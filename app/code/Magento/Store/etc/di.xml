@@ -399,13 +399,9 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Config\Importer\DataDifferenceFactory">
+    <type name="Magento\Store\Model\Config\Importer\DataDifferenceCalculator">
         <arguments>
-            <argument name="calculators" xsi:type="array">
-                <item name="websites" xsi:type="string">Magento\Store\Model\Config\Importer\DataDifference\Websites</item>
-                <item name="groups" xsi:type="string">Magento\Store\Model\Config\Importer\DataDifference\Groups</item>
-                <item name="stores" xsi:type="string">Magento\Store\Model\Config\Importer\DataDifference\Stores</item>
-            </argument>
+            <argument name="runtimeConfigSource" xsi:type="object">Magento\Store\App\Config\Source\RuntimeConfigSource</argument>
         </arguments>
     </type>
 </config>

@@ -7,10 +7,9 @@ namespace Magento\Store\Model\Config\Importer\Process;
 
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Registry;
-use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
+use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\WebsiteRepository;
-use Magento\Store\Model\GroupRepository;
 use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ResourceModel\Group;
@@ -22,9 +21,9 @@ use Magento\Store\Model\ResourceModel\Store;
 class Delete implements ProcessInterface
 {
     /**
-     * @var DataDifferenceFactory
+     * @var DataDifferenceCalculator
      */
-    private $dataDifferenceFactory;
+    private $dataDifferenceCalculator;
 
     /**
      * @var WebsiteRepository
@@ -63,7 +62,7 @@ class Delete implements ProcessInterface
 
     /**
      * @param Registry $registry
-     * @param DataDifferenceFactory $dataDifferenceFactory
+     * @param DataDifferenceCalculator $dataDifferenceCalculator
      * @param WebsiteRepository $websiteRepository
      * @param StoreRepository $storeRepository
      * @param Group\Collection $groupCollection
@@ -73,7 +72,7 @@ class Delete implements ProcessInterface
      */
     public function __construct(
         Registry $registry,
-        DataDifferenceFactory $dataDifferenceFactory,
+        DataDifferenceCalculator $dataDifferenceCalculator,
         WebsiteRepository $websiteRepository,
         StoreRepository $storeRepository,
         Group\Collection $groupCollection,
@@ -82,7 +81,7 @@ class Delete implements ProcessInterface
         Group $groupResource
     ) {
         $this->registry = $registry;
-        $this->dataDifferenceFactory = $dataDifferenceFactory;
+        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
         $this->groupCollection = $groupCollection;
@@ -112,8 +111,7 @@ class Delete implements ProcessInterface
             ];
 
             foreach ($entities as $scope) {
-                $dataDifference = $this->dataDifferenceFactory->create($scope);
-                $items = $dataDifference->getItemsToDelete($data[$scope]);
+                $items = $this->dataDifferenceCalculator->getItemsToDelete($scope, $data[$scope]);
 
                 if (!$items) {
                     continue;

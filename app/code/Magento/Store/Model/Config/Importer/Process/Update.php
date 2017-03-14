@@ -7,7 +7,7 @@ namespace Magento\Store\Model\Config\Importer\Process;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
+use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\ResourceModel\Store;
@@ -22,9 +22,9 @@ use Magento\Store\Model\WebsiteFactory;
 class Update implements ProcessInterface
 {
     /**
-     * @var DataDifferenceFactory
+     * @var DataDifferenceCalculator
      */
-    private $dataDifferenceFactory;
+    private $dataDifferenceCalculator;
 
     /**
      * @var Website
@@ -57,7 +57,7 @@ class Update implements ProcessInterface
     private $groupFactory;
 
     /**
-     * @param DataDifferenceFactory $dataDifferenceFactory
+     * @param DataDifferenceCalculator $dataDifferenceCalculator
      * @param Website $websiteResource
      * @param WebsiteFactory $websiteFactory
      * @param Store $storeResource
@@ -66,7 +66,7 @@ class Update implements ProcessInterface
      * @param GroupFactory $groupFactory
      */
     public function __construct(
-        DataDifferenceFactory $dataDifferenceFactory,
+        DataDifferenceCalculator $dataDifferenceCalculator,
         Website $websiteResource,
         WebsiteFactory $websiteFactory,
         Store $storeResource,
@@ -74,7 +74,7 @@ class Update implements ProcessInterface
         Group $groupResource,
         GroupFactory $groupFactory
     ) {
-        $this->dataDifferenceFactory = $dataDifferenceFactory;
+        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->websiteResource = $websiteResource;
         $this->websiteFactory = $websiteFactory;
         $this->storeResource = $storeResource;
@@ -96,8 +96,7 @@ class Update implements ProcessInterface
             ];
 
             foreach ($entities as $scope) {
-                $dataDifference = $this->dataDifferenceFactory->create($scope);
-                $items = $dataDifference->getItemsToUpdate($data[$scope]);
+                $items = $this->dataDifferenceCalculator->getItemsToUpdate($scope, $data[$scope]);
 
                 if (!$items) {
                     continue;

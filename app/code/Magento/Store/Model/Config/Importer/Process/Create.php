@@ -7,7 +7,7 @@ namespace Magento\Store\Model\Config\Importer\Process;
 
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
+use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ResourceModel\Group;
@@ -22,9 +22,9 @@ use Magento\Store\Model\WebsiteFactory;
 class Create implements ProcessInterface
 {
     /**
-     * @var DataDifferenceFactory
+     * @var DataDifferenceCalculator
      */
-    private $dataDifferenceFactory;
+    private $dataDifferenceCalculator;
 
     /**
      * @var Website
@@ -57,7 +57,7 @@ class Create implements ProcessInterface
     private $storeFactory;
 
     /**
-     * @param DataDifferenceFactory $dataDifferenceFactory
+     * @param DataDifferenceCalculator $dataDifferenceCalculator
      * @param WebsiteFactory $websiteFactory
      * @param GroupFactory $groupFactory
      * @param StoreFactory $storeFactory
@@ -66,7 +66,7 @@ class Create implements ProcessInterface
      * @param Group $groupResource
      */
     public function __construct(
-        DataDifferenceFactory $dataDifferenceFactory,
+        DataDifferenceCalculator $dataDifferenceCalculator,
         WebsiteFactory $websiteFactory,
         GroupFactory $groupFactory,
         StoreFactory $storeFactory,
@@ -74,7 +74,7 @@ class Create implements ProcessInterface
         Store $storeResource,
         Group $groupResource
     ) {
-        $this->dataDifferenceFactory = $dataDifferenceFactory;
+        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->websiteFactory = $websiteFactory;
         $this->groupFactory = $groupFactory;
         $this->storeFactory = $storeFactory;
@@ -96,8 +96,7 @@ class Create implements ProcessInterface
             ];
 
             foreach ($entities as $scope) {
-                $dataDifference = $this->dataDifferenceFactory->create($scope);
-                $items = $dataDifference->getItemsToCreate($data[$scope]);
+                $items = $this->dataDifferenceCalculator->getItemsToCreate($scope, $data[$scope]);
 
                 if (!$items) {
                     continue;

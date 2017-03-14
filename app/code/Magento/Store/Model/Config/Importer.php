@@ -8,7 +8,7 @@ namespace Magento\Store\Model\Config;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
+use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Process\ProcessFactory;
 use Magento\Store\Model\StoreManager;
 
@@ -20,9 +20,9 @@ class Importer implements ImporterInterface
     /**
      * The factory for data difference calculators.
      *
-     * @var DataDifferenceFactory
+     * @var DataDifferenceCalculator
      */
-    private $dataDifferenceFactory;
+    private $dataDifferenceCalculator;
 
     /**
      * The factory for processes.
@@ -39,16 +39,16 @@ class Importer implements ImporterInterface
     private $storeManager;
 
     /**
-     * @param DataDifferenceFactory $dataDifferenceFactory The factory for data difference calculators
+     * @param DataDifferenceCalculator $dataDifferenceCalculator The factory for data difference calculators
      * @param ProcessFactory $processFactory The factory for processes
      * @param StoreManager $storeManager The manager for operations with store
      */
     public function __construct(
-        DataDifferenceFactory $dataDifferenceFactory,
+        DataDifferenceCalculator $dataDifferenceCalculator,
         ProcessFactory $processFactory,
         StoreManager $storeManager
     ) {
-        $this->dataDifferenceFactory = $dataDifferenceFactory;
+        $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->processFactory = $processFactory;
         $this->storeManager = $storeManager;
     }
@@ -90,12 +90,10 @@ class Importer implements ImporterInterface
         $messages = [];
 
         foreach ($data as $scope => $scopeData) {
-            $dataDifference = $this->dataDifferenceFactory->create($scope);
-
             $messageMap = [
-                'Next %s will be deleted: %s' => $dataDifference->getItemsToDelete($scopeData),
-                'Next %s will be updated: %s' => $dataDifference->getItemsToUpdate($scopeData),
-                'Next %s will be created: %s' => $dataDifference->getItemsToCreate($scopeData),
+                'Next %s will be deleted: %s' => $this->dataDifferenceCalculator->getItemsToDelete($scope, $scopeData),
+                'Next %s will be updated: %s' => $this->dataDifferenceCalculator->getItemsToUpdate($scope, $scopeData),
+                'Next %s will be created: %s' => $this->dataDifferenceCalculator->getItemsToCreate($scope, $scopeData),
             ];
 
             foreach ($messageMap as $message => $items) {
