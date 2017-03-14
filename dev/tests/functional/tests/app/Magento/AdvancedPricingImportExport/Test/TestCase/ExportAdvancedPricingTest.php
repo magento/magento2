@@ -129,11 +129,9 @@ class ExportAdvancedPricingTest extends Injectable
 
         if ($website) {
             $website->persist();
-        }
-        $products = $this->prepareProducts($products, $website);
-        if ($website) {
             $this->setupCurrencyForCustomWebsite($website, $currencies[0]);
         }
+        $products = $this->prepareProducts($products, $website);
         $this->adminExportIndex->open();
 
         $exportData = $this->fixtureFactory->createByCode(
@@ -146,11 +144,8 @@ class ExportAdvancedPricingTest extends Injectable
             ]
         );
         $exportData->persist();
-        if (!empty($advancedPricingAttributes)) {
-            $this->adminExportIndex->getExportForm()->prepareAttributeFields($advancedPricingAttributes['attributes']);
-        }
 
-        $this->adminExportIndex->getExportForm()->fill($exportData);
+        $this->adminExportIndex->getExportForm()->fill($exportData, null, $advancedPricingAttributes);
         $this->adminExportIndex->getFilterExport()->clickContinue();
 
         if (!empty($advancedPricingAttributes)) {
@@ -203,7 +198,7 @@ class ExportAdvancedPricingTest extends Injectable
      * @param Website|null $website
      * @return array|null
      */
-    public function prepareProducts($products, Website $website = null)
+    public function prepareProducts(array $products, Website $website = null)
     {
         if (empty($products)) {
             return;

@@ -10,6 +10,7 @@ use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Repository\RepositoryFactory;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * TierPrice data source.
@@ -113,7 +114,19 @@ class TierPrice extends DataSource
      */
     private function prepareWebsite()
     {
-        $this->website = $this->fixtureData['data']['website'];
+        if (!$this->fixtureData['data']['website'] instanceof Website) {
+            if (!empty($this->fixtureData['data']['website']['dataset'])) {
+                /** @var Website $website */
+                $this->website = $this->fixtureFactory->createByCode(
+                    'website',
+                    ['dataset' => $this->fixtureData['data']['website']['dataset']]
+                );
+                $this->website->persist();
+            }
+        } else {
+            $this->website = $this->fixtureData['data']['website'];
+        }
+
         $this->fixtureData['data']['website'] = $this->website->getCode();
         foreach ($this->data as $key => $data) {
             $this->data[$key] = array_merge($data, $this->fixtureData['data']);

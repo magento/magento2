@@ -37,7 +37,7 @@
                 <item name="dataset" xsi:type="string">simple_with_tier_price</item>
             </data>
             <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="attributes" xsi:type="string">sku</item>
+                <item name="0" xsi:type="string">sku</item>
             </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>

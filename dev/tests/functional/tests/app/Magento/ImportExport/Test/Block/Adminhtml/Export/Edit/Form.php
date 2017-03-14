@@ -17,41 +17,24 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class Form extends AbstractForm
 {
     /**
-     * Attribute fields.
-     *
-     * @var array
-     */
-    private $attributeFields = [];
-
-    /**
      * Form filling.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
+     * @param array $attributes
      * @return void
      */
-    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null, $attributes = [])
     {
         $data = $fixture->getData();
         $fields = isset($data['fields']) ? $data['fields'] : $data;
-        if ($this->attributeFields) {
-            foreach ($this->attributeFields as $field) {
-                $fields['product'] = [$field => $fixture->getDataExport()[$field]];
+        if (!empty($attributes)) {
+            foreach ($attributes as $attribute) {
+                $fields['product'] = [$attribute => $fixture->getDataExport()[$attribute]];
             }
         }
         unset($fields['data_export']);
         $mapping = $this->dataMapping($fields);
         parent::_fill($mapping, $element);
-    }
-
-    /**
-     * Prepare attribute fields.
-     *
-     * @param string $attributes
-     * @return void
-     */
-    public function prepareAttributeFields($attributes)
-    {
-        $this->attributeFields = explode(',', $attributes);
     }
 }
