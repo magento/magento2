@@ -123,7 +123,6 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
         /** @var BulkSummaryInterface $bulkSummary */
         $bulkSummary = $entityManager->load($bulkSummaryFactory->create(), 'bulk-uuid-1');
         $this->assertNull($bulkSummary->getBulkId());
-
     }
 
     /**
