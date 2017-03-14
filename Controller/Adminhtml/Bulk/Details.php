@@ -47,7 +47,7 @@ class Details extends \Magento\Backend\App\Action
     
     /**
      * Bulk details action
-     * 
+     *
      * @return \Magento\Framework\View\Result\Page
      */
     public function execute()

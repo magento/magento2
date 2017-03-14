@@ -31,7 +31,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
 
     /**
      * OperationManagement constructor.
-     * 
+     *
      * @param EntityManager $entityManager
      * @param OperationInterfaceFactory $operationFactory
      * @param \Psr\Log\LoggerInterface $logger

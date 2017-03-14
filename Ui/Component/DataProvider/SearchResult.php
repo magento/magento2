@@ -126,7 +126,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
                     }
                     $this->getSelect()->having('status = ?', $this->operationStatus);
                 }
-
             }
             return $this;
         }
