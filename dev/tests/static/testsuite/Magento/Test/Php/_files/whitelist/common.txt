@@ -1,6 +1,7 @@
 # Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
 * * /
-dev
+dev/tools/Magento
+dev/tests
 phpserver
 pub
 setup
