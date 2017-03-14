@@ -111,9 +111,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->metaDataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $serializer = $this->getMock(
             \Magento\Framework\Serialize\Serializer\Json::class,
