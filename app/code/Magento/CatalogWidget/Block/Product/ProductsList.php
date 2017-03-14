@@ -87,7 +87,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     private $priceCurrency;
 
-
     /**
      * Json Serializer Instance
      *
