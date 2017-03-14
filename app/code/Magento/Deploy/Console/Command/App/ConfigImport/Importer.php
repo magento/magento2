@@ -5,7 +5,6 @@
  */
 namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
-use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\RuntimeException;
@@ -114,7 +113,7 @@ class Importer
                 $output->writeln('<info>Nothing to import.</info>');
                 return;
             } else {
-                $output->writeln('<info>Import was started.</info>');
+                $output->writeln('<info>Processing configurations data from configuration file...</info>');
             }
 
             /**
@@ -129,10 +128,15 @@ class Importer
                 /** @var ImporterInterface $importer */
                 $importer = $this->importerFactory->create($importerClassName);
                 $data = $this->deploymentConfig->getConfigData($section);
+                $warnings = $importer->getWarningMessages($data);
 
+                /**
+                 * The importer return some warning questions which are contained in variable $warnings.
+                 * A user should confirm import continuing if $warnings is not empty.
+                 */
                 if (
                     !$input->getOption('no-interaction')
-                    && !empty($warnings = $importer->getWarningMessages($data))
+                    && !empty($warnings)
                     && !$this->questionPerformer->execute($warnings, $input, $output)
                 ) {
                     continue;

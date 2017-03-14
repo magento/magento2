@@ -162,7 +162,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         if ($skipImport) {
             $this->outputMock->expects($this->once())
                 ->method('writeln')
-                ->with('<info>Import was started.</info>');
+                ->with('<info>Processing configurations data from configuration file...</info>');
             $importerMock->expects($this->never())
                 ->method('import');
             $this->configHashMock->expects($this->never())
@@ -170,7 +170,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->outputMock->expects($this->at(0))
                 ->method('writeln')
-                ->with('<info>Import was started.</info>');
+                ->with('<info>Processing configurations data from configuration file...</info>');
             $this->outputMock->expects($this->at(1))
                 ->method('writeln')
                 ->with($expectsMessages);

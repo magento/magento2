@@ -127,7 +127,10 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertContains('Import was started.', $commandTester->getDisplay());
+        $this->assertContains(
+            'Processing configurations data from configuration file...',
+            $commandTester->getDisplay()
+        );
         $this->assertContains(
             "Integration second test data is imported!\nIntegration test data is imported!",
             $commandTester->getDisplay()

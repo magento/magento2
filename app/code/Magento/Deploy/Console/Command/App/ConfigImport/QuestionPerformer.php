@@ -51,6 +51,7 @@ class QuestionPerformer
      *
      * @param string[] $messages array of messages
      * @return Question
+     * @throws LocalizedException is thrown when a user entered a wrong answer
      */
     private function getConfirmationQuestion(array $messages)
     {
