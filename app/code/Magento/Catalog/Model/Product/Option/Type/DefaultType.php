@@ -13,6 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Catalog product option default type
  *
+ * @api
+ *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

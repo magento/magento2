@@ -7,6 +7,8 @@
 /**
  * Catalog category image attribute backend model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
