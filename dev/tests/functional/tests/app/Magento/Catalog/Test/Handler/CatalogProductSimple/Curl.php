@@ -455,6 +455,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
                 $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
             }
+        } else {
             $this->fields['product']['website_ids'][] = 1;
         }
     }
