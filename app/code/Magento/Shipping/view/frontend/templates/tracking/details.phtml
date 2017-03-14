@@ -18,6 +18,7 @@ $fields = [
     'Service Type' => 'getService',
     'Weight' => 'getWeight',
 ];
+$parent = $block->getParentBlock();
 ?>
 <table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $track->getTracking(); ?>">
     <caption class="table-caption"><?php echo $block->escapeHtml(__('Order tracking')); ?></caption>
@@ -77,7 +78,7 @@ $fields = [
                 <tr>
                     <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Delivered on:')); ?></th>
                     <td class="col value">
-                        <?php /* @noEscape */ echo $block->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?>
+                        <?php /* @noEscape */ echo $parent->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?>
                     </td>
                 </tr>
             <?php endif; ?>

@@ -8,6 +8,7 @@
 
 /** @var $block \Magento\Framework\View\Element\Template */
 $track = $block->getData('track');
+$parent = $block->getParentBlock();
 ?>
 <div class="table-wrapper">
     <table class="data table order tracking" id="track-history-table-<?php /* @noEscape */ echo $track->getTracking(); ?>">
@@ -22,8 +23,8 @@ $track = $block->getData('track');
         </thead>
         <tbody>
         <?php foreach ($track->getProgressdetail() as $detail): ?>
-            <?php $detailDate = (!empty($detail['deliverydate']) ? $block->formatDeliveryDate($detail['deliverydate']) : ''); ?>
-            <?php $detailTime = (!empty($detail['deliverytime']) ? $block->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) : ''); ?>
+            <?php $detailDate = (!empty($detail['deliverydate']) ? $parent->formatDeliveryDate($detail['deliverydate']) : ''); ?>
+            <?php $detailTime = (!empty($detail['deliverytime']) ? $parent->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) : ''); ?>
             <tr>
                 <td data-th="<?php echo $block->escapeHtml(__('Location')); ?>" class="col location">
                     <?php echo(!empty($detail['deliverylocation']) ? $block->escapeHtml($detail['deliverylocation']) : ''); ?>
