@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Block;
 
+/**
+ * Shortcut block interface
+ *
+ * @api
+ */
 interface ShortcutInterface
 {
     /**

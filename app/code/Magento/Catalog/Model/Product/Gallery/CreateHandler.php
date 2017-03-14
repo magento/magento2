@@ -12,6 +12,8 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 /**
  * Create handler for catalog product gallery
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler implements ExtensionInterface

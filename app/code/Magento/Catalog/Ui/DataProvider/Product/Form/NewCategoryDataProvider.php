@@ -11,6 +11,8 @@ use Magento\Framework\UrlInterface;
 
 /**
  * DataProvider for new category form
+ *
+ * @api
  */
 class NewCategoryDataProvider extends AbstractDataProvider
 {

@@ -7,6 +7,13 @@ namespace Magento\Catalog\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Shortcuts container
+ *
+ * Accepts shortcuts on shortcut_buttons_container event and render shortcuts using custom order
+ *
+ * @api
+ */
 class ShortcutButtons extends Template
 {
     /**#@+

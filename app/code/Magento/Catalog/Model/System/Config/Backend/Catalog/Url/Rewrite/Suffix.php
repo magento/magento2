@@ -19,6 +19,10 @@ use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
+ * URL suffix backend model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Suffix extends \Magento\Framework\App\Config\Value

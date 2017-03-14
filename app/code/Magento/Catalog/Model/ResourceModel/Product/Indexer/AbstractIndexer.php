@@ -10,6 +10,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Catalog Product Indexer Abstract Resource Model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource

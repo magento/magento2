@@ -11,6 +11,9 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Catalog product Media Gallery attribute processor.
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Processor

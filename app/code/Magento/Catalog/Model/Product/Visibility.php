@@ -7,6 +7,8 @@
 /**
  * Catalog Product visibilite model and attribute source model
  *
+ * @api
+ *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product;

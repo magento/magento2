@@ -28,6 +28,8 @@ use Magento\Catalog\Model\Category\Attribute\Backend\Image as ImageBackendModel;
 /**
  * Class DataProvider
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider

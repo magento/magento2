@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav;
 
+/**
+ * EAV attribute indexer in catalog
+ *
+ * @api
+ */
 class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**

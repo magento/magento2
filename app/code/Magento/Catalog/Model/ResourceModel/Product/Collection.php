@@ -21,6 +21,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 
 /**
  * Product collection
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

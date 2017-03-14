@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
+/**
+ * @api
+ */
 interface RepositoryInterface
 {
     /**

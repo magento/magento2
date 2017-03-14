@@ -12,6 +12,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
 /**
  * Catalog view layer model
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

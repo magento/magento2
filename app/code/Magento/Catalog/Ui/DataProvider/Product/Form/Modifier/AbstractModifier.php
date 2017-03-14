@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Class AbstractModifier
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractModifier implements ModifierInterface

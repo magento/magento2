@@ -8,6 +8,9 @@ namespace Magento\Catalog\Ui\Component\Listing\Columns;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * @api
+ */
 class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
 {
     const NAME = 'thumbnail';

@@ -10,6 +10,8 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Image extends AbstractHelper
