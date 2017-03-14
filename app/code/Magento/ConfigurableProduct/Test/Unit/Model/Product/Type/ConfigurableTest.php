@@ -31,6 +31,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +45,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     private $salableProcessor;
 
+    /**
+     * @var array
+     */
     private $attributeData = [
         1 => [
             'id' => 1,
