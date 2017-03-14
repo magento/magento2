@@ -3,16 +3,18 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Stdlib;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * @codingStandardsIgnoreFile
+ */
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 {
     /**
@@ -36,21 +38,31 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected $selectFactory;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param Stdlib\StringUtils $string
      * @param Stdlib\DateTime $dateTime
      * @param SelectFactory $selectFactory
      * @param array $config
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         Stdlib\StringUtils $string,
         Stdlib\DateTime $dateTime,
         SelectFactory $selectFactory,
-        array $config
+        array $config,
+        SerializerInterface $serializer = null
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->selectFactory = $selectFactory;
         $this->connectionConfig = $this->getValidConfig($config);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
 
         parent::__construct();
     }
@@ -80,7 +92,14 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected function getDbConnectionInstance(DB\LoggerInterface $logger)
     {
         $className = $this->getDbConnectionClassName();
-        return new $className($this->string, $this->dateTime, $logger, $this->selectFactory, $this->connectionConfig);
+        return new $className(
+            $this->string,
+            $this->dateTime,
+            $logger,
+            $this->selectFactory,
+            $this->connectionConfig,
+            $this->serializer
+        );
     }
 
     /**

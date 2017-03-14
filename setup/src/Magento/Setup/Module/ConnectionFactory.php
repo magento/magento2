@@ -105,11 +105,13 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
+        $serializer = $this->serviceLocator->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $resourceInstance = new Mysql(
             new Stdlib\StringUtils(),
             new Stdlib\DateTime(),
             $selectFactory,
-            $connectionConfig
+            $connectionConfig,
+            $serializer
         );
 
         return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));

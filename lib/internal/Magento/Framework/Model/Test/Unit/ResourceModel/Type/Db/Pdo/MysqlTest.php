@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Type\Db\Pdo;
 
 use \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
@@ -13,23 +12,29 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $string;
+    private $stringUtilsMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dateTime;
+    private $dateTimeMock;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     /**
      * @var \Magento\Framework\DB\SelectFactory
      */
-    protected $selectFactory;
+    private $selectFactoryMock;
 
     protected function setUp()
     {
-        $this->string = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
-        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
+        $this->stringUtilsMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->selectFactoryMock = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -42,7 +47,13 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
-        $object = new Mysql($this->string, $this->dateTime, $this->selectFactory, $inputConfig);
+        $object = new Mysql(
+            $this->stringUtilsMock,
+            $this->dateTimeMock,
+            $this->selectFactoryMock,
+            $inputConfig,
+            $this->serializerMock
+        );
         $this->assertAttributeEquals($expectedConfig, 'connectionConfig', $object);
     }
 
@@ -85,7 +96,13 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException()
     {
-        new Mysql($this->string, $this->dateTime, $this->selectFactory, []);
+        new Mysql(
+            $this->stringUtilsMock,
+            $this->dateTimeMock,
+            $this->selectFactoryMock,
+            [],
+            $this->serializerMock
+        );
     }
 
     /**
@@ -95,7 +112,13 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testGetConnectionInactive()
     {
         $config = ['host' => 'localhost', 'active' => false];
-        $object = new Mysql($this->string, $this->dateTime, $this->selectFactory, $config);
+        $object = new Mysql(
+            $this->stringUtilsMock,
+            $this->dateTimeMock,
+            $this->selectFactoryMock,
+            $config,
+            $this->serializerMock
+        );
         $logger = $this->getMockForAbstractClass(\Magento\Framework\DB\LoggerInterface::class);
         $this->assertNull($object->getConnection($logger));
     }
