@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Model\Indexer\Category;
+namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product;
 
 /**
  * Class RowSizeEstimatorTest
@@ -39,10 +39,6 @@ class RowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
         $storeGroupCounterMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productCounterMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->resourceConnectionMock->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturnMap([['store_group', 'storegrouptable'], ['catalog_category_product', 'ccp']]);
@@ -50,17 +46,15 @@ class RowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($connectionMock);
-        $connectionMock->expects($this->atLeastOnce())
+        $connectionMock->expects($this->exactly(3))
             ->method('select')
             ->willReturn($storeGroupCounterMock);
-        $connectionMock->expects($this->at(1))
-            ->method('select')
-            ->willReturn($productCounterMock);
-        $storeGroupCounterMock->expects($this->atLeastOnce())
+        $storeGroupCounterMock->expects($this->exactly(3))
             ->method('from')
             ->willReturnSelf();
-        $storeGroupCounterMock->expects($this->atLeastOnce())
+        $storeGroupCounterMock->expects($this->once())
             ->method('where')
+            ->with('group_id > 0')
             ->willReturnSelf();
         $connectionMock->expects($this->exactly(2))
             ->method('fetchOne')
@@ -68,12 +62,7 @@ class RowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
         $storeGroupCounterMock->expects($this->once())
             ->method('group')
-            ->willReturnSelf();
-        $storeGroupCounterMock->expects($this->once())
-            ->method('order')
-            ->willReturnSelf();
-        $storeGroupCounterMock->expects($this->once())
-            ->method('limit')
+            ->with('category_id')
             ->willReturnSelf();
         $this->assertEquals(2500, $this->model->estimateRowSize());
     }

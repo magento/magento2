@@ -56,13 +56,20 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
         $storeGroupCount = $connection->fetchOne($storeGroupSelect);
 
         // get max possible products per category
-        $productCountSelect = $connection->select()
+        // subselect with products count per category
+        $productCounterSubSelect = $connection->select()
             ->from(
                 $this->resourceConnection->getTableName('catalog_category_product'),
                 ['counter' => new \Zend_Db_Expr('count(category_id)')]
-            )->group('category_id')
-            ->order('counter ' . \Magento\Framework\DB\Select::SQL_DESC)
-            ->limit(1);
+
+            )->group('category_id');
+
+        // select maximum value from subselect
+        $productCountSelect = $connection->select()
+            ->from(
+                ['counters' => $productCounterSubSelect],
+                [new \Zend_Db_Expr('max(counter)')]
+            );
         $maxProducts = $connection->fetchOne($productCountSelect);
 
         return ceil($storeGroupCount * $maxProducts * self::ROW_MEMORY_SIZE);
