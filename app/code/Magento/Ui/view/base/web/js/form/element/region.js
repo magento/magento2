@@ -24,6 +24,7 @@ define([
         update: function (value) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
+                isRegionRequired,
                 option;
 
             if (!value) {
@@ -41,6 +42,14 @@ define([
                     this.validation = _.omit(this.validation, 'required-entry');
                 } else {
                     this.validation['required-entry'] = true;
+                }
+
+                if (option && !this.options().length) {
+                    registry.get(this.customName, function (input) {
+                        isRegionRequired = !!option['is_region_required'];
+                        input.validation['required-entry'] = isRegionRequired;
+                        input.required(isRegionRequired);
+                    });
                 }
 
                 this.required(!!option['is_region_required']);

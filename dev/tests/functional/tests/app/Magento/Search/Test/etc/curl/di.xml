@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="\Magento\Search\Test\Handler\SynonymGroup\SynonymGroupInterface" type="\Magento\Search\Test\Handler\SynonymGroup\Curl" />
+    <preference for="Magento\Search\Test\Handler\SynonymGroup\SynonymGroupInterface" type="Magento\Search\Test\Handler\SynonymGroup\Curl" />
 </config>

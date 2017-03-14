@@ -122,6 +122,7 @@ define([
          * @param {Boolean} isActive
          */
         setActiveState: function (isActive) {
+            this.searchForm.toggleClass('active', isActive);
             this.searchLabel.toggleClass('active', isActive);
 
             if (this.isExpandable) {
