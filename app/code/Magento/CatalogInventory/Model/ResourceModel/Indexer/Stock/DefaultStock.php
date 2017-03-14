@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
@@ -18,11 +19,6 @@ use Magento\Framework\App\ObjectManager;
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
-    /**
-     * @var bool
-     */
-    protected $isFull;
-
     /**
      * Current Product Type Id
      *
@@ -63,6 +59,13 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
+
+    /**
+     * Param for switching logic which depends on action type (full reindex or partial)
+     *
+     * @var string
+     */
+    private $actionType;
 
     /**
      * Class constructor
@@ -130,8 +133,35 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     public function reindexEntity($entityIds)
     {
-        $this->isFull = false;
+        if ($this->getActionType() === Full::ACTION_TYPE) {
+            $this->tableStrategy->setUseIdxTable(false);
+            $this->_prepareIndexTable($entityIds);
+            return $this;
+        }
+
         $this->_updateIndex($entityIds);
+        return $this;
+    }
+
+    /**
+     * Returns action run type
+     *
+     * @return string
+     */
+    public function getActionType()
+    {
+        return $this->actionType;
+    }
+
+    /**
+     * Set action run type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setActionType($type)
+    {
+        $this->actionType = $type;
         return $this;
     }
 
@@ -251,18 +281,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
 
-        return $this;
-    }
-
-    /**
-     * @param array $entityIds
-     * @return $this
-     */
-    public function reindexBatch(array $entityIds)
-    {
-        $this->isFull = true;
-        $this->tableStrategy->setUseIdxTable(false);
-        $this->_prepareIndexTable($entityIds);
         return $this;
     }
 

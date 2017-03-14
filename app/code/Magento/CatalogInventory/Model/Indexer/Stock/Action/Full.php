@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\BatchSizeManagementInterface as BatchSizeManagement;
+use Magento\Framework\Indexer\BatchSizeManagementInterface;
 use Magento\Framework\Indexer\BatchProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -30,12 +30,17 @@ use Magento\Indexer\Model\ResourceModel\FrontendResource;
 class Full extends AbstractAction
 {
     /**
+     * Action type representation
+     */
+    const ACTION_TYPE = 'full';
+
+    /**
      * @var MetadataPool
      */
     private $metadataPool;
 
     /**
-     * @var BatchSizeManagement
+     * @var BatchSizeManagementInterface
      */
     private $batchSizeManagement;
 
@@ -57,7 +62,7 @@ class Full extends AbstractAction
      * @param EventManager $eventManager
      * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      * @param MetadataPool|null $metadataPool
-     * @param BatchSizeManagement|null $batchSizeManagement
+     * @param BatchSizeManagementInterface|null $batchSizeManagement
      * @param BatchProviderInterface|null $batchProvider
      * @param array $batchRowsCount
      *
@@ -71,7 +76,7 @@ class Full extends AbstractAction
         EventManager $eventManager,
         FrontendResource $indexerStockFrontendResource = null,
         MetadataPool $metadataPool = null,
-        BatchSizeManagement $batchSizeManagement = null,
+        BatchSizeManagementInterface $batchSizeManagement = null,
         BatchProviderInterface $batchProvider = null,
         array $batchRowsCount = []
     ) {
@@ -86,8 +91,9 @@ class Full extends AbstractAction
 
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(BatchProviderInterface::class);
-        $this->batchSizeManagement = $batchSizeManagement ?:
-            ObjectManager::getInstance()->get(\Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement::class);
+        $this->batchSizeManagement = $batchSizeManagement ?: ObjectManager::getInstance()->get(
+            \Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement::class
+        );
         $this->batchRowsCount = $batchRowsCount;
     }
 
@@ -109,8 +115,9 @@ class Full extends AbstractAction
 
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));
 
-            /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
+            /** @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock $indexer */
             foreach ($this->_getTypeIndexers() as $indexer) {
+                $indexer->setActionType(self::ACTION_TYPE);
                 $connection = $indexer->getConnection();
                 $tableName = $indexer->getMainTable();
 
@@ -135,7 +142,7 @@ class Full extends AbstractAction
                     $select->where('type_id = ?', $indexer->getTypeId());
 
                     $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
-                    $indexer->reindexBatch($entityIds);
+                    $indexer->reindexEntity($entityIds);
 
                     $select = $connection->select()->from($this->_getIdxTable(), $columns);
                     $query = $select->insertFromSelect($tableName, $columns);

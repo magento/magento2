@@ -6,6 +6,7 @@
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -65,7 +66,9 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     {
         $this->_cleanBundleOptionStockData();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $table = $this->isFull ? $this->getMainTable() : $this->indexerStockFrontendResource->getMainTable();
+        $table = $this->getActionType() === Full::ACTION_TYPE
+            ? $this->getMainTable()
+            : $this->indexerStockFrontendResource->getMainTable();
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $connection = $this->getConnection();
         $select = $connection->select()->from(

@@ -13,6 +13,7 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock;
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
 class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
@@ -57,7 +58,9 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
     {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
-        $table = $this->isFull ? $this->getMainTable() : $this->indexerStockFrontendResource->getMainTable();
+        $table = $this->getActionType() === Full::ACTION_TYPE
+            ? $this->getMainTable()
+            : $this->indexerStockFrontendResource->getMainTable();
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
         $linkField = $metadata->getLinkField();
