@@ -11,7 +11,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Verify that admin user chose to skip Advanced Reporting on Analytics pop-up.
  */
-class AssertSkipSubscriptionPopup extends AbstractConstraint
+class AssertSkipReportingInPopup extends AbstractConstraint
 {
     /**
      * Verify that admin user chose to skip Advanced Reporting on Analytics pop-up.

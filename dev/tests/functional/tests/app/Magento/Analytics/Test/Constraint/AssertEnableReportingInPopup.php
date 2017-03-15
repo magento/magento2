@@ -11,7 +11,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Verify that admin user chose to enable Advanced Reporting on Analytics pop-up.
  */
-class AssertAcceptSubscriptionPopup extends AbstractConstraint
+class AssertEnableReportingInPopup extends AbstractConstraint
 {
     /**
      * Verify that admin user chose to enable Advanced Reporting on Analytics pop-up.

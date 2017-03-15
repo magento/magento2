@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics;
+namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting;
 
 use Magento\Ui\Test\Block\Adminhtml\Modal;
 use Magento\Mtf\Client\Locator;
@@ -21,21 +21,21 @@ class SubscriptionBlock extends Modal
     private $checkbox = '[name="analytics_subscription_checkbox"]';
 
     /**
-     * "Enable Advanced Reporting" button
+     * Enable Advanced Reporting button
      *
      * @var string
      */
     private $acceptReportingButton = '[data-index="analytics_subscription_button_accept"]';
 
     /**
-     * "Disable Advanced Reporting" button
+     * Disable Advanced Reporting button
      *
      * @var string
      */
     private $declineReportingButton = '[data-index="analytics_subscription_button_decline"]';
 
     /**
-     * "Remind me later" button
+     * Skip subscription pop-up button
      *
      * @var string
      */
@@ -62,7 +62,7 @@ class SubscriptionBlock extends Modal
     }
 
     /**
-     * Click 'Enable Advanced Reporting' button on a subscription popup.
+     * Enable Advanced Reporting on a subscription popup.
      *
      * @return void
      */
@@ -74,7 +74,7 @@ class SubscriptionBlock extends Modal
     }
 
     /**
-     * Click 'Disable Advanced Reporting' button on a subscription popup.
+     * Disable Advanced Reporting on a subscription popup.
      *
      * @return void
      */
@@ -86,7 +86,7 @@ class SubscriptionBlock extends Modal
     }
 
     /**
-     * Click 'Remind me later' button on a subscription popup.
+     * Skip subscription popup.
      *
      * @return void
      */
