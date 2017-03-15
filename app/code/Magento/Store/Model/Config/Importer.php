@@ -7,7 +7,6 @@ namespace Magento\Store\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
@@ -97,7 +96,7 @@ class Importer implements ImporterInterface
             }
 
             $this->resource->getConnection()->commit();
-        } catch (LocalizedException $exception) {
+        } catch (\Exception $exception) {
             $this->resource->getConnection()->rollBack();
 
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);

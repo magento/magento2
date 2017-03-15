@@ -10,6 +10,7 @@ use Magento\Store\Model\Config\Importer;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -30,12 +31,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Store\Model\Config\Importer\Processor\ProcessorFactory|Mock
      */
-    private $processFactoryMock;
+    private $processorFactoryMock;
 
     /**
      * @var \Magento\Store\Model\Config\Importer\Processor\ProcessorInterface|Mock
      */
-    private $processMock;
+    private $processorMock;
 
     /**
      * @var StoreManager|Mock
@@ -53,6 +54,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $resourceMock;
 
     /**
+     * @var AdapterInterface|Mock
+     */
+    private $connectionMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -60,10 +66,10 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->dataDifferenceCalculatorMock = $this->getMockBuilder(Importer\DataDifferenceCalculator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processFactoryMock = $this->getMockBuilder(Importer\Processor\ProcessorFactory::class)
+        $this->processorFactoryMock = $this->getMockBuilder(Importer\Processor\ProcessorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processMock = $this->getMockBuilder(Importer\Processor\ProcessorInterface::class)
+        $this->processorMock = $this->getMockBuilder(Importer\Processor\ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
@@ -73,14 +79,65 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->processorFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->processorMock);
 
         $this->model = new Importer(
             $this->dataDifferenceCalculatorMock,
-            $this->processFactoryMock,
+            $this->processorFactoryMock,
             $this->storeManagerMock,
             $this->cacheManagerMock,
             $this->resourceMock
         );
+    }
+
+    public function testImport()
+    {
+        $data = [];
+
+        $this->connectionMock->expects($this->once())
+            ->method('beginTransaction');
+        $this->processorMock->expects($this->exactly(3))
+            ->method('run')
+            ->with($data);
+        $this->connectionMock->expects($this->once())
+            ->method('commit');
+        $this->storeManagerMock->expects($this->once())
+            ->method('reinitStores');
+        $this->cacheManagerMock->expects($this->once())
+            ->method('clean');
+
+        $this->model->import($data);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
+     * @expectedExceptionMessage Some error
+     */
+    public function testImportWithException()
+    {
+        $data = [];
+
+        $this->connectionMock->expects($this->once())
+            ->method('beginTransaction');
+        $this->processorMock->expects($this->any())
+            ->method('run')
+            ->willThrowException(new \Exception('Some error'));
+        $this->connectionMock->expects($this->never())
+            ->method('commit');
+        $this->storeManagerMock->expects($this->once())
+            ->method('reinitStores');
+        $this->cacheManagerMock->expects($this->once())
+            ->method('clean');
+
+        $this->model->import($data);
     }
 
     public function testGetWarningMessages()
