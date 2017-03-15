@@ -296,7 +296,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** @var Store|\PHPUnit_Framework_MockObject_MockObject $storeMock */
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setGroup'])
+            ->setMethods(['setData', 'getResource', 'setGroup', 'setWebsite'])
             ->getMock();
         $storeMock->expects($this->once())
             ->method('setData')

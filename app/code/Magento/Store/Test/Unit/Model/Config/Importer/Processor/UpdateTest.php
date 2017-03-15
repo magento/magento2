@@ -23,6 +23,7 @@ use Magento\Store\Model\Store;
  * Test for Update processor.
  *
  * @see Update
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateTest extends \PHPUnit_Framework_TestCase
 {
@@ -145,39 +146,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             ScopeInterface::SCOPE_GROUPS => [],
             ScopeInterface::SCOPE_STORES => [],
         ];
-        $updateData = [
-            ScopeInterface::SCOPE_WEBSITES => [
-                'test' => [
-                    'website_id' => '2',
-                    'code' => 'test',
-                    'name' => 'Changed Main Test',
-                    'sort_order' => '0',
-                    'default_group_id' => '1',
-                    'is_default' => '0',
-                ]
-            ],
-            ScopeInterface::SCOPE_GROUPS => [
-                2 => [
-                    'group_id' => '2',
-                    'website_id' => '2',
-                    'name' => 'Changed Test Website Store',
-                    'root_category_id' => '2',
-                    'default_store_id' => '1',
-                    'code' => 'test_website_store',
-                ],
-            ],
-            ScopeInterface::SCOPE_STORES => [
-                'test' => [
-                    'store_id' => '2',
-                    'code' => 'test',
-                    'website_id' => '2',
-                    'group_id' => '2',
-                    'name' => 'Changed Test Store View',
-                    'sort_order' => '0',
-                    'is_active' => '1',
-                ]
-            ],
-        ];
+        $updateData = $this->getData();
 
         $this->dataDifferenceCalculatorMock->expects($this->exactly(3))
             ->method('getItemsToUpdate')
@@ -216,14 +185,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             ->with($this->websiteMock, 'test', 'code');
         $this->websiteMock->expects($this->any())
             ->method('setData')
-            ->with([
-                'website_id' => '2',
-                'code' => 'test',
-                'name' => 'Changed Main Test',
-                'sort_order' => '0',
-                'default_group_id' => '1',
-                'is_default' => '0',
-            ], null);
+            ->with($updateData[ScopeInterface::SCOPE_WEBSITES]['test']);
         $this->websiteResourceMock->expects($this->once())
             ->method('save')
             ->with($this->websiteMock);
@@ -245,14 +207,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->groupMock->expects($this->once())
             ->method('setData')
-            ->willReturn([
-                'group_id' => '2',
-                'website_id' => '2',
-                'name' => 'Changed Test Website Store',
-                'root_category_id' => '2',
-                'default_store_id' => '1',
-                'code' => 'test_website_store',
-            ]);
+            ->with($updateData[ScopeInterface::SCOPE_GROUPS][2]);
         $this->storeFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->storeMock);
@@ -272,20 +227,49 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->storeMock->expects($this->once())
             ->method('setData')
-            ->with([
-                'store_id' => '2',
-                'code' => 'test',
-                'website_id' => '2',
-                'group_id' => '2',
-                'name' => 'Changed Test Store View',
-                'sort_order' => '0',
-                'is_active' => '1',
-            ]);
+            ->with($updateData[ScopeInterface::SCOPE_STORES]['test']);
         $this->storeResourceMock->expects($this->once())
             ->method('save')
             ->with($this->storeMock);
 
         $this->model->run($data);
+    }
+
+    private function getData()
+    {
+        return [
+            ScopeInterface::SCOPE_WEBSITES => [
+                'test' => [
+                    'website_id' => '2',
+                    'code' => 'test',
+                    'name' => 'Changed Main Test',
+                    'sort_order' => '0',
+                    'default_group_id' => '1',
+                    'is_default' => '0',
+                ]
+            ],
+            ScopeInterface::SCOPE_GROUPS => [
+                2 => [
+                    'group_id' => '2',
+                    'website_id' => '2',
+                    'name' => 'Changed Test Website Store',
+                    'root_category_id' => '2',
+                    'default_store_id' => '1',
+                    'code' => 'test_website_store',
+                ],
+            ],
+            ScopeInterface::SCOPE_STORES => [
+                'test' => [
+                    'store_id' => '2',
+                    'code' => 'test',
+                    'website_id' => '2',
+                    'group_id' => '2',
+                    'name' => 'Changed Test Store View',
+                    'sort_order' => '0',
+                    'is_active' => '1',
+                ]
+            ],
+        ];
     }
 
     /**
