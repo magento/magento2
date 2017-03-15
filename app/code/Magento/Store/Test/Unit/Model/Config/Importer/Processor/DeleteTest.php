@@ -16,7 +16,7 @@ use Magento\Store\Model\Website;
 use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\Store\Model\ResourceModel\Group\Collection;
-use \Magento\Store\Model\ResourceModel\Group as GroupResource;
+use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Store\Model\Store;
