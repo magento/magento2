@@ -7,6 +7,9 @@ namespace Magento\Setup\Fixtures\ImagesGenerator;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Create image with passed config and put it to media tmp folder
+ */
 class ImagesGenerator
 {
     /**
@@ -22,7 +25,6 @@ class ImagesGenerator
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param array $config
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,

@@ -43,6 +43,10 @@
             </configurable_products>
         -->
         <configurable_products>50</configurable_products>
+        <product-images>
+            <images-count>10</images-count>
+            <images-per-product>2</images-per-product>
+        </product-images>
         <categories>30</categories> <!-- Number of categories to generate -->
         <categories_nesting_level>3</categories_nesting_level> <!-- Nesting level for categories -->
         <catalog_price_rules>10</catalog_price_rules> <!-- Number os catalog price rules -->

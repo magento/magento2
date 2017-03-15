@@ -7,7 +7,28 @@
 namespace Magento\Setup\Fixtures;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
+use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate images per each product
+ * Support next format:
+ *  <product-images>
+ *      <images-count>X</images-count>
+ *      <images-per-product>Y</images-per-product>
+ *  </product-images>
+ *
+ * Where
+ *  X - number of images to be generated
+ *  Y - number of images that will be assigned per each product
+ *
+ * note, that probably you would need to run command:
+ *  php bin/magento catalog:images:resize
+ * to resize images after generation but be patient with it
+ * because it can take pretty much time
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
+ */
 class ImagesFixture extends Fixture
 {
     /**
@@ -68,6 +89,11 @@ class ImagesFixture extends Fixture
     /**
      * @var int
      */
+    private $productsSelectBatchSize = 1000;
+
+    /**
+     * @var int
+     */
     private $productsCountCache;
 
     /**
@@ -75,6 +101,16 @@ class ImagesFixture extends Fixture
      */
     private $tableCache = [];
 
+    /**
+     * @param FixtureModel $fixtureModel
+     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param ImagesGenerator\ImagesGeneratorFactory $imagesGeneratorFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     * @param \Magento\Eav\Model\AttributeRepository $attributeRepository
+     * @param \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $expressionFactory
+     * @param \Magento\Setup\Model\BatchInsertFactory $batchInsertFactory
+     */
     public function __construct(
         FixtureModel $fixtureModel,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -96,21 +132,80 @@ class ImagesFixture extends Fixture
         $this->batchInsertFactory = $batchInsertFactory;
     }
 
-    public function execute() {
-        $this->createImageEntities();
-        $this->assignImagesToProducts();
+    /**
+     * {@inheritdoc}
+     */
+    public function execute()
+    {
+        if (!$this->checkIfImagesExists()) {
+            $this->createImageEntities();
+            $this->assignImagesToProducts();
+        }
     }
 
-    public function getActionTitle() {
-       return 'Generating images';
+    /**
+     * {@inheritdoc}
+     */
+    public function getActionTitle()
+    {
+        return 'Generating images';
     }
 
-    public function introduceParamLabels() {
+    /**
+     * {@inheritdoc}
+     */
+    public function introduceParamLabels()
+    {
         return [
-            'images' => 'Images'
+            'product-images' => 'Product Images'
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     * @throws ValidatorException
+     */
+    public function printInfo(OutputInterface $output)
+    {
+        $config = $this->fixtureModel->getValue('product-images', []);
+        if (!$config) {
+            return ;
+        }
+
+        if (!isset($config['images-count'])) {
+            throw new ValidatorException(
+                __('Please, specify amount of images to generate')
+            );
+        }
+
+        if (!isset($config['images-per-product'])) {
+            throw new ValidatorException(
+                __('Please, specify amount of images per product')
+            );
+        }
+
+        $output->writeln(
+            sprintf(
+                '<info> |- Product images: %s, %s per product</info>',
+                $config['images-count'],
+                $config['images-per-product']
+            )
+        );
+    }
+
+    /**
+     * Check if DB already has any images
+     *
+     * @return bool
+     */
+    private function checkIfImagesExists()
+    {
+        return $this->getImagesCount() > 0;
+    }
+
+    /**
+     * Create image file and add it to media gallery table in DB
+     */
     private function createImageEntities()
     {
         /** @var \Magento\Setup\Model\BatchInsert $batchInsert */
@@ -129,6 +224,13 @@ class ImagesFixture extends Fixture
         $batchInsert->flush();
     }
 
+    /**
+     * Create generator that creates image files and puts them to appropriate media folder
+     * in memory-safe way
+     *
+     * @return \Generator
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
     private function generateImageFilesGenerator()
     {
         /** @var \Magento\Setup\Fixtures\ImagesGenerator\ImagesGenerator $imagesGenerator */
@@ -157,6 +259,9 @@ class ImagesFixture extends Fixture
         }
     }
 
+    /**
+     * Assign created images to products according to Y images per each product
+     */
     private function assignImagesToProducts()
     {
         /** @var \Magento\Setup\Model\BatchInsert $batchInsertCatalogProductEntityVarchar */
@@ -186,7 +291,6 @@ class ImagesFixture extends Fixture
 
                 if ($imageNum === 1) {
                     $attributes = ['image', 'small_image', 'thumbnail', 'swatch_image'];
-
                     foreach ($attributes as $attr) {
                         $batchInsertCatalogProductEntityVarchar->insert([
                             'entity_id' => $productEntityId['entity_id'],
@@ -217,20 +321,24 @@ class ImagesFixture extends Fixture
         $batchInsertCatalogProductEntityMediaGalleryValueToEntity->flush();
     }
 
+    /**
+     * Returns generator to iterate in memory-safe way over all product entities in DB
+     *
+     * @return \Generator
+     */
     private function getProductGenerator()
     {
-        $limit = 1000;
         $offset = 0;
 
-        $products = $this->getProducts($limit, $offset);
-        $offset += $limit;
+        $products = $this->getProducts($this->productsSelectBatchSize, $offset);
+        $offset += $this->productsSelectBatchSize;
 
         while (true) {
             yield current($products);
 
             if (next($products) === false) {
-                $products = $this->getProducts($limit, $offset);
-                $offset += $limit;
+                $products = $this->getProducts($this->productsSelectBatchSize, $offset);
+                $offset += $this->productsSelectBatchSize;
 
                 if (empty($products)) {
                     break;
@@ -239,6 +347,13 @@ class ImagesFixture extends Fixture
         }
     }
 
+    /**
+     * Get products entity ids
+     *
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
     private function getProducts($limit, $offset)
     {
         $select = $this->getDbConnection()
@@ -250,6 +365,11 @@ class ImagesFixture extends Fixture
         return $this->getDbConnection()->fetchAssoc($select);
     }
 
+    /**
+     * Creates generator to iterate infinitely over all image entities
+     *
+     * @return \Generator
+     */
     private function getImagesGenerator()
     {
         $select = $this->getDbConnection()
@@ -271,16 +391,35 @@ class ImagesFixture extends Fixture
         }
     }
 
+    /**
+     * Return number of images to create
+     *
+     * @return null|int
+     */
     private function getImagesToGenerate()
     {
-        return 100;
+        $config = $this->fixtureModel->getValue('product-images', []);
+
+        return isset($config['images-count']) ? $config['images-count'] : null;
     }
 
+    /**
+     * Return number of images to be assigned per each product
+     *
+     * @return null|int
+     */
     private function getImagesPerProduct()
     {
-        return 3;
+        $config = $this->fixtureModel->getValue('product-images', []);
+
+        return isset($config['images-per-product']) ? $config['images-per-product'] : null;
     }
 
+    /**
+     * Get amount of existing products
+     *
+     * @return int
+     */
     private function getProductsCount()
     {
         if ($this->productsCountCache === null) {
@@ -289,7 +428,7 @@ class ImagesFixture extends Fixture
                 ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
                 ->columns([
                     'count' => $this->expressionFactory->create([
-                        'expression' => 'COUNT(1)'
+                        'expression' => 'COUNT(*)'
                     ])
                 ]);
 
@@ -299,6 +438,32 @@ class ImagesFixture extends Fixture
         return $this->productsCountCache;
     }
 
+    /**
+     * Get amount of existing images
+     *
+     * @return int
+     */
+    private function getImagesCount()
+    {
+        $select = $select = $this->getDbConnection()
+            ->select()
+            ->from(['product_entity' => $this->getTable('catalog_product_entity_media_gallery')], [])
+            ->columns([
+                'count' => $this->expressionFactory->create([
+                    'expression' => 'COUNT(*)'
+                ])
+            ])->where('media_type="image"');
+
+        return (int) $this->getDbConnection()->fetchOne($select);
+    }
+
+    /**
+     * Get eav attribute id by it code
+     *
+     * @param $attributeCode
+     * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getAttributeId($attributeCode)
     {
         if (!isset($this->attributeCodesCache[$attributeCode])) {
@@ -346,5 +511,4 @@ class ImagesFixture extends Fixture
 
         return $this->tableCache[$tableName];
     }
-
 }

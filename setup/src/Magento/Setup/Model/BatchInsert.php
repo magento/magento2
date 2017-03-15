@@ -6,6 +6,9 @@
 
 namespace Magento\Setup\Model;
 
+/**
+ * Encapsulate logic that performs batch insert into table
+ */
 class BatchInsert
 {
     /**
@@ -38,6 +41,11 @@ class BatchInsert
      */
     private $currentStorageIndex = 0;
 
+    /**
+     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param string $insertIntoTable
+     * @param int $batchSize
+     */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         $insertIntoTable,
@@ -46,10 +54,15 @@ class BatchInsert
         $this->resourceConnection = $resourceConnection;
         $this->insertIntoTable = $insertIntoTable;
         $this->batchSize = $batchSize;
-
         $this->dataStorage = new \SplFixedArray($batchSize);
     }
 
+    /**
+     * Save data to $dataStorage and automatically flush it to DB
+     * when storage size becomes equal to $batchSize
+     *
+     * @param array $dataToInsert
+     */
     public function insert(array $dataToInsert)
     {
         $this->dataStorage[$this->currentStorageIndex] = $dataToInsert;
@@ -60,6 +73,9 @@ class BatchInsert
         }
     }
 
+    /**
+     * Insert all data form $dataStorage to DB and clear $dataStorage
+     */
     public function flush()
     {
         if ($this->currentStorageIndex > 0) {
