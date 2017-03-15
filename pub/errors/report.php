@@ -8,16 +8,6 @@ require_once 'processorFactory.php';
 
 $processorFactory = new \Magento\Framework\Error\ProcessorFactory();
 $processor = $processorFactory->createProcessor();
-$reportId = (isset($_GET['id'])) ? (int)$_GET['id'] : null;
-
-if ($reportId) {
-    try {
-        $processor->loadReport($reportId);
-    } catch (\Magento\Framework\Exception\NotFoundException $e) {
-        header('Location: '. $processor->getBaseUrl());
-        exit;
-    }
-}
 
 if (isset($reportData) && is_array($reportData)) {
     $reportUrl = $processor->saveReport($reportData);

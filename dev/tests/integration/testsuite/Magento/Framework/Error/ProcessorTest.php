@@ -9,6 +9,21 @@ require_once __DIR__ . '/../../../../../../../pub/errors/processor.php';
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\Error\Processor */
+    private $processor;
+
+    public function setUp()
+    {
+        $this->processor = $this->createProcessor();
+    }
+
+    public function tearDown()
+    {
+        if ($this->processor->reportId) {
+            unlink($this->processor->_reportDir . '/' . $this->processor->reportId);
+        }
+    }
+
     public function testSaveAndLoadReport()
     {
         $reportData = [
@@ -17,26 +32,17 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             'script_name' => 'processor.php'
         ];
         $expectedReportData = array_merge($reportData, ['url' => '']);
-        $saveProcessor = $this->createProcessor();
-        $saveProcessor->saveReport($reportData);
-        if (!$saveProcessor->reportId) {
+        $this->processor = $this->createProcessor();
+        $this->processor->saveReport($reportData);
+        if (!$this->processor->reportId) {
             $this->fail("Failed to generate report id");
         }
-        $this->assertFileExists($saveProcessor->_reportDir . '/' . $saveProcessor->reportId);
-        $this->assertEquals($expectedReportData, $saveProcessor->reportData);
+        $this->assertFileExists($this->processor->_reportDir . '/' . $this->processor->reportId);
+        $this->assertEquals($expectedReportData, $this->processor->reportData);
 
         $loadProcessor = $this->createProcessor();
-        $loadProcessor->loadReport($saveProcessor->reportId);
+        $loadProcessor->loadReport($this->processor->reportId);
         $this->assertEquals($expectedReportData, $loadProcessor->reportData, "File contents of report don't match");
-
-        unlink($saveProcessor->_reportDir . '/' . $saveProcessor->reportId);
-    }
-
-    public function testLoadReportException()
-    {
-        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class, "Report not found");
-        $loadProcessor = $this->createProcessor();
-        $loadProcessor->loadReport(1);
     }
 
     /**
