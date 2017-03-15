@@ -126,6 +126,9 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->websiteMock->expects($this->any())
             ->method('getResource')
             ->willReturn($this->websiteResourceMock);
+        $this->websiteFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->websiteMock);
 
         $this->model = new Update(
             $this->dataDifferenceCalculatorMock,
@@ -143,9 +146,37 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             ScopeInterface::SCOPE_STORES => [],
         ];
         $updateData = [
-            ScopeInterface::SCOPE_WEBSITES => [],
-            ScopeInterface::SCOPE_GROUPS => [],
-            ScopeInterface::SCOPE_STORES => [],
+            ScopeInterface::SCOPE_WEBSITES => [
+                'test' => [
+                    'website_id' => '2',
+                    'code' => 'test',
+                    'name' => 'Changed Main Test',
+                    'sort_order' => '0',
+                    'default_group_id' => '1',
+                    'is_default' => '0',
+                ]
+            ],
+            ScopeInterface::SCOPE_GROUPS => [
+                2 => [
+                    'group_id' => '2',
+                    'website_id' => '2',
+                    'name' => 'Changed Test Website Store',
+                    'root_category_id' => '2',
+                    'default_store_id' => '1',
+                    'code' => 'test_website_store',
+                ],
+            ],
+            ScopeInterface::SCOPE_STORES => [
+                'test' => [
+                    'store_id' => '2',
+                    'code' => 'test',
+                    'website_id' => '2',
+                    'group_id' => '2',
+                    'name' => 'Changed Test Store View',
+                    'sort_order' => '0',
+                    'is_active' => '1',
+                ]
+            ],
         ];
 
         $this->dataDifferenceCalculatorMock->expects($this->exactly(3))
@@ -167,6 +198,92 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                     $updateData[ScopeInterface::SCOPE_STORES],
                 ],
             ]);
+        $this->websiteMock->expects($this->exactly(2))
+            ->method('getResource')
+            ->willReturn($this->websiteResourceMock);
+        $this->websiteMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'website_id' => '2',
+                'code' => 'test',
+                'name' => 'Main Test',
+                'sort_order' => '0',
+                'default_group_id' => '1',
+                'is_default' => '0',
+            ]);
+        $this->websiteResourceMock->expects($this->once())
+            ->method('load')
+            ->with($this->websiteMock, 'test', 'code');
+        $this->websiteMock->expects($this->any())
+            ->method('setData')
+            ->with([
+                'website_id' => '2',
+                'code' => 'test',
+                'name' => 'Changed Main Test',
+                'sort_order' => '0',
+                'default_group_id' => '1',
+                'is_default' => '0',
+            ], null);
+        $this->websiteResourceMock->expects($this->once())
+            ->method('save')
+            ->with($this->websiteMock);
+        $this->groupFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->groupMock);
+        $this->groupMock->expects($this->exactly(2))
+            ->method('getResource')
+            ->willReturn($this->groupResourceMock);
+        $this->groupMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'group_id' => '2',
+                'website_id' => '2',
+                'name' => 'Changed Test Website Store',
+                'root_category_id' => '2',
+                'default_store_id' => '1',
+                'code' => 'test_website_store',
+            ]);
+        $this->groupMock->expects($this->once())
+            ->method('setData')
+            ->willReturn([
+                'group_id' => '2',
+                'website_id' => '2',
+                'name' => 'Changed Test Website Store',
+                'root_category_id' => '2',
+                'default_store_id' => '1',
+                'code' => 'test_website_store',
+            ]);
+        $this->storeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->storeMock);
+        $this->storeMock->expects($this->exactly(2))
+            ->method('getResource')
+            ->willReturn($this->storeResourceMock);
+        $this->storeMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'store_id' => '2',
+                'code' => 'test',
+                'website_id' => '2',
+                'group_id' => '2',
+                'name' => 'Test Store View',
+                'sort_order' => '0',
+                'is_active' => '1',
+            ]);
+        $this->storeMock->expects($this->once())
+            ->method('setData')
+            ->with([
+                'store_id' => '2',
+                'code' => 'test',
+                'website_id' => '2',
+                'group_id' => '2',
+                'name' => 'Changed Test Store View',
+                'sort_order' => '0',
+                'is_active' => '1',
+            ]);
+        $this->storeResourceMock->expects($this->once())
+            ->method('save')
+            ->with($this->storeMock);
 
         $this->model->run($data);
     }

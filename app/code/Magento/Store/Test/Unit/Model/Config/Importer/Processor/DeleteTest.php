@@ -295,7 +295,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-
         $this->websiteResourceMock->expects($this->never())
             ->method('delete');
         $this->groupResourceMock->expects($this->never())
@@ -332,7 +331,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->dataDifferenceCalculatorMock->expects($this->once())
             ->method('getItemsToDelete')
             ->willThrowException(new \Exception('Some exception'));
-
 
         $this->websiteResourceMock->expects($this->never())
             ->method('delete');

@@ -206,7 +206,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** @var Group|\PHPUnit_Framework_MockObject_MockObject $groupMock */
         $groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setWebsite'])
+            ->setMethods(['setData', 'getResource', 'setWebsite', 'setRootCategoryId'])
             ->getMock();
         $groupMock->expects($this->once())
             ->method('setData')
@@ -218,6 +218,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $groupMock->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
+        $groupMock->expects($this->once())
+            ->method('setRootCategoryId')
+            ->with(0);
 
         $this->groupFactoryMock->expects($this->once())
             ->method('create')
@@ -315,6 +318,25 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->abstractDbMock->expects($this->once())
             ->method('addCommitCallback');
+
+        $this->processor->run($data);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Some error
+     */
+    public function testRunWithException()
+    {
+        $data = [
+            'websites' => [],
+            'groups' => [],
+            'stores' => [],
+        ];
+
+        $this->dataDifferenceCalculatorMock->expects($this->any())
+            ->method('getItemsToCreate')
+            ->willThrowException(new \Exception('Some error'));
 
         $this->processor->run($data);
     }
