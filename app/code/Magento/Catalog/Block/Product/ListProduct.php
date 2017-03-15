@@ -84,7 +84,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * Retrieve loaded category collection
+     * Retrieve loaded product collection
      *
      * The goal of this method is to choose whether the existing collection should be returned
      * or a new one should be initialized.
@@ -357,7 +357,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             // if the product is associated with any category
             if ($categories->count()) {
                 // show products from this category
-                $this->setCategoryId(current($categories->getIterator()));
+                $this->setCategoryId(current($categories->getIterator())->getId());
             }
         }
 
