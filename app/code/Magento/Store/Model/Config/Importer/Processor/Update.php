@@ -8,12 +8,8 @@ namespace Magento\Store\Model\Config\Importer\Processor;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
-use Magento\Store\Model\Config\Importer\Processor\ProcessorInterface;
 use Magento\Store\Model\GroupFactory;
-use Magento\Store\Model\ResourceModel\Group;
-use Magento\Store\Model\ResourceModel\Store;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 
@@ -28,29 +24,14 @@ class Update implements ProcessorInterface
     private $dataDifferenceCalculator;
 
     /**
-     * @var Website
-     */
-    private $websiteResource;
-
-    /**
      * @var WebsiteFactory
      */
     private $websiteFactory;
 
     /**
-     * @var Store
-     */
-    private $storeResource;
-
-    /**
      * @var StoreFactory
      */
     private $storeFactory;
-
-    /**
-     * @var Group
-     */
-    private $groupResource;
 
     /**
      * @var GroupFactory
@@ -59,28 +40,19 @@ class Update implements ProcessorInterface
 
     /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator
-     * @param Website $websiteResource
      * @param WebsiteFactory $websiteFactory
-     * @param Store $storeResource
      * @param StoreFactory $storeFactory
-     * @param Group $groupResource
      * @param GroupFactory $groupFactory
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
-        Website $websiteResource,
         WebsiteFactory $websiteFactory,
-        Store $storeResource,
         StoreFactory $storeFactory,
-        Group $groupResource,
         GroupFactory $groupFactory
     ) {
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
-        $this->websiteResource = $websiteResource;
         $this->websiteFactory = $websiteFactory;
-        $this->storeResource = $storeResource;
         $this->storeFactory = $storeFactory;
-        $this->groupResource = $groupResource;
         $this->groupFactory = $groupFactory;
     }
 
@@ -135,10 +107,10 @@ class Update implements ProcessorInterface
             );
 
             $website = $this->websiteFactory->create();
-            $this->websiteResource->load($website, $code, 'code');
+            $website->getResource()->load($website, $code, 'code');
 
             $website->setData(array_replace($website->getData(), $websiteData));
-            $this->websiteResource->save($website);
+            $website->getResource()->save($website);
         }
     }
 
@@ -165,7 +137,7 @@ class Update implements ProcessorInterface
             $group = $this->findGroupById($data, $groupId);
             $website = $this->findWebsiteById($data, $websiteId);
 
-            $this->storeResource->load($store, $code, 'code');
+            $store->getResource()->load($store, $code, 'code');
 
             $store->setData(array_replace($store->getData(), $storeData));
 
@@ -177,7 +149,7 @@ class Update implements ProcessorInterface
                 $store->setGroup($group);
             }
 
-            $this->storeResource->save($store);
+            $store->getResource()->save($store);
         }
     }
 
@@ -199,7 +171,7 @@ class Update implements ProcessorInterface
             $group = $this->groupFactory->create();
             $website = $this->findWebsiteById($data, $websiteId);
 
-            $this->groupResource->load($group, $code, 'code');
+            $group->getResource()->load($group, $code, 'code');
 
             $group->setData(array_replace($group->getData(), $groupData));
 
@@ -207,7 +179,7 @@ class Update implements ProcessorInterface
                 $group->setWebsite($website);
             }
 
-            $this->groupResource->save($group);
+            $group->getResource()->save($group);
         }
     }
 
@@ -224,7 +196,7 @@ class Update implements ProcessorInterface
         foreach ($data[ScopeInterface::SCOPE_WEBSITES] as $websiteData) {
             if ($websiteId == $websiteData['website_id']) {
                 $website = $this->websiteFactory->create();
-                $this->websiteResource->load($website, $websiteData['code'], 'code');
+                $website->getResource()->load($website, $websiteData['code'], 'code');
 
                 return $website;
             }
@@ -246,7 +218,7 @@ class Update implements ProcessorInterface
         foreach ($data[ScopeInterface::SCOPE_GROUPS] as $groupData) {
             if ($groupId == $groupData['group_id']) {
                 $group = $this->groupFactory->create();
-                $this->groupResource->load($group, $groupData['code'], 'code');
+                $group->getResource()->load($group, $groupData['code'], 'code');
 
                 return $group;
             }

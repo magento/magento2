@@ -9,13 +9,11 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
-use Magento\Store\Model\Config\Importer\Processor\ProcessorInterface;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\Store\Model\StoreRepository;
-use Magento\Store\Model\ResourceModel\Website;
-use Magento\Store\Model\ResourceModel\Group;
-use Magento\Store\Model\ResourceModel\Store;
 
 /**
  * @inheritdoc
@@ -38,24 +36,9 @@ class Delete implements ProcessorInterface
     private $storeRepository;
 
     /**
-     * @var Group\Collection
+     * @var Collection
      */
     private $groupCollection;
-
-    /**
-     * @var Website
-     */
-    private $websiteResource;
-
-    /**
-     * @var Store
-     */
-    private $storeResource;
-
-    /**
-     * @var Group
-     */
-    private $groupResource;
 
     /**
      * @var Registry
@@ -73,10 +56,7 @@ class Delete implements ProcessorInterface
      * @param ManagerInterface $eventManager
      * @param WebsiteRepository $websiteRepository
      * @param StoreRepository $storeRepository
-     * @param Group\Collection $groupCollection
-     * @param Website $websiteResource
-     * @param Store $storeResource
-     * @param Group $groupResource
+     * @param Collection $groupCollection
      */
     public function __construct(
         Registry $registry,
@@ -84,10 +64,7 @@ class Delete implements ProcessorInterface
         ManagerInterface $eventManager,
         WebsiteRepository $websiteRepository,
         StoreRepository $storeRepository,
-        Group\Collection $groupCollection,
-        Website $websiteResource,
-        Store $storeResource,
-        Group $groupResource
+        Collection $groupCollection
     ) {
         $this->registry = $registry;
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
@@ -95,9 +72,6 @@ class Delete implements ProcessorInterface
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
         $this->groupCollection = $groupCollection;
-        $this->websiteResource = $websiteResource;
-        $this->storeResource = $storeResource;
-        $this->groupResource = $groupResource;
     }
 
     /**
@@ -156,9 +130,8 @@ class Delete implements ProcessorInterface
         $items = array_keys($items);
 
         foreach ($items as $websiteCode) {
-            $this->websiteResource->delete(
-                $this->websiteRepository->get($websiteCode)
-            );
+            $website = $this->websiteRepository->get($websiteCode);
+            $website->getResource()->delete($website);
         }
     }
 
@@ -174,8 +147,8 @@ class Delete implements ProcessorInterface
 
         foreach ($items as $storeCode) {
             $store = $this->storeRepository->get($storeCode);
+            $store->getResource()->delete($store);
 
-            $this->storeResource->delete($store);
             $this->eventManager->dispatch('store_delete', ['store' => $store]);
         }
     }
@@ -189,12 +162,13 @@ class Delete implements ProcessorInterface
     private function deleteGroups(array $items)
     {
         $items = array_keys($items);
+        /** @var Group[] $groups */
         $groups = $this->groupCollection
             ->addFilter('code', ['in' => $items])
             ->getItems();
 
         foreach ($groups as $group) {
-            $this->groupResource->delete($group);
+            $group->getResource()->delete($group);
         }
     }
 }

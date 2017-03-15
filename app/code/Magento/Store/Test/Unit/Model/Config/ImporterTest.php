@@ -14,7 +14,10 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * @inheritdoc
+ * Test for Importer.
+ *
+ * @see Importer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImporterTest extends \PHPUnit_Framework_TestCase
 {
