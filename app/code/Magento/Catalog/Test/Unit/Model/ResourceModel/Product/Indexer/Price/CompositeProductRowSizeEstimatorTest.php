@@ -28,7 +28,7 @@ class CompositeProductRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->rowSizeEstimatorMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator::class,
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator::class,
             [],
             [],
             '',

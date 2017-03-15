@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Indexer;
 
+/**
+ * Class set MEMORY table size for indexer processes according batch size and index row size.
+ */
 class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagementInterface
 {
     /**
@@ -28,14 +31,13 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
      */
     public function ensureBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $batchSize)
     {
-        // Calculate memory table size for product
-        $memoryForLargeComposite = $this->rowSizeEstimator->estimateRowSize();
+        $rowMemory = $this->rowSizeEstimator->estimateRowSize();
 
         $maxHeapTableSize = $connection->fetchOne('SELECT @@max_heap_table_size;');
         $tmpTableSize = $connection->fetchOne('SELECT @@tmp_table_size;');
         $maxMemoryTableSize = min($maxHeapTableSize, $tmpTableSize);
 
-        $size = (int) ($memoryForLargeComposite * $batchSize);
+        $size = (int) ($rowMemory * $batchSize);
 
         if ($maxMemoryTableSize < $size) {
             $connection->query('SET SESSION tmp_table_size = ' . $size . ';');

@@ -177,7 +177,7 @@
                 <item name="configurable" xsi:type="number">100000</item>
             </argument>
             <argument name="estimators" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\Catalog\Model\Indexer\CompositeProductBatchSizeManagement</item>
+                <item name="configurable" xsi:type="object">Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement</item>
             </argument>
         </arguments>
     </type>

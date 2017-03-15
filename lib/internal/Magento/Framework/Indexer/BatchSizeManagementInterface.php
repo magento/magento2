@@ -9,6 +9,7 @@ use \Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Batch size manager can be used to ensure that MEMORY table has enough memory for data in batch.
+ * @api
  */
 interface BatchSizeManagementInterface
 {

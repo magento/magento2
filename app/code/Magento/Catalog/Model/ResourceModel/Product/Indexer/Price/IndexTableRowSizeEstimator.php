@@ -4,8 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
+namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+/**
+ * Estimate index memory size for simple product.
+ * Size depends on websites and customer groups count.
+ */
 class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface
 {
     /**

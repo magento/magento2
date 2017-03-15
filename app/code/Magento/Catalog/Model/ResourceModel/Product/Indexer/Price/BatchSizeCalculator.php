@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+/**
+ * Ensure that size of index MEMORY table is enough for configured rows count in batch.
+ */
 class BatchSizeCalculator
 {
     /**
@@ -30,7 +33,9 @@ class BatchSizeCalculator
     }
 
     /**
-     * Composite object for batch size calculators
+     * Retrieve batch size for the given indexer.
+     *
+     * Ensure that the database will be able to handle provided batch size correctly.
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $indexerTypeId

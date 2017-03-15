@@ -709,10 +709,9 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
-     * @inheritdoc
      * Returns main table name based on the suffix stored in the 'indexer_state' table
      *
-     * @return string
+     * {@inheritdoc}
      */
     public function getMainTable()
     {

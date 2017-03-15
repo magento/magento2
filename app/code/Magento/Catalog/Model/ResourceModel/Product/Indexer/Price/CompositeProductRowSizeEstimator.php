@@ -6,9 +6,11 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator;
 use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
 
+/**
+ * Estimate index memory size for largest composite product in catalog.
+ */
 class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
     /**
@@ -36,7 +38,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     /**
      * Calculate memory size for largest composite product in database.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function estimateRowSize()
     {

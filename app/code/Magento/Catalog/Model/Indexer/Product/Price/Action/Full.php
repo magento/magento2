@@ -57,15 +57,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null
     ) {
-        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\EntityManager\MetadataPool::class
-        );
-        $this->batchSizeCalculator = $batchSizeCalculator ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator::class
-        );
-        $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Indexer\BatchProviderInterface::class
-        );
         parent::__construct(
             $config,
             $storeManager,
@@ -76,6 +67,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $indexerPriceFactory,
             $defaultIndexerResource,
             $indexerFrontendResource
+        );
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\EntityManager\MetadataPool::class
+        );
+        $this->batchSizeCalculator = $batchSizeCalculator ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator::class
+        );
+        $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Indexer\BatchProviderInterface::class
         );
     }
 
@@ -140,9 +140,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
     /**
      * @inheritdoc
-     * @return string
      */
-    protected function getIndexerDefaultTable()
+    protected function getIndexTargetTable()
     {
         return $this->_defaultIndexerResource->getMainTable();
     }
