@@ -1,7 +1,5 @@
 <?php
 /**
- * Connection adapter factory
- *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,7 +10,8 @@ use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class ConnectionFactory
+ * Connection adapter factory
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
@@ -105,15 +104,14 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $serializer = $this->serviceLocator->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $mysqlFactory = new \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\MysqlFactory(
+            $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get()
+        );
         $resourceInstance = new Mysql(
-            new Stdlib\StringUtils(),
-            new Stdlib\DateTime(),
             $selectFactory,
             $connectionConfig,
-            $serializer
+            $mysqlFactory
         );
-
         return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
 }
