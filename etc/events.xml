@@ -9,4 +9,7 @@
     <event name="checkout_submit_all_after">
         <observer name="signifyd_place_order_observer" instance="Magento\Signifyd\Observer\PlaceOrder" />
     </event>
+    <event name="order_cancel_after">
+        <observer name="signifyd_cancel_order_observer" instance="Magento\Signifyd\Observer\CancelOrder" />
+    </event>
 </config>
