@@ -59,6 +59,7 @@ class Grid extends DataGrid
      */
     public function getIds()
     {
+        $this->resetFilter();
         $result = [];
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $shipmentIds = $this->_rootElement->getElements($this->shipmentId);
