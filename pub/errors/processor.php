@@ -484,7 +484,7 @@ class Processor
         $this->_reportFile = $this->_reportDir . '/' . $reportId;
 
         if (!file_exists($this->_reportFile) || !is_readable($this->_reportFile)) {
-            throw new \Exception('Report not found');
+            throw new \Magento\Framework\Exception\NotFoundException(__('Report not found'));
         }
         $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
     }

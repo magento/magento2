@@ -34,7 +34,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadReportException()
     {
-        $this->setExpectedException(\Exception::class, "Report not found");
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class, "Report not found");
         $loadProcessor = $this->createProcessor();
         $loadProcessor->loadReport(1);
     }

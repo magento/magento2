@@ -13,7 +13,7 @@ $reportId = (isset($_GET['id'])) ? (int)$_GET['id'] : null;
 if ($reportId) {
     try {
         $processor->loadReport($reportId);
-    } catch (\Exception $e) {
+    } catch (\Magento\Framework\Exception\NotFoundException $e) {
         header('Location: '. $processor->getBaseUrl());
         exit;
     }
