@@ -132,10 +132,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
         ]);
 
-
-//        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-//        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
         /** @var StoreFactory $storeFactory */
         $storeFactory = $this->objectManager->get(StoreFactory::class);
