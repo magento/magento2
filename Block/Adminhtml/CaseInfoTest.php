@@ -5,13 +5,11 @@
  */
 namespace Magento\Signifyd\Block\Adminhtml;
 
-use Magento\Backend\Block\Template;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\OrderRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class CaseInfoTest extends \PHPUnit_Framework_TestCase
@@ -32,16 +30,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     private $layout;
 
     /**
-     * @var string
-     */
-    private static $submitButton = 'Submit Guarantee Request';
-
-    /**
-     * @var string
-     */
-    private static $cancelButton = 'Cancel Guarantee Request';
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -52,15 +40,18 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks that block does not give contents
-     * if Signifyd module is inactive.
+     * Checks that block has contents when case entity for order is exists
+     * even if Signifyd module is inactive.
      *
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 0
+     * @magentoDataFixture Magento/Signifyd/_files/case.php
      * @magentoAppArea adminhtml
      */
     public function testModuleIsInactive()
     {
-        static::assertEmpty($this->getBlockContents());
+        $this->order->loadByIncrementId('100000001');
+
+        static::assertNotEmpty($this->getBlockContents());
     }
 
     /**
@@ -96,71 +87,8 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
 
         $html = $this->getBlockContents();
         static::assertNotEmpty($html);
-        static::assertContains('Some Team', $html);
-        static::assertContains('col-case-score-green', $html);
-    }
-
-    /**
-     * Checks state of Guarantee action buttons on order page.
-     *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getButtons
-     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
-     * @magentoDataFixture Magento/Signifyd/_files/case.php
-     * @magentoAppArea adminhtml
-     */
-    public function testSubmitButtonAvailable()
-    {
-        $this->order->loadByIncrementId('100000001');
-
-        $blockContents = $this->getBlockContents();
-
-        static::assertContains(self::$submitButton, $blockContents);
-        static::assertNotContains(self::$cancelButton, $blockContents);
-    }
-
-    /**
-     * Checks that guarantee action buttons is unavailable on order page.
-     *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getButtons
-     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
-     * @magentoDataFixture Magento/Signifyd/_files/case.php
-     * @magentoAppArea adminhtml
-     */
-    public function testButtonsUnavailable()
-    {
-        $this->order->loadByIncrementId('100000001');
-        $this->order->setState(Order::STATE_CANCELED);
-
-        /** @var OrderRepository $orderRepository */
-        $orderRepository = $this->objectManager->get(OrderRepository::class);
-        $orderRepository->save($this->order);
-
-        $blockContents = $this->getBlockContents();
-
-        static::assertNotContains(self::$submitButton, $blockContents);
-        static::assertNotContains(self::$cancelButton, $blockContents);
-    }
-
-    /**
-     * Checks action buttons for case entity with Guarantee submitted.
-     *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getButtons
-     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
-     * @magentoDataFixture Magento/Signifyd/_files/approved_case.php
-     * @magentoAppArea adminhtml
-     */
-    public function testButtonsForApprovedCase()
-    {
-        $this->order->loadByIncrementId('100000001');
-
-        /** @var OrderRepository $orderRepository */
-        $orderRepository = $this->objectManager->get(OrderRepository::class);
-        $orderRepository->save($this->order);
-
-        $blockContents = $this->getBlockContents();
-
-        static::assertNotContains(self::$submitButton, $blockContents);
-        static::assertContains(self::$cancelButton, $blockContents);
+        static::assertContains('Processing', $html);
+        static::assertContains('Good', $html);
     }
 
     /**

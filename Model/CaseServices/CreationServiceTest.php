@@ -175,9 +175,15 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(123123);
+        $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($caseEntity->getOrderId());
 
         static::assertNotEmpty($caseEntity);
         static::assertEquals($order->getEntityId(), $caseEntity->getOrderId());
+        static::assertEquals(
+            $gridGuarantyStatus,
+            $caseEntity->getGuaranteeDisposition(),
+            'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
+        );
     }
 
     /**
@@ -209,5 +215,25 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         }
 
         return $this->order;
+    }
+
+    /**
+     * Returns value of signifyd_guarantee_status column from sales order grid
+     *
+     * @param int $orderEntityId
+     * @return string|null
+     */
+    private function getOrderGridGuarantyStatus($orderEntityId)
+    {
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Grid\Collection $orderGridCollection */
+        $orderGridCollection = $this->objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Grid\Collection::class
+        );
+
+        $items = $orderGridCollection->addFilter($orderGridCollection->getIdFieldName(), $orderEntityId)
+            ->getItems();
+        $result = array_pop($items);
+
+        return isset($result['signifyd_guarantee_status']) ? $result['signifyd_guarantee_status'] : null;
     }
 }

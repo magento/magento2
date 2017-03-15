@@ -9,6 +9,7 @@ use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';
 require __DIR__ . '/store.php';
@@ -19,9 +20,13 @@ $objectManager = Bootstrap::getObjectManager();
 $billingAddress = $objectManager->create(Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
+/** @var OrderPaymentInterface $payment */
 $payment = $objectManager->create(Payment::class);
 $payment->setMethod('braintree')
-    ->setLastTransId('00001');
+    ->setLastTransId('00001')
+    ->setAdditionalInformation('avsPostalCodeResponseCode', 'M')
+    ->setAdditionalInformation('avsStreetAddressResponseCode', 'M')
+    ->setAdditionalInformation('cvvResponseCode', 'M');
 
 /** @var Item $orderItem */
 $orderItem1 = $objectManager->create(Item::class);

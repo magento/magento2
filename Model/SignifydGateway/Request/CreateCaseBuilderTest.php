@@ -87,6 +87,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
+                'avsResponseCode' => 'U',
+                'cvvResponseCode' => '',
                 'orderChannel' => 'WEB',
                 'totalPrice' => $order->getGrandTotal(),
                 'shipments' => [
@@ -113,7 +115,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemUrl' => $product->getProductUrl(),
                         'itemWeight' => $product->getWeight()
                     ]
-                ]
+                ],
+                'paymentMethod' => 'PAYPAL_ACCOUNT'
             ],
             'card' => [
                 'cardHolderName' => 'firstname lastname',
@@ -125,7 +128,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                     'city' => $billingAddress->getCity(),
                     'provinceCode' => $billingAddress->getRegionCode(),
                     'postalCode' => $billingAddress->getPostcode(),
-                    'countryCode' => $billingAddress->getCountryId()
+                    'countryCode' => $billingAddress->getCountryId(),
+                    'unit' => ''
                 ]
             ],
             'recipient' => [
@@ -160,7 +164,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        static::assertEquals(
+        self::assertEquals(
             $expected,
             $this->caseBuilder->build($order->getEntityId())
         );
@@ -200,6 +204,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'paymentGateway' => $payment->getMethod(),
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
+                'avsResponseCode' => 'Y',
+                'cvvResponseCode' => 'M',
                 'orderChannel' => 'PHONE',
                 'totalPrice' => $order->getGrandTotal(),
                 'products' => [
@@ -210,7 +216,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemQuantity' => $orderItems[0]->getQtyOrdered(),
                         'itemUrl' => $product->getProductUrl()
                     ],
-                ]
+                ],
+                'paymentMethod' => 'PAYMENT_CARD'
             ],
             'card' => [
                 'cardHolderName' => 'firstname lastname',
@@ -219,7 +226,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                     'city' => $billingAddress->getCity(),
                     'provinceCode' => $billingAddress->getRegionCode(),
                     'postalCode' => $billingAddress->getPostcode(),
-                    'countryCode' => $billingAddress->getCountryId()
+                    'countryCode' => $billingAddress->getCountryId(),
+                    'unit' => ''
                 ]
             ],
             'seller' => $this->getSellerData(),
@@ -231,7 +239,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        static::assertEquals(
+        self::assertEquals(
             $expected,
             $this->caseBuilder->build($order->getEntityId())
         );
