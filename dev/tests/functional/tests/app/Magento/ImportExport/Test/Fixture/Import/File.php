@@ -23,7 +23,7 @@ class File extends DataSource
      * @var array
      */
     private $codeMapping =[
-        'base' => 'Main Website[USD]'
+        'base' => 'Main Website'
     ];
 
     /**
@@ -243,6 +243,9 @@ class File extends DataSource
                 $csvContent = strtr($csvContent, $data);
             }
         }
+        $this->codeMapping['base'] .= (isset($this->value['template']['mainWebsiteCurrency']))
+            ? "[{$this->value['template']['mainWebsiteCurrency']}]"
+            : '[USD]';
         $csvContent = strtr($csvContent, $this->codeMapping);
         $this->csv = array_map(
             function ($value) {
