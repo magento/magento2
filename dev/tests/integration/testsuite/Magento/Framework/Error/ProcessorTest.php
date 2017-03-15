@@ -32,11 +32,19 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         unlink($saveProcessor->_reportDir . '/' . $saveProcessor->reportId);
     }
 
+    public function testLoadReportException()
+    {
+        $this->setExpectedException(\Exception::class, "Report not found");
+        $loadProcessor = $this->createProcessor();
+        $loadProcessor->loadReport(1);
+    }
+
     /**
-     * @return Processor
+     * @return \Magento\Framework\Error\Processor
      */
     private function createProcessor()
     {
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Processor::class);
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Error\Processor::class);
     }
 }

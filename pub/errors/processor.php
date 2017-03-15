@@ -147,13 +147,12 @@ class Processor
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
-                $this->_scriptName = dirname($_SERVER['SCRIPT_NAME']);
+                $this->_scriptName = dirname(dirname($_SERVER['SCRIPT_NAME']));
             } else {
                 $this->_scriptName = $_SERVER['SCRIPT_NAME'];
             }
         }
 
-        /** @todo Figure out why theme cannot be loaded without a successful loadReport call */
         $this->_indexDir = $this->_getIndexDir();
         $this->_root  = is_dir($this->_indexDir . 'app');
 

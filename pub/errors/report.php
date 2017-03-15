@@ -27,7 +27,6 @@ if (isset($reportData) && is_array($reportData)) {
         echo '</script>';
         exit;
     }
-
 }
 
 $response = $processor->processReport();
