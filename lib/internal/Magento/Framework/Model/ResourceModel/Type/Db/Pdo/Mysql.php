@@ -8,9 +8,8 @@ namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
 use Magento\Framework\DB\SelectFactory;
-use Magento\Framework\Stdlib;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 
 /**
  * @codingStandardsIgnoreFile
@@ -18,52 +17,36 @@ use Magento\Framework\App\ObjectManager;
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 {
     /**
-     * @var Stdlib\StringUtils
-     */
-    protected $string;
-
-    /**
-     * @var Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var array
      */
     protected $connectionConfig;
 
     /**
-     * @var
+     * @var SelectFactory
      */
     protected $selectFactory;
 
     /**
-     * @var SerializerInterface
+     * @var MysqlFactory
      */
-    private $serializer;
+    private $mysqlFactory;
 
     /**
      * Constructor
      *
-     * @param Stdlib\StringUtils $string
-     * @param Stdlib\DateTime $dateTime
      * @param SelectFactory $selectFactory
      * @param array $config
-     * @param SerializerInterface|null $serializer
+     * @param MysqlFactory|null $serializer
      */
     public function __construct(
-        Stdlib\StringUtils $string,
-        Stdlib\DateTime $dateTime,
         SelectFactory $selectFactory,
         array $config,
-        SerializerInterface $serializer = null
+        MysqlFactory $mysqlFactory = null
+
     ) {
-        $this->string = $string;
-        $this->dateTime = $dateTime;
         $this->selectFactory = $selectFactory;
         $this->connectionConfig = $this->getValidConfig($config);
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-
+        $this->mysqlFactory = $mysqlFactory ?: ObjectManager::getInstance()->get(MysqlFactory::class);
         parent::__construct();
     }
 
@@ -84,21 +67,18 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     }
 
     /**
-     * Create and return DB connection object instance
+     * Create and return database connection object instance
      *
      * @param DB\LoggerInterface $logger
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected function getDbConnectionInstance(DB\LoggerInterface $logger)
     {
-        $className = $this->getDbConnectionClassName();
-        return new $className(
-            $this->string,
-            $this->dateTime,
+        return $this->mysqlFactory->create(
+            $this->getDbConnectionClassName(),
             $logger,
             $this->selectFactory,
-            $this->connectionConfig,
-            $this->serializer
+            $this->connectionConfig
         );
     }
 
