@@ -16,47 +16,61 @@ use Magento\Store\Model\WebsiteRepository;
 use Magento\Store\Model\StoreRepository;
 
 /**
- * @inheritdoc
+ * The processor for deleting different entities.
+ *
+ * {@inheritdoc}
  */
 class Delete implements ProcessorInterface
 {
     /**
+     * The calculator for data differences.
+     *
      * @var DataDifferenceCalculator
      */
     private $dataDifferenceCalculator;
 
     /**
+     * The repository for websites.
+     *
      * @var WebsiteRepository
      */
     private $websiteRepository;
 
     /**
+     * The repository for stores.
+     *
      * @var StoreRepository
      */
     private $storeRepository;
 
     /**
+     * The collection of store groups.
+     *
      * @var Collection
      */
     private $groupCollection;
 
     /**
+     * The application registry.
+     *
      * @var Registry
      */
     private $registry;
 
     /**
+     * The event manager.
+     *
      * @var ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @param Registry $registry
-     * @param DataDifferenceCalculator $dataDifferenceCalculator
-     * @param ManagerInterface $eventManager
-     * @param WebsiteRepository $websiteRepository
-     * @param StoreRepository $storeRepository
-     * @param Collection $groupCollection
+     * @param Registry $registry The application registry The application registry
+     * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
+     * @param ManagerInterface $eventManager The event manager
+     * @param WebsiteRepository $websiteRepository The repository for websites
+     * @param StoreRepository $storeRepository The repository for stores
+     * @param Collection $groupCollection The collection of store groups
      */
     public function __construct(
         Registry $registry,
@@ -75,7 +89,9 @@ class Delete implements ProcessorInterface
     }
 
     /**
-     * @inheritdoc
+     * Deletes entities from application according to the data set.
+     *
+     * {@inheritdoc}
      */
     public function run(array $data)
     {
