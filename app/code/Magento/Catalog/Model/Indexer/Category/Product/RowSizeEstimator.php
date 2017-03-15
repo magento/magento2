@@ -61,7 +61,6 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
             ->from(
                 $this->resourceConnection->getTableName('catalog_category_product'),
                 ['counter' => new \Zend_Db_Expr('count(category_id)')]
-
             )->group('category_id');
 
         // select maximum value from subselect
