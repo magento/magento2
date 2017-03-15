@@ -19,7 +19,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about captured amount in order.
      */
-    const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of \w?\W%s online\. Transaction ID: "[\w\-]*"/';
+    const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of .+?%s online\. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about captured amount exists in Comments History section on order page in Admin.
