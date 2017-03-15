@@ -12,9 +12,11 @@ use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class SubscriptionHandlerTest
+ */
 class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -36,11 +38,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
      * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject
      */
     private $notificationTimeMock;
-
-    /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configValueMock;
 
     /**
      * @var ObjectManagerHelper
@@ -78,10 +75,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configValueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionHandler = $this->objectManagerHelper->getObject(
@@ -97,91 +90,71 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int|null $value null means that $value was not changed
      * @param bool $isTokenExist
      *
      * @dataProvider processDataProvider
      */
-    public function testProcess($value, $isTokenExist)
+    public function testProcessEnabled($isTokenExist)
     {
-        $this->configValueMock
-            ->expects($this->once())
-            ->method('isValueChanged')
-            ->willReturn(is_int($value));
-        $this->configValueMock
-            ->expects(is_int($value) ? $this->once() : $this->never())
-            ->method('getData')
-            ->with('value')
-            ->willReturn($value);
-        $this->configWriterMock
-            ->expects(($value === 0) ? $this->once() : $this->never())
-            ->method('delete')
-            ->with(CollectionTime::CRON_SCHEDULE_PATH);
         $this->tokenMock
-            ->expects(is_int($value) ? $this->once() : $this->never())
+            ->expects($this->once())
             ->method('isTokenExist')
             ->willReturn($isTokenExist);
-        if (is_int($value) && !$isTokenExist) {
-            if ($value === 1) {
-                $this->addProcessWithEnabledTrueAsserts();
-            } elseif ($value === 0) {
-                $this->addProcessWithEnabledFalseAsserts();
-            }
+        if (!$isTokenExist) {
+            $this->configWriterMock
+                ->expects($this->once())
+                ->method('save')
+                ->with(SubscriptionHandler::CRON_STRING_PATH, "0 * * * *");
+            $this->flagManagerMock
+                ->expects($this->once())
+                ->method('saveFlag')
+                ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
+                ->willReturn(true);
+            $this->notificationTimeMock
+                ->expects($this->once())
+                ->method('unsetLastTimeNotificationValue')
+                ->willReturn(true);
         }
         $this->assertTrue(
-            $this->subscriptionHandler->process($this->configValueMock)
+            $this->subscriptionHandler->processEnabled()
         );
     }
 
     /**
-     * Add assertions for method process in case when new config value equals 1.
+     * @param bool $isTokenExist
      *
-     * @return void
+     * @dataProvider processDataProvider
      */
-    private function addProcessWithEnabledTrueAsserts()
+    public function testProcessDisabled($isTokenExist)
     {
         $this->configWriterMock
             ->expects($this->once())
-            ->with(SubscriptionHandler::CRON_STRING_PATH, "0 * * * *")
-            ->method('save');
-        $this->flagManagerMock
+            ->method('delete')
+            ->with(CollectionTime::CRON_SCHEDULE_PATH);
+        $this->tokenMock
             ->expects($this->once())
-            ->method('saveFlag')
-            ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
-            ->willReturn(true);
-        $this->notificationTimeMock
-            ->expects($this->once())
-            ->method('unsetLastTimeNotificationValue')
-            ->willReturn(true);
+            ->method('isTokenExist')
+            ->willReturn($isTokenExist);
+        if (!$isTokenExist) {
+            $this->flagManagerMock
+                ->expects($this->once())
+                ->method('deleteFlag')
+                ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
+                ->willReturn(true);
+        }
+        $this->assertTrue(
+            $this->subscriptionHandler->processDisabled()
+        );
     }
 
     /**
-     * Add assertions for method process in case when new config value equals 0.
-     *
-     * @return void
-     */
-    private function addProcessWithEnabledFalseAsserts()
-    {
-        $this->flagManagerMock
-            ->expects($this->once())
-            ->method('deleteFlag')
-            ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
-            ->willReturn(true);
-    }
-
-    /**
-     * Data provider for process test.
-     *
      * @return array
      */
     public function processDataProvider()
     {
         return [
-            'Config value has not changed and token exist' => [null, true],
-            'Config value has not changed and token doesn\'t exist' => [null, false],
-            'Config value is "No" and token exist' => [0, true],
-            'Config value is "Yes" and token exist' => [1, true],
-            'Config value is "No" and token doesn\'t exist' => [0, false],
+            'Token exist' => [true],
+            'Token doesn\'t exist' => [false],
         ];
     }
 }

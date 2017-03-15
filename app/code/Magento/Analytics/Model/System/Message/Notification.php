@@ -63,7 +63,7 @@ class Notification implements MessageInterface
         $messageDetails .= __('Failed to synchronize data to the Magento Business Intelligence service. ');
         $messageDetails .= __(
             '<a href="%1">Retry Synchronization</a>',
-            $this->urlBuilder->getUrl('analytics/retry')
+            $this->urlBuilder->getUrl('analytics/subscription/retry')
         );
 
         return $messageDetails;
