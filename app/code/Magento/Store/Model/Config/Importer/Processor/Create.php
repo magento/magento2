@@ -146,6 +146,7 @@ class Create implements ProcessorInterface
             $group = $this->groupFactory->create();
             $group->setData($groupData);
             $group->setWebsite($website);
+            $group->setRootCategoryId(0);
 
             $group->getResource()->save($group);
             $group->getResource()->addCommitCallback(function () use ($group) {
