@@ -116,7 +116,7 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
 
         $this->customerAccountLogin->open();
         $this->assertCaptcha->processAssert($this->customerAccountLogin);
-        $this->customerAccountLogin->getLoginBlockWithCaptcha()->clickReloadCaptchaButton();
+        $this->customerAccountLogin->getLoginBlockWithCaptcha()->reloadCaptcha();
         $this->customerAccountLogin->getLoginBlockWithCaptcha()->login($customer);
     }
 
