@@ -181,10 +181,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
-     * Reindex all products to root category
-     *
-     * @param \Magento\Store\Model\Store $store
-     * @return void
+     * {@inheritdoc}
      */
     protected function reindexRootCategory(\Magento\Store\Model\Store $store)
     {
