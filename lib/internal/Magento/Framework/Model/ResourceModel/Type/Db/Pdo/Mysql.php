@@ -9,6 +9,7 @@ use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 
 /**
  * @codingStandardsIgnoreFile

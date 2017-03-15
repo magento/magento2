@@ -104,14 +104,10 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $mysqlFactory = new \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\MysqlFactory(
+        $mysqlFactory = new \Magento\Framework\DB\Adapter\Pdo\MysqlFactory(
             $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get()
         );
-        $resourceInstance = new Mysql(
-            $selectFactory,
-            $connectionConfig,
-            $mysqlFactory
-        );
+        $resourceInstance = new Mysql($selectFactory, $connectionConfig, $mysqlFactory);
         return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
 }
