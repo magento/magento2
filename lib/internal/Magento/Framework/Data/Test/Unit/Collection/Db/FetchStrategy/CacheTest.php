@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Collection\Db\FetchStrategy;
 
-use \Magento\Framework\Data\Collection\Db\FetchStrategy\Cache;
-use \Magento\Framework\Cache\FrontendInterface;
-use \Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use \Magento\Framework\DB\Select;
-use \Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategy\Cache;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
