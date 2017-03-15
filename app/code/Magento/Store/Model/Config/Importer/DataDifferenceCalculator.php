@@ -20,6 +20,13 @@ class DataDifferenceCalculator
     private $runtimeConfigSource;
 
     /**
+     * The cached runtime config data.
+     *
+     * @var array
+     */
+    private $runtimeConfigData;
+
+    /**
      * @param ConfigSourceInterface $runtimeConfigSource The config source to retrieve current config
      */
     public function __construct(ConfigSourceInterface $runtimeConfigSource)
@@ -38,7 +45,7 @@ class DataDifferenceCalculator
     {
         $data = $this->changeDataKeyToCode($data);
         $runtimeGroupsData = $this->changeDataKeyToCode(
-            $this->runtimeConfigSource->get($scope)
+            $this->getRuntimeData($scope)
         );
 
         return array_diff_key($runtimeGroupsData, $data);
@@ -55,7 +62,7 @@ class DataDifferenceCalculator
     {
         $data = $this->changeDataKeyToCode($data);
         $runtimeGroupsData = $this->changeDataKeyToCode(
-            $this->runtimeConfigSource->get($scope)
+            $this->getRuntimeData($scope)
         );
 
         return array_diff_key($data, $runtimeGroupsData);
@@ -73,7 +80,7 @@ class DataDifferenceCalculator
         $groupsToUpdate = [];
         $data = $this->changeDataKeyToCode($data);
         $runtimeGroupsData = $this->changeDataKeyToCode(
-            $this->runtimeConfigSource->get($scope)
+            $this->getRuntimeData($scope)
         );
 
         foreach ($runtimeGroupsData as $groupCode => $groupData) {
@@ -85,6 +92,21 @@ class DataDifferenceCalculator
         }
 
         return $groupsToUpdate;
+    }
+
+    /**
+     * Retrieves runtime data for specific scope.
+     *
+     * @param string $scope The scope of config data
+     * @return array
+     */
+    private function getRuntimeData($scope)
+    {
+        if (null === $this->runtimeConfigData) {
+            $this->runtimeConfigData = $this->runtimeConfigSource->get();
+        }
+
+        return (array)$this->runtimeConfigData[$scope];
     }
 
     /**

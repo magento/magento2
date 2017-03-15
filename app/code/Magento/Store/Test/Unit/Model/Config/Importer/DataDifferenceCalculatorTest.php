@@ -50,14 +50,15 @@ class DataDifferenceCalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->runtimeConfigSourceMock->expects($this->once())
             ->method('get')
-            ->with(ScopeInterface::SCOPE_GROUPS)
             ->willReturn([
-                2 => [
-                    'code' => 'test',
-                    'name' => 'Test'
-                ]
+                ScopeInterface::SCOPE_GROUPS => $data
             ]);
 
+        $this->assertSame(
+            $expectedData,
+            $this->model->getItemsToDelete(ScopeInterface::SCOPE_GROUPS, $data)
+        );
+        // Test the lazy-load cache.
         $this->assertSame(
             $expectedData,
             $this->model->getItemsToDelete(ScopeInterface::SCOPE_GROUPS, $data)
@@ -81,8 +82,9 @@ class DataDifferenceCalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->runtimeConfigSourceMock->expects($this->once())
             ->method('get')
-            ->with(ScopeInterface::SCOPE_GROUPS)
-            ->willReturn([]);
+            ->willReturn([
+                ScopeInterface::SCOPE_GROUPS => []
+            ]);
 
         $this->assertSame(
             $expectedData,
@@ -107,11 +109,12 @@ class DataDifferenceCalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->runtimeConfigSourceMock->expects($this->once())
             ->method('get')
-            ->with(ScopeInterface::SCOPE_GROUPS)
             ->willReturn([
-                2 => [
-                    'code' => 'test',
-                    'name' => 'Test'
+                ScopeInterface::SCOPE_GROUPS => [
+                    2 => [
+                        'code' => 'test',
+                        'name' => 'Test'
+                    ]
                 ]
             ]);
 
