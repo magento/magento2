@@ -33,7 +33,7 @@ class MysqlFactory
     }
 
     /**
-     * Create instance of Mysql
+     * Create instance of Mysql adapter
      *
      * @param string $className
      * @param LoggerInterface $logger
