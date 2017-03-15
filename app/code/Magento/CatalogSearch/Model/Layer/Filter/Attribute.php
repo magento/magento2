@@ -53,7 +53,7 @@ class Attribute extends AbstractFilter
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         $attributeValue = $request->getParam($this->_requestVar);
-        if (empty($attributeValue)) {
+        if (empty($attributeValue) && !is_numeric($attributeValue)) {
             return $this;
         }
         $attribute = $this->getAttributeModel();
@@ -95,7 +95,7 @@ class Attribute extends AbstractFilter
         $options = $attribute->getFrontend()
             ->getSelectOptions();
         foreach ($options as $option) {
-            if (empty($option['value'])) {
+            if (empty($option['value']) && !is_numeric($option['value'])) {
                 continue;
             }
 
