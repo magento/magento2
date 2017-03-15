@@ -14,6 +14,7 @@
             <module name="Magento_Directory" />
             <module name="Magento_Checkout" />
             <module name="Magento_Backend" />
+            <module name="Magento_Payment" />
         </sequence>
     </module>
 </config>

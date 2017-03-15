@@ -6,10 +6,13 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
+use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 
 /**
  * Prepare data related to purchase event represented in case creation request.
@@ -32,18 +35,36 @@ class PurchaseBuilder
     private $signifydOrderSessionId;
 
     /**
-     * @param DateTimeFactory $dateTimeFactory
-     * @param ScopeInterface $scope
-     * @param SignifydOrderSessionId $signifydOrderSessionId
+     * @var PaymentVerificationFactory
+     */
+    private $paymentVerificationFactory;
+
+    /**
+     * @var PaymentMethodMapper
+     */
+    private $paymentMethodMapper;
+
+    /**
+     * PurchaseBuilder constructor.
+     *
+     * @param DateTimeFactory            $dateTimeFactory
+     * @param ScopeInterface             $scope
+     * @param SignifydOrderSessionId     $signifydOrderSessionId
+     * @param PaymentVerificationFactory $paymentVerificationFactory
+     * @param PaymentMethodMapper        $paymentMethodMapper
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
         ScopeInterface $scope,
-        SignifydOrderSessionId $signifydOrderSessionId
+        SignifydOrderSessionId $signifydOrderSessionId,
+        PaymentVerificationFactory $paymentVerificationFactory,
+        PaymentMethodMapper $paymentMethodMapper
     ) {
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
         $this->signifydOrderSessionId = $signifydOrderSessionId;
+        $this->paymentVerificationFactory = $paymentVerificationFactory;
+        $this->paymentMethodMapper = $paymentMethodMapper;
     }
 
     /**
@@ -69,8 +90,12 @@ class PurchaseBuilder
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
                 'transactionId' => $orderPayment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
+                'avsResponseCode' => $this->getAvsCode($orderPayment),
+                'cvvResponseCode' => $this->getCvvCode($orderPayment),
                 'orderChannel' => $this->getOrderChannel(),
                 'totalPrice' => $order->getGrandTotal(),
+                'paymentMethod' => $this->paymentMethodMapper
+                    ->getSignifydPaymentMethodCode($orderPayment->getMethod())
             ],
         ];
 
@@ -150,7 +175,16 @@ class PurchaseBuilder
      */
     private function getPaymentGateway($gatewayCode)
     {
-        return strstr($gatewayCode, 'paypal') === false ? $gatewayCode : 'paypal_account';
+        $payPalCodeList = [
+            'paypal_express',
+            'braintree_paypal',
+            'payflowpro',
+            'payflow_express',
+            'payflow_link',
+            'payflow_advanced',
+            'hosted_pro',
+        ];
+        return in_array($gatewayCode, $payPalCodeList) ? 'paypal_account' : $gatewayCode;
     }
 
     /**
@@ -161,5 +195,29 @@ class PurchaseBuilder
     private function getOrderChannel()
     {
         return $this->scope->getCurrentScope() === Area::AREA_ADMINHTML ? 'PHONE' : 'WEB';
+    }
+
+    /**
+     * Gets AVS code for order payment method.
+     *
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
+     */
+    private function getAvsCode(OrderPaymentInterface $orderPayment)
+    {
+        $avsAdapter = $this->paymentVerificationFactory->createPaymentAvs($orderPayment->getMethod());
+        return $avsAdapter->getCode($orderPayment);
+    }
+
+    /**
+     * Gets CVV code for order payment method.
+     *
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
+     */
+    private function getCvvCode(OrderPaymentInterface $orderPayment)
+    {
+        $cvvAdapter = $this->paymentVerificationFactory->createPaymentCvv($orderPayment->getMethod());
+        return $cvvAdapter->getCode($orderPayment);
     }
 }

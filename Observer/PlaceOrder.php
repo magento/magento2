@@ -5,19 +5,16 @@
  */
 namespace Magento\Signifyd\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event;
-use Magento\Sales\Api\Data\OrderInterface;
-
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Api\CaseCreationServiceInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Signifyd\Api\CaseCreationServiceInterface;
+use Magento\Signifyd\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
- * Place Order observer.
- *
  * Observer should be triggered when new order is created and placed.
  * If Signifyd integration enabled in configuration then new case will be created.
  */
@@ -39,8 +36,6 @@ class PlaceOrder implements ObserverInterface
     private $logger;
 
     /**
-     * PlaceOrder constructor.
-     *
      * @param Config $signifydIntegrationConfig
      * @param CaseCreationServiceInterface $caseCreationService
      * @param LoggerInterface $logger
