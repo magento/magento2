@@ -23,6 +23,7 @@ use Magento\Framework\Reflection\MethodsMap;
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {

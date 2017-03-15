@@ -11,6 +11,14 @@ use Magento\Framework\Exception\ErrorMessage;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * Web API exception should not be used directly by any modules except for Magento_Webapi.
+ *
+ * During web API requests, all exceptions are converted to this exception,
+ * which is then used for proper error response generation.
+ *
+ * @api
+ */
 class Exception extends LocalizedException
 {
     /**#@+
