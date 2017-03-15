@@ -10,7 +10,7 @@ use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
-use Magento\Store\Model\Config\Importer\Process\ProcessFactory;
+use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -29,7 +29,7 @@ class Importer implements ImporterInterface
     /**
      * The factory for processes.
      *
-     * @var ProcessFactory
+     * @var ProcessorFactory
      */
     private $processFactory;
 
@@ -56,14 +56,14 @@ class Importer implements ImporterInterface
 
     /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator The factory for data difference calculators
-     * @param ProcessFactory $processFactory The factory for processes
+     * @param ProcessorFactory $processFactory The factory for processes
      * @param StoreManagerInterface $storeManager The manager for operations with store
      * @param CacheInterface $cacheManager The application cache manager
      * @param Website $resource The resource of transaction
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
-        ProcessFactory $processFactory,
+        ProcessorFactory $processFactory,
         StoreManagerInterface $storeManager,
         CacheInterface $cacheManager,
         Website $resource
@@ -85,9 +85,9 @@ class Importer implements ImporterInterface
     {
         try {
             $actions = [
-                ProcessFactory::TYPE_DELETE,
-                ProcessFactory::TYPE_CREATE,
-                ProcessFactory::TYPE_UPDATE
+                ProcessorFactory::TYPE_DELETE,
+                ProcessorFactory::TYPE_CREATE,
+                ProcessorFactory::TYPE_UPDATE
             ];
 
             $this->resource->getConnection()->beginTransaction();

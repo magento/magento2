@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Config\Importer\Process;
+namespace Magento\Store\Model\Config\Importer\Processor;
 
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NotFoundException;
@@ -20,7 +20,7 @@ use Magento\Store\Model\WebsiteFactory;
 /**
  * @inheritdoc
  */
-class Create implements ProcessInterface
+class Create implements ProcessorInterface
 {
     /**
      * @var DataDifferenceCalculator

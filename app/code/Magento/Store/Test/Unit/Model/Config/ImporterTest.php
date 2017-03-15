@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Test\Unit\Model\Config;
 
+use Magento\Framework\App\CacheInterface;
 use Magento\Store\Model\Config\Importer;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
@@ -27,12 +28,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var Importer\Process\ProcessFactory|Mock
+     * @var \Magento\Store\Model\Config\Importer\Processor\ProcessorFactory|Mock
      */
     private $processFactoryMock;
 
     /**
-     * @var Importer\Process\ProcessInterface|Mock
+     * @var \Magento\Store\Model\Config\Importer\Processor\ProcessorInterface|Mock
      */
     private $processMock;
 
@@ -40,6 +41,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      * @var StoreManager|Mock
      */
     private $storeManagerMock;
+
+    /**
+     * @var CacheInterface|Mock
+     */
+    private $cacheManagerMock;
 
     /**
      * @var Website|Mock
@@ -54,14 +60,16 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->dataDifferenceCalculatorMock = $this->getMockBuilder(Importer\DataDifferenceCalculator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processFactoryMock = $this->getMockBuilder(Importer\Process\ProcessFactory::class)
+        $this->processFactoryMock = $this->getMockBuilder(Importer\Processor\ProcessorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processMock = $this->getMockBuilder(Importer\Process\ProcessInterface::class)
+        $this->processMock = $this->getMockBuilder(Importer\Processor\ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->cacheManagerMock = $this->getMockBuilder(CacheInterface::class)
+            ->getMockForAbstractClass();
         $this->resourceMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -70,6 +78,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             $this->dataDifferenceCalculatorMock,
             $this->processFactoryMock,
             $this->storeManagerMock,
+            $this->cacheManagerMock,
             $this->resourceMock
         );
     }

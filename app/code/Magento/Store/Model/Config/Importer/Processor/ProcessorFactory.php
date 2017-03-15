@@ -3,15 +3,20 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Config\Importer\Process;
+namespace Magento\Store\Model\Config\Importer\Processor;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 
-class ProcessFactory
+/**
+ * The factory for creating importing processors.
+ *
+ * @see ProcessorInterface
+ */
+class ProcessorFactory
 {
     /**#@+
-     * Constants for processors.
+     * Constants for processor types.
      */
     const TYPE_CREATE = 'create';
     const TYPE_DELETE = 'delete';
@@ -29,7 +34,7 @@ class ProcessFactory
      * List of class names that implement processes.
      *
      * @var array
-     * @see ProcessInterface
+     * @see ProcessorInterface
      */
     private $processors;
 
@@ -49,7 +54,7 @@ class ProcessFactory
      * Creates an instance of specified processor.
      *
      * @param string $processorName The name of processor
-     * @return ProcessInterface New processor instance
+     * @return ProcessorInterface New processor instance
      * @throws ConfigurationMismatchException If processor type is not exists in processors array
      * or declared class has wrong implementation
      */
@@ -61,9 +66,9 @@ class ProcessFactory
 
         $object = $this->objectManager->create($this->processors[$processorName]);
 
-        if (!$object instanceof ProcessInterface) {
+        if (!$object instanceof ProcessorInterface) {
             throw new ConfigurationMismatchException(
-                __('%1 should implement %2', get_class($object), ProcessInterface::class)
+                __('%1 should implement %2', get_class($object), ProcessorInterface::class)
             );
         }
 

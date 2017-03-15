@@ -3,11 +3,12 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Config\Importer\Process;
+namespace Magento\Store\Model\Config\Importer\Processor;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
+use Magento\Store\Model\Config\Importer\Processor\ProcessorInterface;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\ResourceModel\Store;
@@ -19,7 +20,7 @@ use Magento\Store\Model\WebsiteFactory;
 /**
  * @inheritdoc
  */
-class Update implements ProcessInterface
+class Update implements ProcessorInterface
 {
     /**
      * @var DataDifferenceCalculator

@@ -390,12 +390,12 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Config\Importer\Process\ProcessFactory">
+    <type name="Magento\Store\Model\Config\Importer\Processor\ProcessorFactory">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="create" xsi:type="string">Magento\Store\Model\Config\Importer\Process\Create</item>
-                <item name="delete" xsi:type="string">Magento\Store\Model\Config\Importer\Process\Delete</item>
-                <item name="update" xsi:type="string">Magento\Store\Model\Config\Importer\Process\Update</item>
+                <item name="create" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Create</item>
+                <item name="delete" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Delete</item>
+                <item name="update" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Update</item>
             </argument>
         </arguments>
     </type>
