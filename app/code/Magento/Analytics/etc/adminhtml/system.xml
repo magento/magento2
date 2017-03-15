@@ -13,12 +13,10 @@
             <resource>Magento_Analytics::analytics_settings</resource>
             <group id="general" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Advanced Reporting</label>
-                <comment><![CDATA[
-                    <p>This service provides a suite of dynamic reports based on your product, order and customer data.
-                    All reports are accessed securely on a personalized dashboard dedicated to your reports - separate
-                    from your Admin Panel.</p>
-                    <p>For more information, <a href="#">view details</a> or see our <a href="#">terms and conditions</a>.</p>
-                ]]></comment>
+                <comment><![CDATA[This service provides a suite of dynamic reports based on your product, order and
+                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
+                separate from your Admin Panel.</br> For more information, <a href="#">view details</a> or see our
+                <a href="#">terms and conditions</a>.]]></comment>
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Advanced Reporting Service</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
@@ -41,11 +39,10 @@
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\DefaultTimeZoneLabel</frontend_model>
                 </field>
                 <field id="additional_comment" translate="label comment" type="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label><![CDATA[<strong>Get more insight from Magento Business Intelligence</strong>]]></label>
-                    <comment><![CDATA[
-                    <p>Magento Business Intelligence provides you with a simple and clear path to becoming more data driven.</p>
-                    <p>Learn more about <a target="_blank" href="https://dashboard.rjmetrics.com/v2/magento/signup/">BI Essentials</a>
-                    and <a href="#">BI Pro</a> tiers.</p>]]></comment>
+                    <label><![CDATA[<strong>Get more insights from Magento Business Intelligence</strong>]]></label>
+                    <comment><![CDATA[Magento Business Intelligence provides you with a simple and clear path to
+                    becoming more data driven.</br> Learn more about <a target="_blank"
+                    href="https://dashboard.rjmetrics.com/v2/magento/signup/">BI Essentials</a> tier.]]></comment>
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\AdditionalComment</frontend_model>
                 </field>
             </group>
