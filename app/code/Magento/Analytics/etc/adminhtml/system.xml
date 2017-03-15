@@ -11,7 +11,7 @@
             <label>Advanced Reporting</label>
             <tab>general</tab>
             <resource>Magento_Analytics::analytics_settings</resource>
-            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="general" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Advanced Reporting</label>
                 <comment><![CDATA[
                     <p>This service provides a suite of dynamic reports based on your product, order and customer data.
@@ -40,7 +40,7 @@
                 <field id="time_zone_lable" type="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\DefaultTimeZoneLabel</frontend_model>
                 </field>
-                <field id="additional_comment" type="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="additional_comment" translate="label comment" type="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label><![CDATA[<strong>Get more insight from Magento Business Intelligence</strong>]]></label>
                     <comment><![CDATA[
                     <p>Magento Business Intelligence provides you with a simple and clear path to becoming more data driven.</p>
