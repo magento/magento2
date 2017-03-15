@@ -76,6 +76,8 @@
         <variation name="ImportProductsVariation4" ticketId="MAGETWO-46159" summary="Replace product tier prices in two websites">
             <data name="issue" xsi:type="string">MAGETWO-66134: [Export/Import] Advanced Pricing import works incorrect</data>
             <data name="changeCurrency" xsi:type="boolean">true</data>
+            <data name="configData" xsi:type="string">price_scope_website</data>
+            <data name="rollback" xsi:type="boolean">true</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
                 <item name="behavior" xsi:type="string">Replace</item>
@@ -94,7 +96,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
     </testCase>

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdvancedPricingImportExport\Test\Constraint;
+namespace Magento\ImportExport\Test\Constraint;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -44,6 +44,6 @@ class AssertImportSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Displayed import result is correct.';
+        return 'Displayed import success message is correct.';
     }
 }

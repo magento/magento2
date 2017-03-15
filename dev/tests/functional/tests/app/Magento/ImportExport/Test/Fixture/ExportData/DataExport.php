@@ -15,7 +15,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class DataExport extends DataSource
 {
     /**
-     * @constructor
      * @param InjectableFixture $data
      */
     public function __construct(InjectableFixture $data)

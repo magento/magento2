@@ -7,7 +7,6 @@ namespace Magento\AdvancedPricingImportExport\Test\TestCase;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Store\Test\Fixture\Website;
@@ -75,7 +74,7 @@ class ExportAdvancedPricingTest extends Injectable
         CatalogProductIndex $catalogProductIndex
     ) {
         $catalogProductIndex->open();
-        $catalogProductIndex->getProductGrid()->removeAllProducts();
+        $catalogProductIndex->getProductGrid()->massaction([], 'Delete', true, 'Select All');
     }
 
     /**
@@ -100,7 +99,7 @@ class ExportAdvancedPricingTest extends Injectable
     }
 
     /**
-     * Runs Export Advance Pricing test.
+     * Runs Export Advanced Pricing test.
      *
      * @param string $exportData
      * @param array $products
@@ -201,7 +200,7 @@ class ExportAdvancedPricingTest extends Injectable
     public function prepareProducts(array $products, Website $website = null)
     {
         if (empty($products)) {
-            return;
+            return null;
         }
         $createdProducts = [];
         foreach ($products as $product) {

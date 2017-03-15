@@ -3,15 +3,15 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdvancedPricingImportExport\Test\Constraint;
+namespace Magento\ImportExport\Test\Constraint;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that error message is visible after exporting with advanced pricing option without entity attributes data.
+ * Assert that error message is visible after exporting without entity attributes data.
  */
-class AssertExportAdvancedPricingNoDataErrorMessage extends AbstractConstraint
+class AssertExportNoDataErrorMessage extends AbstractConstraint
 {
     /**
      * Text value to be checked.
@@ -19,7 +19,7 @@ class AssertExportAdvancedPricingNoDataErrorMessage extends AbstractConstraint
     const ERROR_MESSAGE = 'There is no data for the export.';
 
     /**
-     * Assert that error message is visible after exporting with advanced pricing option without entity attributes data.
+     * Assert that error message is visible after exporting without entity attributes data.
      *
      * @param AdminExportIndex $adminExportIndex
      * @return void

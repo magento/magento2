@@ -177,7 +177,7 @@ class File extends DataSource
     }
 
     /**
-     * Create products from configuration of variation.
+     * Create entities from configuration of variation.
      *
      * @return FixtureInterface[]
      */
@@ -187,7 +187,7 @@ class File extends DataSource
         foreach ($this->value['entities'] as $key => $entityDataSet) {
             list($fixtureCode, $dataset) = explode('::', $entityDataSet);
 
-            /** @var FixtureInterface[] $products */
+            /** @var FixtureInterface[] $entities */
             $entities[$key] = $this->fixtureFactory->createByCode(trim($fixtureCode), ['dataset' => trim($dataset)]);
             if ($entities[$key]->hasData('id') === false) {
                 $entities[$key]->persist();
@@ -198,9 +198,9 @@ class File extends DataSource
     }
 
     /**
-     * Create placeholders for products.
+     * Create placeholders for entities.
      *
-     * @return array
+     * @return void
      */
     private function preparePlaceHolders()
     {
