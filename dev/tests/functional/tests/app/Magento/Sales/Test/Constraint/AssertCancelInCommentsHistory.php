@@ -3,26 +3,24 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
+ * Assert that comment about canceled amount exists in
+ * Comments History section on order page in Admin.
  */
-class AssertAuthorizationInCommentsHistory extends AbstractConstraint
+class AssertCancelInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Pattern of message about authorized amount in order.
+     * Pattern of message about canceled amount in order.
      */
-    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
+    private $canceledAmountPattern = '/^Canceled order online Amount: \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
-     *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
@@ -40,23 +38,23 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $orderComments = $infoTab->getCommentsHistoryBlock()->getComments();
-        $commentsMessages = array_column($orderComments, 'comment');
+        $comments = $infoTab->getCommentsHistoryBlock()->getComments();
+        $commentsMessages = array_column($comments, 'comment');
 
         \PHPUnit_Framework_Assert::assertRegExp(
-            sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
+            sprintf($this->canceledAmountPattern, $prices['grandTotal']),
             implode('. ', $commentsMessages),
-            'Incorrect authorized amount value for the order #' . $orderId
+            'Incorrect canceled amount value for the order #' . $orderId
         );
     }
 
     /**
-     * Returns string representation of successful assertion.
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return "Message about authorized amount is available in Comments History section.";
+        return "Message about canceled amount is available in Comments History section.";
     }
 }
