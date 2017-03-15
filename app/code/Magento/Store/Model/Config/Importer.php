@@ -7,27 +7,27 @@ namespace Magento\Store\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use \Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
-use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Imports stores, websites and groups from configuration files.
+ * Imports stores, websites and groups from transmitted data.
  */
 class Importer implements ImporterInterface
 {
     /**
-     * The factory for data difference calculators.
+     * The data difference calculator.
      *
      * @var DataDifferenceCalculator
      */
     private $dataDifferenceCalculator;
 
     /**
-     * The factory for processes.
+     * The factory for processors.
      *
      * @var ProcessorFactory
      */
@@ -43,7 +43,7 @@ class Importer implements ImporterInterface
     /**
      * The resource of transaction.
      *
-     * @var Website
+     * @var ResourceConnection
      */
     private $resource;
 
@@ -59,14 +59,14 @@ class Importer implements ImporterInterface
      * @param ProcessorFactory $processFactory The factory for processes
      * @param StoreManagerInterface $storeManager The manager for operations with store
      * @param CacheInterface $cacheManager The application cache manager
-     * @param Website $resource The resource of transaction
+     * @param ResourceConnection $resource The resource of transaction
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
         ProcessorFactory $processFactory,
         StoreManagerInterface $storeManager,
         CacheInterface $cacheManager,
-        Website $resource
+        ResourceConnection $resource
     ) {
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->processFactory = $processFactory;
@@ -83,6 +83,7 @@ class Importer implements ImporterInterface
      */
     public function import(array $data)
     {
+        $messages = [];
         try {
             $actions = [
                 ProcessorFactory::TYPE_DELETE,
