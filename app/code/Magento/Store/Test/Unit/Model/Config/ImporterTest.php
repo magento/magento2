@@ -29,12 +29,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $dataDifferenceCalculatorMock;
 
     /**
-     * @var \Magento\Store\Model\Config\Importer\Processor\ProcessorFactory|Mock
+     * @var Importer\Processor\ProcessorFactory|Mock
      */
     private $processorFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\Config\Importer\Processor\ProcessorInterface|Mock
+     * @var Importer\Processor\ProcessorInterface|Mock
      */
     private $processorMock;
 
@@ -143,9 +143,10 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     public function testGetWarningMessages()
     {
         $expectedData = [
-            'Next Stores will be deleted: 3 Stores',
+            'Next Stores will be deleted: 3 stores',
             'Next Groups will be deleted: 2 groups',
-            'Next Websites will be deleted: 1 website'
+            'Next Websites will be deleted: 1 website',
+            'Next Websites will be updated: 7 websites',
         ];
         $data = [
             ScopeInterface::SCOPE_STORES => ['stores'],
@@ -156,9 +157,14 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->dataDifferenceCalculatorMock->expects($this->exactly(3))
             ->method('getItemsToDelete')
             ->willReturnMap([
-                [ScopeInterface::SCOPE_STORES, ['stores'], [['name' => '3 Stores']]],
+                [ScopeInterface::SCOPE_STORES, ['stores'], [['name' => '3 stores']]],
                 [ScopeInterface::SCOPE_GROUPS, ['groups'], [['name' => '2 groups']]],
                 [ScopeInterface::SCOPE_WEBSITES, ['websites'], [['name' => '1 website']]],
+            ]);
+        $this->dataDifferenceCalculatorMock->expects($this->exactly(3))
+            ->method('getItemsToUpdate')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITES, ['websites'], [['name' => '7 websites']]],
             ]);
 
         $this->assertSame($expectedData, $this->model->getWarningMessages($data));
