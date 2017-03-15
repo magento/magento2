@@ -33,6 +33,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -62,13 +63,12 @@ class UpgradeData implements UpgradeDataInterface
                 $code = 'store_group';
             }
 
-            if (in_array($code, $codes)) {
-                $i = 1;
-                do {
-                    $newCode = $code . '_' . $i++;
-                } while (in_array($newCode, $codes));
-
-                $code = $newCode;
+            if (array_key_exists($code, $codes)) {
+                $codes[$code]++;
+                $code = $code . $codes[$code];
+                $codes[$code] = 1;
+            } else {
+                $codes[$code] = 1;
             }
 
             $codes[] = $code;
