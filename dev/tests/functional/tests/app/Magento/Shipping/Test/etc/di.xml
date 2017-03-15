@@ -11,4 +11,9 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Shipping\Test\Constraint\AssertTrackingDetailsIsPresent">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
 </config>
