@@ -88,5 +88,6 @@ class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
                 $configFixture->persist();
             }
         }
+        return ['import' => $this->import];
     }
 }
