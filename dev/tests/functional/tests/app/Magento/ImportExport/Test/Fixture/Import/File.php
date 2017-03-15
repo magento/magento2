@@ -22,9 +22,7 @@ class File extends DataSource
      *
      * @var array
      */
-    private $codeMapping =[
-        'base' => 'Main Website'
-    ];
+    private $mainWebsiteMapping;
 
     /**
      * Fixture data.
@@ -207,27 +205,46 @@ class File extends DataSource
         $placeholders = [];
         $key = 0;
         foreach ($this->entities as $entity) {
-            $currency = (isset($this->value['template']['websiteCurrency']))
-                ? "[{$this->value['template']['websiteCurrency']}]"
-                : '[USD]';
-            $website = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
-            $entityData = $entity->getData();
-            $entityData['code'] = $website->getCode();
+            $entityData = $this->prepareEntityData($entity);
             foreach ($this->csvTemplate['entity_' . $key] as $tierKey => $tier) {
                 $values = implode('', array_values($tier));
                 preg_match_all('/\%(.*)\%/U', $values, $indexes);
-
                 foreach ($indexes[1] as $index) {
                     if (isset($entityData[$index])) {
                         $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
                     }
-                    $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $website->getName() . $currency;
+                    $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $entityData[$entityData['code']];
                 }
             }
-
             $key++;
         }
         $this->placeholders = $placeholders;
+    }
+
+    /**
+     * Prepare entity data.
+     *
+     * @param FixtureInterface $entity
+     * @return array
+     */
+    public function prepareEntityData(FixtureInterface $entity)
+    {
+        $currency = (isset($this->value['template']['websiteCurrency']))
+            ? "[{$this->value['template']['websiteCurrency']}]"
+            : '[USD]';
+        $entityData = $entity->getData();
+
+        $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
+        foreach ($websites as $website) {
+            if ($website->getCode() === 'base') {
+                $currency = $this->value['template']['mainWebsiteCurrency'];
+                $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
+                break;
+            }
+            $entityData['code'] = $website->getCode();
+            $entityData[$website->getCode()] = $website->getName() . $currency;
+        }
+        return $entityData;
     }
 
     /**
@@ -243,10 +260,7 @@ class File extends DataSource
                 $csvContent = strtr($csvContent, $data);
             }
         }
-        $this->codeMapping['base'] .= (isset($this->value['template']['mainWebsiteCurrency']))
-            ? "[{$this->value['template']['mainWebsiteCurrency']}]"
-            : '[USD]';
-        $csvContent = strtr($csvContent, $this->codeMapping);
+        $csvContent = strtr($csvContent, $this->mainWebsiteMapping);
         $this->csv = array_map(
             function ($value) {
                 return explode(',', str_replace('"', '', $value));
