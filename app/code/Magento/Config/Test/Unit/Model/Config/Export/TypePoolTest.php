@@ -5,7 +5,6 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
-
 use Magento\Config\Model\Config\TypePool;
 
 class TypePoolTest extends \PHPUnit_Framework_TestCase
@@ -26,12 +25,7 @@ class TypePoolTest extends \PHPUnit_Framework_TestCase
         $expectedResult
     ) {
         $typePool = new TypePool($sensitive, $environment);
-        $result = $typePool->isPresent($path, $type);
-        if ($expectedResult) {
-            $this->assertTrue($result);
-        } else {
-            $this->assertFalse($result);
-        }
+        $this->assertSame($expectedResult, $typePool->isPresent($path, $type));
     }
 
     /**

@@ -22,7 +22,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $excludeList;
 
     /**
-     * Checks whether the field is of type.
+     * Checker for config type.
      *
      * @var TypePool
      */
@@ -114,7 +114,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     /**
      * Checks if the configuration field belongs to a sensitive type.
      *
-     * @param string $path configuration field. For example 'contact/email/recipient_email'
+     * @param string $path Configuration field path. For example 'contact/email/recipient_email'
      * @return boolean
      */
     private function isExcludePath($path)

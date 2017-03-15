@@ -41,14 +41,11 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
-
         $this->sourceMockTwo = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
-
         $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->typePool = $this->getMockBuilder(TypePool::class)
             ->disableOriginalConstructor()
             ->getMock();

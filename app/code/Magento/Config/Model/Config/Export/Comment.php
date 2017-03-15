@@ -28,14 +28,14 @@ class Comment implements CommentInterface
     private $source;
 
     /**
-     * Checks whether the field is of type.
+     * Checker for config type.
      *
      * @var TypePool
      */
     private $typePool;
 
     /**
-     * Class ExcludeList contains list of config fields which should be excluded from config export file.
+     * Contains list of config fields which should be excluded from config export file.
      *
      * @var ExcludeList
      */
@@ -60,7 +60,10 @@ class Comment implements CommentInterface
     }
 
     /**
-     * Retrieves comments for the configuration export file only for fields that have a sensitive type.
+     * Retrieves comments for the configuration export file.
+     *
+     * If there are sensitive fields in the configuration fields,
+     * a list with descriptions of these fields will be added to the comments.
      *
      * @return string
      */
@@ -82,9 +85,9 @@ class Comment implements CommentInterface
     }
 
     /**
-     * Checks whether the field is sensitive
+     * Checks whether the field path is sensitive.
      *
-     * @param string $path configuration field path
+     * @param string $path Configuration field path
      * @return bool
      */
     private function isSensitive($path)

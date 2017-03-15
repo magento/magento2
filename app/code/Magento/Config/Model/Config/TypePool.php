@@ -6,7 +6,13 @@
 namespace Magento\Config\Model\Config;
 
 /**
- * Checks whether the field is of type.
+ * Checker for config type.
+ *
+ * Used when you need to know if the configuration path belongs to a certain type.
+ * Participates in the mechanism for creating the configuration dump file.
+ * There are several types:
+ * - sensitive or TypePool::TYPE_SENSITIVE - the fields that have this type will not be written in the dump configuration;
+ * - environment or TypePool::TYPE_ENVIRONMENT - the fields that have this type will not be written to the dump configuration.
  */
 class TypePool
 {
@@ -21,22 +27,22 @@ class TypePool
     const TYPE_ENVIRONMENT = 'environment';
 
     /**
-     * List of sensitive configuration fields.
+     * List of sensitive configuration fields paths.
      *
      * @var array
      */
     private $sensitive;
 
     /**
-     * List of environment configuration fields.
+     * List of environment configuration fields paths.
      *
      * @var array
      */
     private $environment;
 
     /**
-     * @param array $sensitive list of sensitive configuration fields
-     * @param array $environment list of environment configuration fields
+     * @param array $sensitive List of sensitive configuration fields paths
+     * @param array $environment List of environment configuration fields paths
      */
     public function __construct(array $sensitive = [], array $environment = [])
     {
@@ -45,11 +51,11 @@ class TypePool
     }
 
     /**
-     * Verifies that the configuration field belongs to the specified type.
+     * Verifies that the configuration field path belongs to the specified type.
      *
-     * @param string $path configuration field. For example 'contact/email/recipient_email'
-     * @param string $type type of configuration fields
-     * @return bool
+     * @param string $path Configuration field path. For example, 'contact/email/recipient_email'
+     * @param string $type Type of configuration fields
+     * @return bool True when the path belongs to requested type, false otherwise
      */
     public function isPresent($path, $type)
     {
@@ -58,9 +64,23 @@ class TypePool
     }
 
     /**
-     * Gets a list of configuration fields for the specified type.
+     * Gets a list of configuration fields paths for the specified type.
      *
-     * @param string $type type configuration fields. For example 'contact/email/recipient_email'
+     * Returns an empty array if the passed type does not exist. If the type exists,
+     * it returns a list of fields of a persistent type.
+     * For example, if you pass a sensitive or TypePool::TYPE_SENSITIVE type, we get an array:
+     * ```php
+     * array(
+     *      'some/path/sensetive/path1'
+     *      'some/path/sensetive/path2'
+     *      'some/path/sensetive/path3'
+     *      'some/path/sensetive/path4'
+     * );
+     * ```
+     *
+     * @param string $type Type configuration fields paths. Allowed values of types:
+     * - sensitive or TypePool::TYPE_SENSITIVE;
+     * - environment or TypePool::TYPE_ENVIRONMENT.
      * @return array
      */
     private function getPathsByType($type)
