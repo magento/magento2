@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Cron;
 
 use Magento\Analytics\Cron\CollectData;
-use Magento\Analytics\Model\ExportDataHandler;
+use Magento\Analytics\Model\ExportDataHandlerInterface;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CollectDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ExportDataHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExportDataHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $exportDataHandlerMock;
 
@@ -40,9 +40,8 @@ class CollectDataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->exportDataHandlerMock = $this->getMockBuilder(ExportDataHandler::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->exportDataHandlerMock = $this->getMockBuilder(ExportDataHandlerInterface::class)
+            ->getMockForAbstractClass();
 
         $this->subscriptionStatusMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
             ->disableOriginalConstructor()
