@@ -147,10 +147,15 @@ class Processor
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
-                $this->_scriptName = dirname(dirname($_SERVER['SCRIPT_NAME']));
+                $this->_scriptName = dirname($_SERVER['SCRIPT_NAME']);
             } else {
                 $this->_scriptName = $_SERVER['SCRIPT_NAME'];
             }
+        }
+
+        $reportId = (isset($_GET['id'])) ? (int)$_GET['id'] : null;
+        if ($reportId) {
+            $this->loadReport($reportId);
         }
 
         $this->_indexDir = $this->_getIndexDir();
@@ -484,7 +489,8 @@ class Processor
         $this->_reportFile = $this->_reportDir . '/' . $reportId;
 
         if (!file_exists($this->_reportFile) || !is_readable($this->_reportFile)) {
-            throw new \Magento\Framework\Exception\NotFoundException(__('Report not found'));
+            header("Location: " . $this->getBaseUrl());
+            die();
         }
         $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
     }

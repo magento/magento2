@@ -5,11 +5,12 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Collection\Db\FetchStrategy;
 
-use \Magento\Framework\Data\Collection\Db\FetchStrategy\Cache;
-use \Magento\Framework\Cache\FrontendInterface;
-use \Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use \Magento\Framework\DB\Select;
-use \Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategy\Cache;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,13 +48,16 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock = $this->getMock(FrontendInterface::class);
         $this->fetchStrategyMock = $this->getMock(FetchStrategyInterface::class);
         $this->serializerMock = $this->getMock(SerializerInterface::class);
-        $this->fetchStrategyCache = new Cache(
-            $this->cacheMock,
-            $this->fetchStrategyMock,
-            'fixture_',
-            ['fixture_tag_one', 'fixture_tag_two'],
-            86400,
-            $this->serializerMock
+        $this->fetchStrategyCache = (new ObjectManager($this))->getObject(
+            Cache::class,
+            [
+                'cache' => $this->cacheMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'cacheIdPrefix' => 'fixture_',
+                'cacheTags' => ['fixture_tag_one', 'fixture_tag_two'],
+                'cacheLifetime' => 86400,
+                'serializer' => $this->serializerMock
+            ]
         );
     }
 
