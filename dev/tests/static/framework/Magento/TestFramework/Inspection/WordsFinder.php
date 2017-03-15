@@ -88,7 +88,7 @@ class WordsFinder
 
     /**
      * Map of phrase to exclude from the file content
-     * 
+     *
      * @var  array
      */
     private $exclude = [];

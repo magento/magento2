@@ -124,6 +124,7 @@ class Curl extends AbstractCurl implements RoleInterface
     }
 
     // TODO: Method should be removed in scope of  MAGETWO-31563
+
     /**
      * Prepare admin gws option.
      *

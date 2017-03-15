@@ -6,7 +6,6 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Customer\Counts;
 
-
 /**
  * Class Grid
  * Order count report grid

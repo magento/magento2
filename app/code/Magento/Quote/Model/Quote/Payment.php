@@ -357,6 +357,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     {
         return $this->setData(self::KEY_ADDITIONAL_DATA, $additionalData);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

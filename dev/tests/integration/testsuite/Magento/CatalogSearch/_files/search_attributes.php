@@ -61,7 +61,6 @@ foreach ($attributesData as $data) {
     $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
 }
 
-
 /** @var \Magento\Eav\Model\Config $eavConfig */
 $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $eavConfig->clear();

@@ -70,7 +70,7 @@ class Manager
     }
 
     /**
-     * Get general interface locale 
+     * Get general interface locale
      *
      * @return string
      */

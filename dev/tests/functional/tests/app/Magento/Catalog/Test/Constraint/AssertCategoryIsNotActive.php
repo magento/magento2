@@ -67,7 +67,6 @@ class AssertCategoryIsNotActive extends AbstractConstraint
         return $_ENV['app_frontend_url'] . implode('/', array_reverse($categoryUrlKey)) . '.html';
     }
 
-
     /**
      * Category not find in top menu
      *

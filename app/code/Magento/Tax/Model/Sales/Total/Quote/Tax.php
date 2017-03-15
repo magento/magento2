@@ -250,7 +250,7 @@ class Tax extends CommonTaxCollector
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function processExtraTaxables(Address\Total $total, Array $itemsByType)
+    protected function processExtraTaxables(Address\Total $total, array $itemsByType)
     {
         $extraTaxableDetails = [];
         foreach ($itemsByType as $itemType => $itemTaxDetails) {

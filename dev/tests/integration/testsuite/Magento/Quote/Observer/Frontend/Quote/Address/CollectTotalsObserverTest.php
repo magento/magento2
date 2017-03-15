@@ -72,7 +72,7 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
                 'quote' => $quote,
                 'shipping_assignment' => $shippingAssignment,
                 'total' => $total
-        ]
+            ]
             ]
         );
         $this->model->execute($eventObserver);

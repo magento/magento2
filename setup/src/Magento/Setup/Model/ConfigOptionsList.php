@@ -335,7 +335,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
         ) {
             try {
-
                 $options = $this->getDbSettings($options, $deploymentConfig);
 
                 $this->dbValidator->checkDatabaseConnection(

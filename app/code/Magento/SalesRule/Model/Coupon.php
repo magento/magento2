@@ -302,5 +302,6 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

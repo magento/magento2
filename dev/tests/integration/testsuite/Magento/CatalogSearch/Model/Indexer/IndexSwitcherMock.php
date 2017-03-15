@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-
 use Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface;
 
 /**

@@ -787,6 +787,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         }
         return $this->ruleConditionConverter;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

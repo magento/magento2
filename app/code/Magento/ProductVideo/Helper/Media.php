@@ -33,6 +33,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Configuration path for show related
      */
     const XML_PATH_SHOW_RELATED = 'catalog/product_video/show_related';
+
     /**
      * Configuration path for video auto restart
      */
