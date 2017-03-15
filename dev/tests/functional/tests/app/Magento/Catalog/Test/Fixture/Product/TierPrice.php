@@ -114,7 +114,8 @@ class TierPrice extends DataSource
      */
     private function prepareWebsite()
     {
-        if (isset($this->fixtureData['data']['website']['dataset'])) {
+        if (is_array($this->fixtureData['data']['website'])
+            && isset($this->fixtureData['data']['website']['dataset'])) {
             /** @var Website $website */
             $this->website = $this->fixtureFactory->createByCode(
                 'website',

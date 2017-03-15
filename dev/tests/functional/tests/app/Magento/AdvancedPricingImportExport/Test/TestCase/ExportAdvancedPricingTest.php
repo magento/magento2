@@ -106,7 +106,7 @@ class ExportAdvancedPricingTest extends Injectable
      * @param string|null $configData
      * @param Website|null $website
      * @param array $advancedPricingAttributes
-     * @param array $currencies
+     * @param string|null $currencyCustomWebsite
      * @return array
      */
     public function test(
@@ -115,7 +115,7 @@ class ExportAdvancedPricingTest extends Injectable
         $configData = null,
         Website $website = null,
         array $advancedPricingAttributes = [],
-        array $currencies = []
+        $currencyCustomWebsite = null
     ) {
         $this->configData = $configData;
 
@@ -128,7 +128,7 @@ class ExportAdvancedPricingTest extends Injectable
 
         if ($website) {
             $website->persist();
-            $this->setupCurrencyForCustomWebsite($website, $currencies[0]);
+            $this->setupCurrencyForCustomWebsite($website, $currencyCustomWebsite);
         }
         $products = $this->prepareProducts($products, $website);
         $this->adminExportIndex->open();
@@ -160,24 +160,16 @@ class ExportAdvancedPricingTest extends Injectable
      * Setup currency of custom website.
      *
      * @param Website $website
-     * @param array $currency
+     * @param string $currencyDataset
      * @return void
      */
-    private function setupCurrencyForCustomWebsite($website, $currency)
+    private function setupCurrencyForCustomWebsite($website, $currencyDataset)
     {
         $configFixture = $this->fixtureFactory->createByCode(
             'configData',
             [
+                'dataset' => $currencyDataset,
                 'data' => [
-                    'currency/options/allow' => [
-                        'value' => $currency['allowedCurrencies']
-                    ],
-                    'currency/options/base' => [
-                        'value' => $currency['baseCurrency']
-                    ],
-                    'currency/options/default' => [
-                        'value' => $currency['defaultCurrency']
-                    ],
                     'scope' => [
                         'fixture' => $website,
                         'scope_type' => 'website',

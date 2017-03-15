@@ -57,15 +57,7 @@
                 <item name="dataset" xsi:type="string">simple_with_tier_price</item>
             </data>
             <data name="website/dataset" xsi:type="string">custom_website</data>
-            <data name="currencies" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="allowedCurrencies" xsi:type="array">
-                        <item name="0" xsi:type="string">EUR</item>
-                    </item>
-                    <item name="defaultCurrency" xsi:type="string">EUR</item>
-                    <item name="baseCurrency" xsi:type="string">EUR</item>
-                </item>
-            </data>
+            <data name="currencyCustomWebstite/dataset" xsi:type="string">config_currency_custom_website_eur</data>
             <data name="currencySymbol" xsi:type="array">
                 <item name="mainWebsite" xsi:type="string">$</item>
                 <item name="customWebsite" xsi:type="string">€</item>
