@@ -75,6 +75,7 @@
     <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>
     <preference for="Magento\Sales\Model\Order\Shipment\NotifierInterface" type="Magento\Sales\Model\Order\Shipment\Notifier"/>
     <preference for="Magento\Sales\Model\Order\PaymentAdapterInterface" type="Magento\Sales\Model\Order\PaymentAdapter"/>
+    <preference for="Magento\Sales\Model\Order\RefundAdapterInterface" type="Magento\Sales\Model\Order\RefundAdapter"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
     <preference for="Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface" type="Magento\Sales\Model\Order\Shipment\OrderRegistrar"/>
@@ -175,34 +176,34 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Controller\Order\Creditmemo">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\History">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\Invoice">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintAction">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintCreditmemo">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintInvoice">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintShipment">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\Reorder">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\Shipment">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\View">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Framework\App\Rss\RssManagerInterface">
         <arguments>
