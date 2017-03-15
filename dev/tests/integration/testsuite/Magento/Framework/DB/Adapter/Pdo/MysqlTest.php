@@ -8,9 +8,6 @@ namespace Magento\Framework\DB\Adapter\Pdo;
 use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\CacheCleaner;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**

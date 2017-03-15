@@ -11,9 +11,6 @@ use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 {
     /**
