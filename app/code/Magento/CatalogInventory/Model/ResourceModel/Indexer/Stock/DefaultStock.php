@@ -404,9 +404,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
     /**
      * @inheritdoc
-     * Returns main table name based on the suffix stored in the 'indexer_state' table
-     *
-     * @return string
      */
     public function getMainTable()
     {
