@@ -7,7 +7,7 @@ namespace Magento\Deploy\Console\Command\App\ConfigImportCommand;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
-class IntegrationTestImporter implements ImporterInterface
+class IntegrationTestSecondImporter implements ImporterInterface
 {
     /**
      * @param array $data
@@ -16,7 +16,7 @@ class IntegrationTestImporter implements ImporterInterface
      */
     public function import(array $data)
     {
-        $messages[] = '<info>Integration test data is imported!</info>';
+        $messages[] = '<info>Integration second test data is imported!</info>';
 
         return $messages;
     }
