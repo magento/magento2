@@ -17,11 +17,11 @@ use Magento\Theme\Model\ResourceModel\Theme as ThemeResourceModel;
 /**
  * Imports themes from configurations files.
  *
- * If a theme is not presented in the configuration files and on the filesystem, but is presented in the DB -
+ * If a theme is not presented in the configuration files and in the filesystem, but is presented in the DB -
  * removes its registration.
- * If a theme is not presented in the configuration files and in the DB, but is presented on the filesystem -
+ * If a theme is not presented in the configuration files and in the DB, but is presented in the filesystem -
  * register the theme in the DB.
- * If a theme is presented in the configuration files and on the filesystem, but is not presented in the DB -
+ * If a theme is presented in the configuration files and in the filesystem, but is not presented in the DB -
  * register the theme in the DB.
  * In other cases - do nothing.
  */
@@ -87,8 +87,8 @@ class Importer implements ImporterInterface
             /** @var ThemeDbCollection $collection */
             $collection = $this->themeCollectionFactory->create();
 
-            // List of themes full paths which are located on filesystem
-            $themesOnFs = $this->themeFilesystemCollection->getAllIds();
+            // List of themes full paths which are located in filesystem
+            $themesInFs = $this->themeFilesystemCollection->getAllIds();
 
             /**
              * Removes themes if they are not present in configuration files and filesystem
@@ -96,7 +96,7 @@ class Importer implements ImporterInterface
              */
             foreach ($collection->getItems() as $theme) {
                 $themeFullPath = $theme->getFullPath();
-                if (!key_exists($themeFullPath, $data) && !in_array($themeFullPath, $themesOnFs)) {
+                if (!key_exists($themeFullPath, $data) && !in_array($themeFullPath, $themesInFs)) {
                     $this->themeResourceModel->delete($theme);
                 }
             }
@@ -110,7 +110,8 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * Returns array of warning messages if needed.
+     * Returns array of warning messages which contain information about which changes (removing, registration)
+     * will be applied to themes.
      *
      * @param array $data The data that should be imported, used for creating warning messages
      * @return array
