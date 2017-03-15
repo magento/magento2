@@ -4227,4 +4227,7 @@ return [
     ['Magento\Framework\Search\Document', 'Magento\Framework\Api\Search\Document'],
     ['Magento\Framework\Search\DocumentField'],
     ['Magento\Quote\Setup\Recurring'],
+    ['Magento\Framework\Acl\Cache'],
+    ['Magento\Framework\Acl\CacheInterface'],
+    ['Magento\Framework\Acl\Test\Unit\CacheTest'],
 ];

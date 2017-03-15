@@ -89,11 +89,6 @@
             <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\ResourceLoader</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Acl\Cache">
-        <arguments>
-            <argument name="cacheKey" xsi:type="string">backend_acl_resources</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Acl\RootResource">
         <arguments>
             <argument name="identifier" xsi:type="string">Magento_Backend::all</argument>

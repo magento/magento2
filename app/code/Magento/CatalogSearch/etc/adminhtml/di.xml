@@ -16,7 +16,7 @@
             <argument name="storage" xsi:type="object">Magento\CatalogSearch\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
-    <type name="\Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front">
-        <plugin name="search_weigh" type="\Magento\CatalogSearch\Block\Plugin\FrontTabPlugin" />
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front">
+        <plugin name="search_weigh" type="Magento\CatalogSearch\Block\Plugin\FrontTabPlugin" />
     </type>
 </config>
