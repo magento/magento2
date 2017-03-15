@@ -56,6 +56,6 @@ class CheckResultMessageStep implements TestStepInterface
      */
     public function run()
     {
-        //$this->assert->processAssert($this->adminImportIndex, $this->import);
+        $this->assert->processAssert($this->adminImportIndex, $this->import);
     }
 }

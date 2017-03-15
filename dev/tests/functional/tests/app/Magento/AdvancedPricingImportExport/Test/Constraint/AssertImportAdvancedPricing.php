@@ -87,7 +87,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
                 $resultProductArray[$productSku][] = $tierPrice;
             }
             if (isset($resultProductArray[$productSku])) {
-                $resultProductArray[$productSku]= array_reverse($resultProductArray[$productSku]);
+                $resultProductArray[$productSku] = array_reverse($resultProductArray[$productSku]);
             }
         }
 
