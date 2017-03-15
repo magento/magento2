@@ -11,6 +11,7 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
 use Magento\Store\Model\ResourceModel\Website;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -88,6 +89,11 @@ class Importer implements ImporterInterface
                 ProcessorFactory::TYPE_CREATE,
                 ProcessorFactory::TYPE_UPDATE
             ];
+            $messages = ['Stores were processed'];
+
+            if ($this->shouldCreateNewGroups($data)) {
+                $messages[] = 'New store groups were created, please assign default root category IDs for them';
+            }
 
             $this->resource->getConnection()->beginTransaction();
 
@@ -105,7 +111,27 @@ class Importer implements ImporterInterface
             $this->cacheManager->clean();
         }
 
-        return ['Stores were processed'];
+        return $messages;
+    }
+
+    /**
+     * Checks whether new store groups will be created.
+     *
+     * @param array $data The data set.
+     * @return bool
+     */
+    private function shouldCreateNewGroups(array $data)
+    {
+        if (!isset($data[ScopeInterface::SCOPE_GROUPS])) {
+            return false;
+        }
+
+        $groups = $this->dataDifferenceCalculator->getItemsToCreate(
+            ScopeInterface::SCOPE_GROUPS,
+            $data[ScopeInterface::SCOPE_GROUPS]
+        );
+
+        return !empty($groups);
     }
 
     /**
