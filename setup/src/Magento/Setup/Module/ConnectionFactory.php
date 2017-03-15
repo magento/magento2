@@ -6,7 +6,6 @@
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
-use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -104,9 +103,8 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $mysqlFactory = new \Magento\Framework\DB\Adapter\Pdo\MysqlFactory(
-            $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class)->get()
-        );
+        $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $mysqlFactory = new \Magento\Framework\DB\Adapter\Pdo\MysqlFactory($objectManagerProvider->get());
         $resourceInstance = new Mysql($selectFactory, $connectionConfig, $mysqlFactory);
         return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
