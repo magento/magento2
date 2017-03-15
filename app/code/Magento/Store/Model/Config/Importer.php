@@ -89,15 +89,15 @@ class Importer implements ImporterInterface
                 ProcessorFactory::TYPE_UPDATE
             ];
 
-//            $this->resource->getConnection()->beginTransaction();
+            $this->resource->getConnection()->beginTransaction();
 
             foreach ($actions as $action) {
                 $this->processFactory->create($action)->run($data);
             }
 
-//            $this->resource->getConnection()->commit();
+            $this->resource->getConnection()->commit();
         } catch (\Exception $exception) {
-//            $this->resource->getConnection()->rollBack();
+            $this->resource->getConnection()->rollBack();
 
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);
         } finally {
