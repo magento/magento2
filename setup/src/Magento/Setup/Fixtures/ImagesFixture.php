@@ -458,7 +458,7 @@ class ImagesFixture extends Fixture
     }
 
     /**
-     * Get eav attribute id by it code
+     * Get eav attribute id by its code
      *
      * @param $attributeCode
      * @return int
