@@ -182,6 +182,10 @@ class Create implements ProcessorInterface
             $store->setData($storeData);
             $store->setGroup($group);
 
+            if ($group->getWebsite()) {
+                $store->setWebsite($group->getWebsite());
+            }
+
             $store->getResource()->save($store);
             $store->getResource()->addCommitCallback(function () use ($store) {
                 $this->eventManager->dispatch('store_add', ['store' => $store]);
