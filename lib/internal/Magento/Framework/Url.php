@@ -835,14 +835,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $isArray = is_array($routeParams);
 
         if ($isArray) {
-            array_walk_recursive(
-                $routeParams,
-                function ($item) use (&$isCached) {
-                    if (is_object($item)) {
-                        $isCached = false;
-                    }
+            foreach ($routeParams as $item) {
+                if (is_object($item)) {
+                    $isCached = false;
+                    break;
                 }
-            );
+            }
         }
 
         if(!$isCached) {
@@ -851,12 +849,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             );
         }
 
-        $cashedParams = $routeParams;
+        $cachedParams = $routeParams;
         if ($isArray) {
-            ksort($cashedParams);
+            ksort($cachedParams);
         }
 
-        $cacheKey = md5($routePath . serialize($cashedParams));
+        $cacheKey = md5($routePath . json_encode($cachedParams));
         if (!isset($this->cacheUrl[$cacheKey])) {
             $this->cacheUrl[$cacheKey] = $this->getUrlModifier()->execute(
                 $this->createUrl($routePath, $routeParams)
