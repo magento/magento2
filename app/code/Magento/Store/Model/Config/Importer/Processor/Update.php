@@ -89,7 +89,7 @@ class Update implements ProcessorInterface
 
                 switch ($scope) {
                     case ScopeInterface::SCOPE_WEBSITES:
-                        $this->updateWebsites($items);
+                        $this->updateWebsites($items, $data);
                         break;
                     case ScopeInterface::SCOPE_STORES:
                         $this->updateStores($items, $data);
@@ -107,21 +107,22 @@ class Update implements ProcessorInterface
     /**
      * Updates websites with a new data.
      *
+     * @param array $items The items to update
      * @param array $data The data to be updated
      * @return void
      */
-    private function updateWebsites(array $data)
+    private function updateWebsites(array $items, array $data)
     {
-        foreach ($data as $code => $websiteData) {
-            unset(
-                $websiteData['website_id'],
-                $websiteData['default_group_id']
-            );
+        foreach ($items as $code => $websiteData) {
+            unset($websiteData['website_id']);
 
             $website = $this->websiteFactory->create();
             $website->getResource()->load($website, $code, 'code');
-
             $website->setData(array_replace($website->getData(), $websiteData));
+
+            $group = $this->findGroupById($data, $website->getDefaultGroupId());
+            $website->setDefaultGroupId($group->getGroupId());
+
             $website->getResource()->save($website);
         }
     }
