@@ -24,7 +24,7 @@ class MysqlFactory
     /**
      * Constructor
      *
-     * @param ObjectManagerInterface|null $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         ObjectManagerInterface $objectManager
@@ -37,28 +37,33 @@ class MysqlFactory
      *
      * @param string $className
      * @param LoggerInterface $logger
-     * @param SelectFactory $selectFactory
      * @param array $config
+     * @param SelectFactory|null $selectFactory
      * @return Mysql
      * @throws \InvalidArgumentException
      */
     public function create(
         $className,
         LoggerInterface $logger,
-        SelectFactory $selectFactory,
-        array $config
+        array $config,
+        SelectFactory $selectFactory = null
     ) {
         if ($className instanceof Mysql) {
-            throw new \InvalidArgumentException('Invalid class, class must extend ' . Mysql::class . '.');
+            throw new \InvalidArgumentException('Invalid class, ' . $className . ' must extend ' . Mysql::class . '.');
+        }
+        $selectFactoryParam = [];
+        if ($selectFactory) {
+            $selectFactoryParam['selectFactory'] = $selectFactory;
         }
         return $this->objectManager->create(
             $className,
-            [
-                'logger' => $logger,
-                'selectFactory' => $selectFactory,
-                'config' => $config,
-                'serializer' => $this->objectManager->get(SerializerInterface::class)
-            ]
+            array_merge(
+                [
+                    'logger' => $logger,
+                    'config' => $config
+                ],
+                $selectFactoryParam
+            )
         );
     }
 }

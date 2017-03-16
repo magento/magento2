@@ -7,9 +7,9 @@ namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
-use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
+use Magento\Framework\DB\SelectFactory;
 
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
 {
@@ -19,11 +19,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     protected $connectionConfig;
 
     /**
-     * @var SelectFactory
-     */
-    protected $selectFactory;
-
-    /**
      * @var MysqlFactory
      */
     private $mysqlFactory;
@@ -31,17 +26,14 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     /**
      * Constructor
      *
-     * @param SelectFactory $selectFactory
      * @param array $config
      * @param MysqlFactory|null $serializer
      */
     public function __construct(
-        SelectFactory $selectFactory,
         array $config,
         MysqlFactory $mysqlFactory = null
 
     ) {
-        $this->selectFactory = $selectFactory;
         $this->connectionConfig = $this->getValidConfig($config);
         $this->mysqlFactory = $mysqlFactory ?: ObjectManager::getInstance()->get(MysqlFactory::class);
         parent::__construct();
@@ -50,9 +42,9 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     /**
      * {@inheritdoc}
      */
-    public function getConnection(DB\LoggerInterface $logger)
+    public function getConnection(DB\LoggerInterface $logger, SelectFactory $selectFactory = null)
     {
-        $connection = $this->getDbConnectionInstance($logger);
+        $connection = $this->getDbConnectionInstance($logger, $selectFactory);
 
         $profiler = $connection->getProfiler();
         if ($profiler instanceof DB\Profiler) {
@@ -67,15 +59,16 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
      * Create and return database connection object instance
      *
      * @param DB\LoggerInterface $logger
+     * @param SelectFactory $selectFactory
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function getDbConnectionInstance(DB\LoggerInterface $logger)
+    protected function getDbConnectionInstance(DB\LoggerInterface $logger, $selectFactory)
     {
         return $this->mysqlFactory->create(
             $this->getDbConnectionClassName(),
             $logger,
-            $this->selectFactory,
-            $this->connectionConfig
+            $this->connectionConfig,
+            $selectFactory
         );
     }
 
