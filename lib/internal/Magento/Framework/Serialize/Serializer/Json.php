@@ -15,9 +15,13 @@ class Json implements SerializerInterface
     /**
      * {@inheritDoc}
      */
-    public function serialize($data)
+    public function serialize($data, $options = [])
     {
-        return json_encode($data);
+        $encodeOptions = 0;
+        foreach ($options as $option) {
+            $encodeOptions |= $option;
+        }
+        return json_encode($data, $encodeOptions);
     }
 
     /**

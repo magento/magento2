@@ -8,7 +8,9 @@ namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * A possible implementation of JSON response type (instead of hardcoding json_encode() all over the place)
@@ -22,15 +24,25 @@ class Json extends AbstractResult
     protected $translateInline;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serializer;
+
+    /**
      * @var string
      */
     protected $json;
 
     /**
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
-    public function __construct(InlineInterface $translateInline)
+    public function __construct(
+        InlineInterface $translateInline,
+        JsonSerializer $serializer = null
+    )
     {
+        $this->serializer = ($serializer != null) ? $serializer : new JsonSerializer;
         $this->translateInline = $translateInline;
     }
 
@@ -44,7 +56,10 @@ class Json extends AbstractResult
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        $this->json = \Zend_Json::encode($data, $cycleCheck, $options);
+        if (!in_array(JSON_NUMERIC_CHECK, $options)) {
+            array_push($options, JSON_NUMERIC_CHECK);
+        }
+        $this->json = $this->serializer->serialize($data, $options);
         return $this;
     }
 
