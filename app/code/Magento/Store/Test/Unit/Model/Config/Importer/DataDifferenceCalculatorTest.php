@@ -97,7 +97,10 @@ class DataDifferenceCalculatorTest extends \PHPUnit_Framework_TestCase
         $expectedData = [
             'test' => [
                 'code' => 'test',
-                'name' => 'Test2'
+                'name' => 'Test2',
+                'website_id' => '0',
+                'default_store_id' => '0',
+                'root_category_id' => '0'
             ]
         ];
         $data = [
