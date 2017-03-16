@@ -24,7 +24,7 @@ class MultipleValue implements ApplierInterface
     {
         $result = false;
 
-        switch($condition) {
+        switch ($condition) {
             case ApplierInterface::IN:
                 $field->in($value);
                 $result = true;

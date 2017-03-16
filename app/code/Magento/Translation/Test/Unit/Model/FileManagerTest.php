@@ -121,6 +121,5 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($contextMock);
         $contextMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
         $this->assertEquals($path, $this->model->getTranslationFilePath());
-
     }
 }

@@ -209,7 +209,6 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     /**
      * Make some fake filepath to correspond to the class name
      *

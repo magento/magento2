@@ -44,8 +44,27 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $mergeDataProvider;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializer;
+
     public function setUp()
     {
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
             \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()->getMock();
@@ -103,22 +122,22 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getParentId')
             ->willReturn(1);
         $this->initObjectRegistryFactory([]);
-        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
             ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$canonical]));
-        $categories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $categories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $categories->setRequestPath('category-2')
             ->setStoreId(2);
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$categories]));
-        $current = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $current = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $current->setRequestPath('category-3')
             ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$current]));
-        $anchorCategories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $anchorCategories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $anchorCategories->setRequestPath('category-4')
             ->setStoreId(4);
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
@@ -150,7 +169,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())->method('getRootCategoryId')->will($this->returnValue($storeRootCategoryId));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->initObjectRegistryFactory([$category]);
-        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
             ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')

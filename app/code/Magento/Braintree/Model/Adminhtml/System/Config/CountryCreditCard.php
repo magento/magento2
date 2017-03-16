@@ -13,6 +13,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class CountryCreditCard
@@ -25,6 +26,11 @@ class CountryCreditCard extends Value
     protected $mathRandom;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -33,6 +39,7 @@ class CountryCreditCard extends Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         Context $context,
@@ -42,9 +49,12 @@ class CountryCreditCard extends Value
         Random $mathRandom,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->mathRandom = $mathRandom;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Json::class);
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
@@ -68,7 +78,7 @@ class CountryCreditCard extends Value
                 $result[$country] = $data['cc_types'];
             }
         }
-        $this->setValue(serialize($result));
+        $this->setValue($this->serializer->serialize($result));
         return $this;
     }
 
@@ -79,7 +89,7 @@ class CountryCreditCard extends Value
      */
     public function afterLoad()
     {
-        $value = unserialize($this->getValue());
+        $value = $this->serializer->unserialize($this->getValue());
         if (is_array($value)) {
             $value = $this->encodeArrayFieldValue($value);
             $this->setValue($value);

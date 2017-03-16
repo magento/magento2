@@ -15,7 +15,7 @@ use Magento\Vault\Model\CustomerTokenManagement;
  * Class ConfigProvider
  * @api
  */
-final class TokensConfigProvider implements ConfigProviderInterface
+class TokensConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var string

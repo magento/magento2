@@ -37,6 +37,7 @@ class SessionChecker
      * Delete frontend session cookie if customer session is expired
      *
      * @param SessionManager $sessionManager
+     * @return void
      */
     public function beforeStart(SessionManager $sessionManager)
     {

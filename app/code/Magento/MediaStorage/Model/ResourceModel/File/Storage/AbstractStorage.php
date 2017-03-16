@@ -40,7 +40,6 @@ abstract class AbstractStorage extends \Magento\Framework\Model\ResourceModel\Db
         return $this->_getConnection($this->_connectionName);
     }
 
-
     /**
      * Get connection by name or type
      *

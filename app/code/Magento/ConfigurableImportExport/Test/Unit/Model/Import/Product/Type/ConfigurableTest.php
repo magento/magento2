@@ -183,6 +183,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'fetchPairs',
                 'joinLeft',
                 'insertOnDuplicate',
+                'quoteIdentifier',
                 'delete',
                 'quoteInto'
             ],
@@ -518,6 +519,10 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'configurableskuI22BadPrice' =>
                 [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]));
+
+        // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
+        $this->_connection->expects($this->at(1))->method('quoteIdentifier')->with('m.attribute_id')->willReturn('a');
+        $this->_connection->expects($this->at(2))->method('quoteIdentifier')->with('o.attribute_id')->willReturn('b');
 
         $this->_connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
         $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->will($this->returnValue([

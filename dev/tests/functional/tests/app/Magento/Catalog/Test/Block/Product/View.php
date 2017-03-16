@@ -209,6 +209,33 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -337,7 +364,7 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     * 
+     *
      * @return string
      */
     public function braintreePaypalCheckout()
@@ -518,7 +545,10 @@ class View extends AbstractConfigureBlock
      */
     public function waitLoader()
     {
-        $this->waitForElementNotVisible($this->ajaxLoading);
+        try {
+            $this->waitForElementNotVisible($this->ajaxLoading);
+        } catch (\Exception $e) {
+        }
     }
 
     /**

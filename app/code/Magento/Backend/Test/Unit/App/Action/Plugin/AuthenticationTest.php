@@ -120,7 +120,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             if ($isIFrameParam) {
                 $getParamCalls = 1;
                 $actionName = 'deniedIframe';
-            } else if ($isAjaxParam) {
+            } elseif ($isAjaxParam) {
                 $getParamCalls = 2;
                 $actionName = 'deniedJson';
             } else {

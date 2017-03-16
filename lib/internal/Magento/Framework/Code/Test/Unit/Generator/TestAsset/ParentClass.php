@@ -78,6 +78,9 @@ class ParentClass
     {
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
+     */
     final public function publicParentFinal()
     {
     }

@@ -33,7 +33,6 @@ class PublicCookieMetadataTest extends \PHPUnit_Framework_TestCase
      * @param StringUtils $expectedValue
      * @dataProvider getMethodData
      */
-
     public function testGetters($setMethodName, $getMethodName, $expectedValue)
     {
         $this->publicCookieMetadata->$setMethodName($expectedValue);

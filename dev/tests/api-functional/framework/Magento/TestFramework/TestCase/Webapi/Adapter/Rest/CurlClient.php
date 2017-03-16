@@ -10,6 +10,7 @@ namespace Magento\TestFramework\TestCase\Webapi\Adapter\Rest;
 class CurlClient
 {
     const EMPTY_REQUEST_BODY = 'Empty body';
+
     /**
      * @var string REST URL base path
      */

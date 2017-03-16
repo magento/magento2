@@ -394,7 +394,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if (!$this->_connectionFlagsSet) {
             $this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-            $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            if (isset($this->_config['use_buffered_query']) && $this->_config['use_buffered_query'] === false) {
+                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+            } else {
+                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            }
             $this->_connectionFlagsSet = true;
         }
     }
@@ -535,7 +539,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             }
         } while ($retry);
     }
-
 
     /**
      * Special handling for PDO query().
@@ -1387,7 +1390,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function select()
     {
-//        return new Select($this);
         return $this->selectFactory->create($this);
     }
 
@@ -1880,6 +1882,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($k);
                 if ($v instanceof \Zend_Db_Expr) {
                     $value = $v->__toString();
+                } elseif ($v instanceof \Zend\Db\Sql\Expression) {
+                    $value = $v->getExpression();
                 } elseif (is_string($v)) {
                     $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));
                 } elseif (is_numeric($v)) {
@@ -2369,6 +2373,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     }
                 }
                 $cType .= sprintf('(%d,%d)', $precision, $scale);
+                if (!empty($options['UNSIGNED'])) {
+                    $cUnsigned = true;
+                }
                 break;
             case Table::TYPE_TEXT:
             case Table::TYPE_BLOB:
@@ -3243,7 +3250,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return string
      * @codeCoverageIgnore
      */
-
     public function getTriggerName($tableName, $time, $event)
     {
         $triggerName = 'trg_' . $tableName . '_' . $time . '_' . $event;
