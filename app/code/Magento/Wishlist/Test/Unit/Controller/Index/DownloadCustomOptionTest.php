@@ -85,7 +85,8 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecute() {
+    public function testExecute()
+    {
         $data = [
             'number' => 42,
             'string' => 'string_value',
