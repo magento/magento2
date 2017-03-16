@@ -11,7 +11,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 /**
  * Provides label with default Time Zone
  */
-class DefaultTimeZoneLabel extends \Magento\Config\Block\System\Config\Form\Field
+class CollectionTimeLabel extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var TimezoneInterface
@@ -33,7 +33,7 @@ class DefaultTimeZoneLabel extends \Magento\Config\Block\System\Config\Form\Fiel
     }
 
     /**
-     * Get default time zone
+     * Add default time zone to comment
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
@@ -42,9 +42,8 @@ class DefaultTimeZoneLabel extends \Magento\Config\Block\System\Config\Form\Fiel
     {
         $timeZoneCode = $this->timeZone->getConfigTimezone();
         $getLongTimeZoneName = \IntlTimeZone::createTimeZone($timeZoneCode)->getDisplayName();
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         $element->setData(
-            'value',
+            'comment',
             sprintf("%s (%s)", $getLongTimeZoneName, $timeZoneCode)
         );
         return parent::render($element);
