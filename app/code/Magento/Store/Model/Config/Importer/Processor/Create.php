@@ -155,8 +155,7 @@ class Create implements ProcessorInterface
 
             unset(
                 $groupData['group_id'],
-                $groupData['website_id'],
-                $groupData['default_store_id']
+                $groupData['website_id']
             );
 
             $website = $this->detectWebsiteById(
@@ -169,12 +168,13 @@ class Create implements ProcessorInterface
             $group->setRootCategoryId(0);
 
             $group->getResource()->save($group);
-            $group->getResource()->addCommitCallback(function () use ($group) {
-                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
-            });
-            $group->getResource()->addCommitCallback(function () use ($group, $website) {
+            $group->getResource()->addCommitCallback(function () use ($data, $group, $website) {
+                $store = $this->detectStoreById($data, (int)$group->getDefaultStoreId());
+                $group->setDefaultStoreId($store->getStoreId());
                 $group->setWebsite($website);
                 $group->getResource()->save($group);
+
+                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
             });
         }
     }
@@ -205,14 +205,12 @@ class Create implements ProcessorInterface
             $store->setData($storeData);
 
             $store->getResource()->save($store);
-            $store->getResource()->addCommitCallback(function () use ($store) {
-                $this->eventManager->dispatch('store_add', ['store' => $store]);
-            });
             $store->getResource()->addCommitCallback(function () use ($store, $group, $website) {
                 $store->setGroup($group);
                 $store->setWebsite($website);
-
                 $store->getResource()->save($store);
+
+                $this->eventManager->dispatch('store_add', ['store' => $store]);
             });
         }
     }
@@ -261,5 +259,28 @@ class Create implements ProcessorInterface
         }
 
         throw new NotFoundException(__('Group was not found'));
+    }
+
+    /**
+     * Searches through given stores and compares with current stores.
+     * Returns found store.
+     *
+     * @param array $data The data to be searched in
+     * @param string $storeId The store id
+     * @return \Magento\Store\Model\Store
+     * @throws NotFoundException If store was not detected
+     */
+    private function detectStoreById(array $data, $storeId)
+    {
+        foreach ($data[ScopeInterface::SCOPE_STORES] as $storeData) {
+            if ($storeId == $storeData['store_id']) {
+                $store = $this->storeFactory->create();
+                $store->getResource()->load($store, $storeData['code'], 'code');
+
+                return $store;
+            }
+        }
+
+        throw new NotFoundException(__('Store was not found'));
     }
 }
