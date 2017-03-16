@@ -10,9 +10,9 @@ use Magento\Framework\Notification\MessageInterface;
 use Magento\Framework\UrlInterface;
 
 /**
- * Represents an analytics notification message.
+ * Represents an analytics notification about failed subscription.
  */
-class Notification implements MessageInterface
+class NotificationAboutFailedSubscription implements MessageInterface
 {
     /**
      * @var SubscriptionStatusProvider

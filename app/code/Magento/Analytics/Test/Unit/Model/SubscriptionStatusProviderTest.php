@@ -71,49 +71,65 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function statusDataProvider()
+    public function testGetStatusShouldBeFailed()
     {
-        return [
-            'TestWithEnabledStatus' => [true, true, 1, "Enabled", 42],
-            'TestWithPendingStatus' => [true, false, 1, "Pending", 42],
-            'TestWithDisabledStatus' => [false, false, 0, "Disabled", 42],
-            'TestWithDisabledStatus2' => [false, true, 0,  "Disabled", 42],
-            'TestWithFailedStatus' => [true, false, 1, "Failed", null],
-        ];
-    }
-
-    /**
-     * @dataProvider statusDataProvider
-     *
-     * @param bool $isSubscriptionEnabled
-     * @param bool $hasToken
-     * @param int $tokenExistsCallCount
-     * @param string $expectedStatus
-     * @param int|null $reverseCounter
-     */
-    public function testGetStatus(
-        $isSubscriptionEnabled,
-        $hasToken,
-        $tokenExistsCallCount,
-        $expectedStatus,
-        $reverseCounter
-    ) {
-        $this->analyticsTokenMock->expects($this->exactly($tokenExistsCallCount))
+        $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
-            ->willReturn($hasToken);
+            ->willReturn(false);
         $this->systemConfigMock->expects($this->once())
             ->method('get')
             ->with('default/analytics/subscription/enabled')
-            ->willReturn($isSubscriptionEnabled);
-        $this->flagManagerMock->expects($this->any())->method('getFlagData')
+            ->willReturn(true);
+
+        $this->expectFlagCounterReturn(null);
+        $this->assertEquals('Failed', $this->statusProvider->getStatus());
+    }
+
+    public function testGetStatusShouldBePending()
+    {
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(false);
+        $this->systemConfigMock->expects($this->once())
+            ->method('get')
+            ->with('default/analytics/subscription/enabled')
+            ->willReturn(true);
+
+        $this->expectFlagCounterReturn(45);
+        $this->assertEquals('Pending', $this->statusProvider->getStatus());
+    }
+
+    public function testGetStatusShouldBeEnabled()
+    {
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(true);
+        $this->systemConfigMock->expects($this->once())
+            ->method('get')
+            ->with('default/analytics/subscription/enabled')
+            ->willReturn(true);
+        $this->assertEquals('Enabled', $this->statusProvider->getStatus());
+    }
+
+    public function testGetStatusShouldBeDisabled()
+    {
+        $this->systemConfigMock->expects($this->once())
+            ->method('get')
+            ->with('default/analytics/subscription/enabled')
+            ->willReturn(false);
+        $this->assertEquals('Disabled', $this->statusProvider->getStatus());
+    }
+
+    /**
+     * @param null|int $value
+     */
+    protected function expectFlagCounterReturn($value)
+    {
+        $this->flagManagerMock->expects($this->once())->method('getFlagData')
             ->willReturnMap(
                 [
-                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $reverseCounter],
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $value],
                 ]
             );
-        $this->assertEquals($expectedStatus, $this->statusProvider->getStatus());
     }
 }

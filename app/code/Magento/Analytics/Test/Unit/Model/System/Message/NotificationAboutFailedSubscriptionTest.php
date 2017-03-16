@@ -6,14 +6,14 @@
 namespace Magento\Analytics\Test\Unit\Model\System\Message;
 
 use Magento\Analytics\Model\SubscriptionStatusProvider;
-use Magento\Analytics\Model\System\Message\Notification;
+use Magento\Analytics\Model\System\Message\NotificationAboutFailedSubscription;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class NotificationTest
+ * Class NotificationAboutFailedSubscriptionTest
  */
-class NotificationTest extends \PHPUnit_Framework_TestCase
+class NotificationAboutFailedSubscriptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|SubscriptionStatusProvider
@@ -26,7 +26,7 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
     private $urlBuilderMock;
 
     /**
-     * @var Notification
+     * @var NotificationAboutFailedSubscription
      */
     private $notification;
 
@@ -40,14 +40,14 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->subscriptionStatusMock = $this->getMockBuilder(
-            SubscriptionStatusProvider::class
-        )->disableOriginalConstructor()->getMock();
+        $this->subscriptionStatusMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->notification = $this->objectManagerHelper->getObject(
-            Notification::class,
+            NotificationAboutFailedSubscription::class,
             [
                 'subscriptionStatusProvider' => $this->subscriptionStatusMock,
                 'urlBuilder' => $this->urlBuilderMock
@@ -55,26 +55,52 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testMessageShouldBeDisplayed()
+    public function testIsDisplayedWhenMessageShouldBeDisplayed()
     {
-        $this->subscriptionStatusMock->expects($this->atLeastOnce())
+        $this->subscriptionStatusMock->expects($this->once())
             ->method('getStatus')
-            ->willReturnOnConsecutiveCalls(
-                \Magento\Analytics\Model\SubscriptionStatusProvider::FAILED,
-                \Magento\Analytics\Model\SubscriptionStatusProvider::ENABLED
+            ->willReturn(
+                SubscriptionStatusProvider::FAILED
             );
         $this->assertTrue($this->notification->isDisplayed());
+    }
+
+    /**
+     * @dataProvider notDisplayedNotificationStatuses
+     *
+     * @param $status
+     */
+    public function testIsDisplayedWhenMessageShouldNotBeDisplayed($status)
+    {
+        $this->subscriptionStatusMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn($status);
         $this->assertFalse($this->notification->isDisplayed());
     }
 
-    public function testBuildMessage()
+    public function testGetTextShouldBuildMessage()
     {
         $retryUrl = 'http://magento.dev/retryUrl';
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
+            ->with('analytics/subscription/retry')
             ->willReturn($retryUrl);
         $messageDetails = 'Failed to synchronize data to the Magento Business Intelligence service. ';
         $messageDetails .= sprintf('<a href="%s">Retry Synchronization</a>', $retryUrl);
         $this->assertEquals($messageDetails, $this->notification->getText());
+    }
+
+    /**
+     * Provide statuses according to which message should not be displayed.
+     *
+     * @return array
+     */
+    public function notDisplayedNotificationStatuses()
+    {
+        return [
+            [SubscriptionStatusProvider::PENDING],
+            [SubscriptionStatusProvider::DISABLED],
+            [SubscriptionStatusProvider::ENABLED],
+        ];
     }
 }

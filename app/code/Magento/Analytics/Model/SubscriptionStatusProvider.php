@@ -64,18 +64,24 @@ class SubscriptionStatusProvider
     }
 
     /**
-     * Statuses:
+     * Retrieve subscription status to Magento BI Advanced Reporting..
      *
+     * Statuses:
      * Enabled - if subscription is enabled and MA token was received;
      * Pending - if subscription is enabled and MA token was not received;
      * Disabled - if subscription is not enabled.
+     * Failed - if subscription is enabled and token was not received after attempts ended.
      *
      * @return string
      */
     public function getStatus()
     {
-        $checkboxState = $this->systemConfig->get('default/analytics/subscription/enabled');
-        return $checkboxState ? $this->getStatusForEnabledSubscription() : $this->getStatusForDisabledSubscription();
+        $isSubscriptionEnabledInConfig = $this->systemConfig->get('default/analytics/subscription/enabled');
+        if ($isSubscriptionEnabledInConfig) {
+            return $this->getStatusForEnabledSubscription();
+        }
+
+        return $this->getStatusForDisabledSubscription();
     }
 
     /**
