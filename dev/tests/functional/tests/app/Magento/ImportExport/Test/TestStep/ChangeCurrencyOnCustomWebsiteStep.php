@@ -10,7 +10,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Create custom store step.
+ * Change currency on custom website step.
  */
 class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
 {
@@ -38,12 +38,12 @@ class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
     /**
      * @param FixtureFactory $fixtureFactory
      * @param ImportData $import
-     * @param bool|null $changeCurrency
+     * @param bool $changeCurrency
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
         ImportData $import,
-        $changeCurrency
+        $changeCurrency = false
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->import = $import;
@@ -53,7 +53,7 @@ class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
     /**
      * Fill import form.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {

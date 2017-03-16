@@ -26,7 +26,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
         <variation name="ImportProductsVariation2" ticketId="MAGETWO-46156" summary="Replace product tier prices">
@@ -48,7 +48,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
         <variation name="ImportProductsVariation3" ticketId="MAGETWO-46157" summary="Delete product tier prices">
@@ -70,7 +70,7 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
         <variation name="ImportProductsVariation4" ticketId="MAGETWO-46159" summary="Replace product tier prices in two websites">

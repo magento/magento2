@@ -206,15 +206,15 @@ class File extends DataSource
         $key = 0;
         foreach ($this->entities as $entity) {
             $entityData = $this->prepareEntityData($entity);
-            foreach ($this->csvTemplate['entity_' . $key] as $tierKey => $tier) {
-                $values = implode('', array_values($tier));
+            foreach ($this->csvTemplate['entity_' . $key] as $entityKey => $importedEntityData) {
+                $values = implode('', array_values($importedEntityData));
                 preg_match_all('/\%(.*)\%/U', $values, $indexes);
                 foreach ($indexes[1] as $index) {
                     if (isset($entityData[$index])) {
-                        $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
+                        $placeholders['entity_' . $key][$entityKey]["%{$index}%"] = $entityData[$index];
                     }
                     if (isset($entityData['code'])) {
-                        $placeholders['entity_' . $key][$tierKey][$entityData['code']]
+                        $placeholders['entity_' . $key][$entityKey][$entityData['code']]
                             = isset($entityData[$entityData['code']])
                             ? $entityData[$entityData['code']]
                             : 'Main Website';

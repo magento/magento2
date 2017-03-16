@@ -86,9 +86,6 @@ class AssertImportAdvancedPricing extends AbstractConstraint
             foreach ($tierPrices as $tierPrice) {
                 $resultProductArray[$productSku][] = $tierPrice;
             }
-            if (isset($resultProductArray[$productSku])) {
-                $resultProductArray[$productSku] = array_reverse($resultProductArray[$productSku]);
-            }
         }
 
         // Prepare tier prices data from csv file.
