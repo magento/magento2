@@ -255,7 +255,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
         $product->load(1);
         // fixture
-        $product->addCustomOption('info_buyRequest', serialize(new \Magento\Framework\DataObject(['qty' => 2])));
+        $customOption = new \Magento\Framework\DataObject(['qty' => 2]);
+        $product->addCustomOption('info_buyRequest', json_encode($customOption->getData()));
         foreach ($product->getOptions() as $option) {
             if ('field' == $option->getType()) {
                 $product->addCustomOption('option_ids', $option->getId());

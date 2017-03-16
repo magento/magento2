@@ -134,7 +134,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->timezoneInterfaceMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->sessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
         $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(
+            ProductLimitationFactory::class
+        )->disableOriginalConstructor()->getMock();
+
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->getMock(ProductLimitation::class));
 
