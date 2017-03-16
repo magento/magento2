@@ -90,9 +90,13 @@ class Importer implements ImporterInterface
                 ProcessorFactory::TYPE_UPDATE
             ];
             $messages = ['Stores were processed'];
+            $newGroups = $this->getGroupsToCreate($data);
 
-            if ($this->shouldCreateNewGroups($data)) {
-                $messages[] = 'New store groups were created, please assign default root category IDs for them';
+            if ($newGroups) {
+                $messages[] = sprintf(
+                    'The following new stores must be associated with a root category: %s',
+                    implode(', ', array_column($newGroups, 'name'))
+                );
             }
 
             $this->resource->getConnection()->beginTransaction();
@@ -115,15 +119,15 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * Checks whether new store groups will be created.
+     * Checks which new store groups will be created.
      *
      * @param array $data The data set.
-     * @return bool
+     * @return array
      */
-    private function shouldCreateNewGroups(array $data)
+    private function getGroupsToCreate(array $data)
     {
         if (!isset($data[ScopeInterface::SCOPE_GROUPS])) {
-            return false;
+            return [];
         }
 
         $groups = $this->dataDifferenceCalculator->getItemsToCreate(
@@ -131,7 +135,7 @@ class Importer implements ImporterInterface
             $data[ScopeInterface::SCOPE_GROUPS]
         );
 
-        return !empty($groups);
+        return $groups;
     }
 
     /**
@@ -145,9 +149,9 @@ class Importer implements ImporterInterface
 
         foreach ($data as $scope => $scopeData) {
             $messageMap = [
-                'Next %s will be deleted: %s' => $this->dataDifferenceCalculator->getItemsToDelete($scope, $scopeData),
-                'Next %s will be updated: %s' => $this->dataDifferenceCalculator->getItemsToUpdate($scope, $scopeData),
-                'Next %s will be created: %s' => $this->dataDifferenceCalculator->getItemsToCreate($scope, $scopeData),
+                'These %s will be deleted: %s' => $this->dataDifferenceCalculator->getItemsToDelete($scope, $scopeData),
+                'These %s will be updated: %s' => $this->dataDifferenceCalculator->getItemsToUpdate($scope, $scopeData),
+                'These %s will be created: %s' => $this->dataDifferenceCalculator->getItemsToCreate($scope, $scopeData),
             ];
 
             foreach ($messageMap as $message => $items) {

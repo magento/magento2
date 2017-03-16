@@ -103,7 +103,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
     public function testImport()
     {
-        $data = [];
+        $data = [
+            ScopeInterface::SCOPE_STORES => ['stores'],
+            ScopeInterface::SCOPE_GROUPS => ['groups'],
+            ScopeInterface::SCOPE_WEBSITES => ['websites'],
+        ];
 
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
@@ -116,8 +120,21 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('reinitStores');
         $this->cacheManagerMock->expects($this->once())
             ->method('clean');
+        $this->dataDifferenceCalculatorMock->expects($this->once())
+            ->method('getItemsToCreate')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_STORES, ['stores'], [['name' => '3 stores']]],
+                [ScopeInterface::SCOPE_GROUPS, ['groups'], [['name' => '2 groups'], ['name' => '3 groups']]],
+                [ScopeInterface::SCOPE_WEBSITES, ['websites'], [['name' => '1 website']]],
+            ]);
 
-        $this->model->import($data);
+        $this->assertSame(
+            [
+                'Stores were processed',
+                'The following new stores must be associated with a root category: 2 groups, 3 groups'
+            ],
+            $this->model->import($data)
+        );
     }
 
     /**
@@ -126,8 +143,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportWithException()
     {
-        $data = [];
-
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
         $this->processorMock->expects($this->any())
@@ -140,16 +155,16 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->cacheManagerMock->expects($this->once())
             ->method('clean');
 
-        $this->model->import($data);
+        $this->model->import([]);
     }
 
     public function testGetWarningMessages()
     {
         $expectedData = [
-            'Next Stores will be deleted: 3 stores',
-            'Next Groups will be deleted: 2 groups',
-            'Next Websites will be deleted: 1 website',
-            'Next Websites will be updated: 7 websites',
+            'These Stores will be deleted: 3 stores',
+            'These Groups will be deleted: 2 groups',
+            'These Websites will be deleted: 1 website',
+            'These Websites will be updated: 7 websites',
         ];
         $data = [
             ScopeInterface::SCOPE_STORES => ['stores'],
