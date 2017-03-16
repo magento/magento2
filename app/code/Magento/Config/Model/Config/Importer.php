@@ -154,6 +154,15 @@ class Importer implements ImporterInterface
     }
 
     /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getWarningMessages(array $data)
+    {
+        return [];
+    }
+
+    /**
      * Emulates saving of data array.
      *
      * @param array $data The data to be saved
