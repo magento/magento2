@@ -12,6 +12,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -112,8 +113,9 @@ class RetryTest extends \PHPUnit_Framework_TestCase
      * @dataProvider executeExceptionsDataProvider
      *
      * @param \Exception $exception
+     * @param Phrase $message
      */
-    public function testExecuteWithException(\Exception $exception)
+    public function testExecuteWithException(\Exception $exception, Phrase $message)
     {
         $this->resultFactoryMock
             ->expects($this->once())
@@ -130,22 +132,10 @@ class RetryTest extends \PHPUnit_Framework_TestCase
             ->method('retry')
             ->with()
             ->willThrowException($exception);
-
-        $exceptionMessageCheck = function ($message) use ($exception) {
-            $defaultMessage = __('Sorry, there has been an error processing your request. Please try again later.');
-            if ($exception instanceof LocalizedException) {
-                $result = ($exception->getMessage() === $message);
-            } else {
-                $result = ((string)$defaultMessage === (string)$message);
-            }
-
-            return $result;
-        };
-
         $this->messageManagerMock
             ->expects($this->once())
             ->method('addExceptionMessage')
-            ->with($exception, $this->callback($exceptionMessageCheck));
+            ->with($exception, $message);
 
         $this->assertSame(
             $this->resultRedirectMock,
@@ -159,8 +149,11 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     public function executeExceptionsDataProvider()
     {
         return [
-            [new LocalizedException(__('TestMessage'))],
-            [new \Exception('TestMessage')],
+            [new LocalizedException(__('TestMessage')), __('TestMessage')],
+            [
+                new \Exception('TestMessage'),
+                __('Sorry, there has been an error processing your request. Please try again later.')
+            ],
         ];
     }
 }
