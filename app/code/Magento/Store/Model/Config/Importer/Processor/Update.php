@@ -89,7 +89,7 @@ class Update implements ProcessorInterface
 
                 switch ($scope) {
                     case ScopeInterface::SCOPE_WEBSITES:
-                        $this->updateWebsites($items);
+                        $this->updateWebsites($items, $data);
                         break;
                     case ScopeInterface::SCOPE_STORES:
                         $this->updateStores($items, $data);
@@ -107,21 +107,22 @@ class Update implements ProcessorInterface
     /**
      * Updates websites with a new data.
      *
+     * @param array $items The items to update
      * @param array $data The data to be updated
      * @return void
      */
-    private function updateWebsites(array $data)
+    private function updateWebsites(array $items, array $data)
     {
-        foreach ($data as $code => $websiteData) {
-            unset(
-                $websiteData['website_id'],
-                $websiteData['default_group_id']
-            );
+        foreach ($items as $code => $websiteData) {
+            unset($websiteData['website_id']);
 
             $website = $this->websiteFactory->create();
             $website->getResource()->load($website, $code, 'code');
-
             $website->setData(array_replace($website->getData(), $websiteData));
+
+            $group = $this->findGroupById($data, $website->getDefaultGroupId());
+            $website->setDefaultGroupId($group->getGroupId());
+
             $website->getResource()->save($website);
         }
     }
@@ -180,12 +181,14 @@ class Update implements ProcessorInterface
 
             unset($groupData['group_id'], $groupData['website_id']);
 
-            $group = $this->groupFactory->create();
             $website = $this->findWebsiteById($data, $websiteId);
 
+            $group = $this->groupFactory->create();
             $group->getResource()->load($group, $code, 'code');
-
             $group->setData(array_replace($group->getData(), $groupData));
+
+            $store = $this->findStoreById($data, $group->getDefaultStoreId());
+            $group->setDefaultStoreId($store->getStoreId());
 
             if ($website && $website->getId() != $group->getWebsiteId()) {
                 $group->setWebsite($website);
@@ -233,6 +236,28 @@ class Update implements ProcessorInterface
                 $group->getResource()->load($group, $groupData['code'], 'code');
 
                 return $group;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Searches through given stores and compares with current stores.
+     * Returns found store.
+     *
+     * @param array $data The data to be searched in
+     * @param string $storeId The store id
+     * @return \Magento\Store\Model\Store|null
+     */
+    private function findStoreById(array $data, $storeId)
+    {
+        foreach ($data[ScopeInterface::SCOPE_STORES] as $storeData) {
+            if ($storeId == $storeData['store_id']) {
+                $store = $this->storeFactory->create();
+                $store->getResource()->load($store, $storeData['code'], 'code');
+
+                return $store;
             }
         }
 
