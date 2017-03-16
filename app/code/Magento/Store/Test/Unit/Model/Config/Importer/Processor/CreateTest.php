@@ -232,8 +232,21 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->processor->run($data);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testRunStore()
     {
+        $websites = [
+            'base' => [
+                'website_id' => '1',
+                'code' => 'base',
+                'name' => 'Main Website',
+                'sort_order' => '0',
+                'default_group_id' => '1',
+                'is_default' => '1',
+            ],
+        ];
         $groups = [
             1 => [
                 'group_id' => '1',
@@ -262,7 +275,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             'is_active' => '1',
         ];
         $data = [
-            'websites' => [],
+            'websites' => $websites,
             'groups' => $groups,
             'stores' => $stores,
         ];
@@ -270,9 +283,22 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->dataDifferenceCalculatorMock->expects($this->any())
             ->method('getItemsToCreate')
             ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITES, $websites, []],
                 [ScopeInterface::SCOPE_GROUPS, $groups, []],
                 [ScopeInterface::SCOPE_STORES, $stores, $stores],
             ]);
+
+        /** @var Website|\PHPUnit_Framework_MockObject_MockObject $websiteMock */
+        $websiteMock = $this->getMockBuilder(Website::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getResource'])
+            ->getMock();
+        $websiteMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->abstractDbMock);
+        $this->websiteFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($websiteMock);
 
         /** @var Group|\PHPUnit_Framework_MockObject_MockObject $groupMock */
         $groupMock = $this->getMockBuilder(Group::class)
@@ -285,9 +311,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->groupFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($groupMock);
-        $this->abstractDbMock->expects($this->once())
+
+        $this->abstractDbMock->expects($this->exactly(2))
             ->method('load')
-            ->with($groupMock, 'default', 'code')
+            ->withConsecutive([$groupMock, 'default', 'code'], [$websiteMock, 'base', 'code'])
             ->willReturnSelf();
 
         /** @var Store|\PHPUnit_Framework_MockObject_MockObject $storeMock */
@@ -299,9 +326,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($trimmedStore)
             ->willReturnSelf();
-        $storeMock->expects($this->once())
-            ->method('setGroup')
-            ->with($groupMock);
         $storeMock->expects($this->exactly(3))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
@@ -313,7 +337,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($storeMock)
             ->willReturnSelf();
-        $this->abstractDbMock->expects($this->once())
+        $this->abstractDbMock->expects($this->exactly(2))
             ->method('addCommitCallback');
 
         $this->processor->run($data);

@@ -7,7 +7,7 @@ namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Store\Model\Config\Importer;
-use Magento\Store\Model\ResourceModel\Website;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -52,7 +52,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $cacheManagerMock;
 
     /**
-     * @var Website|Mock
+     * @var ResourceConnection|Mock
      */
     private $resourceMock;
 
@@ -79,7 +79,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->cacheManagerMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
-        $this->resourceMock = $this->getMockBuilder(Website::class)
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)

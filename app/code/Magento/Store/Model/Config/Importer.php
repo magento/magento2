@@ -7,7 +7,7 @@ namespace Magento\Store\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use \Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
