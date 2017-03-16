@@ -12,6 +12,7 @@ class ConditionManager
 {
     const CONDITION_PATTERN_SIMPLE = '%s %s %s';
     const CONDITION_PATTERN_ARRAY = '%s %s (%s)';
+
     /**
      * @var AdapterInterface
      */

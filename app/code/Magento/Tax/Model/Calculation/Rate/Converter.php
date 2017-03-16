@@ -33,6 +33,7 @@ class Converter
         $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
         $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
     }
+
     /**
      * Convert a tax rate data object to an array of associated titles
      *
@@ -108,7 +109,6 @@ class Converter
 
         return $taxRateFormData;
     }
-
 
     /**
      * Convert an array to a tax rate data object

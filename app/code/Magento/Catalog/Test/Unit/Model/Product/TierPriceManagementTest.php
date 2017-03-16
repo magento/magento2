@@ -424,7 +424,6 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\InputException
      * @dataProvider addDataProvider
      */
-
     public function testAddWithInvalidData($price, $qty)
     {
         $this->service->add('product_sku', 1, $price, $qty);

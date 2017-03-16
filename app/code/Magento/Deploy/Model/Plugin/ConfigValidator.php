@@ -6,7 +6,7 @@
 namespace Magento\Deploy\Model\Plugin;
 
 use Magento\Deploy\Model\DeploymentConfig\Validator as DeploymentConfigValidator;
-use Magento\Framework\App\FrontController;
+use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -37,13 +37,13 @@ class ConfigValidator
     /**
      * Performs check that config data from deployment configuration files is valid.
      *
-     * @param FrontController $subject the object of controller is wrapped by this plugin
+     * @param FrontControllerInterface $subject the interface of frontend controller is wrapped by this plugin
      * @param RequestInterface $request the object that contains request params
      * @return void
      * @throws LocalizedException is thrown if config data from deployment configuration files is not valid
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(FrontController $subject, RequestInterface $request)
+    public function beforeDispatch(FrontControllerInterface $subject, RequestInterface $request)
     {
         if (!$this->configValidator->isValid()) {
             throw new LocalizedException(

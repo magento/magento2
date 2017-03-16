@@ -34,8 +34,7 @@ class RepositoryScanner implements ScannerInterface
             foreach ($xpath->query('//preference') as $node) {
                 $forType = $node->attributes->getNamedItem('for');
                 $replacementType = $node->attributes->getNamedItem('type');
-                if (
-                    $forType !== null
+                if ($forType !== null
                     && $replacementType !== null
                     && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
                 ) {

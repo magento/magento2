@@ -584,21 +584,18 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if ($this->isTelephoneRequired()) {
             if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
-
             }
         }
 
         if ($this->isFaxRequired()) {
             if (!\Zend_Validate::is($this->getFax(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'fax']);
-
             }
         }
 
         if ($this->isCompanyRequired()) {
             if (!\Zend_Validate::is($this->getCompany(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'company']);
-
             }
         }
 

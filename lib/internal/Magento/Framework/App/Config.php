@@ -67,7 +67,7 @@ class Config implements ScopeConfigInterface
         if ($scope !== 'default') {
             if (is_numeric($scopeCode) || $scopeCode === null) {
                 $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
-            } else if ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+            } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
                 $scopeCode = $scopeCode->getCode();
             }
             if ($scopeCode) {

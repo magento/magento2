@@ -245,7 +245,6 @@ class Storage extends \Magento\Framework\DataObject
 
             if (array_key_exists($rootChildParts[1], $conditions['plain'])
                 || ($regExp && preg_match($regExp, $value->getFilename()))) {
-
                 $collection->removeItemByKey($key);
             }
         }

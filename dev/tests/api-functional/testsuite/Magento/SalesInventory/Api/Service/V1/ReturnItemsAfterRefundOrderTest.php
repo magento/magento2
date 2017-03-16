@@ -73,7 +73,6 @@ class ReturnItemsAfterRefundOrderTest extends \Magento\TestFramework\TestCase\We
                 $qtyAfterRefund,
                 'Failed asserting qty of returned items incorrect.'
             );
-
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->fail('Failed asserting that Creditmemo was created');
         }

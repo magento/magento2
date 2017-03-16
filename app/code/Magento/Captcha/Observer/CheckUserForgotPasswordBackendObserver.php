@@ -71,8 +71,7 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
         $params = $observer->getControllerAction()->getRequest()->getParams();
         if (!empty($email) && !empty($params)) {
             if ($captchaModel->isRequired()) {
-                if (
-                    !$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
+                if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
                 ) {
                     $this->_session->setEmail((string)$controller->getRequest()->getPost('email'));
                     $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);

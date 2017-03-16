@@ -186,5 +186,6 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

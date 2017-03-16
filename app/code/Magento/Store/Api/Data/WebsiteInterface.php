@@ -36,14 +36,14 @@ interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 
     /**
      * Rethreive website name
-     * 
+     *
      * @return string
      */
     public function getName();
 
     /**
      * Set website name
-     * 
+     *
      * @param string $name
      * @return $this
      */
