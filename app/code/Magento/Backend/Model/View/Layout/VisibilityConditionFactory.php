@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Creates visibility condition classes.
  */
-class VisibilityConditionFactory
+class VisibilityConditionFactory implements ConditionFactoryInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -26,12 +26,10 @@ class VisibilityConditionFactory
     }
 
     /**
-     * @param string $conditionClassName
-     *
-     * @return VisibilityConditionInterface
+     * @inheritdoc
      */
-    public function create($conditionClassName)
+    public function create($conditionAttributeValue)
     {
-        return $this->objectManager->create($conditionClassName);
+        return $this->objectManager->create($conditionAttributeValue);
     }
 }

@@ -23,7 +23,7 @@ interface VisibilityConditionInterface
      * Validate logical condition for ui component
      * If validation passed block will be displayed
      *
-     * @param array $arguments Arguments which allowed by condition filter.
+     * @param array $arguments Attributes from element node.
      *
      * @return bool
      */

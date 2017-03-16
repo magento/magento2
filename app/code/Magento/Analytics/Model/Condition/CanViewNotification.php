@@ -52,9 +52,7 @@ class CanViewNotification implements VisibilityConditionInterface
     /**
      * Validate is notification popup can be shown
      *
-     * @param array $arguments
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isVisible(array $arguments)
     {

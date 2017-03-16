@@ -149,4 +149,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Model\View\Layout\AndConditionFactory">
+        <arguments>
+            <argument name="conditionFactories" xsi:type="array">
+                <item name="visibilityCondition" xsi:type="object">Magento\Backend\Model\View\Layout\VisibilityConditionFactory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
