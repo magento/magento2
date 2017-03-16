@@ -100,7 +100,7 @@ class Create implements ProcessorInterface
 
                 switch ($scope) {
                     case ScopeInterface::SCOPE_WEBSITES:
-                        $this->createWebsites($items);
+                        $this->createWebsites($items, $data);
                         break;
                     case ScopeInterface::SCOPE_GROUPS:
                         $this->createGroups($items, $data);
@@ -119,18 +119,25 @@ class Create implements ProcessorInterface
      * Creates websites from the data.
      *
      * @param array $items Websites to create
+     * @param array $data The all available data
      * @return void
      */
-    private function createWebsites(array $items)
+    private function createWebsites(array $items, array $data)
     {
         foreach ($items as $websiteData) {
-            unset(
-                $websiteData['website_id'],
-                $websiteData['default_group_id']
-            );
+            unset($websiteData['website_id']);
+
             $website = $this->websiteFactory->create();
             $website->setData($websiteData);
+            $website->setDefaultGroupId((int)$websiteData['default_group_id']);
             $website->getResource()->save($website);
+
+            $website->getResource()->addCommitCallback(function () use ($website, $data) {
+                $website->setDefaultGroupId(
+                    $this->detectGroupById($data, $website->getDefaultGroupId())->getId()
+                );
+                $website->getResource()->save($website);
+            });
         }
     }
 
