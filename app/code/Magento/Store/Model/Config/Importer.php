@@ -83,7 +83,6 @@ class Importer implements ImporterInterface
      */
     public function import(array $data)
     {
-        $messages = [];
         try {
             $actions = [
                 ProcessorFactory::TYPE_DELETE,
