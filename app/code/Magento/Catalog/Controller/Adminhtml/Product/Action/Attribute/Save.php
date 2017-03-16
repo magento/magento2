@@ -15,19 +15,6 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $localeDate;
-    
-    /**
-     * Eav config
-     *
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $_eavConfig;
-
-    
-    /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
      */
     protected $_productFlatIndexerProcessor;
@@ -52,72 +39,89 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $_stockIndexerProcessor;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     */
-    protected $stockRegistry;
-    
-     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
-     */
-    protected $stockItemRepository;
-    
-    /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     */
-    protected $stockConfiguration;
-    
-    /**
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
      */
     protected $stockItemFactory;
-    
+
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $localeDate;
+
+    /**
+     * Eav config
+     *
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+     /**
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     */
+    protected $stockItemRepository;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     */
+    protected $stockConfiguration;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate     * 
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface|null $localeDate
+     * @param \Magento\Eav\Model\Config|null $eavConfig
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface|null $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface|null $stockItemRepository
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface|null $stockConfiguration
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate = null,
+        \Magento\Eav\Model\Config $eavConfig = null,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry = null,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository = null,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration = null
     ) {
-        $this->localeDate = $localeDate;
-        $this->eavConfig = $eavConfig;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_catalogProduct = $catalogProduct;
-        $this->stockRegistry = $stockRegistry;
-        $this->stockItemRepository = $stockItemRepository;
-        $this->stockConfiguration = $stockConfiguration;
         $this->stockItemFactory = $stockItemFactory;
         parent::__construct($context, $attributeHelper);
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->localeDate = $localeDate ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Model\Config::class);
+        $this->stockRegistry = $stockRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
+        $this->stockItemRepository = $stockItemRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Api\StockItemRepositoryInterface::class);
+        $this->stockConfiguration = $stockConfiguration ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
     }
 
     /**
