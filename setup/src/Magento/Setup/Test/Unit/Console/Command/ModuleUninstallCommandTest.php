@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -399,7 +399,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
         $this->cache->expects($this->once())->method('clean');
         $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
-
     }
 
     public function testExecute()

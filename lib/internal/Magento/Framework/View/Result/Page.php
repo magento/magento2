@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -91,6 +91,11 @@ class Page extends Layout
     protected $urlBuilder;
 
     /**
+     * @var View\EntitySpecificHandlesList
+     */
+    private $entitySpecificHandlesList;
+
+    /**
      * Constructor
      *
      * @param View\Element\Template\Context $context
@@ -103,6 +108,7 @@ class Page extends Layout
      * @param View\Page\Layout\Reader $pageLayoutReader
      * @param string $template
      * @param bool $isIsolated
+     * @param View\EntitySpecificHandlesList $entitySpecificHandlesList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -116,7 +122,8 @@ class Page extends Layout
         View\Page\Config\RendererFactory $pageConfigRendererFactory,
         View\Page\Layout\Reader $pageLayoutReader,
         $template,
-        $isIsolated = false
+        $isIsolated = false,
+        View\EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();
@@ -127,6 +134,8 @@ class Page extends Layout
         $this->viewFileSystem = $context->getViewFileSystem();
         $this->pageConfigRendererFactory = $pageConfigRendererFactory;
         $this->template = $template;
+        $this->entitySpecificHandlesList = $entitySpecificHandlesList
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(View\EntitySpecificHandlesList::class);
         parent::__construct(
             $context,
             $layoutFactory,
@@ -205,17 +214,23 @@ class Page extends Layout
      *
      * @param array|null $parameters page parameters
      * @param string|null $defaultHandle
+     * @param bool $entitySpecific
      * @return bool
      */
-    public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null)
+    public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null, $entitySpecific = true)
     {
         $handle = $defaultHandle ? $defaultHandle : $this->getDefaultLayoutHandle();
         $pageHandles = [$handle];
         foreach ($parameters as $key => $value) {
-            $pageHandles[] = $handle . '_' . $key . '_' . $value;
+            $pageHandle = $handle . '_' . $key . '_' . $value;
+            $pageHandles[] = $pageHandle;
+            if ($entitySpecific) {
+                $this->entitySpecificHandlesList->addHandle($pageHandle);
+            }
         }
         // Do not sort array going into add page handles. Ensure default layout handle is added first.
-        return $this->addHandle($pageHandles);
+        $this->addHandle($pageHandles);
+        return true;
     }
 
     /**

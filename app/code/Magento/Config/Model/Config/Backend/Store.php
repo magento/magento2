@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,11 +45,6 @@ class Store extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $this->_mutableConfig->setValue(
-            \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-            $this->getValue(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
         $this->_cacheManager->clean();
         return parent::afterSave();
     }

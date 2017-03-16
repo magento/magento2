@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -89,7 +89,7 @@ class SetModeCommand extends Command
             );
             $toMode = $input->getArgument(self::MODE_ARGUMENT);
             $skipCompilation = $input->getOption(self::SKIP_COMPILATION_OPTION);
-            switch($toMode) {
+            switch ($toMode) {
                 case State::MODE_DEVELOPER:
                     $modeController->enableDeveloperMode();
                     break;

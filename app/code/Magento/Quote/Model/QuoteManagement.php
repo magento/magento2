@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -263,7 +263,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 __('Cannot assign customer to the given cart. Customer already has active cart.')
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
         }
 
         $quote->setCustomer($customer);
@@ -276,7 +275,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
         $this->quoteRepository->save($quote);
         return true;
-
     }
 
     /**

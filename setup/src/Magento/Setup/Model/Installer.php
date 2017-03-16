@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -859,7 +859,7 @@ class Installer
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
-        } else if ($type === 'data') {
+        } elseif ($type === 'data') {
             $this->log->log('Data post-updates:');
             $handlerType = 'data-recurring';
         }
@@ -1262,7 +1262,7 @@ class Installer
     }
 
     /**
-     * Clear var/generation and reset object manager
+     * Clear generated/code and reset object manager
      *
      * @return void
      */

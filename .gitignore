@@ -28,6 +28,7 @@ atlassian*
 
 /pub/media/*.*
 !/pub/media/.htaccess
+/pub/media/analytics/*
 /pub/media/catalog/*
 !/pub/media/catalog/.htaccess
 /pub/media/customer/*
@@ -51,3 +52,5 @@ atlassian*
 !/var/.htaccess
 /vendor/*
 !/vendor/.htaccess
+/generated/*
+!/generated/.htaccess

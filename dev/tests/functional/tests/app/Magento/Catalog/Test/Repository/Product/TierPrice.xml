@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -92,7 +92,7 @@
 
         <dataset name="custom_with_percentage_discount">
             <field name="0" xsi:type="array">
-                <item name="value_type" xsi:type="string">Percent</item>
+                <item name="value_type" xsi:type="string">Discount</item>
                 <item name="percentage_value" xsi:type="string">3</item>
                 <item name="website" xsi:type="string">All Websites [USD]</item>
                 <item name="price_qty" xsi:type="string">10</item>

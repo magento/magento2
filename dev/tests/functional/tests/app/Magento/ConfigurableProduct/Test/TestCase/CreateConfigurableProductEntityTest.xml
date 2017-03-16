@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -158,6 +158,20 @@
             <data name="product/data/website_ids/0/dataset" xsi:type="string">custom_store</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite" />
+        </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation10" summary="Create configurable product with tier price for one item">
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_assigned_product_tier_price</data>
+            <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_new_options_with_special_price</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">1</data>
+            <data name="product/data/weight" xsi:type="string">2</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/short_description" xsi:type="string">Configurable short description</data>
+            <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
     </testCase>
 </config>

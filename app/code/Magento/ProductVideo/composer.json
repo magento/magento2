@@ -12,7 +12,8 @@
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
-        "magento/module-customer": "100.2.*"
+        "magento/module-customer": "100.2.*",
+        "magento/module-config": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",

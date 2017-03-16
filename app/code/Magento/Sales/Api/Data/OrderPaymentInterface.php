@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -113,7 +113,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     
     /**
      * Credit card SS start year.
-     * 
+     *
      * @deprecated unused constant
      */
     const CC_SS_START_YEAR = 'cc_ss_start_year';
@@ -160,7 +160,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     
     /**
      * Credit card SS start month.
-     * 
+     *
      * @deprecated unused constant
      */
     const CC_SS_START_MONTH = 'cc_ss_start_month';
@@ -215,7 +215,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     
     /**
      * Credit card SS issue.
-     * 
+     *
      * @deprecated unused constant
      */
     const CC_SS_ISSUE = 'cc_ss_issue';

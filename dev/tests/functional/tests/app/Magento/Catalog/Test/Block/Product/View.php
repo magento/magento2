@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -209,6 +209,33 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -337,7 +364,7 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     * 
+     *
      * @return string
      */
     public function braintreePaypalCheckout()
@@ -518,18 +545,23 @@ class View extends AbstractConfigureBlock
      */
     public function waitLoader()
     {
-        $this->waitForElementNotVisible($this->ajaxLoading);
+        try {
+            $this->waitForElementNotVisible($this->ajaxLoading);
+        } catch (\Exception $e) {
+        }
     }
 
     /**
-     * Check id media gallery is visible for the product.
+     * Check if media gallery is visible for the product.
      *
      * @return bool
      */
     public function isGalleryVisible()
     {
         $this->waitForElementNotVisible($this->galleryLoader);
-        return $this->_rootElement->find($this->mediaGallery)->isVisible();
+        $this->waitForElementVisible($this->mediaGallery);
+
+        return true;
     }
 
     /**

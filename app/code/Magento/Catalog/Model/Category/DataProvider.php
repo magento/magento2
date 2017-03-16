@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category;
@@ -15,6 +15,8 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
@@ -127,6 +129,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $arrayManager;
 
     /**
+     * @var Filesystem
+     */
+    private $fileInfo;
+
+    /**
      * DataProvider constructor
      *
      * @param string $name
@@ -202,8 +209,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 && $category->getStoreId();
             $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
 
-            if (
-                !$attributePath
+            if (!$attributePath
                 || !$canDisplayUseDefault
                 || in_array($attributeCode, $this->elementsWithUseConfigSetting)
             ) {
@@ -483,8 +489,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if ($attribute->getBackend() instanceof ImageBackendModel) {
                 unset($categoryData[$attributeCode]);
 
-                $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
-                $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                $fileName = $category->getData($attributeCode);
+                if ($this->getFileInfo()->isExist($fileName)) {
+                    $stat = $this->getFileInfo()->getStat($fileName);
+                    $mime = $this->getFileInfo()->getMimeType($fileName);
+
+                    $categoryData[$attributeCode][0]['name'] = $fileName;
+                    $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+                    $categoryData['image'][0]['size'] = isset($stat) ? $stat['size'] : 0;
+                    $categoryData['image'][0]['type'] = $mime;
+                }
             }
         }
 
@@ -604,5 +618,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $this->arrayManager;
+    }
+
+    /**
+     * Get FileInfo instance
+     *
+     * @return FileInfo
+     *
+     * @deprecated
+     */
+    private function getFileInfo()
+    {
+        if ($this->fileInfo === null) {
+            $this->fileInfo = ObjectManager::getInstance()->get(FileInfo::class);
+        }
+        return $this->fileInfo;
     }
 }

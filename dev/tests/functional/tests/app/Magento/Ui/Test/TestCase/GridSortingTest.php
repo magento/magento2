@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,7 +134,10 @@ class GridSortingTest extends Injectable
             $steps = [];
         }
         foreach ($steps as $step) {
-            $processStep = $this->objectManager->create($step, ['order' => $item]);
+            $products = $item->getEntityId()['products'];
+            $cart['data']['items'] = ['products' => $products];
+            $cart = $this->fixtureFactory->createByCode('cart', $cart);
+            $processStep = $this->objectManager->create($step, ['order' => $item, 'cart' => $cart]);
             $processStep->run();
         }
     }

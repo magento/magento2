@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\MoveRecentlyComparedProductsOnOrderPageTest" summary="Add Products to Order from Recently Compared Products Section" ticketId="MAGETWO-28109">
-        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
+        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariationWithSimpleProduct1">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
-        </variation>
-        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariation2">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="products/0" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
-            <data name="products/1" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
     </testCase>

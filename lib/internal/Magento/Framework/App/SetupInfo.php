@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -111,7 +111,7 @@ class SetupInfo
         $isProjectInDocRoot = false !== strpos($this->projectRoot . '/', $this->docRoot . '/');
         if (empty($this->server['HTTP_HOST'])) {
             return '';
-        } else if (!$isProjectInDocRoot) {
+        } elseif (!$isProjectInDocRoot) {
             return 'http://' . $this->server['HTTP_HOST'] . '/';
         }
         return 'http://' . $this->server['HTTP_HOST'] . substr($this->projectRoot . '/', strlen($this->docRoot));

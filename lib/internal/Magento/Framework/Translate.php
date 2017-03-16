@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -107,6 +107,11 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @var \Magento\Framework\App\Language\Dictionary
      */
     protected $packDictionary;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\View\DesignInterface $viewDesign
@@ -474,7 +479,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     {
         $data = $this->_cache->load($this->getCacheId());
         if ($data) {
-            $data = unserialize($data);
+            $data = $this->getSerializer()->unserialize($data);
         }
         return $data;
     }
@@ -486,7 +491,22 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _saveCache()
     {
-        $this->_cache->save(serialize($this->getData()), $this->getCacheId(true), [], false);
+        $this->_cache->save($this->getSerializer()->serialize($this->getData()), $this->getCacheId(true), [], false);
         return $this;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(Serialize\SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

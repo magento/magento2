@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -54,8 +54,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
             unset($this->rules[$rule->getId()]);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Unable to save rule %1', $rule->getRuleId()));
         }
         return $rule;

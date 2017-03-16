@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
@@ -23,6 +23,8 @@ class AttributeMerger
         'textarea'    => 'Magento_Ui/js/form/element/textarea',
         'multiline'   => 'Magento_Ui/js/form/components/group',
         'multiselect' => 'Magento_Ui/js/form/element/multiselect',
+        'image' => 'Magento_Ui/js/form/element/media',
+        'file' => 'Magento_Ui/js/form/element/media',
     ];
 
     /**
@@ -32,6 +34,7 @@ class AttributeMerger
      */
     protected $templateMap = [
         'image' => 'media',
+        'file' => 'media',
     ];
 
     /**
@@ -382,7 +385,6 @@ class AttributeMerger
             } else {
                 array_push($tailOptions, $countryOption);
             }
-
         }
         return array_merge($headOptions, $tailOptions);
     }

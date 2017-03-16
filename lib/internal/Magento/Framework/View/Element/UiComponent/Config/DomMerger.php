@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
@@ -208,7 +208,7 @@ class DomMerger implements DomMergerInterface
                             if ($this->isMergeContext($insertedXPath)) {
                                 if ($this->isTextNode($insertedItem) && $this->isTextNode($rootItem)) {
                                     $rootItem->nodeValue = $insertedItem->nodeValue;
-                                } else if (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
+                                } elseif (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
                                     && !$this->hasIdAttribute($rootItem)
                                     && !$this->hasIdAttribute($insertedItem)
                                 ) {

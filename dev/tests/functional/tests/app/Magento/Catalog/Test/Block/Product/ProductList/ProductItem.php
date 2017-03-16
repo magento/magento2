@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,6 +80,7 @@ class ProductItem extends Block
      */
     public function isVisibleAddToCardButton()
     {
+        $this->_rootElement->hover();
         return $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->isVisible();
     }
 
@@ -90,6 +91,7 @@ class ProductItem extends Block
      */
     public function clickAddToCart()
     {
+        $this->_rootElement->hover();
         $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->click();
     }
 

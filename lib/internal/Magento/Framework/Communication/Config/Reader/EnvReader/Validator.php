@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config\Reader\EnvReader;
@@ -178,8 +178,7 @@ class Validator extends ConfigValidator
                 )
             );
         }
-        if (
-            $this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]) &&
+        if ($this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]) &&
             count($configDataItem[ConfigInterface::TOPIC_HANDLERS]) != 1
         ) {
             throw new \LogicException(

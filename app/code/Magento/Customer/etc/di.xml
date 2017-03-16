@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -367,6 +367,22 @@
     <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Attribute">
+        <arguments>
+            <argument name="attributeMetadataCache" xsi:type="object">Magento\Customer\Model\Metadata\AttributeMetadataCache\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">customer_entity</item>
+                    <item name="eavEntityType" xsi:type="string">customer</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

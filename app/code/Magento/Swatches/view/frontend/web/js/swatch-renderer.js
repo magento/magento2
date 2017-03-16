@@ -1,16 +1,19 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 define([
     'jquery',
     'underscore',
+    'mage/template',
     'mage/smart-keyboard-handler',
+    'mage/translate',
+    'priceUtils',
     'jquery/ui',
     'jquery/jquery.parsequery',
     'mage/validation/validation'
-], function ($, _, keyboardHandler) {
+], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
     'use strict';
 
     /**
@@ -254,7 +257,16 @@ define([
             gallerySwitchStrategy: 'replace',
 
             // whether swatches are rendered in product list or on product page
-            inProductList: false
+            inProductList: false,
+
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price',
+
+            // tier prise selectors start
+            tierPriceTemplateSelector: '#tier-prices-template',
+            tierPriceBlockSelector: '[data-role="tier-price-block"]',
+            tierPriceTemplate: ''
+            // tier prise selectors end
         },
 
         /**
@@ -279,6 +291,7 @@ define([
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
 
         /**
@@ -809,7 +822,8 @@ define([
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
-                result;
+                result,
+                tierPriceHtml;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -825,6 +839,29 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
+
+            if (result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
+
+            if (result.tierPrices.length) {
+                if (this.options.tierPriceTemplate) {
+                    tierPriceHtml = mageTemplate(
+                        this.options.tierPriceTemplate,
+                        {
+                            'tierPrices': result.tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.jsonConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        }
+                    );
+                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                }
+            } else {
+                $(this.options.tierPriceBlockSelector).hide();
+            }
         },
 
         /**

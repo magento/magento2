@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -105,8 +105,7 @@ class Attribute extends AbstractFilter
                 ? (int)$optionsFacetedData[$value]['count']
                 : 0;
             // Check filter type
-            if (
-                $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+            if ($this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
                 && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)
             ) {
                 continue;

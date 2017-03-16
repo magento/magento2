@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -442,5 +442,34 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
 
         $this->resource->deleteGalleryValueInStore($valueId, $entityId, $storeId);
+    }
+
+    public function testCountImageUses()
+    {
+        $results = [
+            [
+                'value_id' => '1',
+                'attribute_id' => 90,
+                'value' => '/d/o/download_7.jpg',
+                'media_type' => 'image',
+                'disabled' => '0',
+            ],
+        ];
+
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->select->expects($this->at(0))->method('from')->with(
+            [
+                'main' => 'table',
+            ],
+            '*'
+        )->willReturnSelf();
+        $this->select->expects($this->at(1))->method('where')->with(
+            'value = ?',
+            1
+        )->willReturnSelf();
+        $this->connection->expects($this->once())->method('fetchAll')
+            ->with($this->select)
+            ->willReturn($results);
+        $this->assertEquals($this->resource->countImageUses(1), count($results));
     }
 }

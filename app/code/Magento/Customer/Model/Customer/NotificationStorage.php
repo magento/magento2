@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class NotificationStorage
 {
@@ -17,6 +18,16 @@ class NotificationStorage
     private $cache;
 
     /**
+     * @param FrontendInterface $cache
+     */
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * NotificationStorage constructor.
      * @param FrontendInterface $cache
      */
     public function __construct(FrontendInterface $cache)
@@ -34,7 +45,7 @@ class NotificationStorage
     public function add($notificationType, $customerId)
     {
         $this->cache->save(
-            serialize([
+            $this->getSerializer()->serialize([
                 'customer_id' => $customerId,
                 'notification_type' => $notificationType
             ]),
@@ -76,5 +87,20 @@ class NotificationStorage
     private function getCacheKey($notificationType, $customerId)
     {
         return 'notification_' . $notificationType . '_' . $customerId;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

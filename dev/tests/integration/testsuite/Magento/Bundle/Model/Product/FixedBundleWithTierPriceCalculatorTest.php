@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -495,7 +495,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -544,7 +545,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -601,7 +603,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -664,7 +667,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -727,7 +731,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -790,7 +795,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -872,7 +878,8 @@ class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [

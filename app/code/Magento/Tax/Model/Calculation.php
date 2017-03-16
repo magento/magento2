@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
@@ -521,7 +521,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         ) {
             $basedOn = 'default';
         } else {
-
             if (($billingAddress === null || !$billingAddress->getCountryId())
                 && $basedOn == 'billing'
                 || ($shippingAddress === null || !$shippingAddress->getCountryId())
