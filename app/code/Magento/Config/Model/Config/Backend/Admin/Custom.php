@@ -53,7 +53,6 @@ class Custom extends \Magento\Framework\App\Config\Value
     /* @var \Magento\Framework\App\Config\Storage\WriterInterface */
     protected $_configWriter;
 
-
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry

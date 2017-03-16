@@ -60,7 +60,6 @@ class HandleTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->atLeastOnce())->method('getView')->willReturn($this->viewMock);
 
         $this->controller = new Handle($this->contextMock, $this->componentFactoryMock);
-
     }
 
     public function testExecuteNoButtons()

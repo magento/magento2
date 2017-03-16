@@ -53,8 +53,7 @@ class SearchTermManager
         }
 
         foreach ($this->searchTerms as &$searchTerm) {
-            if (
-                $this->searchTermsUseRate[$searchTerm['term']]['use_rate'] > 0
+            if ($this->searchTermsUseRate[$searchTerm['term']]['use_rate'] > 0
                 && $currentProductIndex % $this->searchTermsUseRate[$searchTerm['term']]['use_rate'] === 0
                 && $this->searchTermsUseRate[$searchTerm['term']]['used'] < $searchTerm['count']
             ) {

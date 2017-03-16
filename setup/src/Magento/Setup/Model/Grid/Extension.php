@@ -48,8 +48,7 @@ class Extension
         foreach ($extensions as &$extension) {
             $extension['update'] = array_key_exists($extension['name'], $packagesForUpdate);
             $extension['uninstall'] = true;
-            if (
-                $extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE
+            if ($extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE
                 || !$this->composerInformation->isPackageInComposerJson($extension['name'])
             ) {
                 $extension['uninstall'] = false;

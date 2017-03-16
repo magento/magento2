@@ -543,7 +543,6 @@ class Checkout
             }
             $this->_getApi()->setSuppressShipping(true);
         } else {
-
             $this->_getApi()->setBillingAddress($this->_quote->getBillingAddress());
 
             $address = $this->_quote->getShippingAddress();

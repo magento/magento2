@@ -74,6 +74,5 @@ class ReportProvider
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
         $statement = $connection->query($query->getSelect());
         return $this->iteratorFactory->create($statement, $this->getIteratorName($query));
-
     }
 }
