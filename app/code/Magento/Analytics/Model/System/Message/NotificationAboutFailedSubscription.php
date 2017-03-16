@@ -35,9 +35,8 @@ class NotificationAboutFailedSubscription implements MessageInterface
     }
 
     /**
-     * Retrieve unique message identity
+     * @inheritdoc
      *
-     * @return string
      * @codeCoverageIgnore
      */
     public function getIdentity()
@@ -70,9 +69,8 @@ class NotificationAboutFailedSubscription implements MessageInterface
     }
 
     /**
-     * Retrieve message severity
+     * @inheritdoc
      *
-     * @return int
      * @codeCoverageIgnore
      */
     public function getSeverity()

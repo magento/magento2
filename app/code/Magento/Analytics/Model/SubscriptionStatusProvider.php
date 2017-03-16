@@ -64,7 +64,7 @@ class SubscriptionStatusProvider
     }
 
     /**
-     * Retrieve subscription status to Magento BI Advanced Reporting..
+     * Retrieve subscription status to Magento BI Advanced Reporting.
      *
      * Statuses:
      * Enabled - if subscription is enabled and MA token was received;

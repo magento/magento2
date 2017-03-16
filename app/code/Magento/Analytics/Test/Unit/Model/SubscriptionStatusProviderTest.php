@@ -82,7 +82,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->expectFlagCounterReturn(null);
-        $this->assertEquals('Failed', $this->statusProvider->getStatus());
+        $this->assertEquals(SubscriptionStatusProvider::FAILED, $this->statusProvider->getStatus());
     }
 
     public function testGetStatusShouldBePending()
@@ -96,7 +96,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->expectFlagCounterReturn(45);
-        $this->assertEquals('Pending', $this->statusProvider->getStatus());
+        $this->assertEquals(SubscriptionStatusProvider::PENDING, $this->statusProvider->getStatus());
     }
 
     public function testGetStatusShouldBeEnabled()
@@ -108,7 +108,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('default/analytics/subscription/enabled')
             ->willReturn(true);
-        $this->assertEquals('Enabled', $this->statusProvider->getStatus());
+        $this->assertEquals(SubscriptionStatusProvider::ENABLED, $this->statusProvider->getStatus());
     }
 
     public function testGetStatusShouldBeDisabled()
@@ -117,13 +117,13 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('default/analytics/subscription/enabled')
             ->willReturn(false);
-        $this->assertEquals('Disabled', $this->statusProvider->getStatus());
+        $this->assertEquals(SubscriptionStatusProvider::DISABLED, $this->statusProvider->getStatus());
     }
 
     /**
      * @param null|int $value
      */
-    protected function expectFlagCounterReturn($value)
+    private function expectFlagCounterReturn($value)
     {
         $this->flagManagerMock->expects($this->once())->method('getFlagData')
             ->willReturnMap(
