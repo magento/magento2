@@ -77,6 +77,11 @@ class ImagesFixture extends Fixture
     private $batchInsertFactory;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @var array
      */
     private $attributeCodesCache = [];
@@ -110,6 +115,7 @@ class ImagesFixture extends Fixture
      * @param \Magento\Eav\Model\AttributeRepository $attributeRepository
      * @param \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $expressionFactory
      * @param \Magento\Setup\Model\BatchInsertFactory $batchInsertFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         FixtureModel $fixtureModel,
@@ -119,7 +125,8 @@ class ImagesFixture extends Fixture
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Eav\Model\AttributeRepository $attributeRepository,
         \Magento\Framework\DB\Sql\ColumnValueExpressionFactory $expressionFactory,
-        \Magento\Setup\Model\BatchInsertFactory $batchInsertFactory
+        \Magento\Setup\Model\BatchInsertFactory $batchInsertFactory,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         parent::__construct($fixtureModel);
 
@@ -130,6 +137,7 @@ class ImagesFixture extends Fixture
         $this->attributeRepository = $attributeRepository;
         $this->expressionFactory = $expressionFactory;
         $this->batchInsertFactory = $batchInsertFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -261,6 +269,8 @@ class ImagesFixture extends Fixture
 
     /**
      * Assign created images to products according to Y images per each product
+     *
+     * @throws \Exception
      */
     private function assignImagesToProducts()
     {
@@ -284,7 +294,7 @@ class ImagesFixture extends Fixture
 
         $imageGenerator = $this->getImagesGenerator();
 
-        foreach ($this->getProductGenerator() as $productEntityId) {
+        foreach ($this->getProductGenerator() as $productEntity) {
             for ($imageNum = 1; $imageNum <= $this->getImagesPerProduct(); $imageNum++) {
                 $image = $imageGenerator->current();
                 $imageGenerator->next();
@@ -293,7 +303,7 @@ class ImagesFixture extends Fixture
                     $attributes = ['image', 'small_image', 'thumbnail', 'swatch_image'];
                     foreach ($attributes as $attr) {
                         $batchInsertCatalogProductEntityVarchar->insert([
-                            'entity_id' => $productEntityId['entity_id'],
+                            $this->getProductLinkField() => $productEntity[$this->getProductLinkField()],
                             'attribute_id' => $this->getAttributeId($attr),
                             'value' => $image['value'],
                             'store_id' => 0,
@@ -303,13 +313,13 @@ class ImagesFixture extends Fixture
 
                 $batchInsertCatalogProductEntityMediaGalleryValueToEntity->insert([
                     'value_id' => $image['value_id'],
-                    'entity_id' => $productEntityId['entity_id']
+                    $this->getProductLinkField() => $productEntity[$this->getProductLinkField()]
                 ]);
 
                 $batchInsertCatalogProductEntityMediaGalleryValue->insert([
                     'value_id' => $image['value_id'],
                     'store_id' => 0,
-                    'entity_id' => $productEntityId['entity_id'],
+                    $this->getProductLinkField() => $productEntity[$this->getProductLinkField()],
                     'position' => $image['value_id'],
                     'disabled' => 0
                 ]);
@@ -325,6 +335,7 @@ class ImagesFixture extends Fixture
      * Returns generator to iterate in memory-safe way over all product entities in DB
      *
      * @return \Generator
+     * @throws \Exception
      */
     private function getProductGenerator()
     {
@@ -353,13 +364,14 @@ class ImagesFixture extends Fixture
      * @param int $limit
      * @param int $offset
      * @return array
+     * @throws \Exception
      */
     private function getProducts($limit, $offset)
     {
         $select = $this->getDbConnection()
             ->select()
             ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-            ->columns(['entity_id'])
+            ->columns([$this->getProductLinkField()])
             ->limit($limit, $offset);
 
         return $this->getDbConnection()->fetchAssoc($select);
@@ -510,5 +522,18 @@ class ImagesFixture extends Fixture
         }
 
         return $this->tableCache[$tableName];
+    }
+
+    /**
+     * Return product id field name - entity_id|row_id
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function getProductLinkField()
+    {
+        return $this->metadataPool
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
     }
 }
