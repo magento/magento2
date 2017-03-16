@@ -99,31 +99,28 @@ class DataDifferenceCalculator
     /**
      * Sets default values for some fields if their value is empty.
      *
-     * @param $scope The data scope
+     * @param string $scope The data scope
      * @param array $data The data of scopes (websites, groups, stores)
      * @return array
      */
     private function setDefaultValues($scope, array $data)
     {
+        $fieldset = [];
+        switch ($scope) {
+            case ScopeInterface::SCOPE_WEBSITES:
+                $fieldset = ['default_group_id'];
+                break;
+            case ScopeInterface::SCOPE_GROUPS:
+                $fieldset = ['website_id', 'default_store_id', 'root_category_id'];
+                break;
+            case ScopeInterface::SCOPE_STORES:
+                $fieldset = ['website_id', 'group_id'];
+                break;
+        }
+
         foreach ($data as $groupCode => $groupData) {
-            switch ($scope) {
-                case ScopeInterface::SCOPE_WEBSITES:
-                    $groupData['default_group_id'] = !empty($groupData['default_group_id'])
-                        ? $groupData['default_group_id'] : '0';
-                    break;
-                case ScopeInterface::SCOPE_GROUPS:
-                    $groupData['website_id'] = !empty($groupData['website_id']) ? $groupData['website_id'] : '0';
-                    $groupData['default_store_id'] = !empty($groupData['default_store_id'])
-                        ? $groupData['default_store_id'] : '0';
-                    $groupData['root_category_id'] = !empty($groupData['root_category_id'])
-                        ? $groupData['root_category_id']: '0';
-                    break;
-                case ScopeInterface::SCOPE_STORES:
-                    $groupData['website_id'] = !empty($groupData['website_id'])
-                        ? $groupData['website_id'] : '0';
-                    $groupData['group_id'] = !empty($groupData['group_id'])
-                        ? $groupData['group_id'] : '0';
-                    break;
+            foreach ($fieldset as $field) {
+                $groupData[$field] = !empty($groupData[$field]) ? $groupData[$field] : '0';
             }
 
             $data[$groupCode] = $groupData;
