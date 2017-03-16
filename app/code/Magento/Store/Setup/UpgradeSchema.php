@@ -24,7 +24,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '2.2.0', '<')) {
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $this->addCodeColumnToStoreGroupTable($setup);
             $this->removeForeignKeys($setup);
         }

@@ -462,10 +462,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Retrieves group code.
-     * Group code is a unique field.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getCode()
     {
@@ -473,10 +470,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Set group code.
-     *
-     * @param string $code
-     * @return $this
+     * @inheritdoc
      */
     public function setCode($code)
     {
