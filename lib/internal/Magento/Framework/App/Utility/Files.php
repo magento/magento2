@@ -339,7 +339,7 @@ class Files
      */
     public function getMainConfigFiles($asDataSet = true)
     {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . implode('|', [$asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $configXmlPaths = [];
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
@@ -375,7 +375,7 @@ class Files
         $excludedFileNames = ['wsdl.xml', 'wsdl2.xml', 'wsi.xml'],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . json_encode([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
@@ -407,7 +407,7 @@ class Files
         $excludedFileNames = [],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . json_encode('|', [$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->getFilesSubset(
                 $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
@@ -458,7 +458,7 @@ class Files
      */
     public function getLayoutConfigFiles($fileNamePattern = '*.xml', $asDataSet = true)
     {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . implode('|', [$fileNamePattern, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             self::$_cache[$cacheKey] = $this->dirSearch->collectFiles(
                 ComponentRegistrar::THEME,
@@ -1427,7 +1427,7 @@ class Files
      */
     public function getComposerFiles($componentType, $asDataSet = true)
     {
-        $key = __METHOD__ . '|' . serialize(func_get_args());
+        $key = __METHOD__ . '|' . implode('|', [$componentType, $asDataSet]);
         if (!isset(self::$_cache[$key])) {
             $excludes = $componentType == ComponentRegistrar::MODULE ? $this->getModuleTestDirsRegex() : [];
             $files = $this->getFilesSubset(
