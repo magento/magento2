@@ -835,12 +835,14 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $isArray = is_array($routeParams);
 
         if ($isArray) {
-            foreach ($routeParams as $item) {
-                if (is_object($item)) {
-                    $isCached = false;
-                    break;
+            array_walk_recursive(
+                $routeParams,
+                function ($item) use (&$isCached) {
+                    if (is_object($item)) {
+                        $isCached = false;
+                    }
                 }
-            }
+            );
         }
 
         if(!$isCached) {
