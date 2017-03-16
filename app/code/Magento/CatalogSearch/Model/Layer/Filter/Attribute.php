@@ -87,7 +87,7 @@ class Attribute extends AbstractFilter
         $isAttributeFilterable =
             $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS;
 
-        if (count($optionsFacetedData) === 0 && $isAttributeFilterable) {
+        if (count($optionsFacetedData) === 0 && !$isAttributeFilterable) {
             return $this->itemDataBuilder->build();
         }
 
