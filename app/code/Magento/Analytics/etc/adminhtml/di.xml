@@ -9,7 +9,7 @@
     <type name="Magento\Framework\Notification\MessageList">
         <arguments>
             <argument name="messages" xsi:type="array">
-                <item name="analytics" xsi:type="string">Magento\Analytics\Model\System\Message\Notification</item>
+                <item name="analytics" xsi:type="string">Magento\Analytics\Model\System\Message\NotificationAboutFailedSubscription</item>
             </argument>
         </arguments>
     </type>
