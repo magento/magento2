@@ -7,6 +7,8 @@ namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 
 /**
  * Import entity abstract customer model
@@ -233,7 +235,8 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            $validator = new EmailValidator();
+            if (!$validator->isValid($email, new RFCValidation())) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);

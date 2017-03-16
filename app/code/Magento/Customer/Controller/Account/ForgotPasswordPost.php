@@ -13,6 +13,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 
 /**
  * ForgotPasswordPost controller
@@ -60,7 +62,8 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $email = (string)$this->getRequest()->getPost('email');
         if ($email) {
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            $validator = new EmailValidator();
+            if (!$validator->isValid($email, new RFCValidation())) {
                 $this->session->setForgottenEmail($email);
                 $this->messageManager->addErrorMessage(__('Please correct the email address.'));
                 return $resultRedirect->setPath('*/*/forgotpassword');
