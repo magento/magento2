@@ -45,14 +45,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'code',
             [
                 'type' => Table::TYPE_TEXT,
-                'nullable' => false,
                 'length' => 32,
-                'comment' => 'Store group unique code'
+                'comment' => 'Store group unique code',
+                'after' => 'website_id'
             ]
-        );
-        $setup->getConnection()->update(
-            $setup->getTable('store_group'),
-            ['code' => new \Zend_Db_Expr('group_id')]
         );
         $setup->getConnection()->addIndex(
             $setup->getTable('store_group'),
