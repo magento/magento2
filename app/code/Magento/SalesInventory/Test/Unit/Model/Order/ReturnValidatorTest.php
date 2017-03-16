@@ -119,7 +119,6 @@ class ReturnValidatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValidator->validate($returnToStockItems, $this->creditMemoMock),
             __('The return to stock argument contains product item that is not part of the original order.')
         );
-
     }
 
     public function dataProvider()

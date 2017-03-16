@@ -266,6 +266,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->setData(self::KEY_PRODUCT_ID, $value);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

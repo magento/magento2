@@ -76,6 +76,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         return $this->collection;
     }
+
     /**
      * Get Data Provider name
      *
@@ -156,6 +157,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
             [$filter->getConditionType() => $filter->getValue()]
         );
     }
+
     /**
      * Returns search criteria
      *

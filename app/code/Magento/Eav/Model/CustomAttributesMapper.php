@@ -5,7 +5,6 @@
  */
 namespace Magento\Eav\Model;
 
-
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;

@@ -1419,6 +1419,7 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns account_status
      *

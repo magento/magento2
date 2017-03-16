@@ -259,7 +259,7 @@ class TypeProcessor
      *
      * @param string $getterName
      * @return string
-     * 
+     *
      * @deprecated
      */
     public function dataObjectGetterNameToFieldName($getterName)
@@ -592,8 +592,8 @@ class TypeProcessor
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -630,8 +630,8 @@ class TypeProcessor
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -647,8 +647,8 @@ class TypeProcessor
      * @param bool $boolAccessorName
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -668,8 +668,8 @@ class TypeProcessor
      * @param ClassReflection $class
      * @param string $methodName
      * @return bool
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {

@@ -33,7 +33,7 @@ class Cron
 
     /**
      * Constructor
-     * 
+     *
      * @param Config $config
      * @param ReportModulesInfo $reportModulesInfo
      * @param ReportCounts $reportCounts
@@ -53,7 +53,7 @@ class Cron
 
     /**
      * The method run by the cron that fires all required events.
-     * 
+     *
      * @return \Magento\NewRelicReporting\Model\Cron
      */
     public function runCron()

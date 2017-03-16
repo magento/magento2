@@ -72,7 +72,6 @@ class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
 
         // Check that each class declaration goes from new line
         if (($stackLine === $nextClassLine) && ($stackLine === $nextOpenBraceLine)) {
-
             $prevParenthesis = $phpcsFile->findPrevious(T_OPEN_PARENTHESIS, $stackPtr);
             $nextParenthesis = $phpcsFile->findNext(T_OPEN_PARENTHESIS, $stackPtr);
 

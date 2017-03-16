@@ -44,7 +44,7 @@ abstract class PaymentTokens extends Template
      * Get type of token
      * @return string
      */
-    abstract function getType();
+    abstract public function getType();
 
     /**
      * @return PaymentTokenInterface[]

@@ -10,7 +10,7 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Class ConditionPool
- * 
+ *
  * Registry for \Magento\Backend\Model\View\Layout\ConditionInterface
  * @see usage details in \Magento\Backend\Model\View\Layout\ConditionInterface description
  *
