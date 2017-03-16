@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\QueueRepository;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Consumer used to process a single message, unlike batch consumer.
@@ -72,12 +73,18 @@ class Consumer implements ConsumerInterface
     private $communicationConfig;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
+     * @param LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -85,12 +92,14 @@ class Consumer implements ConsumerInterface
         CallbackInvoker $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
-        ConsumerConfigurationInterface $configuration
+        ConsumerConfigurationInterface $configuration,
+        LoggerInterface $logger = null
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
         $this->resource = $resource;
         $this->configuration = $configuration;
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -213,6 +222,9 @@ class Consumer implements ConsumerInterface
                     $this->resource->getConnection()
                         ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
                 }
+            } catch (\Magento\Framework\Exception\NotFoundException $e) {
+                $queue->acknowledge($message);
+                $this->logger->warning($e->getMessage());
             } catch (\Exception $e) {
                 $queue->reject($message, false, $e->getMessage());
                 if ($lock) {

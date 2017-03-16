@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 
 class MessageController
@@ -49,11 +50,16 @@ class MessageController
      * @param string $consumerName
      * @return LockInterface
      * @throws MessageLockException
+     * @throws NotFoundException
      */
     public function lock(EnvelopeInterface $envelope, $consumerName)
     {
         $lock = $this->lockFactory->create();
-        $code = $consumerName . '-' . $envelope->getProperties()['message_id'];
+        $properties = $envelope->getProperties();
+        if (empty($properties['message_id'])) {
+            throw new NotFoundException(new Phrase("Property 'message_id' not found in properties."));
+        }
+        $code = $consumerName . '-' . $properties['message_id'];
         $code = md5($code);
         $this->reader->read($lock, $code);
         if ($lock->getId()) {
