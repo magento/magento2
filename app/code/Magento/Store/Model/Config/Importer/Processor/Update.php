@@ -14,35 +14,45 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 
 /**
- * @inheritdoc
+ * The process for updating of existing entities.
+ *
+ * {@inheritdoc}
  */
 class Update implements ProcessorInterface
 {
     /**
+     * The calculator for data differences.
+     *
      * @var DataDifferenceCalculator
      */
     private $dataDifferenceCalculator;
 
     /**
+     * The factory for website entity.
+     *
      * @var WebsiteFactory
      */
     private $websiteFactory;
 
     /**
+     * The factory for store entity.
+     *
      * @var StoreFactory
      */
     private $storeFactory;
 
     /**
+     * The factory for group entity.
+     *
      * @var GroupFactory
      */
     private $groupFactory;
 
     /**
-     * @param DataDifferenceCalculator $dataDifferenceCalculator
-     * @param WebsiteFactory $websiteFactory
-     * @param StoreFactory $storeFactory
-     * @param GroupFactory $groupFactory
+     * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
+     * @param WebsiteFactory $websiteFactory The factory for website entity
+     * @param StoreFactory $storeFactory The factory for store entity
+     * @param GroupFactory $groupFactory The factory for group entity
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
@@ -57,7 +67,9 @@ class Update implements ProcessorInterface
     }
 
     /**
-     * @inheritdoc
+     * Updates entities in application according to the data set.
+     *
+     * {@inheritdoc}
      */
     public function run(array $data)
     {

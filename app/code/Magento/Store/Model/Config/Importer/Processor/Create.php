@@ -15,41 +15,53 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 
 /**
- * @inheritdoc
+ * The processor for creating of new entities.
+ *
+ * {@inheritdoc}
  */
 class Create implements ProcessorInterface
 {
     /**
+     * The calculator for data differences.
+     *
      * @var DataDifferenceCalculator
      */
     private $dataDifferenceCalculator;
 
     /**
+     * The factory for website entity.
+     *
      * @var WebsiteFactory
      */
     private $websiteFactory;
 
     /**
+     * The factory for group entity.
+     *
      * @var GroupFactory
      */
     private $groupFactory;
 
     /**
+     * The factory for store entity.
+     *
      * @var StoreFactory
      */
     private $storeFactory;
 
     /**
+     * The event manager.
+     *
      * @var ManagerInterface
      */
     private $eventManager;
 
     /**
-     * @param DataDifferenceCalculator $dataDifferenceCalculator
-     * @param ManagerInterface $eventManager
-     * @param WebsiteFactory $websiteFactory
-     * @param GroupFactory $groupFactory
-     * @param StoreFactory $storeFactory
+     * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
+     * @param ManagerInterface $eventManager The event manager
+     * @param WebsiteFactory $websiteFactory The factory for website entity
+     * @param GroupFactory $groupFactory The factory for group entity
+     * @param StoreFactory $storeFactory The factory for store entity
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
@@ -66,7 +78,9 @@ class Create implements ProcessorInterface
     }
 
     /**
-     * @inheritdoc
+     * Creates entities in application according to the data set.
+     *
+     * {@inheritdoc}
      */
     public function run(array $data)
     {
