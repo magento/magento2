@@ -33,6 +33,10 @@
                 <item name="newrelicreporting/general/insights_api_url" xsi:type="string">1</item>
                 <item name="newrelicreporting/general/api_url" xsi:type="string">1</item>
             </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="newrelicreporting/general/api_url" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/insights_api_url" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>

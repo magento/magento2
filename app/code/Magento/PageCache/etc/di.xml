@@ -20,6 +20,10 @@
                 <item name="system/full_page_cache/varnish/access_list" xsi:type="string">1</item>
                 <item name="system/full_page_cache/varnish/backend_host" xsi:type="string">1</item>
             </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="system/full_page_cache/varnish/backend_host" xsi:type="string">1</item>
+                <item name="system/full_page_cache/varnish/backend_port" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>

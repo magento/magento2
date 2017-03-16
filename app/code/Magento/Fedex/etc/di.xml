@@ -28,6 +28,9 @@
                 <item name="carriers/fedex/sandbox_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/smartpost_hubid" xsi:type="string">1</item>
             </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="carriers/fedex/sandbox_mode" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>

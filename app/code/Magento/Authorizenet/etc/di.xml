@@ -38,6 +38,12 @@
                 <item name="payment/authorizenet_directpost/cgi_url_td" xsi:type="string">1</item>
                 <item name="payment/authorizenet_directpost/email_customer" xsi:type="string">1</item>
             </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="payment/authorizenet_directpost/cgi_url" xsi:type="string">1</item>
+                <item name="payment/authorizenet_directpost/cgi_url_td" xsi:type="string">1</item>
+                <item name="payment/authorizenet_directpost/debug" xsi:type="string">1</item>
+                <item name="payment/authorizenet_directpost/test" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>
