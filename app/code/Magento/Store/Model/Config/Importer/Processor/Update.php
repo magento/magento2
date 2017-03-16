@@ -184,7 +184,6 @@ class Update implements ProcessorInterface
 
             $group = $this->groupFactory->create();
             $group->getResource()->load($group, $code, 'code');
-            $a = array_replace($group->getData(), $groupData);
             $group->setData(array_replace($group->getData(), $groupData));
 
             $store = $this->findStoreById($data, $group->getDefaultStoreId());
