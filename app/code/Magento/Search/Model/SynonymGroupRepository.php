@@ -126,7 +126,6 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             $this->resourceModel->save($newSynonymGroupModel);
             $synonymGroup->setSynonymGroup($newSynonymGroupModel->getSynonymGroup());
             $synonymGroup->setGroupId($newSynonymGroupModel->getGroupId());
-
         } else {
             // no merge conflict, perform simple insert
             /** @var SynonymGroup $synonymGroupModel */

@@ -55,7 +55,6 @@ class PreProcessor implements PreProcessorInterface
     public function process(Chain $chain)
     {
         if ($this->config->isEmbeddedStrategy()) {
-
             $context = $chain->getAsset()->getContext();
 
             $areaCode = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;

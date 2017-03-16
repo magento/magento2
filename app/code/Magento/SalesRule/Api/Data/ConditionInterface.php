@@ -28,7 +28,6 @@ interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     public function setConditionType($conditionType);
 
-
     /**
      * Return list of conditions
      *

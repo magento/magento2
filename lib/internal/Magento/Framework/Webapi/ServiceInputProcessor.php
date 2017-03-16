@@ -258,9 +258,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
-        } else if (!$customAttributeCode) {
+        } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );

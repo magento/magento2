@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
-
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
     /**

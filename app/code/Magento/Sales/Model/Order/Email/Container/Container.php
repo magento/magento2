@@ -49,6 +49,7 @@ abstract class Container implements IdentityInterface
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
     }
+
     /**
      * Return store configuration value
      *

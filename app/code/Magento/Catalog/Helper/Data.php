@@ -272,7 +272,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBreadcrumbPath()
     {
         if (!$this->_categoryPath) {
-
             $path = [];
             $category = $this->getCategory();
             if ($category) {

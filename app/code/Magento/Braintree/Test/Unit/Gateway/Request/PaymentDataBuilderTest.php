@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class PaymentDataBuilderTest
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
