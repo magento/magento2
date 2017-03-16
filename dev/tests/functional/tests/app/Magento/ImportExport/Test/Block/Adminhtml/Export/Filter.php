@@ -29,13 +29,6 @@ class Filter extends Grid
     ];
 
     /**
-     * Locator for export attribute.
-     *
-     * @var string
-     */
-    private $attribute = '[name="export_filter[%s]"]';
-
-    /**
      * Locator for "Continue" button.
      *
      * @var string
@@ -50,17 +43,5 @@ class Filter extends Grid
     public function clickContinue()
     {
         $this->_rootElement->find($this->continueButton)->click();
-    }
-
-    /**
-     * Set attribute entity value.
-     *
-     * @param string $attribute
-     * @param string $value
-     * @return void
-     */
-    public function setAttributeValue($attribute, $value)
-    {
-        $this->_rootElement->find(sprintf($this->attribute, $attribute))->setValue($value);
     }
 }
