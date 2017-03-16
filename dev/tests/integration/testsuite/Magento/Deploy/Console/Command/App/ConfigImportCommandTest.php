@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestImporter;
+use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestSecondImporter;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
@@ -48,9 +49,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     private $configFilePool;
 
     /**
-     * @var array
+     * @var Hash
      */
-    private $envConfig;
+    private $hash;
 
     /**
      * @var array
@@ -64,7 +65,13 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             ImporterPool::class => [
                 'arguments' => [
                     'importers' => [
-                        'integrationTestImporter' => IntegrationTestImporter::class
+                        'integrationTestImporter' => [
+                            'class' => IntegrationTestImporter::class,
+                            'sortOrder' => 20
+                        ],
+                        'integrationTestSecondImporter' => [
+                            'class' => IntegrationTestSecondImporter::class,
+                        ]
                     ]
                 ]
             ]
@@ -73,8 +80,8 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->writer = $this->objectManager->get(DeploymentConfig\Writer::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
+        $this->hash = $this->objectManager->get(Hash::class);
 
-        $this->envConfig = $this->loadEnvConfig();
         $this->config = $this->loadConfig();
     }
 
@@ -87,30 +94,28 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         /** @var DeploymentConfig\Writer $writer */
         $writer = $this->objectManager->get(DeploymentConfig\Writer::class);
         $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
-
-        $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-            "<?php\n return array();\n"
-        );
-        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testExecuteNothingImport()
     {
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->envConfig);
+        $this->assertEmpty($this->hash->get());
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertContains('Start import', $commandTester->getDisplay());
-        $this->assertContains('Nothing to import', $commandTester->getDisplay());
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
+        $this->assertContains('Nothing to import.', $commandTester->getDisplay());
+        $this->assertEmpty($this->hash->get());
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testExecuteWithImport()
     {
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->envConfig);
+        $this->assertEmpty($this->hash->get());
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             file_get_contents(__DIR__ . '/../../../_files/config.php')
@@ -120,8 +125,12 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
-        $this->assertContains('Integration test data is imported!', $commandTester->getDisplay());
-        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
+        $this->assertContains(
+            "Integration second test data is imported!\nIntegration test data is imported!",
+            $commandTester->getDisplay()
+        );
+        $this->assertArrayHasKey('integrationTestImporter', $this->hash->get());
+        $this->assertArrayHasKey('integrationTestSecondImporter', $this->hash->get());
     }
 
     /**
@@ -130,13 +139,5 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     private function loadConfig()
     {
         return $this->reader->load(ConfigFilePool::APP_CONFIG);
-    }
-
-    /**
-     * @return array
-     */
-    private function loadEnvConfig()
-    {
-        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 }

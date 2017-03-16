@@ -75,5 +75,4 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
             [OperationFactory::INTERCEPTION_CACHE, 1, \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class],
         ];
     }
-
 }

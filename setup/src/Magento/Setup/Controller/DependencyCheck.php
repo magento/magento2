@@ -147,7 +147,6 @@ class DependencyCheck extends AbstractActionController
                     . implode("<br>", $constraints);
                 $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             }
-
         } catch (\Exception $e) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['errorMessage'] = $e->getMessage();

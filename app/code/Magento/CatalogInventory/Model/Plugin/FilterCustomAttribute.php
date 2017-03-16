@@ -30,7 +30,7 @@ class FilterCustomAttribute
      * @param Repository $repository
      * @param array $attributes
      * @return \Magento\Eav\Model\AttributeRepository
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetCustomAttributesMetadata(Repository $repository, array $attributes)

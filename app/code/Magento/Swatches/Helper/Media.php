@@ -91,7 +91,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $this->imageFactory = $imageFactory;
         $this->themeCollection = $themeCollection;
         $this->viewConfig = $configInterface;
-
     }
 
     /**

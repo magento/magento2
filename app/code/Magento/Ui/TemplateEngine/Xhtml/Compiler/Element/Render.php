@@ -37,7 +37,7 @@ class Render implements ElementInterface
         $result = $processedObject->renderChildComponent($node->getAttribute('name'));
         if ($result instanceof ResultInterface) {
             $node->parentNode->replaceChild($result->getDocumentElement(), $node);
-        } else if (!empty($result) && is_scalar($result)) {
+        } elseif (!empty($result) && is_scalar($result)) {
             $newFragment = $node->ownerDocument->createDocumentFragment();
             $newFragment->appendXML($result);
             $node->parentNode->replaceChild($newFragment, $node);

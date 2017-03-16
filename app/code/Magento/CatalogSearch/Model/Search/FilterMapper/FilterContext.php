@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -14,6 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 /**
  * FilterContext represents a Context of the Strategy pattern
  * Its responsibility is to choose appropriate strategy to apply passed filter to the Select
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterContext implements FilterStrategyInterface
 {

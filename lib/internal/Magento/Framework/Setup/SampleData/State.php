@@ -123,7 +123,6 @@ class State implements StateInterface
             $stream = $directoryWrite->openFile($fileName, $mode);
         }
         return $stream;
-
     }
 
     /**

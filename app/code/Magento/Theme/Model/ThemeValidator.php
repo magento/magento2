@@ -38,7 +38,6 @@ class ThemeValidator
      */
     private $configData;
 
-
     /**
      * @param StoreManagerInterface $storeManager
      * @param ThemeProviderInterface $themeProvider
@@ -73,7 +72,7 @@ class ThemeValidator
             ->addFieldToFilter('path', DesignInterface::XML_PATH_THEME_ID)
             ->addFieldToFilter('value', ['in' => array_keys($themesById)]);
         foreach ($configData as $row) {
-            switch($row['scope']) {
+            switch ($row['scope']) {
                 case 'default':
                     $messages[] = '<error>' . $themesById[$row['value']] . ' is in use in default config' . '</error>';
                     break;
