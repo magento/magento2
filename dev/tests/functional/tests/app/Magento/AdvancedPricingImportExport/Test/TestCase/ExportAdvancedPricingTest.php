@@ -237,7 +237,7 @@ class ExportAdvancedPricingTest extends Injectable
         if ($this->configData) {
             $this->stepFactory->create(
                 \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-                ['configData' => 'config_currency_symbols_usd, price_scope_website_rollback']
+                ['configData' => 'price_scope_website', 'rollback' => true]
             )->run();
         }
     }
