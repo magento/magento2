@@ -111,6 +111,9 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedMessage, $this->model->get());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function dataProviderForTestGet()
     {
         return [
@@ -174,14 +177,8 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                 'expectedMessage' => ''
             ],
             [
-                'sensitive' => [
-                    'some/sensitive/field1',
-                    'some/sensitive/field2',
-                ],
-                'notSensitive' => [
-                    'some/notSensitive/field1',
-                    'some/notSensitive/field2',
-                ],
+                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2'],
+                'notSensitive' => ['some/notSensitive/field1', 'some/notSensitive/field2'],
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [

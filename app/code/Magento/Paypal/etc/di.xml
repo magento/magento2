@@ -241,7 +241,7 @@
                 <item name="paypal/wpp/api_username" xsi:type="string">1</item>
                 <item name="paypal/wpp/proxy_host" xsi:type="string">1</item>
             </argument>
-            <argument name="environment">
+            <argument name="environment" xsi:type="array">
                 <item name="payment/hosted_pro/debug" xsi:type="string">1</item>
                 <item name="payment/payflow_advanced/debug" xsi:type="string">1</item>
                 <item name="payment/payflow_advanced/proxy_host" xsi:type="string">1</item>
