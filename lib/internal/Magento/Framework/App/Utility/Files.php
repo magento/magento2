@@ -810,14 +810,21 @@ class Files
                 }
             }
         }
+        
+         // Original paths, to preserve backwards compatibility:
+        $legacyThemePaths = $this->getThemePaths($area, $namespace . '_' . $module, '/web/templates');
+        // Correct paths:
         $themePaths = $this->getThemePaths($area, $namespace . '_' . $module, '/web/template');
+
         $files = self::getFiles(
             array_merge(
+                $legacyThemePaths,
                 $themePaths,
                 $moduleTemplatePaths
             ),
             '*.html'
         );
+        
         $result = self::composeDataSets($files);
         self::$_cache[$key] = $result;
         return $result;
