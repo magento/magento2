@@ -211,12 +211,15 @@ class Block implements Layout\GeneratorInterface
 
         // create block
         $className = $attributes['class'];
-        $block = $this->createBlock($className, $elementName, [
-            'data' => $this->evaluateArguments($data['arguments'])
-        ]);
-        if (!empty($attributes['template'])) {
+        $arguments = $this->evaluateArguments($data['arguments']);
+        $block = $this->createBlock($className, $elementName, ['data' => $arguments]);
+
+        if (!empty($arguments['template'])) {
+            $block->setTemplate($arguments['template']);
+        } elseif (!empty($attributes['template'])) {
             $block->setTemplate($attributes['template']);
         }
+
         if (!empty($attributes['ttl'])) {
             $ttl = (int)$attributes['ttl'];
             $block->setTtl($ttl);
