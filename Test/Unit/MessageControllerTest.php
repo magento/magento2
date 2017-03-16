@@ -30,7 +30,7 @@ class MessageControllerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->lockFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\LockInterfaceFactory::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messageController = $objectManager->getObject(
