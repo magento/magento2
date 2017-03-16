@@ -105,8 +105,7 @@ class Attribute extends AbstractFilter
                 ? (int)$optionsFacetedData[$value]['count']
                 : 0;
             // Check filter type
-            if (
-                $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+            if ($this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
                 && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)
             ) {
                 continue;

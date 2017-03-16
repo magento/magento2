@@ -81,7 +81,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
             } else {
                 $messages[] = $message;
             }
-
         }
         $this->messageManager->addUniqueMessages(
             $messages

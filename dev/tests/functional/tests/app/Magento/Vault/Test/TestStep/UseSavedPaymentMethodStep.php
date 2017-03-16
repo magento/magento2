@@ -33,7 +33,7 @@ class UseSavedPaymentMethodStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $vault
      */
-    public function __construct (CheckoutOnepage $checkoutOnepage, array $vault)
+    public function __construct(CheckoutOnepage $checkoutOnepage, array $vault)
     {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->vault = $vault;

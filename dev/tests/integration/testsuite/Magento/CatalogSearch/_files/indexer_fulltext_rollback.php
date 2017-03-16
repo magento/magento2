@@ -15,6 +15,5 @@ $registry->register('isSecureArea', true);
 $collection = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
 $collection->addAttributeToSelect('id')->load()->delete();
 
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

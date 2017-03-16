@@ -56,7 +56,7 @@ class Adapter
      * @param string $source Source file path.
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     *                       
+     *
      * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory, $options = null)

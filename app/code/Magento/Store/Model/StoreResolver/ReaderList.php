@@ -20,6 +20,7 @@ class ReaderList
     protected $resolverMap;
 
     // @codingStandardsIgnoreStart
+
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $resolverMap
@@ -35,6 +36,7 @@ class ReaderList
         $this->resolverMap = $resolverMap;
         $this->objectManager = $objectManager;
     }
+
     // @codingStandardsIgnoreEnd
 
     /**

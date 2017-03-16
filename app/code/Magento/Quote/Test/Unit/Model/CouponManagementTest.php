@@ -84,7 +84,6 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
-
         $this->assertEquals($couponCode, $this->couponManagement->get($cartId));
     }
 

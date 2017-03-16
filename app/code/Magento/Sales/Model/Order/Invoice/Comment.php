@@ -218,5 +218,6 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

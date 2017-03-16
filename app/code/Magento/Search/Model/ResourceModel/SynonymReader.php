@@ -116,10 +116,10 @@ class SynonymReader extends AbstractDb
             if ($this->isSynRowForStoreView($row)) {
                 // Check for current store view
                 $synRowsForStoreView[] = $row;
-            } else if (empty($synRowsForStoreView) && $this->isSynRowForWebsite($row)) {
+            } elseif (empty($synRowsForStoreView) && $this->isSynRowForWebsite($row)) {
                 // Check for current website
                 $synRowsForWebsite[] = $row;
-            } else if (empty($synRowsForStoreView)
+            } elseif (empty($synRowsForStoreView)
                 && empty($synRowsForWebsite)
                 && $this->isSynRowForDefaultScope($row)) {
                 // Check for all store views (i.e. global/default config)
