@@ -7,34 +7,19 @@ namespace Magento\ImportExport\Test\TestStep;
 
 use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Create custom store step.
+ * Change currency on custom website step.
  */
 class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
 {
-    /**
-     * Factory for Test Steps.
-     *
-     * @var TestStepFactory
-     */
-    private $stepFactory;
-
     /**
      * Fixture factory.
      *
      * @var FixtureFactory
      */
     private $fixtureFactory;
-
-    /**
-     * Currency.
-     *
-     * @var string
-     */
-    private $currency;
 
     /**
      * Import fixture.
@@ -44,62 +29,65 @@ class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
     private $import;
 
     /**
-     * @param TestStepFactory $stepFactory
+     * Change currency flag.
+     *
+     * @var bool
+     */
+    private $changeCurrency;
+
+    /**
      * @param FixtureFactory $fixtureFactory
      * @param ImportData $import
-     * @param string $currency
+     * @param bool $changeCurrency
      */
     public function __construct(
-        TestStepFactory $stepFactory,
         FixtureFactory $fixtureFactory,
         ImportData $import,
-        $currency = 'USD'
+        $changeCurrency = false
     ) {
-        $this->stepFactory = $stepFactory;
         $this->fixtureFactory = $fixtureFactory;
         $this->import = $import;
-        $this->currency = $currency;
+        $this->changeCurrency = $changeCurrency;
     }
 
     /**
      * Fill import form.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {
-        $this->stepFactory->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => 'price_scope_website']
-        )->run();
-
-        $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
-        foreach ($products as $product) {
-            $websites = $product->getDataFieldConfig('website_ids')['source']->getWebsites();
-
-            $configFixture = $this->fixtureFactory->createByCode(
-                'configData',
-                [
-                    'data' => [
-                        'currency/options/allow' => [
-                            'value' =>  [$this->currency]
-                        ],
-                        'currency/options/base' => [
-                            'value' => $this->currency
-                        ],
-                        'currency/options/default' => [
-                            'value' => $this->currency
-                        ],
-                        'scope' => [
-                            'fixture' => $websites[0],
-                            'scope_type' => 'website',
-                            'website_id' => $websites[0]->getWebsiteId(),
-                            'set_level' => 'website',
+        if ($this->changeCurrency === true) {
+            $currency = $this->import->getDataFieldConfig('import_file')['source']
+                ->getValue()['template']['websiteCurrency'];
+            $entities = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
+            foreach ($entities as $entity) {
+                $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
+                $configFixture = $this->fixtureFactory->createByCode(
+                    'configData',
+                    [
+                        'data' => [
+                            'currency/options/allow' => [
+                                'value' => [$currency]
+                            ],
+                            'currency/options/base' => [
+                                'value' => $currency
+                            ],
+                            'currency/options/default' => [
+                                'value' => $currency
+                            ],
+                            'scope' => [
+                                'fixture' => $websites[0],
+                                'scope_type' => 'website',
+                                'website_id' => $websites[0]->getWebsiteId(),
+                                'set_level' => 'website',
+                            ]
                         ]
                     ]
-                ]
-            );
-            $configFixture->persist();
+                );
+                $configFixture->persist();
+            }
         }
+        return ['import' => $this->import];
     }
 }

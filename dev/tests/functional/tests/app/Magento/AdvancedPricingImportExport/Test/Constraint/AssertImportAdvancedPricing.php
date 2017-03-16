@@ -9,7 +9,6 @@ namespace Magento\AdvancedPricingImportExport\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\ImportExport\Test\Fixture\ImportData;
-use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Check imported advanced prices are correct.
@@ -38,13 +37,6 @@ class AssertImportAdvancedPricing extends AbstractConstraint
     private $catalogProductEdit;
 
     /**
-     * Fixture factory.
-     *
-     * @var FixtureFactory
-     */
-    private $fixtureFactory;
-
-    /**
      * Import fixture.
      *
      * @var ImportData
@@ -55,17 +47,14 @@ class AssertImportAdvancedPricing extends AbstractConstraint
      * Assert imported advanced prices are correct.
      *
      * @param CatalogProductEdit $catalogProductEdit
-     * @param FixtureFactory $fixtureFactory
      * @param ImportData $import
      * @return void
      */
     public function processAssert(
         CatalogProductEdit $catalogProductEdit,
-        FixtureFactory $fixtureFactory,
         ImportData $import
     ) {
         $this->catalogProductEdit = $catalogProductEdit;
-        $this->fixtureFactory = $fixtureFactory;
         $this->import = $import;
 
         $resultArrays = $this->getPreparePrices();
@@ -93,13 +82,9 @@ class AssertImportAdvancedPricing extends AbstractConstraint
             $advancedPricing = $this->catalogProductEdit->getProductForm()->openSection('advanced-pricing')
                 ->getSection('advanced-pricing');
             $tierPrices = $advancedPricing->getTierPriceForm()->getFieldsData();
-
             $productSku = $product->getSku();
             foreach ($tierPrices as $tierPrice) {
                 $resultProductArray[$productSku][] = $tierPrice;
-            }
-            if (isset($resultProductArray[$productSku])) {
-                $resultProductArray[$productSku]= array_reverse($resultProductArray[$productSku]);
             }
         }
 

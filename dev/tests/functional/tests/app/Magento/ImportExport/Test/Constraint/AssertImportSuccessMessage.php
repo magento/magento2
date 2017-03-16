@@ -44,6 +44,6 @@ class AssertImportSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Displayed import result is correct.';
+        return 'Displayed import success message is correct.';
     }
 }

@@ -47,7 +47,7 @@ class Countries extends Select
 
     /**
      * Sets name for input element
-     * 
+     *
      * @param string $value
      * @return $this
      */

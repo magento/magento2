@@ -169,7 +169,6 @@ class RefreshSpecialPrices
         if (!empty($selectData)) {
             $this->_processor->getIndexer()->reindexList($selectData);
         }
-
     }
 
     /**

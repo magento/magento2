@@ -44,7 +44,6 @@ $orderItems = [
     ]
 ];
 
-
 /** @var array $orderItemData */
 foreach ($orderItems as $orderItemData) {
     /** @var $orderItem \Magento\Sales\Model\Order\Item */

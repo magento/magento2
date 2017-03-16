@@ -11,6 +11,20 @@ namespace Magento\ImportExport\Test\Block\Adminhtml\Import;
 class Messages extends \Magento\Backend\Test\Block\Messages
 {
     /**
+     * CSS selector for error message block.
+     *
+     * @var string
+     */
+    protected $errorMessage = '.message-error';
+
+    /**
+     * CSS selector for validation errors list block.
+     *
+     * @var string
+     */
+    private $validationErrorList = '.import-error-list';
+
+    /**
      * CSS selector for import message.
      *
      * @var string
@@ -23,6 +37,24 @@ class Messages extends \Magento\Backend\Test\Block\Messages
      * @var string
      */
     private $loader = '[data-role="loader"]';
+
+    /**
+     * Get errors messages list.
+     *
+     * @return array|false
+     */
+    public function getErrorsList()
+    {
+        $element = $this->_rootElement->find($this->validationErrorList);
+
+        if (!$element->isVisible()) {
+            return false;
+        }
+
+        $text = $this->_rootElement->find($this->validationErrorList)->getText();
+
+        return (array) explode(PHP_EOL, strip_tags($text));
+    }
 
     /**
      * Get error message.

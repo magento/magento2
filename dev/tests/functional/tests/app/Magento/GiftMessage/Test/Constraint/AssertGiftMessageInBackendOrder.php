@@ -62,7 +62,6 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 
             $expectedData[] = $giftMessageForm->getData();
             $actualData[] = $salesOrderView->getGiftOptionsBlock()->getData($giftMessageForm);
-
         }
 
         if ($giftMessage->getAllowGiftOptionsForItems() === 'Yes') {

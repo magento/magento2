@@ -175,7 +175,7 @@ class Config
 
     /**
      * Sets config value
-     * 
+     *
      * @param string $pathId
      * @param mixed $value
      * @param string $scope

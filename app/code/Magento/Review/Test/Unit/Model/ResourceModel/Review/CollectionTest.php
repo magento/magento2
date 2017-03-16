@@ -76,7 +76,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
             ]
         );
-
     }
 
     public function testInitSelect()

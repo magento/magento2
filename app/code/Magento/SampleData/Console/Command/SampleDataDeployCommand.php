@@ -151,7 +151,7 @@ class SampleDataDeployCommand extends Command
     {
         $unit = strtolower(substr($value, -1, 1));
         $value = (int) $value;
-        switch($unit) {
+        switch ($unit) {
             case 'g':
                 $value *= 1024 * 1024 * 1024;
                 break;

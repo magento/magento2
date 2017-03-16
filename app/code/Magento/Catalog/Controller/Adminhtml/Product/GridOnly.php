@@ -34,6 +34,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->resultRawFactory = $resultRawFactory;
         $this->layoutFactory = $layoutFactory;
     }
+
     /**
      * Get specified tab grid
      *
