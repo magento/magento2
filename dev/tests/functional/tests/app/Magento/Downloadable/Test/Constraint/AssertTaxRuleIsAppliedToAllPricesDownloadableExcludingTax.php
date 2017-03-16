@@ -21,7 +21,6 @@ class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax extends
      */
     protected $severeness = 'high';
 
-
     /**
      * Get prices on category page.
      *

@@ -58,7 +58,7 @@ class Compiled extends AbstractFactory
         if ($args === []) {
             // Case 1: no arguments required
             return new $type();
-        } else if ($args !== null) {
+        } elseif ($args !== null) {
             /**
              * Case 2: arguments retrieved from pre-compiled DI cache
              *

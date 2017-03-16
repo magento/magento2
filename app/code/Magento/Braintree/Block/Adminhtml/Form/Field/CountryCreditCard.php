@@ -25,7 +25,7 @@ class CountryCreditCard extends AbstractFieldArray
     
     /**
      * Returns renderer for country element
-     * 
+     *
      * @return Countries
      */
     protected function getCountryRenderer()
@@ -42,7 +42,7 @@ class CountryCreditCard extends AbstractFieldArray
 
     /**
      * Returns renderer for country element
-     * 
+     *
      * @return CcTypes
      */
     protected function getCcTypesRenderer()

@@ -159,12 +159,15 @@ class Create implements ProcessorInterface
 
             $group = $this->groupFactory->create();
             $group->setData($groupData);
-            $group->setWebsite($website);
             $group->setRootCategoryId(0);
 
             $group->getResource()->save($group);
             $group->getResource()->addCommitCallback(function () use ($group) {
                 $this->eventManager->dispatch('store_group_save', ['group' => $group]);
+            });
+            $group->getResource()->addCommitCallback(function () use ($group, $website) {
+                $group->setWebsite($website);
+                $group->getResource()->save($group);
             });
         }
     }
@@ -180,6 +183,7 @@ class Create implements ProcessorInterface
     {
         foreach ($items as $storeData) {
             $groupId = $storeData['group_id'];
+            $websiteId = $storeData['website_id'];
 
             unset(
                 $storeData['store_id'],
@@ -187,22 +191,21 @@ class Create implements ProcessorInterface
                 $storeData['group_id']
             );
 
-            $group = $this->detectGroupById(
-                $data,
-                $groupId
-            );
+            $group = $this->detectGroupById($data, $groupId);
+            $website = $this->detectWebsiteById($data, $websiteId);
 
             $store = $this->storeFactory->create();
             $store->setData($storeData);
-            $store->setGroup($group);
-
-            if ($group->getWebsite()) {
-                $store->setWebsite($group->getWebsite());
-            }
 
             $store->getResource()->save($store);
             $store->getResource()->addCommitCallback(function () use ($store) {
                 $this->eventManager->dispatch('store_add', ['store' => $store]);
+            });
+            $store->getResource()->addCommitCallback(function () use ($store, $group, $website) {
+                $store->setGroup($group);
+                $store->setWebsite($website);
+
+                $store->getResource()->save($store);
             });
         }
     }

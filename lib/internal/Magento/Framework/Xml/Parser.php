@@ -111,8 +111,7 @@ class Parser
                         $value = ['_value' => $value, '_attribute' => $attributes];
                     }
                     if (isset($content[$node->nodeName])) {
-                        if (
-                            (is_string($content[$node->nodeName]) || !isset($content[$node->nodeName][0]))
+                        if ((is_string($content[$node->nodeName]) || !isset($content[$node->nodeName][0]))
                             || (is_array($value) && !is_array($content[$node->nodeName][0]))
                         ) {
                             $oldValue = $content[$node->nodeName];

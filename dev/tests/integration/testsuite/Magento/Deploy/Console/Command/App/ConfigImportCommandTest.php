@@ -146,11 +146,13 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $website = $websiteFactory->create()->load('test', 'code');
         $this->assertSame($website->getName(), 'Test Website');
 
-        $group = $groupFactory->create()->load('test_website_store', 'code');
+        $group = $groupFactory->create();
+        $group->getResource()->load($group, 'test_website_store', 'code');
         $this->assertSame($group->getName(), 'Test Website Store');
         $this->assertSame($group->getWebsiteId(), $website->getId());
 
-        $store = $storeFactory->create()->load('test', 'code');
+        $store = $storeFactory->create();
+        $store->getResource()->load($store, 'test', 'code');
         $this->assertSame($store->getSortOrder(), '23');
         $this->assertSame($store->getName(), 'Test Store view');
         $this->assertSame($store->getGroupId(), $group->getId());
@@ -164,20 +166,23 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
         ]);
 
-        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
-        $store = $storeFactory->create()->load('test', 'code');
+        $store = $storeFactory->create();
+        $store->getResource()->load($store, 'test', 'code');
         $this->assertSame($store->getSortOrder(), '23');
         $this->assertSame($store->getName(), 'Changed Test Store view');
         $this->assertSame($store->getGroupId(), $group->getId());
         $this->assertSame($store->getWebsiteId(), $website->getId());
 
-        $website = $websiteFactory->create()->load('test', 'code');
+        $website = $websiteFactory->create();
+        $website->getResource()->load($website, 'test', 'code');
         $this->assertSame($website->getName(), 'Changed Main Test');
 
-        $group = $groupFactory->create()->load('test_website_store', 'code');
+        $group = $groupFactory->create();
+        $group->getResource()->load($group, 'test_website_store', 'code');
         $this->assertSame($group->getName(), 'Changed Test Website Store');
         $this->assertSame($website->getId(), $group->getWebsiteId());
 
@@ -190,13 +195,16 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
         ]);
 
-        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
-        $group = $groupFactory->create()->load('test_website_store', 'code');
-        $store = $storeFactory->create()->load('test', 'code');
-        $website = $websiteFactory->create()->load('test', 'code');
+        $group = $groupFactory->create();
+        $group->getResource()->load($group, 'test_website_store', 'code');
+        $store = $storeFactory->create();
+        $store->getResource()->load($store, 'test', 'code');
+        $website = $websiteFactory->create();
+        $website->getResource()->load($website, 'test', 'code');
 
         $this->assertSame(null, $store->getId());
         $this->assertSame(null, $website->getId());

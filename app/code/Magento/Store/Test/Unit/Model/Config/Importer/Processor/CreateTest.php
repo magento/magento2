@@ -212,10 +212,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($trimmedGroup)
             ->willReturnSelf();
-        $groupMock->expects($this->once())
-            ->method('setWebsite')
-            ->with($websiteMock);
-        $groupMock->expects($this->exactly(2))
+        $groupMock->expects($this->exactly(3))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
         $groupMock->expects($this->once())
@@ -229,7 +226,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($groupMock)
             ->willReturnSelf();
-        $this->abstractDbMock->expects($this->once())
+        $this->abstractDbMock->expects($this->exactly(2))
             ->method('addCommitCallback');
 
         $this->processor->run($data);
@@ -305,7 +302,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())
             ->method('setGroup')
             ->with($groupMock);
-        $storeMock->expects($this->exactly(2))
+        $storeMock->expects($this->exactly(3))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
 

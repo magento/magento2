@@ -111,6 +111,5 @@ class InstallSchema implements InstallSchemaInterface
         $setup->getConnection()->createTable($table);
 
         $setup->endSetup();
-
     }
 }

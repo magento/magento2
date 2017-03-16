@@ -833,5 +833,6 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }
