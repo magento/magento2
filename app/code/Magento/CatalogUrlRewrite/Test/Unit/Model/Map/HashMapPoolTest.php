@@ -63,7 +63,7 @@ class HashMapPoolTest extends \PHPUnit_Framework_TestCase
                         ['category' => 2],
                         $dataProductMapMockOtherCategory
                     ]
-               ]
+                ]
             );
         $this->assertSame($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
         $this->assertSame($dataProductMapMock, $this->model->getDataMap(DataProductHashMap::class, 1));

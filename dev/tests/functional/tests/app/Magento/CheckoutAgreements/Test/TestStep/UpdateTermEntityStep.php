@@ -21,6 +21,7 @@ class UpdateTermEntityStep implements TestStepInterface
      * @var CheckoutAgreement
      */
     protected $agreement;
+
     /**
      * Original checkout agreement data.
      *

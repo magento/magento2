@@ -18,7 +18,6 @@ class RuleLabel extends \Magento\Framework\Api\AbstractExtensibleObject implemen
     const KEY_STORE_ID = 'store_id';
     const KEY_STORE_LABEL = 'store_label';
 
-
     /**
      * Get storeId
      *

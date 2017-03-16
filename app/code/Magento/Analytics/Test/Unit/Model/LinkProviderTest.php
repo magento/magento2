@@ -156,7 +156,11 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [null, 'initVector'],
-            ['path', null]
+            ['path', null],
+            ['', 'initVector'],
+            ['path', ''],
+            ['', ''],
+            [null, null]
         ];
     }
 }

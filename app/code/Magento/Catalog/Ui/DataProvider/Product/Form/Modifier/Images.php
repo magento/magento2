@@ -54,8 +54,7 @@ class Images extends AbstractModifier
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $this->locator->getProduct();
         $modelId = $product->getId();
-        if (
-            isset($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
+        if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
             && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'])
         ) {

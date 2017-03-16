@@ -59,14 +59,12 @@ class Website
             ]
         ];
 
-        if (
-            $this->storeManager->hasSingleStore()
+        if ($this->storeManager->hasSingleStore()
             || ($eavAttribute->getEntityAttribute() && $eavAttribute->getEntityAttribute()->isScopeGlobal()
             )
         ) {
             return $this->websites = $websites;
         }
-
 
         if ($storeId = $this->locator->getStore()->getId()) {
             /** @var WebsiteInterface $website */

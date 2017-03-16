@@ -17,6 +17,7 @@ class GridStructure implements IndexStructureInterface
      * @var Resource
      */
     private $resource;
+
     /**
      * @var FlatScopeResolver
      */

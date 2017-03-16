@@ -205,7 +205,6 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
                 ->method('addError')->with(__('Please select indexers.'))
                 ->will($this->returnValue(1));
         } else {
-
             $this->objectManager->expects($this->any())
                 ->method('get')->with(\Magento\Framework\Indexer\IndexerRegistry::class)
                 ->will($this->returnValue($this->indexReg));

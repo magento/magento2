@@ -584,7 +584,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                             break;
                         }
                     }
-
                 }
             } else {
                 $result = 1;
