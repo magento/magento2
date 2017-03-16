@@ -224,14 +224,11 @@
                 <item name="payment/payflowpro/user" xsi:type="string">1</item>
                 <item name="payment/paypal_express/merchant_id" xsi:type="string">1</item>
                 <item name="payment/paypal_express_bml/publisher_id" xsi:type="string">1</item>
-
                 <item name="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_sftp" xsi:type="string">1</item>
                 <item name="payment_all_paypal/payflow_link/settings_payflow_link/settings_payflow_link_advanced/payflow_link_settlement_report/heading_sftp" xsi:type="string">1</item>
                 <item name="payment_all_paypal/payments_pro_hosted_solution/pphs_settings/pphs_settings_advanced/pphs_settlement_report/heading_sftp" xsi:type="string">1</item>
-                <item name="payment_all_paypal/payments_pro_hosted_solution_without_bml/pphs_settings/pphs_settings_advanced/pphs_settlement_report/heading_sftp" xsi:type="string">1</item>
                 <item name="payment_all_paypal/paypal_payflowpro/settings_paypal_payflow/heading_cc" xsi:type="string">1</item>
                 <item name="payment_all_paypal/paypal_payflowpro/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_settlement_report/heading_sftp" xsi:type="string">1</item>
-
                 <item name="paypal/fetch_reports/ftp_ip" xsi:type="string">1</item>
                 <item name="paypal/fetch_reports/ftp_login" xsi:type="string">1</item>
                 <item name="paypal/fetch_reports/ftp_password" xsi:type="string">1</item>
