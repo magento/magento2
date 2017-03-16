@@ -48,7 +48,6 @@
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Analytics/js/modal/modal-component</item>
                 <item name="onCancel" xsi:type="string">actionCancel</item>
-                <item name="state" xsi:type="boolean">true</item>
                 <item name="options" xsi:type="array">
                     <item name="modalClass" xsi:type="string">advanced-reports-subscription-modal</item>
                     <item name="title" xsi:type="string" translate="true">Advanced Reporting</item>
@@ -72,15 +71,17 @@
                         <item name="label" xsi:type="string"/>
                         <item name="template" xsi:type="string">ui/form/components/complex</item>
                         <item name="additionalClasses" xsi:type="string">advanced-reports-subscription-text</item>
-                        <item name="text" xsi:type="string" translate="true"><![CDATA[In sit amet ante id leo posuere
-                            cursus ac ac metus. Donec varius ut augue quis accumsan. Integer urna elit, luctus et diam
-                            sit amet, <a href="http://www.w3.org/TR/upgrade-insecure-requests/" target="_blank">a link
-                            to learn more</a>. In sit amet ante id leo posuere cursus ac ac metus. Donec varius ut augue
-                            quis accumsan. In sit amet ante id leo posuere cursus ac ac metus. Donec varius ut augue quis
-                            accumsan. In sit amet ante id leo posuere cursus ac ac metus. Donec varius ut augue quis
-                            accumsan. Integer urna elit, luctus et diam sit amet,
-                            <a href="http://www.w3.org/TR/upgrade-insecure-requests/" target="_blank">terms and
-                            conditipns</a> amet ante id leo posuere cursus ac ac metus.]]></item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>When you turn Advanced
+                        Reporting, you'll  have access to a suite of dynamic reports tailored to your business. Example
+                        of the new data and trend reports, listed bt category, include:</p><ul class="list">
+                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
+                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
+                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
+                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
+                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
+                        more data-driven. For more information, <a href="#" target="_blank">view details</a> or see our
+                        <a href="#" target="_blank">terms and conditions</a>.</p>]]>
+                        </item>
                     </item>
                 </argument>
             </container>
@@ -116,33 +117,12 @@
                             <item name="title" xsi:type="string">Disable Advance Reporting</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_checkbox</item>
-                                    <item name="actionName" xsi:type="string">checked</item>
-                                    <item name="params" xsi:type="array">
-                                        <item name="0" xsi:type="boolean">false</item>
-                                    </item>
-                                </item>
-                                <item name="1" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
-                                <item name="2" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_modal</item>
-                                    <item name="actionName" xsi:type="string">actionDeclineAlert</item>
-                                    <item name="params" xsi:type="array">
-                                        <item name="0" xsi:type="string" translate="true">You are choosing to opt-out of Advanced Reporting</item>
-                                        <item name="1" xsi:type="string" translate="true">Suspendisse bibendum elit at
-                                            sem iaculis porttitor. Cras convallis lacus sit amet tincidunt condimentum. Donec neque nunc,
-                                            imperdiet ut neque molestie, interdum condimentum elit. Sed scelerisque id arcu vel rhoncus.
-                                            Donec mollis condimentum lacus, et viverra orci tempor sit amet. Proin nisi massa, laoreet non
-                                            tortor nec, gravida finibus purus. Maecenas sit amet enim justo. Praesent ac nunc dui.
-                                            Vestibulum ornare porttitor tellus. Nullam ullamcorper orci quis sapien ullamcorper, in dictum
-                                            neque porta.</item>
-                                    </item>
-                                </item>
-                                <item name="3" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_form</item>
-                                    <item name="actionName" xsi:type="string">save</item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_decline_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
                         </item>
@@ -178,8 +158,7 @@
                             <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
                             <item name="description" xsi:type="string" translate="true"><![CDATA[I agree to securely
                                 transmit data to Magento Business Intelligence.</br >
-                                <a href="http://www.w3.org/TR/upgrade-insecure-requests/" target="_blank">Learn
-                                more</a>.]]>
+                                <a href="#" target="_blank">Learn more</a>.]]>
                             </item>
                             <item name="formElement" xsi:type="string">checkbox</item>
                             <item name="dataScope" xsi:type="string">analytics_subscription_checkbox</item>
@@ -193,5 +172,71 @@
                 </field>
             </container>
         </fieldset>
+    </modal>
+
+    <modal name="analytics_subscription_decline_modal">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="onCancel" xsi:type="string">actionCancel</item>
+                <item name="options" xsi:type="array">
+                    <item name="modalClass" xsi:type="string">advanced-reports-decline-subscription-modal</item>
+                    <item name="title" xsi:type="string" translate="true">Are you sure you want to opt out?</item>
+                    <item name="type" xsi:type="string">popup</item>
+                    <item name="responsive" xsi:type="boolean">true</item>
+                    <item name="autoOpen" xsi:type="boolean">false</item>
+                    <item name="innerScroll" xsi:type="boolean">true</item>
+                    <item name="buttons" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="text" xsi:type="string">Cancel</item>
+                            <item name="class" xsi:type="string">action-secondary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_decline_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_modal</item>
+                                    <item name="actionName" xsi:type="string">openModal</item>
+                                </item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="text" xsi:type="string">Opt out</item>
+                            <item name="class" xsi:type="string">action-primary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_checkbox</item>
+                                    <item name="actionName" xsi:type="string">checked</item>
+                                    <item name="params" xsi:type="array">
+                                        <item name="0" xsi:type="boolean">false</item>
+                                    </item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_form</item>
+                                    <item name="actionName" xsi:type="string">save</item>
+                                </item>
+                                <item name="2" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_decline_modal</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <container name="analytics_subscription_decline_text">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string"/>
+                    <item name="template" xsi:type="string">ui/form/components/complex</item>
+                    <item name="additionalClasses" xsi:type="string">advanced-reports-subscription-text</item>
+                    <item name="text" xsi:type="string" translate="true"><![CDATA[<p>Advanced Reporting in included,
+                    free of charge, in your Magento software. When you opt out, we collect no product, order, and
+                    customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advance
+                    Reporting in you Admin Panel.</p>]]></item>
+                </item>
+            </argument>
+        </container>
     </modal>
 </form>

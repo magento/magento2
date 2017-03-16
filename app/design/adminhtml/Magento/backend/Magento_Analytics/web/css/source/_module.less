@@ -83,18 +83,50 @@
 //  Modal on dashboard
 //  ---------------------------------------------
 
+.advanced-reports-decline-subscription-modal,
 .advanced-reports-subscription-modal {
     .modal-inner-wrap {
-        max-width: 70rem;
+        max-width: 80rem;
     }
+}
 
+.advanced-reports-subscription-modal {
     .admin__fieldset {
         padding: 0;
     }
 }
 
+.advanced-reports-decline-subscription-modal {
+    .advanced-reports-subscription-text {
+        margin-bottom: 0;
+    }
+
+    .modal-content {
+        padding-bottom: 0;
+    }
+}
+
 .advanced-reports-subscription-text {
     line-height: @line-height__xl;
+
+    .list {
+        .lib-list-reset-styles(@_margin: @indent__m 0, @_padding: 0);
+
+        li {
+            padding-left: @indent__l;
+            position: relative;
+
+            &:before {
+                content: '\2022';
+                left: 1rem;
+                position: absolute;
+            }
+
+            + li {
+                margin-top: @indent__m;
+            }
+        }
+    }
 }
 
 .advanced-reports-subscription-actions {
@@ -110,12 +142,9 @@
         width: 100%;
     }
 
-    .action-basic {
-        padding: @button__padding-vertical__l @button__padding-horizontal @button__padding-vertical__l;
-    }
-
+    .action-basic,
     .action-additional {
-        padding: @button__padding-vertical__l 0 @button__padding-vertical__l;
+        &:extend(.abs-action-l all);
     }
 
     .advanced-reports-subscription-postpone,

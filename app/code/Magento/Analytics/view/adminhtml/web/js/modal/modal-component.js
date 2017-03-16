@@ -61,19 +61,6 @@ define([
         actionCancel: function () {
             this.sendPostponeRequest(this.postponeOptions);
             this.closeModal();
-        },
-
-        /**
-         * Additional information appeared after subscription decline.
-         *
-         * @param {String} title
-         * @param {String} message
-         */
-        actionDeclineAlert: function (title, message) {
-            alert({
-                title: title,
-                content: message
-            });
         }
     });
 });
