@@ -71,9 +71,9 @@
                         <item name="label" xsi:type="string"/>
                         <item name="template" xsi:type="string">ui/form/components/complex</item>
                         <item name="additionalClasses" xsi:type="string">advanced-reports-subscription-text</item>
-                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>When you turn Advanced
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>When you turn on Advanced
                         Reporting, you'll  have access to a suite of dynamic reports tailored to your business. Example
-                        of the new data and trend reports, listed bt category, include:</p><ul class="list">
+                        of the new data and trend reports, listed by category, include:</p><ul class="list">
                         <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
                         </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
                         </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
