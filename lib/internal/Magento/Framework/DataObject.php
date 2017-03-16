@@ -331,7 +331,8 @@ class DataObject implements \ArrayAccess
     public function toJson(array $keys = [])
     {
         $data = $this->toArray($keys);
-        return \Zend_Json::encode($data);
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        return $serializer->encode($data);
     }
 
     /**

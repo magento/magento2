@@ -31,6 +31,7 @@ class Encoder implements EncoderInterface
     public function encode($data)
     {
         $this->translateInline->processResponseBody($data);
-        return \Zend_Json::encode($data);
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        return $serializer->encode($data);
     }
 }

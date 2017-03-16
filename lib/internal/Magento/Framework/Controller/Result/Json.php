@@ -8,7 +8,6 @@ namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
@@ -40,8 +39,7 @@ class Json extends AbstractResult
     public function __construct(
         InlineInterface $translateInline,
         JsonSerializer $serializer = null
-    )
-    {
+    ) {
         $this->serializer = ($serializer != null) ? $serializer : new JsonSerializer;
         $this->translateInline = $translateInline;
     }
@@ -56,6 +54,8 @@ class Json extends AbstractResult
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
+        unset($cycleCheck);
+
         if (!in_array(JSON_NUMERIC_CHECK, $options)) {
             array_push($options, JSON_NUMERIC_CHECK);
         }
