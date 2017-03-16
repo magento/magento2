@@ -115,7 +115,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Prepare expectations for indexer
-     * 
+     *
      * @param int $invalidateCounter
      * @return void
      */

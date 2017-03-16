@@ -80,7 +80,7 @@ class IframeConfigProvider implements ConfigProviderInterface
     protected function getFrameActionUrl($code)
     {
         $url = '';
-        switch($code) {
+        switch ($code) {
             case Config::METHOD_PAYFLOWADVANCED:
                 $url = $this->urlBuilder->getUrl('paypal/payflowadvanced/form', ['_secure' => true]);
                 break;

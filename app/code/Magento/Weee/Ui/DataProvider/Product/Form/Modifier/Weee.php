@@ -116,8 +116,7 @@ class Weee extends AbstractModifier
             foreach ($metaConfig['children'] as $attributeCode => $attributeConfig) {
                 if ($this->startsWith($attributeCode, self::CONTAINER_PREFIX)) {
                     $metaConfig['children'][$attributeCode] = $this->modifyMetaConfig($attributeConfig);
-                } elseif (
-                    !empty($attributeConfig['arguments']['data']['config']['formElement']) &&
+                } elseif (!empty($attributeConfig['arguments']['data']['config']['formElement']) &&
                     $attributeConfig['arguments']['data']['config']['formElement'] === static::FORM_ELEMENT_WEEE
                 ) {
                     $metaConfig['children'][$attributeCode] =

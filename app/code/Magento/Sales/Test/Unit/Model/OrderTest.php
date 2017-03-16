@@ -701,8 +701,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $canVoidOrder = false;
         }
         if ($orderState == \Magento\Sales\Model\Order::STATE_HOLDED && (!isset(
-                    $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
-                ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
+            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
+        ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
         ) {
             $canVoidOrder = false;
         }

@@ -205,7 +205,6 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param boolean $isTaxIncluded
      */
-
     protected function initMockCalculationTool($isTaxIncluded)
     {
         $mockValues = [

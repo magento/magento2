@@ -103,7 +103,6 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
             // Check for zend placeholders %placeholder% and sprintf placeholder %s
             if (preg_match_all('/%((s)|([A-Za-z]+)%)/', $phrase['phrase'], $placeHolders, PREG_OFFSET_CAPTURE)) {
-
                 foreach ($placeHolders[0] as $ph) {
                     // Check if char after placeholder is not a digit or letter
                     $charAfterPh = $phrase['phrase'][$ph[1] + strlen($ph[0])];

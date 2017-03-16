@@ -21,6 +21,13 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      */
     private $config;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param Template\Context $context
+     * @param Config $config
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         Config $config,

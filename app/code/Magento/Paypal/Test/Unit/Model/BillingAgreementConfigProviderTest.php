@@ -38,7 +38,6 @@ class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->currentCustomerMock,
             $this->agreementFactoryMock
         );
-
     }
 
     public function testGetConfig()

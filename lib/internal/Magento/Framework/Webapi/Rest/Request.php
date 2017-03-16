@@ -130,7 +130,6 @@ class Request extends \Magento\Framework\Webapi\Request
             if ($this->getContent()) {
                 $this->_bodyParams = (array)$this->_getDeserializer()->deserialize((string)$this->getContent());
             }
-
         }
         return $this->_bodyParams;
     }
