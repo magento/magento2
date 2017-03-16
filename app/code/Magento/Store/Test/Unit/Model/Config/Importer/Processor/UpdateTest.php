@@ -141,11 +141,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
 
     public function testRun()
     {
-        $data = [
-            ScopeInterface::SCOPE_WEBSITES => [],
-            ScopeInterface::SCOPE_GROUPS => [],
-            ScopeInterface::SCOPE_STORES => [],
-        ];
+        $data = $this->getData();
         $updateData = $this->getData();
 
         $this->dataDifferenceCalculatorMock->expects($this->exactly(3))
@@ -167,7 +163,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                     $updateData[ScopeInterface::SCOPE_STORES],
                 ],
             ]);
-        $this->websiteMock->expects($this->exactly(2))
+        $this->websiteMock->expects($this->exactly(4))
             ->method('getResource')
             ->willReturn($this->websiteResourceMock);
         $this->websiteMock->expects($this->once())
@@ -180,7 +176,10 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                 'default_group_id' => '1',
                 'is_default' => '0',
             ]);
-        $this->websiteResourceMock->expects($this->once())
+        $this->websiteMock->expects($this->once())
+            ->method('getDefaultGroupId')
+            ->willReturn('2');
+        $this->websiteResourceMock->expects($this->exactly(3))
             ->method('load')
             ->with($this->websiteMock, 'test', 'code');
         $this->websiteMock->expects($this->any())
@@ -189,10 +188,10 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->websiteResourceMock->expects($this->once())
             ->method('save')
             ->with($this->websiteMock);
-        $this->groupFactoryMock->expects($this->once())
+        $this->groupFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->groupMock);
-        $this->groupMock->expects($this->exactly(2))
+        $this->groupMock->expects($this->exactly(4))
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
         $this->groupMock->expects($this->once())
@@ -206,12 +205,15 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                 'code' => 'test_website_store',
             ]);
         $this->groupMock->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn('2');
+        $this->groupMock->expects($this->once())
             ->method('setData')
             ->with($updateData[ScopeInterface::SCOPE_GROUPS][2]);
-        $this->storeFactoryMock->expects($this->once())
+        $this->storeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->exactly(2))
+        $this->storeMock->expects($this->exactly(3))
             ->method('getResource')
             ->willReturn($this->storeResourceMock);
         $this->storeMock->expects($this->once())
@@ -244,7 +246,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                     'code' => 'test',
                     'name' => 'Changed Main Test',
                     'sort_order' => '0',
-                    'default_group_id' => '1',
+                    'default_group_id' => '2',
                     'is_default' => '0',
                 ]
             ],
@@ -254,7 +256,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                     'website_id' => '2',
                     'name' => 'Changed Test Website Store',
                     'root_category_id' => '2',
-                    'default_store_id' => '1',
+                    'default_store_id' => '2',
                     'code' => 'test_website_store',
                 ],
             ],
