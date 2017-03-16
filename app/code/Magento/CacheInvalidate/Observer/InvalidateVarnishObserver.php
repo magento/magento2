@@ -22,6 +22,18 @@ class InvalidateVarnishObserver implements ObserverInterface
     protected $purgeCache;
 
     /**
+     * Batch size of the purge request.
+     *
+     * Based on default Varnish 4 http_req_hdr_len size minus a 512 bytes margin for method,
+     * header name, line feeds etc.
+     *
+     * @see http://www.varnish-cache.org/docs/4.0/reference/varnishd.html#http-req-hdr-len
+     *
+     * @var int
+     */
+    private $requestSize = 7680;
+
+    /**
      * Invalidation tags resolver
      *
      * @var \Magento\Framework\App\Cache\Tag\Resolver
@@ -44,6 +56,8 @@ class InvalidateVarnishObserver implements ObserverInterface
      * If Varnish caching is enabled it collects array of tags
      * of incoming object and asks to clean cache.
      *
+     * For scaling reason the purge request is chopped down to fix batch size.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
@@ -56,10 +70,21 @@ class InvalidateVarnishObserver implements ObserverInterface
         if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
             $bareTags = $this->getTagResolver()->getTags($object);
 
+            $tagsBatchSize = 0;
             $tags = [];
-            $pattern = "((^|,)%s(,|$))";
+            $pattern = '((^|,)%s(,|$))';
             foreach ($bareTags as $tag) {
-                $tags[] = sprintf($pattern, $tag);
+                $formattedTag = sprintf($pattern, $tag);
+
+                // Send request if batch size is reached and add the implode with pipe to the computation
+                if ($tagsBatchSize + strlen($formattedTag) > $this->requestSize - count($tags) - 1) {
+                    $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+                    $tags = [];
+                    $tagsBatchSize = 0;
+                }
+
+                $tagsBatchSize += strlen($formattedTag);
+                $tags[] = $formattedTag;
             }
             if (!empty($tags)) {
                 $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
