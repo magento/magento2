@@ -158,8 +158,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('test_sensitive2', $config['system']['default']['web']['test']);
         $this->assertArrayHasKey('test_environment7', $config['system']['default']['web']['test']);
         $this->assertArrayHasKey('test_environment8', $config['system']['default']['web']['test']);
-
-
         $this->assertArrayNotHasKey('test_sensitive', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_sensitive3', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_sensitive_environment4', $config['system']['default']['web']['test']);
