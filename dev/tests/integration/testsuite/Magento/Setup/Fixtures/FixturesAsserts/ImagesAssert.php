@@ -8,11 +8,51 @@ namespace Magento\Setup\Fixtures\FixturesAsserts;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class ImagesAssert
+ *
+ * Class performs assertions to check that generated images are valid
+ * after running setup:performance:generate-fixtures command
+ */
 class ImagesAssert
 {
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
+     */
+    private $readHandler;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Media\Config
+     */
+    private $mediaConfig;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
     private $mediaDirectory;
 
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $readHandler
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -27,6 +67,11 @@ class ImagesAssert
         $this->mediaConfig = $mediaConfig;
     }
 
+    /**
+     * Performs assertions over images
+     *
+     * @throws \AssertionError
+     */
     public function assert()
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
@@ -39,7 +84,13 @@ class ImagesAssert
         }
     }
 
-    private function assertProductMediaGallery(\Magento\Catalog\Api\Data\ProductInterface $product)
+    /**
+     * Performs assertions over media_gallery product attribute
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @throws \AssertionError
+     */
+    private function assertProductMediaGallery(\Magento\Catalog\Model\Product $product)
     {
         $extendedProduct = $this->readHandler->execute($product);
         $mediaGalleryImages = $extendedProduct->getMediaGalleryEntries();
@@ -55,7 +106,14 @@ class ImagesAssert
         }
     }
 
-    private function assertProductMediaAttributes(\Magento\Catalog\Api\Data\ProductInterface $product)
+    /**
+     * Performs assertions over product media attributes
+     * e.g. image|small_image|swatch_image|thumbnail
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @throws \AssertionError
+     */
+    private function assertProductMediaAttributes(\Magento\Catalog\Model\Product $product)
     {
         foreach ($product->getMediaAttributeValues() as $attributeCode => $attributeValue) {
             if (empty($attributeValue)) {
@@ -66,7 +124,13 @@ class ImagesAssert
         }
     }
 
-    private function assertProductImageExistsInFS(\Magento\Catalog\Api\Data\ProductInterface $product)
+    /**
+     * Performs assertions over image files in FS
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @throws \AssertionError
+     */
+    private function assertProductImageExistsInFS(\Magento\Catalog\Model\Product $product)
     {
         $mediaDirectory = $this->getMediaDirectory();
         $mediaAttributes = $product->getMediaAttributeValues();
@@ -76,6 +140,11 @@ class ImagesAssert
         }
     }
 
+    /**
+     * Local cache for $mediaDirectory
+     *
+     * @return \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
     private function getMediaDirectory()
     {
         if ($this->mediaDirectory === null) {

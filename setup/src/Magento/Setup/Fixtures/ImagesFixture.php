@@ -282,7 +282,7 @@ class ImagesFixture extends Fixture
             'batchSize' => $this->imagesInsertBatchSize
         ]);
 
-        $imageGenerator = $this->getImagesGenerator(); // to many images can be selected
+        $imageGenerator = $this->getImagesGenerator();
 
         foreach ($this->getProductGenerator() as $productEntityId) {
             for ($imageNum = 1; $imageNum <= $this->getImagesPerProduct(); $imageNum++) {
