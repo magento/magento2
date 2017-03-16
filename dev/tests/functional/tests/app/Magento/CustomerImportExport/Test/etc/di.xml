@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Mtf\Util\Command\File\ExportInterface">
+        <arguments>
+            <argument name="type" xsi:type="string">customerAddresses</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\CustomerAddressesReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
+        <arguments>
+            <argument name="template" xsi:type="string">customer_address.*?\.csv</argument>
+        </arguments>
+    </virtualType>
+</config>

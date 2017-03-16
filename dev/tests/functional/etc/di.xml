@@ -110,6 +110,12 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\CustomerAddressesReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
+        <arguments>
+            <argument name="template" xsi:type="string">customer_address.*?\.csv</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Magento\Mtf\Util\Command\File\Export\CustomerReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
         <arguments>
             <argument name="template" xsi:type="string">customer.*?\.csv</argument>
