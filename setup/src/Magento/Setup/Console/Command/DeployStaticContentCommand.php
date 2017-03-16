@@ -54,7 +54,7 @@ class DeployStaticContentCommand extends Command
     /**
      * Default jobs amount
      */
-    const DEFAULT_JOBS_AMOUNT = 4;
+    const DEFAULT_JOBS_AMOUNT = 0;
 
     /** @var InputInterface */
     private $input;

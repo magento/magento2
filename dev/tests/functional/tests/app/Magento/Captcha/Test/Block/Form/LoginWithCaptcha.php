@@ -8,7 +8,6 @@ namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Customer\Test\Block\Form\Login;
-use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Form for storefront login with captcha.
@@ -54,7 +53,7 @@ class LoginWithCaptcha extends Login
      *
      * @return void
      */
-    public function clickReloadCaptchaButton()
+    public function reloadCaptcha()
     {
         $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS)->click();
     }
