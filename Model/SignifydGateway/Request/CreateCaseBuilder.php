@@ -126,6 +126,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
      */
     private function isEmpty($value)
     {
-        return $value === null || $value === '' || (is_array($value) && empty($value));
+        return $value === null || (is_array($value) && empty($value));
     }
 }
