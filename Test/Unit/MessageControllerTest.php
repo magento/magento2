@@ -9,7 +9,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 /**
  * Unit test for MessageController class.
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MessageControllerTest extends \PHPUnit_Framework_TestCase
 {

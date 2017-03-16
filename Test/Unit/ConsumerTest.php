@@ -146,10 +146,11 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($topicConfig);
         $this->configuration->expects($this->once())->method('getConsumerName')->willReturn($consumerName);
         $this->messageController->expects($this->once())->method('lock')->with($envelope, $consumerName)
-            ->willThrowException(new \Magento\Framework\Exception\NotFoundException(
+            ->willThrowException(
+                new \Magento\Framework\Exception\NotFoundException(
                     $exceptionPhrase
-            )
-        );
+                )
+            );
         $queue->expects($this->once())->method('acknowledge')->with($envelope);
         $this->logger->expects($this->once())->method('warning')->with($exceptionPhrase->render());
 
