@@ -105,7 +105,7 @@ class Context
         $data = $this->getData();
         if (!empty($data)) {
             ksort($data);
-            return sha1(serialize($data));
+            return sha1(json_encode($data));
         }
         return null;
     }
