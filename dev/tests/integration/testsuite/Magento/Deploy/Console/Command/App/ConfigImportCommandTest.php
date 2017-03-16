@@ -118,48 +118,6 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
-     */
-    public function testImportStores()
-    {
-        $this->assertEmpty($this->hash->get());
-        $this->writer->saveConfig([
-            ConfigFilePool::APP_CONFIG => require __DIR__ . '/../../../_files/scopes/config_with_stores.php'
-        ]);
-        $command = $this->objectManager->create(ConfigImportCommand::class);
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
-        ]);
-
-        $this->assertContains('Start import', $commandTester->getDisplay());
-        $this->assertContains('Stores were processed', $commandTester->getDisplay());
-        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-
-        /** @var StoreFactory $storeFactory */
-        $storeFactory = $this->objectManager->get(StoreFactory::class);
-        /** @var WebsiteFactory $websiteFactory */
-        $websiteFactory = $this->objectManager->get(WebsiteFactory::class);
-        /** @var GroupFactory $groupFactory */
-        $groupFactory = $this->objectManager->get(GroupFactory::class);
-
-        $website = $websiteFactory->create()->load('test', 'code');
-        $this->assertSame($website->getName(), 'Test Website');
-
-        $group = $groupFactory->create();
-        $group->getResource()->load($group, 'test_website_store', 'code');
-        $this->assertSame($group->getName(), 'Test Website Store');
-        $this->assertSame($group->getWebsiteId(), $website->getId());
-
-        $store = $storeFactory->create();
-        $store->getResource()->load($store, 'test', 'code');
-        $this->assertSame($store->getSortOrder(), '23');
-        $this->assertSame($store->getName(), 'Test Store view');
-        $this->assertSame($store->getGroupId(), $group->getId());
-        $this->assertSame($store->getWebsiteId(), $website->getId());
-    }
-
-    /**
      * @return array
      */
     private function loadConfig()
