@@ -30,7 +30,7 @@ class ComplexType
 
     /**
      * Get attribute type based on its backend model.
-     * 
+     *
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @param string $serviceClass
      * @param $serviceBackendModelDataInterfaceMap array

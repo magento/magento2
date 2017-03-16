@@ -81,7 +81,6 @@ class Product extends Form
      *
      * @return string|null
      */
-
     public function getItemSubInclTax()
     {
         $price = $this->_rootElement->find($this->itemSubInclTax, Locator::SELECTOR_XPATH);

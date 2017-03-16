@@ -177,8 +177,7 @@ class AssertCategoryPage extends AbstractConstraint
             }
         }
 
-        if (
-            isset($categoryData['landing_page'])
+        if (isset($categoryData['landing_page'])
             && isset($categoryData['display_mode'])
             && in_array($categoryData['display_mode'], $this->visibleCmsBlockMode)
         ) {

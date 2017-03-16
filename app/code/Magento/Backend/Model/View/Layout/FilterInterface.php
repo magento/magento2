@@ -23,7 +23,7 @@ use Magento\Framework\View\Layout\Data\Structure;
  *         </argument>
  *     </arguments>
  * </type>
- * 
+ *
  */
 interface FilterInterface
 {

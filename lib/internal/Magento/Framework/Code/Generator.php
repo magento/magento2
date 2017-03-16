@@ -199,7 +199,7 @@ class Generator
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
-        } else if ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
+        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClass)) {
             $generatedFileName = $this->_ioObject->generateResultFileName($resultClass);
             /**
              * Must handle two edge cases: a competing process has generated the class and written it to disc already,
@@ -211,7 +211,7 @@ class Generator
                 $this->_ioObject->includeFile($generatedFileName);
             }
             return self::GENERATION_SKIP;
-        } else if (!isset($this->_generatedEntities[$resultEntityType])) {
+        } elseif (!isset($this->_generatedEntities[$resultEntityType])) {
             throw new \InvalidArgumentException('Unknown generation entity.');
         }
         return false;

@@ -25,7 +25,7 @@ class Query implements \JsonSerializable
     private $selectHydrator;
 
     /**
-     * @var string 
+     * @var string
      */
     private $connectionName;
 

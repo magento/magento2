@@ -41,7 +41,7 @@ class PopupWindow extends Block
      * Process PayPal auth flow
      *
      * @param null|string $parentWindow
-     * 
+     *
      */
     public function process($parentWindow = null)
     {
