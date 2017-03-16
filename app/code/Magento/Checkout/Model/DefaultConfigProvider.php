@@ -368,7 +368,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
                     'quote_id'
                 )->getMaskedId();
             }
-
         }
         return $quoteData;
     }

@@ -104,7 +104,6 @@ class Gateway implements GatewayInterface
 
             $result->setData(array_change_key_case($responseArray, CASE_LOWER));
             $result->setData('result_code', $result->getData('result'));
-
         } catch (\Zend_Http_Client_Exception $e) {
             $result->addData(
                 [

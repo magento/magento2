@@ -100,7 +100,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
             $this->maxRegularAmount = $this->doGetMaxRegularAmount() ?: false;
         }
         return $this->maxRegularAmount;
-
     }
 
     /**

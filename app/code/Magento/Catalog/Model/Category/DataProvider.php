@@ -209,8 +209,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 && $category->getStoreId();
             $attributePath = $this->getArrayManager()->findPath($attributeCode, $meta);
 
-            if (
-                !$attributePath
+            if (!$attributePath
                 || !$canDisplayUseDefault
                 || in_array($attributeCode, $this->elementsWithUseConfigSetting)
             ) {

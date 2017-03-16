@@ -65,7 +65,6 @@ class GetNonce extends Action
             $customerId = $this->session->getCustomerId();
             $result = $this->command->execute(['public_hash' => $publicHash, 'customer_id' => $customerId])->get();
             $response->setData(['paymentMethodNonce' => $result['paymentMethodNonce']]);
-
         } catch (\Exception $e) {
             $this->logger->critical($e);
             return $this->processBadRequest($response);

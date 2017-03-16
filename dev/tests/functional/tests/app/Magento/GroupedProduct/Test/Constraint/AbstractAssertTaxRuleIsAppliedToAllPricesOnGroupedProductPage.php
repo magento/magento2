@@ -21,7 +21,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
 abstract class AbstractAssertTaxRuleIsAppliedToAllPricesOnGroupedProductPage extends
  AbstractAssertTaxRuleIsAppliedToAllPrices
 {
-
     /**
      * Get grouped product view prices.
      *

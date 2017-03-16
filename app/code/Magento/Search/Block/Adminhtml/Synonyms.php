@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Block\Adminhtml;
 
-
 /**
  * Adminhtml synonym group content block
  */
