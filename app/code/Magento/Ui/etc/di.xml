@@ -5,36 +5,24 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface"
-                type="Magento\Ui\Component\Wrapper\UiComponent"/>
-    <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface"
-                type="Magento\Ui\Component\Control\ActionPool"/>
-    <preference for="Magento\Framework\Data\Argument\InterpreterInterface"
-                type="Magento\Framework\Data\Argument\Interpreter\Composite"/>
-    <preference for="Magento\Framework\Config\ConverterInterface"
-                type="Magento\Framework\View\Element\UiComponent\Config\Converter"/>
-    <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface"
-                type="Magento\Ui\Model\Manager"/>
-    <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface"
-                type="Magento\Framework\View\Element\UiComponent\Context"/>
-    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface"
-                type="Magento\Framework\View\Layout\Generic"/>
-    <preference for="Magento\Authorization\Model\UserContextInterface"
-                type="Magento\Authorization\Model\CompositeUserContext"/>
-    <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-    <preference for="Magento\Ui\Api\BookmarkRepositoryInterface"
-                type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent" />
+    <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
+    <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
+    <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
+    <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
+    <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
+    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
+    <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
-    <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface"
-                type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
-    <preference for="Magento\Framework\Api\Search\ReportingInterface"
-                type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
+    <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
-    <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false"/>
+    <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <arguments>
             <argument name="engines" xsi:type="array">
@@ -44,9 +32,7 @@
     </type>
     <type name="Magento\Framework\View\TemplateEngine\Xhtml">
         <arguments>
-            <argument name="compilerFactory" xsi:type="object">
-                Magento\Framework\View\TemplateEngine\Xhtml\UiCompilerFactory
-            </argument>
+            <argument name="compilerFactory" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\UiCompilerFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory">
@@ -61,48 +47,30 @@
     <type name="Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text">
         <arguments>
             <argument name="directivePool" xsi:type="array">
-                <item name="variable" xsi:type="object">
-                    Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\Variable
-                </item>
-                <item name="callableMethod" xsi:type="object">
-                    Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod
-                </item>
+                <item name="variable" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
+                <item name="callableMethod" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Attribute">
         <arguments>
             <argument name="directivePool" xsi:type="array">
-                <item name="variable" xsi:type="object">
-                    Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\Variable
-                </item>
-                <item name="callableMethod" xsi:type="object">
-                    Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod
-                </item>
+                <item name="variable" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
+                <item name="callableMethod" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\UiCompilerFactory"
-                 type="Magento\Framework\View\TemplateEngine\Xhtml\CompilerFactory">
+    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\UiCompilerFactory" type="Magento\Framework\View\TemplateEngine\Xhtml\CompilerFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Framework\View\TemplateEngine\Xhtml\UiCompiler
-            </argument>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\View\TemplateEngine\Xhtml\UiCompiler</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\UiCompiler"
-                 type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
+    <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\UiCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
         <arguments>
-            <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text
-            </argument>
-            <argument name="compilerAttribute" xsi:type="object">
-                Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Attribute
-            </argument>
-            <argument name="compilerCdata" xsi:type="object">
-                Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Cdata
-            </argument>
-            <argument name="compilerComment" xsi:type="object">
-                Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Comment
-            </argument>
+            <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
+            <argument name="compilerAttribute" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Attribute</argument>
+            <argument name="compilerCdata" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Cdata</argument>
+            <argument name="compilerComment" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Comment</argument>
             <argument name="elementCompilers" xsi:type="array">
                 <item name="render" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Render</item>
                 <item name="content" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Content</item>
@@ -155,8 +123,7 @@
             <argument name="isMergeSimpleXMLElement" xsi:type="boolean">true</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiDefinitionFileCollector"
-                 type="Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector">
+    <virtualType name="uiDefinitionFileCollector" type="Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector">
         <arguments>
             <argument name="searchPattern" xsi:type="string">etc/definition.xml</argument>
         </arguments>
@@ -219,16 +186,12 @@
     </type>
     <virtualType name="arrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Framework\Data\Argument\Interpreter\ArrayType
-            </argument>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\Data\Argument\Interpreter\ArrayType</argument>
         </arguments>
     </virtualType>
-    <virtualType name="configurableObjectArgumentInterpreterProxy"
-                 type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+    <virtualType name="configurableObjectArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
-            <argument name="instanceName" xsi:type="string">
-                Magento\Framework\View\Element\UiComponent\Argument\Interpreter\ConfigurableObject
-            </argument>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\View\Element\UiComponent\Argument\Interpreter\ConfigurableObject</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
@@ -255,10 +218,8 @@
         <arguments>
             <argument name="baseFiles" xsi:type="object">uiComponentAggregatedSourceBaseSorted</argument>
             <argument name="themeFiles" xsi:type="object">uiComponentAggregatedSourceThemeSorted</argument>
-            <argument name="overrideBaseFiles" xsi:type="object">uiComponentAggregatedSourceOverrideBaseSorted
-            </argument>
-            <argument name="overrideThemeFiles" xsi:type="object">uiComponentAggregatedSourceOverrideThemeSorted
-            </argument>
+            <argument name="overrideBaseFiles" xsi:type="object">uiComponentAggregatedSourceOverrideBaseSorted</argument>
+            <argument name="overrideThemeFiles" xsi:type="object">uiComponentAggregatedSourceOverrideThemeSorted</argument>
         </arguments>
     </virtualType>
     <virtualType name="uiComponentAggregatedSourceBase" type="Magento\Framework\View\File\Collector\Base">
@@ -266,14 +227,12 @@
             <argument name="subDir" xsi:type="string">ui_component</argument>
         </arguments>
     </virtualType>
-    <virtualType shared="false" name="uiComponentAggregatedSourceBaseFiltered"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+    <virtualType shared="false" name="uiComponentAggregatedSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceBase</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceBaseSorted"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+    <virtualType name="uiComponentAggregatedSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceBaseFiltered</argument>
         </arguments>
@@ -283,50 +242,42 @@
             <argument name="subDir" xsi:type="string">ui_component</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceThemeFiltered"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+    <virtualType name="uiComponentAggregatedSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceTheme</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceThemeSorted"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+    <virtualType name="uiComponentAggregatedSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceThemeFiltered</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceOverrideBase"
-                 type="Magento\Framework\View\File\Collector\Override\Base">
+    <virtualType name="uiComponentAggregatedSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
         <arguments>
             <argument name="subDir" xsi:type="string">layout/override/base</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceOverrideBaseFiltered"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+    <virtualType name="uiComponentAggregatedSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideBase</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceOverrideBaseSorted"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+    <virtualType name="uiComponentAggregatedSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideBaseFiltered</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceOverrideTheme"
-                 type="Magento\Framework\View\File\Collector\Override\ThemeModular">
+    <virtualType name="uiComponentAggregatedSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
         <arguments>
             <argument name="subDir" xsi:type="string">layout/override/theme</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceOverrideThemeFiltered"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+    <virtualType name="uiComponentAggregatedSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideTheme</argument>
         </arguments>
     </virtualType>
-    <virtualType name="uiComponentAggregatedSourceOverrideThemeSorted"
-                 type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+    <virtualType name="uiComponentAggregatedSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideThemeFiltered</argument>
         </arguments>
