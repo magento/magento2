@@ -146,6 +146,8 @@ class Attribute extends AbstractFilter
     /**
      * Retrieve count of the options
      *
+     * @param int|string $value
+     * @param array $optionsFacetedData
      * @return int
      */
     private function getOptionCount($value, $optionsFacetedData)
