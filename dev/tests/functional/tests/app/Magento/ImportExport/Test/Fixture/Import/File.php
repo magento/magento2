@@ -239,17 +239,19 @@ class File extends DataSource
             : '[USD]';
         $entityData = $entity->getData();
 
-        $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
-        foreach ($websites as $website) {
-            if ($website->getCode() === 'base') {
-                $currency = isset($this->value['template']['mainWebsiteCurrency'])
-                ? $this->value['template']['websiteCurrency']
-                : '[USD]';
-                $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
-                break;
+        if (isset($entityData['website_ids'])) {
+            $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
+            foreach ($websites as $website) {
+                if ($website->getCode() === 'base') {
+                    $currency = isset($this->value['template']['mainWebsiteCurrency'])
+                        ? $this->value['template']['websiteCurrency']
+                        : '[USD]';
+                    $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
+                    break;
+                }
+                $entityData['code'] = $website->getCode();
+                $entityData[$website->getCode()] = $website->getName() . $currency;
             }
-            $entityData['code'] = $website->getCode();
-            $entityData[$website->getCode()] = $website->getName() . $currency;
         }
         return $entityData;
     }
@@ -267,7 +269,9 @@ class File extends DataSource
                 $csvContent = strtr($csvContent, $data);
             }
         }
-        $csvContent = strtr($csvContent, $this->mainWebsiteMapping);
+        if (is_array($this->mainWebsiteMapping)) {
+            $csvContent = strtr($csvContent, $this->mainWebsiteMapping);
+        }
         $this->csv = array_map(
             function ($value) {
                 return explode(',', str_replace('"', '', $value));

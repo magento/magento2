@@ -59,7 +59,7 @@ class Addresses extends Tab
      *
      * @var string
      */
-    protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
+    protected $customerAddress = '//*[contains(@class, "address-list-item")][%d + 1]';
 
     /**
      * Magento loader.
@@ -164,10 +164,10 @@ class Addresses extends Tab
     public function getDataAddresses($address = null)
     {
         $data = [];
-        $addresses = is_array($address) ? $address : [1 => $address];
+        $addresses = is_array($address) ? $address : [0 => $address];
 
         foreach ($addresses as $addressNumber => $address) {
-            $isHasData = (null === $address) || $address->hasData();
+            $isHasData = (null !== $address) && $address->hasData();
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
             if ($isHasData && !$isVisibleCustomerAddress) {
