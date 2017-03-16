@@ -90,42 +90,59 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isTokenExist
-     *
-     * @dataProvider processDataProvider
+     * @return void
      */
-    public function testProcessEnabled($isTokenExist)
+    public function testProcessEnabledTokenExist()
     {
         $this->tokenMock
             ->expects($this->once())
             ->method('isTokenExist')
-            ->willReturn($isTokenExist);
-        if (!$isTokenExist) {
-            $this->configWriterMock
-                ->expects($this->once())
-                ->method('save')
-                ->with(SubscriptionHandler::CRON_STRING_PATH, "0 * * * *");
-            $this->flagManagerMock
-                ->expects($this->once())
-                ->method('saveFlag')
-                ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
-                ->willReturn(true);
-            $this->notificationTimeMock
-                ->expects($this->once())
-                ->method('unsetLastTimeNotificationValue')
-                ->willReturn(true);
-        }
+            ->willReturn(true);
+        $this->configWriterMock
+            ->expects($this->never())
+            ->method('save');
+        $this->flagManagerMock
+            ->expects($this->never())
+            ->method('saveFlag');
+        $this->notificationTimeMock
+            ->expects($this->never())
+            ->method('unsetLastTimeNotificationValue');
         $this->assertTrue(
             $this->subscriptionHandler->processEnabled()
         );
     }
 
     /**
-     * @param bool $isTokenExist
-     *
-     * @dataProvider processDataProvider
+     * @return void
      */
-    public function testProcessDisabled($isTokenExist)
+    public function testProcessEnabledTokenDoesNotExist()
+    {
+        $this->tokenMock
+            ->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(false);
+        $this->configWriterMock
+            ->expects($this->once())
+            ->method('save')
+            ->with(SubscriptionHandler::CRON_STRING_PATH, "0 * * * *");
+        $this->flagManagerMock
+            ->expects($this->once())
+            ->method('saveFlag')
+            ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
+            ->willReturn(true);
+        $this->notificationTimeMock
+            ->expects($this->once())
+            ->method('unsetLastTimeNotificationValue')
+            ->willReturn(true);
+        $this->assertTrue(
+            $this->subscriptionHandler->processEnabled()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testProcessDisabledTokenDoesNotExist()
     {
         $this->configWriterMock
             ->expects($this->once())
@@ -134,27 +151,35 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
         $this->tokenMock
             ->expects($this->once())
             ->method('isTokenExist')
-            ->willReturn($isTokenExist);
-        if (!$isTokenExist) {
-            $this->flagManagerMock
-                ->expects($this->once())
-                ->method('deleteFlag')
-                ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
-                ->willReturn(true);
-        }
+            ->willReturn(false);
+        $this->flagManagerMock
+            ->expects($this->once())
+            ->method('deleteFlag')
+            ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
+            ->willReturn(true);
         $this->assertTrue(
             $this->subscriptionHandler->processDisabled()
         );
     }
 
     /**
-     * @return array
+     * @return void
      */
-    public function processDataProvider()
+    public function testProcessDisabledTokenExists()
     {
-        return [
-            'Token exist' => [true],
-            'Token doesn\'t exist' => [false],
-        ];
+        $this->configWriterMock
+            ->expects($this->once())
+            ->method('delete')
+            ->with(CollectionTime::CRON_SCHEDULE_PATH);
+        $this->tokenMock
+            ->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(true);
+        $this->flagManagerMock
+            ->expects($this->never())
+            ->method('deleteFlag');
+        $this->assertTrue(
+            $this->subscriptionHandler->processDisabled()
+        );
     }
 }
