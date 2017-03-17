@@ -22,10 +22,10 @@ return [
                 'default_group_id' => '1',
                 'is_default' => '1',
             ],
-            'test' => [
+            'test_website' => [
                 'website_id' => '2',
-                'code' => 'test',
-                'name' => 'Changed Main Test',
+                'code' => 'test_website',
+                'name' => 'Changed Test Website',
                 'sort_order' => '10',
                 'default_group_id' => '1',
                 'is_default' => '0',

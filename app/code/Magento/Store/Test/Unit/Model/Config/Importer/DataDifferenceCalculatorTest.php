@@ -58,11 +58,6 @@ class DataDifferenceCalculatorTest extends \PHPUnit_Framework_TestCase
             $expectedData,
             $this->model->getItemsToDelete(ScopeInterface::SCOPE_GROUPS, $data)
         );
-        // Test the lazy-load cache.
-        $this->assertSame(
-            $expectedData,
-            $this->model->getItemsToDelete(ScopeInterface::SCOPE_GROUPS, $data)
-        );
     }
 
     public function testGetItemsToCreate()
