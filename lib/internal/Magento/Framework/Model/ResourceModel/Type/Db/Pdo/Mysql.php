@@ -27,7 +27,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
      * Constructor
      *
      * @param array $config
-     * @param MysqlFactory|null $serializer
+     * @param MysqlFactory|null $mysqlFactory
      */
     public function __construct(
         array $config,
