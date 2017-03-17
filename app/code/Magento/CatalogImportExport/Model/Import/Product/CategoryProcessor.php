@@ -79,7 +79,10 @@ class CategoryProcessor
                     for ($i = 1; $i < $pathSize; $i++) {
                         $path[] = $collection->getItemById((int)$structure[$i])->getName();
                     }
-                    $index = implode(self::DELIMITER_CATEGORY, $path);
+                    /** @var string $index */
+                    $index = $this->standardizeString(
+                        implode(self::DELIMITER_CATEGORY, $path)
+                    );
                     $this->categories[$index] = $category->getId();
                 }
             }
@@ -123,13 +126,16 @@ class CategoryProcessor
      */
     protected function upsertCategory($categoryPath)
     {
-        if (!isset($this->categories[$categoryPath])) {
+        /** @var string $index */
+        $index = $this->standardizeString($categoryPath);
+
+        if (!isset($this->categories[$index])) {
             $pathParts = explode(self::DELIMITER_CATEGORY, $categoryPath);
             $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
             $path = '';
 
             foreach ($pathParts as $pathPart) {
-                $path .= $pathPart;
+                $path .= $this->standardizeString($pathPart);
                 if (!isset($this->categories[$path])) {
                     $this->categories[$path] = $this->createCategory($pathPart, $parentId);
                 }
@@ -138,7 +144,7 @@ class CategoryProcessor
             }
         }
 
-        return $this->categories[$categoryPath];
+        return $this->categories[$index];
     }
 
     /**
@@ -171,7 +177,7 @@ class CategoryProcessor
      * @param string $category
      * @param \Magento\Framework\Exception\AlreadyExistsException $exception
      *
-     * @return array
+     * @return $this
      */
     private function addFailedCategory($category, $exception)
     {
@@ -190,7 +196,18 @@ class CategoryProcessor
      */
     public function getFailedCategories()
     {
-        return  $this->failedCategories;
+        return $this->failedCategories;
+    }
+
+    /**
+     * Resets failed categories' array
+     *
+     * @return $this
+     */
+    public function clearFailedCategories()
+    {
+        $this->failedCategories = [];
+        return $this;
     }
 
     /**
@@ -203,5 +220,22 @@ class CategoryProcessor
     public function getCategoryById($categoryId)
     {
         return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+    }
+
+    /**
+     * Standardize a string by lowercase-ing it
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function standardizeString(string $string)
+    {
+        if (function_exists('mb_strtolower')) {
+            $string = mb_strtolower($string);
+        } else {
+            $string = strtolower($string);
+        }
+
+        return $string;
     }
 }
