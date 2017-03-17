@@ -158,7 +158,10 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute(['-n' => true]);
 
-        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains(
+            'Processing configurations data from configuration file...',
+            $commandTester->getDisplay()
+        );
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
@@ -191,7 +194,10 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute(['-n' => true]);
 
-        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains(
+            'Processing configurations data from configuration file...',
+            $commandTester->getDisplay()
+        );
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
@@ -218,7 +224,10 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute(['-n' => true]);
 
-        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains(
+            'Processing configurations data from configuration file...',
+            $commandTester->getDisplay()
+        );
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
