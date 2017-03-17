@@ -17,10 +17,10 @@ interface ConnectionAdapterInterface
     /**
      * Get connection
      *
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      * @param SelectFactory|null $selectFactory
      * @return AdapterInterface
      * @throws \InvalidArgumentException
      */
-    public function getConnection(LoggerInterface $logger, SelectFactory $selectFactory = null);
+    public function getConnection(LoggerInterface $logger = null, SelectFactory $selectFactory = null);
 }
