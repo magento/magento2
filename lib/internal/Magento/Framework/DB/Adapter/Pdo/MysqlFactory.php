@@ -36,8 +36,8 @@ class MysqlFactory
      * Create instance of Mysql adapter
      *
      * @param string $className
-     * @param LoggerInterface $logger
      * @param array $config
+     * @param LoggerInterface|null $logger
      * @param SelectFactory|null $selectFactory
      * @return Mysql
      * @throws \InvalidArgumentException
@@ -54,11 +54,11 @@ class MysqlFactory
         $arguments = [
             'config' => $config
         ];
-        if ($selectFactory) {
-            $arguments['selectFactory'] = $selectFactory;
-        }
         if ($logger) {
             $arguments['logger'] = $logger;
+        }
+        if ($selectFactory) {
+            $arguments['selectFactory'] = $selectFactory;
         }
         return $this->objectManager->create(
             $className,

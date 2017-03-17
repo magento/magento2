@@ -6,7 +6,7 @@
 namespace Magento\Framework\connectionFactory\Test\Unit\ResourceconnectionFactory\Type\Db;
 
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
-use Magento\Framework\connectionFactory\ResourceconnectionFactory\Type\Db\ConnectionFactory;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory;
 use Magento\Framework\ObjectManagerInterface;
 
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
