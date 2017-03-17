@@ -32,6 +32,6 @@ class Encoder implements EncoderInterface
     {
         $this->translateInline->processResponseBody($data);
         $serializer = new \Magento\Framework\Serialize\Serializer\Json;
-        return $serializer->encode($data);
+        return $serializer->serialize($data);
     }
 }

@@ -332,7 +332,7 @@ class DataObject implements \ArrayAccess
     {
         $data = $this->toArray($keys);
         $serializer = new \Magento\Framework\Serialize\Serializer\Json;
-        return $serializer->encode($data);
+        return $serializer->serialize($data);
     }
 
     /**
