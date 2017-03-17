@@ -51,19 +51,16 @@ class MysqlFactory
         if (!in_array(Mysql::class, class_parents($className, true) + [$className => $className])) {
             throw new \InvalidArgumentException('Invalid class, ' . $className . ' must extend ' . Mysql::class . '.');
         }
-        $selectFactoryParam = [];
-        if ($selectFactory) {
-            $selectFactoryParam['selectFactory'] = $selectFactory;
+        $arguments = [
+            'logger' => $logger,
+            'config' => $config
+        ];
+        if  ($selectFactory) {
+            $arguments['selectFactory'] = $selectFactory;
         }
         return $this->objectManager->create(
             $className,
-            array_merge(
-                [
-                    'logger' => $logger,
-                    'config' => $config
-                ],
-                $selectFactoryParam
-            )
+            $arguments
         );
     }
 }
