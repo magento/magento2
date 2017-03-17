@@ -31,6 +31,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @api
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
