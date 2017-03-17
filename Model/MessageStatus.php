@@ -7,6 +7,8 @@ namespace Magento\MysqlMq\Model;
 
 /**
  * Message model for message status
+ *
+ * @api
  */
 class MessageStatus extends \Magento\Framework\Model\AbstractModel
 {
