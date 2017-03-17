@@ -1,7 +1,5 @@
 <?php
 /**
- * Connection adapter factory
- *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,9 @@ namespace Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory as ModelConnectionFactory;
 use Magento\Framework\DB\Adapter\DdlCache;
 
+/**
+ * Connection adapter factory
+ */
 class ConnectionFactory extends ModelConnectionFactory
 {
     /**

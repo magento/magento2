@@ -58,7 +58,7 @@ class SalesSetup extends EavSetup
 
     /**
      * Constructor
-     * 
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache

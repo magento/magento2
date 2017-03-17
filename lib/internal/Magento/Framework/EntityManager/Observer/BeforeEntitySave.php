@@ -16,7 +16,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class BeforeEntitySave implements ObserverInterface
 {
-
     /**
      * Apply model save operation
      *

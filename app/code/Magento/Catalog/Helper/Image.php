@@ -432,7 +432,7 @@ class Image extends AbstractHelper
      *
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
@@ -543,7 +543,7 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */

@@ -47,5 +47,4 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $anonymize = $this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         return $anonymize;
     }
-
 }

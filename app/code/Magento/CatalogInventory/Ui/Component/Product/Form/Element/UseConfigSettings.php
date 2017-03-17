@@ -42,8 +42,7 @@ class UseConfigSettings extends Checkbox
     public function prepare()
     {
         $config = $this->getData('config');
-        if (
-            isset($config['keyInConfiguration'])
+        if (isset($config['keyInConfiguration'])
             && isset($config['valueFromConfig'])
             && $config['valueFromConfig'] instanceof ValueSourceInterface
         ) {
