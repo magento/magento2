@@ -331,23 +331,29 @@ define([
         /**
          * Determine product id and related data
          *
-         * @returns {{productId: *, isInProductView: boolean}}
+         * @returns {{productId: *, isInProductView: bool}}
          * @private
          */
-        _determineProductData: function() {
+        _determineProductData: function () {
             // Check if product is in a list of products.
-            var productId = this.element.parents('.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id'),
+            var productId,
+                product,
                 isInProductView = false;
+
+            productId = this.element.parents('.product-item-details')
+                    .find('.price-box.price-final_price').attr('data-product-id');
 
             if (!productId) {
                 // Check individual product.
-                var product = document.getElementsByName('product')[0];
+                product = document.getElementsByName('product')[0];
                 productId = product ? product.value : undefined;
                 isInProductView = productId > 0;
             }
 
-            return {productId: productId, isInProductView: isInProductView};
+            return {
+                productId: productId,
+                isInProductView: isInProductView
+            };
         },
 
         /**
