@@ -284,8 +284,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $serializeData[$key] = $value;
             }
         }
-
-        return md5($this->serializer->serialize($serializeData));
+        $serializeData = $this->serializer->serialize($serializeData);
+        return md5($serializeData);
     }
 
     /**
