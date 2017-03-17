@@ -47,10 +47,10 @@ class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $objectManagerArguments
      * @param array $config
      * @param LoggerInterface|null $logger
      * @param SelectFactory|null $selectFactory
-     * @param array $arguments
      * @dataProvider createDataProvider
      */
     public function testCreate(
