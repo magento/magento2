@@ -21,13 +21,6 @@ class DataDifferenceCalculator
     private $runtimeConfigSource;
 
     /**
-     * The cached runtime config data.
-     *
-     * @var array
-     */
-    private $runtimeConfigData;
-
-    /**
      * @param ConfigSourceInterface $runtimeConfigSource The config source to retrieve current config
      */
     public function __construct(ConfigSourceInterface $runtimeConfigSource)
@@ -137,11 +130,9 @@ class DataDifferenceCalculator
      */
     private function getRuntimeData($scope)
     {
-        if (null === $this->runtimeConfigData) {
-            $this->runtimeConfigData = $this->runtimeConfigSource->get();
-        }
+        $runtimeData = $this->runtimeConfigSource->get();
 
-        return (array)$this->runtimeConfigData[$scope];
+        return (array)$runtimeData[$scope];
     }
 
     /**
