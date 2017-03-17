@@ -11,45 +11,34 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert swatches visibility in category page.
+ * Assert swatches are visible on category page
  */
-class AssertSwatchesVisibilityInCategory extends AbstractConstraint
+class AssertSwatchesAreVisibleOnCategoryPage extends AbstractConstraint
 {
     /**
-     * Checking swatches in the category page.
-     *
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
-     * @param bool $visible
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
-        FixtureInterface $product,
-        $visible = true
+        FixtureInterface $product
     ) {
         $this->openCategoryPage($cmsIndex, $product);
 
-        $swatchesBlockVisible = $catalogCategoryView->getListSwatchesProductBlock()
+        $isSwatchesBlockVisible = $catalogCategoryView->getListSwatchesProductBlock()
             ->getProductItem($product)->isSwatchesBlockVisible();
 
-        if ($visible) {
-            \PHPUnit_Framework_Assert::assertTrue(
-                $swatchesBlockVisible,
-                'Swatches are absent on category page.'
-            );
-        } else {
-            \PHPUnit_Framework_Assert::assertFalse(
-                $swatchesBlockVisible,
-                'Swatches are still present on category page.'
-            );
-        }
+        \PHPUnit_Framework_Assert::assertTrue(
+            $isSwatchesBlockVisible,
+            'Swatches are absent on category page.'
+        );
     }
 
     /**
-     * Open category view page.
+     * Open category view page
      *
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
@@ -66,7 +55,7 @@ class AssertSwatchesVisibilityInCategory extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */
