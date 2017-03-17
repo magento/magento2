@@ -110,6 +110,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             'name' => 'Main Website',
             'sort_order' => '0',
             'is_default' => '1',
+            'default_group_id' => '1',
         ];
         $data = [
             'websites' => $websites,
@@ -132,7 +133,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($trimmedWebsite)
             ->willReturnSelf();
-        $websiteMock->expects($this->once())
+        $websiteMock->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
 
@@ -173,6 +174,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             'name' => 'Default',
             'root_category_id' => '1',
             'code' => 'default',
+            'default_store_id' => '1',
         ];
         $data = [
             'websites' => $websites,
@@ -212,7 +214,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($trimmedGroup)
             ->willReturnSelf();
-        $groupMock->expects($this->exactly(3))
+        $groupMock->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
         $groupMock->expects($this->once())
@@ -226,7 +228,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($groupMock)
             ->willReturnSelf();
-        $this->abstractDbMock->expects($this->exactly(2))
+        $this->abstractDbMock->expects($this->once())
             ->method('addCommitCallback');
 
         $this->processor->run($data);
@@ -326,7 +328,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($trimmedStore)
             ->willReturnSelf();
-        $storeMock->expects($this->exactly(3))
+        $storeMock->expects($this->exactly(2))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
 
@@ -337,7 +339,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($storeMock)
             ->willReturnSelf();
-        $this->abstractDbMock->expects($this->exactly(2))
+        $this->abstractDbMock->expects($this->once())
             ->method('addCommitCallback');
 
         $this->processor->run($data);

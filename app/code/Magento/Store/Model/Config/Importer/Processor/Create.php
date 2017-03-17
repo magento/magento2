@@ -129,7 +129,6 @@ class Create implements ProcessorInterface
 
             $website = $this->websiteFactory->create();
             $website->setData($websiteData);
-            $website->setDefaultGroupId((int)$websiteData['default_group_id']);
             $website->getResource()->save($website);
 
             $website->getResource()->addCommitCallback(function () use ($website, $data) {
