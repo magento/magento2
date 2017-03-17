@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\connectionFactory\Test\Unit\ResourceconnectionFactory\Type\Db;
+namespace Magento\Framework\Model\Test\Unit\ResourceModel\Type\Db;
 
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory;
