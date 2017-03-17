@@ -154,7 +154,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);

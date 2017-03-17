@@ -136,7 +136,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->getMock(ProductLimitation::class));
