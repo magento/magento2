@@ -32,7 +32,6 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     public function __construct(
         array $config,
         MysqlFactory $mysqlFactory = null
-
     ) {
         $this->connectionConfig = $this->getValidConfig($config);
         $this->mysqlFactory = $mysqlFactory ?: ObjectManager::getInstance()->get(MysqlFactory::class);

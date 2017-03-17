@@ -45,7 +45,6 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
         $object = new Mysql(
-            $this->selectFactoryMock,
             $inputConfig,
             $this->mysqlFactoryMock
         );
@@ -92,7 +91,6 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testConstructorException()
     {
         new Mysql(
-            $this->selectFactoryMock,
             [],
             $this->mysqlFactoryMock
         );
@@ -113,11 +111,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $object = new Mysql(
-            $this->selectFactoryMock,
             $config,
             $this->mysqlFactoryMock
         );
-        $logger = $this->getMock(\Magento\Framework\DB\LoggerInterface::class);
-        $this->assertNull($object->getConnection($logger));
+        $loggerMock = $this->getMock(\Magento\Framework\DB\LoggerInterface::class);
+        $this->assertNull($object->getConnection($loggerMock, $this->selectFactoryMock));
     }
 }
