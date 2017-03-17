@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 /**
  * Class CustomOptions
  * Form of custom options product
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomOptions extends Form
 {
@@ -110,6 +111,27 @@ class CustomOptions extends Form
     protected $optionByName = '//*[label[contains(.,"%s")] or legend[contains(.,"%s")]]';
 
     /**
+     * Locator for custom option field.
+     *
+     * @var string
+     */
+    private $customOptionField = './/div[contains(@class, "field")';
+
+    /**
+     * Locator for required custom option title.
+     *
+     * @var string
+     */
+    private $requiredOption = 'and contains(@class, "required") and contains(.//span, "%s")]';
+
+    /**
+     * Locator for validation error message after option.
+     *
+     * @var string
+     */
+    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "required field")]';
+
+    /**
      * Get product options
      *
      * @param FixtureInterface $product
@@ -149,6 +171,16 @@ class CustomOptions extends Form
     }
 
     /**
+     * Wait for error message.
+     *
+     * @return bool
+     */
+    public function waitValidationErrorMessage()
+    {
+        return $this->waitForElementVisible($this->validationErrorMessage, Locator::SELECTOR_XPATH);
+    }
+
+    /**
      * Get list custom options
      *
      * @return array
@@ -164,6 +196,20 @@ class CustomOptions extends Form
         }
 
         return $customOptions;
+    }
+
+    /**
+     * Check option's validation message is visible or not.
+     *
+     * @param string $customOptionTitle
+     * @return bool
+     */
+    public function isJsMessageVisible($customOptionTitle)
+    {
+        $optionSelector = $this->customOptionField . $this->requiredOption . $this->validationErrorMessage;
+        $title = sprintf($optionSelector, $customOptionTitle);
+
+        return $this->_rootElement->find($title, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**
@@ -328,7 +374,7 @@ class CustomOptions extends Form
      * @param int $firstOption
      * @return array
      */
-    protected function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
+    public function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
     {
         $listOptions = [];
 

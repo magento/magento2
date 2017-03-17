@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -131,7 +131,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
 
         $this->setOrderIncrementIdHtml($this->escapeHtml($this->_txn->getOrder()->getIncrementId()));
 
-        $this->setTxnTypeHtml($this->escapeHtml($this->_txn->getTxnType()));
+        $this->setTxnTypeHtml($this->escapeHtml(__($this->_txn->getTxnType())));
 
         $this->setOrderIdUrlHtml(
             $this->escapeHtml($this->getUrl('sales/order/view', ['order_id' => $this->_txn->getOrderId()]))

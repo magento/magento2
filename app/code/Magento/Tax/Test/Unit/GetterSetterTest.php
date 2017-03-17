@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit;
@@ -34,7 +34,7 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                     $variableValue = [$obj];
                     $variables[$variableName] = $variableValue;
                 }
-            } else if (strpos($variableValue, 'Magento') !== false) {
+            } elseif (strpos($variableValue, 'Magento') !== false) {
                 $obj = $objectManager->getObject($variableValue);
                 $variableValue = $obj;
                 $variables[$variableName] = $variableValue;

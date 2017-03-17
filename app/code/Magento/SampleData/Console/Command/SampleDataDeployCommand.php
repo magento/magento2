@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -151,7 +151,7 @@ class SampleDataDeployCommand extends Command
     {
         $unit = strtolower(substr($value, -1, 1));
         $value = (int) $value;
-        switch($unit) {
+        switch ($unit) {
             case 'g':
                 $value *= 1024 * 1024 * 1024;
                 break;

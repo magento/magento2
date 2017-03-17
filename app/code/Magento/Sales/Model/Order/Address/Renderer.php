@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,6 +48,7 @@ class Renderer
      */
     public function format(Address $address, $type)
     {
+        $this->addressConfig->setStore($address->getOrder()->getStoreId());
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;

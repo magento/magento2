@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest" summary="Create Currency Rate" ticketId="MAGETWO-36824">
+        <variation name="CreateCurrencyRateTestVariation4">
+            <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
+            <data name="currencyRate/data/currency_to" xsi:type="string">UAH</data>
+            <data name="currencyRate/data/rate" xsi:type="number">2.000</data>
+            <data name="currencySymbol/dataSet" xsi:type="string">currency_symbols_uah</data>
+            <data name="product" xsi:type="string">configurableProduct::default</data>
+            <data name="config/dataset" xsi:type="string">config_base_currency_us_display_currency_uah</data>
+            <data name="baseCurrency/data/code" xsi:type="string">USD</data>
+            <data name="basePrice" xsi:type="string">₴80.00</data>
+            <data name="configuredPrices" xsi:type="array">
+                <item name="custom_currency" xsi:type="string">₴80.00</item>
+                <item name="base_currency" xsi:type="string">$40.00</item>
+            </data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertCurrencyRateAppliedOnProductPage" />
+        </variation>
+    </testCase>
+</config>

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -59,11 +59,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
     /** @var EmailNotificationInterface */
     private $emailNotification;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
 
     /**
      * @var AuthenticationInterface
@@ -171,8 +166,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                    'You did not sign in correctly or your account is temporarily disabled.'
                 );
                 $this->session->logout();
                 $this->session->start();
@@ -193,22 +187,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
-    }
-
-    /**
-     * Get scope config
-     *
-     * @return ScopeConfigInterface
-     */
-    private function getScopeConfig()
-    {
-        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
-            return ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Config\ScopeConfigInterface::class
-            );
-        } else {
-            return $this->scopeConfig;
-        }
     }
 
     /**

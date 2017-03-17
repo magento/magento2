@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,9 @@
                 <input type="number"
                        name="qty"
                        id="qty"
-                       maxlength="12"
                        value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
-                       title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+                       title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
+                       class="input-text qty"
                        data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
                        />
             </div>

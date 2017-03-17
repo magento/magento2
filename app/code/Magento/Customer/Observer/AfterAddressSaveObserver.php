@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -190,8 +190,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             return true;
         }
 
-        if (
-            $this->_coreRegistry->registry(BeforeAddressSaveObserver::VIV_CURRENTLY_SAVED_ADDRESS) != $address->getId()
+        if ($this->_coreRegistry->registry(BeforeAddressSaveObserver::VIV_CURRENTLY_SAVED_ADDRESS) != $address->getId()
         ) {
             return false;
         }

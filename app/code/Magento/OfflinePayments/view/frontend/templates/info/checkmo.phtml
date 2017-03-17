@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
 ?>
 <dl class="payment-method checkmemo">
     <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
-    <?php if ($block->getInfo()->getAdditionalData()): ?>
+    <?php if ($block->getInfo()->getAdditionalInformation()): ?>
         <?php if ($block->getPayableTo()): ?>
             <dd class="content">
                 <strong><?php echo $block->escapeHtml(__('Make Check payable to')) ?></strong>

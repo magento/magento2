@@ -2,7 +2,7 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -258,9 +258,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
-        } else if (!$customAttributeCode) {
+        } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );

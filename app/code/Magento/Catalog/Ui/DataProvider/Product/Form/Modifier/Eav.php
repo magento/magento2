@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -798,8 +798,7 @@ class Eav extends AbstractModifier
      */
     private function getScopeLabel(ProductAttributeInterface $attribute)
     {
-        if (
-            $this->storeManager->isSingleStoreMode()
+        if ($this->storeManager->isSingleStoreMode()
             || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
         ) {
             return '';

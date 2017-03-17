@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -18,6 +18,23 @@ class ScheduledStructure
     const ELEMENT_OFFSET_OR_SIBLING  = 'offsetOrSibling';
     const ELEMENT_IS_AFTER = 'isAfter';
     /**#@-*/
+
+    /**
+     * Map of class properties.
+     *
+     * @var array
+     */
+    private $serializableProperties = [
+        'scheduledStructure',
+        'scheduledData',
+        'scheduledElements',
+        'scheduledMoves',
+        'scheduledRemoves',
+        'scheduledIfconfig',
+        'scheduledPaths',
+        'elementsToSort',
+        'brokenParent',
+    ];
 
     /**
      * Information about structural elements, scheduled for creation
@@ -84,18 +101,10 @@ class ScheduledStructure
 
     /**
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(array $data = [])
     {
-        $this->scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
-        $this->scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
-        $this->scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
-        $this->scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
-        $this->scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
-        $this->scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
-        $this->scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
+        $this->populateWithArray($data);
     }
 
     /**
@@ -530,5 +539,45 @@ class ScheduledStructure
         $this->flushPaths();
         $this->scheduledElements = [];
         $this->scheduledStructure = [];
+    }
+
+    /**
+     * Reformat 'Layout scheduled structure' to array.
+     *
+     * @return array
+     */
+    public function __toArray()
+    {
+        $result = [];
+        foreach ($this->serializableProperties as $property) {
+            $result[$property] = $this->{$property};
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update 'Layout scheduled structure' data.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function populateWithArray(array $data)
+    {
+        foreach ($this->serializableProperties as $property) {
+            $this->{$property} = $this->getArrayValueByKey($property, $data);
+        }
+    }
+
+    /**
+     * Get value from array by key.
+     *
+     * @param string $key
+     * @param array $array
+     * @return array
+     */
+    private function getArrayValueByKey($key, array $array)
+    {
+        return isset($array[$key]) ? $array[$key] : [];
     }
 }

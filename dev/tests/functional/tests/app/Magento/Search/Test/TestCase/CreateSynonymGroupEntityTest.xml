@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -25,7 +25,7 @@
     </testCase>
     <testCase name="Magento\Search\Test\TestCase\CreateSynonymGroupEntityTest" summary="Create Synonym Group with custom Website and Store View" ticketId="MAGETWO-47681">
         <variation name="CreateSynonymGroupEntityTestVariation3">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, stable:no</data>
             <data name="synonymGroup/data/synonyms" xsi:type="string">synonym_%isolation%</data>
             <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">custom_store</data>
             <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />

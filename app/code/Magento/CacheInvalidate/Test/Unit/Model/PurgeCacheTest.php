@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
@@ -70,7 +70,9 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
                 ->with($uri->getHost(), $uri->getPort());
             $this->socketAdapterMock->expects($this->at($i++))
                 ->method('write')
-                ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags']);
+                ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]);
+            $this->socketAdapterMock->expects($this->at($i++))
+                ->method('read');
             $i++;
         }
         $this->socketAdapterMock->expects($this->exactly(count($uris)))

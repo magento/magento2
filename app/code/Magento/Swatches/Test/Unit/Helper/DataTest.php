@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Helper;
@@ -46,10 +46,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepoMock;
 
+    /** @var   \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\EntityManager\MetadataPool*/
+    private $metaDataPoolMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->imageHelperMock = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
         $this->productCollectionFactoryMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
@@ -58,9 +60,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-
         $this->productCollectionMock = $this->objectManager->getCollectionMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
@@ -108,6 +108,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->metaDataPoolMock = $this->getMock(
+            \Magento\Framework\EntityManager\MetadataPool::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $serializer = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            ['serialize', 'unserialize']
+        );
+
+        $serializer->expects($this->any())
+            ->method('serialize')->willReturnCallback(function ($parameter) {
+                return json_encode($parameter);
+            });
+        $serializer->expects($this->any())
+            ->method('unserialize')->willReturnCallback(function ($parameter) {
+                return json_decode($parameter, true);
+            });
 
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
@@ -118,7 +139,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'swatchCollectionFactory' => $this->swatchCollectionFactoryMock,
                 'imageHelper' => $this->imageHelperMock,
+                'serializer' => $serializer,
             ]
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->swatchHelperObject,
+            'metadataPool',
+            $this->metaDataPoolMock
         );
     }
 
@@ -131,7 +158,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'getData' => 1,
                     'setData' => 3,
@@ -182,7 +209,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'swatch_input_type' => 'visual',
                     'update_product_preview_image' => 1,
@@ -246,12 +273,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadVariationByFallback($product)
     {
+        $metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
+        $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
+
         $this->getSwatchAttributes($product);
 
         $this->prepareVariationCollection();
 
         $this->productCollectionMock->method('getFirstItem')->willReturn($this->productMock);
-        $this->productMock->method('getId')->willReturn(95);
+        $this->productMock->method('getData')->with('id')->willReturn(95);
         $this->productModelFactoryMock->method('create')->willReturn($this->productMock);
         $this->productMock->method('load')->with(95)->will($this->returnSelf());
 
@@ -322,23 +353,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturnMap([
-                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
-                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_large_no_frame', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_medium_no_frame', [], $this->imageHelperMock],
                 [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
             ]);
 
         $this->imageHelperMock->expects($this->any())
             ->method('setImageFile')
             ->with($image)
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('constrainOnly')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('keepAspectRatio')
-            ->willReturnSelf();
-        $this->imageHelperMock->expects($this->any())
-            ->method('keepFrame')
             ->willReturnSelf();
         $this->imageHelperMock->expects($this->any())
             ->method('getUrl')
@@ -416,7 +438,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->configurableMock->expects($this->once())->method('getUsedProducts')->with($this->productMock)
             ->willReturn($simpleProducts);
-
     }
 
     protected function getAttributesFromConfigurable()
@@ -824,7 +845,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'getData' => 1,
                     'setData' => 3,
@@ -880,7 +901,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'getData' => 1,
                     'setData' => 3,

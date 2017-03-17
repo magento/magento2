@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -147,7 +147,6 @@ class DependencyCheck extends AbstractActionController
                     . implode("<br>", $constraints);
                 $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             }
-
         } catch (\Exception $e) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['errorMessage'] = $e->getMessage();
