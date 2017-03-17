@@ -69,7 +69,8 @@
         "ext-zip": "*",
         "ext-pdo_mysql": "*",
         "sjparkinson/static-review": "~4.1",
-        "ramsey/uuid": "3.4"
+        "ramsey/uuid": "3.4",
+        "egulias/email-validator": "~2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",

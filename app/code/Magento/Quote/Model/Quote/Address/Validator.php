@@ -7,6 +7,10 @@
 namespace Magento\Quote\Model\Quote\Address;
 
 use Zend_Validate_Exception;
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 class Validator extends \Magento\Framework\Validator\AbstractValidator
 {
@@ -39,7 +43,13 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
     {
         $messages = [];
         $email = $value->getEmail();
-        if (!empty($email) && !\Zend_Validate::is($email, 'EmailAddress')) {
+        $validator = new EmailValidator();
+        $validations = new MultipleValidationWithAnd([
+            new RFCValidation(),
+            new DNSCheckValidation()
+        ]);
+
+        if (!empty($email) && !$validator->isValid($email, $validations)) {
             $messages['invalid_email_format'] = 'Invalid email format';
         }
 

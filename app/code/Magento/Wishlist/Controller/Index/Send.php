@@ -13,6 +13,10 @@ use Magento\Framework\Session\Generic as WishlistSession;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\Layout as ResultLayout;
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -151,9 +155,16 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                 if (count($emails) > $emailsLeft) {
                     $error = __('This wish list can be shared %1 more times.', $emailsLeft);
                 } else {
+
+                    $validator = new EmailValidator();
+                    $validations = new MultipleValidationWithAnd([
+                        new RFCValidation(),
+                        new DNSCheckValidation()
+                    ]);
+
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
-                        if (!\Zend_Validate::is($email, 'EmailAddress')) {
+                        if (!$validator->isValid($email, $validations)) {
                             $error = __('Please enter a valid email address.');
                             break;
                         }
