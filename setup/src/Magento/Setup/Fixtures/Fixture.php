@@ -58,7 +58,10 @@ abstract class Fixture
             $generationCount = is_array($configValue) === true
                 ? count($configValue[array_keys($configValue)[0]])
                 : $configValue;
-            $output->writeln('<info> |- ' . $label . ': ' . $generationCount .'</info>');
+
+            if (!empty($generationCount)) {
+                $output->writeln('<info> |- ' . $label . ': ' . $generationCount .'</info>');
+            }
         }
     }
 
