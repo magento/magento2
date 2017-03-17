@@ -51,7 +51,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->order->loadByIncrementId('100000001');
 
-        static::assertNotEmpty($this->getBlockContents());
+        static::assertNotEmpty($this->getBlock()->toHtml());
     }
 
     /**
@@ -67,14 +67,13 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->order->loadByIncrementId('100000001');
 
-        static::assertEmpty($this->getBlockContents());
+        static::assertEmpty($this->getBlock()->toHtml());
     }
 
     /**
      * Checks that:
      * - block give contents
-     * - associated team displays correct
-     * - score class displays correct
+     * - block contents guarantee decision field
      *
      * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getScoreClass
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
@@ -85,18 +84,17 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->order->loadByIncrementId('100000001');
 
-        $html = $this->getBlockContents();
-        static::assertNotEmpty($html);
-        static::assertContains('Processing', $html);
-        static::assertContains('Good', $html);
+        $block = $this->getBlock();
+        static::assertNotEmpty($block->toHtml());
+        static::assertContains((string) $block->getCaseGuaranteeDisposition(), $block->toHtml());
     }
 
     /**
-     * Renders block contents.
+     * Gets block.
      *
-     * @return string
+     * @return CaseInfo
      */
-    private function getBlockContents()
+    private function getBlock()
     {
         $this->layout->addContainer('order_additional_info', 'Container');
 
@@ -105,7 +103,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
         $block->setAttribute('context', $this->getContext());
         $block->setTemplate('Magento_Signifyd::case_info.phtml');
 
-        return $block->toHtml();
+        return $block;
     }
 
     /**
