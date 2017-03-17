@@ -79,30 +79,6 @@ class CaseInfo extends Template
     }
 
     /**
-     * Gets case status
-     *
-     * @return string
-     */
-    public function getCaseStatus()
-    {
-        return $this->getCaseProperty('', function () {
-            $caseStatusMap = [
-                CaseInterface::STATUS_OPEN => __('Open'),
-                CaseInterface::STATUS_PENDING => __('Pending'),
-                CaseInterface::STATUS_PROCESSING => __('Processing'),
-                CaseInterface::STATUS_FLAGGED => __('Flagged'),
-                CaseInterface::STATUS_DISMISSED => __('Dismissed')
-            ];
-
-            $status = isset($caseStatusMap[$this->getCaseEntity()->getStatus()]) ?
-                $caseStatusMap[$this->getCaseEntity()->getStatus()] :
-                '';
-
-            return $status;
-        });
-    }
-
-    /**
      * Gets case guarantee disposition status.
      *
      * @return string
@@ -121,28 +97,6 @@ class CaseInfo extends Template
 
             $status = isset($guaranteeStatusMap[$this->getCaseEntity()->getGuaranteeDisposition()]) ?
                 $guaranteeStatusMap[$this->getCaseEntity()->getGuaranteeDisposition()] :
-                '';
-
-            return $status;
-        });
-    }
-
-    /**
-     * Gets case review disposition status.
-     *
-     * @return string
-     */
-    public function getCaseReviewDisposition()
-    {
-        return $this->getCaseProperty('', function () {
-            $reviewStatusMap = [
-                CaseInterface::DISPOSITION_GOOD => __('Good'),
-                CaseInterface::DISPOSITION_FRAUDULENT => __('Fraudulent'),
-                CaseInterface::DISPOSITION_UNSET => __('Unset')
-            ];
-
-            $status = isset($reviewStatusMap[$this->getCaseEntity()->getReviewDisposition()]) ?
-                $reviewStatusMap[$this->getCaseEntity()->getReviewDisposition()] :
                 '';
 
             return $status;

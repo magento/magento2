@@ -16,7 +16,7 @@
                 <group id="about" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                     <frontend_model>Magento\Signifyd\Block\Adminhtml\System\Config\Fieldset\Info</frontend_model>
                     <fieldset_css>signifyd-about-header</fieldset_css>
-                    <label><![CDATA[Protect your store from fraud with Guaranteed Payments&trade; by Signifyd.]]></label>
+                    <label><![CDATA[Protect your store from fraud with Guaranteed Fraud Protection by Signifyd.]]></label>
                     <comment><![CDATA[Signifyd automatically reviews your orders for fraud, telling you in seconds which orders to ship, and which to reject.
                     We back our approvals with 100% chargeback protection, reimbursing you the full order amount plus fees should you ever receive a fraudulent chargeback.
                     <p>Benefits:<ul>
@@ -24,7 +24,7 @@
                     <li>Accept more orders and maximize your revenue</li>
                     <li>Automate order review and shift fraud off your plate</li></ul></p>]]>
                     </comment>
-                    <more_url>https://www.signifyd.com/magento-ecommerce-fraud-protection-partner</more_url>
+                    <more_url>https://www.signifyd.com/magento-guaranteed-fraud-protection</more_url>
                 </group>
                 <group id="config" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                     <fieldset_css>signifyd-about-header</fieldset_css>
