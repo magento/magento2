@@ -14,6 +14,8 @@ use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.
+ *
+ * @api
  */
 class MethodsMap
 {

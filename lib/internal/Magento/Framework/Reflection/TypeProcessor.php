@@ -16,6 +16,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class TypeProcessor
 {
