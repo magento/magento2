@@ -29,7 +29,6 @@ class Processor implements PoolInterface, SubjectInterface
      */
     protected $observers = [];
 
-
     /**
      * @inheritDoc
      */

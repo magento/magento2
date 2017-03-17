@@ -6,14 +6,12 @@
 
 namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 
-
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
 class Decimal implements GeneratorInterface
 {
-
     /**
      * {@inheritdoc}
      */

@@ -110,6 +110,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
     {
         return $this->storeId;
     }
+
     /**
      * Get quote or order item
      *

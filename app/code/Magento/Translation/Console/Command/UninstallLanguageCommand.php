@@ -19,7 +19,7 @@ use Magento\Framework\Setup\BackupRollbackFactory;
 
 /**
  * Command for uninstalling language and backup-code feature
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UninstallLanguageCommand extends Command

@@ -203,7 +203,6 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;
 

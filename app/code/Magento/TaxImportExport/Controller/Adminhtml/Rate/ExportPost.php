@@ -94,6 +94,5 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         ) || $this->_authorization->isAllowed(
             'Magento_TaxImportExport::import_export'
         );
-
     }
 }

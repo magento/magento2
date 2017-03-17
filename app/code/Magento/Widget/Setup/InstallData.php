@@ -42,6 +42,5 @@ class InstallData implements InstallDataInterface
         $installer->doUpdateClassAliases();
 
         $setup->endSetup();
-        
     }
 }

@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Error processor
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Processor
 {
@@ -320,6 +321,8 @@ class Processor
      * Prepare config data
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareConfig()
     {
@@ -335,10 +338,10 @@ class Processor
         $config->skin           = self::DEFAULT_SKIN;
 
         //combine xml data to one object
-        if (!is_null($design) && (string)$design->skin) {
+        if ($design !== null && (string)$design->skin) {
             $this->_setSkin((string)$design->skin, $config);
         }
-        if (!is_null($local)) {
+        if ($local !== null) {
             if ((string)$local->report->action) {
                 $config->action = $local->report->action;
             }
@@ -401,7 +404,7 @@ class Processor
      */
     protected function _getFilePath($file, $directories = null)
     {
-        if (is_null($directories)) {
+        if ($directories === null) {
             $directories[] = $this->_errorDir;
         }
 
@@ -482,6 +485,7 @@ class Processor
      *
      * @param int $reportId
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function loadReport($reportId)
     {
@@ -499,6 +503,8 @@ class Processor
      * Send report
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendReport()
     {
