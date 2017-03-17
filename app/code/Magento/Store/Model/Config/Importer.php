@@ -95,7 +95,7 @@ class Importer implements ImporterInterface
 
             if ($newGroups) {
                 $messages[] = sprintf(
-                    'The following new stores must be associated with a root category: %s',
+                    $this->getStoreGroupAssignMessage(),
                     implode(', ', array_column($newGroups, 'name'))
                 );
             }
@@ -117,6 +117,18 @@ class Importer implements ImporterInterface
         }
 
         return $messages;
+    }
+
+    /**
+     * Retrieves message reminder about root category assigning.
+     *
+     * @return string
+     */
+    private function getStoreGroupAssignMessage()
+    {
+        return 'The following new store groups must be associated with a root category: %s. '
+            . PHP_EOL
+            . 'Associate a store group with a root category in the Admin Panel: Stores > Settings > All Stores.';
     }
 
     /**
