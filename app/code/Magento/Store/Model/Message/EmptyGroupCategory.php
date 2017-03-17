@@ -6,13 +6,12 @@
 
 namespace Magento\Store\Model\Message;
 
-use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Model\ResourceModel\Group\Collection as GroupCollection;
 
 /**
- * System message about not filed required root category for store group
+ * System message about not filled required root category for store group
  */
 class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInterface
 {
@@ -31,6 +30,8 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
     private $urlBuilder;
 
     /**
+     * List of store groups with unassigned root categories.
+     *
      * @var GroupInterface[]
      */
     private $items = null;
@@ -50,7 +51,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
     /**
      * {@inheritdoc}
      *
-     * Check whether all store groups has assigned root category
+     * Check whether all store groups has assigned root category.
      *
      * @return bool - true if at least one group does not have category
      */
@@ -92,7 +93,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
     }
 
     /**
-     * Retrieve filtered store group collection.
+     * Retrieves store groups which do not have assigned categories.
      *
      * @return GroupInterface[]
      */
