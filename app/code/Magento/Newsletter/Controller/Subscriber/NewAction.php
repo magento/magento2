@@ -14,6 +14,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -107,7 +109,11 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
     {
 
         $validator = new EmailValidator();
-        if (!$validator->isValid($email, new RFCValidation())) {
+        $validations = new MultipleValidationWithAnd([
+            new RFCValidation(),
+            new DNSCheckValidation()
+        ]);
+        if (!$validator->isValid($email, $validations)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a valid email address.'));
         }
     }

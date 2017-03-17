@@ -15,6 +15,8 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\Layout as ResultLayout;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -155,10 +157,14 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                 } else {
 
                     $validator = new EmailValidator();
+                    $validations = new MultipleValidationWithAnd([
+                        new RFCValidation(),
+                        new DNSCheckValidation()
+                    ]);
 
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
-                        if (!$validator->isValid($email, new RFCValidation())) {
+                        if (!$validator->isValid($email, $validations)) {
                             $error = __('Please enter a valid email address.');
                             break;
                         }

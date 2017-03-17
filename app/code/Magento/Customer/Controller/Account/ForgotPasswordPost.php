@@ -15,6 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * ForgotPasswordPost controller
@@ -63,7 +65,11 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
         $email = (string)$this->getRequest()->getPost('email');
         if ($email) {
             $validator = new EmailValidator();
-            if (!$validator->isValid($email, new RFCValidation())) {
+            $validations = new MultipleValidationWithAnd([
+                new RFCValidation(),
+                new DNSCheckValidation()
+            ]);
+            if (!$validator->isValid($email, $validations)) {
                 $this->session->setForgottenEmail($email);
                 $this->messageManager->addErrorMessage(__('Please correct the email address.'));
                 return $resultRedirect->setPath('*/*/forgotpassword');

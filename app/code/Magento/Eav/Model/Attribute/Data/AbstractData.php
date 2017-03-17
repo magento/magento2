@@ -12,6 +12,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException as CoreException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * EAV Attribute Abstract Data Model
@@ -354,7 +356,11 @@ abstract class AbstractData
                     break;
                 case 'email':
                     $validator = new EmailValidator();
-                    if (!$validator->isValid($value, new RFCValidation())) {
+                    $validations = new MultipleValidationWithAnd([
+                        new RFCValidation(),
+                        new DNSCheckValidation()
+                    ]);
+                    if (!$validator->isValid($value, $validations)) {
                         return [__('"%1" is not a valid email address.', $label)];
                     }
                     break;

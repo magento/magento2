@@ -8,6 +8,8 @@ namespace Magento\SendFriend\Model;
 use Magento\Framework\Exception\LocalizedException as CoreException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * SendFriend Log
@@ -238,8 +240,12 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         $email = $this->getSender()->getEmail();
         $validator = new EmailValidator();
+        $validations = new MultipleValidationWithAnd([
+            new RFCValidation(),
+            new DNSCheckValidation()
+        ]);
 
-        if (empty($email) or !$validator->isValid($email, new RFCValidation())) {
+        if (empty($email) or !$validator->isValid($email, $validations)) {
             $errors[] = __('Invalid Sender Email');
         }
 
@@ -252,11 +258,9 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
             $errors[] = __('Please specify at least one recipient.');
         }
 
-        $validator = new EmailValidator();
-
         // validate recipients email addresses
         foreach ($this->getRecipients()->getEmails() as $email) {
-            if (!$validator->isValid($email, new RFCValidation())) {
+            if (!$validator->isValid($email, $validations)) {
                 $errors[] = __('Please enter a correct recipient email address.');
                 break;
             }

@@ -9,6 +9,8 @@ use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * Import entity abstract customer model
@@ -236,7 +238,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $website = $rowData[static::COLUMN_WEBSITE];
 
             $validator = new EmailValidator();
-            if (!$validator->isValid($email, new RFCValidation())) {
+            $validations = new MultipleValidationWithAnd([
+                new RFCValidation(),
+                new DNSCheckValidation()
+            ]);
+            if (!$validator->isValid($email, $validations)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);

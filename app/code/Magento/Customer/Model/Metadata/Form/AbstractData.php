@@ -13,6 +13,8 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Api\ArrayObjectSearch;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -326,7 +328,11 @@ abstract class AbstractData
                     break;
                 case 'email':
                     $validator = new EmailValidator();
-                    if (!$validator->isValid($value, new RFCValidation())) {
+                    $validations = new MultipleValidationWithAnd([
+                        new RFCValidation(),
+                        new DNSCheckValidation()
+                    ]);
+                    if (!$validator->isValid($value, $validations)) {
                         return [__('"%1" is not a valid email address.', $label)];
                     }
                     break;

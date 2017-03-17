@@ -9,6 +9,8 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 use Magento\Security\Model\SecurityManager;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
@@ -47,7 +49,11 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
         if (!empty($email) && !empty($params)) {
             // Validate received data to be an email address
             $validator = new EmailValidator();
-            if ($validator->isValid($email, new RFCValidation())) {
+            $validations = new MultipleValidationWithAnd([
+                new RFCValidation(),
+                new DNSCheckValidation()
+            ]);
+            if ($validator->isValid($email, $validations)) {
                 try {
                     $this->securityManager->performSecurityCheck(
                         \Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,
