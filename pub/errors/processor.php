@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Error processor
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Processor
