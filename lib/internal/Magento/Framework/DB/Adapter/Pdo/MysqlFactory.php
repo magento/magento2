@@ -55,7 +55,7 @@ class MysqlFactory
             'logger' => $logger,
             'config' => $config
         ];
-        if  ($selectFactory) {
+        if ($selectFactory) {
             $arguments['selectFactory'] = $selectFactory;
         }
         return $this->objectManager->create(
