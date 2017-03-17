@@ -54,16 +54,16 @@ class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
      * @dataProvider createDataProvider
      */
     public function testCreate(
+        array $objectManagerArguments,
         array $config,
         LoggerInterface $logger = null,
-        SelectFactory $selectFactory = null,
-        array $arguments
+        SelectFactory $selectFactory = null
     ) {
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
                 Mysql::class,
-                $arguments
+                $objectManagerArguments
             );
         $this->mysqlFactory->create(
             Mysql::class,
@@ -82,32 +82,32 @@ class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
         $this->selectFactoryMock = $this->getMock(SelectFactory::class, [], [], '', false);
         return [
             [
-                ['foo' => 'bar'],
-                $this->loggerMock,
-                $this->selectFactoryMock,
                 [
                     'config' => ['foo' => 'bar'],
                     'logger' => $this->loggerMock,
                     'selectFactory' => $this->selectFactoryMock
-                ]
-            ],
-            [
+                ],
                 ['foo' => 'bar'],
                 $this->loggerMock,
-                null,
+                $this->selectFactoryMock
+            ],
+            [
                 [
                     'config' => ['foo' => 'bar'],
                     'logger' => $this->loggerMock
-                ]
+                ],
+                ['foo' => 'bar'],
+                $this->loggerMock,
+                null
             ],
             [
-                ['foo' => 'bar'],
-                null,
-                $this->selectFactoryMock,
                 [
                     'config' => ['foo' => 'bar'],
                     'selectFactory' => $this->selectFactoryMock
-                ]
+                ],
+                ['foo' => 'bar'],
+                null,
+                $this->selectFactoryMock
             ],
         ];
     }
