@@ -8,6 +8,7 @@ namespace Magento\Reports\Test\Constraint;
 
 use Magento\Reports\Test\Page\Adminhtml\SalesReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
+use DateTime;
 
 /**
  * Assert that message in Sales Reports Pages display correct date/time.
@@ -26,16 +27,17 @@ class AssertReportStatisticsNoticeMessage extends AbstractAssertSalesReportResul
      *
      * @param array $salesReport
      * @param SalesReport $salesReportPage
+     * @param DateTime $currentDate
      * @return void
      */
     public function processAssert(
         array $salesReport,
-        SalesReport $salesReportPage
+        SalesReport $salesReportPage,
+        DateTime $currentDate
     ) {
         $this->salesReportPage = $salesReportPage;
         $this->searchInSalesReportGrid($salesReport);
         $date = $this->getLastUpdatedDate();
-        $currentDate  = new \DateTime();
         $currentDateTime = $currentDate->format('M j, Y, g');
         $displayedDateTime = date('M j, Y, g', strtotime($date));
         \PHPUnit_Framework_Assert::assertEquals(
