@@ -41,3 +41,4 @@
 "Your API key can be found on the <a href=""http://signifyd.com/settings"" target=""_blank"">settings page</a> in the Signifyd console","Your API key can be found on the <a href=""http://signifyd.com/settings"" target=""_blank"">settings page</a> in the Signifyd console"
 "Don’t change unless asked to do so.","Don’t change unless asked to do so."
 "Your webhook URL will be used to <a href=""https://app.signifyd.com/settings/notifications"" target=""_blank"">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento.","Your webhook URL will be used to <a href=""https://app.signifyd.com/settings/notifications"" target=""_blank"">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento."
+"Signifyd Guarantee Decision","Signifyd Guarantee Decision"
