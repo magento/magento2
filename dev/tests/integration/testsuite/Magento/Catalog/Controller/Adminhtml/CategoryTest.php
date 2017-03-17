@@ -128,7 +128,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()->setParam('label_part', 'Default');
         $this->dispatch('backend/catalog/category/suggestCategories');
         $this->assertEquals(
-            '[{"id":"2","children":[],"is_active":"1","label":"Default Category"}]',
+            '[{"id":2,"children":[],"is_active":1,"label":"Default Category"}]',
             $this->getResponse()->getBody()
         );
     }

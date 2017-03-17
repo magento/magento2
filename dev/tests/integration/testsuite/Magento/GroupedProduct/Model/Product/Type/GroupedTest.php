@@ -105,10 +105,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         ];
         $expectedData = [
             \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_FULL => [
-                1  => '{"super_product_config":{"product_type":"grouped","product_id":"'
-                    . $product->getId() . '"}}',
-                21 => '{"super_product_config":{"product_type":"grouped","product_id":"'
-                    . $product->getId() . '"}}',
+                1  => '{"super_product_config":{"product_type":"grouped","product_id":'
+                    . $product->getId() . '}}',
+                21 => '{"super_product_config":{"product_type":"grouped","product_id":'
+                    . $product->getId() . '}}',
             ],
             \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_LITE => [
                 $product->getId() => '{"value":{"qty":2}}',
