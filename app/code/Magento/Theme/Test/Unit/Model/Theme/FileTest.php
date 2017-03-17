@@ -204,6 +204,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->model->setContent($content);
         $this->assertEquals($content, $this->model->getContent());
     }
+
     public function testGetFileInfo()
     {
         $fileId = 123;

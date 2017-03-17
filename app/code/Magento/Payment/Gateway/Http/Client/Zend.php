@@ -65,7 +65,7 @@ class Zend implements ClientInterface
         $client->setConfig($transferObject->getClientConfig());
         $client->setMethod($transferObject->getMethod());
 
-        switch($transferObject->getMethod()) {
+        switch ($transferObject->getMethod()) {
             case \Zend_Http_Client::GET:
                 $client->setParameterGet($transferObject->getBody());
                 break;

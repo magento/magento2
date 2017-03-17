@@ -23,7 +23,6 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
     public function register()
     {
         return [T_OPEN_TAG];
-
     }
 
     /**
@@ -83,7 +82,7 @@ class ConstantUsageSniff implements \PHP_CodeSniffer_Sniff
             if (preg_match($variableRegexp, $lineContent) !== 0) {
                 $phpcsFile->addError($error, $stackPtr, 'VariableTranslation');
             }
-        } else if ($previousLineMatch) {
+        } elseif ($previousLineMatch) {
             $variableRegexp = "/^{$constantRegexp}/";
             if (preg_match($variableRegexp, $lineContent) !== 0) {
                 $phpcsFile->addError($error, $stackPtr, 'VariableTranslation');

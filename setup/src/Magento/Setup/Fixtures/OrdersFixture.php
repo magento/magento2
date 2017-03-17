@@ -247,7 +247,6 @@ class OrdersFixture extends Fixture
                 ]),
                 $productsResult
             ];
-
         }
 
         $productStoreId = function ($index) use ($result) {
@@ -657,7 +656,6 @@ class OrdersFixture extends Fixture
                 'order' => $this->serializer->serialize($simpleBuyRequest),
                 'quote' => $this->serializer->serialize($quoteSimpleBuyRequest),
             ];
-
         }
         return $productsResult;
     }

@@ -158,7 +158,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
-
         } else {
             $selectMock->expects($this->once())->method('insertFromSelect')->with(
                 $destTable,

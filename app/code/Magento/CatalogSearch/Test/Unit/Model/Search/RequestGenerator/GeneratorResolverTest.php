@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\RequestGenerator;
 
-
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 

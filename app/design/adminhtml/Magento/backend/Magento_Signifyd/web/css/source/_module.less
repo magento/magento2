@@ -11,3 +11,13 @@
   &:extend(.abs-order-tables all);
   &:extend(.abs-order-tbody-border all);
 }
+
+//
+//  Layout
+//  ---------------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+  .case-information {
+    float: left;
+    #mix-grid .width(6,12);
+  }
+}

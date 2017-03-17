@@ -11,13 +11,11 @@ namespace Magento\Framework\Api;
  */
 class Uploader extends \Magento\Framework\File\Uploader
 {
-
     /**
      * Avoid running the default constructor specific to FILE upload
      */
     public function __construct()
     {
-
     }
 
     /**
