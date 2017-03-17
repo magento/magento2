@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Save
@@ -65,7 +66,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     protected $stockRegistry;
 
-     /**
+    /**
      * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
      */
     protected $stockItemRepository;
@@ -112,15 +113,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->stockItemFactory = $stockItemFactory;
         parent::__construct($context, $attributeHelper);
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->localeDate = $localeDate ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->localeDate = $localeDate ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
             ->get(\Magento\Eav\Model\Config::class);
-        $this->stockRegistry = $stockRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
-        $this->stockItemRepository = $stockItemRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->stockItemRepository = $stockItemRepository ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Api\StockItemRepositoryInterface::class);
-        $this->stockConfiguration = $stockConfiguration ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->stockConfiguration = $stockConfiguration ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
     }
 
