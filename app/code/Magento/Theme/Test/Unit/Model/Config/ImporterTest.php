@@ -144,7 +144,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 '<info>Theme import was started.</info>',
-                '<info>Theme import was finished.</info>'
+                '<info>Theme import finished.</info>'
             ],
             $result
         );
@@ -208,9 +208,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 [],
                 ['frontend/Magento/luma'],
                 [
-                    '<info>As result of themes importing you will get:</info>',
-                    '<info>The following themes will be registered:</info>',
-                    'frontend/Magento/luma',
+                    '<info>The following themes will be registered:</info> frontend/Magento/luma',
                 ]
             ],
             [
@@ -224,9 +222,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 [],
                 ['frontend/Magento/luma'],
                 [
-                    '<info>As result of themes importing you will get:</info>',
-                    '<info>The following themes will be registered:</info>',
-                    'frontend/Magento/luma',
+                    '<info>The following themes will be registered:</info> frontend/Magento/luma',
                 ]
             ],
             [
@@ -234,9 +230,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 ['frontend/Magento/luma'],
                 [],
                 [
-                    '<info>As result of themes importing you will get:</info>',
-                    '<info>The following themes will be removed:</info>',
-                    'frontend/Magento/luma',
+                    '<info>The following themes will be removed:</info> frontend/Magento/luma',
                 ]
             ],
             [

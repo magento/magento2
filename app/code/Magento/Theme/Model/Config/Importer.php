@@ -104,7 +104,7 @@ class Importer implements ImporterInterface
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);
         }
 
-        $messages[] = '<info>Theme import was finished.</info>';
+        $messages[] = '<info>Theme import finished.</info>';
 
         return $messages;
     }
@@ -134,18 +134,13 @@ class Importer implements ImporterInterface
         $newThemes = array_diff($toBeRegistered, $themesInDb);
 
         $messages = [];
-        if ($newThemes || $toBeRemoved) {
-            $messages = ['<info>As result of themes importing you will get:</info>'];
 
-            if ($newThemes) {
-                $messages[] = '<info>The following themes will be registered:</info>';
-                $messages[] = implode(PHP_EOL, $newThemes);
-            }
+        if ($newThemes) {
+            $messages[] = '<info>The following themes will be registered:</info> ' . implode(PHP_EOL, $newThemes);
+        }
 
-            if ($toBeRemoved) {
-                $messages[] = '<info>The following themes will be removed:</info>';
-                $messages[] = implode(PHP_EOL, $toBeRemoved);
-            }
+        if ($toBeRemoved) {
+            $messages[] = '<info>The following themes will be removed:</info> ' . implode(PHP_EOL, $toBeRemoved);
         }
 
         return $messages;
