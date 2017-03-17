@@ -224,6 +224,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Check that product has at least one swatch attribute
+     *
      * @return bool
      */
     protected function isProductHasSwatchAttribute()
@@ -413,7 +415,10 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * @codeCoverageIgnore
+     * Return renderer template
+     *
+     * Template for product with swatches is different from product without swatches
+     *
      * @return string
      */
     protected function getRendererTemplate()
