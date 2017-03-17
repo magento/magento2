@@ -132,7 +132,6 @@ class CatalogPriceRulesFixture extends Fixture
             $model->setUseAutoGeneration($useAutoGeneration);
             $model->save();
         }
-
     }
 
     /**

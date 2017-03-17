@@ -7,6 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\ShippingInfoBlock;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\CommentsHistoryBlock;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock;
 
@@ -28,6 +29,13 @@ class Info extends Tab
      * @var string
      */
     private $paymentInfoBlockSelector = '.order-payment-method';
+
+    /**
+     * Selector for `Shipping Information` block.
+     *
+     * @var string
+     */
+    private $shippingInfoBlock = '.order-shipping-method';
 
     /**
      * Selector for Comments history block.
@@ -56,6 +64,19 @@ class Info extends Tab
         return $this->blockFactory->create(
             PaymentInfoBlock::class,
             ['element' => $this->_rootElement->find($this->paymentInfoBlockSelector)]
+        );
+    }
+
+    /**
+     * Gets Order Shipping Information block.
+     *
+     * @return ShippingInfoBlock
+     */
+    public function getShippingInfoBlock()
+    {
+        return $this->blockFactory->create(
+            ShippingInfoBlock::class,
+            ['element' => $this->_rootElement->find($this->shippingInfoBlock)]
         );
     }
 

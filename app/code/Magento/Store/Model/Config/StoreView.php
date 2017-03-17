@@ -16,8 +16,10 @@ class StoreView
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     private $scopeConfig;
+
     /** @var \Magento\Store\Model\StoreManagerInterface */
     private $storeManager;
+
     /** @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface */
     private $themeProvider;
 

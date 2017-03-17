@@ -229,7 +229,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         }
 
         return (bool)$valid;
-
     }
 
     /**

@@ -49,6 +49,8 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -360,7 +362,33 @@ class UpgradeData implements UpgradeDataInterface
             $this->changePriceAttributeDefaultScope($categorySetup);
         }
 
+        if (version_compare($context->getVersion(), '2.1.5') < 0) {
+            $this->dissallowUsingHtmlForProductName($setup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * Set to 'No' 'Is Allowed Html on Store Front' option on product name attribute, because product name
+     * is multi entity field (used in order, quote) and cannot be conditionally escaped in all places
+     *
+     * @param ModuleDataSetupInterface $categorySetup
+     * @return void
+     */
+    private function dissallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
+    {
+        /** @var CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'name');
+
+        $setup->getConnection()
+            ->update(
+                $setup->getTable('catalog_eav_attribute'),
+                ['is_html_allowed_on_front' => 0],
+                $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            );
     }
 
     /**
@@ -372,13 +400,14 @@ class UpgradeData implements UpgradeDataInterface
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         foreach (['price', 'cost', 'special_price'] as $attributeCode) {
             $attribute = $categorySetup->getAttribute($entityTypeId, $attributeCode);
-            $categorySetup->updateAttribute(
-                $entityTypeId,
-                $attribute['attribute_id'],
-                'is_global',
-                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
-            );
-
+            if (isset($attribute['attribute_id'])) {
+                $categorySetup->updateAttribute(
+                    $entityTypeId,
+                    $attribute['attribute_id'],
+                    'is_global',
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+                );
+            }
         }
     }
 }

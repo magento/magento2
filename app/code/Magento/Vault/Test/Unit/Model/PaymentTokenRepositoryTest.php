@@ -211,7 +211,6 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->paymentTokenMock->setPublicHash('');
         $this->assertFalse($this->repositoryModel->delete($this->paymentTokenMock));
         $this->assertFalse($this->paymentTokenMock->getIsActive());
-
     }
 
     /**

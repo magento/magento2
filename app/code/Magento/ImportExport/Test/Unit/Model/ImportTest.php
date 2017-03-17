@@ -212,7 +212,6 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ])
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
-
     }
 
     /**

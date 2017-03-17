@@ -167,7 +167,7 @@ class Addresses extends Tab
         $addresses = is_array($address) ? $address : [1 => $address];
 
         foreach ($addresses as $addressNumber => $address) {
-            $isHasData = (null === $address) || $address->hasData();
+            $isHasData = (null !== $address) && $address->hasData();
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
             if ($isHasData && !$isVisibleCustomerAddress) {

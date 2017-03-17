@@ -93,7 +93,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test JS minification library
-     * 
+     *
      * @return void
      */
     public function testJshrinkLibrary()

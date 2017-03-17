@@ -86,8 +86,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             $newPath = $path ? $path . '/' . $subKey : $subKey;
             $filteredPath = $this->filterPath($newPath);
 
-            if (
-                $filteredPath
+            if ($filteredPath
                 && !is_array($data[$subKey])
                 && $this->excludeList->isPresent($filteredPath)
             ) {

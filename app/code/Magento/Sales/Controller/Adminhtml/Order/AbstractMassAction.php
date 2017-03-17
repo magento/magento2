@@ -71,6 +71,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     {
         return $this->filter->getComponentRefererUrl()?: 'sales/*/';
     }
+
     /**
      * Set status to collection items
      *
