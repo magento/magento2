@@ -9,6 +9,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class for accessing to communication configuration.
+ *
+ * @api
  */
 interface ConfigInterface
 {
