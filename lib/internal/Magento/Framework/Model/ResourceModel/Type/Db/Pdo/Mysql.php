@@ -62,7 +62,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
      * @param SelectFactory $selectFactory
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function getDbConnectionInstance(DB\LoggerInterface $logger, $selectFactory)
+    protected function getDbConnectionInstance(DB\LoggerInterface $logger, SelectFactory $selectFactory)
     {
         return $this->mysqlFactory->create(
             $this->getDbConnectionClassName(),
