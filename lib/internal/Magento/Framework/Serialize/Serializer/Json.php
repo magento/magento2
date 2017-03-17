@@ -17,11 +17,23 @@ class Json implements SerializerInterface
      */
     public function serialize($data, $options = [])
     {
-        $encodeOptions = 0;
-        foreach ($options as $option) {
-            $encodeOptions |= $option;
+
+        $prettyPrint = (isset($options['prettyPrint']) && ($options['prettyPrint'] == true));
+
+        $encodeOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_NUMERIC_CHECK;
+
+        if ($prettyPrint && defined('JSON_PRETTY_PRINT')) {
+            $encodeOptions |= JSON_PRETTY_PRINT;
+            $prettyPrint = false;
         }
-        return json_encode($data, $encodeOptions);
+
+        $encodedResult = json_encode($data, $encodeOptions);
+        
+        if ($prettyPrint) {
+            $encodedResult = self::prettyPrint($encodedResult, array("intent" => "    "));
+        }
+
+        return $encodedResult;
     }
 
     /**

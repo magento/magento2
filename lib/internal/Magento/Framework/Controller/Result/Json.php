@@ -55,10 +55,6 @@ class Json extends AbstractResult
     public function setData($data, $cycleCheck = false, $options = [])
     {
         unset($cycleCheck);
-
-        if (!in_array(JSON_NUMERIC_CHECK, $options)) {
-            array_push($options, JSON_NUMERIC_CHECK);
-        }
         $this->json = $this->serializer->serialize($data, $options);
         return $this;
     }
