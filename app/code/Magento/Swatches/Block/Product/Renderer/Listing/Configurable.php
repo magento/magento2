@@ -29,7 +29,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     protected function _toHtml()
     {
         $output = '';
-        if ($this->isProductHasSwatchAttribute) {
+        if ($this->isProductHasSwatchAttribute()) {
             $output = parent::_toHtml();
         }
 

@@ -102,7 +102,7 @@ class CheckSwatchesInCategoryPageTest extends Injectable
         //Steps:
         $this->testStepFactory->create(
             SetupConfigurationStep::class,
-            ['configData' => 'disable_swatches_visibility_in_catalog']
+            ['configData' => 'disable_swatches_visibility_in_catalog', 'flushCache' => true]
         )->run();
 
         /** @var AssertSwatchesVisibilityInCategory $assertSwatchesVisibility */
