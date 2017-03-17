@@ -63,8 +63,7 @@ if (php_sapi_name() === 'cli-server') {
 
     $debug($route);
 
-    if (
-        strpos($route, 'media/') === 0 ||
+    if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||
         strpos($route, 'static/') === 0 ||
         strpos($route, 'errors/default/css/') === 0 ||

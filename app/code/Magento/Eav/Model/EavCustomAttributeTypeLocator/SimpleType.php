@@ -15,7 +15,7 @@ class SimpleType
 {
     /**
      * List of attributes, type of which cannot be identified reliably. We do not validate these attributes.
-     * 
+     *
      * @var string[]
      */
     private $anyTypeAttributes = ['quantity_and_stock_status'];

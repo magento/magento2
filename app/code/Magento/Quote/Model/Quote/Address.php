@@ -1664,6 +1664,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     {
         return $this->setData(self::SAVE_IN_ADDRESS_BOOK, $saveInAddressBook);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

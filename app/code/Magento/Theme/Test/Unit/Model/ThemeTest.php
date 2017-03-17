@@ -598,7 +598,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     'theme_data' => 'theme_data',
                     'parent_theme' => 'theme_instance'
                 ],
-                'expected call count' => 1
+                    'expected call count' => 1
             ],
             'valid data with children' => [
                 'value' => [

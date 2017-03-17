@@ -18,7 +18,6 @@ try {
     $product = $productRepository->get('simple_dropdown_option', false, null, true);
     $product->delete();
 } catch (NoSuchEntityException $e) {
-
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -31,6 +31,7 @@ class View extends CustomerController
         $this->reviewFactory = $reviewFactory;
         parent::__construct($context, $customerSession);
     }
+
     /**
      * Render review details
      *

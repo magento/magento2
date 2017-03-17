@@ -86,7 +86,7 @@ class RequestValidator
         if (!$this->authorization->isAllowed($route->getAclResources())) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
             throw new AuthorizationException(
-                __(AuthorizationException::NOT_AUTHORIZED, $params)
+                __('Consumer is not authorized to access %resources', $params)
             );
         }
     }

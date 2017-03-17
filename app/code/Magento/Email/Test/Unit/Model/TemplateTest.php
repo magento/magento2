@@ -87,7 +87,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $serilizerMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -144,7 +144,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serilizerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
     }
 
     /**
@@ -172,7 +172,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->urlModel,
                 $this->filterFactory,
                 [],
-                $this->serilizerMock
+                $this->serializerMock
             ])
             ->getMock();
     }
@@ -542,7 +542,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model = $this->getModelMock();
         $model->setData('orig_template_variables', $templateVariables);
 
-        $this->serilizerMock->expects($this->any())->method('unserialize')
+        $this->serializerMock->expects($this->any())->method('unserialize')
             ->willReturn(
                 json_decode($templateVariables, true)
             );
