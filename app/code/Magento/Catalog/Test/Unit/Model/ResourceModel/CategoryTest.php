@@ -21,6 +21,9 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
