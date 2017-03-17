@@ -30,7 +30,7 @@ class Json implements SerializerInterface
         $encodedResult = json_encode($data, $encodeOptions);
 
         if ($prettyPrint) {
-            $encodedResult = self::prettyPrint($encodedResult, array("intent" => "    "));
+            $encodedResult = self::prettyPrint($encodedResult, ["intent" => "    "]);
         }
 
         return $encodedResult;

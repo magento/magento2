@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,6 +38,9 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
     /** @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $interpretationStrategyMock;
 
+    /** @var JsonSerializer */
+    protected $jsonSerializer;
+
     /** @var Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $dataMock;
 
@@ -54,6 +58,8 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->dataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->jsonSerializer = \JsonSerializer;
 
         $this->model = new MessagePlugin(
             $this->cookieManagerMock,
@@ -113,29 +119,29 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode($messages),
+                $this->jsonSerializer->serialize($messages),
                 $cookieMetadataMock
             );
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode([])
+                $this->jsonSerializer->serialize([])
             )
-            ->willReturn(\Zend_Json::encode($existingMessages));
+            ->willReturn($this->jsonSerializer->serialize($existingMessages));
 
         $this->dataMock->expects($this->once())
             ->method('jsonDecode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::decode($data);
+                    return $this->jsonSerializer->serialize($data);
                 }
             );
         $this->dataMock->expects($this->exactly(2))
             ->method('jsonEncode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::encode($data);
+                    return $this->jsonSerializer->serialize($data);
                 }
             );
 
@@ -178,22 +184,22 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('getCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode([])
+                $this->jsonSerializer->serialize([])
             )
-            ->willReturn(\Zend_Json::encode([]));
+            ->willReturn($this->jsonSerializer->serialize([]));
 
         $this->dataMock->expects($this->once())
             ->method('jsonDecode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::decode($data);
+                    return $this->jsonSerializer->unserialize($data);
                 }
             );
         $this->dataMock->expects($this->once())
             ->method('jsonEncode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::encode($data);
+                    return $this->jsonSerializer->serialize($data);
                 }
             );
 
@@ -246,29 +252,29 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode($messages),
+                $this->jsonSerializer->serialize($messages),
                 $cookieMetadataMock
             );
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode([])
+                $this->jsonSerializer->serialize([])
             )
-            ->willReturn(\Zend_Json::encode([]));
+            ->willReturn($this->jsonSerializer->serialize([]));
 
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::decode($data);
+                    return $this->jsonSerializer->unserialize($data);
                 }
             );
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::encode($data);
+                    return $this->jsonSerializer->serialize($data);
                 }
             );
 
@@ -329,16 +335,16 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode($messages),
+                $this->jsonSerializer->serialize($messages),
                 $cookieMetadataMock
             );
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode([])
+                $this->jsonSerializer->serialize([])
             )
-            ->willReturn(\Zend_Json::encode([]));
+            ->willReturn($this->jsonSerializer->serialize([]));
 
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
@@ -347,7 +353,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('jsonEncode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::encode($data);
+                    return $this->jsonSerializer->serialize($data);
                 }
             );
 
@@ -408,29 +414,29 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode($messages),
+                $this->jsonSerializer->serialize($messages),
                 $cookieMetadataMock
             );
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode([])
+                $this->jsonSerializer->serialize([])
             )
-            ->willReturn(\Zend_Json::encode('string'));
+            ->willReturn($this->jsonSerializer->serialize('string'));
 
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::decode($data);
+                    return $this->jsonSerializer->unserialize($data);
                 }
             );
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(
                 function ($data) {
-                    return \Zend_Json::encode($data);
+                    return $this->jsonSerializer->serialize($data);
                 }
             );
 

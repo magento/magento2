@@ -57,7 +57,8 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeJson($data)
     {
-        return \Zend_Json::encode($data);
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        return $serializer->serialize($data);
     }
 
     /**

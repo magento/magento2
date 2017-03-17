@@ -41,7 +41,8 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
             $elementJsClass = $this->getData('element_js_class');
         }
 
-        $selectConfigJson = \Zend_Json::encode($selectConfig);
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        $selectConfigJson = $serializer->serialize($selectConfig);
         $jsObjectName = $this->getJsObjectName();
 
         // TODO: TaxRateEditableMultiselect should be moved to a static .js module.

@@ -79,6 +79,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     private function setupOrderItem()
     {
+
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+
         $orderItem = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
@@ -86,7 +89,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $orderItem->setData(
             'weee_tax_applied',
-            \Zend_Json::encode(
+            $serializer->serialize(
                 [
                     [
                         WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,
@@ -289,6 +292,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAppliedSimple()
     {
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+
         $testArray = ['key' => 'value'];
         $itemProductSimple=$this->getMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied'], [], '', false);
         $itemProductSimple->expects($this->any())
@@ -297,13 +302,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(\Zend_Json::encode($testArray)));
+            ->will($this->returnValue($serializer->serialize($testArray)));
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductSimple));
     }
 
     public function testGetAppliedBundle()
     {
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+
         $testArray1 = ['key1' => 'value1'];
         $testArray2 = ['key2' => 'value2'];
 
@@ -326,11 +333,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(\Zend_Json::encode($testArray1)));
+            ->will($this->returnValue($serializer->serialize($testArray1)));
 
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(\Zend_Json::encode($testArray2)));
+            ->will($this->returnValue($serializer->serialize($testArray2)));
 
         $itemProductBundle=$this->getMock(
             \Magento\Quote\Model\Quote\Item::class,

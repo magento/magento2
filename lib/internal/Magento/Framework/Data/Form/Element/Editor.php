@@ -100,6 +100,8 @@ class Editor extends Textarea
                 }
             }
 
+            $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+
             $html = $this->_getButtonsHtml() .
                 '<textarea name="' .
                 $this->getName() .
@@ -126,7 +128,7 @@ class Editor extends Textarea
                 window.tinyMCE_GZ = window.tinyMCE_GZ || {}; window.tinyMCE_GZ.loaded = true;require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
                 "\n" .
                 '  (function($) {$.mage.translate.add(' .
-                \Zend_Json::encode(
+                $serializer->serialize(
                     $this->getButtonTranslations()
                 ) .
                 ')})(jQuery);' .
@@ -135,7 +137,7 @@ class Editor extends Textarea
                 ' = new tinyMceWysiwygSetup("' .
                 $this->getHtmlId() .
                 '", ' .
-                \Zend_Json::encode(
+                $serializer->serialize(
                     $this->getConfig()
                 ) .
                 ');' .
@@ -170,11 +172,12 @@ class Editor extends Textarea
             if ($this->getConfig('widget_window_url')) {
                 $html = $this->_getButtonsHtml() . $js . parent::getElementHtml();
                 if ($this->getConfig('add_widgets')) {
+                    $serializer = new \Magento\Framework\Serialize\Serializer\Json;
                     $html .= '<script type="text/javascript">
                     //<![CDATA[
                     require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
                         (function($) {
-                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
+                            $.mage.translate.add(' . $serializer->serialize($this->getButtonTranslations()) . ')
                         })(jQuery);
                     });
                     //]]>
