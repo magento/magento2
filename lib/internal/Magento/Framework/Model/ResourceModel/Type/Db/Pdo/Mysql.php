@@ -41,7 +41,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     /**
      * {@inheritdoc}
      */
-    public function getConnection(DB\LoggerInterface $logger, SelectFactory $selectFactory = null)
+    public function getConnection(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
     {
         $connection = $this->getDbConnectionInstance($logger, $selectFactory);
 
@@ -65,8 +65,8 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     {
         return $this->mysqlFactory->create(
             $this->getDbConnectionClassName(),
-            $logger,
             $this->connectionConfig,
+            $logger,
             $selectFactory
         );
     }

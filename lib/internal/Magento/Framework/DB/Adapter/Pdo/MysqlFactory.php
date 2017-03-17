@@ -44,19 +44,21 @@ class MysqlFactory
      */
     public function create(
         $className,
-        LoggerInterface $logger,
         array $config,
+        LoggerInterface $logger = null,
         SelectFactory $selectFactory = null
     ) {
         if (!in_array(Mysql::class, class_parents($className, true) + [$className => $className])) {
             throw new \InvalidArgumentException('Invalid class, ' . $className . ' must extend ' . Mysql::class . '.');
         }
         $arguments = [
-            'logger' => $logger,
             'config' => $config
         ];
         if ($selectFactory) {
             $arguments['selectFactory'] = $selectFactory;
+        }
+        if ($logger) {
+            $arguments['logger'] = $logger;
         }
         return $this->objectManager->create(
             $className,

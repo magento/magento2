@@ -38,6 +38,6 @@ class ConnectionFactory implements ConnectionFactoryInterface
             ['config' => $connectionConfig]
         );
 
-        return $adapterInstance->getConnection($this->objectManager->get(\Magento\Framework\DB\LoggerInterface::class));
+        return $adapterInstance->getConnection();
     }
 }
