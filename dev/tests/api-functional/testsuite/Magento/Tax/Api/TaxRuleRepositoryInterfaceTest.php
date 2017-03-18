@@ -510,6 +510,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             'Tax rates were updated incorrectly.'
         );
     }
+
     public function testUpdateTaxRuleNotExisting()
     {
         $requestData = [

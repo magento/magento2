@@ -15,7 +15,7 @@ class PaymentAction implements ArrayInterface
 {
     /**
      * Possible actions on order place
-     * 
+     *
      * @return array
      */
     public function toOptionArray()

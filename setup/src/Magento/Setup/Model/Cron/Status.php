@@ -215,7 +215,7 @@ class Status
             } catch (FileSystemException $e) {
                 throw new \RuntimeException(sprintf('"%s" cannot be created.', $pathToFlagFile));
             }
-        } else if ($this->varReaderWriter->isExist($pathToFlagFile)) {
+        } elseif ($this->varReaderWriter->isExist($pathToFlagFile)) {
             $this->varReaderWriter->delete($pathToFlagFile);
         }
         return $this;

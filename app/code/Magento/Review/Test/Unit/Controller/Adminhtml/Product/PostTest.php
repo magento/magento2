@@ -94,7 +94,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context
             ]
         );
-
     }
 
     /**

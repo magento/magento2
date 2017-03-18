@@ -30,6 +30,7 @@ class ShipmentCreateTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
+
     /**
      * @magentoApiDataFixture Magento/Sales/_files/order.php
      */

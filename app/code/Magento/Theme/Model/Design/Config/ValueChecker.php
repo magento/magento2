@@ -79,7 +79,7 @@ class ValueChecker
      * @param mixed $defaultValue
      * @return bool
      */
-    protected function isEqual ($value, $defaultValue)
+    protected function isEqual($value, $defaultValue)
     {
         switch (gettype($value)) {
             case 'array':

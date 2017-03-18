@@ -207,7 +207,7 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
                     'name' => '/s/a/sample_3.jpg'
                 ]
             ],
-            'media_type' => null,
+                'media_type' => null,
         ];
 
         $this->assertEquals($expectedResult, $this->modelObject->convertFrom($this->mediaGalleryEntryMock));

@@ -25,7 +25,7 @@ class Text implements ApplierInterface
         $result = false;
 
         $value = trim($value, "% \r\n\t");
-        switch($condition) {
+        switch ($condition) {
             case ApplierInterface::EQ:
                 $field->is($value);
                 $result = true;

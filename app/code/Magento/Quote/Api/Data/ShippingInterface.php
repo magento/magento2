@@ -27,7 +27,6 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      */
     public function setAddress(\Magento\Quote\Api\Data\AddressInterface $value);
 
-
     /**
      * Get shipping method
      *

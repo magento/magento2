@@ -51,9 +51,9 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var array
+     * @var Hash
      */
-    private $envConfig;
+    private $hash;
 
     /**
      * @inheritdoc
@@ -67,10 +67,10 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
         $this->writer = $this->objectManager->get(DeploymentConfig\Writer::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
+        $this->hash = $this->objectManager->get(Hash::class);
 
         // Snapshot of configuration.
         $this->config = $this->loadConfig();
-        $this->envConfig = $this->loadEnvConfig();
     }
 
     /**
@@ -82,20 +82,11 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array
-     */
-    private function loadEnvConfig()
-    {
-        return $this->reader->load(ConfigFilePool::APP_ENV);
-    }
-
-    /**
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Deploy/_files/config_data.php
      */
     public function testExecute()
     {
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->envConfig);
         $this->objectManager->configure([
             \Magento\Config\Model\Config\Export\ExcludeList::class => [
                 'arguments' => [
@@ -127,7 +118,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
-        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
+        $this->assertSame([], $this->hash->get());
     }
 
     /**
@@ -214,11 +205,5 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         /** @var DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         $deploymentConfig->resetData();
-
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-            "<?php\n return array();\n"
-        );
-        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
     }
 }

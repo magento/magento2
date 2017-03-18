@@ -96,6 +96,5 @@ class InstallData implements InstallDataInterface
                 $connection->update($configDataTable, ['value' => $newValue], $whereConfigId);
             }
         }
-        
     }
 }

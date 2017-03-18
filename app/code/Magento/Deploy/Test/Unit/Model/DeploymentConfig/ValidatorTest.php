@@ -55,18 +55,27 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $configData
+     * @param string $sectionName
+     * @param array $fullConfigData
+     * @param string|null $configData
      * @param string $generatedHash
      * @param string $savedHash
      * @param bool $expectedResult
      * @return void
      * @dataProvider isValidDataProvider
      */
-    public function testIsValid($configData, $generatedHash, $savedHash, $expectedResult)
-    {
+    public function testIsValid(
+        $sectionName,
+        $fullConfigData,
+        $configData,
+        $generatedHash,
+        $savedHash,
+        $expectedResult
+    ) {
         $this->dataConfigCollectorMock->expects($this->once())
             ->method('getConfig')
-            ->willReturn($configData);
+            ->with($sectionName)
+            ->willReturn($fullConfigData);
         $this->hashGeneratorMock->expects($this->any())
             ->method('generate')
             ->with($configData)
@@ -75,7 +84,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($savedHash);
 
-        $this->assertSame($expectedResult, $this->validator->isValid());
+        $this->assertSame($expectedResult, $this->validator->isValid($sectionName));
     }
 
     /**

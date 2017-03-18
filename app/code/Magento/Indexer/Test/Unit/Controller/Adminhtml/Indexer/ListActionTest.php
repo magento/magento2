@@ -171,7 +171,6 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         $this->menu->expects($this->any())->method('getParentItems')->will($this->returnValue($this->items));
 
         $this->object = new \Magento\Indexer\Controller\Adminhtml\Indexer\ListAction($this->contextMock);
-
     }
 
     public function testExecute()

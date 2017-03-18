@@ -36,14 +36,14 @@ interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     /**
      * Retrieve store name
-     * 
+     *
      * @return string
      */
     public function getName();
 
     /**
      * Set store name
-     * 
+     *
      * @param string $name
      * @return $this
      */

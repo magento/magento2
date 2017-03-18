@@ -33,7 +33,6 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
-
     /**
      * Test lost connection re-initializing
      *
