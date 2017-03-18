@@ -142,6 +142,7 @@ class ImagesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @throws \Exception
      */
     public function execute()
     {
