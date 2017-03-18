@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9421858ec622a1dcf34501de48ecd6b5",
+    "content-hash": "eaf5eb81b4a74f6f743df13bd35284b8",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3989,47 +3989,6 @@
                 "password"
             ],
             "time": "2014-11-20T16:49:30+00:00"
-        },
-        {
-            "name": "lstrojny/phpunit-clever-and-smart",
-            "version": "0.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lstrojny/phpunit-clever-and-smart.git",
-                "reference": "f1766f3fd77c0fbc9093261e5f8e664b65fa11d9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lstrojny/phpunit-clever-and-smart/zipball/f1766f3fd77c0fbc9093261e5f8e664b65fa11d9",
-                "reference": "f1766f3fd77c0fbc9093261e5f8e664b65fa11d9",
-                "shasum": ""
-            },
-            "require": {
-                "ext-sqlite3": "*",
-                "phpunit/phpunit": "*"
-            },
-            "require-dev": {
-                "athletic/athletic": "~0.1",
-                "symfony/process": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PHPUnit\\Runner\\CleverAndSmart": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lars Strojny",
-                    "email": "lars@strojny.net"
-                }
-            ],
-            "description": "A clever test runner for PHPUnit",
-            "time": "2014-03-13T17:41:39+00:00"
         },
         {
             "name": "lusitanian/oauth",
