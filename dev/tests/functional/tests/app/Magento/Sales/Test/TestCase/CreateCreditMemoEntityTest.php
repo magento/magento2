@@ -6,11 +6,7 @@
 
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
@@ -29,68 +25,19 @@ use Magento\Mtf\TestStep\TestStepFactory;
  * @group Order_Management
  * @ZephyrId MAGETWO-29116
  */
-class CreateCreditMemoEntityTest extends Injectable
+class CreateCreditMemoEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
     /* end tags */
 
     /**
-     * Fixture factory.
+     * Runs test for credit memo creation for order placed with offline payment method.
      *
-     * @var FixtureFactory
+     * @return void
      */
-    protected $fixtureFactory;
-
-    /**
-     * Skip fields for create product fixture.
-     *
-     * @var array
-     */
-    protected $skipFields = [
-        'attribute_set_id',
-        'website_ids',
-        'checkout_data',
-        'type_id',
-        'price',
-    ];
-
-    /**
-     * Create credit memo.
-     *
-     * @param TestStepFactory $stepFactory
-     * @param FixtureFactory $fixtureFactory
-     * @param OrderInjectable $order
-     * @param array $data
-     * @param string|null $configData [optional]
-     * @return array
-     */
-    public function test(
-        TestStepFactory $stepFactory,
-        FixtureFactory $fixtureFactory,
-        OrderInjectable $order,
-        array $data,
-        $configData = null
-    ) {
-        // Preconditions
-        $this->fixtureFactory = $fixtureFactory;
-        $stepFactory->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $configData]
-        )->run();
-        $order->persist();
-        $stepFactory->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
-
-        // Steps
-        $createCreditMemoStep = $stepFactory->create(
-            \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
-            ['order' => $order, 'data' => $data]
-        );
-        $result = $createCreditMemoStep->run();
-
-        return [
-            'ids' => ['creditMemoIds' => $result['creditMemoIds']],
-            'customer' => $order->getDataFieldConfig('customer_id')['source']->getCustomer()
-        ];
+    public function test()
+    {
+        $this->executeScenario();
     }
 }

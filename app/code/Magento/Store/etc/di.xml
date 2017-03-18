@@ -55,7 +55,7 @@
     </type>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
-    <type name="\Magento\Framework\App\Action\AbstractAction">
+    <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
         <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
@@ -200,11 +200,6 @@
                 </item>
             </argument>
             <argument name="default" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Acl\Cache">
-        <arguments>
-            <argument name="cacheKey" xsi:type="string">global_acl_resources</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Config\Initial\Converter">

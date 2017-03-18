@@ -111,12 +111,18 @@ class MassOrdersUpdateTest extends Injectable
      */
     protected function processSteps(OrderInjectable $order, $steps)
     {
+        $products = $order->getEntityId()['products'];
+        $cart['data']['items'] = ['products' => $products];
+        $cart = $this->fixtureFactory->createByCode('cart', $cart);
         $steps = array_diff(explode(',', $steps), ['-']);
         foreach ($steps as $step) {
             $action = str_replace(' ', '', ucwords($step));
             $methodAction = (($action != 'OnHold') ? 'Create' : '') . $action . 'Step';
             $path = 'Magento\Sales\Test\TestStep';
-            $processStep = $this->objectManager->create($path . '\\' . $methodAction, ['order' => $order]);
+            $processStep = $this->objectManager->create(
+                $path . '\\' . $methodAction,
+                ['order' => $order, 'cart' => $cart]
+            );
             $processStep->run();
         }
     }

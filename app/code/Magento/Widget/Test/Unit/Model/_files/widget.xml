@@ -11,6 +11,7 @@
         <label translate="true">Orders and Returns</label>
         <description translate="true">Orders and Returns Search Form</description>
         <parameters>
+            <!-- Comment added to check fix to https://github.com/magento/magento2/issues/3882 -->
             <parameter name="title" xsi:type="text" visible="false">
                 <label translate="true">Anchor Custom Title</label>
             </parameter>
@@ -54,6 +55,7 @@
             </parameter>
         </parameters>
         <containers>
+            <!-- Comment added to check fix to https://github.com/magento/magento2/issues/3882 -->
             <container name="left">
                 <template name="default" value="default_template" />
             </container>

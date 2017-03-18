@@ -47,7 +47,7 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
                 'MONARCH English', [
                 ['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0],
                 ['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]
-            ]
+                ]
             ]
         ];
     }

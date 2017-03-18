@@ -83,7 +83,7 @@ class EavAttribute
      * @param Attribute $attribute
      * @return void
      */
-    public function beforeSave(Attribute $attribute)
+    public function beforeBeforeSave(Attribute $attribute)
     {
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             $this->setProperOptionsArray($attribute);
@@ -372,7 +372,6 @@ class EavAttribute
         if ($this->isSwatchExists) {
             $swatch->setData('type', $type);
             $swatch->setData('value', $value);
-
         } else {
             $swatch->setData('option_id', $optionId);
             $swatch->setData('store_id', $storeId);
@@ -398,8 +397,7 @@ class EavAttribute
             /** @var \Magento\Swatches\Model\Swatch $swatch */
             $swatch = $this->swatchFactory->create();
             // created and removed on frontend option not exists in dependency array
-            if (
-                substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
+            if (substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
                 isset($this->dependencyArray[$defaultValue])
             ) {
                 $defaultValue = $this->dependencyArray[$defaultValue];
@@ -446,10 +444,23 @@ class EavAttribute
             if ($this->isOptionForDelete($attribute, $optionId)) {
                 continue;
             }
-            if (empty($option[0])) {
+            if (!isset($option[0]) || $option[0] === '') {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * @param Attribute $attribute
+     * @param bool $result
+     * @return bool
+     */
+    public function afterUsesSource(Attribute $attribute, $result)
+    {
+        if ($this->swatchHelper->isSwatchAttribute($attribute)) {
+            return true;
+        }
+        return $result;
     }
 }
