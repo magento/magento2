@@ -247,7 +247,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
         $orderData = [
             'currency' => 'USD',
             'id' => 4,
-            'increment_id' => 0000004
+            'increment_id' => '0000004'
         ];
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()

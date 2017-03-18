@@ -65,7 +65,7 @@ class RateTest extends \PHPUnit_Framework_TestCase
         return [
             'fill all required fields 1' => [
                 'exceptionMessage' => 'Make sure all required information is valid.',
-                'data' => ['zip_is_range' => true, 'zip_from' => 0111, 'zip_to' => '',
+                'data' => ['zip_is_range' => true, 'zip_from' => '0111', 'zip_to' => '',
                     'code' => '', 'tax_country_id' => '', 'rate' => '', 'tax_postcode' => '', ],
             ],
             'fill all required fields 2' => [

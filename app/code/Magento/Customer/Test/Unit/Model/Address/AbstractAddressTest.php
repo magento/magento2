@@ -340,7 +340,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             'city' => 'Odessa',
             'telephone' => '555-55-55',
             'country_id' => $countryId,
-            'postcode' => 07201,
+            'postcode' => '07201',
             'region_id' => 1,
             'company' => 'Magento',
             'fax' => '222-22-22'

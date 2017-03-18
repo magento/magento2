@@ -138,7 +138,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
                     'city' => 'Chicago',
                     'region_code' => 'IL',
                     'country_id' => 'US',
-                    'post_code' => 00000
+                    'post_code' => '00000'
                 ],
                 [
                     AddressDataBuilder::SHIPPING_ADDRESS => [
@@ -149,7 +149,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
                         AddressDataBuilder::EXTENDED_ADDRESS => 'street2',
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
-                        AddressDataBuilder::POSTAL_CODE => 00000,
+                        AddressDataBuilder::POSTAL_CODE => '00000',
                         AddressDataBuilder::COUNTRY_CODE => 'US'
 
                     ],
@@ -161,7 +161,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
                         AddressDataBuilder::EXTENDED_ADDRESS => 'street2',
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
-                        AddressDataBuilder::POSTAL_CODE => 00000,
+                        AddressDataBuilder::POSTAL_CODE => '00000',
                         AddressDataBuilder::COUNTRY_CODE => 'US'
                     ]
                 ]

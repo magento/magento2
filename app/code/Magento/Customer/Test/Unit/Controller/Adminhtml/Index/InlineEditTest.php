@@ -165,7 +165,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->items = [
             14 => [
                 'email' => 'test@test.ua',
-                'billing_postcode' => 07294,
+                'billing_postcode' => '07294',
             ]
         ];
     }
@@ -210,7 +210,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareMocksForProcessAddressData();
         $addressData = [
-            'postcode' => 07294,
+            'postcode' => '07294',
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
         ];

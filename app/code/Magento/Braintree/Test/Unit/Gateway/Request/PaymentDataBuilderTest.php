@@ -119,7 +119,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             PaymentDataBuilder::AMOUNT  => 10.00,
             PaymentDataBuilder::PAYMENT_METHOD_NONCE  => self::PAYMENT_METHOD_NONCE,
-            PaymentDataBuilder::ORDER_ID => 000000101,
+            PaymentDataBuilder::ORDER_ID => '000000101',
             PaymentDataBuilder::MERCHANT_ACCOUNT_ID  => self::MERCHANT_ACCOUNT_ID,
         ];
 

@@ -36,7 +36,7 @@ $addressOneData = [
     'city' => 'test city',
     'region_id' => 10,
     'country_id' => 'US',
-    'postcode' => 01001,
+    'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 1,
 ];
@@ -54,7 +54,7 @@ $addressTwoData = [
     'city' => 'test city',
     'region_id' => 10,
     'country_id' => 'US',
-    'postcode' => 01001,
+    'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 2,
 ];
@@ -72,7 +72,7 @@ $addressThreeData = [
     'city' => 'removed city',
     'region_id' => 10,
     'country_id' => 'US',
-    'postcode' => 01001,
+    'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 3,
 ];

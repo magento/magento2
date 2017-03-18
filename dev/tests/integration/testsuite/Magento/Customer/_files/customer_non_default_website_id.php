@@ -59,7 +59,7 @@ $addressOneData = [
     'street' => ['test street'],
     'city' => 'test city',
     'country_id' => 'US',
-    'postcode' => 01001,
+    'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 1,
 ];
@@ -75,7 +75,7 @@ $addressTwoData = [
     'street' => ['test street'],
     'city' => 'test city',
     'country_id' => 'US',
-    'postcode' => 01001,
+    'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 2,
 ];
@@ -91,7 +91,7 @@ $addressThreeData = [
     'street' => ['removed street'],
     'city' => 'removed city',
     'country_id' => 'US',
-    'postcode' => 01001,
+    'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 3,
 ];
