@@ -13,6 +13,7 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\Di\DiAbstractServiceFactory;
 
 class Module implements
     BootstrapListenerInterface,
@@ -57,6 +58,9 @@ class Module implements
                 $headers->addHeaderLine('X-XSS-Protection: ' . $xssHeaderValue);
             }
         }
+
+        //adds itself as an abstract factory
+        $application->getServiceManager()->get(DiAbstractServiceFactory::class);
     }
 
     /**
