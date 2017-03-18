@@ -11,21 +11,25 @@ use Zend\Mime\Mime;
 use Zend\Mime\Part;
 
 /**
- * @todo composition instead of inheritance for better testability
- * - add a ZendMailDecorator interface with getZendMail() method for usage in \Magento\Framework\Mail\Transport
  * @todo get rid of temporal coupling (setMessageType() + setBody())
- * - deprecate setMessageType(), implement a HtmlMessage decorator instead
+ * - deprecate setMessageType(), setBody() and getBody()
+ * - implement setBodyHtml(), setBodyText(), getBodyHtml() and getBodyText()
  * - change usage in \Magento\Framework\Mail\Template\TransportBuilder::prepareMessage()
  */
-class Message extends \Zend\Mail\Message implements MessageInterface
+class Message implements MessageInterface
 {
+    /**
+     * @var \Zend\Mail\Message
+     */
+    private $zendMessage;
 
     /**
-     * @param string $charset
+     * @param string $encoding
      */
-    public function __construct($charset = 'utf-8')
+    public function __construct($encoding = 'utf-8')
     {
-        $this->encoding = $charset;
+        $this->zendMessage = new \Zend\Mail\Message;
+        $this->zendMessage->setEncoding($encoding);
     }
 
     /**
@@ -49,24 +53,76 @@ class Message extends \Zend\Mail\Message implements MessageInterface
 
     /**
      * @param null|object|string|\Zend\Mime\Message $body
-     * @return \Zend\Mail\Message
+     * @return $this
      */
     public function setBody($body)
     {
         if (is_string($body) && $this->messageType === MessageInterface::TYPE_HTML) {
-            $body = self::htmlMimeFromString($body);
+            $body = self::createHtmlMimeFromString($body);
         }
-        return parent::setBody($body);
+        $this->zendMessage->setBody($body);
+        return $this;
+    }
+
+    public function setSubject($subject)
+    {
+        $this->zendMessage->setSubject($subject);
+        return $this;
+    }
+
+    public function getSubject()
+    {
+        return $this->zendMessage->getSubject();
+    }
+
+    public function getBody()
+    {
+        return $this->zendMessage->getBody();
+    }
+
+    public function setFrom($fromAddress)
+    {
+        $this->zendMessage->setFrom($fromAddress);
+        return $this;
+    }
+
+    public function addTo($toAddress)
+    {
+        $this->zendMessage->addTo($toAddress);
+        return $this;
+    }
+
+    public function addCc($ccAddress)
+    {
+        $this->zendMessage->addCc($ccAddress);
+        return $this;
+    }
+
+    public function addBcc($bccAddress)
+    {
+        $this->zendMessage->addBcc($bccAddress);
+        return $this;
+    }
+
+    public function setReplyTo($replyToAddress)
+    {
+        $this->zendMessage->setReplyTo($replyToAddress);
+        return $this;
+    }
+
+    public function getRawMessage()
+    {
+        return $this->zendMessage->toString();
     }
 
     /**
      * @param string $htmlBody
      * @return \Zend\Mime\Message
      */
-    private function htmlMimeFromString($htmlBody)
+    private function createHtmlMimeFromString($htmlBody)
     {
         $htmlPart = new Part($htmlBody);
-        $htmlPart->setCharset($this->getEncoding());
+        $htmlPart->setCharset($this->zendMessage->getEncoding());
         $htmlPart->setType(Mime::TYPE_HTML);
         $mimeMessage = new \Zend\Mime\Message();
         $mimeMessage->addPart($htmlPart);

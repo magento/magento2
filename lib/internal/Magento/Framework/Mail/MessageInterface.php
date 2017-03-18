@@ -96,4 +96,11 @@ interface MessageInterface
      * @return $this
      */
     public function setMessageType($type);
+
+    /**
+     * Get message source code
+     *
+     * @return string
+     */
+    public function getRawMessage();
 }
