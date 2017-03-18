@@ -5,6 +5,7 @@
  */
 
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Zend\Mvc\Service\DiAbstractServiceFactoryFactory;
 use Zend\ServiceManager\Di\DiAbstractServiceFactory;
 
 return [
@@ -19,14 +20,14 @@ return [
             __DIR__ . '/autoload/{,*.}{global,local}.php',
         ],
     ],
-    'listeners' => [\Magento\Setup\Mvc\Bootstrap\InitParamListener::class],
+    'listeners' => [InitParamListener::class],
     'service_manager' => [
         'invokables' => [
-            \Magento\Setup\Mvc\Bootstrap\InitParamListener::class => \Magento\Setup\Mvc\Bootstrap\InitParamListener::class
+            InitParamListener::class => InitParamListener::class
         ],
         'factories' => [
-            \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM => \Magento\Setup\Mvc\Bootstrap\InitParamListener::class,
-            DiAbstractServiceFactory::class => \Zend\Mvc\Service\DiAbstractServiceFactoryFactory::class
+            InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class,
+            DiAbstractServiceFactory::class => DiAbstractServiceFactoryFactory::class
         ],
     ],
 ];
