@@ -5,6 +5,7 @@
  */
 
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Zend\ServiceManager\Di\DiAbstractServiceFactory;
 
 return [
     'modules' => [
@@ -20,8 +21,12 @@ return [
     ],
     'listeners' => [\Magento\Setup\Mvc\Bootstrap\InitParamListener::class],
     'service_manager' => [
+        'invokables' => [
+            \Magento\Setup\Mvc\Bootstrap\InitParamListener::class => \Magento\Setup\Mvc\Bootstrap\InitParamListener::class
+        ],
         'factories' => [
-            InitParamListener::BOOTSTRAP_PARAM => \Magento\Setup\Mvc\Bootstrap\InitParamListener::class,
+            \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM => \Magento\Setup\Mvc\Bootstrap\InitParamListener::class,
+            DiAbstractServiceFactory::class => \Zend\Mvc\Service\DiAbstractServiceFactoryFactory::class
         ],
     ],
 ];
