@@ -53,7 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Create DB Backup'),
                 'name' => 'create_backup',
                 'options' => ['1' => __('Yes'), '0' => __('No')],
-                'value' => '1'
+                'value' => 1
             ]
         );
 

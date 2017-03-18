@@ -160,7 +160,7 @@ class BundlePanel extends AbstractModifier
                                     'formElement' => Form\Element\Input::NAME,
                                     'dataScope' => 'data.affect_bundle_product_selections',
                                     'visible' => false,
-                                    'value' => '1'
+                                    'value' => 1
                                 ],
                             ],
                         ],
@@ -565,10 +565,10 @@ class BundlePanel extends AbstractModifier
                                 'description' => __('Required'),
                                 'dataScope' => 'required',
                                 'label' => ' ',
-                                'value' => '1',
+                                'value' => 1,
                                 'valueMap' => [
-                                    'true' => '1',
-                                    'false' => '0',
+                                    'true' => 1,
+                                    'false' => 0,
                                 ],
                                 'sortOrder' => 30,
                             ],
@@ -619,9 +619,9 @@ class BundlePanel extends AbstractModifier
                                 'label' => __('Is Default'),
                                 'dataScope' => 'is_default',
                                 'prefer' => 'radio',
-                                'value' => '0',
+                                'value' => 0,
                                 'sortOrder' => 50,
-                                'valueMap' => ['false' => '0', 'true' => '1']
+                                'valueMap' => ['false' => 0, 'true' => 1]
                             ],
                         ],
                     ],
@@ -668,7 +668,7 @@ class BundlePanel extends AbstractModifier
                                 'dataType' => Form\Element\DataType\Number::NAME,
                                 'label' => __('Default Quantity'),
                                 'dataScope' => 'selection_qty',
-                                'value' => '1',
+                                'value' => 1,
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'required-entry' => true,
@@ -691,8 +691,8 @@ class BundlePanel extends AbstractModifier
                                 'dataType' => Form\Element\DataType\Price::NAME,
                                 'label' => __('User Defined'),
                                 'dataScope' => 'selection_can_change_qty',
-                                'value' => '1',
-                                'valueMap' => ['true' => '1', 'false' => '0'],
+                                'value' => 1,
+                                'valueMap' => ['true' => 1, 'false' => 0],
                                 'sortOrder' => 110,
                             ],
                         ],
@@ -759,15 +759,15 @@ class BundlePanel extends AbstractModifier
                         'formElement' => Form\Element\Select::NAME,
                         'label' => __('Price Type'),
                         'dataScope' => 'selection_price_type',
-                        'value' => '0',
+                        'value' => 0,
                         'options' => [
                             [
                                 'label' => __('Fixed'),
-                                'value' => '0'
+                                'value' => 0
                             ],
                             [
                                 'label' => __('Percent'),
-                                'value' => '1'
+                                'value' => 1
                             ]
                         ],
                         'imports' => [

@@ -114,7 +114,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -146,7 +146,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
 
@@ -181,7 +181,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));

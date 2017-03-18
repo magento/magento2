@@ -91,9 +91,9 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
             $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
         );
         $items = [
-            new \Magento\Framework\DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
-            new \Magento\Framework\DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
-            new \Magento\Framework\DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
+            new \Magento\Framework\DataObject(['sub_test1' => 1, 'sub_test2' => 2]),
+            new \Magento\Framework\DataObject(['sub_test1' => 1, 'sub_test2' => 2]),
+            new \Magento\Framework\DataObject(['sub_test1' => 1, 'sub_test2' => 2]),
         ];
         foreach ($items as $item) {
             $collection->addItem($item);

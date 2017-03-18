@@ -155,7 +155,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($adapter);
         $select = $this->collection->getSelect()->from('test');
 
-        $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
+        $this->collection->addFieldToFilter('is_imported', ['eq' => 1]);
         $this->assertEquals('SELECT `test`.* FROM `test` WHERE (is_imported = 1)', $select->assemble());
     }
 
@@ -203,7 +203,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%'))",
             $select->assemble()
         );
-        $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
+        $this->collection->addFieldToFilter('is_imported', ['eq' => 1]);
         $this->assertEquals(
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%')) AND (is_imported = 1)",
             $select->assemble()

@@ -140,7 +140,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                         ['text' => ['downloadable-docu', 'mentation'], 'feed' => 255, 'align' => 'right'],
                         ['text' => '$20.00', 'feed' => 330, 'font' => 'bold', 'align' => 'right'],
                         ['text' => '$-5.00', 'feed' => 380, 'font' => 'bold', 'align' => 'right'],
-                        ['text' => '1', 'feed' => 445, 'font' => 'bold', 'align' => 'right'],
+                        ['text' => 1, 'feed' => 445, 'font' => 'bold', 'align' => 'right'],
                         ['text' => '$2.00', 'feed' => 495, 'font' => 'bold', 'align' => 'right'],
                         ['text' => '$17.00', 'feed' => 565, 'font' => 'bold', 'align' => 'right'],
                     ],

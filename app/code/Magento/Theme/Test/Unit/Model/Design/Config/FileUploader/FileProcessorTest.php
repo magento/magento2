@@ -137,7 +137,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with('absolute/path/to/tmp/media')
             ->willReturn([
                 'file' => 'file.jpg',
-                'size' => '234234',
+                'size' => 234234,
                 'type' => 'image/jpg',
                 'name' => 'file.jpg',
             ]);
@@ -145,7 +145,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             [
                 'file' => 'file.jpg',
                 'name' => 'file.jpg',
-                'size' => '234234',
+                'size' => 234234,
                 'type' => 'image/jpg',
                 'url' => 'http://magento2.com/pub/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
             ],

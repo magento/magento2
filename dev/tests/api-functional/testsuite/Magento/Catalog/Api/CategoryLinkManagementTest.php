@@ -25,8 +25,8 @@ class CategoryLinkManagementTest extends WebapiAbstract
         $expected = [
             [
                 'sku' => 'simple333',
-                'position' => '0',
-                'category_id' => '333',
+                'position' => 0,
+                'category_id' => 333,
             ],
         ];
         $result = $this->getAssignedProducts($this->modelId);

@@ -273,8 +273,8 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $expectedRuleData = [
             'id' => $taxRuleId,
             'code' => 'Test Rule Duplicate',
-            'priority' => '0',
-            'position' => '0',
+            'priority' => 0,
+            'position' => 0,
             'customer_tax_class_ids' => array_values(array_unique($fixtureRule->getCustomerTaxClasses())),
             'product_tax_class_ids' => array_values(array_unique($fixtureRule->getProductTaxClasses())),
             'tax_rate_ids' => array_values(array_unique($fixtureRule->getRates())),

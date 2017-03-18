@@ -1162,16 +1162,16 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $linksData = [
             'upsell' => [
-                'simple1' => '3',
-                'simple3' => '1'
+                'simple1' => 3,
+                'simple3' => 1
             ],
             'crosssell' => [
-                'simple2' => '1',
-                'simple3' => '2'
+                'simple2' => 1,
+                'simple3' => 2
             ],
             'related' => [
-                'simple1' => '2',
-                'simple2' => '1'
+                'simple1' => 2,
+                'simple2' => 1
             ]
         ];
         // import data from CSV file

@@ -276,7 +276,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSalesModelItems()
     {
-        $product = new \Magento\Framework\DataObject(['id' => '1']);
+        $product = new \Magento\Framework\DataObject(['id' => 1]);
         return [
             new \Magento\Framework\DataObject(
                 ['name' => 'name 1', 'qty' => 1, 'price' => 0.1, 'original_item' => $product]

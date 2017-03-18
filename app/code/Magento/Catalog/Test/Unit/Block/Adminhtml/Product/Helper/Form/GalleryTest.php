@@ -53,12 +53,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $mediaGallery = [
             'images' => [
                 [
-                    'value_id' => '1',
+                    'value_id' => 1,
                     'file' => 'image_1.jpg',
                     'media_type' => 'image',
                 ] ,
                 [
-                    'value_id' => '2',
+                    'value_id' => 2,
                     'file' => 'image_2.jpg',
                     'media_type' => 'image',
                 ]

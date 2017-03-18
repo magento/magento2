@@ -847,7 +847,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             case 'varchar':
                 $columns[$this->getAttributeCode()] = [
                     'type'     => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length'   => '255',
+                    'length'   => 255,
                     'unsigned' => false,
                     'nullable' => true,
                     'default'  => null,

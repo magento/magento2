@@ -62,7 +62,7 @@ class Address extends AbstractRepository
                         'input' => 'select',
                     ],
                     'postcode' => [
-                        'value' => '90230',
+                        'value' => 90230,
                     ],
                     'country_id' => [
                         'value' => 'United States',
@@ -118,7 +118,7 @@ class Address extends AbstractRepository
                         'input' => 'select',
                     ],
                     'postcode' => [
-                        'value' => '10022',
+                        'value' => 10022,
                     ],
                     'country_id' => [
                         'value' => 'United States',
@@ -162,7 +162,7 @@ class Address extends AbstractRepository
                         'value' => 'Culver City',
                     ],
                     'postcode' => [
-                        'value' => '90230',
+                        'value' => 90230,
                     ],
                     'telephone' => [
                         'value' => '555-55-555-55',
@@ -274,7 +274,7 @@ class Address extends AbstractRepository
                 'data' => [
                     'fields' => [
                         'vat_id' => [
-                            'value' => '584451913',
+                            'value' => 584451913,
                         ],
                     ],
                 ],
@@ -317,7 +317,7 @@ class Address extends AbstractRepository
                         'selector' => '#region_id',
                     ],
                     'postcode' => [
-                        'value' => '10789',
+                        'value' => 10789,
                     ],
                     'telephone' => [
                         'value' => '333-33-333-33',

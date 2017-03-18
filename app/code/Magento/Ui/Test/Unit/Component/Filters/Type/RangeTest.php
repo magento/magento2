@@ -199,7 +199,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'test_date',
-                ['test_date' => ['from' => '0', 'to' => '0']],
+                ['test_date' => ['from' => 0, 'to' => 0]],
                 2
             ],
             [
@@ -219,12 +219,12 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'test_date',
-                ['test_date' => ['from' => '1']],
+                ['test_date' => ['from' => 1]],
                 1
             ],
             [
                 'test_date',
-                ['test_date' => ['to' => '1']],
+                ['test_date' => ['to' => 1]],
                 1
             ],
             [

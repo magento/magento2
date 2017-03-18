@@ -65,32 +65,32 @@ class RateTest extends \PHPUnit_Framework_TestCase
         return [
             'fill all required fields 1' => [
                 'exceptionMessage' => 'Make sure all required information is valid.',
-                'data' => ['zip_is_range' => true, 'zip_from' => '0111', 'zip_to' => '',
+                'data' => ['zip_is_range' => true, 'zip_from' => 0111, 'zip_to' => '',
                     'code' => '', 'tax_country_id' => '', 'rate' => '', 'tax_postcode' => '', ],
             ],
             'fill all required fields 2' => [
                 'exceptionMessage' => 'Make sure all required information is valid.',
                 'data' => ['zip_is_range' => '', 'zip_from' => '', 'zip_to' => '',
-                    'code' => '', 'tax_country_id' => '', 'rate' => '0.2', 'tax_postcode' => '1234', ], ],
+                    'code' => '', 'tax_country_id' => '', 'rate' => '0.2', 'tax_postcode' => 1234, ], ],
             'positive number' => [
                 'exceptionMessage' => 'The Rate Percent should be a positive number.',
                 'data' => ['zip_is_range' => '', 'zip_from' => '', 'zip_to' => '', 'code' => 'code',
-                    'tax_country_id' => 'US', 'rate' => '-1', 'tax_postcode' => '1234', ],
+                    'tax_country_id' => 'US', 'rate' => '-1', 'tax_postcode' => 1234, ],
             ],
             'zip code length' => [
                 'exceptionMessage' => 'Maximum zip code length is 9.',
-                'data' => ['zip_is_range' => true, 'zip_from' => '1234567890', 'zip_to' => '1234',
-                    'code' => 'code', 'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => '1234', ],
+                'data' => ['zip_is_range' => true, 'zip_from' => 1234567890, 'zip_to' => 1234,
+                    'code' => 'code', 'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => 1234, ],
             ],
             'contain characters' => [
                 'exceptionMessage' => 'Use digits only for the zip code.',
-                'data' => ['zip_is_range' => true, 'zip_from' => 'foo', 'zip_to' => '1234', 'code' => 'code',
-                    'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => '1234', ],
+                'data' => ['zip_is_range' => true, 'zip_from' => 'foo', 'zip_to' => 1234, 'code' => 'code',
+                    'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => 1234, ],
             ],
             'equal or greater' => [
                 'exceptionMessage' => 'Range To should be equal or greater than Range From.',
-                'data' => ['zip_is_range' => true, 'zip_from' => '321', 'zip_to' => '123', 'code' => 'code',
-                    'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => '1234', ],
+                'data' => ['zip_is_range' => true, 'zip_from' => 321, 'zip_to' => 123, 'code' => 'code',
+                    'tax_country_id' => 'US', 'rate' => '1.1', 'tax_postcode' => 1234, ],
             ],
         ];
     }

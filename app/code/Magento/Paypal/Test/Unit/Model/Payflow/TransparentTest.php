@@ -373,7 +373,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $ccDetails = [
             'cc_type' => 'VI',
-            'cc_number' => '1111'
+            'cc_number' => 1111
         ];
 
         $this->responseMock->setData('result_code', Payflowpro::RESPONSE_CODE_APPROVED);

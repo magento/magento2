@@ -95,26 +95,26 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
                     [
                         'name' => '1-aaa',
                         'configurable_attribute' => '{"configurable_attribute":"25"}',
-                        'price' => '3',
+                        'price' => 3,
                         'sku' => '1-aaa',
-                        'quantity_and_stock_status' => ['qty' => '5'],
-                        'weight' => '6',
+                        'quantity_and_stock_status' => ['qty' => 5],
+                        'weight' => 6,
                     ],
                     [
                         'name' => '1-bbb',
                         'configurable_attribute' => '{"configurable_attribute":"24"}',
-                        'price' => '3',
+                        'price' => 3,
                         'sku' => '1-bbb',
-                        'quantity_and_stock_status' => ['qty' => '5'],
-                        'weight' => '6'
+                        'quantity_and_stock_status' => ['qty' => 5],
+                        'weight' => 6
                     ],
                     [
                         'name' => '1-ccc',
                         'configurable_attribute' => '{"configurable_attribute":"23"}',
-                        'price' => '3',
+                        'price' => 3,
                         'sku' => '1-ccc',
-                        'quantity_and_stock_status' => ['qty' => '5'],
-                        'weight' => '6'
+                        'quantity_and_stock_status' => ['qty' => 5],
+                        'weight' => 6
                     ],
                 ],
             ]
@@ -132,10 +132,10 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
                     [
                         'name' => '1-aaa',
                         'configurable_attribute' => '{"configurable_attribute":"23"}',
-                        'price' => '3',
+                        'price' => 3,
                         'sku' => '1-aaa-1',
                         'quantity_and_stock_status' => ['qty' => ''],
-                        'weight' => '6',
+                        'weight' => 6,
                     ],
                 ],
             ]

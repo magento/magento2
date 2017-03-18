@@ -108,18 +108,18 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $imagesResult = [
             [
-                'value_id' => '2',
+                'value_id' => 2,
                 'file' => 'file_2.jpg',
                 'media_type' => 'image',
-                'position' => '0',
+                'position' => 0,
                 'url' => 'url_to_the_image/image_2.jpg',
                 'size' => 879394
             ],
             [
-                'value_id' => '1',
+                'value_id' => 1,
                 'file' => 'file_1.jpg',
                 'media_type' => 'image',
-                'position' => '1',
+                'position' => 1,
                 'url' => 'url_to_the_image/image_1.jpg',
                 'size' => 399659
             ]
@@ -128,16 +128,16 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $images = [
             'images' => [
                 [
-                    'value_id' => '1',
+                    'value_id' => 1,
                     'file' => 'file_1.jpg',
                     'media_type' => 'image',
-                    'position' => '1'
+                    'position' => 1
                 ] ,
                 [
-                    'value_id' => '2',
+                    'value_id' => 2,
                     'file' => 'file_2.jpg',
                     'media_type' => 'image',
-                    'position' => '0'
+                    'position' => 0
                 ]
             ]
         ];
@@ -179,18 +179,18 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $imagesResult = [
             [
-                'value_id' => '2',
+                'value_id' => 2,
                 'file' => 'file_2.jpg',
                 'media_type' => 'image',
-                'position' => '0',
+                'position' => 0,
                 'url' => 'url_to_the_placeholder/placeholder.jpg',
                 'size' => 0
             ],
             [
-                'value_id' => '1',
+                'value_id' => 1,
                 'file' => 'file_1.jpg',
                 'media_type' => 'image',
-                'position' => '1',
+                'position' => 1,
                 'url' => 'url_to_the_placeholder/placeholder.jpg',
                 'size' => 0
             ]
@@ -199,16 +199,16 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $images = [
             'images' => [
                 [
-                    'value_id' => '1',
+                    'value_id' => 1,
                     'file' => 'file_1.jpg',
                     'media_type' => 'image',
-                    'position' => '1'
+                    'position' => 1
                 ],
                 [
-                    'value_id' => '2',
+                    'value_id' => 2,
                     'file' => 'file_2.jpg',
                     'media_type' => 'image',
-                    'position' => '0'
+                    'position' => 0
                 ]
             ]
         ];

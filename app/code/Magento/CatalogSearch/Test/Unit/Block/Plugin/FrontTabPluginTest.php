@@ -90,7 +90,7 @@ class FrontTabPluginTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSetForm()
     {
-        $weightOptions = [1 => '1', 2 => '2'];
+        $weightOptions = [1 => 1, 2 => 2];
 
         $this->formMock->expects(static::any())
             ->method('getElement')

@@ -93,7 +93,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'created_at',
                 'type' => 'datetime',
                 'align' => 'center',
-                'width' => '160'
+                'width' => 160
             ]
         );
 
@@ -102,7 +102,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Uses'),
                 'index' => 'times_used',
-                'width' => '100',
+                'width' => 100,
                 'type' => 'options',
                 'options' => [__('No'), __('Yes')],
                 'renderer' => \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used::class,
@@ -112,7 +112,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'times_used',
-            ['header' => __('Times Used'), 'index' => 'times_used', 'width' => '50', 'type' => 'number']
+            ['header' => __('Times Used'), 'index' => 'times_used', 'width' => 50, 'type' => 'number']
         );
 
         $this->addExportType('*/*/exportCouponsCsv', __('CSV'));

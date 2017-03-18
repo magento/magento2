@@ -19,19 +19,19 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
      * @var string[]
      */
     protected $reservedWords = [
-        'int' => '7',
-        'float' => '7',
-        'bool' => '7',
-        'string' => '7',
-        'true' => '7',
-        'false' => '7',
-        'null' => '7',
+        'int' => 7,
+        'float' => 7,
+        'bool' => 7,
+        'string' => 7,
+        'true' => 7,
+        'false' => 7,
+        'null' => 7,
         'void' => '7.1',
         'iterable' => '7.1',
-        'resource' => '7',
-        'object' => '7',
-        'mixed' => '7',
-        'numeric' => '7',
+        'resource' => 7,
+        'object' => 7,
+        'mixed' => 7,
+        'numeric' => 7,
     ];
 
     /**

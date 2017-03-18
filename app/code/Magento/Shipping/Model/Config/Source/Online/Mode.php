@@ -20,8 +20,8 @@ class Mode implements OptionSourceInterface
     public function toOptionArray()
     {
         return [
-            ['value' => '0', 'label' => __('Development')],
-            ['value' => '1', 'label' => __('Live')]
+            ['value' => 0, 'label' => __('Development')],
+            ['value' => 1, 'label' => __('Live')]
         ];
     }
 }

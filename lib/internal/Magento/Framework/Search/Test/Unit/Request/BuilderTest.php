@@ -122,7 +122,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             'queries' => [
                 'one_match_filters' => [
                     'name' => 'one_match_filters',
-                    'boost' => '2',
+                    'boost' => 2,
                     'queryReference' => [
                         [
                             'clause' => 'must',
@@ -137,12 +137,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 ],
                 'fulltext_search_query' => [
                     'name' => 'fulltext_search_query',
-                    'boost' => '5',
+                    'boost' => 5,
                     'value' => '$fulltext_search_query$',
                     'match' => [
                         [
                             'field' => 'data_index',
-                            'boost' => '2',
+                            'boost' => 2,
                         ],
                     ],
                     'type' => 'matchQuery',
@@ -186,8 +186,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     'value' => '$pidsh$',
                 ],
             ],
-            'from' => '10',
-            'size' => '10',
+            'from' => 10,
+            'size' => 10,
             'query' => 'one_match_filters',
             'index' => 'catalogsearch_fulltext',
             'aggregations' => [],

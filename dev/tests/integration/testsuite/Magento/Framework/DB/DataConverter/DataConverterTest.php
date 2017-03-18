@@ -165,7 +165,7 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
             ['id' => 3, 'value' => '{}'],
             ['id' => 4, 'value' => 'null'],
             ['id' => 5, 'value' => '""'],
-            ['id' => 6, 'value' => '0'],
+            ['id' => 6, 'value' => 0],
             ['id' => 7, 'value' => 'N;'],
             ['id' => 8, 'value' => '{"valid": "json value"}'],
         ];

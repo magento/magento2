@@ -110,10 +110,10 @@ class BillingAddressManagementTest extends WebapiAbstract
             'region_id' => 12,
             'region' => 'California',
             'region_code' => 'CA',
-            'postcode' => '0985432',
+            'postcode' => 0985432,
             'country_id' => 'US',
-            'telephone' => '88776655',
-            'fax' => '44332255',
+            'telephone' => 88776655,
+            'fax' => 44332255,
         ];
         $requestData = [
             "cartId" => $quote->getId(),
@@ -233,10 +233,10 @@ class BillingAddressManagementTest extends WebapiAbstract
             'region_id' => 12,
             'region' => 'California',
             'region_code' => 'CA',
-            'postcode' => '0985432',
+            'postcode' => 0985432,
             'country_id' => 'US',
-            'telephone' => '88776655',
-            'fax' => '44332255',
+            'telephone' => 88776655,
+            'fax' => 44332255,
         ];
         $requestData = [
             'address' => $addressData,

@@ -171,7 +171,7 @@ class AdvancedInventory extends AbstractModifier
                 $this->meta,
                 [
                     'label' => __('Stock Status'),
-                    'value' => '1',
+                    'value' => 1,
                     'dataScope' => $fieldCode . '.is_in_stock',
                     'scopeLabel' => '[GLOBAL]',
                 ]
@@ -205,8 +205,8 @@ class AdvancedInventory extends AbstractModifier
                 'dataType' => 'number',
                 'formElement' => 'input',
                 'componentType' => 'field',
-                'visible' => '1',
-                'require' => '0',
+                'visible' => 1,
+                'require' => 0,
                 'additionalClasses' => 'admin__field-small',
                 'label' => __('Quantity'),
                 'scopeLabel' => '[GLOBAL]',

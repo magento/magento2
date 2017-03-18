@@ -70,12 +70,12 @@ class WebsiteListCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $websiteData = [
-            'id' => '444',
-            'default_group_id' => '555',
+            'id' => 444,
+            'default_group_id' => 555,
             'name' => 'unit test website',
             'code' => 'unit_test_website',
-            'is_default' => '0',
-            'sort_order' => '987',
+            'is_default' => 0,
+            'sort_order' => 987,
         ];
 
         $websites = [

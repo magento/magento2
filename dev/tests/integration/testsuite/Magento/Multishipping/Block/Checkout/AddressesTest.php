@@ -61,7 +61,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = [
             [
-                'value' => '1',
+                'value' => 1,
                 'label' => 'John Smith, Green str, 67, CityM, Alabama 75477, United States',
             ],
         ];

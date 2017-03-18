@@ -186,16 +186,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'input' => ['method' => 'getBackendType', 'type' => 'input_type'],
             ],
             [
-                'attribute_value' => '1',
-                'parsed_value' => '1',
-                'new_value' => '2',
+                'attribute_value' => 1,
+                'parsed_value' => 1,
+                'new_value' => 2,
                 'operator' => '>=',
                 'input' => ['method' => 'getBackendType', 'type' => 'input_type']
             ],
             [
-                'attribute_value' => '1',
-                'parsed_value' => ['1' => '0'],
-                'new_value' => ['1' => '1'],
+                'attribute_value' => 1,
+                'parsed_value' => ['1' => 0],
+                'new_value' => ['1' => 1],
                 'operator' => '!()',
                 'input' => ['method' => 'getFrontendInput', 'type' => 'multiselect']
             ]

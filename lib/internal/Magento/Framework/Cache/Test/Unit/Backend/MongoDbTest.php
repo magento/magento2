@@ -193,7 +193,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
             'non-existing record' => ['test_id', ['_id' => 'test_id'], null, false],
             'non-string id' => [
                 10,
-                ['_id' => '10'],
+                ['_id' => 10],
                 ['_id' => 'test_id', 'data' => 'data', 'tags' => [], 'expire' => $time, 'mtime' => $time],
                 ['_id' => 'test_id', 'data' => 'data', 'tags' => [], 'expire' => $time, 'mtime' => $time],
             ]

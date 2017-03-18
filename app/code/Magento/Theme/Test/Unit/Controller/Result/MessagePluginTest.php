@@ -59,7 +59,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->jsonSerializer = \JsonSerializer;
+        $this->jsonSerializer = new JsonSerializer;
 
         $this->model = new MessagePlugin(
             $this->cookieManagerMock,

@@ -165,11 +165,11 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'text' => 'Enabled',
-                'id' => '1',
+                'id' => 1,
             ],
             [
                 'text' => 'Disabled',
-                'id' => '2'
+                'id' => 2
             ]
         ];
     }

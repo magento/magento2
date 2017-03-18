@@ -48,14 +48,14 @@ class InstallSchema implements InstallSchemaInterface
                 'num_results',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Num results'
             )
             ->addColumn(
                 'popularity',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Popularity'
             )
             ->addColumn(
@@ -76,28 +76,28 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Store ID'
             )
             ->addColumn(
                 'display_in_terms',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1'],
+                ['nullable' => false, 'default' => 1],
                 'Display in terms'
             )
             ->addColumn(
                 'is_active',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['default' => '1'],
+                ['default' => 1],
                 'Active status'
             )
             ->addColumn(
                 'is_processed',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['default' => '0'],
+                ['default' => 0],
                 'Processed status'
             )
             ->addColumn(

@@ -68,8 +68,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeMetadata()
     {
         $attribute = new \Magento\Framework\DataObject([
-            'entity_type_id' => '1',
-            'attribute_id'   => '2',
+            'entity_type_id' => 1,
+            'attribute_id'   => 2,
             'backend'        => new \Magento\Framework\DataObject(['table' => 'customer_entity_varchar']),
             'backend_type'   => 'varchar',
         ]);
@@ -79,8 +79,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->helper->getAttributeMetadata('customer', 'lastname');
         $expected = [
-            'entity_type_id' => '1',
-            'attribute_id' => '2',
+            'entity_type_id' => 1,
+            'attribute_id' => 2,
             'attribute_table' => 'customer_entity_varchar',
             'backend_type' => 'varchar',
         ];

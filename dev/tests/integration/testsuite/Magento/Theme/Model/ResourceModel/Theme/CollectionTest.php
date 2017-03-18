@@ -243,52 +243,52 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'parent_id' => '0',
+                'parent_id' => 0,
                 'theme_path' => 'test/default',
                 'code' => 'test/default',
                 'theme_title' => 'Test',
                 'preview_image' => 'test_default.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'test_area',
                 'type' => ThemeInterface::TYPE_PHYSICAL,
             ],
             [
-                'parent_id' => '0',
+                'parent_id' => 0,
                 'theme_path' => 'test/pro',
                 'code' => 'test/pro',
                 'theme_title' => 'Professional Test',
                 'preview_image' => 'test_default.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'test_area2',
                 'type' => ThemeInterface::TYPE_VIRTUAL
             ],
             [
-                'parent_id' => '0',
+                'parent_id' => 0,
                 'theme_path' => 'test/fixed1',
                 'code' => 'test/fixed1',
                 'theme_title' => 'Theme test 1',
                 'preview_image' => 'test_default.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'test_area3',
                 'type' => ThemeInterface::TYPE_STAGING
             ],
             [
-                'parent_id' => '0',
+                'parent_id' => 0,
                 'theme_path' => 'test/fixed2',
                 'code' => 'test/fixed2',
                 'theme_title' => 'Theme test 2',
                 'preview_image' => 'test_default.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'test_area3',
                 'type' => ThemeInterface::TYPE_PHYSICAL
             ],
             [
-                'parent_id' => '0',
+                'parent_id' => 0,
                 'theme_path' => 'test/fixed3',
                 'code' => 'test/fixed3',
                 'theme_title' => 'Theme test 3',
                 'preview_image' => 'test_default.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'test_area3',
                 'type' => ThemeInterface::TYPE_VIRTUAL
             ]
@@ -302,12 +302,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'parent_id' => '0',
+                'parent_id' => 0,
                 'theme_path' => 'test1/test1',
                 'code' => 'test1/test1',
                 'theme_title' => 'Test1',
                 'preview_image' => 'test1_test1.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'area51',
                 'type' => ThemeInterface::TYPE_PHYSICAL,
             ],
@@ -317,7 +317,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'code' => 'test1/test2',
                 'theme_title' => 'Test2',
                 'preview_image' => 'test1_test2.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'area51',
                 'type' => ThemeInterface::TYPE_VIRTUAL
             ],
@@ -327,7 +327,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'code' => 'test1/test3',
                 'theme_title' => 'Test3',
                 'preview_image' => 'test1_test3.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'area51',
                 'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
             ],
@@ -337,7 +337,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'code' => 'test1/test4',
                 'theme_title' => 'Test4',
                 'preview_image' => 'test1_test4.jpg',
-                'is_featured' => '1',
+                'is_featured' => 1,
                 'area' => 'area51',
                 'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
             ]

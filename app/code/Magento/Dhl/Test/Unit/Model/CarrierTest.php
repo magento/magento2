@@ -186,7 +186,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'httpClientFactory' => $httpClientFactory,
                 'readFactory' => $readFactory,
                 'storeManager' => $storeManager,
-                'data' => ['id' => 'dhl', 'store' => '1']
+                'data' => ['id' => 'dhl', 'store' => 1]
             ]
         );
     }

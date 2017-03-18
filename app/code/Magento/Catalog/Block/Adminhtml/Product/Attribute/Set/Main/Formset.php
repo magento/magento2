@@ -58,7 +58,7 @@ class Formset extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         if (!$this->getRequest()->getParam('id', false)) {
-            $fieldset->addField('gotoEdit', 'hidden', ['name' => 'gotoEdit', 'value' => '1']);
+            $fieldset->addField('gotoEdit', 'hidden', ['name' => 'gotoEdit', 'value' => 1]);
 
             $sets = $this->_setFactory->create()->getResourceCollection()->setEntityTypeFilter(
                 $this->_coreRegistry->registry('entityType')

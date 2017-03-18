@@ -82,7 +82,7 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
             'force true, value present, override value is %customer_id%' => [
                 ['Name1' => 'valueIn'],
                 ['Name1' => ['force' => true, 'value' => '%customer_id%']],
-                ['Name1' => '1234'],
+                ['Name1' => 1234],
                 1234,
                 UserContextInterface::USER_TYPE_CUSTOMER,
             ],

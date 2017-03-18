@@ -72,7 +72,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_active',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Is Active'
             )
             ->addColumn(
@@ -93,14 +93,14 @@ class InstallSchema implements InstallSchemaInterface
                 'stop_rules_processing',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1'],
+                ['nullable' => false, 'default' => 1],
                 'Stop Rules Processing'
             )
             ->addColumn(
                 'sort_order',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Sort Order'
             )
             ->addColumn(
@@ -121,7 +121,7 @@ class InstallSchema implements InstallSchemaInterface
                 'sub_is_enable',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Is Rule Enable For Subitems'
             )
             ->addColumn(
@@ -162,35 +162,35 @@ class InstallSchema implements InstallSchemaInterface
                 'rule_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Rule Id'
             )
             ->addColumn(
                 'from_time',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'From Time'
             )
             ->addColumn(
                 'to_time',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'To time'
             )
             ->addColumn(
                 'customer_group_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Customer Group Id'
             )
             ->addColumn(
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Product Id'
             )
             ->addColumn(
@@ -211,14 +211,14 @@ class InstallSchema implements InstallSchemaInterface
                 'action_stop',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Action Stop'
             )
             ->addColumn(
                 'sort_order',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Sort Order'
             )
             ->addColumn(
@@ -298,14 +298,14 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Customer Group Id'
             )
             ->addColumn(
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Product Id'
             )
             ->addColumn(
@@ -370,21 +370,21 @@ class InstallSchema implements InstallSchemaInterface
                 'rule_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Rule Id'
             )
             ->addColumn(
                 'customer_group_id',
                 $customerGroupIdType,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Customer Group Id'
             )
             ->addColumn(
                 'website_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Website Id'
             )
             ->addIndex(

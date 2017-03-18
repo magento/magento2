@@ -69,7 +69,7 @@ class InstallSchema implements InstallSchemaInterface
                 'status',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Current Session status'
             )
             ->addColumn(

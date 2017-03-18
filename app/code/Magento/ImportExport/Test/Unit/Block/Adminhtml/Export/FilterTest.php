@@ -299,7 +299,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                     'filter_options' => []
                 ],
                 'backendType' => 'varchar',
-                'columnValue' => ['values' => ['category_ids' => '1']]
+                'columnValue' => ['values' => ['category_ids' => 1]]
             ],
             [
                 'attributeCode' => [

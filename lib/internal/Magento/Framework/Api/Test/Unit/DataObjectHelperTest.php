@@ -371,22 +371,22 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'id' => '1',
-                    'country_id' => '1',
+                    'id' => 1,
+                    'country_id' => 1,
                     'street' => ["7701 W Parmer Lane", "Second Line"],
                     'default_shipping' => true,
                     'region' => [
-                        'region_id' => '1',
+                        'region_id' => 1,
                         'region' => 'TX',
                     ]
                 ],
                 [
-                    'id' => '2',
-                    'country_id' => '2',
+                    'id' => 2,
+                    'country_id' => 2,
                     'street' => ["7702 W Parmer Lane", "Second Line"],
                     'default_shipping' => false,
                     'region' => [
-                        'region_id' => '2',
+                        'region_id' => 2,
                         'region' => 'TX',
                     ]
                 ]
@@ -396,17 +396,17 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
                     'street' => ["7701 W Parmer Lane", "Second Line"],
                     'default_shipping' => true,
                     'region' => [
-                        'region_id' => '1',
+                        'region_id' => 1,
                         'region' => 'TX',
                     ]
                 ],
                 [
-                    'id' => '2',
-                    'country_id' => '2',
+                    'id' => 2,
+                    'country_id' => 2,
                     'street' => ["7702 W Parmer Lane", "Second Line"],
                     'default_shipping' => false,
                     'region' => [
-                        'region_id' => '2',
+                        'region_id' => 2,
                         'region' => 'TX',
                     ]
                 ]

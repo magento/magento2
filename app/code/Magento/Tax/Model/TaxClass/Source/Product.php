@@ -83,9 +83,9 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
         if ($withEmpty) {
             if (!$this->_options) {
-                return [['value' => '0', 'label' => __('None')]];
+                return [['value' => 0, 'label' => __('None')]];
             } else {
-                return array_merge([['value' => '0', 'label' => __('None')]], $this->_options);
+                return array_merge([['value' => 0, 'label' => __('None')]], $this->_options);
             }
         }
         return $this->_options;

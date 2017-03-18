@@ -202,16 +202,16 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     protected function getProductOption(array $options = [])
     {
         $data = [
-            'option_id' => '1',
-            'product_id' => '4',
+            'option_id' => 1,
+            'product_id' => 4,
             'type' => 'file',
-            'is_require' => '1',
+            'is_require' => 1,
             'sku' => null,
             'max_characters' => null,
             'file_extension' => null,
-            'image_size_x' => '2000',
-            'image_size_y' => '2000',
-            'sort_order' => '0',
+            'image_size_x' => 2000,
+            'image_size_y' => 2000,
+            'sort_order' => 0,
             'default_title' => 'MediaOption',
             'store_title' => null,
             'title' => 'MediaOption',
@@ -284,7 +284,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
             'title' => 'test.jpg',
             'quote_path' => 'custom_options/quote/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
             'order_path' => 'custom_options/order/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
-            'size' => '3300',
+            'size' => 3300,
             'width' => 136,
             'height' => 131,
         ];

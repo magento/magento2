@@ -20,6 +20,6 @@ class Boolean extends \Magento\Framework\Data\Form\Element\Select
     protected function _construct()
     {
         parent::_construct();
-        $this->setValues([['label' => __('No'), 'value' => '0'], ['label' => __('Yes'), 'value' => 1]]);
+        $this->setValues([['label' => __('No'), 'value' => 0], ['label' => __('Yes'), 'value' => 1]]);
     }
 }

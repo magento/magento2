@@ -396,7 +396,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getVersionInfo()
     {
-        return ['ServiceId' => 'crs', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0'];
+        return ['ServiceId' => 'crs', 'Major' => 10, 'Intermediate' => 0, 'Minor' => 0];
     }
 
     /**
@@ -437,7 +437,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'CustomsValue' => ['Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()],
                 ],
                 'RateRequestTypes' => 'LIST',
-                'PackageCount' => '1',
+                'PackageCount' => 1,
                 'PackageDetail' => 'INDIVIDUAL_PACKAGES',
                 'RequestedPackageLineItems' => [
                     '0' => [
@@ -1052,8 +1052,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'Version' => [
                 'ServiceId' => 'trck',
                 'Major' => self::$trackServiceVersion,
-                'Intermediate' => '0',
-                'Minor' => '0',
+                'Intermediate' => 0,
+                'Minor' => 0,
             ],
             'SelectionDetails' => [
                 'PackageIdentifier' => ['Type' => 'TRACKING_NUMBER_OR_DOORTAG', 'Value' => $tracking],
@@ -1195,7 +1195,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'TransactionDetail' => [
                 'CustomerTransactionId' => '*** Express Domestic Shipping Request v9 using PHP ***',
             ],
-            'Version' => ['ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0'],
+            'Version' => ['ServiceId' => 'ship', 'Major' => 10, 'Intermediate' => 0, 'Minor' => 0],
         ];
     }
 
@@ -1311,7 +1311,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'RateRequestTypes' => ['ACCOUNT'],
                 'PackageCount' => 1,
                 'RequestedPackageLineItems' => [
-                    'SequenceNumber' => '1',
+                    'SequenceNumber' => 1,
                     'Weight' => ['Units' => $weightUnits, 'Value' => $request->getPackageWeight()],
                     'CustomerReferences' => [
                         'CustomerReferenceType' => 'CUSTOMER_REFERENCE',

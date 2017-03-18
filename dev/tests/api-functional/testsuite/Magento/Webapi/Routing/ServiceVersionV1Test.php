@@ -81,7 +81,7 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
         $customerAttributes = [
             Item::CUSTOM_ATTRIBUTE_1 => [
                 AttributeValue::ATTRIBUTE_CODE => Item::CUSTOM_ATTRIBUTE_1,
-                AttributeValue::VALUE => '12345',
+                AttributeValue::VALUE => 12345,
             ],
             Item::CUSTOM_ATTRIBUTE_2 => [
                 AttributeValue::ATTRIBUTE_CODE => Item::CUSTOM_ATTRIBUTE_2,

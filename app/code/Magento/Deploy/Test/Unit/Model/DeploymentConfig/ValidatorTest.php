@@ -84,11 +84,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function isValidDataProvider()
     {
         return [
-            ['configData' => 'some data', 'generatedHash' => '123', 'savedHash' => '123', 'expectedResult' => true],
-            ['configData' => 'some data', 'generatedHash' => '321', 'savedHash' => '123', 'expectedResult' => false],
-            ['configData' => 'some data', 'generatedHash' => '321', 'savedHash' => null, 'expectedResult' => false],
-            ['configData' => null, 'generatedHash' => '321', 'savedHash' => '123', 'expectedResult' => true],
-            ['configData' => null, 'generatedHash' => '321', 'savedHash' => null, 'expectedResult' => true],
+            ['configData' => 'some data', 'generatedHash' => 123, 'savedHash' => 123, 'expectedResult' => true],
+            ['configData' => 'some data', 'generatedHash' => 321, 'savedHash' => 123, 'expectedResult' => false],
+            ['configData' => 'some data', 'generatedHash' => 321, 'savedHash' => null, 'expectedResult' => false],
+            ['configData' => null, 'generatedHash' => 321, 'savedHash' => 123, 'expectedResult' => true],
+            ['configData' => null, 'generatedHash' => 321, 'savedHash' => null, 'expectedResult' => true],
         ];
     }
 }

@@ -52,10 +52,10 @@ class InformationTest extends \PHPUnit_Framework_TestCase
             Information::XML_PATH_STORE_INFO_STREET_LINE1 => '1234 Example Ct',
             Information::XML_PATH_STORE_INFO_STREET_LINE2 => 'Suite A',
             Information::XML_PATH_STORE_INFO_CITY => 'Aldburg',
-            Information::XML_PATH_STORE_INFO_POSTCODE => '65804',
+            Information::XML_PATH_STORE_INFO_POSTCODE => 65804,
             Information::XML_PATH_STORE_INFO_REGION_CODE => 1989,
             Information::XML_PATH_STORE_INFO_COUNTRY_CODE => 'ED',
-            Information::XML_PATH_STORE_INFO_VAT_NUMBER => '123456789',
+            Information::XML_PATH_STORE_INFO_VAT_NUMBER => 123456789,
         ];
 
         $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);

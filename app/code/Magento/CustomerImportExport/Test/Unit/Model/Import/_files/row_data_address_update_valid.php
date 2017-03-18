@@ -7,7 +7,7 @@
 return [
     '_website' => 'website1',
     '_email' => 'test1@email.com',
-    '_entity_id' => '1',
+    '_entity_id' => 1,
     'city' => 'Culver City',
     'company' => '',
     'country_id' => 'C1',
@@ -15,18 +15,18 @@ return [
     'firstname' => 'John',
     'lastname' => 'Doe',
     'middlename' => '',
-    'postcode' => '90232',
+    'postcode' => 90232,
     'prefix' => '',
     'region' => 'region1',
-    'region_id' => '1',
+    'region_id' => 1,
     'street' => '10441 Jefferson Blvd. Suite 200 Culver City',
     'suffix' => '',
-    'telephone' => '12312313',
+    'telephone' => 12312313,
     'vat_id' => '',
     'vat_is_valid' => '',
     'vat_request_date' => '',
     'vat_request_id' => '',
     'vat_request_success' => '',
-    '_address_default_billing_' => '1',
-    '_address_default_shipping_' => '1'
+    '_address_default_billing_' => 1,
+    '_address_default_shipping_' => 1
 ];

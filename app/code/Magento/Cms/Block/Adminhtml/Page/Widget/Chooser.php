@@ -67,7 +67,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::_construct();
         //$this->setDefaultSort('name');
         $this->setUseAjax(true);
-        $this->setDefaultFilter(['chooser_is_active' => '1']);
+        $this->setDefaultFilter(['chooser_is_active' => 1]);
     }
 
     /**

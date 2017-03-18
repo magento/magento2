@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [false, 'not-exist-type'],
             [false, 'not-exist-type', 'not-exist-code'],
             [false, 'action'],
-            [['single' => '3', 'all' => '4'], 'action', ''],
+            [['single' => 3, 'all' => 4], 'action', ''],
             ['3', 'action', 'single']
         ];
     }

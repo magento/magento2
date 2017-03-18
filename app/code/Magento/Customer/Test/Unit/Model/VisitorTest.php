@@ -113,7 +113,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindCustomerLogin()
     {
-        $customer = new \Magento\Framework\DataObject(['id' => '1']);
+        $customer = new \Magento\Framework\DataObject(['id' => 1]);
         $observer = new \Magento\Framework\DataObject([
             'event' => new \Magento\Framework\DataObject(['customer' => $customer]),
         ]);
@@ -144,7 +144,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindQuoteCreate()
     {
-        $quote = new \Magento\Framework\DataObject(['id' => '1', 'is_checkout_cart' => true]);
+        $quote = new \Magento\Framework\DataObject(['id' => 1, 'is_checkout_cart' => true]);
         $observer = new \Magento\Framework\DataObject([
             'event' => new \Magento\Framework\DataObject(['quote' => $quote]),
         ]);
@@ -154,7 +154,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
     public function testBindQuoteDestroy()
     {
-        $quote = new \Magento\Framework\DataObject(['id' => '1']);
+        $quote = new \Magento\Framework\DataObject(['id' => 1]);
         $observer = new \Magento\Framework\DataObject([
             'event' => new \Magento\Framework\DataObject(['quote' => $quote]),
         ]);

@@ -92,7 +92,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $this->dimension = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Search\Request\Dimension::class,
-            ['name' => 'scope', 'value' => '1']
+            ['name' => 'scope', 'value' => 1]
         );
 
         $this->productApple = $this->getProductBySku('fulltext-1');

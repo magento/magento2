@@ -120,9 +120,9 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (3 * 13 + 1 * 30 + 1 * 10)
                     'maximalPrice' => 39.5,
                     // 1 * 10
-                    'regularMinimalPrice' => '10',
+                    'regularMinimalPrice' => 10,
                     // 3 * 20 + (30 * 1 + 13 * 3)
-                    'regularMaximalPrice' => '129',
+                    'regularMaximalPrice' => 129,
                 ]
             ],
 

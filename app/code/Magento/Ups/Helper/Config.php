@@ -42,7 +42,7 @@ class Config
     protected function getCodes()
     {
         return [
-            'action' => ['single' => '3', 'all' => '4'],
+            'action' => ['single' => 3, 'all' => 4],
             'originShipment' => [
                 // United States Domestic Shipments
                 'United States Domestic Shipments' => [
@@ -164,15 +164,15 @@ class Config
                 'CC' => ["label" => 'Customer Counter', "code" => "03"],
             ],
             'container' => [
-                'CP' => '00',
-                'ULE' => '01',
-                'CSP' => '02',
-                'UT' => '03',
-                'PAK' => '04',
-                'UEB' => '21',
-                'UW25' => '24',
-                'UW10' => '25',
-                'PLT' => '30',
+                'CP' => 00,
+                'ULE' => 01,
+                'CSP' => 02,
+                'UT' => 03,
+                'PAK' => 04,
+                'UEB' => 21,
+                'UW25' => 24,
+                'UW10' => 25,
+                'PLT' => 30,
                 'SEB' => '2a',
                 'MEB' => '2b',
                 'LEB' => '2c',
@@ -191,7 +191,7 @@ class Config
                 'MEB' => __('Medium Express Box'),
                 'LEB' => __('Large Express Box'),
             ],
-            'dest_type' => ['RES' => '01', 'COM' => '02'],
+            'dest_type' => ['RES' => 01, 'COM' => 02],
             'dest_type_description' => ['RES' => __('Residential'), 'COM' => __('Commercial')],
             'unit_of_measure' => ['LBS' => __('Pounds'), 'KGS' => __('Kilograms')],
             'containers_filter' => [

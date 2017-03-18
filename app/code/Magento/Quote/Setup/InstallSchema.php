@@ -39,7 +39,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'created_at',
@@ -63,25 +63,25 @@ class InstallSchema implements InstallSchemaInterface
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '1'],
+            ['unsigned' => true, 'default' => 1],
             'Is Active'
         )->addColumn(
             'is_virtual',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Is Virtual'
         )->addColumn(
             'is_multi_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Is Multi Shipping'
         )->addColumn(
             'items_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Items Count'
         )->addColumn(
             'items_qty',
@@ -93,7 +93,7 @@ class InstallSchema implements InstallSchemaInterface
             'orig_order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Orig Order Id'
         )->addColumn(
             'store_to_base_rate',
@@ -159,7 +159,7 @@ class InstallSchema implements InstallSchemaInterface
             'customer_group_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Customer Group Id'
         )->addColumn(
             'customer_email',
@@ -213,13 +213,13 @@ class InstallSchema implements InstallSchemaInterface
             'customer_note_notify',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '1'],
+            ['unsigned' => true, 'default' => 1],
             'Customer Note Notify'
         )->addColumn(
             'customer_is_guest',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Customer Is Guest'
         )->addColumn(
             'remote_ip',
@@ -315,7 +315,7 @@ class InstallSchema implements InstallSchemaInterface
             'trigger_recollect',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Trigger Recollect'
         )->addColumn(
             'ext_shipping_info',
@@ -355,7 +355,7 @@ class InstallSchema implements InstallSchemaInterface
             'quote_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Quote Id'
         )->addColumn(
             'created_at',
@@ -379,7 +379,7 @@ class InstallSchema implements InstallSchemaInterface
             'save_in_address_book',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['default' => '0'],
+            ['default' => 0],
             'Save In Address Book'
         )->addColumn(
             'customer_address_id',
@@ -487,13 +487,13 @@ class InstallSchema implements InstallSchemaInterface
             'same_as_billing',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Same As Billing'
         )->addColumn(
             'collect_shipping_rates',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Collect Shipping Rates'
         )->addColumn(
             'shipping_method',
@@ -704,7 +704,7 @@ class InstallSchema implements InstallSchemaInterface
             'quote_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Quote Id'
         )->addColumn(
             'created_at',
@@ -782,7 +782,7 @@ class InstallSchema implements InstallSchemaInterface
             'no_discount',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'No Discount'
         )->addColumn(
             'weight',
@@ -1002,13 +1002,13 @@ class InstallSchema implements InstallSchemaInterface
             'quote_address_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Quote Address Id'
         )->addColumn(
             'quote_item_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Quote Item Id'
         )->addColumn(
             'created_at',
@@ -1320,7 +1320,7 @@ class InstallSchema implements InstallSchemaInterface
             'quote_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Quote Id'
         )->addColumn(
             'created_at',
@@ -1380,7 +1380,7 @@ class InstallSchema implements InstallSchemaInterface
             'cc_exp_year',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Cc Exp Year'
         )->addColumn(
             'cc_ss_owner',
@@ -1392,13 +1392,13 @@ class InstallSchema implements InstallSchemaInterface
             'cc_ss_start_month',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Cc Ss Start Month'
         )->addColumn(
             'cc_ss_start_year',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Cc Ss Start Year'
         )->addColumn(
             'po_number',
@@ -1453,7 +1453,7 @@ class InstallSchema implements InstallSchemaInterface
             'address_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Address Id'
         )->addColumn(
             'created_at',

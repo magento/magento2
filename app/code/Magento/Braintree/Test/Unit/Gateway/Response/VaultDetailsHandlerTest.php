@@ -218,7 +218,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = [
             'token' => 'rh3gd4',
-            'bin' => '5421',
+            'bin' => 5421,
             'cardType' => 'American Express',
             'expirationMonth' => 12,
             'expirationYear' => 2021,

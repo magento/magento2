@@ -163,7 +163,7 @@ class Customer extends WebapiAbstract
             'custom_attributes' => [
                 [
                     'attribute_code' => 'disable_auto_group_change',
-                    'value' => '0',
+                    'value' => 0,
                 ],
             ],
         ];

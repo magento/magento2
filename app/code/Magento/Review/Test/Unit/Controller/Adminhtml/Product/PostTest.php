@@ -165,7 +165,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['product_id', false, 1],
-                    ['ratings', [], ['1' => '1']]
+                    ['ratings', [], ['1' => 1]]
                 ]
             );
         $this->requestMock->expects($this->once())

@@ -76,9 +76,9 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
         );
         $items = [
-            new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
-            new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
-            new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
+            new \Magento\Framework\DataObject(['test1' => 1, 'test2' => 2]),
+            new \Magento\Framework\DataObject(['test1' => 1, 'test2' => 2]),
+            new \Magento\Framework\DataObject(['test1' => 1, 'test2' => 2]),
         ];
         foreach ($items as $item) {
             $collection->addItem($item);
@@ -101,17 +101,17 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         $items = [
             new \Magento\Framework\DataObject(
                 [
-                    'children' => new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']),
+                    'children' => new \Magento\Framework\DataObject(['test4' => 1, 'test5' => 2]),
                 ]
             ),
             new \Magento\Framework\DataObject(
                 [
-                    'children' => new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']),
+                    'children' => new \Magento\Framework\DataObject(['test4' => 1, 'test5' => 2]),
                 ]
             ),
             new \Magento\Framework\DataObject(
                 [
-                    'children' => new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']),
+                    'children' => new \Magento\Framework\DataObject(['test4' => 1, 'test5' => 2]),
                 ]
             ),
         ];
@@ -120,8 +120,8 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             $subCollection = new \Magento\Framework\Data\Collection(
                 $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
             );
-            $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']));
-            $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '2', 'test5' => '2']));
+            $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => 1, 'test5' => 2]));
+            $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => 2, 'test5' => 2]));
             $item->setChildren($subCollection);
             $collection->addItem($item);
         }

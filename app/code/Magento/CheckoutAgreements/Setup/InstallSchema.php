@@ -62,13 +62,13 @@ class InstallSchema implements InstallSchemaInterface
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Is Active'
         )->addColumn(
             'is_html',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Is Html'
         )->setComment(
             'Checkout Agreement'

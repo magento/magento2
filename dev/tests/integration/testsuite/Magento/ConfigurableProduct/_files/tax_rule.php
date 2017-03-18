@@ -12,10 +12,10 @@ $productTaxClass1 = $objectManager->create(\Magento\Tax\Model\ClassModel::class)
 
 $taxRate = [
     'tax_country_id' => 'US',
-    'tax_region_id' => '0',
+    'tax_region_id' => 0,
     'tax_postcode' => '*',
     'code' => '*',
-    'rate' => '10',
+    'rate' => 10,
 ];
 $rate = $objectManager->create(\Magento\Tax\Model\Calculation\Rate::class)->setData($taxRate)->save();
 
@@ -26,8 +26,8 @@ $registry->register('_fixture/Magento_Tax_Model_Calculation_Rate', $rate);
 
 $ruleData = [
     'code' => 'Test Rule',
-    'priority' => '0',
-    'position' => '0',
+    'priority' => 0,
+    'position' => 0,
     'customer_tax_class_ids' => [$customerTaxClass->getId()],
     'product_tax_class_ids' => [$productTaxClass1->getId()],
     'tax_rate_ids' => [$rate->getId()],

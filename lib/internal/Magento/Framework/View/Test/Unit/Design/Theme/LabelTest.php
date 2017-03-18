@@ -34,7 +34,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
     {
         $defaultLabel = (string)new \Magento\Framework\Phrase('-- No Theme --');
         $data = [
-            'value' => '1',
+            'value' => 1,
             'label' => 'Label1',
         ];
 
@@ -53,7 +53,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
     {
         $defaultLabel = (string)new \Magento\Framework\Phrase('-- No Theme --');
         $data = [
-            'value' => '1',
+            'value' => 1,
             'label' => 'Label1',
         ];
 

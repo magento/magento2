@@ -92,7 +92,7 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'result' => 'value1'
             ],
             1 => [
-                'path' => '0',
+                'path' => 0,
                 'data' => [false],
                 'result' => false
             ],
@@ -424,7 +424,7 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'indexes' => 0,
                 'data' => $data,
                 'startPath' => ['', '0'],
-                'internalPath' => '0',
+                'internalPath' => 0,
                 'result' => ['/0/0', '/0/0/0/0']
             ],
             2 => [
@@ -504,7 +504,7 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
                 'indexes' => 0,
                 'data' => $data,
                 'startPath' => ['', '0'],
-                'internalPath' => '0',
+                'internalPath' => 0,
                 'result' => '/0/0'
             ],
             2 => [

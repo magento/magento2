@@ -357,7 +357,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                         "region" => ["region_id" => 43],
                         "city" => "New York",
                     ],
-                    'customer_id' => '1',
+                    'customer_id' => 1,
                     'items' => [
                         [
                             'code' => 'sequence-1',
@@ -721,7 +721,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'title' => 'TX Rate',
                 ],
             ],
-            'item_id' => '1',
+            'item_id' => 1,
             'item_type' => 'product',
             'associated_item_id' => NULL,
             'process' => 0,

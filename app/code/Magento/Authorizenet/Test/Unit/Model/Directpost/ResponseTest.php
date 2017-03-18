@@ -45,14 +45,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
                 'merchantApiLogin' => 'Magento',
                 'amount' => null,
                 'amountTestFunc' => '0.00',
-                'transactionId' => '1'
+                'transactionId' => 1
             ],
             [
                 'merchantMd5' => '8AEF4E508261A287C3E2F544720FCA3A',
                 'merchantApiLogin' => 'Magento2',
                 'amount' => 100.50,
                 'amountTestFunc' => 100.50,
-                'transactionId' => '2'
+                'transactionId' => 2
             ]
         ];
     }
@@ -89,7 +89,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
                 'merchantMd5' => 'FCD7F001E9274FDEFB14BFF91C799306',
                 'merchantApiLogin' => 'Magento',
                 'amount' => null,
-                'transactionId' => '1',
+                'transactionId' => 1,
                 'hash' => '1F24A4EC9A169B2B2A072A5F168E16DC',
                 'expectedValue' => true
             ],
@@ -97,7 +97,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
                 'merchantMd5' => '8AEF4E508261A287C3E2F544720FCA3A',
                 'merchantApiLogin' => 'Magento2',
                 'amount' => 100.50,
-                'transactionId' => '2',
+                'transactionId' => 2,
                 'hash' => '1F24A4EC9A169B2B2A072A5F168E16DC',
                 'expectedValue' => false
             ]

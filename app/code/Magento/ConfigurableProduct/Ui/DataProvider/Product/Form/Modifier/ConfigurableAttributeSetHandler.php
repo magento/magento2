@@ -75,7 +75,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
                                             'true' => 'current',
-                                            'false' => '0',
+                                            'false' => 0,
                                         ],
                                         'value' => 'current',
                                         'sortOrder' => 20,
@@ -97,9 +97,9 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
                                             'true' => 'new',
-                                            'false' => '0',
+                                            'false' => 0,
                                         ],
-                                        'value' => '0',
+                                        'value' => 0,
                                         'sortOrder' => 30,
                                     ],
                                 ],
@@ -120,9 +120,9 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
                                             'true' => 'existing',
-                                            'false' => '0',
+                                            'false' => 0,
                                         ],
-                                        'value' => '0',
+                                        'value' => 0,
                                         'sortOrder' => 50,
                                     ],
                                 ],

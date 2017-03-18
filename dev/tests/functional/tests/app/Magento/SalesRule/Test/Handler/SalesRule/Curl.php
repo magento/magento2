@@ -48,18 +48,18 @@ class Curl extends Conditions implements SalesRuleInterface
         'Conditions combination' => [
             'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',
-            'value' => '1',
+            'value' => 1,
         ],
         'Products subselection' => [
             'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
             'attribute' => 'qty',
             'operator' => '==',
-            'value' => '1',
+            'value' => 1,
             'aggregator' => 'all',
         ],
         'Product attribute combination' => [
             'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
-            'value' => '1',
+            'value' => 1,
             'aggregator' => 'all',
         ],
         'Shipping Country' => [

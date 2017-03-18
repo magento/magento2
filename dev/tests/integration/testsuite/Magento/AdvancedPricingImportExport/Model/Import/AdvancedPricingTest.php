@@ -52,13 +52,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                     'percentage_value'  => null
                 ],
                 [
-                    'customer_group_id' => '1',
+                    'customer_group_id' => 1,
                     'value'             => '11.0000',
                     'qty'               => '11.0000',
                     'percentage_value'  => null
                 ],
                 [
-                    'customer_group_id' => '3',
+                    'customer_group_id' => 3,
                     'value'             => '14.0000',
                     'qty'               => '14.0000',
                     'percentage_value'  => null
@@ -78,13 +78,13 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                     'percentage_value'  => null
                 ],
                 [
-                    'customer_group_id' => '0',
+                    'customer_group_id' => 0,
                     'value'             => '12.0000',
                     'qty'               => '12.0000',
                     'percentage_value'  => null
                 ],
                 [
-                    'customer_group_id' => '2',
+                    'customer_group_id' => 2,
                     'value'             => '13.0000',
                     'qty'               => '13.0000',
                     'percentage_value'  => null

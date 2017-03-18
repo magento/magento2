@@ -39,7 +39,7 @@ class InstallSchema implements InstallSchemaInterface
             'job_code',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Job Code'
         )->addColumn(
             'status',

@@ -131,7 +131,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             [
                 'array' => '["a","b","c"]',
                 'string' => '"i am string"',
-                'integer' => '969',
+                'integer' => 969,
                 'empty_with_default' => '""',
                 'not_serialized_string' => 'i am string',
                 'serialized_boolean_false' => 'false'

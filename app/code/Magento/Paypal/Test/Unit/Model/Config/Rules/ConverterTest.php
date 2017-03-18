@@ -57,12 +57,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         'events' => [
                             'test-selector' => [
                                 'event0' => [
-                                    'value' => '0',
+                                    'value' => 0,
                                     'predicate' => [
                                     ],
                                 ],
                                 'event1' => [
-                                    'value' => '1',
+                                    'value' => 1,
                                     'predicate' => [
                                         'name' => 'predicate1',
                                         'message' => 'Test message!',
@@ -107,11 +107,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         'events' => [
                             'test-selector' => [
                                 'event0' => [
-                                    'value' => '0',
+                                    'value' => 0,
                                     'predicate' => [],
                                 ],
                                 'event1' => [
-                                    'value' => '1',
+                                    'value' => 1,
                                     'predicate' => [
                                         'name' => 'predicate1',
                                         'message' => 'Test message!',

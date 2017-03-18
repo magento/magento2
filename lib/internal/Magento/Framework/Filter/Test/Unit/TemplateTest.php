@@ -28,7 +28,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'street1' => '687 Vernon Street',
                 'city' => 'Parker Dam',
                 'region' => 'CA',
-                'postcode' => '92267',
+                'postcode' => 92267,
                 'telephone' => '760-663-5876',
             ]
         );

@@ -15,9 +15,9 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
             'street' => 'street',
             'city' => 'Los Angeles',
             'region' => 'CA',
-            'postcode' => '1',
+            'postcode' => 1,
             'country_id' => 'US',
-            'telephone' => '1',
+            'telephone' => 1,
         ]
     ]
 );

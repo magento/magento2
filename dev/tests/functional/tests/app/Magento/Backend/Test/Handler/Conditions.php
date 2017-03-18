@@ -59,11 +59,11 @@ abstract class Conditions extends Curl
             'same_as' => 'the Same as Matched Product Categories',
         ],
         'value' => [
-            'California' => '12',
+            'California' => 12,
             'United States' => 'US',
             '[flatrate] Fixed' => 'flatrate_flatrate',
-            'FOUND' => '1',
-            'TRUE' => '1',
+            'FOUND' => 1,
+            'TRUE' => 1,
         ],
         'aggregator' => [
             'ALL' => 'all',

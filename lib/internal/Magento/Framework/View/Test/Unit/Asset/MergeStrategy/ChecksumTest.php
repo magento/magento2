@@ -143,7 +143,7 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
         $this->sourceDir->expects($this->exactly(2))
             ->method('getRelativePath')
             ->will($this->onConsecutiveCalls('file/one.txt', 'file/two.txt'));
-        $this->sourceDir->expects($this->exactly(2))->method('stat')->will($this->returnValue(['mtime' => '1']));
+        $this->sourceDir->expects($this->exactly(2))->method('stat')->will($this->returnValue(['mtime' => 1]));
         $this->resultAsset->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue('merged/result.txt'));

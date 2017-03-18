@@ -21,16 +21,16 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_defaultConfig = [
         'type' => 'default',
-        'enable' => '1',
+        'enable' => 1,
         'font' => 'linlibertine',
         'mode' => 'after_fail',
         'forms' => 'user_forgotpassword,user_create,guest_checkout,register_during_checkout',
-        'failed_attempts_login' => '3',
-        'failed_attempts_ip' => '1000',
-        'timeout' => '7',
+        'failed_attempts_login' => 3,
+        'failed_attempts_ip' => 1000,
+        'timeout' => 7,
         'length' => '4-5',
         'symbols' => 'ABCDEFGHJKMnpqrstuvwxyz23456789',
-        'case_sensitive' => '0',
+        'case_sensitive' => 0,
         'shown_to_logged_in_user' => ['contact_us' => 1],
         'always_for' => [
             'user_create',

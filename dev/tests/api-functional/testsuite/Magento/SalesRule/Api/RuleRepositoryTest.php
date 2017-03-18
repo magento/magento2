@@ -65,7 +65,7 @@ class RuleRepositoryTest extends WebapiAbstract
                         'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'operator' => '==',
                         'attribute_name' => 'attribute_set_id',
-                        'value' => '4',
+                        'value' => 4,
                     ]
                 ],
                 'aggregator_type' => 'all',

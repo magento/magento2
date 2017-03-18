@@ -35,7 +35,7 @@ class ImagesTest extends AbstractModifierTest
             \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images::CODE_IMAGE_MANAGEMENT_GROUP => [
                 'children' => [],
                 'label' => __('Images'),
-                'sortOrder' => '20',
+                'sortOrder' => 20,
                 'componentType' => 'fieldset'
             ]
         ];

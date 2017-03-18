@@ -12,28 +12,28 @@ require 'order.php';
 $payments = [
     [
         'parent_id' => $order->getId(),
-        'cc_exp_month' => '06',
-        'cc_ss_start_year' => '2014',
+        'cc_exp_month' => 06,
+        'cc_ss_start_year' => 2014,
         'method' => 'checkmo',
-        'cc_last_4' => '123'
+        'cc_last_4' => 123
     ],
     [
         'parent_id' => $order->getId(),
-        'cc_exp_month' => '07',
-        'cc_ss_start_year' => '2014',
+        'cc_exp_month' => 07,
+        'cc_ss_start_year' => 2014,
         'method' => 'checkmo',
-        'cc_last_4' => '456'
+        'cc_last_4' => 456
     ],
     [
         'parent_id' => $order->getId(),
-        'cc_exp_month' => '08',
-        'cc_ss_start_year' => '2015',
+        'cc_exp_month' => 08,
+        'cc_ss_start_year' => 2015,
         'method' => 'checkmo'
     ],
     [
         'parent_id' => $order->getId(),
-        'cc_exp_month' => '09',
-        'cc_ss_start_year' => '2016',
+        'cc_exp_month' => 09,
+        'cc_ss_start_year' => 2016,
         'method' => 'paypal_express'
     ],
 ];

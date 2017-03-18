@@ -80,14 +80,14 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Product Id'
             )
             ->addColumn(
                 'stock_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Stock Id'
             )
             ->addColumn(
@@ -108,28 +108,28 @@ class InstallSchema implements InstallSchemaInterface
                 'use_config_min_qty',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Min Qty'
             )
             ->addColumn(
                 'is_qty_decimal',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Is Qty Decimal'
             )
             ->addColumn(
                 'backorders',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Backorders'
             )
             ->addColumn(
                 'use_config_backorders',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Backorders'
             )
             ->addColumn(
@@ -143,7 +143,7 @@ class InstallSchema implements InstallSchemaInterface
                 'use_config_min_sale_qty',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Min Sale Qty'
             )
             ->addColumn(
@@ -157,14 +157,14 @@ class InstallSchema implements InstallSchemaInterface
                 'use_config_max_sale_qty',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Max Sale Qty'
             )
             ->addColumn(
                 'is_in_stock',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Is In Stock'
             )
             ->addColumn(
@@ -185,35 +185,35 @@ class InstallSchema implements InstallSchemaInterface
                 'use_config_notify_stock_qty',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Notify Stock Qty'
             )
             ->addColumn(
                 'manage_stock',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Manage Stock'
             )
             ->addColumn(
                 'use_config_manage_stock',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Manage Stock'
             )
             ->addColumn(
                 'stock_status_changed_auto',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Stock Status Changed Automatically'
             )
             ->addColumn(
                 'use_config_qty_increments',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Qty Increments'
             )
             ->addColumn(
@@ -227,21 +227,21 @@ class InstallSchema implements InstallSchemaInterface
                 'use_config_enable_qty_inc',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
                 'Use Config Enable Qty Increments'
             )
             ->addColumn(
                 'enable_qty_increments',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Enable Qty Increments'
             )
             ->addColumn(
                 'is_decimal_divided',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 5,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Is Divided into Multiple Boxes for Shipping'
             )
             ->addColumn(

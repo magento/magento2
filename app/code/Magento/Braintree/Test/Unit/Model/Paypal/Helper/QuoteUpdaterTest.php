@@ -150,7 +150,7 @@ class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
                 'extendedAddress' => 'Apt. #1',
                 'locality' => 'Chicago',
                 'region' => 'IL',
-                'postalCode' => '60618',
+                'postalCode' => 60618,
                 'countryCodeAlpha2' => 'US',
                 'recipientName' => 'John Doe',
             ],
@@ -159,7 +159,7 @@ class QuoteUpdaterTest extends \PHPUnit_Framework_TestCase
                 'extendedAddress' => 'Apt. #1',
                 'locality' => 'Chicago',
                 'region' => 'IL',
-                'postalCode' => '60618',
+                'postalCode' => 60618,
                 'countryCodeAlpha2' => 'US',
             ],
         ];

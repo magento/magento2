@@ -77,7 +77,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $expectedOptions = [
             [
                 'label' => __('All Store Views'),
-                'value' => '0'
+                'value' => 0
             ],
             [
                 'label' => 'Main Website',
@@ -87,7 +87,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
                         'value' => [
                             [
                                 'label' => '        Default Store View',
-                                'value' => '1'
+                                'value' => 1
                             ]
                         ]
                     ]

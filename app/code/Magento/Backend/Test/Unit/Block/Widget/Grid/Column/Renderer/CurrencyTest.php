@@ -80,7 +80,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         );
         $currencyFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_currencyMock));
 
-        $this->_row = new \Magento\Framework\DataObject(['columnIndex' => '10']);
+        $this->_row = new \Magento\Framework\DataObject(['columnIndex' => 10]);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_blockCurrency = $helper->getObject(

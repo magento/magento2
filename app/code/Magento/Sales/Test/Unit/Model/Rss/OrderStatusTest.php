@@ -148,7 +148,7 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $comment = [
             'entity_type_code' => 'order',
-            'increment_id' => '100000001',
+            'increment_id' => 100000001,
             'created_at' => '2014-10-09 18:25:50',
             'comment' => 'Some comment',
         ];

@@ -404,35 +404,35 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'category_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Category ID'
             )
             ->addColumn(
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Product ID'
             )
             ->addColumn(
                 'position',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Position'
             )
             ->addColumn(
                 'is_parent',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Is Parent'
             )
             ->addColumn(
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Store ID'
             )
             ->addColumn(

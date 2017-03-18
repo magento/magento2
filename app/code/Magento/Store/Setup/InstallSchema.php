@@ -73,19 +73,19 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Sort Order'
         )->addColumn(
             'default_group_id',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Default Group Id'
         )->addColumn(
             'is_default',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Defines Is Website Default'
         )->addIndex(
             $installer->getIdxName(
@@ -121,7 +121,7 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Website Id'
         )->addColumn(
             'name',
@@ -133,13 +133,13 @@ class InstallSchema implements InstallSchemaInterface
             'root_category_id',
             Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Root Category Id'
         )->addColumn(
             'default_store_id',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Default Store Id'
         )->addIndex(
             $installer->getIdxName('store_group', ['website_id']),
@@ -179,13 +179,13 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Website Id'
         )->addColumn(
             'group_id',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Group Id'
         )->addColumn(
             'name',
@@ -197,13 +197,13 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Sort Order'
         )->addColumn(
             'is_active',
             Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Activity'
         )->addIndex(
             $installer->getIdxName(

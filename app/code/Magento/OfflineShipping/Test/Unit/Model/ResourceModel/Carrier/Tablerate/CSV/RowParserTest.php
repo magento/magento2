@@ -65,7 +65,7 @@ class RowParserTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = [
             'website_id' => 58,
-            'dest_country_id' => '0',
+            'dest_country_id' => 0,
             'dest_region_id' => 0,
             'dest_zip' => '*',
             'condition_name' => 'condition_short_name',

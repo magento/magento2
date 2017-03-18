@@ -243,8 +243,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $postData = [
-            'qty' => '1',
-            'product' => '1',
+            'qty' => 1,
+            'product' => 1,
             'custom_price' => 1,
             'form_key' => $formKey->getFormKey(),
             'isAjax' => 1

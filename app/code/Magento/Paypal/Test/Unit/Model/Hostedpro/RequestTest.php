@@ -91,7 +91,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'lastname' => 'Lastname',
             'city' => 'City',
             'region_code' => 'CA',
-            'postcode' => '12346',
+            'postcode' => 12346,
             'country_id' => 'US',
             'street' => '1 Ln Ave',
         ]);
@@ -100,7 +100,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'lastname' => 'ShipLastname',
             'city' => 'ShipCity',
             'region' => 'olala',
-            'postcode' => '12346',
+            'postcode' => 12346,
             'country_id' => 'US',
             'street' => '1 Ln Ave',
         ]);
@@ -109,7 +109,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'lastname' => 'Lastname',
             'city' => 'Culver City',
             'region_code' => 'CA',
-            'postcode' => '12346',
+            'postcode' => 12346,
             'country_id' => 'US',
             'street' => '1 Ln Ave',
         ]);
@@ -117,7 +117,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'ShipFirstname',
             'lastname' => 'ShipLastname',
             'city' => 'ShipCity',
-            'postcode' => '12346',
+            'postcode' => 12346,
             'country_id' => 'US',
             'street' => '1 Ln Ave',
         ]);

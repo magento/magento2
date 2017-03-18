@@ -29,14 +29,14 @@ class Curl extends AbstractCurl implements TaxRateInterface
             'United Kingdom' => 'GB',
         ],
         'tax_region_id' => [
-            '*' => '0',
-            'California' => '12',
-            'New York' => '43',
-            'Texas' => '57',
+            '*' => 0,
+            'California' => 12,
+            'New York' => 43,
+            'Texas' => 57,
         ],
         'zip_is_range' => [
-            'Yes' => '1',
-            'No' => '0'
+            'Yes' => 1,
+            'No' => 0
         ]
     ];
 

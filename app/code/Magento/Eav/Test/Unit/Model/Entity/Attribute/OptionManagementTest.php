@@ -215,7 +215,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
         $removalMarker = [
             'option' => [
                 'value' => [$optionId => []],
-                'delete' => [$optionId => '1'],
+                'delete' => [$optionId => 1],
             ],
         ];
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
@@ -250,7 +250,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
         $removalMarker = [
             'option' => [
                 'value' => [$optionId => []],
-                'delete' => [$optionId => '1'],
+                'delete' => [$optionId => 1],
             ],
         ];
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)

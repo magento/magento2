@@ -28,7 +28,7 @@ $salesRule->getConditions()->loadArray([
     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
     'attribute' => null,
     'operator' => null,
-    'value' => '1',
+    'value' => 1,
     'is_value_processed' => null,
     'aggregator' => 'any',
     'conditions' =>
@@ -37,7 +37,7 @@ $salesRule->getConditions()->loadArray([
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                     'attribute' => null,
                     'operator' => null,
-                    'value' => '1',
+                    'value' => 1,
                     'is_value_processed' => null,
                     'aggregator' => 'all',
                     'conditions' =>
@@ -46,7 +46,7 @@ $salesRule->getConditions()->loadArray([
                                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                     'attribute' => 'category_ids',
                                     'operator' => '==',
-                                    'value' => '2',
+                                    'value' => 2,
                                     'is_value_processed' => false,
                                 ],
                         ],
@@ -67,7 +67,7 @@ $salesRule->getConditions()->loadArray([
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'postcode',
                     'operator' => '==',
-                    'value' => '78000'
+                    'value' => 78000
                 ],
                 [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
@@ -79,7 +79,7 @@ $salesRule->getConditions()->loadArray([
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'region_id',
                     'operator' => '==',
-                    'value' => '56'
+                    'value' => 56
                 ],
                 [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,

@@ -79,7 +79,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $taxData = [
             'tax_country_id' => 'US',
-            'tax_region_id' => '8',
+            'tax_region_id' => 8,
             'rate' => '8.25',
             'code' => 'US-CA-*-Rate' . rand(),
             'zip_is_range' => true,
@@ -115,7 +115,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $taxData = [
             'tax_country_id' => 'US',
-            'tax_region_id' => '8',
+            'tax_region_id' => 8,
             'rate' => '8.25',
             'code' => 'US-CA-*-Rate' . rand(),
             'zip_is_range' => true,
@@ -168,7 +168,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $invalidTaxData = [
             'id' => 9999,
             'tax_country_id' => 'US',
-            'tax_region_id' => '8',
+            'tax_region_id' => 8,
             'rate' => '8.25',
             'code' => 'US-CA-*-Rate' . rand(),
             'zip_is_range' => true,
@@ -193,7 +193,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $invalidTaxData = [
             'tax_country_id' => 'US',
-            'tax_region_id' => '8',
+            'tax_region_id' => 8,
             'rate' => '8.25',
             'code' => 'US-CA-*-Rate' . rand(),
             'zip_is_range' => true,
@@ -353,7 +353,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             'emptyPercentageRate' => [
                 [
                     'tax_country_id' => 'US',
-                    'tax_region_id' => '8',
+                    'tax_region_id' => 8,
                     'rate' => '',
                     'code' => 'US-CA-*-Rate' . rand(),
                     'zip_is_range' => true,
@@ -375,7 +375,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             'tax_country_id' => 'US',
-            'tax_region_id' => '12',
+            'tax_region_id' => 12,
             'tax_postcode' => '*',
             'code' => 'US_12_Code',
             'rate' => '7.5',
@@ -538,10 +538,10 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $taxRates = $this->taxRateFixtureFactory->createTaxRates(
             [
-                ['percentage' => 7.5, 'country' => 'US', 'region' => '42'],
-                ['percentage' => 7.5, 'country' => 'US', 'region' => '12'],
-                ['percentage' => 22.0, 'country' => 'US', 'region' => '42'],
-                ['percentage' => 10.0, 'country' => 'US', 'region' => '12'],
+                ['percentage' => 7.5, 'country' => 'US', 'region' => 42],
+                ['percentage' => 7.5, 'country' => 'US', 'region' => 12],
+                ['percentage' => 22.0, 'country' => 'US', 'region' => 42],
+                ['percentage' => 10.0, 'country' => 'US', 'region' => 12],
             ]
         );
 

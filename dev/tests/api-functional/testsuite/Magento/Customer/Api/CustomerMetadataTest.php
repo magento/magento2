@@ -102,9 +102,9 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
                         ['label' => ' ', 'value' => ''],
-                        ['label' => 'Male', 'value' => '1'],
-                        ['label' => 'Female', 'value' => '2'],
-                        ['label' => 'Not Specified', 'value' => '3']
+                        ['label' => 'Male', 'value' => 1],
+                        ['label' => 'Female', 'value' => 2],
+                        ['label' => 'Not Specified', 'value' => 3]
                     ],
                     AttributeMetadata::FRONTEND_CLASS   => '',
                     AttributeMetadata::USER_DEFINED     => false,
@@ -132,7 +132,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::REQUIRED         => true,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
-                        ['label' => 'Main Website', 'value' => '1'],
+                        ['label' => 'Main Website', 'value' => 1],
                     ],
                     AttributeMetadata::FRONTEND_CLASS   => 'required-entry',
                     AttributeMetadata::USER_DEFINED     => false,

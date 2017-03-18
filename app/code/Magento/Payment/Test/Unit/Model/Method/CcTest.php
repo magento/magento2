@@ -29,13 +29,13 @@ class CcTest extends \PHPUnit_Framework_TestCase
         $additionalData = [
             'cc_type' => 'VI',
             'cc_owner' => 'Bruce',
-            'cc_number' => '41111111111111',
-            'cc_cid' => '42',
-            'cc_exp_month' => '02',
-            'cc_exp_year' => '30',
-            'cc_ss_issue' => '9',
-            'cc_ss_start_month' => '01',
-            'cc_ss_start_year' => '30'
+            'cc_number' => 41111111111111,
+            'cc_cid' => 42,
+            'cc_exp_month' => 02,
+            'cc_exp_year' => 30,
+            'cc_ss_issue' => 9,
+            'cc_ss_start_month' => 01,
+            'cc_ss_start_year' => 30
         ];
 
         $inputData = new DataObject(
@@ -51,14 +51,14 @@ class CcTest extends \PHPUnit_Framework_TestCase
         $expectedData = [
             'cc_type' => 'VI',
             'cc_owner' => 'Bruce',
-            'cc_last_4' => '1111',
-            'cc_number' => '41111111111111',
-            'cc_cid' => '42',
-            'cc_exp_month' => '02',
-            'cc_exp_year' => '30',
-            'cc_ss_issue' => '9',
-            'cc_ss_start_month' => '01',
-            'cc_ss_start_year' => '30'
+            'cc_last_4' => 1111,
+            'cc_number' => 41111111111111,
+            'cc_cid' => 42,
+            'cc_exp_month' => 02,
+            'cc_exp_year' => 30,
+            'cc_ss_issue' => 9,
+            'cc_ss_start_month' => 01,
+            'cc_ss_start_year' => 30
         ];
 
         $payment->expects(static::once())

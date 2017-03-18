@@ -70,7 +70,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             [
                 'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => 'value',
-                'expectedResult' => '123'
+                'expectedResult' => 123
             ],
         ];
     }
@@ -124,7 +124,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'value' => false,
-                'originalValue' => '0',
+                'originalValue' => 0,
                 'isRequired' => true,
                 'expectedResult' => true,
             ],

@@ -153,19 +153,19 @@ class ExternalVideoEntryConverterTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $rowData = [
-            'value_id' => '4',
+            'value_id' => 4,
             'file' => '/i/n/index111111.jpg',
             'media_type' => ExternalVideoEntryConverter::MEDIA_TYPE_CODE,
-            'entity_id' => '1',
+            'entity_id' => 1,
             'label' => '',
-            'position' => '3',
-            'disabled' => '0',
+            'position' => 3,
+            'disabled' => 0,
             'label_default' => null,
-            'position_default' => '3',
-            'disabled_default' => '0',
+            'position_default' => 3,
+            'disabled_default' => 0,
             'video_provider' => null,
             'video_url' => 'https://www.youtube.com/watch?v=abcdefghij',
-            'video_title' => '111',
+            'video_title' => 111,
             'video_description' => null,
             'video_metadata' => null,
         ];
@@ -216,11 +216,11 @@ class ExternalVideoEntryConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedResult = [
-            'value_id' => '4',
+            'value_id' => 4,
             'file' => '/i/n/index111111.jpg',
             'label' => 'Some Label',
-            'position' => '3',
-            'disabled' => '0',
+            'position' => 3,
+            'disabled' => 0,
             'types' => [],
             'media_type' => null,
             'content' => null,

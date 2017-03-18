@@ -6,7 +6,7 @@
 return [
     'new_products' => [
         '@' => ['type' => \Magento\Sales\Block\Widget\Guest\Form::class],
-        'is_email_compatible' => '1',
+        'is_email_compatible' => 1,
         'placeholder_image' => 'Magento_Catalog::images/product_widget_new.png',
         'name' => 'Orders and Returns',
         'description' => 'Orders and Returns Search Form',
@@ -18,30 +18,30 @@ return [
                     'default' => ['value' => 'all_products', 'label' => 'All products'],
                     'item' => ['value' => 'new_products', 'label' => 'New products'],
                 ],
-                'visible' => '1',
-                'required' => '1',
+                'visible' => 1,
+                'required' => 1,
                 'label' => 'Display Type',
                 'description' => 'All products - recently added products, New products - products marked as new',
             ],
             'show_pager' => [
                 'source_model' => "Magento\Config\Model\Config\Source\Yesno",
                 'type' => 'select',
-                'visible' => '1',
+                'visible' => 1,
                 'label' => 'Display Page Control',
             ],
             'products_per_page' => [
                 'type' => 'text',
-                'value' => '5',
-                'visible' => '1',
-                'required' => '1',
+                'value' => 5,
+                'visible' => 1,
+                'required' => 1,
                 'label' => 'Number of Products per Page',
-                'depends' => ['show_pager' => ['value' => '1']],
+                'depends' => ['show_pager' => ['value' => 1]],
             ],
             'products_count' => [
                 'type' => 'text',
-                'value' => '10',
-                'visible' => '1',
-                'required' => '1',
+                'value' => 10,
+                'visible' => 1,
+                'required' => 1,
                 'label' => 'Number of Products to Display',
             ],
             'template' => [
@@ -70,19 +70,19 @@ return [
                     ],
                     'default_template' => ['value' => 'widget/guest/form.phtml', 'label' => 'Default Template'],
                 ],
-                'visible' => '0',
-                'required' => '1',
+                'visible' => 0,
+                'required' => 1,
                 'label' => 'Template',
             ],
             'cache_lifetime' => [
                 'type' => 'text',
-                'visible' => '1',
+                'visible' => 1,
                 'label' => 'Cache Lifetime (Seconds)',
                 'description' => "86400 by default, if not set. To refresh instantly, clear the Blocks HTML
                     Output cache.
                 ",
             ],
-            'title' => ['type' => 'text', 'visible' => '0', 'label' => 'Anchor Custom Title'],
+            'title' => ['type' => 'text', 'visible' => 0, 'label' => 'Anchor Custom Title'],
         ],
         'supported_containers' => [
             [

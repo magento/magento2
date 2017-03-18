@@ -145,7 +145,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'int'],
-                ['product_type' => 'any', 'attribute_code' => '1'],
+                ['product_type' => 'any', 'attribute_code' => 1],
                 true
             ],
             [

@@ -266,11 +266,11 @@ class TableTest extends \PHPUnit_Framework_TestCase
             [
                 ['1', '2'],
                 '1,2',
-                [['label' => 'test label 1', 'value' => '1'], ['label' => 'test label 2', 'value' => '1']],
+                [['label' => 'test label 1', 'value' => 1], ['label' => 'test label 2', 'value' => 1]],
                 ['test label 1', 'test label 2'],
             ],
-            ['1', '1', [['label' => 'test label', 'value' => '1']], 'test label'],
-            ['5', '5', [['label' => 'test label', 'value' => '5']], 'test label']
+            ['1', '1', [['label' => 'test label', 'value' => 1]], 'test label'],
+            ['5', '5', [['label' => 'test label', 'value' => 5]], 'test label']
         ];
     }
 
@@ -387,26 +387,26 @@ class TableTest extends \PHPUnit_Framework_TestCase
             [
                 false,
                 false,
-                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
-                [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']],
-                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']]
+                [['value' => 16, 'label' => 'black'], ['value' => 17, 'label' => 'white']],
+                [['value' => 16, 'label' => 'blck'], ['value' => 17, 'label' => 'wht']],
+                [['value' => 16, 'label' => 'black'], ['value' => 17, 'label' => 'white']]
             ],
             [
                 false,
                 true,
-                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
-                [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']],
-                [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']]
+                [['value' => 16, 'label' => 'black'], ['value' => 17, 'label' => 'white']],
+                [['value' => 16, 'label' => 'blck'], ['value' => 17, 'label' => 'wht']],
+                [['value' => 16, 'label' => 'blck'], ['value' => 17, 'label' => 'wht']]
             ],
             [
                 true,
                 false,
-                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
-                [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']],
+                [['value' => 16, 'label' => 'black'], ['value' => 17, 'label' => 'white']],
+                [['value' => 16, 'label' => 'blck'], ['value' => 17, 'label' => 'wht']],
                 [
                     ['label' => ' ', 'value' => ''],
-                    ['value' => '16', 'label' => 'black'],
-                    ['value' => '17', 'label' => 'white']
+                    ['value' => 16, 'label' => 'black'],
+                    ['value' => 17, 'label' => 'white']
                 ]
             ]
         ];

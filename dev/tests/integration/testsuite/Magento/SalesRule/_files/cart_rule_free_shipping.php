@@ -21,7 +21,7 @@ $row =
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                     'attribute' => null,
                     'operator' => null,
-                    'value' => '1',
+                    'value' => 1,
                     'is_value_processed' => null,
                     'aggregator' => 'all',
                 ]
@@ -32,7 +32,7 @@ $row =
                 'type' => Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                 'attribute' => null,
                 'operator' => null,
-                'value' => '1',
+                'value' => 1,
                 'is_value_processed' => null,
                 'aggregator' => 'all',
                 'conditions' => [
@@ -40,7 +40,7 @@ $row =
                         'type' => Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'attribute' => 'quote_item_price',
                         'operator' => '==',
-                        'value' => '7',
+                        'value' => 7,
                         'is_value_processed' => false,
                     ]
                 ]

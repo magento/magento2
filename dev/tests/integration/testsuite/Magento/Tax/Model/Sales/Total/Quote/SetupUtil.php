@@ -23,13 +23,13 @@ class SetupUtil
      * @var array
      */
     protected $defaultConfig = [
-        Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS => '0',
+        Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS => 0,
         Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX => 0, //Excluding tax
         Config::CONFIG_XML_PATH_SHIPPING_INCLUDES_TAX => 0, //Excluding tax
         Config::CONFIG_XML_PATH_BASED_ON => 'shipping', // or 'billing'
-        Config::CONFIG_XML_PATH_APPLY_ON => '0',
-        Config::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT => '0',
-        Config::CONFIG_XML_PATH_DISCOUNT_TAX => '0',
+        Config::CONFIG_XML_PATH_APPLY_ON => 0,
+        Config::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT => 0,
+        Config::CONFIG_XML_PATH_DISCOUNT_TAX => 0,
         Config::XML_PATH_ALGORITHM => Calculation::CALC_TOTAL_BASE,
         //@TODO: add config for cross border trade
     ];
@@ -55,7 +55,7 @@ class SetupUtil
                 'tax_region_id' => self::REGION_TX,
                 'tax_postcode' => '*',
                 'code' => self::TAX_RATE_TX,
-                'rate' => '20',
+                'rate' => 20,
             ],
             'id' => null,
         ],
@@ -65,7 +65,7 @@ class SetupUtil
                 'tax_region_id' => self::REGION_TX,
                 'tax_postcode' => self::AUSTIN_POST_CODE,
                 'code' => self::TAX_RATE_AUSTIN,
-                'rate' => '5',
+                'rate' => 5,
             ],
             'id' => null,
         ],
@@ -364,8 +364,8 @@ class SetupUtil
         //The tax rule will cover all tax rates except TAX_RATE_SHIPPING
         $taxRuleDefaultData = [
             'code' => 'Test Rule',
-            'priority' => '0',
-            'position' => '0',
+            'priority' => 0,
+            'position' => 0,
             'customer_tax_class_ids' => $customerClassIds,
             'product_tax_class_ids' => $this->getProductTaxClassIds(),
             'tax_rate_ids' => $this->getDefaultTaxRateIds(),
@@ -376,8 +376,8 @@ class SetupUtil
             //Create separate shipping tax rule
             $shippingTaxRuleData = [
                 'code' => 'Shipping Tax Rule',
-                'priority' => '0',
-                'position' => '0',
+                'priority' => 0,
+                'position' => 0,
                 'customer_tax_class_ids' => $customerClassIds,
                 'product_tax_class_ids' => [$this->productTaxClasses[self::SHIPPING_TAX_CLASS]],
                 'tax_rate_ids' => [$this->taxRates[self::TAX_RATE_SHIPPING]['id']],

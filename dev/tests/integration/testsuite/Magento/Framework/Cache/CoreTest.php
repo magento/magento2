@@ -18,7 +18,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             'backend_decorators' => [
                 'test_decorator' => [
                     'class' => \Magento\Framework\Cache\Backend\Decorator\Compression::class,
-                    'options' => ['compression_threshold' => '100'],
+                    'options' => ['compression_threshold' => 100],
                 ],
             ],
         ];

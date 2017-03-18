@@ -94,7 +94,7 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'cookie_path' => '/test/path',
                 'cookie_httponly' => 'true',
                 'cookie_secure' => 'true',
-                'cookie_duration' => '600',
+                'cookie_duration' => 600,
             ];
 
         $response = $this->curlClient->get($url, $cookieParams);

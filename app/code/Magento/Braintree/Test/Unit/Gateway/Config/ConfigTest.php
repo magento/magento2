@@ -229,9 +229,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         return [
             ['data' => 1, 'expected' => true],
             ['data' => true, 'expected' => true],
-            ['data' => '1', 'expected' => true],
+            ['data' => 1, 'expected' => true],
             ['data' => 0, 'expected' => false],
-            ['data' => '0', 'expected' => false],
+            ['data' => 0, 'expected' => false],
             ['data' => false, 'expected' => false],
         ];
     }

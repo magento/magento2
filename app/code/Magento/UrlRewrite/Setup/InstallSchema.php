@@ -69,7 +69,7 @@ class InstallSchema implements InstallSchemaInterface
                 'redirect_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Redirect Type'
             )
             ->addColumn(

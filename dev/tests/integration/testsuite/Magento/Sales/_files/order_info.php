@@ -73,7 +73,7 @@ $cartItemRepository->save($cartItem);
 $quoteManagement = $objectManager->create(\Magento\Quote\Api\CartManagementInterface::class);
 
 $quote = $quoteRepository->get($quote->getId());
-$order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
+$order = $quoteManagement->submit($quote, ['increment_id' => 100000001]);
 
 /** @var $item \Magento\Sales\Model\Order\Item */
 $item = $order->getAllItems()[0];

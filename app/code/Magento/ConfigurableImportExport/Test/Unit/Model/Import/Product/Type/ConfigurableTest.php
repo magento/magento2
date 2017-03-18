@@ -284,13 +284,13 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         );
 
         $this->_entityModel->expects($this->any())->method('getAttributeOptions')->will($this->returnValue([
-            'attr2val1' => '1',
-            'attr2val2' => '2',
-            'attr2val3' => '3',
-            'testattr3v1' => '4',
-            'testattr30v1' => '4',
-            'testattr3v2' => '5',
-            'testattr3v3' => '6',
+            'attr2val1' => 1,
+            'attr2val2' => 2,
+            'attr2val3' => 3,
+            'testattr3v1' => 4,
+            'testattr30v1' => 4,
+            'testattr3v2' => 5,
+            'testattr3v3' => 6,
         ]));
 
         $metadataPoolMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
@@ -448,14 +448,14 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     {
         return [
             'testattr2' => [
-                'id' => '131',
+                'id' => 131,
                 'code' => 'testattr2',
                 'attribute_code' => 'testattr2',
-                'is_global' => '1',
-                'is_visible' => '1',
-                'is_static' => '0',
-                'is_required' => '0',
-                'is_unique' => '0',
+                'is_global' => 1,
+                'is_visible' => 1,
+                'is_static' => 0,
+                'is_required' => 0,
+                'is_unique' => 0,
                 'frontend_label' => 'testattr2',
                 'is_static' => false,
                 'backend_type' => 'select',
@@ -464,21 +464,21 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'type' => 'select',
                 'default_value' => null,
                 'options' => [
-                    'attr2val1' => '6',
-                    'attr2val2' => '7',
-                    'attr2val3' => '8',
+                    'attr2val1' => 6,
+                    'attr2val2' => 7,
+                    'attr2val3' => 8,
                 ]
             ],
 
             'testattr3' => [
-                'id' => '132',
+                'id' => 132,
                 'code' => 'testattr3',
                 'attribute_code' => 'testattr3',
-                'is_global' => '1',
-                'is_visible' => '1',
-                'is_static' => '0',
-                'is_required' => '0',
-                'is_unique' => '0',
+                'is_global' => 1,
+                'is_visible' => 1,
+                'is_static' => 0,
+                'is_required' => 0,
+                'is_unique' => 0,
                 'frontend_label' => 'testattr3',
                 'is_static' => false,
                 'backend_type' => 'select',
@@ -487,9 +487,9 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'default_value' => null,
                 'options' =>
                     [
-                        'testattr3v1' => '9',
-                        'testattr3v2' => '10',
-                        'testattr3v3' => '11',
+                        'testattr3v1' => 9,
+                        'testattr3v2' => 10,
+                        'testattr3v3' => 11,
                     ],
             ]
         ];

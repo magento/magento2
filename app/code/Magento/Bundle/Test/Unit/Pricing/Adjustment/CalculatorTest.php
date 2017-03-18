@@ -300,9 +300,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'title' => 'test option 1',
                         'default_title' => 'test option 1',
                         'type' => 'select',
-                        'option_id' => '1',
-                        'position' => '0',
-                        'required' => '1',
+                        'option_id' => 1,
+                        'position' => 0,
+                        'required' => 1,
                     ],
                     'selections' => [
                         'selection with the lowest price' => [
@@ -343,9 +343,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'title' => 'test option 1',
                         'default_title' => 'test option 1',
                         'type' => 'select',
-                        'option_id' => '1',
-                        'position' => '0',
-                        'required' => '1',
+                        'option_id' => 1,
+                        'position' => 0,
+                        'required' => 1,
                     ],
                     'selections' => [
                         'first product selection' => [
@@ -364,9 +364,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'title' => 'test option 2',
                         'default_title' => 'test option 2',
                         'type' => 'select',
-                        'option_id' => '2',
-                        'position' => '1',
-                        'required' => '1',
+                        'option_id' => 2,
+                        'position' => 1,
+                        'required' => 1,
                     ],
                     'selections' => [
                         'first product selection' => [
@@ -421,9 +421,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'title' => 'test option 1',
                         'default_title' => 'test option 1',
                         'type' => 'select',
-                        'option_id' => '1',
-                        'position' => '0',
-                        'required' => '1',
+                        'option_id' => 1,
+                        'position' => 0,
+                        'required' => 1,
                     ],
                     'selections' => []
                 ],
@@ -456,9 +456,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'title' => 'test option 1',
                         'default_title' => 'test option 1',
                         'type' => 'select',
-                        'option_id' => '1',
-                        'position' => '0',
-                        'required' => '0',
+                        'option_id' => 1,
+                        'position' => 0,
+                        'required' => 0,
                     ],
                     'selections' => [
                         'first product selection' => [
@@ -477,9 +477,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'title' => 'test option 2',
                         'default_title' => 'test option 2',
                         'type' => 'select',
-                        'option_id' => '2',
-                        'position' => '1',
-                        'required' => '0',
+                        'option_id' => 2,
+                        'position' => 1,
+                        'required' => 0,
                     ],
                     'selections' => [
                     ]

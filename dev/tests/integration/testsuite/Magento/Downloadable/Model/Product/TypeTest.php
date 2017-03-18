@@ -117,13 +117,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $linkFactory = $objectManager->create(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
         $extension = $product->getExtensionAttributes();
         $expectedLink = [
-            'is_shareable' => '2',
+            'is_shareable' => 2,
             'link_type' => 'file',
             'link_file' => '/j/e/jellyfish_2_4.jpg',
-            'number_of_downloads' => '15',
+            'number_of_downloads' => 15,
             'price' => '15.0000',
             'sample_type' => 'file',
-            'sort_order' => '1',
+            'sort_order' => 1,
             'title' => 'Updated downloadable link #1',
         ];
         $links = [];
@@ -206,7 +206,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $expectedSample = [
             'sample_type' => 'file',
-            'sort_order' => '1',
+            'sort_order' => 1,
             'title' => 'Updated downloadable sample #1',
         ];
 

@@ -55,7 +55,7 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
     {
         $this->addFieldToFilter(
             'items_count',
-            ['neq' => '0']
+            ['neq' => 0]
         )->addFieldToFilter(
             'main_table.is_active',
             '1'

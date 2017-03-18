@@ -37,13 +37,13 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Website Id'
         )->addColumn(
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Id'
         )->addColumn(
             'country',
@@ -61,7 +61,7 @@ class InstallSchema implements InstallSchemaInterface
             'state',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'State'
         )->addColumn(
             'attribute_id',

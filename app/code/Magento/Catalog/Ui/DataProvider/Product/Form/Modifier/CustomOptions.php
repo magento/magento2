@@ -362,7 +362,7 @@ class CustomOptions extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
-                        'deleteValue' => '1',
+                        'deleteValue' => 1,
                         'addButton' => false,
                         'renderDefaultRecord' => false,
                         'columnsHeader' => false,
@@ -631,7 +631,7 @@ class CustomOptions extends AbstractModifier
                         'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
-                        'deleteValue' => '1',
+                        'deleteValue' => 1,
                         'renderDefaultRecord' => false,
                         'sortOrder' => $sortOrder,
                     ],
@@ -813,10 +813,10 @@ class CustomOptions extends AbstractModifier
                         'dataScope' => static::FIELD_IS_REQUIRE_NAME,
                         'dataType' => Text::NAME,
                         'sortOrder' => $sortOrder,
-                        'value' => '1',
+                        'value' => 1,
                         'valueMap' => [
-                            'true' => '1',
-                            'false' => '0'
+                            'true' => 1,
+                            'false' => 0
                         ],
                     ],
                 ],

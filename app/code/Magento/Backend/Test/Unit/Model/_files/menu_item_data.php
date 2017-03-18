@@ -34,11 +34,11 @@ return [
     ],
     'with submenu' => [
         [
-            'parent_id' => '1',
+            'parent_id' => 1,
             'module_name' => 'Magento_Module1',
-            'sort_index' => '50',
+            'sort_index' => 50,
             'depends_on_config' => null,
-            'id' => '5',
+            'id' => 5,
             'resource' => null,
             'path' => null,
             'action' => null,
@@ -56,11 +56,11 @@ return [
             ],
         ],
         [
-            'parent_id' => '1',
+            'parent_id' => 1,
             'module_name' => 'Magento_Module1',
-            'sort_index' => '50',
+            'sort_index' => 50,
             'depends_on_config' => null,
-            'id' => '5',
+            'id' => 5,
             'resource' => null,
             'path' => null,
             'action' => null,
@@ -81,9 +81,9 @@ return [
     ],
     'small set of data' => [
         [
-            'parent_id' => '1',
+            'parent_id' => 1,
             'module_name' => 'Magento_Module1',
-            'sort_index' => '50',
+            'sort_index' => 50,
             'sub_menu' => [
                 'id' => 'item',
                 'title' => 'Item Title',
@@ -95,9 +95,9 @@ return [
             ],
         ],
         [
-            'parent_id' => '1',
+            'parent_id' => 1,
             'module_name' => 'Magento_Module1',
-            'sort_index' => '50',
+            'sort_index' => 50,
             'depends_on_config' => null,
             'id' => null,
             'resource' => null,

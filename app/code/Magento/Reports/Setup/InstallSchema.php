@@ -266,7 +266,7 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_login',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Customer Login'
             )
             ->setComment('Reports Event Type Table');
@@ -295,28 +295,28 @@ class InstallSchema implements InstallSchemaInterface
                 'event_type_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Event Type Id'
             )
             ->addColumn(
                 'object_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Object Id'
             )
             ->addColumn(
                 'subject_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Subject Id'
             )
             ->addColumn(
                 'subtype',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Subtype'
             )
             ->addColumn(
@@ -621,14 +621,14 @@ class InstallSchema implements InstallSchemaInterface
                 'views_num',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Number of Views'
             )
             ->addColumn(
                 'rating_pos',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Rating Pos'
             )
             ->addIndex(
@@ -721,14 +721,14 @@ class InstallSchema implements InstallSchemaInterface
                 'views_num',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Number of Views'
             )
             ->addColumn(
                 'rating_pos',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Rating Pos'
             )
             ->addIndex(
@@ -821,14 +821,14 @@ class InstallSchema implements InstallSchemaInterface
                 'views_num',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Number of Views'
             )
             ->addColumn(
                 'rating_pos',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Rating Pos'
             )
             ->addIndex(

@@ -146,7 +146,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
             'test_field_1' => 'test_value_1',
             'test_field_2' => 100,
             'test_field_4' => null,
-            'identifier' => '100000001'
+            'identifier' => 100000001
         ];
 
         $finalData = [

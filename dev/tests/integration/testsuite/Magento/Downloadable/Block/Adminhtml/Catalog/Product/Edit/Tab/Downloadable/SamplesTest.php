@@ -62,7 +62,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\DataObject(
                 [
                     'type_id' => $productType,
-                    'id' => '1',
+                    'id' => 1,
                     'samples_title' => $samplesTitle,
                 ]
             )

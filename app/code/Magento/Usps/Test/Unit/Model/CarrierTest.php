@@ -135,7 +135,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $httpClientFactory->expects($this->any())->method('create')->will($this->returnValue($httpClient));
 
-        $data = ['id' => 'usps', 'store' => '1'];
+        $data = ['id' => 'usps', 'store' => 1];
 
         $this->error = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\RateResult\Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])

@@ -89,12 +89,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $mediaData = [
             'images' => [
                 '72mljfhmasfilp9cuq' => [
-                    'position' => '3',
+                    'position' => 3,
                     'media_type' => 'external-video',
                     'file' => '/i/n/index111111.jpg',
-                    'value_id' => '4',
+                    'value_id' => 4,
                     'label' => '',
-                    'disabled' => '0',
+                    'disabled' => 0,
                     'removed' => '',
                     'video_provider' => 'youtube',
                     'video_url' => 'https://www.youtube.com/watch?v=ab123456',
@@ -104,13 +104,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'role' => '',
                 ],
                 'w596fi79hv1p6wj21u' => [
-                    'position' => '4',
+                    'position' => 4,
                     'media_type' => 'image',
                     'video_provider' => '',
                     'file' => '/h/d/hd_image.jpg',
-                    'value_id' => '7',
+                    'value_id' => 7,
                     'label' => '',
-                    'disabled' => '0',
+                    'disabled' => 0,
                     'removed' => '',
                     'video_url' => '',
                     'video_title' => '',
@@ -119,12 +119,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'role' => '',
                 ],
                 'tcodwd7e0dirifr64j' => [
-                    'position' => '4',
+                    'position' => 4,
                     'media_type' => 'external-video',
                     'file' => '/s/a/sample_3.jpg',
-                    'value_id' => '5',
+                    'value_id' => 5,
                     'label' => '',
-                    'disabled' => '0',
+                    'disabled' => 0,
                     'removed' => '',
                     'video_provider' => 'youtube',
                     'video_url' => 'https://www.youtube.com/watch?v=ab123456',
@@ -135,7 +135,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'additional_store_data' => [
                         0 =>
                             [
-                                'store_id' => '0',
+                                'store_id' => 0,
                                 'video_provider' => null,
                                 'video_url' => 'https://www.youtube.com/watch?v=ab123456',
                                 'video_title' => 'New Title',
@@ -190,12 +190,12 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $mediaData = [
             'images' => [
                 '72mljfhmasfilp9cuq' => [
-                    'position' => '3',
+                    'position' => 3,
                     'media_type' => 'external-video',
                     'file' => '/i/n/index111111.jpg',
-                    'value_id' => '4',
+                    'value_id' => 4,
                     'label' => '',
-                    'disabled' => '0',
+                    'disabled' => 0,
                     'removed' => '',
                     'video_provider' => 'youtube',
                     'video_url' => 'https://www.youtube.com/watch?v=abcdefghij',
@@ -205,13 +205,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'role' => '',
                 ],
                 'w596fi79hv1p6wj21u' => [
-                    'position' => '4',
+                    'position' => 4,
                     'media_type' => 'external-video',
                     'video_provider' => '',
                     'file' => '/h/d/hd_image.jpg',
-                    'value_id' => '7',
+                    'value_id' => 7,
                     'label' => '',
-                    'disabled' => '0',
+                    'disabled' => 0,
                     'removed' => '',
                     'video_url' => '',
                     'video_title' => '',
@@ -220,20 +220,20 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'role' => '',
                 ],
                 'tcodwd7e0dirifr64j' => [
-                    'position' => '4',
+                    'position' => 4,
                     'media_type' => 'external-video',
                     'video_provider' => '',
                     'file' => '/h/d/hd_image.jpg',
                     'value_id' => '',
                     'label' => '',
-                    'disabled' => '0',
+                    'disabled' => 0,
                     'removed' => '',
                     'video_url' => '',
                     'video_title' => '',
                     'video_description' => '',
                     'video_metadata' => '',
                     'role' => '',
-                    'save_data_from' => '7',
+                    'save_data_from' => 7,
                     'new_file' => '/i/n/index_4.jpg',
                 ],
             ],
@@ -249,7 +249,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $resourceEntryResult = [
             [
-                'value_id' => '4',
+                'value_id' => 4,
                 'store_id' => 1,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=abcdefghij',
@@ -263,7 +263,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                 'video_metadata' => 'meta one',
             ],
             [
-                'value_id' => '7',
+                'value_id' => 7,
                 'store_id' => 1,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',

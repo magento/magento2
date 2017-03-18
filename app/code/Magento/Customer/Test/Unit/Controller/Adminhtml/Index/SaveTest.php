@@ -355,7 +355,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             CustomerInterface::DEFAULT_BILLING => $addressId,
             CustomerInterface::DEFAULT_SHIPPING => $addressId,
             'confirmation' => false,
-            'sendemail_store_id' => '1',
+            'sendemail_store_id' => 1,
             'id' => $customerId,
         ];
         $mergedAddressData = [

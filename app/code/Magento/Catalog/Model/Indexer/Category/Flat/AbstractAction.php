@@ -249,7 +249,7 @@ class AbstractAction
             'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT, 5],
             'unsigned' => true,
             'nullable' => false,
-            'default' => '0',
+            'default' => 0,
             'comment' => 'Store Id',
         ];
 

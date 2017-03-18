@@ -14,7 +14,7 @@ $row =
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                     'attribute' => null,
                     'operator' => null,
-                    'value' => '1',
+                    'value' => 1,
                     'is_value_processed' => null,
                     'aggregator' => 'all',
                     'conditions' => [
@@ -22,7 +22,7 @@ $row =
                             'type' => Magento\SalesRule\Model\Rule\Condition\Address::class,
                             'attribute' => 'weight',
                             'operator' => '<=',
-                            'value' => '1',
+                            'value' => 1,
                             'is_value_processed' => false,
                         ]
                     ]

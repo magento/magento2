@@ -123,7 +123,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => self::DATA_NAME,
                 'required' => true,
                 'disabled' => $disabled,
-                'maxlength' => '255'
+                'maxlength' => 255
             ]
         );
         $fieldset->addField(
@@ -134,7 +134,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name' => self::DATA_EMAIL,
                 'disabled' => $disabled,
                 'class' => 'validate-email',
-                'maxlength' => '254'
+                'maxlength' => 254
             ]
         );
         $fieldset->addField(

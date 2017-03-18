@@ -132,7 +132,7 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
                          DbVersionInfo::KEY_MODULE => 'Module_One',
                          DbVersionInfo::KEY_TYPE => 'schema',
                          DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
+                         DbVersionInfo::KEY_REQUIRED => 1
                      ]
                 ],
             ],
@@ -142,7 +142,7 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
                          DbVersionInfo::KEY_MODULE => 'Module_Two',
                          DbVersionInfo::KEY_TYPE => 'data',
                          DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
+                         DbVersionInfo::KEY_REQUIRED => 1
                      ]
                 ],
             ],
@@ -152,25 +152,25 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
                          DbVersionInfo::KEY_MODULE => 'Module_One',
                          DbVersionInfo::KEY_TYPE => 'schema',
                          DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
+                         DbVersionInfo::KEY_REQUIRED => 1
                      ],
                      [
                          DbVersionInfo::KEY_MODULE => 'Module_Two',
                          DbVersionInfo::KEY_TYPE => 'schema',
                          DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
+                         DbVersionInfo::KEY_REQUIRED => 1
                      ],
                      [
                          DbVersionInfo::KEY_MODULE => 'Module_One',
                          DbVersionInfo::KEY_TYPE => 'data',
                          DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
+                         DbVersionInfo::KEY_REQUIRED => 1
                      ],
                      [
                          DbVersionInfo::KEY_MODULE => 'Module_Two',
                          DbVersionInfo::KEY_TYPE => 'data',
                          DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
+                         DbVersionInfo::KEY_REQUIRED => 1
                      ]
                 ],
             ],

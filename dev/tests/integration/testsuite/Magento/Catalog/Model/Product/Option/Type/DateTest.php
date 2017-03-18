@@ -81,7 +81,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 // $infoBuyRequest
                 ['code' => 'info_buyRequest', 'value' => '{"qty":23}'],
                 // $productOptionData
-                ['id' => '11', 'value' => '{"qty":12}'],
+                ['id' => 11, 'value' => '{"qty":12}'],
                 // $expectedOptionValueForRequest
                 ['date_internal' => ['field1' => 'value1', 'field2' => 'value2']]
             ],
@@ -92,7 +92,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 // $infoBuyRequest
                 ['code' => 'info_buyRequest', 'value' => '{"options":{"11":{"qty":23}}}'],
                 // $productOptionData
-                ['id' => '11', 'value' => '{"qty":12}'],
+                ['id' => 11, 'value' => '{"qty":12}'],
                 // $expectedOptionValueForRequest
                 ['qty' => 23]
             ],

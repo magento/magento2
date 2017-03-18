@@ -149,8 +149,8 @@ class RoleTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->_groupFactoryMock->expects($this->once())->method('create')->with(['roleId' => '1']);
-        $this->_roleFactoryMock->expects($this->once())->method('create')->with(['roleId' => '2']);
+        $this->_groupFactoryMock->expects($this->once())->method('create')->with(['roleId' => 1]);
+        $this->_roleFactoryMock->expects($this->once())->method('create')->with(['roleId' => 2]);
 
         $aclMock = $this->getMock(\Magento\Framework\Acl::class);
         $aclMock->expects($this->at(0))->method('addRole')->with($this->anything(), null);

@@ -21,7 +21,7 @@ class ConvertArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testAssocToXml()
     {
-        $data = ['one' => 1, 'two' => ['three' => 3, 'four' => '4']];
+        $data = ['one' => 1, 'two' => ['three' => 3, 'four' => 4]];
         $result = $this->_model->assocToXml($data);
         $expectedResult = <<<XML
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

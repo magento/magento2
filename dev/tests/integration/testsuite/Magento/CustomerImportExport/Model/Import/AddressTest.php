@@ -44,10 +44,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $_updateData = [
         'address' => [ // address records
-            'update' => '19107',  // address with updates
-            'new' => '85034',  // new address
-            'no_customer' => '33602',  // there is no customer with this primary key (email+website)
-            'new_no_address_id' => '32301'// new address without address id
+            'update' => 19107,  // address with updates
+            'new' => 85034,  // new address
+            'no_customer' => 33602,  // there is no customer with this primary key (email+website)
+            'new_no_address_id' => 32301// new address without address id
         ],
         'update' => [ // this data is changed in CSV file
             '19107' => [
@@ -62,8 +62,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ],
         ],
         'default' => [ // new default billing/shipping addresses
-            'billing' => '85034',
-            'shipping' => '19107',
+            'billing' => 85034,
+            'shipping' => 19107,
         ],
     ];
 
@@ -73,8 +73,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_deleteData = [
-        'delete' => '19107',  // deleted address
-        'not_delete' => '72701',  // not deleted address
+        'delete' => 19107,  // deleted address
+        'not_delete' => 72701,  // not deleted address
     ];
 
     /** @var \Magento\Customer\Model\ResourceModel\Customer */

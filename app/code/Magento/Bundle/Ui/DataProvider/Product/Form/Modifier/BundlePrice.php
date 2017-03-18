@@ -51,8 +51,8 @@ class BundlePrice extends AbstractModifier
             [
                 'disabled' => (bool)$this->locator->getProduct()->getId(),
                 'valueMap' => [
-                    'false' => '1',
-                    'true' => '0'
+                    'false' => 1,
+                    'true' => 0
                 ],
                 'validation' => [
                     'required-entry' => false

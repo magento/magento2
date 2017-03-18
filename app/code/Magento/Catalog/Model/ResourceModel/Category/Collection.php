@@ -397,7 +397,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addRootLevelFilter()
     {
-        $this->addFieldToFilter('path', ['neq' => '1']);
+        $this->addFieldToFilter('path', ['neq' => 1]);
         $this->addLevelFilter(1);
         return $this;
     }

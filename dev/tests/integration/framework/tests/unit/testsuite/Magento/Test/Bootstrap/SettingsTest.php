@@ -44,7 +44,7 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
                 'item_price' => 12.99,
                 'is_in_stock' => true,
                 'free_shipping' => 'enabled',
-                'zero_value' => '0',
+                'zero_value' => 0,
                 'test_file' => 'metrics.php',
                 'all_xml_files' => '*.xml',
                 'all_xml_or_one_php_file' => '{*.xml,4.php}',

@@ -48,8 +48,8 @@ class BundleWeightTest extends AbstractModifierTest
         ];
         $weightTypeParams = [
             'valueMap' => [
-                'false' => '1',
-                'true' => '0'
+                'false' => 1,
+                'true' => 0
             ],
             'validation' => [
                 'required-entry' => false

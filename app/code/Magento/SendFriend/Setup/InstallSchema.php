@@ -36,19 +36,19 @@ class InstallSchema implements InstallSchemaInterface
             'ip',
             \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
             '20',
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Customer IP address'
         )->addColumn(
             'time',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Log time'
         )->addColumn(
             'website_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Website ID'
         )->addIndex(
             $installer->getIdxName('sendfriend_log', 'ip'),

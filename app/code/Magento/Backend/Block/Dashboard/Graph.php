@@ -189,7 +189,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             'cht' => 'lc',
             'chf' => 'bg,s,ffffff',
             'chco' => 'ef672f',
-            'chls' => '7',
+            'chls' => 7,
             'chxs' => '0,676056,15,0,l,676056|1,676056,15,0,l,676056',
             'chm' => 'h,f2ebde,0,0:1:.1,1,-1',
         ];

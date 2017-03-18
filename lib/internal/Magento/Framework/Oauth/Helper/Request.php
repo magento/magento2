@@ -66,7 +66,7 @@ class Request
      *         'oauth_version' => '1.0',
      *         'oauth_signature_method' => 'HMAC-SHA1',
      *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
+     *         'oauth_timestamp' => 1377183099,
      *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
      *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
      * )

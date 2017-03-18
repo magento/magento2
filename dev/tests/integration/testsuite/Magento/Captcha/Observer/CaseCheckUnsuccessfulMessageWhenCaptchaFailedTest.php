@@ -24,7 +24,7 @@ class CaseCheckUnsuccessfulMessageWhenCaptchaFailedTest extends \Magento\TestFra
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\UrlInterface::class
         )->turnOffSecretKey();
-        $this->getRequest()->setPostValue(['email' => 'dummy@dummy.com', 'captcha' => '1234']);
+        $this->getRequest()->setPostValue(['email' => 'dummy@dummy.com', 'captcha' => 1234]);
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertSessionMessages(
             $this->equalTo(['Incorrect CAPTCHA']),

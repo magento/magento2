@@ -89,7 +89,7 @@ class InvoiceCreateTest extends WebapiAbstract
             'subtotal' => null,
             'subtotal_incl_tax' => null,
             'tax_amount' => null,
-            'total_qty' => '1',
+            'total_qty' => 1,
             'transaction_id' => null,
             'updated_at' => null,
             'items' => [

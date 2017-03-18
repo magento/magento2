@@ -189,17 +189,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $weeeObject1 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode1,
-                'amount' => '15',
+                'amount' => 15,
                 'amount_excl_tax' => '15.0000',
-                'tax_amount' => '1'
+                'tax_amount' => 1
             ]
         );
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => $fptCode2,
-                'amount' => '10',
+                'amount' => 10,
                 'amount_excl_tax' => '10.0000',
-                'tax_amount' => '5'
+                'tax_amount' => 5
             ]
         );
         $expectedObject1 = new \Magento\Framework\DataObject(
@@ -207,7 +207,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'code' => $fptCode1,
                 'amount' => $expectedAmount[0],
                 'amount_excl_tax' => '15.0000',
-                'tax_amount' => '1'
+                'tax_amount' => 1
             ]
         );
         $expectedObject2 = new \Magento\Framework\DataObject(
@@ -215,7 +215,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'code' => $fptCode2,
                 'amount' => $expectedAmount[1],
                 'amount_excl_tax' => '10.0000',
-                'tax_amount' => '5'
+                'tax_amount' => 5
             ]
         );
 

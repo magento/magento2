@@ -112,7 +112,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'nickname',
                 'title' => __('Nickname'),
                 'label' => __('Nickname'),
-                'maxlength' => '50',
+                'maxlength' => 50,
                 'required' => true
             ]
         );
@@ -124,7 +124,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'title',
                 'title' => __('Summary of Review'),
                 'label' => __('Summary of Review'),
-                'maxlength' => '255',
+                'maxlength' => 255,
                 'required' => true
             ]
         );

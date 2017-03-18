@@ -51,24 +51,24 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function ajaxSaveActionDataProvider()
     {
-        $postData = ['rate' => '10', 'tax_country_id' => 'US', 'tax_region_id' => '1'];
+        $postData = ['rate' => 10, 'tax_country_id' => 'US', 'tax_region_id' => 1];
         return [
             [
                 $postData + [
                     'code' => 'Rate ' . uniqid(rand()),
-                    'zip_is_range' => '1',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
+                    'zip_is_range' => 1,
+                    'zip_from' => 10000,
+                    'zip_to' => 20000,
                     'tax_postcode' => '*',
                 ],
-                ['zip_is_range' => 1, 'zip_from' => '10000', 'zip_to' => '20000', 'tax_postcode' => '10000-20000'],
+                ['zip_is_range' => 1, 'zip_from' => 10000, 'zip_to' => 20000, 'tax_postcode' => '10000-20000'],
             ],
             [
                 $postData + [
                     'code' => 'Rate ' . uniqid(rand()),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
+                    'zip_is_range' => 0,
+                    'zip_from' => 10000,
+                    'zip_to' => 20000,
                     'tax_postcode' => '*',
                 ],
                 ['zip_is_range' => null, 'zip_from' => null, 'zip_to' => null, 'tax_postcode' => '*']
@@ -117,9 +117,9 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => rand(1, 10000),
                     'tax_country_id' => 'US',
-                    'tax_region_id' => '0',
+                    'tax_region_id' => 0,
                     'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '1',
+                    'zip_is_range' => 1,
                     'zip_from' => '',
                     'zip_to' => '',
                     'tax_postcode' => '*'
@@ -131,11 +131,11 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => rand(1, 10000),
                     'tax_country_id' => 'US',
-                    'tax_region_id' => '0',
+                    'tax_region_id' => 0,
                     'code' => '',
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
+                    'zip_is_range' => 0,
+                    'zip_from' => 10000,
+                    'zip_to' => 20000,
                     'tax_postcode' => '*',
                 ],
                 $expectedData
@@ -145,11 +145,11 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => rand(1, 10000),
                     'tax_country_id' => '',
-                    'tax_region_id' => '0',
+                    'tax_region_id' => 0,
                     'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
+                    'zip_is_range' => 0,
+                    'zip_from' => 10000,
+                    'zip_to' => 20000,
                     'tax_postcode' => '*',
                 ],
                 $expectedData
@@ -159,11 +159,11 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => '',
                     'tax_country_id' => 'US',
-                    'tax_region_id' => '0',
+                    'tax_region_id' => 0,
                     'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
+                    'zip_is_range' => 0,
+                    'zip_from' => 10000,
+                    'zip_to' => 20000,
                     'tax_postcode' => '*',
                 ],
                 $expectedData
@@ -173,11 +173,11 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => rand(1, 10000),
                     'tax_country_id' => 'US',
-                    'tax_region_id' => '0',
+                    'tax_region_id' => 0,
                     'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
+                    'zip_is_range' => 0,
+                    'zip_from' => 10000,
+                    'zip_to' => 20000,
                     'tax_postcode' => '',
                 ],
                 $expectedData
@@ -187,9 +187,9 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 [
                     'rate' => '',
                     'tax_country_id' => '',
-                    'tax_region_id' => '1',
+                    'tax_region_id' => 1,
                     'code' => '',
-                    'zip_is_range' => '0',
+                    'zip_is_range' => 0,
                     'zip_from' => '',
                     'zip_to' => '',
                     'tax_postcode' => '',

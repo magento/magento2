@@ -129,19 +129,19 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
                 'name' => 'fieldName3',
                 'dataType' => 'varchar',
                 'type' => 'text',
-                'size' => '255',
+                'size' => 255,
             ],
             [
                 'name' => 'fieldName3',
                 'dataType' => 'mediumtext',
                 'type' => 'text',
-                'size' => '16777216',
+                'size' => 16777216,
             ],
             [
                 'name' => 'fieldName3',
                 'dataType' => 'text',
                 'type' => 'text',
-                'size' => '65536',
+                'size' => 65536,
             ]
         ];
         $index = 'index_name';

@@ -71,9 +71,9 @@ class InitialThemeSource implements ConfigSourceInterface
      *          'parent_id' => NULL,
      *          'theme_path' => 'Magento/backend',
      *          'theme_title' => 'Magento 2 backend',
-     *          'is_featured' => '0',
+     *          'is_featured' => 0,
      *          'area' => 'adminhtml',
-     *          'type' => '0',
+     *          'type' => 0,
      *          'code' => 'Magento/backend',
      *      ]
      *  ]

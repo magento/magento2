@@ -76,7 +76,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_data_sharing',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 1],
             'Defines Is Data Sharing'
         )->addColumn(
             'data_sharing_key',
@@ -88,7 +88,7 @@ class InstallSchema implements InstallSchemaInterface
             'default_attribute_set_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Default Attribute Set Id'
         )->addColumn(
             'increment_model',
@@ -100,19 +100,19 @@ class InstallSchema implements InstallSchemaInterface
             'increment_per_store',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Increment Per Store'
         )->addColumn(
             'increment_pad_length',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '8'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 8],
             'Increment Pad Length'
         )->addColumn(
             'increment_pad_char',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             1,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Increment Pad Char'
         )->addColumn(
             'additional_attribute_table',
@@ -149,13 +149,13 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_set_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Set Id'
         )->addColumn(
             'increment_id',
@@ -167,13 +167,13 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Parent Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'created_at',
@@ -191,7 +191,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 1],
             'Defines Is Entity Active'
         )->addIndex(
             $installer->getIdxName('eav_entity', ['entity_type_id']),
@@ -231,25 +231,25 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Id'
         )->addColumn(
             'value',
@@ -312,25 +312,25 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Id'
         )->addColumn(
             'value',
@@ -393,31 +393,31 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Id'
         )->addColumn(
             'value',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Attribute Value'
         )->addIndex(
             $installer->getIdxName('eav_entity_int', ['store_id']),
@@ -474,25 +474,25 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Id'
         )->addColumn(
             'value',
@@ -555,25 +555,25 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Id'
         )->addColumn(
             'value',
@@ -636,7 +636,7 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_code',
@@ -702,13 +702,13 @@ class InstallSchema implements InstallSchemaInterface
             'is_required',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Defines Is Required'
         )->addColumn(
             'is_user_defined',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Defines Is User Defined'
         )->addColumn(
             'default_value',
@@ -720,7 +720,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_unique',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Defines Is Unique'
         )->addColumn(
             'note',
@@ -762,13 +762,13 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'increment_prefix',
@@ -820,7 +820,7 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_set_name',
@@ -832,7 +832,7 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Sort Order'
         )->addIndex(
             $installer->getIdxName(
@@ -871,7 +871,7 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_set_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Set Id'
         )->addColumn(
             'attribute_group_name',
@@ -883,13 +883,13 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Sort Order'
         )->addColumn(
             'default_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true, 'default' => 0],
             'Default Id'
         )->addColumn(
             'attribute_group_code',
@@ -940,31 +940,31 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Entity Type Id'
         )->addColumn(
             'attribute_set_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Set Id'
         )->addColumn(
             'attribute_group_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Group Id'
         )->addColumn(
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Sort Order'
         )->addIndex(
             $installer->getIdxName(
@@ -1025,13 +1025,13 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Sort Order'
         )->addIndex(
             $installer->getIdxName('eav_attribute_option', ['attribute_id']),
@@ -1062,13 +1062,13 @@ class InstallSchema implements InstallSchemaInterface
             'option_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Option Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'value',
@@ -1114,13 +1114,13 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Attribute Id'
         )->addColumn(
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'value',
@@ -1178,7 +1178,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_system',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Is System'
         )->addColumn(
             'theme',
@@ -1278,7 +1278,7 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Sort Order'
         )->addIndex(
             $installer->getIdxName(
@@ -1375,7 +1375,7 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Sort Order'
         )->addIndex(
             $installer->getIdxName(

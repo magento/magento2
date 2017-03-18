@@ -105,7 +105,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
                     'format' => '#$subscriber_id $customer_name ($subscriber_email)'
                 ],
                 [
-                    'subscriber_id' => '10',
+                    'subscriber_id' => 10,
                     'customer_name' => 'John Doe',
                     'subscriber_email' => 'john@doe.com'
                 ],

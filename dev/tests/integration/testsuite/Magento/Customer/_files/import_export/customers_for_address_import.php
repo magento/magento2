@@ -47,8 +47,8 @@ $addressFirst->addData(
         'street' => '1079 Rocky Road',
         'city' => 'Philadelphia',
         'country_id' => 'US',
-        'region_id' => '51',
-        'postcode' => '19107',
+        'region_id' => 51,
+        'postcode' => 19107,
         'telephone' => '215-629-9720',
     ]
 );
@@ -67,8 +67,8 @@ $addressSecond->addData(
         'street' => '3176 Cambridge Court',
         'city' => 'Fayetteville',
         'country_id' => 'US',
-        'region_id' => '5',
-        'postcode' => '72701',
+        'region_id' => 5,
+        'postcode' => 72701,
         'telephone' => '479-899-9849',
     ]
 );

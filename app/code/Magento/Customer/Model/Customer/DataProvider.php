@@ -490,8 +490,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if ($attribute->getFrontendInput() === 'boolean') {
             $meta[$code]['arguments']['data']['config']['prefer'] = 'toggle';
             $meta[$code]['arguments']['data']['config']['valueMap'] = [
-                'true' => '1',
-                'false' => '0',
+                'true' => 1,
+                'false' => 0,
             ];
         }
     }

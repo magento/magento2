@@ -214,10 +214,10 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
             'lastname' => 'Smith',
             'suffix' => 'Esq.',
             'email' => 'customer@example.com',
-            'default_billing' => '1',
-            'default_shipping' => '1',
+            'default_billing' => 1,
+            'default_shipping' => 1,
             'disable_auto_group_change' => 0,
-            'taxvat' => '12',
+            'taxvat' => 12,
             'gender' => 0
         ];
 

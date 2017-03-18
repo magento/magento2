@@ -189,7 +189,7 @@ class AddAttributeToTemplateTest extends \PHPUnit_Framework_TestCase
         $templateId = '4';
         $attributeIds = [
             'selected' => ["178"],
-            'total' => '1'
+            'total' => 1
         ];
 
         $this->requestMock

@@ -39,8 +39,8 @@ class ComplexParameterTest extends \PHPUnit_Framework_TestCase
             ['--foo', []],
             ['--foo=', []],
             ['--foo=1', [1 => '']],
-            ['--foo=bar=1&baz=2', ['bar' => '1', 'baz' => '2']],
-            ['--foo=bar[1]=2&baz[3]=4', ['bar' => [1 => '2'], 'baz' => [3 => '4']]],
+            ['--foo=bar=1&baz=2', ['bar' => 1, 'baz' => 2]],
+            ['--foo=bar[1]=2&baz[3]=4', ['bar' => [1 => 2], 'baz' => [3 => 4]]],
             ['--foo=bar[one]=value1&bar[two]=value2', ['bar' => ['one' => 'value1', 'two' => 'value2']]],
         ];
     }

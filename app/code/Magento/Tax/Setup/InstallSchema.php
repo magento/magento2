@@ -364,7 +364,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'tax_base_amount_sum',

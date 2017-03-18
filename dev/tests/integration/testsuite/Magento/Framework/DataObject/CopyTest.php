@@ -22,7 +22,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     {
         $fieldset = 'sales_copy_order';
         $aspect = 'to_edit';
-        $data = ['customer_email' => 'admin@example.com', 'customer_group_id' => '1'];
+        $data = ['customer_email' => 'admin@example.com', 'customer_group_id' => 1];
         $source = new \Magento\Framework\DataObject($data);
         $target = new \Magento\Framework\DataObject();
         $expectedTarget = new \Magento\Framework\DataObject($data);
@@ -153,7 +153,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     {
         $fieldset = 'sales_copy_order';
         $aspect = 'to_edit';
-        $data = ['customer_email' => 'admin@example.com', 'customer_group_id' => '1'];
+        $data = ['customer_email' => 'admin@example.com', 'customer_group_id' => 1];
         $source = new \Magento\Framework\DataObject($data);
         $target = [];
         $expectedTarget = $data;

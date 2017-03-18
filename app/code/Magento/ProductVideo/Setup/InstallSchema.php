@@ -43,7 +43,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Store ID'
             )
             ->addColumn(

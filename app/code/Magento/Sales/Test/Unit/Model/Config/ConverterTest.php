@@ -48,17 +48,17 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'group1' => [
                     'item1' => [
                         'instance' => 'instance1',
-                        'sort_order' => '1',
+                        'sort_order' => 1,
                         'renderers' => ['renderer1' => 'instance1'],
                     ],
                 ],
                 'group2' => [
-                    'item1' => ['instance' => 'instance1', 'sort_order' => '1', 'renderers' => []],
+                    'item1' => ['instance' => 'instance1', 'sort_order' => 1, 'renderers' => []],
                 ],
             ],
             'section2' => [
                 'group1' => [
-                    'item1' => ['instance' => 'instance1', 'sort_order' => '1', 'renderers' => []],
+                    'item1' => ['instance' => 'instance1', 'sort_order' => 1, 'renderers' => []],
                 ],
             ],
             'order' => ['available_product_types' => ['type1', 'type2']],

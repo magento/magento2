@@ -27,11 +27,11 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             [
                 'Default' => [
                     'name' => [
-                        'id' => '69',
+                        'id' => 69,
                         'code' => 'name',
-                        'is_global' => '0',
-                        'is_required' => '1',
-                        'is_unique' => '0',
+                        'is_global' => 0,
+                        'is_required' => 1,
+                        'is_unique' => 0,
                         'frontend_label' => 'Name',
                         'is_static' => false,
                         'apply_to' =>
@@ -44,11 +44,11 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
                             ],
                     ],
                     'sku' => [
-                        'id' => '70',
+                        'id' => 70,
                         'code' => 'sku',
-                        'is_global' => '1',
-                        'is_required' => '1',
-                        'is_unique' => '1',
+                        'is_global' => 1,
+                        'is_required' => 1,
+                        'is_unique' => 1,
                         'frontend_label' => 'SKU',
                         'is_static' => true,
                         'apply_to' =>

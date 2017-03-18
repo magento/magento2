@@ -113,10 +113,10 @@ class ReportModulesInfoTest extends \PHPUnit_Framework_TestCase
         $this->collectMock->expects($this->once())
             ->method('getModuleData')
             ->willReturn([
-                'installed' => '1',
-                'uninstalled' => '1',
-                'enabled' => '1',
-                'disabled' => '1',
+                'installed' => 1,
+                'uninstalled' => 1,
+                'enabled' => 1,
+                'disabled' => 1,
                 'changes' => [
                     ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'enabled'],
                     ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'disabled'],

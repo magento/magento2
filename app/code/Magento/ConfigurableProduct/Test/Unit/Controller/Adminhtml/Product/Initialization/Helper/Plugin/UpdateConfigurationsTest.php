@@ -105,7 +105,7 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
             [
                 'newProduct' => false,
                 'id' => 'product3',
-                'qty' => '3',
+                'qty' => 3,
                 'was_changed' => true,
             ],
             [
@@ -139,7 +139,7 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'image' => 'simple2_image'
             ],
             'product3' => [
-                'quantity_and_stock_status' => ['qty' => '3']
+                'quantity_and_stock_status' => ['qty' => 3]
             ]
         ];
         /** @var Product[]|\PHPUnit_Framework_MockObject_MockObject[] $productMocks */

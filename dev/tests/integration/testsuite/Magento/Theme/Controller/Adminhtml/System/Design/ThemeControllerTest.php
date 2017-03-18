@@ -48,8 +48,8 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
                 'name' => 'simple-js-file.js',
                 'type' => 'application/x-javascript',
                 'tmp_name' => $target,
-                'error' => '0',
-                'size' => '28',
+                'error' => 0,
+                'size' => 28,
             ],
         ];
     }

@@ -111,14 +111,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'data' => [
                 'items' => [
                     [
-                        'id' => '1',
+                        'id' => 1,
                         $fieldName => 3
                     ],
                     [
-                        'id' => '2'
+                        'id' => 2
                     ],
                     [
-                        'id' => '3',
+                        'id' => 3,
                         $fieldName => 4.55,
                     ]
                 ]
@@ -128,16 +128,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'data' => [
                 'items' => [
                     [
-                        'id' => '1',
+                        'id' => 1,
                         $fieldName => '3.00$',
                         'price_number' => '3.00',
                         'price_currency' => $currencySymbol
                     ],
                     [
-                        'id' => '2'
+                        'id' => 2
                     ],
                     [
-                        'id' => '3',
+                        'id' => 3,
                         $fieldName => '4.55$',
                         'price_number' => '4.55',
                         'price_currency' => $currencySymbol

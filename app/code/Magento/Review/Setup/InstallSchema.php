@@ -91,21 +91,21 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Entity id'
             )
             ->addColumn(
                 'entity_pk_value',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Product id'
             )
             ->addColumn(
                 'status_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Status code'
             )
             ->addIndex(
@@ -153,14 +153,14 @@ class InstallSchema implements InstallSchemaInterface
                 'review_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Review id'
             )
             ->addColumn(
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Store id'
             )
             ->addColumn(
@@ -243,35 +243,35 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_pk_value',
                 \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Product id'
             )
             ->addColumn(
                 'entity_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Entity type id'
             )
             ->addColumn(
                 'reviews_count',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Qty of reviews'
             )
             ->addColumn(
                 'rating_summary',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Summarized rating'
             )
             ->addColumn(
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Store id'
             )
             ->addIndex(
@@ -623,7 +623,7 @@ class InstallSchema implements InstallSchemaInterface
                 'percent_approved',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['default' => '0'],
+                ['default' => 0],
                 'Vote percent approved by admin'
             )
             ->addColumn(

@@ -29,7 +29,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
 
         $address = [
             OrderAddress::REGION => 'CA',
-            OrderAddress::POSTCODE => '11111',
+            OrderAddress::POSTCODE => 11111,
             OrderAddress::LASTNAME => 'lastname',
             OrderAddress::STREET => ['street'],
             OrderAddress::CITY => 'city',
@@ -76,7 +76,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
 
         $validate = [
             OrderAddress::REGION => 'CA',
-            OrderAddress::POSTCODE => '11111',
+            OrderAddress::POSTCODE => 11111,
             OrderAddress::LASTNAME => 'lastname',
             OrderAddress::STREET => 'street',
             OrderAddress::CITY => 'city',

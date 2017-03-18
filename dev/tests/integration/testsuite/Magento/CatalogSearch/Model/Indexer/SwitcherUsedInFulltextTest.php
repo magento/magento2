@@ -114,7 +114,7 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
 
         $this->dimension = $objectManager->create(
             \Magento\Framework\Search\Request\Dimension::class,
-            ['name' => 'scope', 'value' => '1']
+            ['name' => 'scope', 'value' => 1]
         );
 
         $this->indexSwitcher = Bootstrap::getObjectManager()->get(

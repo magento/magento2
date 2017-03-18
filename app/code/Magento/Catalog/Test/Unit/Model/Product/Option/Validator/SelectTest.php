@@ -61,7 +61,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         $value = [
             'price_type' => 'fixed',
-            'price' => '10',
+            'price' => 10,
             'title' => 'Some Title',
         ];
         $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
@@ -77,7 +77,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         $value = [
             'price_type' => 'fixed',
-            'price' => '10',
+            'price' => 10,
             'title' => 'Some Title',
         ];
 

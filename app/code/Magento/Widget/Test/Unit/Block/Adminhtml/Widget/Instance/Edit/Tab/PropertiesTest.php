@@ -65,11 +65,11 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
                     'parameters' => [
                         'title' => [
                             'type' => 'text',
-                            'visible' => '0',
+                            'visible' => 0,
                         ],
                         'template' => [
                             'type' => 'select',
-                            'visible' => '1',
+                            'visible' => 1,
                         ],
                     ]
                 ],
@@ -80,11 +80,11 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
                     'parameters' => [
                         'types' => [
                             'type' => 'multiselect',
-                            'visible' => '1',
+                            'visible' => 1,
                         ],
                         'template' => [
                             'type' => 'select',
-                            'visible' => '1',
+                            'visible' => 1,
                         ],
                     ]
                 ],
@@ -99,7 +99,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
                     'parameters' => [
                         'template' => [
                             'type' => 'select',
-                            'visible' => '0',
+                            'visible' => 0,
                         ],
                     ]
                 ],

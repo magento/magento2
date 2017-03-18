@@ -66,22 +66,22 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $fetchAllForInitAttributes = [
             [
-                'attribute_set_name' => '1',
-                'attribute_id' => '1',
+                'attribute_set_name' => 1,
+                'attribute_id' => 1,
             ],
             [
-                'attribute_set_name' => '2',
-                'attribute_id' => '2',
+                'attribute_set_name' => 2,
+                'attribute_id' => 2,
             ],
         ];
 
         $fetchAllForOtherCalls = [[
-            'selection_id' => '1',
-            'option_id' => '1',
-            'parent_product_id' => '1',
-            'product_id' => '1',
-            'position' => '1',
-            'is_default' => '1'
+            'selection_id' => 1,
+            'option_id' => 1,
+            'parent_product_id' => 1,
+            'product_id' => 1,
+            'position' => 1,
+            'is_default' => 1
         ]];
 
         $this->connection
@@ -238,48 +238,48 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->will($this->returnValue([
             '1' => [
-                'option_id' => '1',
-                'parent_id' => '1',
-                'required' => '1',
-                'position' => '1',
+                'option_id' => 1,
+                'parent_id' => 1,
+                'required' => 1,
+                'position' => 1,
                 'type' => 'bundle',
-                'value_id' => '1',
+                'value_id' => 1,
                 'title' => 'Bundle1',
                 'name' => 'bundle1',
                 'selections' => [
                     ['name' => 'Bundlen1',
                         'type' => 'dropdown',
-                        'required' => '1',
-                        'sku' => '1',
-                        'price' => '10',
+                        'required' => 1,
+                        'sku' => 1,
+                        'price' => 10,
                         'price_type' => 'fixed',
-                        'shipment_type' => '1',
-                        'default_qty' => '1',
-                        'is_defaul' => '1',
-                        'position' => '1',
-                        'option_id' => '1']
+                        'shipment_type' => 1,
+                        'default_qty' => 1,
+                        'is_defaul' => 1,
+                        'position' => 1,
+                        'option_id' => 1]
                 ]
             ],
             '2' => [
-                'option_id' => '6',
-                'parent_id' => '6',
-                'required' => '6',
-                'position' => '6',
+                'option_id' => 6,
+                'parent_id' => 6,
+                'required' => 6,
+                'position' => 6,
                 'type' => 'bundle',
-                'value_id' => '6',
+                'value_id' => 6,
                 'title' => 'Bundle6',
                 'selections' => [
                     ['name' => 'Bundlen6',
                         'type' => 'dropdown',
-                        'required' => '1',
-                        'sku' => '222',
-                        'price' => '10',
+                        'required' => 1,
+                        'sku' => 222,
+                        'price' => 10,
                         'price_type' => 'percent',
                         'shipment_type' => 0,
-                        'default_qty' => '2',
-                        'is_defaul' => '1',
-                        'position' => '6',
-                        'option_id' => '6']
+                        'default_qty' => 2,
+                        'is_defaul' => 1,
+                        'position' => 6,
+                        'option_id' => 6]
                 ]
             ]
         ]));

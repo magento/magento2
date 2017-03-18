@@ -123,7 +123,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
                 'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
                 'caption' => '',
-                'position' => '0',
+                'position' => 0,
                 'isMain' => true,
             ];
         }

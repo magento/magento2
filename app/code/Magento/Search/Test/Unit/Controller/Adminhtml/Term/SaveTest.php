@@ -129,7 +129,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     public function executeIsPostDataDataProvider()
     {
         return [
-            [false, ['0' => '0']],
+            [false, ['0' => 0]],
             [true, []]
         ];
     }
@@ -228,7 +228,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     private function mockGetRequestData($queryText, $queryId)
     {
-        $this->request->expects($this->at(0))->method('getPostValue')->willReturn(['0' => '0']);
+        $this->request->expects($this->at(0))->method('getPostValue')->willReturn(['0' => 0]);
         $this->request->expects($this->at(1))->method('isPost')->willReturn(true);
         $this->request->expects($this->at(2))->method('getPost')->with('query_text', false)->willReturn($queryText);
         $this->request->expects($this->at(3))->method('getPost')->with('query_id', null)->willReturn($queryId);

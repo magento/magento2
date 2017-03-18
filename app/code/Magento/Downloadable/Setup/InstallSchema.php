@@ -41,14 +41,14 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Product ID'
             )
             ->addColumn(
                 'sort_order',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Sort order'
             )
             ->addColumn(
@@ -62,7 +62,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_shareable',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Shareable flag'
             )
             ->addColumn(
@@ -137,14 +137,14 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Link ID'
             )
             ->addColumn(
                 'website_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Website ID'
             )
             ->addColumn(
@@ -195,7 +195,7 @@ class InstallSchema implements InstallSchemaInterface
                 'order_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Order ID'
             )
             ->addColumn(
@@ -209,7 +209,7 @@ class InstallSchema implements InstallSchemaInterface
                 'order_item_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Order Item ID'
             )
             ->addColumn(
@@ -230,7 +230,7 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => true, 'default' => 0],
                 'Customer ID'
             )
             ->addColumn(
@@ -299,21 +299,21 @@ class InstallSchema implements InstallSchemaInterface
                 'purchased_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Purchased ID'
             )
             ->addColumn(
                 'order_item_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Order Item ID'
             )
             ->addColumn(
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => true, 'default' => 0],
                 'Product ID'
             )
             ->addColumn(
@@ -327,21 +327,21 @@ class InstallSchema implements InstallSchemaInterface
                 'number_of_downloads_bought',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Number of downloads bought'
             )
             ->addColumn(
                 'number_of_downloads_used',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Number of downloads used'
             )
             ->addColumn(
                 'link_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Link ID'
             )
             ->addColumn(
@@ -355,7 +355,7 @@ class InstallSchema implements InstallSchemaInterface
                 'is_shareable',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Shareable Flag'
             )
             ->addColumn(
@@ -455,14 +455,14 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Link ID'
             )
             ->addColumn(
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Store ID'
             )
             ->addColumn(
@@ -518,7 +518,7 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Product ID'
             )
             ->addColumn(
@@ -546,7 +546,7 @@ class InstallSchema implements InstallSchemaInterface
                 'sort_order',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Sort Order'
             )
             ->addIndex(
@@ -579,14 +579,14 @@ class InstallSchema implements InstallSchemaInterface
                 'sample_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Sample ID'
             )
             ->addColumn(
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Store ID'
             )
             ->addColumn(

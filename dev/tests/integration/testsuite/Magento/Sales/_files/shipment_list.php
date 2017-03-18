@@ -14,28 +14,28 @@ require 'order.php';
 
 $shipments = [
     [
-        'increment_id' => '100000001',
+        'increment_id' => 100000001,
         'order_id' => $order->getId(),
         'shipping_address_id' => 1,
         'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
     ],
     [
-        'increment_id' => '100000002',
+        'increment_id' => 100000002,
         'order_id' => $order->getId(),
         'shipping_address_id' => 3,
         'shipment_status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
     ],
     [
-        'increment_id' => '100000003',
+        'increment_id' => 100000003,
         'order_id' => $order->getId(),
         'shipping_address_id' => 3,
         'status' => \Magento\Sales\Model\Order\Shipment::STATUS_NEW,
         'store_id' => 1,
     ],
     [
-        'increment_id' => '100000004',
+        'increment_id' => 100000004,
         'order_id' => $order->getId(),
         'shipping_address_id' => 4,
         'shipment_status' => 'closed',

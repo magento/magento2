@@ -49,7 +49,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $attributeData = [
-            'attribute_id' => '123',
+            'attribute_id' => 123,
             'entity_type_id' => 4,
             'attribute_code' => 'status',
             'backend_model' => null,

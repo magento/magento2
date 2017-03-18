@@ -39,7 +39,7 @@ class InstallSchema implements InstallSchemaInterface
             'severity',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Problem type'
         )->addColumn(
             'date_added',
@@ -69,13 +69,13 @@ class InstallSchema implements InstallSchemaInterface
             'is_read',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Flag if notification read'
         )->addColumn(
             'is_remove',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Flag if notification might be removed'
         )->addIndex(
             $installer->getIdxName('adminnotification_inbox', ['severity']),
@@ -106,7 +106,7 @@ class InstallSchema implements InstallSchemaInterface
             'severity',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Problem type'
         )->addColumn(
             'created_at',

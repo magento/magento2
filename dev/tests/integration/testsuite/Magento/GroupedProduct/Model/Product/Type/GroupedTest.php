@@ -61,16 +61,16 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             1 => [
                 'sku' => 'simple',
                 'name' => 'Simple Product',
-                'price' => '10',
-                'qty' => '1',
-                'position' => '1'
+                'price' => 10,
+                'qty' => 1,
+                'position' => 1
             ],
             21 => [
                 'sku' => 'virtual-product',
                 'name' => 'Virtual Product',
-                'price' => '10',
-                'qty' => '2',
-                'position' => '2'
+                'price' => 10,
+                'qty' => 2,
+                'position' => 2
             ]
         ];
         $productId = $product->getId();

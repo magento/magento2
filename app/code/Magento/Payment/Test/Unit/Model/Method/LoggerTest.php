@@ -27,11 +27,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $debugData =
             [
-                'request' => ['masked' => '123', 'unmasked' => '123']
+                'request' => ['masked' => 123, 'unmasked' => 123]
             ];
         $expectedDebugData =
             [
-                'request' => ['masked' => Logger::DEBUG_KEYS_MASK, 'unmasked' => '123']
+                'request' => ['masked' => Logger::DEBUG_KEYS_MASK, 'unmasked' => 123]
             ];
         $debugReplaceKeys =
             [
@@ -49,7 +49,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $debugData =
             [
-                'request' => ['data1' => '123', 'data2' => '123']
+                'request' => ['data1' => 123, 'data2' => 123]
             ];
 
         $this->loggerMock->expects(static::once())
@@ -63,7 +63,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $debugData =
             [
-                'request' => ['masked' => '123', 'unmasked' => '123']
+                'request' => ['masked' => 123, 'unmasked' => 123]
             ];
         $debugReplaceKeys =
             [

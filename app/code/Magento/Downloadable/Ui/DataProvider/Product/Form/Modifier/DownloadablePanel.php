@@ -124,8 +124,8 @@ class DownloadablePanel extends AbstractModifier
                     . ProductAttributeInterface::CODE_HAS_WEIGHT
             ],
             'valueMap' => [
-                'false' => '0',
-                'true' => '1',
+                'false' => 0,
+                'true' => 1,
             ],
             'samplesFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_SAMPLES,
             'linksFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_LINKS,
