@@ -42,17 +42,16 @@ define([
          */
         (function lookup(element) {
             // prevent cross origin iframe content reading
-            if (element.nodeName === "IFRAME") {
-                var iframeSrc = document.createElement('a');
-                iframeSrc.href = element.src;
-                if (window.location.hostname !== iframeSrc.hostname) {
+            if ($(element).prop('tagName') === 'IFRAME') {
+                var iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                                             .prop('hostname');
+
+                if (window.location.hostname !== iframeHostName) {
                     return [];
                 }
             }
 
             $(element).contents().each(function (index, el) {
-                var hostName, iFrameHostName;
-
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
                         lookup(el);
