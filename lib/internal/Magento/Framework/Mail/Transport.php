@@ -12,10 +12,11 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
      * @var \Zend\Mail\Transport\Sendmail
      */
     private $zendTransport;
+
     /**
      * @var \Magento\Framework\Mail\MessageInterface
      */
-    protected $_message;
+    private $message;
 
     /**
      * @param MessageInterface $message
@@ -25,7 +26,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     public function __construct(\Magento\Framework\Mail\MessageInterface $message, $parameters = null)
     {
         $this->zendTransport = new \Zend\Mail\Transport\Sendmail($parameters);
-        $this->_message = $message;
+        $this->message = $message;
     }
 
     /**
@@ -38,7 +39,7 @@ class Transport implements \Magento\Framework\Mail\TransportInterface
     {
         try {
             $this->zendTransport->send(
-                \Zend\Mail\Message::fromString($this->_message->getRawMessage())
+                \Zend\Mail\Message::fromString($this->message->getRawMessage())
             );
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);

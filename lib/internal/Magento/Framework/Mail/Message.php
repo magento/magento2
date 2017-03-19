@@ -64,52 +64,85 @@ class Message implements MessageInterface
         return $this;
     }
 
+    /**
+     * @param string $subject
+     * @return $this
+     */
     public function setSubject($subject)
     {
         $this->zendMessage->setSubject($subject);
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSubject()
     {
         return $this->zendMessage->getSubject();
     }
 
+    /**
+     * @return object
+     */
     public function getBody()
     {
         return $this->zendMessage->getBody();
     }
 
+    /**
+     * @param array|string $fromAddress
+     * @return $this
+     */
     public function setFrom($fromAddress)
     {
         $this->zendMessage->setFrom($fromAddress);
         return $this;
     }
 
+    /**
+     * @param array|string $toAddress
+     * @return $this
+     */
     public function addTo($toAddress)
     {
         $this->zendMessage->addTo($toAddress);
         return $this;
     }
 
+    /**
+     * @param array|string $ccAddress
+     * @return $this
+     */
     public function addCc($ccAddress)
     {
         $this->zendMessage->addCc($ccAddress);
         return $this;
     }
 
+    /**
+     * @param array|string $bccAddress
+     * @return $this
+     */
     public function addBcc($bccAddress)
     {
         $this->zendMessage->addBcc($bccAddress);
         return $this;
     }
 
+    /**
+     * @param array|string $replyToAddress
+     * @return $this
+     */
     public function setReplyTo($replyToAddress)
     {
         $this->zendMessage->setReplyTo($replyToAddress);
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getRawMessage()
     {
         return $this->zendMessage->toString();
