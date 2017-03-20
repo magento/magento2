@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
+/**
+ * Provided logic will create temporary table based on memory table and will return new index table name.
+ */
 class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\StrategyInterface
 {
     const TEMP_SUFFIX = '_temp';

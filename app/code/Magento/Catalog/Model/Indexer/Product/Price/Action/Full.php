@@ -117,8 +117,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                     $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
 
                     if (!empty($entityIds)) {
-                        // Temporary table will created
+                        // Temporary table will created if not exists
                         $idxTableName = $this->_defaultIndexerResource->getIdxTable();
+                        $this->_emptyTable($idxTableName);
 
                         if ($indexer->getIsComposite()) {
                             $this->_copyRelationIndexData($entityIds);
