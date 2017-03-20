@@ -46,6 +46,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
+
     public static function dataInvalidPostAction()
     {
         return [

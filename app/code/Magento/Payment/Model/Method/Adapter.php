@@ -542,7 +542,6 @@ class Adapter implements MethodInterface
         $command = $this->commandPool->get($commandCode);
 
         return $command->execute($arguments);
-
     }
 
     /**

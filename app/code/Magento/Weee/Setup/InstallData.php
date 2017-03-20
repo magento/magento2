@@ -64,7 +64,6 @@ class InstallData implements InstallDataInterface
         $quoteSetup->addAttribute('quote_item', 'base_weee_tax_disposition', ['type' => 'decimal']);
         $quoteSetup->addAttribute('quote_item', 'base_weee_tax_row_disposition', ['type' => 'decimal']);
 
-
         /** @var SalesSetup $salesSetup */
         $salesSetup = $this->salesSetupFactory->create(['setup' => $setup]);
         $salesSetup->addAttribute('order_item', 'weee_tax_applied', ['type' => 'text']);

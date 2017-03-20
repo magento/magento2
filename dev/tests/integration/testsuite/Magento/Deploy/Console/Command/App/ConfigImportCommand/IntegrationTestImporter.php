@@ -12,6 +12,7 @@ class IntegrationTestImporter implements ImporterInterface
     /**
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function import(array $data)
     {

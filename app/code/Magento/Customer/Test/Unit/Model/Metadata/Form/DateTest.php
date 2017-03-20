@@ -7,7 +7,6 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
-
 class DateTest extends AbstractFormTestCase
 {
     /** @var \Magento\Customer\Model\Metadata\Form\Date */

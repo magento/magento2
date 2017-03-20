@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Layout;
 
-
 /**
  * Pool of generators for structural elements
  */
@@ -156,8 +155,7 @@ class GeneratorPool
                 $element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING]
             );
 
-            if (
-                isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
+            if (isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
                     && $structure->hasElement($siblingElement[ScheduledStructure::ELEMENT_NAME])
             ) {
                 $this->reorderElements(

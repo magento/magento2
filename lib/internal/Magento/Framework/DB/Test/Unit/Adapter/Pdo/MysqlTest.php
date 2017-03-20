@@ -6,9 +6,6 @@
 
 // @codingStandardsIgnoreFile
 
-/**
- * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
- */
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -17,6 +14,10 @@ use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**

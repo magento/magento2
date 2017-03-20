@@ -40,6 +40,7 @@ class Adjustment implements AdjustmentInterface
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
+
     /**
      * Constructor
      *

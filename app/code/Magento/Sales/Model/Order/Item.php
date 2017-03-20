@@ -2389,5 +2389,6 @@ class Item extends AbstractModel implements OrderItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }
