@@ -292,7 +292,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains('Import is failed: Invalid value. Value must be', $commandTester->getDisplay());
+        $this->assertContains('Import failed: Invalid value. Value must be', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
 
         $this->writeConfig(
