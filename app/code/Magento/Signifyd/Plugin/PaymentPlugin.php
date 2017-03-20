@@ -10,9 +10,9 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
 
 /**
- * Plugin complements MethodInterface::denyPayment method logic with canceling Signifyd guarantee.
+ * Plugin for Magento\Payment\Model\MethodInterface.
  *
- * @see MethodInterface::denyPayment
+ * @see MethodInterface
  */
 class PaymentPlugin
 {
@@ -41,6 +41,7 @@ class PaymentPlugin
     /**
      * Performs Signifyd guarantee cancel operation after payment denying.
      *
+     * @see MethodInterface::denyPayment
      * @param MethodInterface $subject
      * @param MethodInterface|bool $result
      * @return MethodInterface|bool
