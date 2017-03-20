@@ -39,4 +39,4 @@ before_script: ./dev/travis/before_script.sh
 script:
   - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
   - phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER
-  - if [$TEST_SUITE == "js"]; then grunt spec; fi
+  - if [ $TEST_SUITE == "js" ]; then grunt spec; fi
