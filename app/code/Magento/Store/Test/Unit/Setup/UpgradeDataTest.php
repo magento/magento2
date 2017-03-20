@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Store\Test\Unit\Setup;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -103,7 +102,6 @@ class UpgradeDataTest extends \PHPUnit_Framework_TestCase
         $this->model->upgrade($this->setupMock, $this->contextMock);
     }
 
-
     public function upgradeDataProvider()
     {
         return [
@@ -127,7 +125,6 @@ class UpgradeDataTest extends \PHPUnit_Framework_TestCase
                     3 => 'test_group3'
                 ]
             ],
-
             [
                 [
                     1 => '123 Group',
