@@ -66,12 +66,9 @@ class UpgradeData implements UpgradeDataInterface
             if (array_key_exists($code, $codes)) {
                 $codes[$code]++;
                 $code = $code . $codes[$code];
-                $codes[$code] = 1;
-            } else {
-                $codes[$code] = 1;
             }
 
-            $codes[] = $code;
+            $codes[$code] = 1;
 
             $group->setCode($code);
             $group->save();
