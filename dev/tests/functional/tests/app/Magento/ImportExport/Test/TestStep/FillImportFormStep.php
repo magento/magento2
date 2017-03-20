@@ -33,8 +33,10 @@ class FillImportFormStep implements TestStepInterface
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
      */
-    public function __construct(AdminImportIndex $adminImportIndex, ImportData $import)
-    {
+    public function __construct(
+        AdminImportIndex $adminImportIndex,
+        ImportData $import
+    ) {
         $this->adminImportIndex = $adminImportIndex;
         $this->import = $import;
     }
@@ -52,7 +54,8 @@ class FillImportFormStep implements TestStepInterface
         $file = $this->import->getDataFieldConfig('import_file')['source'];
 
         return [
-            'products' => $file->getProducts()
+            'entities' => $file->getEntities(),
+            'import' => $this->import
         ];
     }
 }
