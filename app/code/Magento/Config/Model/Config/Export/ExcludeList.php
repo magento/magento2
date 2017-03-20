@@ -32,8 +32,7 @@ class ExcludeList
      *
      * @param string $path
      * @return bool
-     * @deprecated because in Magento since version 2.2.0 there are several
-     * types for configuration fields that require special processing.
+     * @deprecated
      */
     public function isPresent($path)
     {
@@ -44,8 +43,7 @@ class ExcludeList
      * Retrieves all excluded field paths for export
      *
      * @return array
-     * @deprecated because in Magento since version 2.2.0 there are several
-     * types for configuration fields that require special processing.
+     * @deprecated
      */
     public function get()
     {
