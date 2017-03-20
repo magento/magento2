@@ -41,6 +41,13 @@ class TypePool
     private $environment;
 
     /**
+     * Filtered configuration array
+     *
+     * @var array
+     */
+    private $filteredPaths;
+
+    /**
      * @param array $sensitive List of sensitive configuration fields paths
      * @param array $environment List of environment configuration fields paths
      */
@@ -59,8 +66,11 @@ class TypePool
      */
     public function isPresent($path, $type)
     {
-        $paths = $this->getPathsByType($type);
-        return in_array($path, $paths);
+        if (!isset($this->filteredPaths[$type])) {
+            $this->filteredPaths[$type] = $this->getPathsByType($type);
+        }
+
+        return in_array($path, $this->filteredPaths[$type]);
     }
 
     /**
