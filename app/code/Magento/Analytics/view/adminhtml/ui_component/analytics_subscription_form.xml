@@ -99,7 +99,7 @@
                             <item name="displayArea" xsi:type="string">actions-secondary</item>
                             <item name="displayAsLink" xsi:type="string">true</item>
                             <item name="buttonClasses" xsi:type="string">advanced-reports-subscription-postpone</item>
-                            <item name="title" xsi:type="string">Remind me later</item>
+                            <item name="title" xsi:type="string" translate="true">Remind me later</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_modal</item>
@@ -115,7 +115,7 @@
                             <item name="displayArea" xsi:type="string">actions-secondary</item>
                             <item name="displayAsLink" xsi:type="string">true</item>
                             <item name="buttonClasses" xsi:type="string">advanced-reports-subscription-disable</item>
-                            <item name="title" xsi:type="string">Disable Advance Reporting</item>
+                            <item name="title" xsi:type="string" translate="true">Disable Advanced Reporting</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_modal</item>
@@ -134,7 +134,7 @@
                         <item name="config" xsi:type="array">
                             <item name="controlCheckbox" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_checkbox:checked</item>
                             <item name="displayArea" xsi:type="string">actions-primary</item>
-                            <item name="title" xsi:type="string">Enable Advance Reporting</item>
+                            <item name="title" xsi:type="string" translate="true">Enable Advanced Reporting</item>
                             <item name="imports" xsi:type="array">
                                 <item name="disabled" xsi:type="string">!${ $.controlCheckbox }</item>
                             </item>
@@ -188,7 +188,7 @@
                     <item name="innerScroll" xsi:type="boolean">true</item>
                     <item name="buttons" xsi:type="array">
                         <item name="0" xsi:type="array">
-                            <item name="text" xsi:type="string">Cancel</item>
+                            <item name="text" xsi:type="string" translate="true">Cancel</item>
                             <item name="class" xsi:type="string">action-secondary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
@@ -202,7 +202,7 @@
                             </item>
                         </item>
                         <item name="1" xsi:type="array">
-                            <item name="text" xsi:type="string">Opt out</item>
+                            <item name="text" xsi:type="string" translate="true">Opt out</item>
                             <item name="class" xsi:type="string">action-primary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
@@ -234,7 +234,7 @@
                     <item name="additionalClasses" xsi:type="string">advanced-reports-subscription-text</item>
                     <item name="text" xsi:type="string" translate="true"><![CDATA[<p>Advanced Reporting in included,
                     free of charge, in your Magento software. When you opt out, we collect no product, order, and
-                    customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advance
+                    customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advanced
                     Reporting in you Admin Panel.</p>]]></item>
                 </item>
             </argument>
