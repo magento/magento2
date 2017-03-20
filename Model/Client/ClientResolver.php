@@ -50,7 +50,6 @@ class ClientResolver
      */
     protected $scope;
 
-
     /**
      * @param ObjectManagerInterface $objectManager
      * @param ScopeConfigInterface $scopeConfig,

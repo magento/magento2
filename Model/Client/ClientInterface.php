@@ -9,7 +9,7 @@ interface ClientInterface
 {
     /**
      * Validate connection params for search engine
-     * 
+     *
      * @return bool
      */
     public function testConnection();
