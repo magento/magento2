@@ -6,51 +6,62 @@
 
 namespace Magento\Store\Model\Message;
 
+use Magento\Framework\UrlInterface;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Model\ResourceModel\Group\Collection as GroupCollection;
+
 /**
- * System message about not filed required root category for store group
+ * System message about not filled required root category for store group
  */
 class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * Store group collection.
      *
-     * @var \Magento\Store\Model\ResourceModel\Group\Collection
+     * @var GroupCollection
      */
     private $collection;
 
     /**
      * URL builder.
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @param \Magento\Store\Model\ResourceModel\Group\Collection $collection Store group collection
-     * @param \Magento\Framework\UrlInterface $urlBuilder URL builder
+     * List of store groups with unassigned root categories.
+     *
+     * @var GroupInterface[]
+     */
+    private $items = null;
+
+    /**
+     * @param GroupCollection $collection Store group collection
+     * @param UrlInterface $urlBuilder URL builder
      */
     public function __construct(
-        \Magento\Store\Model\ResourceModel\Group\Collection $collection,
-        \Magento\Framework\UrlInterface $urlBuilder
+        GroupCollection $collection,
+        UrlInterface $urlBuilder
     ) {
         $this->collection = $collection;
         $this->urlBuilder = $urlBuilder;
     }
 
     /**
-     * Check whether all store groups has assigned root category
+     * {@inheritdoc}
+     *
+     * Check whether all store groups has assigned root category.
      *
      * @return bool - true if at least one group does not have category
      */
     public function isDisplayed()
     {
-        return !empty($this->collection->setWithoutAssignedCategoryFilter()->getItems());
+        return !empty($this->getItems());
     }
 
     /**
-     * Retrieve unique message identity
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getIdentity()
     {
@@ -58,23 +69,39 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
     }
 
     /**
-     * Retrieve message text
-     *
-     * @return \Magento\Framework\Phrase
+     * @inheritdoc
      */
     public function getText()
     {
-        $url = $this->urlBuilder->getUrl('adminhtml/system_store');
-        return __('One or more <a href="%1">stores</a> do not have assigned root category', $url);
+        $items = $this->getItems();
+        $groupLinks = [];
+        foreach ($items as $group) {
+            $groupUrl = $this->urlBuilder->getUrl('adminhtml/system_store/editGroup', ['group_id' => $group->getId()]);
+            $groupLinks[] = sprintf('<a href="%s">%s</a>', $groupUrl, $group->getName());
+        }
+        return __('The following stores are not associated with a root category: '
+            . implode(' ,', $groupLinks) . '. For the store to be displayed in the storefront, '
+            . 'it must be associated with a root category.');
     }
 
     /**
-     * Retrieve message severity
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getSeverity()
     {
         return self::SEVERITY_MAJOR;
+    }
+
+    /**
+     * Retrieves store groups which do not have assigned categories.
+     *
+     * @return GroupInterface[]
+     */
+    private function getItems()
+    {
+        if (null === $this->items) {
+            $this->items = $this->collection->setWithoutAssignedCategoryFilter()->getItems();
+        }
+        return $this->items;
     }
 }

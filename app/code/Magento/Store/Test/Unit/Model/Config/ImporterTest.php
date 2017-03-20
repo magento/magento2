@@ -131,7 +131,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'Stores were processed',
-                'The following new stores must be associated with a root category: 2 groups, 3 groups'
+                'The following new store groups must be associated with a root category: 2 groups, 3 groups. '
+                . PHP_EOL
+                . 'Associate a store group with a root category in the Admin Panel: Stores > Settings > All Stores.'
             ],
             $this->model->import($data)
         );
