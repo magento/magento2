@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdvancedPricingImportExport\Test\Constraint;
+namespace Magento\ImportExport\Test\Constraint;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -22,7 +22,7 @@ class AssertImportCheckDataErrorMessagesList extends AbstractConstraint
      */
     public function processAssert(array $patterns, AdminImportIndex $adminImportIndex)
     {
-        $messages = $adminImportIndex->getImportResult()->getErrorsList();
+        $messages = $adminImportIndex->getMessagesBlock()->getErrorsList();
 
         \PHPUnit_Framework_Assert::assertNotFalse($messages, 'Errors messages block is absent.');
         \PHPUnit_Framework_Assert::assertNotEmpty($messages, 'Errors messages is absent.');
