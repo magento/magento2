@@ -27,7 +27,6 @@
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
             <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_approve</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_single_flow, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
@@ -55,7 +54,6 @@
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
             <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_decline</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test_single_flow, severity:S1</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />

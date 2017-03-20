@@ -5,6 +5,7 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
+use Magento\Customer\Test\TestStep\DeleteCustomerStep;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnSignifydConsole;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
@@ -60,6 +61,13 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $signifydCancelOrderStep;
 
     /**
+     * Delete customer step.
+     *
+     * @var DeleteCustomerStep
+     */
+    private $deleteCustomerStep;
+
+    /**
      * Prices list.
      *
      * @var array
@@ -80,6 +88,7 @@ class SignifydObserveCaseStep implements TestStepInterface
      * @param SignifydNotifications $signifydNotifications
      * @param SignifydData $signifydData
      * @param SignifydCancelOrderStep $signifydCancelOrderStep
+     * @param DeleteCustomerStep $deleteCustomerStep
      * @param array $prices
      * @param $orderId
      */
@@ -90,6 +99,7 @@ class SignifydObserveCaseStep implements TestStepInterface
         SignifydNotifications $signifydNotifications,
         SignifydData $signifydData,
         SignifydCancelOrderStep $signifydCancelOrderStep,
+        DeleteCustomerStep $deleteCustomerStep,
         array $prices,
         $orderId
     ) {
@@ -99,6 +109,7 @@ class SignifydObserveCaseStep implements TestStepInterface
         $this->signifydNotifications = $signifydNotifications;
         $this->signifydData = $signifydData;
         $this->signifydCancelOrderStep = $signifydCancelOrderStep;
+        $this->deleteCustomerStep = $deleteCustomerStep;
         $this->prices = $prices;
         $this->orderId = $orderId;
     }
@@ -126,12 +137,14 @@ class SignifydObserveCaseStep implements TestStepInterface
 
     /**
      * Cancel order if test fails, or in the end of variation.
+     * Cleanup customer for next variations.
      *
      * @return void
      */
     public function cleanup()
     {
         $this->signifydCancelOrderStep->run();
+        $this->deleteCustomerStep->run();
     }
 
     /**

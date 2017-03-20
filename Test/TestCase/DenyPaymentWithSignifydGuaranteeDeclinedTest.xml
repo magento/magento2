@@ -33,6 +33,7 @@
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertDenyPaymentMessageInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
         </variation>
     </testCase>
 </config>
