@@ -106,4 +106,16 @@
             <argument name="paymentMapping" xsi:type="object">PaymentMethodConfigData</argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="fraud_protection/signifyd/api_key" xsi:type="string">1</item>
+                <item name="fraud_protection/signifyd/api_url" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="fraud_protection/signifyd/api_key" xsi:type="string">1</item>
+                <item name="fraud_protection/signifyd/api_url" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
