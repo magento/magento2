@@ -231,11 +231,9 @@ class CategoryProcessor
     protected function standardizeString($string)
     {
         if (function_exists('mb_strtolower')) {
-            $string = mb_strtolower($string);
-        } else {
-            $string = strtolower($string);
+            return mb_strtolower($string);
         }
 
-        return $string;
+        return strtolower($string);
     }
 }
