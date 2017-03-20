@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -23,7 +23,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * CMS block cache tag
      */
-    const CACHE_TAG = 'cms_block';
+    const CACHE_TAG = 'cms_b';
 
     /**#@+
      * Block's statuses
@@ -36,7 +36,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * @var string
      */
-    protected $_cacheTag = 'cms_block';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Adminhtml\Form\Field;
@@ -25,7 +25,7 @@ class CountryCreditCard extends AbstractFieldArray
     
     /**
      * Returns renderer for country element
-     * 
+     *
      * @return Countries
      */
     protected function getCountryRenderer()
@@ -42,7 +42,7 @@ class CountryCreditCard extends AbstractFieldArray
 
     /**
      * Returns renderer for country element
-     * 
+     *
      * @return CcTypes
      */
     protected function getCcTypesRenderer()

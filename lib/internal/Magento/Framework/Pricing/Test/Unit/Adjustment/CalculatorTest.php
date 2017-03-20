@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -60,12 +60,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($totalAmount), $this->equalTo($expectedAdjustments))
             ->will($this->returnValue($amountBaseMock));
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Weee\Pricing\Adjustment::class)
+        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
@@ -82,7 +82,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($amountInclTax), $this->equalTo($productMock))
             ->will($this->returnValue($weeeAdjustment + $amountInclTax));
 
-        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Tax\Pricing\Adjustment::class)
+        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
@@ -127,12 +127,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $adjustment = 5;
         $expectedAdjustments = [];
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Tax\Pricing\Adjustment::class)
+        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
@@ -150,7 +150,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($fullamount), $this->equalTo($productMock))
             ->will($this->returnValue($amount));
 
-        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Weee\Pricing\Adjustment::class)
+        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())

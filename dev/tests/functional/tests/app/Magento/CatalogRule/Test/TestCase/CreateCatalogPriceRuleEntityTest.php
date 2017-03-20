@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
  * 5. Save rule.
  * 6. Perform appropriate assertions.
  *
- * @group Catalog_Price_Rules_(MX)
+ * @group Catalog_Price_Rules
  * @ZephyrId MAGETWO-24341
  */
 class CreateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
@@ -28,7 +28,6 @@ class CreateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

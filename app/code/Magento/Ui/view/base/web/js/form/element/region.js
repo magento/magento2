@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,6 +24,7 @@ define([
         update: function (value) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
                 options = country.indexedOptions,
+                isRegionRequired,
                 option;
 
             if (!value) {
@@ -43,6 +44,14 @@ define([
                     this.validation['required-entry'] = true;
                 }
 
+                if (option && !this.options().length) {
+                    registry.get(this.customName, function (input) {
+                        isRegionRequired = !!option['is_region_required'];
+                        input.validation['required-entry'] = isRegionRequired;
+                        input.required(isRegionRequired);
+                    });
+                }
+
                 this.required(!!option['is_region_required']);
             }
         },
@@ -56,16 +65,20 @@ define([
          */
         filter: function (value, field) {
             var country = registry.get(this.parentName + '.' + 'country_id'),
+                option;
+
+            if (country) {
                 option = country.indexedOptions[value];
 
-            this._super(value, field);
+                this._super(value, field);
 
-            if (option && option['is_region_visible'] === false) {
-                // hide select and corresponding text input field if region must not be shown for selected country
-                this.setVisible(false);
+                if (option && option['is_region_visible'] === false) {
+                    // hide select and corresponding text input field if region must not be shown for selected country
+                    this.setVisible(false);
 
-                if (this.customEntry) {
-                    this.toggleInput(false);
+                    if (this.customEntry) {// eslint-disable-line max-depth
+                        this.toggleInput(false);
+                    }
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent;
@@ -323,9 +323,9 @@ class Context implements ContextInterface
         $rawAcceptType = $this->request->getHeader('Accept');
         if (strpos($rawAcceptType, 'json') !== false) {
             $this->acceptType = 'json';
-        } else if (strpos($rawAcceptType, 'html') !== false) {
+        } elseif (strpos($rawAcceptType, 'html') !== false) {
             $this->acceptType = 'html';
-        } else if (strpos($rawAcceptType, 'xml') !== false) {
+        } elseif (strpos($rawAcceptType, 'xml') !== false) {
             $this->acceptType = 'xml';
         }
     }

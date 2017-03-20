@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -99,6 +99,7 @@ class IndexBuilder implements IndexBuilderInterface
      *
      * @param RequestInterface $request
      * @return Select
+     * @throws \LogicException
      */
     public function build(RequestInterface $request)
     {
@@ -123,7 +124,7 @@ class IndexBuilder implements IndexBuilderInterface
             ScopeInterface::SCOPE_STORE
         );
         if ($isShowOutOfStock === false) {
-            $select->joinLeft(
+            $select->joinInner(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
                 . $this->resource->getConnection()->quoteInto(
@@ -132,7 +133,7 @@ class IndexBuilder implements IndexBuilderInterface
                 ),
                 []
             );
-            $select->where('stock_index.stock_status = ?', Stock::DEFAULT_STOCK_ID);
+            $select->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK);
         }
 
         return $select;

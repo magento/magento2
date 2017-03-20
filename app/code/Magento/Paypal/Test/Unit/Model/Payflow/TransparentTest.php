@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
@@ -122,7 +122,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->setMethods([
                 'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
-                'getId', 'getIncrementId'
+                'getId', 'getIncrementId', 'getBaseCurrencyCode'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -164,6 +164,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('getBaseCurrencyCode')
+            ->willReturn('USD');
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($this->addressBillingMock);
@@ -424,6 +427,13 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $extensionAttributes->expects(static::once())
             ->method('setVaultPaymentToken')
             ->with($paymentTokenMock);
+
+        $this->paymentMock->expects($this->at(8))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::CC_DETAILS);
+        $this->paymentMock->expects($this->at(9))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::PNREF);
 
         $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
     }

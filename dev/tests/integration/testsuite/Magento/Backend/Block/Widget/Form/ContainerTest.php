@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Form;
@@ -32,5 +32,24 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($expectedHtml, $block->getFormHtml());
         $form->setText($expectedHtml);
         $this->assertEquals($expectedHtml, $block->getFormHtml());
+    }
+
+    public function testPseudoConstruct()
+    {
+        /** @var $block \Magento\Backend\Block\Widget\Form\Container */
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
+        )->createBlock(
+            \Magento\Backend\Block\Widget\Form\Container::class,
+            '',
+            [
+                'data' => [
+                    \Magento\Backend\Block\Widget\Container::PARAM_CONTROLLER => 'user',
+                    \Magento\Backend\Block\Widget\Form\Container::PARAM_MODE => 'edit',
+                    \Magento\Backend\Block\Widget\Form\Container::PARAM_BLOCK_GROUP => 'Magento_User'
+                ]
+            ]
+        );
+        $this->assertInstanceOf(\Magento\User\Block\User\Edit\Form::class, $block->getChildBlock('form'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -137,10 +137,33 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         if (!$productSku) {
             throw new CouldNotSaveException(__('ProductSku should be specified'));
         }
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku);
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $option->setData('product_id', $product->getData($metadata->getLinkField()));
-        $option->setOptionId(null);
+        $option->setData('store_id', $product->getStoreId());
+
+        if ($option->getOptionId()) {
+            $options = $product->getOptions();
+            if (!$options) {
+                $options = $this->getProductOptions($product);
+            }
+
+            $persistedOption = array_filter($options, function ($iOption) use ($option) {
+                return $option->getOptionId() == $iOption->getOptionId();
+            });
+            $persistedOption = reset($persistedOption);
+
+            if (!$persistedOption) {
+                throw new NoSuchEntityException();
+            }
+            $originalValues = $persistedOption->getValues();
+            $newValues = $option->getData('values');
+            if ($newValues) {
+                $newValues = $this->markRemovedValues($newValues, $originalValues);
+                $option->setData('values', $newValues);
+            }
+        }
         $option->save();
         return $option;
     }

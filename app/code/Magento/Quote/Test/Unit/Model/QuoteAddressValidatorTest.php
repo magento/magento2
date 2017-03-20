@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,10 +96,10 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalidAddress()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $address = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $this->customerRepositoryMock->expects($this->never())->method('getById');
-        $address->expects($this->atLeastOnce())->method('getId')->willReturn(101);
+        $address->expects($this->atLeastOnce())->method('getCustomerAddressId')->willReturn(101);
+        $address->expects($this->once())->method('getId')->willReturn(101);
 
         $this->addressRepositoryMock->expects($this->once())->method('getById')
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
@@ -118,70 +118,23 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->validate($address));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Invalid address id 100
-     */
-    public function testValidateWithAddressOfOtherCustomer()
-    {
-        $this->markTestSkipped('MAGETWO-48531');
-        $addressCustomer = 100;
-        $addressId = 100;
-        $address = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->with($addressCustomer)
-            ->willReturn($customerMock);
-        $this->addressRepositoryMock->expects($this->once())->method('getById')->willReturn($this->quoteAddressMock);
-        $customerMock->expects($this->once())->method('getId')->willReturn(42);
-        $address->expects($this->atLeastOnce())->method('getId')->willReturn($addressId);
-        $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($addressCustomer);
-
-        $this->quoteAddressMock->expects($this->once())->method('getCustomerId')->willReturn(42);
-        $this->model->validate($address);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Invalid address id 42
-     */
-    public function testValidateWithInvalidCustomerAddressId()
-    {
-        $this->markTestSkipped('MAGETWO-48531');
-        $customerAddressId = 42;
-        $address = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $customerAddress = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-
-        $address->expects($this->atLeastOnce())->method('getCustomerAddressId')->willReturn($customerAddressId);
-        $this->customerSessionMock->expects($this->once())->method('getCustomerDataObject')->willReturn($customerMock);
-        $customerMock->expects($this->once())->method('getAddresses')->willReturn([$customerAddress]);
-        $customerAddress->expects($this->once())->method('getId')->willReturn(43);
-
-        $this->model->validate($address);
-    }
-
     public function testValidateWithValidAddress()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $addressCustomer = 100;
-        $addressId = 100;
         $customerAddressId = 42;
 
         $address = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $address->expects($this->atLeastOnce())->method('getId')->willReturn($addressId);
         $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($addressCustomer);
         $address->expects($this->atLeastOnce())->method('getCustomerAddressId')->willReturn($customerAddressId);
         $customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customerAddress = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willReturn($customerMock);
+        $this->customerRepositoryMock->expects($this->exactly(2))->method('getById')->willReturn($customerMock);
         $customerMock->expects($this->once())->method('getId')->willReturn($addressCustomer);
 
         $this->addressRepositoryMock->expects($this->once())->method('getById')->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->any())->method('getCustomerId')->willReturn($addressCustomer);
 
-        $this->customerSessionMock->expects($this->once())->method('getCustomerDataObject')->willReturn($customerMock);
         $customerMock->expects($this->once())->method('getAddresses')->willReturn([$customerAddress]);
         $customerAddress->expects($this->once())->method('getId')->willReturn(42);
 

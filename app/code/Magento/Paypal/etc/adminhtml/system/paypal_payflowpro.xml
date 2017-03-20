@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,11 +9,14 @@
     <group id="paypal_payflowpro" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
         <label>Payflow Pro</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <fieldset_css>pp-method-payflow</fieldset_css>
-        <comment>Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.</comment>
+        <fieldset_css>paypal-other-section</fieldset_css>
+        <comment><![CDATA[Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflowpro/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/payflow-payment-gateway?partner_id=NB9WWHYEMVUMS</more_url>
         <attribute type="paypal_ec_separate">1</attribute>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -81,7 +84,7 @@
                 </requires>
             </field>
             <field id="payflowpro_cc_vault_active" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>Vault enabled</label>
+                <label>Vault Enabled</label>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <config_path>payment/payflowpro_cc_vault/active</config_path>
                 <attribute type="shared">1</attribute>

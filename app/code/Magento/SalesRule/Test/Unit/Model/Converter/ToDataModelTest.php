@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Converter;
@@ -45,6 +45,11 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serializer;
+
     protected function setUp()
     {
         $this->ruleFactory = $this->getMockBuilder(\Magento\SalesRule\Model\RuleFactory::class)
@@ -78,6 +83,10 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['_construct', 'getData', 'getConditionsSerialized', 'getActionsSerialized'])
             ->getMock();
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(null)
+            ->getMock();
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
             \Magento\SalesRule\Model\Converter\ToDataModel::class,
@@ -87,28 +96,51 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
                 'conditionDataFactory' => $this->conditionDataFactory,
                 'ruleLabelFactory' => $this->ruleLabelFactory,
                 'dataObjectProcessor' => $this->dataObjectProcessor,
+                'serializer' => $this->serializer,
             ]
         );
     }
 
-    public function testToDataModel()
+    private function getArrayData()
     {
-        $array = [
+        return [
             'rule_id' => '1',
             'name' => 'testrule',
             'is_active' => '1',
-            'conditions_serialized' =>
-                'a:7:{s:4:"type";s:46:"Magento\SalesRule\Model\Rule\Condition\Combine";s:9:"attribute";N;'
-                . 's:8:"operator";N;s:5:"value";s:1:"1";s:18:"is_value_processed";N;s:10:"aggregator";s:3:"all";'
-                . 's:10:"conditions";a:1:{i:0;a:5:{s:4:"type";s:46:"Magento\SalesRule\Model\Rule\Condition\Address";'
-                . 's:9:"attribute";s:13:"base_subtotal";s:8:"operator";s:2:">=";s:5:"value";s:3:"100";'
-                . 's:18:"is_value_processed";b:0;}}}',
-            'actions_serialized' =>
-                'a:7:{s:4:"type";s:54:"Magento\SalesRule\Model\Rule\Condition\Product\Combine";s:9:"attribute";N;'
-                . 's:8:"operator";N;s:5:"value";s:1:"1";s:18:"is_value_processed";N;s:10:"aggregator";s:3:"all";'
-                . 's:10:"conditions";a:1:{i:0;a:5:{s:4:"type";s:46:"Magento\SalesRule\Model\Rule\Condition\Product";'
-                . 's:9:"attribute";s:16:"attribute_set_id";s:8:"operator";s:2:"==";s:5:"value";s:1:"4";'
-                . 's:18:"is_value_processed";b:0;}}}',
+            'conditions_serialized' => json_encode([
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                        'attribute' => 'base_subtotal',
+                        'operator' => '>=',
+                        'value' => '100',
+                        'is_value_processed' => false,
+                    ],
+                ],
+            ]),
+            'actions_serialized' => json_encode([
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
+                'attribute' => null,
+                'operator' => null,
+                'value' => '1',
+                'is_value_processed' => null,
+                'aggregator' => 'all',
+                'conditions' => [
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'attribute_set_id',
+                        'operator' => '==',
+                        'value' => '4',
+                        'is_value_processed' => false,
+                    ],
+                ],
+            ]),
             'coupon_type' => '1',
             'coupon_code' => '',
             'store_labels' => [
@@ -116,11 +148,15 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
                 1 => 'TestRuleForDefaultStore',
             ],
         ];
+    }
 
+    public function testToDataModel()
+    {
+        $array = $this->getArrayData();
         $dataModel = $this->getMockBuilder(\Magento\SalesRule\Model\Data\Rule::class)
-        ->disableOriginalConstructor()
-        ->setMethods(['create', 'getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create', 'getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
+            ->getMock();
 
         $dataLabel = $this->getMockBuilder(\Magento\SalesRule\Api\Data\RuleLabel::class)
             ->setMethods(['setStoreId', 'setStoreLabel', 'setStoreLabels'])
@@ -158,9 +194,9 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($array['conditions_serialized']);
 
         $dataModel
-        ->expects($this->atLeastOnce())
-        ->method('getStoreLabels')
-        ->willReturn($array['store_labels']);
+            ->expects($this->atLeastOnce())
+            ->method('getStoreLabels')
+            ->willReturn($array['store_labels']);
 
         $dataModel
             ->expects($this->atLeastOnce())
@@ -213,15 +249,15 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
                     'is_value_processed' => null,
                     'aggregator' => 'all',
                     'conditions' => [
-                             [
-                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
-                                    'attribute' => 'category_ids',
-                                    'operator' => '==',
-                                    'value' => 3,
-                                    'is_value_processed' => null
-                             ]
-
+                        [
+                            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                            'attribute' => 'category_ids',
+                            'operator' => '==',
+                            'value' => 3,
+                            'is_value_processed' => null
                         ]
+
+                    ]
 
                 ],
             ]

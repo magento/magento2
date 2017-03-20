@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Model\Asset\Plugin;
@@ -35,15 +35,13 @@ class CleanMergedJsCss
      * Clean files in database on cleaning merged assets
      *
      * @param \Magento\Framework\View\Asset\MergeService $subject
-     * @param callable $proceed
+     * @param void $result
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCleanMergedJsCss(\Magento\Framework\View\Asset\MergeService $subject, \Closure $proceed)
+    public function afterCleanMergedJsCss(\Magento\Framework\View\Asset\MergeService $subject, $result)
     {
-        $proceed();
-
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $pubStaticDirectory */
         $pubStaticDirectory = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
         $mergedDir = $pubStaticDirectory->getAbsolutePath() . '/'

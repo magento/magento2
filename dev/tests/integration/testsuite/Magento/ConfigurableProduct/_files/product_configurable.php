@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,6 +107,13 @@ $registry->register('isSecureArea', true);
 try {
     $productToDelete = $productRepository->getById(1);
     $productRepository->delete($productToDelete);
+
+    /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $itemResource */
+    $itemResource = Bootstrap::getObjectManager()->get(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
+    $itemResource->getConnection()->delete(
+        $itemResource->getMainTable(),
+        'product_id = ' . $productToDelete->getId()
+    );
 } catch (\Exception $e) {
     // Nothing to remove
 }

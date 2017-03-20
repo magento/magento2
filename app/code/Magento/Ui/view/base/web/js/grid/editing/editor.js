@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -486,7 +486,7 @@ define([
         },
 
         /**
-         * Counts number of invalid fields accros all active records.
+         * Counts number of invalid fields across all active records.
          *
          * @returns {Number}
          */
@@ -500,6 +500,16 @@ define([
             this.errorsCount = errorsCount;
 
             return errorsCount;
+        },
+
+        /**
+         * Translatable error message text.
+         *
+         * @returns {String}
+         */
+        countErrorsMessage: function () {
+            return $t('There are {placeholder} messages requires your attention.')
+                .replace('{placeholder}', this.countErrors());
         },
 
         /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -21,5 +21,6 @@
         <block name="successMessage" class="Magento\Setup\Test\Block\SuccessMessage" locator="body" strategy="css selector"/>
         <block name="moduleGrid" class="Magento\Setup\Test\Block\Module\Grid" locator=".admin__data-grid-outer-wrap" strategy="css selector"/>
         <block name="moduleStatus" class="Magento\Setup\Test\Block\Module\Status" locator="body" strategy="css selector"/>
+        <block name="extensionsUpdateGrid" class="Magento\Setup\Test\Block\Extension\UpdateGrid" locator="#main" strategy="css selector"/>
     </page>
 </config>

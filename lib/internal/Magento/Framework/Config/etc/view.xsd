@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -66,13 +66,22 @@
                     <xs:attribute name="id" type="xs:string" use="required"/>
                     <xs:attribute name="type">
                         <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:enumeration value="thumbnail"/>
-                                <xs:enumeration value="small_image"/>
-                                <xs:enumeration value="image"/>
-                                <xs:enumeration value="swatch_image"/>
-                                <xs:enumeration value="swatch_thumb"/>
-                            </xs:restriction>
+                            <xs:union>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="thumbnail"/>
+                                        <xs:enumeration value="small_image"/>
+                                        <xs:enumeration value="image"/>
+                                        <xs:enumeration value="swatch_image"/>
+                                        <xs:enumeration value="swatch_thumb"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="[a-z]+(_?[a-z])+"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:union>
                         </xs:simpleType>
                     </xs:attribute>
                 </xs:complexType>

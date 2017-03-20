@@ -2,7 +2,7 @@
 /**
  * Customer address entity resource model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
@@ -11,8 +11,8 @@ use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 
 /**
@@ -63,6 +63,11 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\AddressRegistry $addressRegistry
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
@@ -71,6 +76,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory $addressSearchResultsFactory
      * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressCollectionFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         \Magento\Customer\Model\AddressFactory $addressFactory,
@@ -80,7 +86,8 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory $addressSearchResultsFactory,
         \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressCollectionFactory,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->addressFactory = $addressFactory;
         $this->addressRegistry = $addressRegistry;
@@ -90,6 +97,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -116,8 +124,12 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $addressModel->updateData($address);
         }
 
-        $inputException = $this->_validate($addressModel);
-        if ($inputException->wasErrorAdded()) {
+        $errors = $addressModel->validate();
+        if ($errors !== true) {
+            $inputException = new InputException();
+            foreach ($errors as $error) {
+                $inputException->addError($error);
+            }
             throw $inputException;
         }
         $addressModel->save();
@@ -164,29 +176,14 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $searchResults = $this->addressSearchResultsFactory->create();
-
         /** @var Collection $collection */
         $collection = $this->addressCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process(
             $collection,
             \Magento\Customer\Api\Data\AddressInterface::class
         );
-        // Add filters from root filter group to the collection
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
-        $searchResults->setTotalCount($collection->getSize());
-        /** @var SortOrder $sortOrder */
-        foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
-            $field = $sortOrder->getField();
-            $collection->addOrder(
-                $field,
-                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-            );
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
+
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
         $addresses = [];
@@ -194,14 +191,19 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         foreach ($collection->getItems() as $address) {
             $addresses[] = $this->getById($address->getId());
         }
+
+        /** @var \Magento\Customer\Api\Data\AddressSearchResultsInterface $searchResults */
+        $searchResults = $this->addressSearchResultsFactory->create();
         $searchResults->setItems($addresses);
         $searchResults->setSearchCriteria($searchCriteria);
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
+     * @deprecated
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -258,66 +260,18 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     }
 
     /**
-     * Validate Customer Addresses attribute values.
+     * Retrieve collection processor
      *
-     * @param CustomerAddressModel $customerAddressModel the model to validate
-     * @return InputException
-     *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated
+     * @return CollectionProcessorInterface
      */
-    private function _validate(CustomerAddressModel $customerAddressModel)
+    private function getCollectionProcessor()
     {
-        $exception = new InputException();
-        if ($customerAddressModel->getShouldIgnoreValidation()) {
-            return $exception;
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
+            );
         }
-
-        if (!\Zend_Validate::is($customerAddressModel->getFirstname(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'firstname']));
-        }
-
-        if (!\Zend_Validate::is($customerAddressModel->getLastname(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'lastname']));
-        }
-
-        if (!\Zend_Validate::is($customerAddressModel->getStreetLine(1), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'street']));
-        }
-
-        if (!\Zend_Validate::is($customerAddressModel->getCity(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'city']));
-        }
-
-        if (!\Zend_Validate::is($customerAddressModel->getTelephone(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'telephone']));
-        }
-
-        $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
-        if (!in_array($customerAddressModel->getCountryId(), $havingOptionalZip)
-            && !\Zend_Validate::is($customerAddressModel->getPostcode(), 'NotEmpty')
-        ) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'postcode']));
-        }
-
-        if (!\Zend_Validate::is($customerAddressModel->getCountryId(), 'NotEmpty')) {
-            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'countryId']));
-        }
-
-        if ($this->directoryData->isRegionRequired($customerAddressModel->getCountryId())) {
-            $regionCollection = $customerAddressModel->getCountryModel()->getRegionCollection();
-            if (!$regionCollection->count() && empty($customerAddressModel->getRegion())) {
-                $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'region']));
-            } elseif (
-                $regionCollection->count()
-                && !in_array(
-                    $customerAddressModel->getRegionId(),
-                    array_column($regionCollection->getData(), 'region_id')
-                )
-            ) {
-                $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'regionId']));
-            }
-        }
-        return $exception;
+        return $this->collectionProcessor;
     }
 }

@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -54,6 +57,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @var array
      */
     protected $loadedData;
+
+    /**
+     * @var CountryWithWebsites
+     */
+    private $countryWithWebsiteSource;
+
+    /**
+     * @var \Magento\Customer\Model\Config\Share
+     */
+    private $shareConfig;
 
     /**
      * EAV attribute properties to fetch from meta storage
@@ -117,6 +130,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -234,6 +248,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Attribute $attribute
      * @param array $customerData
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getFileUploaderData(
         Type $entityType,
@@ -256,23 +271,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ) {
             $stat = $fileProcessor->getStat($file);
             $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
-        }
 
-        $fileName = $file;
-        if (strrpos($fileName, '/') !== false) {
-            $fileName = substr($fileName, strrpos($fileName, '/') + 1);
-        }
-
-        if (!empty($file)) {
             return [
                 [
                     'file' => $file,
                     'size' => isset($stat) ? $stat['size'] : 0,
                     'url' => isset($viewUrl) ? $viewUrl : '',
-                    'name' => $fileName,
+                    'name' => basename($file),
+                    'type' => $fileProcessor->getMimeType($file),
                 ],
             ];
         }
+
         return [];
     }
 
@@ -292,6 +302,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $this->processFrontendInput($attribute, $meta);
 
             $code = $attribute->getAttributeCode();
+
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
@@ -304,7 +315,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
 
             if ($attribute->usesSource()) {
-                $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                if ($code == AddressInterface::COUNTRY_ID) {
+                    $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryWithWebsiteSource()
+                        ->getAllOptions();
+                } else {
+                    $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                }
             }
 
             $rules = $this->eavValidationRules->build($attribute, $meta[$code]['arguments']['data']['config']);
@@ -315,7 +331,59 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
+
+        $this->processWebsiteMeta($meta);
         return $meta;
+    }
+
+    /**
+     * Retrieve Country With Websites Source
+     *
+     * @deprecated
+     * @return CountryWithWebsites
+     */
+    private function getCountryWithWebsiteSource()
+    {
+        if (!$this->countryWithWebsiteSource) {
+            $this->countryWithWebsiteSource = ObjectManager::getInstance()->get(CountryWithWebsites::class);
+        }
+
+        return $this->countryWithWebsiteSource;
+    }
+
+    /**
+     * Retrieve Customer Config Share
+     *
+     * @deprecated
+     * @return \Magento\Customer\Model\Config\Share
+     */
+    private function getShareConfig()
+    {
+        if (!$this->shareConfig) {
+            $this->shareConfig = ObjectManager::getInstance()->get(\Magento\Customer\Model\Config\Share::class);
+        }
+
+        return $this->shareConfig;
+    }
+
+    /**
+     * Add global scope parameter and filter options to website meta
+     *
+     * @param array $meta
+     * @return void
+     */
+    private function processWebsiteMeta(&$meta)
+    {
+        if (isset($meta[CustomerInterface::WEBSITE_ID]) && $this->getShareConfig()->isGlobalScope()) {
+            $meta[CustomerInterface::WEBSITE_ID]['arguments']['data']['config']['isGlobalScope'] = 1;
+        }
+
+        if (isset($meta[AddressInterface::COUNTRY_ID]) && !$this->getShareConfig()->isGlobalScope()) {
+            $meta[AddressInterface::COUNTRY_ID]['arguments']['data']['config']['filterBy'] = [
+                'target' => '${ $.provider }:data.customer.website_id',
+                'field' => 'website_ids'
+            ];
+        }
     }
 
     /**

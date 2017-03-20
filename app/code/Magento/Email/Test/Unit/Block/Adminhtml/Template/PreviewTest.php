@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,9 +84,13 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs([
                 $scopeConfig
             ])
-            ->setMethods(null)
+            ->setMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
+        $appState->expects($this->any())
+            ->method('emulateAreaCode')
+            ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA, [$template, 'getProcessedTemplate'])
+            ->willReturn($template->getProcessedTemplate());
 
         $context = $this->getMock(
             \Magento\Backend\Block\Template\Context::class,

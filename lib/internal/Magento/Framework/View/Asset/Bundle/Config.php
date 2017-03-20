@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Asset\Bundle;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View;
 use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 class Config implements Bundle\ConfigInterface
 {
@@ -29,6 +31,16 @@ class Config implements Bundle\ConfigInterface
      * @var View\ConfigInterface
      */
     protected $viewConfig;
+
+    /**
+     * @var ThemeProviderInterface
+     */
+    private $themeProvider;
+
+    /**
+     * @var \Magento\Framework\Config\View[]
+     */
+    private $config = [];
 
     /**
      * @param View\ConfigInterface $viewConfig
@@ -57,12 +69,17 @@ class Config implements Bundle\ConfigInterface
      */
     public function getConfig(FallbackContext $assetContext)
     {
-        return $this->viewConfig->getViewConfig([
-            'area' => $assetContext->getAreaCode(),
-            'themeModel' => $this->themeList->getThemeByFullPath(
-                $assetContext->getAreaCode() . '/' . $assetContext->getThemePath()
-            )
-        ]);
+        $themePath = $assetContext->getAreaCode() . '/' . $assetContext->getThemePath();
+        if (!isset($this->config[$themePath])) {
+            $this->config[$themePath] = $this->viewConfig->getViewConfig([
+                'area' => $assetContext->getAreaCode(),
+                'themeModel' => $this->getThemeProvider()->getThemeByFullPath(
+                    $themePath
+                )
+            ]);
+        }
+
+        return $this->config[$themePath];
     }
 
     /**
@@ -83,7 +100,19 @@ class Config implements Bundle\ConfigInterface
             case 'MB':
                 return (int)$size * 1024;
             default:
-                return (int)$size / 1024;
+                return (int)($size / 1024);
         }
+    }
+
+    /**
+     * @return ThemeProviderInterface
+     */
+    private function getThemeProvider()
+    {
+        if (null === $this->themeProvider) {
+            $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);
+        }
+
+        return $this->themeProvider;
     }
 }

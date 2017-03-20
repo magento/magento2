@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -13,12 +13,13 @@
         </span>
     </div>
 </div>
-<div class="admin__data-grid-outer-wrap">
+<div class="admin__data-grid-outer-wrap" id="updateExtensionGrid">
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
+                <button type="button" class="btn" ng-click="updateAll()">Update</button>
                 <div class="admin__control-support-text">
-                    <span>{{total}}</span> products
+                    <span>{{total}}</span> extensions
                 </div>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap"
@@ -30,9 +31,42 @@
         <table class="data-grid">
             <thead data-part="head">
             <tr>
+                <th class="data-grid-multicheck-cell">
+                    <div class="action-multicheck-wrap"
+                         ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                         click-out="multipleChoiceService.hideNewExtensionsMenu()"
+                    >
+                        <input type="checkbox"
+                               style="visibility: hidden;"
+                               class="admin__control-checkbox"
+                               ng-class="{'_indeterminate':multipleChoiceService.someExtensionsSelected}"
+                               ng-checked="multipleChoiceService.allExtensionsSelected"
+                        >
+                        <label></label>
+                        <button class="action-multicheck-toggle"
+                                ng-class="{'_active':multipleChoiceService.isNewExtensionsMenuVisible}"
+                                ng-click="multipleChoiceService.toggleNewExtensionsMenu()"
+                        >
+                            <span>Options</span>
+                        </button>
+                        <ul class="action-menu">
+                            <li ng-show="!multipleChoiceService.allExtensionsSelected"
+                                ng-click="multipleChoiceService.selectAllExtensions()"
+                            >
+                                <span class="action-menu-item">Select all</span>
+                            </li>
+                            <li ng-show="multipleChoiceService.allExtensionsSelected
+                                        || multipleChoiceService.someExtensionsSelected"
+                                ng-click="multipleChoiceService.deselectAllExtensions()"
+                            >
+                                <span class="action-menu-item">Deselect all</span>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
                 <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
                 && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
-                    <span>Product Name</span>
+                    <span>Extension Name</span>
                 </th>
                 <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type' &&
                 !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th _sortable">
@@ -58,11 +92,22 @@
             <tr ng-repeat="extension in extensions | orderBy:predicate:reverse
                 | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
             >
-                <td>
-                    <span class="data-grid-data">{{extension.name}}</span>
+                <td class="data-grid-checkbox-cell">
+                    <label class="data-grid-checkbox-cell-inner">
+                        <input type="checkbox"
+                               class="admin__control-checkbox"
+                               ng-checked="multipleChoiceService.selectedExtensions.hasOwnProperty(extension.name)"
+                               ng-click="multipleChoiceService.updateSelectedExtensions($event, extension.name,
+                                        extension.latestVersion)"
+                        >
+                        <label></label>
+                    </label>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.type}}</span>
+                    <span class="data-grid-data">{{extension.package_title}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{extension.package_type}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{extension.vendor}}</span>
@@ -77,6 +122,11 @@
                                     value="{{version}}"
                             >Version {{version}}</option>
                         </select>
+                    </span>
+                    <span class="component-indicator _tooltip"
+                          ng-show="extension.package_link"
+                          data-label="View info on Marketplace"
+                    ><a href="{{extension.package_link}}" target="_blank"></a>
                     </span>
                 </td>
                 <td class="data-grid-data">

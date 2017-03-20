@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Config;
@@ -12,7 +12,7 @@ use Magento\Email\Model\Template;
  */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    const TEMPLATE_CODE = 'fixture';
+    const TEMPLATE_CODE = 'email_exception_fixture';
 
     /**
      * @var \Magento\Theme\Model\Design\Config\Validator
@@ -44,7 +44,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->templateModel = $objectManager->create(\Magento\Email\Model\Template::class);
         $this->templateModel->load(self::TEMPLATE_CODE, 'template_code');
-
+        $this->templateFactoryMock->expects($this->once())
+            ->method("create")
+            ->willReturn($this->templateModel);
         $this->model = $objectManager->create(
             \Magento\Theme\Model\Design\Config\Validator::class,
             [ 'templateFactory' => $this->templateFactoryMock ]
@@ -58,9 +60,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateHasRecursiveReference()
     {
-        $this->templateFactoryMock->expects($this->once())
-            ->method("create")
-            ->willReturn($this->templateModel);
+        if (!$this->templateModel->getId()) {
+            $this->fail('Cannot load Template model');
+        }
 
         $fieldConfig = [
             'path' => 'design/email/header_template',
@@ -90,7 +92,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$designElementMock]);
         $designElementMock->expects($this->any())->method('getFieldConfig')->willReturn($fieldConfig);
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
-        $designElementMock->expects($this->once())->method('getValue')->willReturn(1);
+        $designElementMock->expects($this->once())->method('getValue')->willReturn($this->templateModel->getId());
 
         $this->model->validate($designConfigMock);
     }
@@ -132,7 +134,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$designElementMock]);
         $designElementMock->expects($this->any())->method('getFieldConfig')->willReturn($fieldConfig);
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
-        $designElementMock->expects($this->once())->method('getValue')->willReturn(1);
+        $designElementMock->expects($this->once())->method('getValue')->willReturn($this->templateModel->getId());
 
         $this->model->validate($designConfigMock);
     }

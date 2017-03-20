@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -23,6 +26,11 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
      */
     protected $_attrOptionFactory;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
@@ -47,29 +55,49 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
         $storeId = $this->getAttribute()->getStoreId();
+        if ($storeId === null) {
+            $storeId = $this->getStoreManager()->getStore()->getId();
+        }
         if (!is_array($this->_options)) {
             $this->_options = [];
         }
         if (!is_array($this->_optionsDefault)) {
             $this->_optionsDefault = [];
         }
-        if (!isset($this->_options[$storeId])) {
+        $attributeId = $this->getAttribute()->getId();
+        if (!isset($this->_options[$storeId][$attributeId])) {
             $collection = $this->_attrOptionCollectionFactory->create()->setPositionOrder(
                 'asc'
             )->setAttributeFilter(
-                $this->getAttribute()->getId()
+                $attributeId
             )->setStoreFilter(
-                $this->getAttribute()->getStoreId()
+                $storeId
             )->load();
-            $this->_options[$storeId] = $collection->toOptionArray();
-            $this->_optionsDefault[$storeId] = $collection->toOptionArray('default_value');
+            $this->_options[$storeId][$attributeId] = $collection->toOptionArray();
+            $this->_optionsDefault[$storeId][$attributeId] = $collection->toOptionArray('default_value');
         }
-        $options = $defaultValues ? $this->_optionsDefault[$storeId] : $this->_options[$storeId];
+        $options = $defaultValues
+            ? $this->_optionsDefault[$storeId][$attributeId]
+            : $this->_options[$storeId][$attributeId];
         if ($withEmpty) {
             $options = $this->addEmptyOption($options);
         }
 
         return $options;
+    }
+
+    /**
+     * Get StoreManager dependency
+     *
+     * @return StoreManagerInterface
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager === null) {
+            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        }
+        return $this->storeManager;
     }
 
     /**

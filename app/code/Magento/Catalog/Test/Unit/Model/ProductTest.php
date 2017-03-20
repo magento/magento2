@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -184,6 +184,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $extensionAttributesFactory;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystemMock;
+
+    /**
+     * @var \Magento\Framework\Data\CollectionFactory
+     */
+    private $collectionFactoryMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -374,6 +384,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->collectionFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->mediaConfig = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -402,6 +419,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
                 'linkRepository' => $this->productLinkRepositoryMock,
                 'catalogProductMediaConfig' => $this->mediaConfig,
+                '_filesystem' => $this->filesystemMock,
+                '_collectionFactory' => $this->collectionFactoryMock,
                 'data' => ['id' => 1]
             ]
         );
@@ -689,13 +708,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         return [
             'no changes' => [
-                ['catalog_product_1'],
+                ['cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
             ],
             'new product' => $this->getNewProductProviderData(),
             'status and category change' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1', 2 => 'catalog_category_product_2'],
+                [0 => 'cat_p_1', 1 => 'cat_c_p_1', 2 => 'cat_c_p_2'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
                 [
                     'id' => 1,
@@ -707,18 +726,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'status change only' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_7'],
+                [0 => 'cat_p_1', 1 => 'cat_c_p_7'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 2],
             ],
             'status changed, category unassigned' => $this->getStatusAndCategoryChangesData(),
             'no status changes' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             ],
             'no stock status changes' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -730,7 +749,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no stock status data 1' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -741,7 +760,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'no stock status data 2' => [
-                [0 => 'catalog_product_1'],
+                [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 [
                     'id' => 1,
@@ -761,7 +780,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getStatusAndCategoryChangesData()
     {
         return [
-            [0 => 'catalog_product_1', 1 => 'catalog_category_product_5'],
+            [0 => 'cat_p_1', 1 => 'cat_c_p_5'],
             ['id' => 1, 'name' => 'value', 'category_ids' => [5], 'status' => 2],
             [
                 'id' => 1,
@@ -780,7 +799,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getNewProductProviderData()
     {
         return [
-            ['catalog_product_1', 'catalog_category_product_1'],
+            ['cat_p_1', 'cat_c_p_1'],
             null,
             [
                 'id' => 1,
@@ -799,7 +818,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private function getStatusStockProviderData($extensionAttributesMock)
     {
         return [
-            [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+            [0 => 'cat_p_1', 1 => 'cat_c_p_1'],
             ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
             [
                 'id' => 1,
@@ -810,20 +829,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
             ],
         ];
-    }
-
-    public function testStatusAfterLoad()
-    {
-        $this->resource->expects($this->once())->method('load')->with($this->model, 1, null);
-        $this->eventManagerMock->expects($this->exactly(4))->method('dispatch');
-        $this->model->load(1);
-        $this->assertEquals(
-            Status::STATUS_ENABLED,
-            $this->model->getData(\Magento\Catalog\Model\Product::STATUS)
-        );
-        $this->assertFalse($this->model->hasDataChanges());
-        $this->model->setStatus(Status::STATUS_DISABLED);
-        $this->assertTrue($this->model->hasDataChanges());
     }
 
     /**
@@ -1230,6 +1235,71 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->getMediaGallery());
     }
 
+    public function testGetMediaGalleryImagesMerging()
+    {
+        $mediaEntries = [
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'media_type' => 'image',
+                ],
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                ],
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                    'media_type' => 'image',
+                ],
+            ]
+        ];
+        $expectedImageDataObject = new \Magento\Framework\DataObject([
+            'value_id' => 1,
+            'file' => 'imageFile.jpg',
+            'media_type' => 'image',
+            'url' => 'http://magento.dev/pub/imageFile.jpg',
+            'id' => 1,
+            'path' => '/var/www/html/pub/imageFile.jpg',
+        ]);
+        $expectedSmallImageDataObject = new \Magento\Framework\DataObject([
+            'value_id' => 2,
+            'file' => 'smallImageFile.jpg',
+            'media_type' => 'image',
+            'url' => 'http://magento.dev/pub/smallImageFile.jpg',
+            'id' => 2,
+            'path' => '/var/www/html/pub/smallImageFile.jpg',
+        ]);
+
+        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystemMock->expects($this->once())->method('getDirectoryRead')->willReturn($directoryMock);
+        $this->model->setData('media_gallery', $mediaEntries);
+        $imagesCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($imagesCollectionMock);
+        $imagesCollectionMock->expects($this->at(2))->method('getItemById')->with(1)->willReturn($expectedImageDataObject);
+        $this->mediaConfig->expects($this->at(0))
+            ->method('getMediaUrl')
+            ->willReturn('http://magento.dev/pub/imageFile.jpg');
+        $directoryMock->expects($this->at(0))
+            ->method('getAbsolutePath')
+            ->willReturn('/var/www/html/pub/imageFile.jpg');
+        $this->mediaConfig->expects($this->at(2))
+            ->method('getMediaUrl')
+            ->willReturn('http://magento.dev/pub/smallImageFile.jpg');
+        $directoryMock->expects($this->at(1))
+            ->method('getAbsolutePath')
+            ->willReturn('/var/www/html/pub/smallImageFile.jpg');
+        $imagesCollectionMock->expects($this->at(1))->method('addItem')->with($expectedImageDataObject);
+        $imagesCollectionMock->expects($this->at(4))->method('addItem')->with($expectedSmallImageDataObject);
+
+        $this->model->getMediaGalleryImages();
+    }
+
     public function testGetCustomAttributes()
     {
         $priceCode = 'price';
@@ -1382,5 +1452,28 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->getTypeInstance();
         $this->model->setTypeId('typeId');
         $this->model->getTypeInstance();
+    }
+
+    public function testGetOptionById()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn($optionId);
+        $this->assertEquals($optionMock, $this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdWithWrongOptionId()
+    {
+        $optionId = 100;
+        $optionMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, [], [], '', false);
+        $this->model->setOptions([$optionMock]);
+        $optionMock->expects($this->once())->method('getId')->willReturn(200);
+        $this->assertNull($this->model->getOptionById($optionId));
+    }
+
+    public function testGetOptionByIdForProductWithoutOptions()
+    {
+        $this->assertNull($this->model->getOptionById(100));
     }
 }

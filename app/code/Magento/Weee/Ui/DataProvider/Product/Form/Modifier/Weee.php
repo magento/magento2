@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Ui\DataProvider\Product\Form\Modifier;
@@ -116,8 +116,7 @@ class Weee extends AbstractModifier
             foreach ($metaConfig['children'] as $attributeCode => $attributeConfig) {
                 if ($this->startsWith($attributeCode, self::CONTAINER_PREFIX)) {
                     $metaConfig['children'][$attributeCode] = $this->modifyMetaConfig($attributeConfig);
-                } elseif (
-                    !empty($attributeConfig['arguments']['data']['config']['formElement']) &&
+                } elseif (!empty($attributeConfig['arguments']['data']['config']['formElement']) &&
                     $attributeConfig['arguments']['data']['config']['formElement'] === static::FORM_ELEMENT_WEEE
                 ) {
                     $metaConfig['children'][$attributeCode] =

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -114,7 +114,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\ValidatorException
-     * @expectedExceptionMessage Invalid method signature. Detected extra parameters
+     * @expectedExceptionMessage Invalid method signature. Invalid method parameters count
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
     public function testValidateExtraParameters()

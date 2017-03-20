@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -74,7 +74,7 @@ class UpgradeSystemTest extends Injectable
         );
         $version = $upgrade['upgradeVersion'];
 
-        $suffix = "( (CE|EE))$";
+        $suffix = "( (CE|EE|B2B))$";
         $normalVersion = '(0|[1-9]\d*)';
         $preReleaseVersion = "((0(?!\\d+(\\.|\\+|{$suffix}))|[1-9A-Za-z])[0-9A-Za-z-]*)";
         $buildVersion = '([0-9A-Za-z][0-9A-Za-z-]*)';

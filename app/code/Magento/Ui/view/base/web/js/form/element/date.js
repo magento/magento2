@@ -1,11 +1,12 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'moment',
     'mageUtils',
-    './abstract'
+    './abstract',
+    'moment-timezone-with-data'
 ], function (moment, utils, Abstract) {
     'use strict';
 
@@ -13,7 +14,7 @@ define([
         defaults: {
             options: {},
 
-            timeOffset: 0,
+            storeTimeZone: 'UTC',
 
             validationParams: {
                 dateFormat: '${ $.outputDateFormat }'
@@ -54,6 +55,11 @@ define([
 
             elementTmpl: 'ui/form/element/date',
 
+            /**
+             * Format needed by moment timezone for conversion
+             */
+            timezoneFormat: 'YYYY-MM-DD HH:mm',
+
             listens: {
                 'value': 'onValueChange',
                 'shiftedValue': 'onShiftedValueChange'
@@ -61,7 +67,7 @@ define([
 
             /**
              * Date/time value shifted to corresponding timezone
-             * according to this.timeOffset property. This value
+             * according to this.storeTimeZone property. This value
              * will be sent to the server.
              *
              * @type {String}
@@ -109,7 +115,7 @@ define([
 
             if (value) {
                 if (this.options.showsTime) {
-                    shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
+                    shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
 
@@ -133,15 +139,18 @@ define([
          * @param {String} shiftedValue
          */
         onShiftedValueChange: function (shiftedValue) {
-            var value;
+            var value,
+                formattedValue,
+                momentValue;
 
             if (shiftedValue) {
+                momentValue = moment(shiftedValue, this.pickerDateTimeFormat);
+
                 if (this.options.showsTime) {
-                    value = moment.utc(shiftedValue, this.pickerDateTimeFormat);
-                    value = value.subtract(this.timeOffset, 'seconds').toISOString();
+                    formattedValue = moment(momentValue).format(this.timezoneFormat);
+                    value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.pickerDateTimeFormat);
-                    value = value.format(this.outputDateFormat);
+                    value = momentValue.format(this.outputDateFormat);
                 }
             } else {
                 value = '';
@@ -163,14 +172,14 @@ define([
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
 
-            this.pickerDateTimeFormat = utils.normalizeDate(this.pickerDateTimeFormat);
+            this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
 
             if (this.dateFormat) {
                 this.inputDateFormat = this.dateFormat;
             }
 
-            this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
-            this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+            this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);
+            this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
         }

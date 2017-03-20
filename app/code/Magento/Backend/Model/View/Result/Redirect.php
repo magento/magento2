@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\View\Result;
@@ -10,6 +10,7 @@ use Magento\Backend\Model\Session;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App;
 use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 
 class Redirect extends \Magento\Framework\Controller\Result\Redirect
 {
@@ -56,7 +57,7 @@ class Redirect extends \Magento\Framework\Controller\Result\Redirect
     /**
      * {@inheritdoc}
      */
-    protected function render(App\ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         $this->session->setIsUrlNotice($this->actionFlag->get('', AbstractAction::FLAG_IS_URLS_CHECKED));
         return parent::render($response);

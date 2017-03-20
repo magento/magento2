@@ -2,7 +2,7 @@
 /**
  * Form Element File Data Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
@@ -127,7 +127,7 @@ class File extends AbstractData
                         $value[$fileKey] = $scopeData[$attrCode];
                     }
                 }
-            } else if (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
+            } elseif (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
                 /**
                  * This case is required by file uploader UI component
                  *

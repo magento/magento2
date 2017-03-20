@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Invoice;
@@ -22,6 +22,11 @@ class ItemCreation implements InvoiceItemCreationInterface
      * @var float
      */
     private $qty;
+
+    /**
+     * @var \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface
+     */
+    private $extensionAttributes;
 
     /**
      * {@inheritdoc}
@@ -53,5 +58,28 @@ class ItemCreation implements InvoiceItemCreationInterface
     public function setQty($qty)
     {
         $this->qty = $qty;
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->extensionAttributes;
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\InvoiceItemCreationExtensionInterface $extensionAttributes
+    ) {
+        $this->extensionAttributes = $extensionAttributes;
+        return $this;
     }
 }

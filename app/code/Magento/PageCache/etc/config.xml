@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,9 +14,9 @@
         </design>
         <system>
             <full_page_cache>
-                <varnish3>
-                    <path>varnish3.vcl</path>
-                </varnish3>
+                <varnish5>
+                    <path>varnish5.vcl</path>
+                </varnish5>
                 <varnish4>
                     <path>varnish4.vcl</path>
                 </varnish4>
@@ -27,6 +27,7 @@
                     <backend_host>localhost</backend_host>
                     <backend_port>8080</backend_port>
                     <ttl>86400</ttl>
+                    <grace_period>300</grace_period>
                 </default>
             </full_page_cache>
         </system>

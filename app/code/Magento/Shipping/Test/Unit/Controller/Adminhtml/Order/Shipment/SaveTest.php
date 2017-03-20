@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,12 +9,17 @@
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
+
 /**
  * Class SaveTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,6 +94,16 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $saveAction;
 
     /**
+     * @var ShipmentValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shipmentValidatorMock;
+
+    /**
+     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationResult;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -98,6 +113,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
             ->disableOriginalConstructor()
             ->setMethods([])
+            ->getMock();
+        $this->validationResult = $this->getMockBuilder(ValidatorResultInterface::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->labelGenerator = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\LabelGenerator::class)
             ->disableOriginalConstructor()
@@ -210,6 +228,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getFormKeyValidator')
             ->will($this->returnValue($this->formKeyValidator));
 
+        $this->shipmentValidatorMock = $this->getMockBuilder(ShipmentValidatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->saveAction = $objectManagerHelper->getObject(
             \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save::class,
             [
@@ -218,7 +240,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoader,
                 'request' => $this->request,
-                'response' => $this->response
+                'response' => $this->response,
+                'shipmentValidator' => $this->shipmentValidatorMock
             ]
         );
     }
@@ -345,6 +368,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ->method('getOrderId')
                 ->will($this->returnValue($orderId));
             $this->prepareRedirect($path, $arguments);
+
+            $this->shipmentValidatorMock->expects($this->once())
+                ->method('validate')
+                ->with($shipment, [QuantityValidator::class])
+                ->willReturn($this->validationResult);
+
+            $this->validationResult->expects($this->once())
+                ->method('hasMessages')
+                ->willReturn(false);
 
             $this->saveAction->execute();
             $this->assertEquals($this->response, $this->saveAction->getResponse());

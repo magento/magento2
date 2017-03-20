@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Quote\Api\CartManagementInterface;
 
 /**
  * Adminhtml quote session
@@ -80,11 +78,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @var \Magento\Quote\Model\QuoteFactory
      */
     protected $quoteFactory;
-
-    /**
-     * @var \Magento\Quote\Api\CartManagementInterface;
-     */
-    private $cartManagement;
 
     /**
      * @param \Magento\Framework\App\Request\Http $request

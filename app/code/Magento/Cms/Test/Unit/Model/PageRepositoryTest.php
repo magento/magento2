@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\PageRepository;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * Test for Magento\Cms\Model\PageRepository
@@ -61,6 +61,11 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * Initialize repository
      */
     protected function setUp()
@@ -103,7 +108,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->collection = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
+            ->setMethods(['getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
 
         $pageFactory->expects($this->any())
@@ -129,6 +134,9 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMockForAbstractClass();
+
         $this->repository = new PageRepository(
             $this->pageResource,
             $pageFactory,
@@ -137,7 +145,8 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             $pageSearchResultFactory,
             $this->dataHelper,
             $this->dataObjectProcessor,
-            $this->storeManager
+            $this->storeManager,
+            $this->collectionProcessor
         );
     }
 
@@ -227,51 +236,42 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $field = 'name';
-        $value = 'magento';
-        $condition = 'eq';
         $total = 10;
-        $currentPage = 3;
-        $pageSize = 2;
-        $sortField = 'id';
-
-        $criteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)->getMock();
-        $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)->getMock();
-        $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)->getMock();
-        $storeFilter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)->getMock();
-        $sortOrder = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)->getMock();
-
-        $criteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
-        $criteria->expects($this->once())->method('getSortOrders')->willReturn([$sortOrder]);
-        $criteria->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $criteria->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $filterGroup->expects($this->once())->method('getFilters')->willReturn([$storeFilter, $filter]);
-        $filter->expects($this->once())->method('getConditionType')->willReturn($condition);
-        $filter->expects($this->any())->method('getField')->willReturn($field);
-        $filter->expects($this->once())->method('getValue')->willReturn($value);
-        $storeFilter->expects($this->any())->method('getField')->willReturn('store_id');
-        $storeFilter->expects($this->once())->method('getValue')->willReturn(1);
-        $sortOrder->expects($this->once())->method('getField')->willReturn($sortField);
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_DESC);
 
         /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
+        $criteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)->getMock();
 
         $this->collection->addItem($this->page);
-        $this->pageSearchResult->expects($this->once())->method('setSearchCriteria')->with($criteria)->willReturnSelf();
         $this->collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with([$field], [[$condition => $value]])
+            ->method('getSize')
+            ->willReturn($total);
+
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($criteria, $this->collection)
             ->willReturnSelf();
-        $this->pageSearchResult->expects($this->once())->method('setTotalCount')->with($total)->willReturnSelf();
-        $this->collection->expects($this->once())->method('getSize')->willReturn($total);
-        $this->collection->expects($this->once())->method('setCurPage')->with($currentPage)->willReturnSelf();
-        $this->collection->expects($this->once())->method('setPageSize')->with($pageSize)->willReturnSelf();
-        $this->collection->expects($this->once())->method('addOrder')->with($sortField, 'DESC')->willReturnSelf();
-        $this->page->expects($this->once())->method('getData')->willReturn(['data']);
-        $this->pageSearchResult->expects($this->once())->method('setItems')->with(['someData'])->willReturnSelf();
+
+        $this->pageSearchResult->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($criteria)
+            ->willReturnSelf();
+        $this->pageSearchResult->expects($this->once())
+            ->method('setTotalCount')
+            ->with($total)
+            ->willReturnSelf();
+        $this->pageSearchResult->expects($this->once())
+            ->method('setItems')
+            ->with(['someData'])
+            ->willReturnSelf();
+
+        $this->page->expects($this->once())
+            ->method('getData')
+            ->willReturn(['data']);
+
         $this->dataHelper->expects($this->once())
             ->method('populateWithArray')
             ->with($this->pageData, ['data'], \Magento\Cms\Api\Data\PageInterface::class);
+
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
             ->with($this->pageData, \Magento\Cms\Api\Data\PageInterface::class)

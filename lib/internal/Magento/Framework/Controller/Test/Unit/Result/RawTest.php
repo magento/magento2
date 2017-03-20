@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class RawTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +14,7 @@ class RawTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Controller\Result\Raw */
     protected $raw;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var HttpResponseInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $response;
 
     /** @var ObjectManagerHelper */
@@ -24,15 +25,13 @@ class RawTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->response = $this->getMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setBody', 'sendResponse'],
+            HttpResponseInterface::class,
+            [],
             [],
             '',
             false
         );
-        $this->raw = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Controller\Result\Raw::class
-        );
+        $this->raw = $this->objectManagerHelper->getObject(\Magento\Framework\Controller\Result\Raw::class);
     }
 
     public function testSetContents()

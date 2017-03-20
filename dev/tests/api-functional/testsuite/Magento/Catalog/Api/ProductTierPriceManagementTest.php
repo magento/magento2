@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,7 +51,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
     public function getListDataProvider()
     {
         return [
-            [0, 1, 5, 3],
+            [0, 2, 5, 3],
             [1, 0, null, null],
             ['all', 2, 8, 2],
         ];

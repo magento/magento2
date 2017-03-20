@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,6 +44,16 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_db;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $selectMock;
 
     protected function setUp()
     {
@@ -149,6 +159,30 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection::class,
             $this->abstractCollection->addWebsiteFilter($website)
+        );
+    }
+
+    public function testAddWebsiteFilterArray()
+    {
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('quoteInto')
+            ->with($this->equalTo('website. IN (?)'), $this->equalTo(['2', '3']))
+            ->willReturn(true);
+
+        $this->abstractCollection->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
+        $this->abstractCollection->expects($this->atLeastOnce())->method('getConnection')
+            ->willReturn($this->connectionMock);
+
+        $this->assertInstanceOf(
+            \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection::class,
+            $this->abstractCollection->addWebsiteFilter(['2', '3'])
         );
     }
 

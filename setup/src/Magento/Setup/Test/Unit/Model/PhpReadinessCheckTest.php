@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -222,7 +222,12 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     'message' => $xdebugMessage,
                     'error' => false,
                 ],
-            ]
+                'missed_function_imagecreatefromjpeg' => [
+                    'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                    'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+                    'error' => false,
+                ],
+            ],
         ];
         if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
@@ -261,8 +266,13 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'xdebug_max_nesting_level' => [
                     'message' => $xdebugMessage,
                     'error' => true,
-                ]
-            ]
+                ],
+                'missed_function_imagecreatefromjpeg' => [
+                    'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                    'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+                    'error' => false,
+                ],
+            ],
         ];
         if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
@@ -301,6 +311,13 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ];
         }
+
+        $expected['data']['missed_function_imagecreatefromjpeg'] = [
+            'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+            'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+            'error' => false,
+        ];
+
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 

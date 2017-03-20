@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\App\Action;
@@ -111,9 +111,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $cache
      * @param bool $taxEnabled
      * @param bool $loggedIn
-     * @dataProvider dataProviderAroundDispatch
+     * @dataProvider beforeDispatchDataProvider
      */
-    public function testAroundDispatch($cache, $taxEnabled, $loggedIn)
+    public function testBeforeDispatch($cache, $taxEnabled, $loggedIn)
     {
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
@@ -160,18 +160,14 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
             $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
             $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-            $expectedResult = 'expectedResult';
-            $proceed = function ($request) use ($expectedResult) {
-                return $expectedResult;
-            };
-            $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+            $this->contextPlugin->beforeDispatch($action, $request);
         }
     }
 
     /**
      * @return array
      */
-    public function dataProviderAroundDispatch()
+    public function beforeDispatchDataProvider()
     {
         return [
             [false, false, false],

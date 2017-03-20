@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ namespace Magento\Tax\Api;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
 use Magento\Tax\Model\ClassModel;
@@ -19,6 +20,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Tests for tax class service.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TaxClassRepositoryTest extends WebapiAbstract
 {
@@ -31,6 +33,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
 
     /** @var FilterBuilder */
     private $filterBuilder;
+
+    /** @var  SortOrderBuilder */
+    private $sortOrderBuilder;
 
     /** @var TaxClassInterfaceFactory */
     private $taxClassFactory;
@@ -63,6 +68,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $this->taxClassRepository = Bootstrap::getObjectManager()->create(
             \Magento\Tax\Model\TaxClass\Repository::class,
             ['classModelRegistry' => $this->taxClassRegistry]
+        );
+        $this->sortOrderBuilder = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Api\SortOrderBuilder::class
         );
     }
 
@@ -268,6 +276,8 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $filter4 = $this->filterBuilder->setField(ClassModel::KEY_TYPE)
             ->setValue($customerTaxClass[ClassModel::KEY_TYPE])
             ->create();
+        $sortOrder = $this->sortOrderBuilder->setField("class_type")
+            ->setDirection("ASC")->create();
 
         /**
          * (class_name == 'Retail Customer' || class_name == 'Taxable Goods)
@@ -275,6 +285,7 @@ class TaxClassRepositoryTest extends WebapiAbstract
          */
         $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
         $this->searchCriteriaBuilder->addFilters([$filter3, $filter4]);
+        $this->searchCriteriaBuilder->addSortOrder($sortOrder);
         $searchCriteria = $this->searchCriteriaBuilder->setCurrentPage(1)->setPageSize(10)->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -291,15 +302,15 @@ class TaxClassRepositoryTest extends WebapiAbstract
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResults['total_count']);
+
         $this->assertEquals(
-            $productTaxClass[ClassModel::KEY_NAME],
+            $customerTaxClass[ClassModel::KEY_NAME],
             $searchResults['items'][0][ClassModel::KEY_NAME]
         );
         $this->assertEquals(
-            $customerTaxClass[ClassModel::KEY_NAME],
+            $productTaxClass[ClassModel::KEY_NAME],
             $searchResults['items'][1][ClassModel::KEY_NAME]
         );
-
         /** class_name == 'Retail Customer' && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT') */
         $this->searchCriteriaBuilder->addFilters([$filter2]);
         $this->searchCriteriaBuilder->addFilters([$filter3, $filter4]);

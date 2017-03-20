@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -205,6 +205,8 @@ class Totals extends Block
      */
     public function getDiscount()
     {
+        $this->waitForElementNotVisible($this->blockWaitElement);
+        $this->waitForElementVisible($this->discount, Locator::SELECTOR_CSS);
         $priceElement = $this->_rootElement->find($this->discount, Locator::SELECTOR_CSS);
         return $priceElement->isVisible() ? $this->escapeCurrency($priceElement->getText()) : null;
     }
@@ -238,7 +240,7 @@ class Totals extends Block
      */
     public function isVisibleShippingPriceBlock()
     {
-        return  $this->_rootElement->find($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS)->isVisible();
+        return $this->_rootElement->find($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS)->isVisible();
     }
 
     /**

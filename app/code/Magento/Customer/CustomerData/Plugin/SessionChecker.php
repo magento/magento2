@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\CustomerData\Plugin;
@@ -37,6 +37,7 @@ class SessionChecker
      * Delete frontend session cookie if customer session is expired
      *
      * @param SessionManager $sessionManager
+     * @return void
      */
     public function beforeStart(SessionManager $sessionManager)
     {

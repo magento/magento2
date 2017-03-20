@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\TestCase;
@@ -27,15 +27,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 9. Click "Save" button on product page
  * 10. Perform asserts.
  *
- * @group ProductVideo_(MX)
+ * @group ProductVideo
  * @ZephyrId MAGETWO-43664, @ZephyrId MAGETWO-43656, @ZephyrId MAGETWO-43661, @ZephyrId MAGETWO-43663
  */
 class UpdateProductVideoTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
+    const TEST_TYPE = 'extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**

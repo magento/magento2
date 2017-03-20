@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -78,14 +78,14 @@
                           ng-class="{'_show-dependencies': item.requiredBy.length > 0 && showDependencies,
                                      '_hide-dependencies': item.requiredBy.length > 0 && !showDependencies,
                                      '_no-dependencies': item.requiredBy.length == 0}">
-                        {{item.name}}
+                        {{item.package_title}}
                     </div>
                     <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
                         <div class="product-modules-title">
-                            Products currently using module
+                            Packages currently using module
                         </div>
                         <div class="product-modules-descriprion">
-                            Product Name
+                            Module Name
                         </div>
                         <ul class="product-modules-list">
                             <li ng-repeat="product in item.requiredBy">
@@ -94,7 +94,7 @@
                                       data-label="{{getIndicatorInfo(product, 'label')}}">
                                     <span>{{getIndicatorInfo(product, 'label')}}</span>
                                 </span>
-                                {{product.name}}
+                                {{product.package_title}}
                             </li>
                         </ul>
                     </div>
@@ -106,11 +106,11 @@
                             &nbsp;
                         </div>
                         <div class="product-modules-descriprion">
-                            Product Type
+                            Package Type
                         </div>
                         <ul class="product-modules-list">
                             <li ng-repeat="product in item.requiredBy">
-                                {{product.type}}
+                                {{product.package_type}}
                             </li>
                         </ul>
                     </div>

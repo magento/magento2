@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Result;
@@ -79,7 +79,6 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterRenderResult()
     {
-        
         $existingMessages = [
             [
                 'type' => 'message0type',
@@ -125,14 +124,14 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(\Zend_Json::encode($existingMessages));
 
-        $this->dataMock->expects($this->any())
+        $this->dataMock->expects($this->once())
             ->method('jsonDecode')
             ->willReturnCallback(
                 function ($data) {
                     return \Zend_Json::decode($data);
                 }
             );
-        $this->dataMock->expects($this->any())
+        $this->dataMock->expects($this->exactly(2))
             ->method('jsonEncode')
             ->willReturnCallback(
                 function ($data) {
@@ -164,6 +163,56 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('getMessages')
             ->with(true, null)
             ->willReturn($collectionMock);
+
+        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+    }
+
+    public function testAfterRenderResultWithNoMessages()
+    {
+        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        $resultMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
+            ->with(
+                MessagePlugin::MESSAGES_COOKIES_NAME,
+                \Zend_Json::encode([])
+            )
+            ->willReturn(\Zend_Json::encode([]));
+
+        $this->dataMock->expects($this->once())
+            ->method('jsonDecode')
+            ->willReturnCallback(
+                function ($data) {
+                    return \Zend_Json::decode($data);
+                }
+            );
+        $this->dataMock->expects($this->once())
+            ->method('jsonEncode')
+            ->willReturnCallback(
+                function ($data) {
+                    return \Zend_Json::encode($data);
+                }
+            );
+
+        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([]);
+
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+
+        $this->cookieMetadataFactoryMock->expects($this->never())
+            ->method('createPublicCookieMetadata')
+            ->willReturn(null);
 
         $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }

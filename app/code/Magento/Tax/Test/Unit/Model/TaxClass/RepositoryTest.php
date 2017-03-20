@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,6 +56,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $extensionAttributesJoinProcessorMock;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
+     *  \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -107,7 +113,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = $this->objectManager->getObject(
             \Magento\Tax\Model\TaxClass\Repository::class,
             [
@@ -115,7 +127,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 'taxClassResource' => $this->taxClassResourceMock,
                 'searchResultsFactory' => $this->searchResultFactory,
                 'taxClassCollectionFactory' => $this->taxClassCollectionFactory,
-                'joinProcessor' => $this->extensionAttributesJoinProcessorMock
+                'joinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'collectionProcessor' => $this->collectionProcessor
             ]
         );
     }
@@ -206,34 +219,18 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $taxClassOne = $this->getMock(\Magento\Tax\Api\Data\TaxClassInterface::class);
         $taxClassTwo = $this->getMock(\Magento\Tax\Api\Data\TaxClassInterface::class);
         $searchCriteria = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $collection = $this->getMock(\Magento\Tax\Model\ResourceModel\TaxClass\Collection::class, [], [], '', false);
-        $sortOrder = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with($collection);
-
-        $searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
-        $filterGroup->expects($this->once())->method('getFilters')->willReturn([$filter]);
-        $filter->expects($this->atLeastOnce())->method('getConditionType')->willReturn('eq');
-        $filter->expects($this->once())->method('getField')->willReturn('field');
-        $filter->expects($this->once())->method('getValue')->willReturn('value');
-        $collection->expects($this->once())->method('addFieldToFilter')->with(['field'], [['eq' => 'value']]);
-
-        $searchCriteria->expects($this->exactly(2))->method('getSortOrders')->willReturn([$sortOrder]);
-        $sortOrder->expects($this->once())->method('getField')->willReturn('field');
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collection->expects($this->once())->method('addOrder')->with('field', 'ASC');
-        $searchCriteria->expects($this->once())->method('getPageSize')->willReturn(20);
-        $searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn(0);
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
 
         $collection->expects($this->any())->method('getSize')->willReturn(2);
         $collection->expects($this->any())->method('setItems')->with([$taxClassOne, $taxClassTwo]);
         $collection->expects($this->any())->method('getItems')->willReturn([$taxClassOne, $taxClassTwo]);
-        $collection->expects($this->once())->method('setCurPage')->with(0);
-        $collection->expects($this->once())->method('setPageSize')->with(20);
 
         $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
         $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(2);

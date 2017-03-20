@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\App\Action;
@@ -123,7 +123,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchBasedOnDefault()
+    public function testBeforeDispatchBasedOnDefault()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -187,14 +187,11 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnOrigin()
+    public function testBeforeDispatchBasedOnOrigin()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -219,14 +216,11 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnBilling()
+    public function testBeforeDispatchBasedOnBilling()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -294,14 +288,11 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 
-    public function testAroundDispatchBasedOnShipping()
+    public function testBeforeDispatchBasedOnShipping()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -369,10 +360,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-        $expectedResult = 'expectedResult';
-        $proceed = function ($request) use ($expectedResult) {
-            return $expectedResult;
-        };
-        $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+
+        $this->contextPlugin->beforeDispatch($action, $request);
     }
 }

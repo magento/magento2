@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
@@ -187,38 +187,6 @@ class FrontendCompilationTest extends \PHPUnit_Framework_TestCase
         );
 
         $frontendCompilation->process($this->getChainMockExpects('', 1, 1, $newContentType));
-    }
-
-    /**
-     * Run test for process method (content not empty)
-     */
-    public function testProcessContentNotEmpty()
-    {
-        $chainMock = $this->getChainMock();
-        $assetMock = $this->getAssetMock();
-
-        $chainMock->expects(self::once())
-            ->method('getContent')
-            ->willReturn('test-content');
-
-        $chainMock->expects(self::never())
-            ->method('getAsset')
-            ->willReturn($assetMock);
-
-        $this->lockerProcessMock->expects(self::never())
-            ->method('lockProcess');
-        $this->lockerProcessMock->expects(self::never())
-            ->method('unlockProcess');
-
-        $frontendCompilation = new FrontendCompilation(
-            $this->assetSourceMock,
-            $this->assetBuilderMock,
-            $this->alternativeSourceMock,
-            $this->lockerProcessMock,
-            'lock'
-        );
-
-        $frontendCompilation->process($chainMock);
     }
 
     /**

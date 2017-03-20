@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Block\Account;
@@ -18,7 +18,7 @@ class AuthenticationPopup extends Form
      *
      * @var string
      */
-    private $login = '[name="send"]';
+    private $login = '.action.action-login.secondary';
 
     /**
      * Selector for loading mask element.
@@ -26,6 +26,40 @@ class AuthenticationPopup extends Form
      * @var string
      */
     private $loadingMask = '.loading-mask';
+
+    /**
+     * 'Create an Account' button.
+     *
+     * @var string
+     */
+    private $createAccountButton = '.action.action-register.primary';
+
+    /**
+     * Selector for password field with autocomplete off.
+     *
+     * @var string
+     */
+    private $passwordFieldWithAutocompleteOff = 'input[name="password"][autocomplete="off"]';
+
+    /**
+     * Checks if password field autocomplete is off.
+     *
+     * @return bool
+     */
+    public function isPasswordAutocompleteOff()
+    {
+        return $this->_rootElement->find($this->passwordFieldWithAutocompleteOff)->isVisible();
+    }
+
+    /**
+     * Click 'Create an Account' button.
+     *
+     * @return void
+     */
+    public function createAccount()
+    {
+        $this->_rootElement->find($this->createAccountButton)->click();
+    }
 
     /**
      * Login customer on authentication popup.
