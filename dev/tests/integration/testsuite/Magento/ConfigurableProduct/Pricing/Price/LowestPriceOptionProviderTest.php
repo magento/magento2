@@ -32,7 +32,8 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        $this->lowestPriceOptionsProvider = Bootstrap::getObjectManager()->get(
+        // create is used for prevent internal caching in property
+        $this->lowestPriceOptionsProvider = Bootstrap::getObjectManager()->create(
             LowestPriceOptionsProviderInterface::class
         );
     }
