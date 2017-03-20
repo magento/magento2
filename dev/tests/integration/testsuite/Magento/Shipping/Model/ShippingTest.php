@@ -45,13 +45,13 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $address = $this->objectManager->create(DataObject::class, [
             'data' => [
                 'region_id' => 'CA',
-                'postcode' => '11111',
+                'postcode' => 11111,
                 'lastname' => 'John',
                 'firstname' => 'Doe',
                 'street' => 'Some street',
                 'city' => 'Los Angeles',
                 'email' => 'john.doe@example.com',
-                'telephone' => '11111111',
+                'telephone' => 11111111,
                 'country_id' => 'US',
                 'item_qty' => 1
             ]

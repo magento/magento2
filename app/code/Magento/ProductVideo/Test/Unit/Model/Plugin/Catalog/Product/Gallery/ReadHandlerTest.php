@@ -90,40 +90,40 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $mediaData = [
             'images' => [
                 [
-                    'value_id' => '4',
+                    'value_id' => 4,
                     'file' => '/i/n/index111111.jpg',
                     'media_type' => 'external-video',
-                    'entity_id' => '1',
+                    'entity_id' => 1,
                     'label' => '',
-                    'position' => '3',
-                    'disabled' => '0',
+                    'position' => 3,
+                    'disabled' => 0,
                     'label_default' => null,
-                    'position_default' => '3',
-                    'disabled_default' => '0',
+                    'position_default' => 3,
+                    'disabled_default' => 0,
                 ],
                 [
-                    'value_id' => '5',
+                    'value_id' => 5,
                     'file' => '/s/a/sample_3.jpg',
                     'media_type' => 'external-video',
-                    'entity_id' => '1',
+                    'entity_id' => 1,
                     'label' => '',
-                    'position' => '4',
-                    'disabled' => '0',
+                    'position' => 4,
+                    'disabled' => 0,
                     'label_default' => null,
-                    'position_default' => '4',
-                    'disabled_default' => '0',
+                    'position_default' => 4,
+                    'disabled_default' => 0,
                 ],
                 [
-                    'value_id' => '7',
+                    'value_id' => 7,
                     'file' => '/h/d/hd_image.jpg',
                     'media_type' => 'image',
-                    'entity_id' => '1',
+                    'entity_id' => 1,
                     'label' => '',
-                    'position' => '4',
-                    'disabled' => '0',
+                    'position' => 4,
+                    'disabled' => 0,
                     'label_default' => null,
-                    'position_default' => '4',
-                    'disabled_default' => '0',
+                    'position_default' => 4,
+                    'disabled_default' => 0,
                 ]
             ],
             'values' => []
@@ -131,7 +131,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
         $resourceEntryResult = [
             [
-                'value_id' => '4',
+                'value_id' => 4,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=abcdefghij',
                 'video_title_default' => 'Some first title',
@@ -144,7 +144,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
                 'video_metadata' => 'meta one',
             ],
             [
-                'value_id' => '5',
+                'value_id' => 5,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',
                 'video_title_default' => 'Some second title',
@@ -185,16 +185,16 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $mediaData = [
             'images' => [
                 [
-                    'value_id' => '7',
+                    'value_id' => 7,
                     'file' => '/h/d/hd_image.jpg',
                     'media_type' => 'image',
-                    'entity_id' => '1',
+                    'entity_id' => 1,
                     'label' => '',
-                    'position' => '4',
-                    'disabled' => '0',
+                    'position' => 4,
+                    'disabled' => 0,
                     'label_default' => null,
-                    'position_default' => '4',
-                    'disabled_default' => '0',
+                    'position_default' => 4,
+                    'disabled_default' => 0,
                 ]
             ],
             'values' => []

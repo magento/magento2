@@ -56,7 +56,7 @@ class InstallSchema implements InstallSchemaInterface
                 [
                     'unsigned' => true,
                     'nullable' => false,
-                    'default'  => '0',
+                    'default'  => 0,
                 ],
                 'Store Id'
             )->addColumn(

@@ -45,7 +45,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'type' => Table::TYPE_INTEGER,
                 'unsigned' => true,
                 'nullable' => false,
-                'default' => '0',
+                'default' => 0,
                 'comment' => 'Discount Step',
             ]
         );

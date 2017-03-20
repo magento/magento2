@@ -206,7 +206,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getModel();
         $beforeForwardInfo = [
-            'params' => ['one' => '111', 'two' => '222'],
+            'params' => ['one' => 111, 'two' => 222],
             'action_name' => 'ActionName',
             'controller_name' => 'ControllerName',
             'module_name' => 'ModuleName',
@@ -289,8 +289,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $defaultServerData = [
             'SCRIPT_NAME' => 'index.php',
             'HTTP_HOST' => 'sample.host.com',
-            'SERVER_PORT' => '80',
-            'HTTPS' => '1'
+            'SERVER_PORT' => 80,
+            'HTTPS' => 1
         ];
 
         $secureUnusualPort = $noHttpsData = $httpsOffData = $noHostData = $noScriptNameData = $defaultServerData;

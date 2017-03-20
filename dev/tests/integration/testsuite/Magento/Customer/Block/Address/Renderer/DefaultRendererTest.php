@@ -42,11 +42,11 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             'country_id' => 'US',
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'postcode' => '75477',
+            'postcode' => 75477,
             'region' => 'Alabama',
-            'region_id' => '1',
+            'region_id' => 1,
             'street' => ['Green str, 67'],
-            'telephone' => '3468676',
+            'telephone' => 3468676,
         ];
 
         $htmlResult = "John Smith<br />\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, " .
@@ -89,11 +89,11 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             'country_id' => 'US',
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'postcode' => '75477',
+            'postcode' => 75477,
             'region' => 'Alabama',
-            'region_id' => '1',
+            'region_id' => 1,
             'street' => ['Green str, 67'],
-            'telephone' => '3468676',
+            'telephone' => 3468676,
         ];
 
         $address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

@@ -76,7 +76,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
 
-        $data = base64_encode(json_encode(['order_id' => 1, 'increment_id' => '100000001', 'customer_id' => 1]));
+        $data = base64_encode(json_encode(['order_id' => 1, 'increment_id' => 100000001, 'customer_id' => 1]));
         $link = 'http://magento.com/rss/feed/index/type/order_status?data=' . $data;
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')
             ->with([

@@ -159,15 +159,15 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             [
                 'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                 'aggregator' => 'all',
-                'value' => '1',
+                'value' => 1,
                 'new_child' => ''
             ]
         ];
         $params = [
             'title' => 'my "widget"',
-            'show_pager' => '1',
-            'products_per_page' => '5',
-            'products_count' => '10',
+            'show_pager' => 1,
+            'products_per_page' => 5,
+            'products_count' => 10,
             'template' => 'product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
@@ -212,15 +212,15 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             [
                 'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                 'aggregator' => 'all',
-                'value' => '1',
+                'value' => 1,
                 'new_child' => ''
             ]
         ];
         $params = [
             'title' => 'my widget',
-            'show_pager' => '1',
-            'products_per_page' => '5',
-            'products_count' => '0',
+            'show_pager' => 1,
+            'products_per_page' => 5,
+            'products_count' => 0,
             'template' => 'product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];

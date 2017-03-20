@@ -61,16 +61,16 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             1 => [
                 'sku' => 'simple',
                 'name' => 'Simple Product',
-                'price' => '10',
-                'qty' => '1',
-                'position' => '1'
+                'price' => 10,
+                'qty' => 1,
+                'position' => 1
             ],
             21 => [
                 'sku' => 'virtual-product',
                 'name' => 'Virtual Product',
-                'price' => '10',
-                'qty' => '2',
-                'position' => '2'
+                'price' => 10,
+                'qty' => 2,
+                'position' => 2
             ]
         ];
         $productId = $product->getId();
@@ -105,10 +105,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         ];
         $expectedData = [
             \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_FULL => [
-                1  => '{"super_product_config":{"product_type":"grouped","product_id":"'
-                    . $product->getId() . '"}}',
-                21 => '{"super_product_config":{"product_type":"grouped","product_id":"'
-                    . $product->getId() . '"}}',
+                1  => '{"super_product_config":{"product_type":"grouped","product_id":'
+                    . $product->getId() . '}}',
+                21 => '{"super_product_config":{"product_type":"grouped","product_id":'
+                    . $product->getId() . '}}',
             ],
             \Magento\GroupedProduct\Model\Product\Type\Grouped::PROCESS_MODE_LITE => [
                 $product->getId() => '{"value":{"qty":2}}',

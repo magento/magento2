@@ -91,8 +91,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             1 => [
                 'title' => '404 Not Found',
                 'identifier' => 'no-route',
-                'custom_theme' => '1',
-                'custom_root_template' => '2'
+                'custom_theme' => 1,
+                'custom_root_template' => 2
             ]
         ];
         $this->request->expects($this->any())
@@ -141,8 +141,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'layout' => '1column',
                 'title' => '404 Not Found',
                 'identifier' => 'no-route',
-                'custom_theme' => '1',
-                'custom_root_template' => '2'
+                'custom_theme' => 1,
+                'custom_root_template' => 2
             ]);
         $this->jsonFactory->expects($this->once())
             ->method('create')
@@ -241,48 +241,48 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     public function testSetCmsPageData()
     {
         $extendedPageData = [
-            'page_id' => '2',
+            'page_id' => 2,
             'title' => 'Home Page',
             'page_layout' => '1column',
             'identifier' => 'home',
             'content_heading' => 'Home Page',
             'content' => 'CMS homepage content goes here.',
-            'is_active' => '1',
-            'sort_order' => '1',
-            'custom_theme' => '3',
+            'is_active' => 1,
+            'sort_order' => 1,
+            'custom_theme' => 3,
             'store_id' => ['0']
         ];
         $pageData = [
-            'page_id' => '2',
+            'page_id' => 2,
             'title' => 'Home Page',
             'page_layout' => '1column',
             'identifier' => 'home',
-            'is_active' => '1',
-            'custom_theme' => '3',
+            'is_active' => 1,
+            'custom_theme' => 3,
         ];
         $getData = [
-            'page_id' => '2',
+            'page_id' => 2,
             'title' => 'Home Page',
             'page_layout' => '1column',
             'identifier' => 'home',
             'content_heading' => 'Home Page',
             'content' => 'CMS homepage content goes here.',
-            'is_active' => '1',
-            'sort_order' => '1',
-            'custom_theme' => '3',
+            'is_active' => 1,
+            'sort_order' => 1,
+            'custom_theme' => 3,
             'custom_root_template' => '1column',
             'store_id' => ['0']
         ];
         $mergedData = [
-            'page_id' => '2',
+            'page_id' => 2,
             'title' => 'Home Page',
             'page_layout' => '1column',
             'identifier' => 'home',
             'content_heading' => 'Home Page',
             'content' => 'CMS homepage content goes here.',
-            'is_active' => '1',
-            'sort_order' => '1',
-            'custom_theme' => '3',
+            'is_active' => 1,
+            'sort_order' => 1,
+            'custom_theme' => 3,
             'custom_root_template' => '1column',
             'store_id' => ['0']
         ];

@@ -22,11 +22,11 @@ return [
                                                         [
                                                             [
                                                                 'label' => __('Active'),
-                                                                'value' => '1',
+                                                                'value' => 1,
                                                             ],
                                                             [
                                                                 'label' => __('Inactive'),
-                                                                'value' => '0',
+                                                                'value' => 0,
                                                             ],
                                                         ],
                                                 ],
@@ -69,11 +69,11 @@ return [
                                                         [
                                                             [
                                                                 'label' => __('Yes'),
-                                                                'value' => '1',
+                                                                'value' => 1,
                                                             ],
                                                             [
                                                                 'label' => __('No'),
-                                                                'value' => '0',
+                                                                'value' => 0,
                                                             ],
                                                         ],
                                                 ],
@@ -119,8 +119,8 @@ return [
                                         ],
                                 ],
                         ],
-                    'discount_amount' => ['arguments' => ['data' => ['config' => ['value' => '0']]]],
-                    'discount_qty' => ['arguments' => ['data' => ['config' => ['value' => '0']]]],
+                    'discount_amount' => ['arguments' => ['data' => ['config' => ['value' => 0]]]],
+                    'discount_qty' => ['arguments' => ['data' => ['config' => ['value' => 0]]]],
                     'apply_to_shipping' =>
                         [
                             'arguments' =>
@@ -133,11 +133,11 @@ return [
                                                         [
                                                             [
                                                                 'label' => __('Yes'),
-                                                                'value' => '1'
+                                                                'value' => 1
                                                             ],
                                                             [
                                                                 'label' => __('No'),
-                                                                'value' => '0'
+                                                                'value' => 0
                                                             ],
                                                         ],
                                                 ],
@@ -157,12 +157,12 @@ return [
                                                         [
                                                             [
                                                                 'label' => __('Yes'),
-                                                                'value' => '1'
+                                                                'value' => 1
                                                             ],
 
                                                             [
                                                                 'label' => __('No'),
-                                                                'value' => '0'
+                                                                'value' => 0
                                                             ],
                                                         ],
                                                 ],

@@ -19,8 +19,8 @@ class ExcludeListTest extends \PHPUnit_Framework_TestCase
         $this->model = new ExcludeList(
             [
                 'web/unsecure/base_url' => '',
-                'web/test/test_value' => '0',
-                'web/test/test_sensitive' => '1',
+                'web/test/test_value' => 0,
+                'web/test/test_sensitive' => 1,
             ]
         );
     }

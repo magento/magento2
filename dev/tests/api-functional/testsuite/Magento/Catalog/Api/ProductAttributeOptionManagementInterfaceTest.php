@@ -21,11 +21,11 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
         $testAttributeCode = 'quantity_and_stock_status';
         $expectedOptions = [
             [
-                AttributeOptionInterface::VALUE => '1',
+                AttributeOptionInterface::VALUE => 1,
                 AttributeOptionInterface::LABEL => 'In Stock',
             ],
             [
-                AttributeOptionInterface::VALUE => '0',
+                AttributeOptionInterface::VALUE => 0,
                 AttributeOptionInterface::LABEL => 'Out of Stock',
             ],
         ];

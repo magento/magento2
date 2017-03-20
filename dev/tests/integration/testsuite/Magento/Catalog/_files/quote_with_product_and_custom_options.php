@@ -9,11 +9,11 @@ require __DIR__ . '/../../../Magento/Checkout/_files/active_quote.php';
 $optionValue = [
     'field' => 'Test value',
     'date_time' => [
-        'year' => '2015',
-        'month' => '9',
-        'day' => '9',
-        'hour' => '2',
-        'minute' => '2',
+        'year' => 2015,
+        'month' => 9,
+        'day' => 9,
+        'hour' => 2,
+        'minute' => 2,
         'day_part' => 'am',
         'date_internal' => '',
     ],

@@ -123,7 +123,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         [
             'option_id' => 1,
             'sku' => '1-text',
-            'max_characters' => '100',
+            'max_characters' => 100,
             'file_extension' => null,
             'image_size_x' => 0,
             'image_size_y' => 0,

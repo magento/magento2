@@ -23,19 +23,27 @@ class Tree extends \Magento\Backend\Block\Template
     protected $urlEncoder;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $jsonSerializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\Framework\Serialize\Serializer\Json $jsonSerializer
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Theme\Helper\Storage $storageHelper,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\Framework\Serialize\Serializer\Json $jsonSerializer,
         array $data = []
     ) {
         $this->_storageHelper = $storageHelper;
         $this->urlEncoder = $urlEncoder;
+        $this->jsonSerializer = $jsonSerializer;
         parent::__construct($context, $data);
     }
 
@@ -57,7 +65,7 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeJson($data)
     {
-        return \Zend_Json::encode($data);
+        return $this->jsonSerializer->serialize($data);
     }
 
     /**

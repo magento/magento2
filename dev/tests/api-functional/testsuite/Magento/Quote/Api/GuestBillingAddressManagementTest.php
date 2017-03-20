@@ -122,8 +122,8 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             'region_code' => 'CA',
             'postcode' => '0985432',
             'country_id' => 'US',
-            'telephone' => '88776655',
-            'fax' => '44332255',
+            'telephone' => 88776655,
+            'fax' => 44332255,
         ];
         $requestData = [
             'cartId' => $cartId,

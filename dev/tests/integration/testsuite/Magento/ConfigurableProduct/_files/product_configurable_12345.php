@@ -86,7 +86,7 @@ $configurableAttributesData = [
         'attribute_id' => $attribute->getId(),
         'code' => $attribute->getAttributeCode(),
         'label' => $attribute->getStoreLabel(),
-        'position' => '0',
+        'position' => 0,
         'values' => $attributeValues,
     ],
 ];

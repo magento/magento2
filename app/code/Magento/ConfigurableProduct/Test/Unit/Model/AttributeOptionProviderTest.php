@@ -191,21 +191,21 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
                         'sku' => 'Configurable1-Black',
                         'product_id' => 4,
                         'attribute_code' => 'color',
-                        'value_index' => '13',
+                        'value_index' => 13,
                         'option_title' => 'Black'
                     ],
                     [
                         'sku' => 'Configurable1-White',
                         'product_id' => 4,
                         'attribute_code' => 'color',
-                        'value_index' => '14',
+                        'value_index' => 14,
                         'option_title' => 'White'
                     ],
                     [
                         'sku' => 'Configurable1-Red',
                         'product_id' => 4,
                         'attribute_code' => 'color',
-                        'value_index' => '15',
+                        'value_index' => 15,
                         'option_title' => 'Red'
                     ]
                 ]

@@ -235,10 +235,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
         $this->orderMock->expects($this->once())
             ->method('getData')
-            ->willReturn(['increment_id' => '10000001']);
+            ->willReturn(['increment_id' => 10000001]);
         $this->objectRelationProcessorMock->expects($this->once())
             ->method('validateDataIntegrity')
-            ->with(null, ['increment_id' => '10000001']);
+            ->with(null, ['increment_id' => 10000001]);
         $this->relationCompositeMock->expects($this->once())
             ->method('processRelations')
             ->with($this->orderMock);

@@ -233,7 +233,7 @@ class LabelGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [['tracking_number' => ['111111', '222222', '333333'], 'label_content' => 'some']],
-            [['tracking_number' => '111111', 'label_content' => 'some']],
+            [['tracking_number' => 111111, 'label_content' => 'some']],
         ];
     }
 }

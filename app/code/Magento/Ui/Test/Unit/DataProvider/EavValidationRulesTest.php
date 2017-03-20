@@ -70,10 +70,10 @@ class EavValidationRulesTest extends \PHPUnit_Framework_TestCase
             ['', ['input_validation' => 'email'], [], ['validate-email' => true]],
             ['', ['input_validation' => 'date'], [], ['validate-date' => true]],
             ['', ['input_validation' => 'other'], [], []],
-            ['', ['max_text_length' => '254'], ['required' => 1], ['max_text_length' => 254, 'required-entry' => true]],
-            ['', ['max_text_length' => '254', 'min_text_length' => 1], [],
+            ['', ['max_text_length' => 254], ['required' => 1], ['max_text_length' => 254, 'required-entry' => true]],
+            ['', ['max_text_length' => 254, 'min_text_length' => 1], [],
                 ['max_text_length' => 254, 'min_text_length' => 1]],
-            ['', ['max_text_length' => '254', 'input_validation' => 'date'], [],
+            ['', ['max_text_length' => 254, 'input_validation' => 'date'], [],
                 ['max_text_length' => 254, 'validate-date' => true]],
         ];
     }

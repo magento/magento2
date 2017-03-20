@@ -29,7 +29,7 @@ class InstallSchema implements InstallSchemaInterface
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_FLOAT,
                 'unsigned' => true,
                 'nullable' => false,
-                'default' => '1',
+                'default' => 1,
                 'comment' => 'Search Weight'
             ]
         );

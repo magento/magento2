@@ -104,14 +104,14 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
     private function getArrayData()
     {
         return [
-            'rule_id' => '1',
+            'rule_id' => 1,
             'name' => 'testrule',
-            'is_active' => '1',
+            'is_active' => 1,
             'conditions_serialized' => json_encode([
                 'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                 'attribute' => null,
                 'operator' => null,
-                'value' => '1',
+                'value' => 1,
                 'is_value_processed' => null,
                 'aggregator' => 'all',
                 'conditions' => [
@@ -119,7 +119,7 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
                         'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                         'attribute' => 'base_subtotal',
                         'operator' => '>=',
-                        'value' => '100',
+                        'value' => 100,
                         'is_value_processed' => false,
                     ],
                 ],
@@ -128,7 +128,7 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
                 'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                 'attribute' => null,
                 'operator' => null,
-                'value' => '1',
+                'value' => 1,
                 'is_value_processed' => null,
                 'aggregator' => 'all',
                 'conditions' => [
@@ -136,12 +136,12 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
                         'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'attribute' => 'attribute_set_id',
                         'operator' => '==',
-                        'value' => '4',
+                        'value' => 4,
                         'is_value_processed' => false,
                     ],
                 ],
             ]),
-            'coupon_type' => '1',
+            'coupon_type' => 1,
             'coupon_code' => '',
             'store_labels' => [
                 0 => 'TestRule',

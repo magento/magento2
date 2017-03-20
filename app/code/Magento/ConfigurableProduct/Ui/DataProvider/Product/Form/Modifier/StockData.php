@@ -42,7 +42,7 @@ class StockData extends AbstractModifier
     {
         if ($this->locator->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE) {
             $config['arguments']['data']['config'] = [
-                'visible' => '0',
+                'visible' => 0,
                 'imports' => [
                     'visible' => null,
                 ],

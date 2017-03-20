@@ -20,13 +20,13 @@ return [
                                 [
                                     'id' => 'Magento_Customer::manageChild',
                                     'title' => 'Create Customer',
-                                    'sortOrder' => '30',
+                                    'sortOrder' => 30,
                                     'children' => [],
                                 ],
                                 [
                                     'id' => 'Magento_Customer::manageChild2',
                                     'title' => 'Edit Customer',
-                                    'sortOrder' => '10',
+                                    'sortOrder' => 10,
                                     'children' => []
                                 ],
                             ],
@@ -45,13 +45,13 @@ return [
                                 [
                                     'id' => 'Magento_SalesRule::quoteChild',
                                     'title' => 'Create Customer',
-                                    'sortOrder' => '30',
+                                    'sortOrder' => 30,
                                     'children' => [],
                                 ],
                                 [
                                     'id' => 'Magento_SalesRule::quoteChild2',
                                     'title' => 'Edit Customer',
-                                    'sortOrder' => '10',
+                                    'sortOrder' => 10,
                                     'children' => []
                                 ],
                             ],

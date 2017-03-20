@@ -157,18 +157,18 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'data' => '2000',
+                'data' => 2000,
                 'locale' => 'en_US',
                 'index' => 'period',
                 'period' => 'year',
-                'result' => '2000'
+                'result' => 2000
             ],
             [
-                'data' => '2030',
+                'data' => 2030,
                 'locale' => 'en_US',
                 'index' => 'period',
                 'period' => 'year',
-                'result' => '2030'
+                'result' => 2030
             ],
             [
                 'data' => '2000-01',

@@ -30,8 +30,8 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
         $this->moduleList->expects($this->any())
             ->method('getOne')
             ->will($this->returnValueMap([
-                        ['Module_One', ['name' => 'Module_One', 'setup_version' => '1']],
-                        ['Module_Two', ['name' => 'Module_Two', 'setup_version' => '2']],
+                        ['Module_One', ['name' => 'Module_One', 'setup_version' => 1]],
+                        ['Module_Two', ['name' => 'Module_Two', 'setup_version' => 2]],
                         ['Module_No_Schema', []],
                     ]));
         $this->moduleList->expects($this->any())
@@ -125,14 +125,14 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
         $expectedErrors = [
             [
                 DbVersionInfo::KEY_MODULE => 'Module_One',
-                DbVersionInfo::KEY_CURRENT => '2',
-                DbVersionInfo::KEY_REQUIRED => '1',
+                DbVersionInfo::KEY_CURRENT => 2,
+                DbVersionInfo::KEY_REQUIRED => 1,
                 DbVersionInfo::KEY_TYPE => 'schema',
             ],
             [
                 DbVersionInfo::KEY_MODULE => 'Module_One',
-                DbVersionInfo::KEY_CURRENT => '2',
-                DbVersionInfo::KEY_REQUIRED => '1',
+                DbVersionInfo::KEY_CURRENT => 2,
+                DbVersionInfo::KEY_REQUIRED => 1,
                 DbVersionInfo::KEY_TYPE => 'data',
             ]
         ];

@@ -87,7 +87,7 @@ class ShipmentCreateTest extends WebapiAbstract
                     'order_id' => $order->getId(),
                     'title' => 'ground',
                     'description' => null,
-                    'track_number' => '12345678',
+                    'track_number' => 12345678,
                     'parent_id' => null,
                     'created_at' => null,
                     'updated_at' => null,

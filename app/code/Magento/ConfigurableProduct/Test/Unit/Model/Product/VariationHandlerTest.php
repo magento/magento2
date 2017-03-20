@@ -188,9 +188,9 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         }
 
         $stockData = [
-            'manage_stock' => '0',
-            'use_config_enable_qty_increments' => '1',
-            'use_config_qty_increments' => '1',
+            'manage_stock' => 0,
+            'use_config_enable_qty_increments' => 1,
+            'use_config_qty_increments' => 1,
             'use_config_manage_stock' => 0,
             'is_decimal_divided' => 0
         ];
@@ -366,7 +366,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
                         'images' => [
                             0 => [
                                 'position' => 1,
-                                'file' => '1',
+                                'file' => 1,
                                 'disabled' => 0,
                                 'label' => '',
                             ],

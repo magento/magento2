@@ -211,7 +211,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     PaymentInterface::KEY_METHOD => 'payment_method_code',
-                    'cc_number' => '1111',
+                    'cc_number' => 1111,
                     'cc_type' => 'VI',
                     'cc_owner' => 'John Doe'
                 ],
@@ -219,7 +219,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     PaymentInterface::KEY_METHOD => 'payment_method_code',
                     PaymentInterface::KEY_PO_NUMBER => null,
                     PaymentInterface::KEY_ADDITIONAL_DATA => [
-                        'cc_number' => '1111',
+                        'cc_number' => 1111,
                         'cc_type' => 'VI',
                         'cc_owner' => 'John Doe'
                     ],
@@ -229,7 +229,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     PaymentInterface::KEY_METHOD => 'payment_method_code',
                     PaymentInterface::KEY_PO_NUMBER => null,
                     PaymentInterface::KEY_ADDITIONAL_DATA => [
-                        'cc_number' => '1111',
+                        'cc_number' => 1111,
                         'cc_type' => 'VI',
                         'cc_owner' => 'John Doe'
                     ],
@@ -240,7 +240,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     PaymentInterface::KEY_METHOD => 'payment_method_code',
-                    'cc_number' => '1111',
+                    'cc_number' => 1111,
                     'cc_type' => 'VI',
                     'cc_owner' => 'John Doe',
                     'checks' => ['check_code1', 'check_code2']
@@ -249,7 +249,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     PaymentInterface::KEY_METHOD => 'payment_method_code',
                     PaymentInterface::KEY_PO_NUMBER => null,
                     PaymentInterface::KEY_ADDITIONAL_DATA => [
-                        'cc_number' => '1111',
+                        'cc_number' => 1111,
                         'cc_type' => 'VI',
                         'cc_owner' => 'John Doe'
                     ],
@@ -259,7 +259,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     PaymentInterface::KEY_METHOD => 'payment_method_code',
                     PaymentInterface::KEY_PO_NUMBER => null,
                     PaymentInterface::KEY_ADDITIONAL_DATA => [
-                        'cc_number' => '1111',
+                        'cc_number' => 1111,
                         'cc_type' => 'VI',
                         'cc_owner' => 'John Doe'
                     ],

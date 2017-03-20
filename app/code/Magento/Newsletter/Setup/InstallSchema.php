@@ -41,7 +41,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Store Id'
             )
             ->addColumn(
@@ -55,7 +55,7 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Customer Id'
             )
             ->addColumn(
@@ -69,7 +69,7 @@ class InstallSchema implements InstallSchemaInterface
                 'subscriber_status',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Subscriber Status'
             )
             ->addColumn(
@@ -162,7 +162,7 @@ class InstallSchema implements InstallSchemaInterface
                 'template_actual',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '1'],
+                ['unsigned' => true, 'default' => 1],
                 'Template Actual'
             )
             ->addColumn(
@@ -210,7 +210,7 @@ class InstallSchema implements InstallSchemaInterface
                 'template_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Template ID'
             )
             ->addColumn(
@@ -259,7 +259,7 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_status',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Queue Status'
             )
             ->addColumn(
@@ -306,14 +306,14 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Queue Id'
             )
             ->addColumn(
                 'subscriber_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Subscriber Id'
             )
             ->addColumn(
@@ -362,14 +362,14 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Queue Id'
             )
             ->addColumn(
                 'store_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Store Id'
             )
             ->addIndex(
@@ -416,14 +416,14 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Queue Id'
             )
             ->addColumn(
                 'problem_error_code',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Problem Error Code'
             )
             ->addColumn(

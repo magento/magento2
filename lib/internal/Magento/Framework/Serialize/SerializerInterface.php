@@ -14,9 +14,10 @@ interface SerializerInterface
      * Serialize data into string
      *
      * @param string|int|float|bool|array|null $data
+     * @param array $options
      * @return string|bool
      */
-    public function serialize($data);
+    public function serialize($data, $options = []);
 
     /**
      * Unserialize the given string

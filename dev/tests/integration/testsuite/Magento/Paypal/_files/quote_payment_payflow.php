@@ -37,13 +37,13 @@ $product->load(1);
 
 $addressData = [
     'region' => 'CA',
-    'postcode' => '11111',
+    'postcode' => 11111,
     'lastname' => 'lastname',
     'firstname' => 'firstname',
     'street' => 'street',
     'city' => 'Los Angeles',
     'email' => 'admin@example.com',
-    'telephone' => '11111111',
+    'telephone' => 11111111,
     'country_id' => 'US',
 ];
 
@@ -55,15 +55,15 @@ $billingData = [
     'email' => 'test@com.com',
     'street' => [0 => 'test1', 1 => ''],
     'city' => 'Test',
-    'region_id' => '1',
+    'region_id' => 1,
     'region' => '',
-    'postcode' => '9001',
+    'postcode' => 9001,
     'country_id' => 'US',
-    'telephone' => '11111111',
+    'telephone' => 11111111,
     'fax' => '',
     'confirm_password' => '',
-    'save_in_address_book' => '1',
-    'use_for_shipping' => '1',
+    'save_in_address_book' => 1,
+    'use_for_shipping' => 1,
 ];
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -109,4 +109,4 @@ $quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS_EXPRESS
 /** @var $service \Magento\Quote\Api\CartManagementInterface */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Quote\Api\CartManagementInterface::class);
-$order = $service->submit($quote, ['increment_id' => '100000001']);
+$order = $service->submit($quote, ['increment_id' => 100000001]);

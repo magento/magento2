@@ -538,7 +538,7 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'transactionId' => '9941997799',
+                'transactionId' => 9941997799,
                 'resultStatus' => 'Successful.',
                 'responseStatus' => 'voided',
                 'responseCode' => 1

@@ -72,7 +72,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->any())
             ->method('getAll')
             ->willReturn($configData);
-        $this->assertEquals([3 => '3'], $this->model->getIsQtyTypeIds($filter));
+        $this->assertEquals([3 => 3], $this->model->getIsQtyTypeIds($filter));
     }
 
     public function testIsQty()

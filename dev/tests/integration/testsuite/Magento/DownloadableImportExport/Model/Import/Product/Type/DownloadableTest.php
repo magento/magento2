@@ -115,21 +115,21 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $expectedLinks= [
             'file' => [
                 'title' => 'TEST Import Link Title File',
-                'sort_order' => '78',
+                'sort_order' => 78,
                 'sample_type' => 'file',
                 'price' => '123.0000',
-                'number_of_downloads' => '123',
-                'is_shareable' => '0',
+                'number_of_downloads' => 123,
+                'is_shareable' => 0,
                 'link_type' => 'file'
             ],
             'url'  => [
                 'title' => 'TEST Import Link Title URL',
-                'sort_order' => '42',
+                'sort_order' => 42,
                 'sample_type' => 'url',
                 'sample_url' => 'http://www.bing.com',
                 'price' => '1.0000',
-                'number_of_downloads' => '0',
-                'is_shareable' => '1',
+                'number_of_downloads' => 0,
+                'is_shareable' => 1,
                 'link_type' => 'url',
                 'link_url' => 'http://www.google.com'
             ]
@@ -157,12 +157,12 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $expectedSamples= [
             'file' => [
                 'title' => 'TEST Import Sample File',
-                'sort_order' => '178',
+                'sort_order' => 178,
                 'sample_type' => 'file'
             ],
             'url'  => [
                 'title' => 'TEST Import Sample URL',
-                 'sort_order' => '178',
+                 'sort_order' => 178,
                  'sample_type' => 'url',
                  'sample_url' => 'http://www.yahoo.com'
             ]

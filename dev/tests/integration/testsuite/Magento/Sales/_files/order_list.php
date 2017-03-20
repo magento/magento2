@@ -14,7 +14,7 @@ require 'order.php';
 /** @var  Order\Address $shippingAddress */
 $orders = [
     [
-        'increment_id' => '100000002',
+        'increment_id' => 100000002,
         'state' => \Magento\Sales\Model\Order::STATE_NEW,
         'status' => 'processing',
         'grand_total' => 120.00,
@@ -25,7 +25,7 @@ $orders = [
         'payment' => $payment
     ],
     [
-        'increment_id' => '100000003',
+        'increment_id' => 100000003,
         'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
         'status' => 'processing',
         'grand_total' => 140.00,
@@ -36,7 +36,7 @@ $orders = [
         'payment' => $payment
     ],
     [
-        'increment_id' => '100000004',
+        'increment_id' => 100000004,
         'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
         'status' => 'closed',
         'grand_total' => 140.00,

@@ -70,43 +70,43 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
         $collection = $this->getCategoryCollectionMock(
             [
-                $this->getCategoryMock(['id' => '2', 'parent_id' => '1', 'name' => 'Category 2', 'is_active' => '1']),
-                $this->getCategoryMock(['id' => '3', 'parent_id' => '1', 'name' => 'Category 3', 'is_active' => '0']),
-                $this->getCategoryMock(['id' => '4', 'parent_id' => '3', 'name' => 'Category 4', 'is_active' => '1']),
-                $this->getCategoryMock(['id' => '5', 'parent_id' => '2', 'name' => 'Category 5', 'is_active' => '1']),
-                $this->getCategoryMock(['id' => '6', 'parent_id' => '4', 'name' => 'Category 6', 'is_active' => '1']),
-                $this->getCategoryMock(['id' => '7', 'parent_id' => '1', 'name' => 'Category 7', 'is_active' => '0']),
-                $this->getCategoryMock(['id' => '8', 'parent_id' => '1', 'name' => 'Category 8', 'is_active' => '1']),
-                $this->getCategoryMock(['id' => '9', 'parent_id' => '7', 'name' => 'Category 9', 'is_active' => '1']),
+                $this->getCategoryMock(['id' => 2, 'parent_id' => 1, 'name' => 'Category 2', 'is_active' => 1]),
+                $this->getCategoryMock(['id' => 3, 'parent_id' => 1, 'name' => 'Category 3', 'is_active' => 0]),
+                $this->getCategoryMock(['id' => 4, 'parent_id' => 3, 'name' => 'Category 4', 'is_active' => 1]),
+                $this->getCategoryMock(['id' => 5, 'parent_id' => 2, 'name' => 'Category 5', 'is_active' => 1]),
+                $this->getCategoryMock(['id' => 6, 'parent_id' => 4, 'name' => 'Category 6', 'is_active' => 1]),
+                $this->getCategoryMock(['id' => 7, 'parent_id' => 1, 'name' => 'Category 7', 'is_active' => 0]),
+                $this->getCategoryMock(['id' => 8, 'parent_id' => 1, 'name' => 'Category 8', 'is_active' => 1]),
+                $this->getCategoryMock(['id' => 9, 'parent_id' => 7, 'name' => 'Category 9', 'is_active' => 1]),
             ]
         );
 
         $result = [
             [
-                'value' => '2',
-                'is_active' => '1',
+                'value' => 2,
+                'is_active' => 1,
                 'label' => 'Category 2',
                 'optgroup' => [
                     [
-                        'value' => '5',
-                        'is_active' => '1',
+                        'value' => 5,
+                        'is_active' => 1,
                         'label' => 'Category 5'
                     ]
                 ]
             ],
             [
-                'value' => '3',
-                'is_active' => '0',
+                'value' => 3,
+                'is_active' => 0,
                 'label' => 'Category 3',
                 'optgroup' => [
                     [
-                        'value' => '4',
-                        'is_active' => '1',
+                        'value' => 4,
+                        'is_active' => 1,
                         'label' => 'Category 4',
                         'optgroup' => [
                             [
-                                'value' => '6',
-                                'is_active' => '1',
+                                'value' => 6,
+                                'is_active' => 1,
                                 'label' => 'Category 6'
                             ]
                         ]
@@ -114,20 +114,20 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                'value' => '7',
-                'is_active' => '0',
+                'value' => 7,
+                'is_active' => 0,
                 'label' => 'Category 7',
                 'optgroup' => [
                     [
-                        'value' => '9',
-                        'is_active' => '1',
+                        'value' => 9,
+                        'is_active' => 1,
                         'label' => 'Category 9'
                     ]
                 ]
             ],
             [
-                'value' => '8',
-                'is_active' => '1',
+                'value' => 8,
+                'is_active' => 1,
                 'label' => 'Category 8'
             ]
         ];

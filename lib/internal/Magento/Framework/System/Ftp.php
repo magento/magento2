@@ -392,7 +392,7 @@ class Ftp
      */
     public static function chmodnum($chmod)
     {
-        $trans = ['-' => '0', 'r' => '4', 'w' => '2', 'x' => '1'];
+        $trans = ['-' => 0, 'r' => 4, 'w' => 2, 'x' => 1];
         $chmod = substr(strtr($chmod, $trans), 1);
         $array = str_split($chmod, 3);
         return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));

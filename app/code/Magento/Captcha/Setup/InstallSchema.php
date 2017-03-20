@@ -42,7 +42,7 @@ class InstallSchema implements InstallSchemaInterface
             'count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Count'
         )->addColumn(
             'updated_at',

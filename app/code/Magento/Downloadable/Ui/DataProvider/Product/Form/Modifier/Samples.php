@@ -148,7 +148,7 @@ class Samples extends AbstractModifier
             'additionalClasses' => 'admin__field-wide',
             'dataScope' => 'downloadable',
             'deleteProperty'=> 'is_delete',
-            'deleteValue' => '1',
+            'deleteValue' => 1,
         ];
 
         return $this->arrayManager->set('children/record', $dynamicRows, $this->getRecord());

@@ -55,7 +55,7 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Website ID'
         )->addColumn(
             'info',
@@ -108,7 +108,7 @@ class InstallSchema implements InstallSchemaInterface
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 'unsigned' => true,
-                'default' => '0',
+                'default' => 0,
                 'comment' => 'Is Quote Persistent'
             ]
         );

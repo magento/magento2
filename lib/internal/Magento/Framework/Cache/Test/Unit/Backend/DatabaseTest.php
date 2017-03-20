@@ -650,7 +650,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
         $connectionMock->expects($this->any())
             ->method('fetchRow')
-            ->will($this->returnValue(['expire_time' => '3', 'update_time' => 2]));
+            ->will($this->returnValue(['expire_time' => 3, 'update_time' => 2]));
 
         /** @var \Magento\Framework\Cache\Backend\Database $database */
         $database = $this->objectManager->getObject(

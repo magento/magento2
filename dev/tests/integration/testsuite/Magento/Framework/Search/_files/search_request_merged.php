@@ -19,7 +19,7 @@ return [
                     'bool_query' =>
                         [
                             'name' => 'bool_query',
-                            'boost' => '10',
+                            'boost' => 10,
                             'queryReference' =>
                                 [
                                     0 =>
@@ -183,8 +183,8 @@ return [
                             'type' => 'rangeBucket',
                         ],
                 ],
-            'from' => '0',
-            'size' => '10000',
+            'from' => 0,
+            'size' => 10000,
             'query' => 'bool_query',
             'index' => 'bool_query_index_override',
         ],
@@ -262,8 +262,8 @@ return [
                             'type' => 'wildcardFilter',
                         ],
                 ],
-            'from' => '0',
-            'size' => '10000',
+            'from' => 0,
+            'size' => 10000,
             'query' => 'filter_query',
             'index' => 'filter_query_index_override',
             'aggregations' =>
@@ -299,8 +299,8 @@ return [
             'filters' =>
                 [
                 ],
-            'from' => '0',
-            'size' => '10000',
+            'from' => 0,
+            'size' => 10000,
             'query' => 'new_match_query',
             'index' => 'new_query_index',
             'aggregations' =>

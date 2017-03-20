@@ -35,7 +35,7 @@ class OrderGetTest extends WebapiAbstract
         $expectedOrderData = [
             'base_subtotal' => '100.0000',
             'subtotal' => '100.0000',
-            'customer_is_guest' => '1',
+            'customer_is_guest' => 1,
             'increment_id' => self::ORDER_INCREMENT_ID,
         ];
         $expectedPayments = ['method' => 'checkmo'];

@@ -110,7 +110,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
                     ],
                     'visible' => 'true',
                     'required' => 'true',
-                    'sort_order' => '10',
+                    'sort_order' => 10,
                     'label' => 'CMS Page',
                 ],
             ],

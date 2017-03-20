@@ -416,8 +416,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 'sku' => 'simpletest',
                 'tier_price_website' => $webSite,
                 'tier_price_customer_group' => $userGroup,
-                'tier_price_qty' => '2',
-                'tier_price' => '23',
+                'tier_price_qty' => 2,
+                'tier_price' => 23,
             ]
         ];
         $this->advancedPricing->expects($this->once())->method('getExportData')->willReturn($data);
@@ -425,8 +425,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             'sku' => 'simpletest',
             'tier_price_website' => $webSite,
             'tier_price_customer_group' => $userGroup,
-            'tier_price_qty' => '2',
-            'tier_price' => '23',
+            'tier_price_qty' => 2,
+            'tier_price' => 23,
         ];
         $this->advancedPricing
             ->expects($this->any())

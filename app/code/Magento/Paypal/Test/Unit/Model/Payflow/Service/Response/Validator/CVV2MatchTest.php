@@ -89,7 +89,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
                         'cvv2match' => 'Y',
                     ]
                 ),
-                'configValue' => '0',
+                'configValue' => 0,
             ],
             [
                 'expectedResult' => true,
@@ -98,7 +98,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
                         'cvv2match' => 'Y',
                     ]
                 ),
-                'configValue' => '1',
+                'configValue' => 1,
             ],
             [
                 'expectedResult' => true,
@@ -107,7 +107,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
                         'cvv2match' => 'X',
                     ]
                 ),
-                'configValue' => '1',
+                'configValue' => 1,
             ],
             [
                 'expectedResult' => false,
@@ -116,7 +116,7 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
                         'cvv2match' => 'N',
                     ]
                 ),
-                'configValue' => '1',
+                'configValue' => 1,
             ],
             [
                 'expectedResult' => true,
@@ -125,12 +125,12 @@ class CVV2MatchTest extends \PHPUnit_Framework_TestCase
                         'cvv2match' => null,
                     ]
                 ),
-                'configValue' => '1',
+                'configValue' => 1,
             ],
             [
                 'expectedResult' => true,
                 'response' => new \Magento\Framework\DataObject(),
-                'configValue' => '1',
+                'configValue' => 1,
             ],
         ];
     }

@@ -119,8 +119,8 @@ class UsedDefault extends AbstractModifier
                 'description' => __('Use Default Value'),
                 'dataScope' => 'use_default_price',
                 'valueMap' => [
-                    'false' => '0',
-                    'true' => '1',
+                    'false' => 0,
+                    'true' => 1,
                 ],
                 'imports' => [
                     'linksPurchasedSeparately' => '${$.provider}:data.product.links_purchased_separately',
@@ -154,8 +154,8 @@ class UsedDefault extends AbstractModifier
                 'description' => __('Use Default Value'),
                 'dataScope' => 'use_default_title',
                 'valueMap' => [
-                    'false' => '0',
-                    'true' => '1',
+                    'false' => 0,
+                    'true' => 1,
                 ],
                 'exports' => [
                     'checked' => '${$.parentName}.' . $indexTitle . ':disabled',

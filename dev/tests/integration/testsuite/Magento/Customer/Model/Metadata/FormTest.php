@@ -48,8 +48,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'street' => ['2211 North First Street'],
             'city' => 'San Jose',
             'country_id' => 'US',
-            'postcode' => '95131',
-            'telephone' => '5125125125',
+            'postcode' => 95131,
+            'telephone' => 5125125125,
             'region_id' => 12,
             'region' => 'California',
         ];
@@ -65,8 +65,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'street' => ['2211 New Street'],
             'city' => 'San Jose',
             'country_id' => 'US',
-            'postcode' => '95131',
-            'telephone' => '5125125125',
+            'postcode' => 95131,
+            'telephone' => 5125125125,
             'region_id' => 12,
             'region' => 'California',
         ];

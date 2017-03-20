@@ -38,7 +38,7 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Customer id'
         )->addColumn(
             'sender',

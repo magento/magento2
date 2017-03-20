@@ -72,7 +72,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $linkedProduct = [
             'sku' => 'virtual-product',
             'option_id' => $optionId,
-            'position' => '1',
+            'position' => 1,
             'is_default' => 1,
             'priceType' => 2,
             'price' => 151.34,

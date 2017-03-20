@@ -19,7 +19,7 @@ $addresses = [
     ],
     [
         'telephone' => 3234676,
-        'postcode' => '47676',
+        'postcode' => 47676,
         'country_id' => 'US',
         'city' => 'CityX',
         'street' => ['Black str, 48'],

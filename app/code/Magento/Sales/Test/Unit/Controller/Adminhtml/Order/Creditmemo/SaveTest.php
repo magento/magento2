@@ -149,7 +149,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveActionOnlineRefundToStoreCredit()
     {
-        $data = ['comment_text' => '', 'do_offline' => '0', 'refund_customerbalance_return_enable' => '1'];
+        $data = ['comment_text' => '', 'do_offline' => 0, 'refund_customerbalance_return_enable' => 1];
         $this->_requestMock->expects(
             $this->once()
         )->method(

@@ -31,7 +31,7 @@ $downloadableData = [
                 ]
             ),
             'sample_url' => null,
-            'sort_order' => '0',
+            'sort_order' => 0,
         ],
     ],
 ];
@@ -59,7 +59,7 @@ $extension = $product->getExtensionAttributes();
 $links = [];
 $linkData = [
     'product_id' => 1,
-    'sort_order' => '0',
+    'sort_order' => 0,
     'title' => 'Downloadable Product Link',
     'sample' => [
         'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,

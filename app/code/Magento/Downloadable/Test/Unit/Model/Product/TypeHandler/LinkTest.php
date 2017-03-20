@@ -99,7 +99,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                         [
                             'link_id' => 0,
                             'product_id' => 1,
-                            'sort_order' => '0',
+                            'sort_order' => 0,
                             'title' => 'Downloadable Product Link',
                             'sample' => [
                                 'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
@@ -140,13 +140,13 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                                 ]
                             ),
                             'sample_url' => null,
-                            'sort_order' => '0',
+                            'sort_order' => 0,
                         ],
                     ],
                 ],
                 'modelData' => [
                     'product_id' => 1,
-                    'sort_order' => '0',
+                    'sort_order' => 0,
                     'title' => 'Downloadable Product Link',
                     'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
                     'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,

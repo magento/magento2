@@ -132,8 +132,8 @@ class Links extends AbstractModifier
             'dataScope' => 'product.links_purchased_separately',
             'scopeLabel' => $this->storeManager->isSingleStoreMode() ? '' : '[GLOBAL]',
             'valueMap' => [
-                'false' => '0',
-                'true' => '1',
+                'false' => 0,
+                'true' => 1,
             ],
         ];
         // @codingStandardsIgnoreStart
@@ -173,7 +173,7 @@ class Links extends AbstractModifier
             'additionalClasses' => 'admin__field-wide',
             'dataScope' => 'downloadable',
             'deleteProperty' => 'is_delete',
-            'deleteValue' => '1',
+            'deleteValue' => 1,
         ];
 
         return $this->arrayManager->set('children/record', $dynamicRows, $this->getRecord());
@@ -445,8 +445,8 @@ class Links extends AbstractModifier
             'dataScope' => 'is_unlimited',
             'description' => __('Unlimited'),
             'valueMap' => [
-                'false' => '0',
-                'true' => '1',
+                'false' => 0,
+                'true' => 1,
             ],
             'exports' => [
                 'checked' => '${$.parentName}.number_of_downloads:disabled',

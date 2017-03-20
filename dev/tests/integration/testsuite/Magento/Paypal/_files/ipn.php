@@ -6,7 +6,7 @@
 
 return [
     'mc_gross' => '100.00',
-    'invoice' => '100000001',
+    'invoice' => 100000001,
     'payment_status' => 'Completed',
     'auth_status' => 'Completed',
     'mc_currency' => 'USD',

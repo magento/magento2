@@ -84,7 +84,7 @@ class Changelog implements ChangelogInterface
                 $this->getColumnName(),
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Entity ID'
             );
             $this->connection->createTable($table);

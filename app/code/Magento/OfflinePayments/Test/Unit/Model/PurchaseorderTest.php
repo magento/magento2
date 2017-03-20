@@ -42,7 +42,7 @@ class PurchaseorderTest extends \PHPUnit_Framework_TestCase
     public function testAssignData()
     {
         $data = new \Magento\Framework\DataObject([
-            'po_number' => '12345'
+            'po_number' => 12345
         ]);
 
         $instance = $this->getMock(\Magento\Payment\Model\Info::class, [], [], '', false);

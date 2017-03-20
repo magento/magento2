@@ -80,7 +80,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -112,7 +112,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
 
@@ -147,7 +147,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
         $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
@@ -300,7 +300,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $requestData = [
             "method" => [
                 'method' => 'checkmo',
-                'po_number' => '200'
+                'po_number' => 200
             ],
         ];
 

@@ -15,9 +15,25 @@ class Json implements SerializerInterface
     /**
      * {@inheritDoc}
      */
-    public function serialize($data)
+    public function serialize($data, $options = [])
     {
-        return json_encode($data);
+
+        $prettyPrint = (isset($options['prettyPrint']) && ($options['prettyPrint'] == true));
+
+        $encodeOptions = JSON_NUMERIC_CHECK;
+
+        if ($prettyPrint && defined('JSON_PRETTY_PRINT')) {
+            $encodeOptions |= JSON_PRETTY_PRINT;
+            $prettyPrint = false;
+        }
+
+        $encodedResult = json_encode($data, $encodeOptions);
+
+        if ($prettyPrint) {
+            $encodedResult = self::prettyPrint($encodedResult, ["intent" => "    "]);
+        }
+
+        return $encodedResult;
     }
 
     /**

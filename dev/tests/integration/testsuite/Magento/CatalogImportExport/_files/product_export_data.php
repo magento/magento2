@@ -20,7 +20,7 @@ $productModel = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $customOptions = [
     [
         'option_id' => null,
-        'sort_order' => '0',
+        'sort_order' => 0,
         'title' => 'Option 1',
         'type' => 'drop_down',
         'is_require' => 1,

@@ -96,8 +96,8 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
     public function modifyDataDataProvider()
     {
         return [
-            ['typeId' => Type::TYPE_DOWNLOADABLE, 'isDownloadable' => '1'],
-            ['typeId' => 'someType', 'isDownloadable' => '0'],
+            ['typeId' => Type::TYPE_DOWNLOADABLE, 'isDownloadable' => 1],
+            ['typeId' => 'someType', 'isDownloadable' => 0],
         ];
     }
 

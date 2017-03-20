@@ -78,9 +78,9 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
-                'two' => '2',
-                'three' => '3',
-                'four' => '4',
+                'two' => 2,
+                'three' => 3,
+                'four' => 4,
                 'four and 5/10' => '4.50',
                 'four and 75/100' => '4.75',
                 'five' => '5.0',
@@ -100,8 +100,8 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
-                'two' => '2',
-                'three' => '3',
+                'two' => 2,
+                'three' => 3,
             ]
         ];
     }
@@ -117,9 +117,9 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
-                'two' => '2',
-                'three' => '3',
-                'four' => '4',
+                'two' => 2,
+                'three' => 3,
+                'four' => 4,
             ]
         ];
     }

@@ -80,7 +80,7 @@ class AbstractMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testDebugData()
     {
-        $debugData = ['masked' => '123'];
+        $debugData = ['masked' => 123];
         $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with($this->equalTo($debugData));

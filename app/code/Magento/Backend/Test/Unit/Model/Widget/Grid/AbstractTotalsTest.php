@@ -66,7 +66,7 @@ class AbstractTotalsTest extends \PHPUnit_Framework_TestCase
         $collection = new \Magento\Framework\Data\Collection(
             $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
         );
-        $items = [new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2'])];
+        $items = [new \Magento\Framework\DataObject(['test1' => 1, 'test2' => 2])];
         foreach ($items as $item) {
             $collection->addItem($item);
         }

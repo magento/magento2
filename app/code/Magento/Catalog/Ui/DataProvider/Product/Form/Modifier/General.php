@@ -155,8 +155,8 @@ class General extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'prefer' => 'toggle',
             'valueMap' => [
-                'true' => '1',
-                'false' => '2'
+                'true' => 1,
+                'false' => 2
             ],
         ];
 

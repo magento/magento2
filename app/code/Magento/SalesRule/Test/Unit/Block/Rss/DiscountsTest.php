@@ -126,7 +126,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
         $ruleData = [
             'to_date' => '12/12/14',
             'from_date' => '12/12/14',
-            'coupon_code' => '1234567',
+            'coupon_code' => 1234567,
             'description' => 'Rule Description',
             'name' => 'Rule Name',
         ];
@@ -143,7 +143,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
                         'description' => 'Rule Description',
                         'start_date' => '12/12/14',
                         'end_date' => '12/12/14',
-                        'coupon_code' => '1234567',
+                        'coupon_code' => 1234567,
                     ],
             ],
         ];

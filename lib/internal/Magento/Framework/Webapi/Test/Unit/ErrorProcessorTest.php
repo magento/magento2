@@ -281,12 +281,12 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                 new AuthorizationException(
                     new Phrase(
                         'Consumer %consumer_id is not authorized to access %resources',
-                        ['consumer_id' => '3', 'resources' => '4']
+                        ['consumer_id' => 3, 'resources' => 4]
                     )
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
                 'Consumer %consumer_id is not authorized to access %resources',
-                ['consumer_id' => '3', 'resources' => '4'],
+                ['consumer_id' => 3, 'resources' => 4],
             ],
             'Exception' => [
                 new \Exception('Non service exception', 5678),

@@ -50,14 +50,14 @@ class InstallSchema implements InstallSchemaInterface
                 'required',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Required'
             )
             ->addColumn(
                 'position',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Position'
             )
             ->addColumn(
@@ -182,21 +182,21 @@ class InstallSchema implements InstallSchemaInterface
                 'position',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Position'
             )
             ->addColumn(
                 'is_default',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Is Default'
             )
             ->addColumn(
                 'selection_price_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Selection Price Type'
             )
             ->addColumn(
@@ -217,7 +217,7 @@ class InstallSchema implements InstallSchemaInterface
                 'selection_can_change_qty',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Selection Can Change Qty'
             )
             ->addIndex(
@@ -279,7 +279,7 @@ class InstallSchema implements InstallSchemaInterface
                 'selection_price_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Selection Price Type'
             )
             ->addColumn(
@@ -441,14 +441,14 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Option Id'
             )
             ->addColumn(
                 'stock_status',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['default' => '0'],
+                ['default' => 0],
                 'Stock Status'
             )
             ->setComment('Catalog Product Bundle Stock Index');
@@ -485,7 +485,7 @@ class InstallSchema implements InstallSchemaInterface
                 'tax_class_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Tax Class Id'
             )
             ->addColumn(
@@ -585,7 +585,7 @@ class InstallSchema implements InstallSchemaInterface
                 'tax_class_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Tax Class Id'
             )
             ->addColumn(
@@ -689,28 +689,28 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Option Id'
             )
             ->addColumn(
                 'selection_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Selection Id'
             )
             ->addColumn(
                 'group_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Group Type'
             )
             ->addColumn(
                 'is_required',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Is Required'
             )
             ->addColumn(
@@ -761,28 +761,28 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Option Id'
             )
             ->addColumn(
                 'selection_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Selection Id'
             )
             ->addColumn(
                 'group_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Group Type'
             )
             ->addColumn(
                 'is_required',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'default' => '0'],
+                ['unsigned' => true, 'default' => 0],
                 'Is Required'
             )
             ->addColumn(
@@ -837,7 +837,7 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Option Id'
             )
             ->addColumn(
@@ -909,7 +909,7 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
                 'Option Id'
             )
             ->addColumn(

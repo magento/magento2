@@ -28,7 +28,7 @@ class CouponRepositoryTest extends WebapiAbstract
     protected function getCouponData()
     {
         $data = [
-                'rule_id' => '1',
+                'rule_id' => 1,
                 'code' => 'mycouponcode1',
                 'times_used' => 0,
                 'is_primary' => null,

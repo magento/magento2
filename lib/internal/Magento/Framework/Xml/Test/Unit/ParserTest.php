@@ -27,7 +27,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                     'text' => ' some text ',
                     'trim_spaces' => '',
                     'cdata' => '  Some data here <strong>html</strong> tags are <i>allowed</i>  ',
-                    'zero' => '0',
+                    'zero' => 0,
                     'null' => null,
                 ]
             ]],

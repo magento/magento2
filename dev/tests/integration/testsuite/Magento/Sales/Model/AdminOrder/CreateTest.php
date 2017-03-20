@@ -353,11 +353,11 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $firstNameForShippingAddress = 'FirstNameForShipping';
         $orderData = [
             'currency' => 'USD',
-            'account' => ['group_id' => '1', 'email' => $customerEmail],
-            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => '1']),
+            'account' => ['group_id' => 1, 'email' => $customerEmail],
+            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => 1]),
             'shipping_address' => array_merge(
                 $this->_getValidAddressData(),
-                ['save_in_address_book' => '1', 'firstname' => $firstNameForShippingAddress]
+                ['save_in_address_book' => 1, 'firstname' => $firstNameForShippingAddress]
             ),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
@@ -400,8 +400,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $customerEmail = 'new_customer@example.com';
         $orderData = [
             'currency' => 'USD',
-            'account' => ['group_id' => '1', 'email' => $customerEmail],
-            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => '1']),
+            'account' => ['group_id' => 1, 'email' => $customerEmail],
+            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => 1]),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
             'send_confirmation' => false,
@@ -438,10 +438,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $firstNameForShippingAddress = 'FirstNameForShipping';
         $orderData = [
             'currency' => 'USD',
-            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => '1']),
+            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => 1]),
             'shipping_address' => array_merge(
                 $this->_getValidAddressData(),
-                ['save_in_address_book' => '1', 'firstname' => $firstNameForShippingAddress]
+                ['save_in_address_book' => 1, 'firstname' => $firstNameForShippingAddress]
             ),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
@@ -486,7 +486,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $shippingAddressAsBilling = 1;
         $orderData = [
             'currency' => 'USD',
-            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => '1']),
+            'billing_address' => array_merge($this->_getValidAddressData(), ['save_in_address_book' => 1]),
             'shipping_method' => $shippingMethod,
             'comment' => ['customer_note' => ''],
             'send_confirmation' => false,
@@ -721,9 +721,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             'country_id' => 'US',
             'region' => [
                 'region' => '',
-                'region_id' => '1',
+                'region_id' => 1,
             ],
-            'postcode' => '76868',
+            'postcode' => 76868,
             'telephone' => '+8709273498729384',
             'fax' => '',
             'vat_id' => ''

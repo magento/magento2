@@ -10,7 +10,7 @@ return [
     'parameters' => [
         'types' => [
             'type' => 'multiselect',
-            'visible' => '1',
+            'visible' => 1,
             'source_model' => \Magento\Cms\Model\Config\Source\Page::class,
         ],
     ]

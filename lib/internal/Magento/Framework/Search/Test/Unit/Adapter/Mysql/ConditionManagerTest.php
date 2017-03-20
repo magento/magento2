@@ -93,7 +93,7 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
                 'expectedResult' => '',
             ],
             'invalidQuery' => [
-                'query' => '1',
+                'query' => 1,
                 'expectedResult' => '(1)',
             ]
         ];
@@ -143,7 +143,7 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
             [
                 'field' => 'a',
                 'operator' => '=',
-                'value' => '123',
+                'value' => 123,
                 'expectedResult' => '`a` = \'123\''
             ],
         ];

@@ -53,9 +53,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function currencyDataProvider()
     {
         return [
-            ['amount' => '100', 'format' => true, 'includeContainer' => true, 'result' => '100grn.'],
-            ['amount' => '115', 'format' => true, 'includeContainer' => false, 'result' => '1150'],
-            ['amount' => '120', 'format' => false, 'includeContainer' => null, 'result' => '1200'],
+            ['amount' => 100, 'format' => true, 'includeContainer' => true, 'result' => '100grn.'],
+            ['amount' => 115, 'format' => true, 'includeContainer' => false, 'result' => 1150],
+            ['amount' => 120, 'format' => false, 'includeContainer' => null, 'result' => 1200],
         ];
     }
 
@@ -87,9 +87,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function currencyByStoreDataProvider()
     {
         return [
-            ['amount' => '10', 'store' => 1, 'format' => true, 'includeContainer' => true, 'result' => '10grn.'],
-            ['amount' => '115', 'store' => 4,  'format' => true, 'includeContainer' => false, 'result' => '1150'],
-            ['amount' => '120', 'store' => 5,  'format' => false, 'includeContainer' => null, 'result' => '1200'],
+            ['amount' => 10, 'store' => 1, 'format' => true, 'includeContainer' => true, 'result' => '10grn.'],
+            ['amount' => 115, 'store' => 4,  'format' => true, 'includeContainer' => false, 'result' => 1150],
+            ['amount' => 120, 'store' => 5,  'format' => false, 'includeContainer' => null, 'result' => 1200],
         ];
     }
 

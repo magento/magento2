@@ -92,7 +92,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         $removalMarker = [
             'option' => [
                 'value' => [$optionId => []],
-                'delete' => [$optionId => '1'],
+                'delete' => [$optionId => 1],
             ],
         ];
         $attribute->addData($removalMarker);

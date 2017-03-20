@@ -65,12 +65,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [
                 'action_operator' => 'by_percent',
                 'action_amount' => '50.0000',
-                'action_stop' => '0'
+                'action_stop' => 0
             ],
             [
                 'action_operator' => 'by_percent',
                 'action_amount' => '10.0000',
-                'action_stop' => '0'
+                'action_stop' => 0
             ]
         ];
     }

@@ -7,7 +7,7 @@ return [
     'scopes' => [
         'websites' => [
             'admin' => [
-                'website_id' => '0'
+                'website_id' => 0
             ],
         ],
     ],

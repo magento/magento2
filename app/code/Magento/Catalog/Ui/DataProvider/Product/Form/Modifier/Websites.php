@@ -179,7 +179,7 @@ class Websites extends AbstractModifier
                             'label' => $label,
                             'valueMap' => [
                                 'true' => (string)$website['id'],
-                                'false' => '0',
+                                'false' => 0,
                             ],
                             'value' => $isChecked ? (string)$website['id'] : '0',
                         ],
@@ -321,7 +321,7 @@ class Websites extends AbstractModifier
     {
         $options = [
             [
-                'value' => '0',
+                'value' => 0,
                 'label' => __('Default Values'),
             ],
         ];

@@ -87,7 +87,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
             $this->filterMapperMock
         );
 
-        $collection->addFieldToFilter('orderId', ['like' => '0']);
+        $collection->addFieldToFilter('orderId', ['like' => 0]);
         $items = $collection->getItems();
         $this->assertEquals(2, count($items));
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
@@ -116,7 +116,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
             $this->filterMapperMock
         );
 
-        $collection->addFieldToFilter('orderId', ['like' => '0']);
+        $collection->addFieldToFilter('orderId', ['like' => 0]);
         $items = $collection->getItems();
         $this->assertEquals(0, count($items));
     }
@@ -147,7 +147,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $collection->setPageSize(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT);
 
-        $collection->addFieldToFilter('orderId', ['like' => '0']);
+        $collection->addFieldToFilter('orderId', ['like' => 0]);
         $items = $collection->getItems();
         $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
@@ -179,7 +179,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $collection->setPageSize(null);
 
-        $collection->addFieldToFilter('orderId', ['like' => '0']);
+        $collection->addFieldToFilter('orderId', ['like' => 0]);
         $items = $collection->getItems();
         $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);

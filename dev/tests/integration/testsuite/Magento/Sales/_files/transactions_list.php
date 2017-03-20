@@ -27,7 +27,7 @@ $transactions = [
         'parent_transaction_id' => 'trx_auth1',
         'order_id' => $order->getId(),
         'payment_id' => $payment->getId(),
-        'txn_id' => '123456',
+        'txn_id' => 123456,
     ],
     [
         'transaction_id' => 'trx_auth3',

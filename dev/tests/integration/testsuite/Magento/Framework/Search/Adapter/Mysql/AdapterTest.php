@@ -359,13 +359,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function advancedSearchDataProvider()
     {
         return [
-            ['white', 'shorts', ['from' => '16', 'to' => '18'], 0],
-            ['white', 'shorts',['from' => '12', 'to' => '18'], 1],
-            ['black', 'tshirts', ['from' => '12', 'to' => '20'], 0],
-            ['shorts', 'green', ['from' => '12', 'to' => '22'], 1],
+            ['white', 'shorts', ['from' => 16, 'to' => 18], 0],
+            ['white', 'shorts',['from' => 12, 'to' => 18], 1],
+            ['black', 'tshirts', ['from' => 12, 'to' => 20], 0],
+            ['shorts', 'green', ['from' => 12, 'to' => 22], 1],
             //Search with empty fields/values
-            ['white', '  ', ['from' => '12', 'to' => '22'], 1],
-            ['  ', 'green', ['from' => '12', 'to' => '22'], 2]
+            ['white', '  ', ['from' => 12, 'to' => 22], 1],
+            ['  ', 'green', ['from' => 12, 'to' => 22], 2]
         ];
     }
 

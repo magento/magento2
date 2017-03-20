@@ -122,9 +122,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             'valid1' => [
                 [
                     '_tier_price_website' => 'all',
-                    '_tier_price_customer_group' => '1',
-                    '_tier_price_qty' => '1',
-                    '_tier_price_price' => '1'
+                    '_tier_price_customer_group' => 1,
+                    '_tier_price_qty' => 1,
+                    '_tier_price_price' => 1
                 ],
                 1,
                 null,
@@ -132,10 +132,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             'invalidPriceWebsite' => [
                 [
-                    '_tier_price_website' => '1',
-                    '_tier_price_customer_group' => '1',
-                    '_tier_price_qty' => '1',
-                    '_tier_price_price' => '1'
+                    '_tier_price_website' => 1,
+                    '_tier_price_customer_group' => 1,
+                    '_tier_price_qty' => 1,
+                    '_tier_price_price' => 1
                 ],
                 1,
                 null,
@@ -143,7 +143,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             'invalidIncomplete1' => [
                 [
-                    '_tier_price_qty' => '1'
+                    '_tier_price_qty' => 1
                 ],
                 1,
                 null,
@@ -151,7 +151,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             'invalidIncomplete2' => [
                 [
-                    '_tier_price_customer_group' => '1'
+                    '_tier_price_customer_group' => 1
                 ],
                 1,
                 null,
@@ -159,7 +159,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             'invalidIncomplete3' => [
                 [
-                    '_tier_price_price' => '1'
+                    '_tier_price_price' => 1
                 ],
                 1,
                 null,
@@ -167,10 +167,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ],
             'invalidSite' => [
                 [
-                    '_tier_price_website' => '1',
+                    '_tier_price_website' => 1,
                     '_tier_price_customer_group' => 'all',
-                    '_tier_price_qty' => '1',
-                    '_tier_price_price' => '1'
+                    '_tier_price_qty' => 1,
+                    '_tier_price_price' => 1
                 ],
                 1,
                 null,
@@ -179,9 +179,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             'invalidGroup' => [
                 [
                     '_tier_price_website' => 'all',
-                    '_tier_price_customer_group' => '1',
-                    '_tier_price_qty' => '1',
-                    '_tier_price_price' => '1'
+                    '_tier_price_customer_group' => 1,
+                    '_tier_price_qty' => 1,
+                    '_tier_price_price' => 1
                 ],
                 2,
                 null,
@@ -190,7 +190,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             'invalidQty' => [
                 [
                     '_tier_price_website' => 'all',
-                    '_tier_price_customer_group' => '1',
+                    '_tier_price_customer_group' => 1,
                     '_tier_price_qty' => '-1',
                     '_tier_price_price' => '-1'
                 ],

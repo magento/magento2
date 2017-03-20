@@ -97,10 +97,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         return [
             'withDuplicate' => [
                 'data' => [
-                    ['state' => 12, 'country' => 'US', 'website_id' => '1'],
-                    ['state' => 99, 'country' => 'ES', 'website_id' => '1'],
-                    ['state' => 12, 'country' => 'US', 'website_id' => '1'],
-                    ['state' => null, 'country' => 'ES', 'website_id' => '1']
+                    ['state' => 12, 'country' => 'US', 'website_id' => 1],
+                    ['state' => 99, 'country' => 'ES', 'website_id' => 1],
+                    ['state' => 12, 'country' => 'US', 'website_id' => 1],
+                    ['state' => null, 'country' => 'ES', 'website_id' => 1]
                 ],
                 'expected' => 'You must set unique country-state combinations within the same fixed product tax',
                 ]
@@ -216,14 +216,14 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'withRegion' => [
-                'origData' => [['state' => 12, 'country' => 'US', 'website_id' => '1']],
-                'currentData' => [['state' => 12, 'country' => 'US', 'website_id' => '2', 'price' => 100]],
-                'expectedData' => ['state' => 12, 'country' => 'US', 'website_id' => '2', 'value' => 100,
+                'origData' => [['state' => 12, 'country' => 'US', 'website_id' => 1]],
+                'currentData' => [['state' => 12, 'country' => 'US', 'website_id' => 2, 'price' => 100]],
+                'expectedData' => ['state' => 12, 'country' => 'US', 'website_id' => 2, 'value' => 100,
                                    'attribute_id' => 1]],
             'withNoRegion' => [
-                'origData' => [['country' => 'US', 'website_id' => '1']],
-                'currentData' => [['country' => 'US', 'website_id' => '2', 'price' => 100]],
-                'expectedData' => ['state' => 0, 'country' => 'US', 'website_id' => '2', 'value' => 100,
+                'origData' => [['country' => 'US', 'website_id' => 1]],
+                'currentData' => [['country' => 'US', 'website_id' => 2, 'price' => 100]],
+                'expectedData' => ['state' => 0, 'country' => 'US', 'website_id' => 2, 'value' => 100,
                                    'attribute_id' => 1]]
         ];
     }

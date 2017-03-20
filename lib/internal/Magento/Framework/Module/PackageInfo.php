@@ -82,7 +82,8 @@ class PackageInfo
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
                 $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
-                    $packageData = \Zend_Json::decode($jsonData[$key]);
+                    $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+                    $packageData = $serializer->unserialize($jsonData[$key]);
                     if (isset($packageData['name'])) {
                         $this->packageModuleMap[$packageData['name']] = $moduleName;
                     }

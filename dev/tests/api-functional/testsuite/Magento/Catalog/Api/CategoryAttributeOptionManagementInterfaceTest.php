@@ -20,11 +20,11 @@ class CategoryAttributeOptionManagementInterfaceTest extends WebapiAbstract
         $expectedOptions = [
             [
                     'label' => 'Yes',
-                    'value' => '1',
+                    'value' => 1,
             ],
             [
                     'label' => 'No',
-                    'value' => '0',
+                    'value' => 0,
             ],
         ];
 

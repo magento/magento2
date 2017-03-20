@@ -49,7 +49,7 @@ $salesRule->getConditions()->loadArray([
     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
     'attribute' => null,
     'operator' => null,
-    'value' => '1',
+    'value' => 1,
     'is_value_processed' => null,
     'aggregator' => 'all',
     'conditions' => [
@@ -57,7 +57,7 @@ $salesRule->getConditions()->loadArray([
             'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
             'attribute' => null,
             'operator' => null,
-            'value' => '0',
+            'value' => 0,
             'is_value_processed' => null,
             'aggregator' => 'all',
             'conditions' => [
@@ -65,7 +65,7 @@ $salesRule->getConditions()->loadArray([
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                     'attribute' => 'attribute_for_sales_rule_1',
                     'operator' => '==',
-                    'value' => '2',
+                    'value' => 2,
                     'is_value_processed' => false,
                 ],
             ],

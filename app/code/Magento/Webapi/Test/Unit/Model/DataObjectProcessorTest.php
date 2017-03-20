@@ -61,7 +61,7 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
         $testDataObject = $objectManager->getObject(\Magento\Webapi\Test\Unit\Model\Files\TestDataObject::class);
 
         $expectedOutputDataArray = [
-            'id' => '1',
+            'id' => 1,
             'address' => 'someAddress',
             'default_shipping' => 'true',
             'required_billing' => 'false',

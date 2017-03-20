@@ -128,7 +128,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [
                 'newProduct' => true,
                 'variationKey' => 'simple3',
-                'qty' => '3'
+                'qty' => 3
             ]
         ];
         $variationMatrix = [
@@ -146,7 +146,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'image' => 'simple2_image'
             ],
             'simple3' => [
-                'quantity_and_stock_status' => ['qty' => '3']
+                'quantity_and_stock_status' => ['qty' => 3]
             ]
         ];
         $paramValueMap = [

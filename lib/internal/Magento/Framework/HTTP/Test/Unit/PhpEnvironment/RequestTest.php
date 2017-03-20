@@ -154,7 +154,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = $this->getModel();
 
-        $post = ['one' => '111', 'two' => '222'];
+        $post = ['one' => 111, 'two' => 222];
         $this->model->setPostValue($post);
         $this->assertEquals($post, $this->model->getPost()->toArray());
 
@@ -174,7 +174,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = $this->getModel();
 
-        $files = ['one' => '111', 'two' => '222'];
+        $files = ['one' => 111, 'two' => 222];
         $this->model->setFiles(new Parameters($files));
 
         $this->assertEquals($files, $this->model->getFiles()->toArray());

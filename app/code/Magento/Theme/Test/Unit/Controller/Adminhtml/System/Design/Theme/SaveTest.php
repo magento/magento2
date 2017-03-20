@@ -21,7 +21,7 @@ class SaveTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
         $themeData = ['theme_id' => 123];
         $customCssContent = 'custom css content';
         $jsRemovedFiles = [3, 4];
-        $jsOrder = [1 => '1', 2 => 'test'];
+        $jsOrder = [1 => 1, 2 => 'test'];
 
         $this->_request->expects($this->at(0))
             ->method('getParam')

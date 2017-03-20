@@ -28,8 +28,8 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         $data->setData(
             [
                 'tax_country_id' => 'US',
-                'taxregion_id' => '12',
-                'tax_postcode' => '5555',
+                'taxregion_id' => 12,
+                'tax_postcode' => 5555,
                 'customer_class_id' => $customerTaxClasses[0],
                 'product_class_id' => $productTaxClasses[0],
             ]

@@ -51,7 +51,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $product->setIsDuplicate(true);
         $product->setData(
             'media_gallery',
-            ['images' => ['image' => ['value_id' => '100', 'file' => $this->fileName, 'label' => $this->fileLabel]]]
+            ['images' => ['image' => ['value_id' => 100, 'file' => $this->fileName, 'label' => $this->fileLabel]]]
         );
         $this->createHandler->execute($product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/duplicate/100'));

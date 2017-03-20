@@ -135,7 +135,7 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
                 'name' => 'name1',
                 'qty' => 1,
                 'position' => 1,
-                'price' => '1',
+                'price' => 1,
             ],
             '1' => [
                 'id' => 'id2',
@@ -143,7 +143,7 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
                 'name' => 'name2',
                 'qty' => 2,
                 'position' => 2,
-                'price' => '1',
+                'price' => 1,
             ],
         ];
 

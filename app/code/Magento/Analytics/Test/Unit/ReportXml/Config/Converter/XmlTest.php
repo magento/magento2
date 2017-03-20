@@ -75,7 +75,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                                                 [
                                                     'attribute' => 'entity_id',
                                                     'operator' => 'gt',
-                                                    '_value' => '10'
+                                                    '_value' => 10
                                                 ]
                                             ]
                                         ]

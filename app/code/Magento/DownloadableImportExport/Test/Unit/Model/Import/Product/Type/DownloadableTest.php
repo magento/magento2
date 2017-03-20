@@ -234,12 +234,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         )->will($this->onConsecutiveCalls(
             [
                 [
-                    'attribute_set_name' => '1',
-                    'attribute_id' => '1',
+                    'attribute_set_name' => 1,
+                    'attribute_id' => 1,
                 ],
                 [
-                    'attribute_set_name' => '2',
-                    'attribute_id' => '2',
+                    'attribute_set_name' => 2,
+                    'attribute_id' => 2,
                 ],
             ],
             $fetchResult['sample'],
@@ -275,9 +275,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'newSku' => [
                     'downloadablesku1' => [
-                        'entity_id' => '25',
+                        'entity_id' => 25,
                         'type_id' => 'downloadable',
-                        'attr_set_id' => '4',
+                        'attr_set_id' => 4,
                         'attr_set_code' => 'Default',
                     ],
                 ],
@@ -297,29 +297,29 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 [
                     'sample' => [
                         [
-                            'sample_id' => '65',
-                            'product_id' => '25',
+                            'sample_id' => 65,
+                            'product_id' => 25,
                             'sample_url' => null,
                             'sample_file' => '',
                             'sample_type' => 'file',
-                            'sort_order' => '1',
+                            'sort_order' => 1,
                         ],
                         [
-                            'sample_id' => '66',
-                            'product_id' => '25',
+                            'sample_id' => 66,
+                            'product_id' => 25,
                             'sample_url' => 'media/file2.mp4',
                             'sample_file' => null,
                             'sample_type' => 'url',
-                            'sort_order' => '0',
+                            'sort_order' => 0,
                         ]
                     ],
                     'link' => [
                         [
-                            'link_id' => '65',
-                            'product_id' => '25',
-                            'sort_order' => '1',
-                            'number_of_downloads' => '0',
-                            'is_shareable' => '2',
+                            'link_id' => 65,
+                            'product_id' => 25,
+                            'sort_order' => 1,
+                            'number_of_downloads' => 0,
+                            'is_shareable' => 2,
                             'link_url' => null,
                             'link_file' => '',
                             'link_type' => 'file',
@@ -328,11 +328,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                             'sample_type' => null,
                         ],
                         [
-                            'link_id' => '66',
-                            'product_id' => '25',
-                            'sort_order' => '0',
-                            'number_of_downloads' => '0',
-                            'is_shareable' => '2',
+                            'link_id' => 66,
+                            'product_id' => 25,
+                            'sort_order' => 0,
+                            'number_of_downloads' => 0,
+                            'is_shareable' => 2,
                             'link_url' => 'media/file2.mp4',
                             'link_file' => null,
                             'link_type' => 'url',
@@ -346,9 +346,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'newSku' => [
                     'downloadablesku2' => [
-                        'entity_id' => '25',
+                        'entity_id' => 25,
                         'type_id' => 'downloadable',
-                        'attr_set_id' => '4',
+                        'attr_set_id' => 4,
                         'attr_set_code' => 'Default',
                     ],
                 ],
@@ -370,9 +370,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'newSku' => [
                     'downloadablesku3' => [
-                        'entity_id' => '25',
+                        'entity_id' => 25,
                         'type_id' => 'simple',
-                        'attr_set_id' => '4',
+                        'attr_set_id' => 4,
                         'attr_set_code' => 'Default',
                     ],
                 ],
@@ -394,9 +394,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'newSku' => [
                     'downloadablesku4' => [
-                        'entity_id' => '25',
+                        'entity_id' => 25,
                         'type_id' => 'downloadable',
-                        'attr_set_id' => '4',
+                        'attr_set_id' => 4,
                         'attr_set_code' => 'Default',
                     ],
                 ],
@@ -416,29 +416,29 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 [
                     'sample' => [
                         [
-                            'sample_id' => '65',
-                            'product_id' => '25',
+                            'sample_id' => 65,
+                            'product_id' => 25,
                             'sample_url' => null,
                             'sample_file' => '',
                             'sample_type' => 'file',
-                            'sort_order' => '1',
+                            'sort_order' => 1,
                         ],
                         [
-                            'sample_id' => '66',
-                            'product_id' => '25',
+                            'sample_id' => 66,
+                            'product_id' => 25,
                             'sample_url' => 'media/some_another_file.mp4',
                             'sample_file' => null,
                             'sample_type' => 'url',
-                            'sort_order' => '0',
+                            'sort_order' => 0,
                         ]
                     ],
                     'link' => [
                         [
-                            'link_id' => '65',
-                            'product_id' => '25',
-                            'sort_order' => '1',
-                            'number_of_downloads' => '0',
-                            'is_shareable' => '2',
+                            'link_id' => 65,
+                            'product_id' => 25,
+                            'sort_order' => 1,
+                            'number_of_downloads' => 0,
+                            'is_shareable' => 2,
                             'link_url' => null,
                             'link_file' => '',
                             'link_type' => 'file',
@@ -447,11 +447,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                             'sample_type' => null,
                         ],
                         [
-                            'link_id' => '66',
-                            'product_id' => '25',
-                            'sort_order' => '0',
-                            'number_of_downloads' => '0',
-                            'is_shareable' => '2',
+                            'link_id' => 66,
+                            'product_id' => 25,
+                            'sort_order' => 0,
+                            'number_of_downloads' => 0,
+                            'is_shareable' => 2,
                             'link_url' => 'media/some_another_file.mp4',
                             'link_file' => null,
                             'link_type' => 'url',
@@ -465,9 +465,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'newSku' => [
                     'downloadablesku5' => [
-                        'entity_id' => '25',
+                        'entity_id' => 25,
                         'type_id' => 'downloadable',
-                        'attr_set_id' => '4',
+                        'attr_set_id' => 4,
                         'attr_set_code' => 'Default',
                     ],
                 ],
@@ -488,29 +488,29 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 [
                     'sample' => [
                         [
-                            'sample_id' => '65',
-                            'product_id' => '25',
+                            'sample_id' => 65,
+                            'product_id' => 25,
                             'sample_url' => null,
                             'sample_file' => '',
                             'sample_type' => 'file',
-                            'sort_order' => '1',
+                            'sort_order' => 1,
                         ],
                         [
-                            'sample_id' => '66',
-                            'product_id' => '25',
+                            'sample_id' => 66,
+                            'product_id' => 25,
                             'sample_url' => 'media/file2.mp4',
                             'sample_file' => null,
                             'sample_type' => 'url',
-                            'sort_order' => '0',
+                            'sort_order' => 0,
                         ]
                     ],
                     'link' => [
                         [
-                            'link_id' => '65',
-                            'product_id' => '25',
-                            'sort_order' => '1',
-                            'number_of_downloads' => '0',
-                            'is_shareable' => '1',
+                            'link_id' => 65,
+                            'product_id' => 25,
+                            'sort_order' => 1,
+                            'number_of_downloads' => 0,
+                            'is_shareable' => 1,
                             'link_url' => 'http://www.sample.com/pic.jpg',
                             'link_file' => null,
                             'link_type' => 'url',
@@ -519,11 +519,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                             'sample_type' => 'url',
                         ],
                         [
-                            'link_id' => '66',
-                            'product_id' => '25',
-                            'sort_order' => '0',
-                            'number_of_downloads' => '0',
-                            'is_shareable' => '2',
+                            'link_id' => 66,
+                            'product_id' => 25,
+                            'sort_order' => 0,
+                            'number_of_downloads' => 0,
+                            'is_shareable' => 2,
                             'link_url' => 'media/file2.mp4',
                             'link_file' => null,
                             'link_type' => 'url',
@@ -547,12 +547,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         )->willReturnOnConsecutiveCalls(
             [
                 [
-                    'attribute_set_name' => '1',
-                    'attribute_id' => '1',
+                    'attribute_set_name' => 1,
+                    'attribute_id' => 1,
                 ],
                 [
-                    'attribute_set_name' => '2',
-                    'attribute_id' => '2',
+                    'attribute_set_name' => 2,
+                    'attribute_id' => 2,
                 ],
             ]
         );
@@ -696,12 +696,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         )->willReturnOnConsecutiveCalls(
             [
                 [
-                    'attribute_set_name' => '1',
-                    'attribute_id' => '1',
+                    'attribute_set_name' => 1,
+                    'attribute_id' => 1,
                 ],
                 [
-                    'attribute_set_name' => '2',
-                    'attribute_id' => '2',
+                    'attribute_set_name' => 2,
+                    'attribute_id' => 2,
                 ],
             ]
         );
@@ -744,9 +744,9 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'newSku' => [
                     'downloadablesku1' => [
-                        'entity_id' => '25',
+                        'entity_id' => 25,
                         'type_id' => 'downloadable',
-                        'attr_set_id' => '4',
+                        'attr_set_id' => 4,
                         'attr_set_code' => 'Default',
                     ],
                 ],
@@ -788,12 +788,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         )->willReturnOnConsecutiveCalls(
             [
                 [
-                    'attribute_set_name' => '1',
-                    'attribute_id' => '1',
+                    'attribute_set_name' => 1,
+                    'attribute_id' => 1,
                 ],
                 [
-                    'attribute_set_name' => '2',
-                    'attribute_id' => '2',
+                    'attribute_set_name' => 2,
+                    'attribute_id' => 2,
                 ],
             ]
         );
@@ -814,11 +814,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             [
                 'Default' => [
                     'name' => [
-                        'id' => '69',
+                        'id' => 69,
                         'code' => 'name',
-                        'is_global' => '0',
-                        'is_required' => '1',
-                        'is_unique' => '0',
+                        'is_global' => 0,
+                        'is_required' => 1,
+                        'is_unique' => 0,
                         'frontend_label' => 'Name',
                         'is_static' => false,
                         'apply_to' =>
@@ -831,11 +831,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                             ],
                     ],
                     'sku' => [
-                        'id' => '70',
+                        'id' => 70,
                         'code' => 'sku',
-                        'is_global' => '1',
-                        'is_required' => '1',
-                        'is_unique' => '1',
+                        'is_global' => 1,
+                        'is_required' => 1,
+                        'is_unique' => 1,
                         'frontend_label' => 'SKU',
                         'is_static' => true,
                         'apply_to' =>

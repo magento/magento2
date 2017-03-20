@@ -131,9 +131,9 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                ['foo' => ['bar' => '1'], 'foo/bar' => '2'],
-                ['foo/bar' => '1', 'foo' => ['bar' => '2']],
-                ['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3'],
+                ['foo' => ['bar' => 1], 'foo/bar' => 2],
+                ['foo/bar' => 1, 'foo' => ['bar' => 2]],
+                ['foo' => ['subfoo' => ['subbar' => 1], 'subfoo/subbar' => 2], 'bar' => 3],
             ]
         ];
     }

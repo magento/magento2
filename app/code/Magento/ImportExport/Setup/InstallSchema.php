@@ -82,7 +82,7 @@ class InstallSchema implements InstallSchemaInterface
                 'user_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'User ID'
             )
             ->addColumn(

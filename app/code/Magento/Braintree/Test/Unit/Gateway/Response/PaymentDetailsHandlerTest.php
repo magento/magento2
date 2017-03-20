@@ -112,7 +112,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             'avsStreetAddressResponseCode' => 'M',
             'cvvResponseCode' => 'M',
             'processorAuthorizationCode' => 'W1V8XK',
-            'processorResponseCode' => '1000',
+            'processorResponseCode' => 1000,
             'processorResponseText' => 'Approved'
         ];
 

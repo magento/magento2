@@ -269,8 +269,8 @@ class Form extends Template
     {
         $options = [
             ['value' => '', 'label' => __('All')],
-            ['value' => '1', 'label' => __('Yes')],
-            ['value' => '0', 'label' => __('No')],
+            ['value' => 1, 'label' => __('Yes')],
+            ['value' => 0, 'label' => __('No')],
         ];
 
         $name = $attribute->getAttributeCode();

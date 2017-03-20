@@ -97,23 +97,23 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'sectionName' => null,
                 'fullConfigData' => ['section' => 'some data'],
                 'configData' => 'some data',
-                'generatedHash' => '123',
-                'savedHash' => ['section' => '123'],
+                'generatedHash' => 123,
+                'savedHash' => ['section' => 123],
                 'expectedResult' => true
             ],
             [
                 'sectionName' => 'section',
                 'fullConfigData' => ['section' => 'some data'],
                 'configData' => 'some data',
-                'generatedHash' => '321',
-                'savedHash' => ['section' => '123'],
+                'generatedHash' => 321,
+                'savedHash' => ['section' => 123],
                 'expectedResult' => false
             ],
             [
                 'sectionName' => null,
                 'fullConfigData' => ['section' => 'some data'],
                 'configData' => 'some data',
-                'generatedHash' => '321',
+                'generatedHash' => 321,
                 'savedHash' => [],
                 'expectedResult' => false
             ],
@@ -121,14 +121,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'sectionName' => 'section',
                 'fullConfigData' => [],
                 'configData' => null,
-                'generatedHash' => '321',
-                'savedHash' => ['section' => '123'],
+                'generatedHash' => 321,
+                'savedHash' => ['section' => 123],
                 'expectedResult' => true],
             [
                 'sectionName' => null,
                 'fullConfigData' => [],
                 'configData' => null,
-                'generatedHash' => '321',
+                'generatedHash' => 321,
                 'savedHash' => [],
                 'expectedResult' => true
             ],

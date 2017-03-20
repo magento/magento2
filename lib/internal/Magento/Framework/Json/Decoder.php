@@ -17,6 +17,7 @@ class Decoder implements DecoderInterface
      */
     public function decode($data)
     {
-        return \Zend_Json::decode($data);
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        return $serializer->unserialize($data);
     }
 }

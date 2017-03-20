@@ -128,7 +128,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWrongAttributeCode()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'attribute_code' => '_()&&&?'];
+        $postData = $this->_getAttributeData() + ['attribute_id' => 2, 'attribute_code' => '_()&&&?'];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -153,7 +153,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testAttributeWithoutEntityTypeId()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'new_attribute_set_name' => ' '];
+        $postData = $this->_getAttributeData() + ['attribute_id' => 2, 'new_attribute_set_name' => ' '];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -168,7 +168,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionApplyToDataSystemAttribute()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '2'];
+        $postData = $this->_getAttributeData() + ['attribute_id' => 2];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -181,7 +181,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionApplyToDataUserDefinedAttribute()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '1'];
+        $postData = $this->_getAttributeData() + ['attribute_id' => 1];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
@@ -195,7 +195,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionApplyToData()
     {
-        $postData = $this->_getAttributeData() + ['attribute_id' => '3'];
+        $postData = $this->_getAttributeData() + ['attribute_id' => 3];
         unset($postData['apply_to']);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
@@ -250,22 +250,22 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         return [
             'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
-            'default_value_text' => '0',
-            'default_value_yesno' => '0',
+            'default_value_text' => 0,
+            'default_value_yesno' => 0,
             'default_value_date' => '',
-            'default_value_textarea' => '0',
-            'is_required' => '1',
+            'default_value_textarea' => 0,
+            'is_required' => 1,
             'frontend_class' => '',
-            'is_searchable' => '0',
-            'is_visible_in_advanced_search' => '0',
-            'is_comparable' => '0',
-            'is_filterable' => '0',
-            'is_filterable_in_search' => '0',
-            'is_used_for_promo_rules' => '0',
-            'is_html_allowed_on_front' => '0',
-            'is_visible_on_front' => '0',
-            'used_in_product_listing' => '1',
-            'used_for_sort_by' => '0',
+            'is_searchable' => 0,
+            'is_visible_in_advanced_search' => 0,
+            'is_comparable' => 0,
+            'is_filterable' => 0,
+            'is_filterable_in_search' => 0,
+            'is_used_for_promo_rules' => 0,
+            'is_html_allowed_on_front' => 0,
+            'is_visible_on_front' => 0,
+            'used_in_product_listing' => 1,
+            'used_for_sort_by' => 0,
             'apply_to' => ['simple'],
             'frontend_label' => [\Magento\Store\Model\Store::DEFAULT_STORE_ID => 'string to translate']
         ];

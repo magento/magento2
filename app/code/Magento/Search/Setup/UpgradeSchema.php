@@ -64,7 +64,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'store_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     null,
-                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    ['unsigned' => true, 'nullable' => false, 'default' => 0],
                     'Store Id - identifies the store view these synonyms belong to'
                 )
                 ->addIndex(
@@ -117,14 +117,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'store_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     null,
-                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    ['unsigned' => true, 'nullable' => false, 'default' => 0],
                     'Store Id - identifies the store view these synonyms belong to'
                 )
                 ->addColumn(
                     'website_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     null,
-                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    ['unsigned' => true, 'nullable' => false, 'default' => 0],
                     'Website Id - identifies the website id these synonyms belong to'
                 )
                 ->addIndex(

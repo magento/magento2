@@ -24,12 +24,12 @@ $model->setData(
         'theme_id' => $theme->getId(),
         'title' => 'New Sample widget title',
         'store_ids' => [
-            0 => '0',
+            0 => 0,
         ],
         'widget_parameters' => [
-            'block_id' => '2',
+            'block_id' => 2,
         ],
-        'sort_order' => '0',
+        'sort_order' => 0,
         'page_groups' => [],
         'instance_code' => 'new_sample_widget',
     ]

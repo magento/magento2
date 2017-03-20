@@ -89,19 +89,19 @@ class InstallSchema implements InstallSchemaInterface
                 'lognum',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'User Login Number'
             )->addColumn(
                 'reload_acl_flag',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Reload ACL'
             )->addColumn(
                 'is_active',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1'],
+                ['nullable' => false, 'default' => 1],
                 'User Is Active'
             )->addColumn(
                 'extra',

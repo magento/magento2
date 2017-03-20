@@ -696,6 +696,7 @@ class Migration
      */
     protected function _jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
     {
-        return \Zend_Json::decode($encodedValue, $objectDecodeType);
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        return $serializer->unserialize($encodedValue, $objectDecodeType);
     }
 }

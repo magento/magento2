@@ -146,7 +146,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     public function linksDataProvider()
     {
         return [
-            [[5 => ['id' => '2', 'qty' => '100', 'position' => '1']]]
+            [[5 => ['id' => 2, 'qty' => 100, 'position' => 1]]]
         ];
     }
 

@@ -141,7 +141,7 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = [
             'creditCard' => [
-                'bin' => '5421',
+                'bin' => 5421,
                 'cardType' => 'American Express',
                 'expirationMonth' => 12,
                 'expirationYear' => 21,

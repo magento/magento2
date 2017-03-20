@@ -31,8 +31,8 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
             'street' => ['2211 North First Street'],
             'city' => 'San Jose',
             'country_id' => 'US',
-            'postcode' => '95131',
-            'telephone' => '5135135135',
+            'postcode' => 95131,
+            'telephone' => 5135135135,
             'region_id' => 12,
             'region' => 'California',
         ];

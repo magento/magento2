@@ -39,8 +39,8 @@ class BundleWeight extends AbstractModifier
             $meta,
             [
                 'valueMap' => [
-                    'false' => '1',
-                    'true' => '0'
+                    'false' => 1,
+                    'true' => 0
                 ],
                 'validation' => [
                     'required-entry' => false

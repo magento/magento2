@@ -87,7 +87,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Registry::class
         )->register(
             'product',
-            new \Magento\Framework\DataObject(['type_id' => $productType, 'id' => '1', 'links_title' => $linksTitle])
+            new \Magento\Framework\DataObject(['type_id' => $productType, 'id' => 1, 'links_title' => $linksTitle])
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\LayoutInterface::class

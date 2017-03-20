@@ -37,7 +37,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'length' => 6,
                 'nullable' => false,
                 'comment' => 'Applied mode',
-                'default' => '0'
+                'default' => 0
             ];
             $connection->addColumn($setup->getTable('checkout_agreement'), 'mode', $column);
         }

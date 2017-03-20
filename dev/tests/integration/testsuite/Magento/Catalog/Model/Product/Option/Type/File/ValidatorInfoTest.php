@@ -130,16 +130,16 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     protected function getProductOption(array $options = [])
     {
         $data = [
-            'option_id' => '1',
-            'product_id' => '4',
+            'option_id' => 1,
+            'product_id' => 4,
             'type' => 'file',
-            'is_require' => '1',
+            'is_require' => 1,
             'sku' => null,
             'max_characters' => null,
             'file_extension' => null,
-            'image_size_x' => '2000',
-            'image_size_y' => '2000',
-            'sort_order' => '0',
+            'image_size_x' => 2000,
+            'image_size_y' => 2000,
+            'sort_order' => 0,
             'default_title' => 'MediaOption',
             'store_title' => null,
             'title' => 'MediaOption',

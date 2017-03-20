@@ -151,8 +151,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'checkbox_text',
                 'label' => __('Checkbox Text'),
                 'title' => __('Checkbox Text'),
-                'rows' => '5',
-                'cols' => '30',
+                'rows' => 5,
+                'cols' => 30,
                 'wysiwyg' => false,
                 'required' => true
             ]

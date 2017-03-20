@@ -69,13 +69,13 @@ class StoreListCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $storeData = [
-            'store_id' => '999',
-            'group_id' => '777',
-            'website_id' => '888',
+            'store_id' => 999,
+            'group_id' => 777,
+            'website_id' => 888,
             'name' => 'unit test store',
             'code' => 'unit_test_store',
-            'is_active' => '1',
-            'sort_order' => '123',
+            'is_active' => 1,
+            'sort_order' => 123,
         ];
 
         $stores = [

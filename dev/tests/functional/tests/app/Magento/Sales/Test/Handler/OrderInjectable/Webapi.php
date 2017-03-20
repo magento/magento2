@@ -27,7 +27,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
      */
     protected $mappingData = [
         'region_id' => [
-            'California' => '12',
+            'California' => 12,
         ],
         'country_id' => [
             'United States' => 'US',

@@ -116,9 +116,9 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     public function dataProviderSessionLifetime()
     {
         return [
-            ['expectedResult' => true, 'sessionLifetime' => '0'],
-            ['expectedResult' => true, 'sessionLifetime' => '1'],
-            ['expectedResult' => false, 'sessionLifetime' => '2']
+            ['expectedResult' => true, 'sessionLifetime' => 0],
+            ['expectedResult' => true, 'sessionLifetime' => 1],
+            ['expectedResult' => false, 'sessionLifetime' => 2]
         ];
     }
 

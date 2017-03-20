@@ -235,7 +235,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $post = [
             'customer' => [
-                'entity_id' => '1',
+                'entity_id' => 1,
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -243,8 +243,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'lastname' => 'test lastname',
                 'email' => 'customer@example.com',
                 'new_password' => 'auto',
-                'sendemail_store_id' => '1',
-                'sendemail' => '1',
+                'sendemail_store_id' => 1,
+                'sendemail' => 1,
                 'created_at' => '2000-01-01 00:00:00',
                 'default_shipping' => '_item1',
                 'default_billing' => 1,
@@ -400,8 +400,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'lastname' => 'test lastname',
                 'email' => $newEmail,
                 'new_password' => 'auto',
-                'sendemail_store_id' => '1',
-                'sendemail' => '1',
+                'sendemail_store_id' => 1,
+                'sendemail' => 1,
                 'created_at' => '2000-01-01 00:00:00',
                 'default_shipping' => '_item1',
                 'default_billing' => 1,
@@ -604,7 +604,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $customerData = [
             'customer' => [
-                'entity_id' => '1',
+                'entity_id' => 1,
                 'middlename' => 'new middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -613,8 +613,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'email' => 'example@domain.com',
                 'default_shipping' => '_item1',
                 'new_password' => 'auto',
-                'sendemail_store_id' => '1',
-                'sendemail' => '1',
+                'sendemail_store_id' => 1,
+                'sendemail' => 1,
             ],
             'address' => [
                 '_item1' => [
@@ -661,7 +661,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $customerData = [
             'customer' => [
-                'entity_id' => '1',
+                'entity_id' => 1,
                 'middlename' => 'new middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -670,8 +670,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'email' => '*',
                 'default_shipping' => '_item1',
                 'new_password' => 'auto',
-                'sendemail_store_id' => '1',
-                'sendemail' => '1',
+                'sendemail_store_id' => 1,
+                'sendemail' => 1,
             ],
             'address' => [
                 '1' => [
@@ -725,7 +725,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     public function testResetPasswordActionBadCustomerId()
     {
         // Bad customer ID in post, will just get redirected to base
-        $this->getRequest()->setPostValue(['customer_id' => '789']);
+        $this->getRequest()->setPostValue(['customer_id' => 789]);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
@@ -735,7 +735,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     public function testResetPasswordActionSuccess()
     {
-        $this->getRequest()->setPostValue(['customer_id' => '1']);
+        $this->getRequest()->setPostValue(['customer_id' => 1]);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),

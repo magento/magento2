@@ -30,16 +30,16 @@ class VariationMatrixTest extends \PHPUnit_Framework_TestCase
         $result = [
             [
                 130 => [
-                    'value' => '3',
+                    'value' => 3,
                     'label' => 'red',
-                    'price' => ['value_index' => '3', 'pricing_value' => '', 'is_percent' => '0', 'include' => '1',],
+                    'price' => ['value_index' => 3, 'pricing_value' => '', 'is_percent' => 0, 'include' => 1,],
                 ],
             ],
             [
                 130 => [
-                    'value' => '4',
+                    'value' => 4,
                     'label' => 'blue',
-                    'price' => ['value_index' => '4', 'pricing_value' => '', 'is_percent' => '0', 'include' => '1',],
+                    'price' => ['value_index' => 4, 'pricing_value' => '', 'is_percent' => 0, 'include' => 1,],
                 ],
             ],
         ];
@@ -48,20 +48,20 @@ class VariationMatrixTest extends \PHPUnit_Framework_TestCase
             130 => [
                 'values' => [
                     [
-                        'value_index' => '3',
+                        'value_index' => 3,
                         'pricing_value' => '',
-                        'is_percent' => '0',
-                        'include' => '1'
+                        'is_percent' => 0,
+                        'include' => 1
                     ],
                     [
-                        'value_index' => '4',
+                        'value_index' => 4,
                         'pricing_value' => '',
-                        'is_percent' => '0',
-                        'include' => '1'
+                        'is_percent' => 0,
+                        'include' => 1
                     ],
                 ],
-                'attribute_id' => '130',
-                'options' => [['value' => '3', 'label' => 'red',], ['value' => '4', 'label' => 'blue',],],
+                'attribute_id' => 130,
+                'options' => [['value' => 3, 'label' => 'red',], ['value' => 4, 'label' => 'blue',],],
             ],
         ];
 

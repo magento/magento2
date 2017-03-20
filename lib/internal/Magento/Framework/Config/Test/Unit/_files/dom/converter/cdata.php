@@ -11,8 +11,8 @@ return [
             'mixed' => [
                 [
                     'node_one' => [
-                        ['__attributes__' => ['attributeOne' => '10'], '__content__' => '<valueThree>'],
-                        ['__attributes__' => ['attributeTwo' => '20'], '__content__' => 'valueFour'],
+                        ['__attributes__' => ['attributeOne' => 10], '__content__' => '<valueThree>'],
+                        ['__attributes__' => ['attributeTwo' => 20], '__content__' => 'valueFour'],
                     ],
                 ],
             ],

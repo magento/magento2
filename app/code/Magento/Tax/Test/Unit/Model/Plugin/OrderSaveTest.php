@@ -416,7 +416,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     [
                         //state tax for item
                         'item_id' => self::ORDER_ITEM_ID,
-                        'tax_id' => '35',
+                        'tax_id' => 35,
                         'tax_percent' => 6,
                         'associated_item_id' => null,
                         'amount' => 0.11,
@@ -428,7 +428,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     [
                         //state tax for shipping
                         'item_id' => null,
-                        'tax_id' => '35',
+                        'tax_id' => 35,
                         'tax_percent' => 6,
                         'associated_item_id' => null,
                         'amount' => 0.55,
@@ -440,7 +440,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     [
                         //federal tax for item
                         'item_id' => self::ORDER_ITEM_ID,
-                        'tax_id' => '36',
+                        'tax_id' => 36,
                         'tax_percent' => 5,
                         'associated_item_id' => null,
                         'amount' => 0.11,
@@ -452,7 +452,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     [
                         //federal tax for shipping
                         'item_id' => null,
-                        'tax_id' => '36',
+                        'tax_id' => 36,
                         'tax_percent' => 5,
                         'associated_item_id' => null,
                         'amount' => 0.55,
@@ -464,7 +464,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     [
                         //city tax for item
                         'item_id' => self::ORDER_ITEM_ID,
-                        'tax_id' => '37',
+                        'tax_id' => 37,
                         'tax_percent' => 3.33,
                         'associated_item_id' => null,
                         'amount' => 0.03,
@@ -476,7 +476,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     [
                         //city tax for shipping
                         'item_id' => null,
-                        'tax_id' => '37',
+                        'tax_id' => 37,
                         'tax_percent' => 3.33,
                         'associated_item_id' => null,
                         'amount' => 0.17,

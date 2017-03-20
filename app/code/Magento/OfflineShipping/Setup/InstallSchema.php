@@ -50,19 +50,19 @@ class InstallSchema implements InstallSchemaInterface
             'website_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Website Id'
         )->addColumn(
             'dest_country_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             4,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Destination coutry ISO/2 or ISO/3 code'
         )->addColumn(
             'dest_region_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Destination Region Id'
         )->addColumn(
             'dest_zip',
@@ -112,7 +112,7 @@ class InstallSchema implements InstallSchemaInterface
             'simple_free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Simple Free Shipping'
         );
         $installer->getConnection(self::$salesConnectionName)->addColumn(
@@ -120,7 +120,7 @@ class InstallSchema implements InstallSchemaInterface
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Free Shipping'
         );
         $installer->getConnection(self::$quoteConnectionName)->addColumn(
@@ -128,7 +128,7 @@ class InstallSchema implements InstallSchemaInterface
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Free Shipping'
         );
         $installer->getConnection(self::$quoteConnectionName)->addColumn(
@@ -136,7 +136,7 @@ class InstallSchema implements InstallSchemaInterface
             'free_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Free Shipping'
         );
         $installer->getConnection(self::$quoteConnectionName)->addColumn(

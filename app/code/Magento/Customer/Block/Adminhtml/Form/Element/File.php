@@ -92,7 +92,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
             $checkbox = [
                 'type' => 'checkbox',
                 'name' => sprintf('%s[delete]', $this->getName()),
-                'value' => '1',
+                'value' => 1,
                 'class' => 'checkbox',
                 'id' => $checkboxId
             ];

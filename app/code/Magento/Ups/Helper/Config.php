@@ -42,7 +42,7 @@ class Config
     protected function getCodes()
     {
         return [
-            'action' => ['single' => '3', 'all' => '4'],
+            'action' => ['single' => 3, 'all' => 4],
             'originShipment' => [
                 // United States Domestic Shipments
                 'United States Domestic Shipments' => [
@@ -169,10 +169,10 @@ class Config
                 'CSP' => '02',
                 'UT' => '03',
                 'PAK' => '04',
-                'UEB' => '21',
-                'UW25' => '24',
-                'UW10' => '25',
-                'PLT' => '30',
+                'UEB' => 21,
+                'UW25' => 24,
+                'UW10' => 25,
+                'PLT' => 30,
                 'SEB' => '2a',
                 'MEB' => '2b',
                 'LEB' => '2c',

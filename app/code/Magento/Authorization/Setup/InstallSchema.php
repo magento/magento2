@@ -41,31 +41,31 @@ class InstallSchema implements InstallSchemaInterface
                 'parent_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Parent Role ID'
             )->addColumn(
                 'tree_level',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Role Tree Level'
             )->addColumn(
                 'sort_order',
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Role Sort Order'
             )->addColumn(
                 'role_type',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 1,
-                ['nullable' => false, 'default' => '0'],
+                ['nullable' => false, 'default' => 0],
                 'Role Type'
             )->addColumn(
                 'user_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'User ID'
             )->addColumn(
                 'user_type',
@@ -107,7 +107,7 @@ class InstallSchema implements InstallSchemaInterface
                 'role_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                ['unsigned' => true, 'nullable' => false, 'default' => 0],
                 'Role ID'
             )->addColumn(
                 'resource_id',

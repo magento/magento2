@@ -844,7 +844,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $prodNoTaxInclBase = [
             'quote_details' => [
                 'shipping_address' => [
-                    'postcode' => '55555',
+                    'postcode' => 55555,
                     'country_id' => 'US',
                     'region' => ['region_id' => 42],
                 ],
@@ -987,7 +987,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $productTaxInclBase = [
             'quote_details' => [
                 'shipping_address' => [
-                    'postcode' => '55555',
+                    'postcode' => 55555,
                     'country_id' => 'US',
                     'region' => ['region_id' => 42],
                 ],
@@ -1136,7 +1136,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $prodRoundingNoTaxInclBase = [
             'quote_details' => [
                 'shipping_address' => [
-                    'postcode' => '55555',
+                    'postcode' => 55555,
                     'country_id' => 'US',
                     'region' => ['region_id' => 42],
                 ],
@@ -2556,11 +2556,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $multiTaxRatesSamePriority = $this->taxRuleFixtureFactory->createTaxRates([
-            ['percentage' => 5, 'country' => 'US', 'region' => 42, 'postcode' => '55555'],
+            ['percentage' => 5, 'country' => 'US', 'region' => 42, 'postcode' => 55555],
         ]);
 
         $multiTaxRatesDifferentPriority = $this->taxRuleFixtureFactory->createTaxRates([
-            ['percentage' => 11, 'country' => 'US', 'region' => 42, 'postcode' => '55555'],
+            ['percentage' => 11, 'country' => 'US', 'region' => 42, 'postcode' => 55555],
         ]);
 
         $higherRates = $this->taxRuleFixtureFactory->createTaxRates([
@@ -2649,12 +2649,12 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
     {
         $baseQuote = [
             'billing_address' => [
-                'postcode' => '55555',
+                'postcode' => 55555,
                 'country_id' => 'US',
                 'region' => ['region_id' => 42],
             ],
             'shipping_address' => [
-                'postcode' => '55555',
+                'postcode' => 55555,
                 'country_id' => 'US',
                 'region' => ['region_id' => 42],
             ],

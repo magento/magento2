@@ -136,8 +136,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $optionsData = [
             'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
-            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14']
+            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => 13],
+            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => 14]
         ];
         $productData = [
             'stock_data' => ['stock_data'],
@@ -272,12 +272,12 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'ids do not match, no replacement occurs' => [
                 [
                     [
-                        'option_id' => '3',
+                        'option_id' => 3,
                         'key1' => 'val1',
                         'default_key1' => 'val2',
                         'values' => [
                             [
-                                'option_type_id' => '2',
+                                'option_type_id' => 2,
                                 'key1' => 'val1',
                                 'default_key1' => 'val2'
                             ]
@@ -286,18 +286,18 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     4 => [
-                        'key1' => '1',
+                        'key1' => 1,
                         'values' => [3 => ['key1' => 1]]
                     ]
                 ],
                 [
                     [
-                        'option_id' => '3',
+                        'option_id' => 3,
                         'key1' => 'val1',
                         'default_key1' => 'val2',
                         'values' => [
                             [
-                                'option_type_id' => '2',
+                                'option_type_id' => 2,
                                 'key1' => 'val1',
                                 'default_key1' => 'val2'
                             ]
@@ -308,14 +308,14 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'key2 is replaced, key1 is not (checkbox is not checked)' => [
                 [
                     [
-                        'option_id' => '5',
+                        'option_id' => 5,
                         'key1' => 'val1',
                         'title' => 'val2',
                         'default_key1' => 'val3',
                         'default_title' => 'val4',
                         'values' => [
                             [
-                                'option_type_id' => '2',
+                                'option_type_id' => 2,
                                 'key1' => 'val1',
                                 'key2' => 'val2',
                                 'default_key1' => 'val11',
@@ -326,14 +326,14 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     5 => [
-                        'key1' => '0',
-                        'title' => '1',
+                        'key1' => 0,
+                        'title' => 1,
                         'values' => [2 => ['key1' => 1]]
                     ]
                 ],
                 [
                     [
-                        'option_id' => '5',
+                        'option_id' => 5,
                         'key1' => 'val1',
                         'title' => 'val4',
                         'default_key1' => 'val3',
@@ -341,7 +341,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                         'is_delete_store_title' => 1,
                         'values' => [
                             [
-                                'option_type_id' => '2',
+                                'option_type_id' => 2,
                                 'key1' => 'val11',
                                 'key2' => 'val2',
                                 'default_key1' => 'val11',
@@ -354,13 +354,13 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'key1 is replaced, key2 has no default value' => [
                 [
                     [
-                        'option_id' => '7',
+                        'option_id' => 7,
                         'key1' => 'val1',
                         'key2' => 'val2',
                         'default_key1' => 'val3',
                         'values' => [
                             [
-                                'option_type_id' => '2',
+                                'option_type_id' => 2,
                                 'key1' => 'val1',
                                 'title' => 'val2',
                                 'default_key1' => 'val11',
@@ -371,20 +371,20 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     7 => [
-                        'key1' => '1',
-                        'key2' => '1',
+                        'key1' => 1,
+                        'key2' => 1,
                         'values' => [2 => ['key1' => 0, 'title' => 1]]
                     ]
                 ],
                 [
                     [
-                        'option_id' => '7',
+                        'option_id' => 7,
                         'key1' => 'val3',
                         'key2' => 'val2',
                         'default_key1' => 'val3',
                         'values' => [
                             [
-                                'option_type_id' => '2',
+                                'option_type_id' => 2,
                                 'key1' => 'val1',
                                 'title' => 'val22',
                                 'default_key1' => 'val11',

@@ -92,41 +92,41 @@ class InstallData implements InstallDataInterface
         $states = [
             'new' => [
                 'label' => __('New'),
-                'statuses' => ['pending' => ['default' => '1']],
+                'statuses' => ['pending' => ['default' => 1]],
                 'visible_on_front' => true,
             ],
             'pending_payment' => [
                 'label' => __('Pending Payment'),
-                'statuses' => ['pending_payment' => ['default' => '1']],
+                'statuses' => ['pending_payment' => ['default' => 1]],
             ],
             'processing' => [
                 'label' => __('Processing'),
-                'statuses' => ['processing' => ['default' => '1'], 'fraud' => []],
+                'statuses' => ['processing' => ['default' => 1], 'fraud' => []],
                 'visible_on_front' => true,
             ],
             'complete' => [
                 'label' => __('Complete'),
-                'statuses' => ['complete' => ['default' => '1']],
+                'statuses' => ['complete' => ['default' => 1]],
                 'visible_on_front' => true,
             ],
             'closed' => [
                 'label' => __('Closed'),
-                'statuses' => ['closed' => ['default' => '1']],
+                'statuses' => ['closed' => ['default' => 1]],
                 'visible_on_front' => true,
             ],
             'canceled' => [
                 'label' => __('Canceled'),
-                'statuses' => ['canceled' => ['default' => '1']],
+                'statuses' => ['canceled' => ['default' => 1]],
                 'visible_on_front' => true,
             ],
             'holded' => [
                 'label' => __('On Hold'),
-                'statuses' => ['holded' => ['default' => '1']],
+                'statuses' => ['holded' => ['default' => 1]],
                 'visible_on_front' => true,
             ],
             'payment_review' => [
                 'label' => __('Payment Review'),
-                'statuses' => ['payment_review' => ['default' => '1'], 'fraud' => []],
+                'statuses' => ['payment_review' => ['default' => 1], 'fraud' => []],
                 'visible_on_front' => true,
             ],
         ];

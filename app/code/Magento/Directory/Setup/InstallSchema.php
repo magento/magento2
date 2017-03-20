@@ -110,7 +110,7 @@ class InstallSchema implements InstallSchemaInterface
             'country_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             4,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Country Id in ISO-2'
         )->addColumn(
             'code',
@@ -147,7 +147,7 @@ class InstallSchema implements InstallSchemaInterface
             'region_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => 0],
             'Region Id'
         )->addColumn(
             'name',

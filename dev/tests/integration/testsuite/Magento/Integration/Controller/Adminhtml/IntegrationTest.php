@@ -74,7 +74,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
             [
                 'name' => $integrationName,
                 'email' => 'test@magento.com',
-                'authentication' => '1',
+                'authentication' => 1,
                 'endpoint' => $url,
                 'current_password' => Bootstrap::ADMIN_PASSWORD,
             ]
@@ -95,7 +95,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
             [
                 'name' => $integrationName,
                 'email' => 'test@magento.com',
-                'authentication' => '1',
+                'authentication' => 1,
                 'endpoint' => $url,
                 'current_password' => Bootstrap::ADMIN_PASSWORD,
             ]

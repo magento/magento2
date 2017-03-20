@@ -60,7 +60,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
                 '$to$' => 'filter_to',
                 '$filter$' => 'filter_value',
                 '$method$' => 'filter_method',
-                '$zero_value$' => '0',
+                '$zero_value$' => 0,
             ],
             'from' => 1,
             'size' => 10,
@@ -84,7 +84,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
                     'type' => 'termFilter',
                     'name' => 'zero_value',
                     'field' => 'zero_value',
-                    'value' => '0',
+                    'value' => 0,
                     'is_bind' => true,
                 ]
             ],

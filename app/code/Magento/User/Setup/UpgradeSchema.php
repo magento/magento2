@@ -67,7 +67,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'user_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'User Id'
         )->addColumn(
             'password_hash',
@@ -79,13 +79,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'expires',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Expires'
         )->addColumn(
             'last_updated',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Last Updated'
         )->addIndex(
             $installer->getIdxName('admin_passwords', ['user_id']),

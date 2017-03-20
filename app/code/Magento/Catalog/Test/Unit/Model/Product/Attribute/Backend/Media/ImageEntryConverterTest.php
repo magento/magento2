@@ -103,16 +103,16 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvertTo()
     {
         $rowData = [
-            'value_id' => '6',
+            'value_id' => 6,
             'file' => '/s/a/sample-1_1.jpg',
             'media_type' => 'image',
-            'entity_id' => '1',
+            'entity_id' => 1,
             'label' => '',
-            'position' => '5',
-            'disabled' => '0',
+            'position' => 5,
+            'disabled' => 0,
             'label_default' => null,
-            'position_default' => '5',
-            'disabled_default' => '0',
+            'position_default' => 5,
+            'disabled_default' => 0,
         ];
 
         $productImages = [
@@ -143,11 +143,11 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
         $this->mediaGalleryEntryMock->expects($this->once())->method('getContent')->willReturn(null);
 
         $expectedResult = [
-            'value_id' => '5',
+            'value_id' => 5,
             'file' => '/s/a/sample_3.jpg',
             'label' => '',
-            'position' => '4',
-            'disabled' => '0',
+            'position' => 4,
+            'disabled' => 0,
             'types' =>
                 [
                     0 => 'image',
@@ -190,11 +190,11 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
         $this->mediaGalleryEntryMock->expects($this->once())->method('getContent')->willReturn($imageContentInterface);
 
         $expectedResult = [
-            'value_id' => '5',
+            'value_id' => 5,
             'file' => '/s/a/sample_3.jpg',
             'label' => '',
-            'position' => '4',
-            'disabled' => '0',
+            'position' => 4,
+            'disabled' => 0,
             'types' =>
                 [
                     0 => 'image',

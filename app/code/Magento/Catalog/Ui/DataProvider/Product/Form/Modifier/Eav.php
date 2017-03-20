@@ -711,8 +711,8 @@ class Eav extends AbstractModifier
         if ($attribute->getFrontendInput() === 'boolean') {
             $meta['arguments']['data']['config']['prefer'] = 'toggle';
             $meta['arguments']['data']['config']['valueMap'] = [
-                'true' => '1',
-                'false' => '0',
+                'true' => 1,
+                'false' => 0,
             ];
         }
 

@@ -113,13 +113,13 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
                 '1' => [
                     'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                     'aggregator' => 'all',
-                    'value' => '1',
+                    'value' => 1,
                     'new_child' => '',
                 ],
                 '1--1' => [
                     'type' => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
                     'attribute' => 'attribute_set_id',
-                    'value' => '4',
+                    'value' => 4,
                     'operator' => '==',
                 ],
             ],
@@ -164,7 +164,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         return [
           # Variation 1
           [
-              ['block_id' => '2']
+              ['block_id' => 2]
           ]
         ];
     }

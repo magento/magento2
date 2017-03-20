@@ -70,7 +70,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $endpoint = 'exampleEndpoint';
         $identityLinkUrl = 'identityLinkUrl';
         $integrationData = [
-            Info::DATA_ID => '1',
+            Info::DATA_ID => 1,
             Info::DATA_NAME => $name,
             Info::DATA_EMAIL => 'admin@example.com',
             Info::DATA_ENDPOINT => 'exampleEndpoint',

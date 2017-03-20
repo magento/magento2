@@ -547,7 +547,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         (new ObjectManager($this))->getObject(
             Mysql::class,
-            ['config' => ['host' => 'localhost', 'port' => '33390']]
+            ['config' => ['host' => 'localhost', 'port' => 33390]]
         );
     }
 }

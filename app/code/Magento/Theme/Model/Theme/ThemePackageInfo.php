@@ -57,7 +57,8 @@ class ThemePackageInfo
             $rawData = [];
             $themeFile = $themeDir->readFile('composer.json');
             if ($themeFile) {
-                $rawData = \Zend_Json::decode($themeFile);
+                $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+                $rawData = $serializer->unserialize($themeFile);
             }
             return isset($rawData['name']) ? $rawData['name'] : '';
         }
@@ -92,7 +93,8 @@ class ThemePackageInfo
         foreach ($themePaths as $fullThemePath => $themeDir) {
             $themeDirRead = $this->readDirFactory->create($themeDir);
             if ($themeDirRead->isExist('composer.json')) {
-                $rawData = \Zend_Json::decode($themeDirRead->readFile('composer.json'));
+                $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+                $rawData = $serializer->unserialize($themeDirRead->readFile('composer.json'));
                 if (isset($rawData['name'])) {
                     $this->packageNameToFullPathMap[$rawData['name']] = $fullThemePath;
                 }

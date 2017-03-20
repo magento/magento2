@@ -172,7 +172,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ['filter' => '0-10-20', 'result' => false],
             ['filter' => '', 'result' => false],
             ['filter' => '-', 'result' => ['', '']],
-            ['filter' => '0', 'result' => false],
+            ['filter' => 0, 'result' => false],
             ['filter' => 0, 'result' => false],
             ['filter' => '100500INF', 'result' => false],
         ];

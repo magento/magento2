@@ -40,7 +40,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     'unsigned' => true,
                     'nullable' => false,
-                    'default' => '0',
+                    'default' => 0,
                     'comment' => 'Is Used in Grid'
                 ]
             );
@@ -51,7 +51,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     'unsigned' => true,
                     'nullable' => false,
-                    'default' => '0',
+                    'default' => 0,
                     'comment' => 'Is Visible in Grid'
                 ]
             );
@@ -62,7 +62,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     'unsigned' => true,
                     'nullable' => false,
-                    'default' => '0',
+                    'default' => 0,
                     'comment' => 'Is Filterable in Grid'
                 ]
             );
@@ -73,7 +73,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     'unsigned' => true,
                     'nullable' => false,
-                    'default' => '0',
+                    'default' => 0,
                     'comment' => 'Is Searchable in Grid'
                 ]
             );
@@ -86,7 +86,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                     'nullable' => true,
-                    'default' => '0',
+                    'default' => 0,
                     'comment' => 'Failure Number'
                 ]
             );

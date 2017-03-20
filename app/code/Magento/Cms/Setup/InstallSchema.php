@@ -71,7 +71,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '1'],
+            ['nullable' => false, 'default' => 1],
             'Is Block Active'
         )->addIndex(
             $setup->getIdxName(
@@ -192,13 +192,13 @@ class InstallSchema implements InstallSchemaInterface
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '1'],
+            ['nullable' => false, 'default' => 1],
             'Is Page Active'
         )->addColumn(
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Page Sort Order'
         )->addColumn(
             'layout_update_xml',

@@ -148,7 +148,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_ids',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Store ids'
         )->addColumn(
             'widget_parameters',
@@ -160,7 +160,7 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Sort order'
         )->addForeignKey(
             $installer->getFkName('widget_instance', 'theme_id', 'theme', 'theme_id'),
@@ -188,7 +188,7 @@ class InstallSchema implements InstallSchemaInterface
             'instance_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Instance Id'
         )->addColumn(
             'page_group',
@@ -249,13 +249,13 @@ class InstallSchema implements InstallSchemaInterface
             'page_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Page Id'
         )->addColumn(
             'layout_update_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Layout Update Id'
         )->addIndex(
             $installer->getIdxName('widget_instance_page_layout', 'page_id'),
@@ -317,7 +317,7 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Sort Order'
         )->addColumn(
             'updated_at',
@@ -348,7 +348,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Store Id'
         )->addColumn(
             'theme_id',
@@ -360,13 +360,13 @@ class InstallSchema implements InstallSchemaInterface
             'layout_update_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Layout Update Id'
         )->addColumn(
             'is_temporary',
             \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Defines whether Layout Update is Temporary'
         )->addIndex(
             $installer->getIdxName('layout_link', ['layout_update_id']),

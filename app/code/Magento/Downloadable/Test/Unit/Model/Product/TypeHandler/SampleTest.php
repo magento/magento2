@@ -109,7 +109,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
                             'title' => 'Downloadable Product Sample Title',
                             'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
                             'sample_url' => null,
-                            'sort_order' => '0',
+                            'sort_order' => 0,
                         ],
                     ],
                 ],
@@ -117,7 +117,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
                     'title' => 'Downloadable Product Sample Title',
                     'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
                     'sample_url' => null,
-                    'sort_order' => '0',
+                    'sort_order' => 0,
                 ]
             ]
         ];

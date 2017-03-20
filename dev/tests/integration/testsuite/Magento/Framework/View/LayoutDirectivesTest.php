@@ -115,7 +115,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('arguments_complex_values.xml');
         $this->assertEquals(
-            ['parameters' => ['first' => '1', 'second' => '2']],
+            ['parameters' => ['first' => 1, 'second' => 2]],
             $layout->getBlock('block_with_args_complex_values')->getOne()
         );
         $this->assertEquals('two', $layout->getBlock('block_with_args_complex_values')->getTwo());

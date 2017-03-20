@@ -110,8 +110,8 @@ class ValueProvider
                             'data' => [
                                 'config' => [
                                     'options' => [
-                                        ['label' => __('Active'), 'value' => '1'],
-                                        ['label' => __('Inactive'), 'value' => '0']
+                                        ['label' => __('Active'), 'value' => 1],
+                                        ['label' => __('Inactive'), 'value' => 0]
                                     ],
                                 ],
                             ],
@@ -140,8 +140,8 @@ class ValueProvider
                             'data' => [
                                 'config' => [
                                     'options' => [
-                                        ['label' => __('Yes'), 'value' => '1'],
-                                        ['label' => __('No'), 'value' => '0']
+                                        ['label' => __('Yes'), 'value' => 1],
+                                        ['label' => __('No'), 'value' => 0]
                                     ],
                                 ],
                             ],
@@ -164,7 +164,7 @@ class ValueProvider
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'value' => '0',
+                                    'value' => 0,
                                 ],
                             ],
                         ],
@@ -173,7 +173,7 @@ class ValueProvider
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'value' => '0',
+                                    'value' => 0,
                                 ],
                             ],
                         ],
@@ -183,8 +183,8 @@ class ValueProvider
                             'data' => [
                                 'config' => [
                                     'options' => [
-                                        ['label' => __('Yes'), 'value' => '1'],
-                                        ['label' => __('No'), 'value' => '0']
+                                        ['label' => __('Yes'), 'value' => 1],
+                                        ['label' => __('No'), 'value' => 0]
                                     ]
                                 ],
                             ],
@@ -195,8 +195,8 @@ class ValueProvider
                             'data' => [
                                 'config' => [
                                     'options' => [
-                                        ['label' => __('Yes'), 'value' => '1'],
-                                        ['label' => __('No'), 'value' => '0'],
+                                        ['label' => __('Yes'), 'value' => 1],
+                                        ['label' => __('No'), 'value' => 0],
                                     ],
                                 ],
                             ]

@@ -39,9 +39,9 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $expectedTaxRuleData = [
             'tax_calculation_rule_id' => $expectedFirstTaxRuleId,
             'code' => 'Test Rule',
-            'priority' => '0',
-            'position' => '0',
-            'calculate_subtotal' => '0',
+            'priority' => 0,
+            'position' => 0,
+            'calculate_subtotal' => 0,
             'customer_tax_classes' => $firstTaxRuleFixture->getCustomerTaxClassIds(),
             'product_tax_classes' => $firstTaxRuleFixture->getProductTaxClassIds(),
             'tax_rates' => $firstTaxRuleFixture->getTaxRateIds(),

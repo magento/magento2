@@ -50,7 +50,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultSort('block_identifier');
         $this->setDefaultDir('ASC');
         $this->setUseAjax(true);
-        $this->setDefaultFilter(['chooser_is_active' => '1']);
+        $this->setDefaultFilter(['chooser_is_active' => 1]);
     }
 
     /**

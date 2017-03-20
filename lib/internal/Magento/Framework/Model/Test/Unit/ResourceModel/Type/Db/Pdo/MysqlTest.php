@@ -69,7 +69,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                 ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'non-active string 0' => [
-                ['host' => 'localhost', 'active' => '0'],
+                ['host' => 'localhost', 'active' => 0],
                 ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'non-active bool false' => [

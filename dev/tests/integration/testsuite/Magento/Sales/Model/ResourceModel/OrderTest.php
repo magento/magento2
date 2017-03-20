@@ -53,13 +53,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     {
         $addressData = [
             'region' => 'CA',
-            'postcode' => '11111',
+            'postcode' => 11111,
             'lastname' => 'lastname',
             'firstname' => 'firstname',
             'street' => 'street',
             'city' => 'Los Angeles',
             'email' => 'admin@example.com',
-            'telephone' => '11111111',
+            'telephone' => 11111111,
             'country_id' => 'US'
         ];
 

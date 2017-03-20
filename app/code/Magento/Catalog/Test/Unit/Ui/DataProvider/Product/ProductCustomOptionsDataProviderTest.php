@@ -142,14 +142,14 @@ class ProductCustomOptionsDataProviderTest extends \PHPUnit_Framework_TestCase
             0 => [
                 'amount' => 2,
                 'collectionArray' => [
-                    '12' => ['id' => '12', 'value' => 'test1'],
-                    '25' => ['id' => '25', 'value' => 'test2']
+                    '12' => ['id' => 12, 'value' => 'test1'],
+                    '25' => ['id' => 25, 'value' => 'test2']
                 ],
                 'result' => [
                     'totalRecords' => 2,
                     'items' => [
-                        ['id' => '12', 'value' => 'test1'],
-                        ['id' => '25', 'value' => 'test2']
+                        ['id' => 12, 'value' => 'test1'],
+                        ['id' => 25, 'value' => 'test2']
                     ]
                 ]
             ]

@@ -45,7 +45,7 @@ class InstallSchema implements InstallSchemaInterface
             'scope_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Config Scope Id'
         )->addColumn(
             'path',

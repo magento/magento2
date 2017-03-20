@@ -164,7 +164,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $resultRow = [
             [
-                'value_id' => '4',
+                'value_id' => 4,
                 'store_id' => 1,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=abcdefghij',
@@ -178,7 +178,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
                 'video_metadata' => 'meta one',
             ],
             [
-                'value_id' => '5',
+                'value_id' => 5,
                 'store_id' => 0,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',
@@ -258,7 +258,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 
         $resultRow = [
             [
-                'value_id' => '4',
+                'value_id' => 4,
                 'store_id' => 1,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=abcdefghij',
@@ -272,7 +272,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
                 'video_metadata' => 'meta one',
             ],
             [
-                'value_id' => '5',
+                'value_id' => 5,
                 'store_id' => 0,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',
@@ -321,14 +321,14 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $positionCheckSql = 'testchecksql';
         $resultRow = [
             [
-                'value_id' => '1',
+                'value_id' => 1,
                 'file' => '/d/o/download_7.jpg',
                 'label' => null,
-                'position' => '1',
-                'disabled' => '0',
+                'position' => 1,
+                'disabled' => 0,
                 'label_default' => null,
-                'position_default' => '1',
-                'disabled_default' => '0',
+                'position_default' => 1,
+                'disabled_default' => 0,
             ],
         ];
 
@@ -397,7 +397,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     public function testInsertGalleryValueInStore()
     {
         $data = [
-            'value_id' => '8',
+            'value_id' => 8,
             'store_id' => 0,
             'provider' => '',
             'url' => 'https://www.youtube.com/watch?v=abcdfghijk',
@@ -448,11 +448,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     {
         $results = [
             [
-                'value_id' => '1',
+                'value_id' => 1,
                 'attribute_id' => 90,
                 'value' => '/d/o/download_7.jpg',
                 'media_type' => 'image',
-                'disabled' => '0',
+                'disabled' => 0,
             ],
         ];
 

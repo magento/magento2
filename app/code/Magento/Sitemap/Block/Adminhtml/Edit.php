@@ -55,7 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         'button' => [
                             'event' => 'save',
                             'target' => '#edit_form',
-                            'eventData' => ['action' => ['args' => ['generate' => '1']]],
+                            'eventData' => ['action' => ['args' => ['generate' => 1]]],
                         ],
                     ],
                 ],

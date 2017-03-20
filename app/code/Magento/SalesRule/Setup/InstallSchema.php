@@ -65,13 +65,13 @@ class InstallSchema implements InstallSchemaInterface
             'uses_per_customer',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Uses Per Customer'
         )->addColumn(
             'is_active',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Is Active'
         )->addColumn(
             'conditions_serialized',
@@ -89,13 +89,13 @@ class InstallSchema implements InstallSchemaInterface
             'stop_rules_processing',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '1'],
+            ['nullable' => false, 'default' => 1],
             'Stop Rules Processing'
         )->addColumn(
             'is_advanced',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 1],
             'Is Advanced'
         )->addColumn(
             'product_ids',
@@ -107,7 +107,7 @@ class InstallSchema implements InstallSchemaInterface
             'sort_order',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Sort Order'
         )->addColumn(
             'simple_action',
@@ -137,25 +137,25 @@ class InstallSchema implements InstallSchemaInterface
             'apply_to_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Apply To Shipping'
         )->addColumn(
             'times_used',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Times Used'
         )->addColumn(
             'is_rss',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Is Rss'
         )->addColumn(
             'coupon_type',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 1],
             'Coupon Type'
         )->addColumn(
             'use_auto_generation',
@@ -216,7 +216,7 @@ class InstallSchema implements InstallSchemaInterface
             'times_used',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Times Used'
         )->addColumn(
             'expiration_date',
@@ -293,7 +293,7 @@ class InstallSchema implements InstallSchemaInterface
             'times_used',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Times Used'
         )->addIndex(
             $installer->getIdxName('salesrule_coupon_usage', ['customer_id']),
@@ -330,19 +330,19 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Rule Id'
         )->addColumn(
             'customer_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Customer Id'
         )->addColumn(
             'times_used',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Times Used'
         )->addIndex(
             $installer->getIdxName('salesrule_customer', ['rule_id', 'customer_id']),
@@ -535,7 +535,7 @@ class InstallSchema implements InstallSchemaInterface
             'coupon_uses',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Coupon Uses'
         )->addColumn(
             'subtotal_amount',
@@ -650,7 +650,7 @@ class InstallSchema implements InstallSchemaInterface
             'coupon_uses',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Coupon Uses'
         )->addColumn(
             'subtotal_amount',

@@ -31,7 +31,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     /**
      * @var array
      */
-    protected $standardPorts = ['http' => '80', 'https' => '443'];
+    protected $standardPorts = ['http' => 80, 'https' => 443];
 
     /**
      * @var string

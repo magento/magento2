@@ -148,8 +148,8 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     public function modifyDataDataProvider()
     {
         return [
-            ['isPurchasedSeparatelyBool' => true, 'PurchasedSeparatelyStr' => '1'],
-            ['isPurchasedSeparatelyBool' => false, 'PurchasedSeparatelyStr' => '0'],
+            ['isPurchasedSeparatelyBool' => true, 'PurchasedSeparatelyStr' => 1],
+            ['isPurchasedSeparatelyBool' => false, 'PurchasedSeparatelyStr' => 0],
         ];
     }
 

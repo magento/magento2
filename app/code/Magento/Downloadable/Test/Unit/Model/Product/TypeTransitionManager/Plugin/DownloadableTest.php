@@ -126,7 +126,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             [true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
             [false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
             [true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, ['link' => [['is_delete' => '']]]],
-            [false, \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => '1']]]]
+            [false, \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => 1]]]]
         ];
     }
 }

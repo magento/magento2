@@ -779,7 +779,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'field_1' => 123,
             'field_2' => 'text',
             'field_3' => [
-                'field_3_1' => '1244',
+                'field_3_1' => 1244,
                 'field_3_2' => null,
                 'field_3_3' => false,
             ]
@@ -857,7 +857,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'field_1' => 123,
             'field_2' => 'text',
             'field_3' => [
-                'field_3_1' => '1244',
+                'field_3_1' => 1244,
                 'field_3_2' => null,
                 'field_3_3' => false,
             ]

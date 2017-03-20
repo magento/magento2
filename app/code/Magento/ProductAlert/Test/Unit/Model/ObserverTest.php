@@ -246,7 +246,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
         $items = [
             new \Magento\Framework\DataObject([
-                'customer_id' => '42'
+                'customer_id' => 42
             ])
         ];
 
@@ -343,7 +343,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->stockColFactoryMock->expects($this->once())->method('addStatusFilter')->willReturnSelf();
         $items = [
             new \Magento\Framework\DataObject([
-                'customer_id' => '42'
+                'customer_id' => 42
             ])
         ];
 
@@ -380,7 +380,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->stockColFactoryMock->expects($this->once())->method('addStatusFilter')->willReturnSelf();
         $items = [
             new \Magento\Framework\DataObject([
-                'customer_id' => '42'
+                'customer_id' => 42
             ])
         ];
 

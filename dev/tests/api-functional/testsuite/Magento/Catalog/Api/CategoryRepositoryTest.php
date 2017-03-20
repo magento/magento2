@@ -181,11 +181,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function getSimpleCategoryData($categoryData = [])
     {
         return [
-            'parent_id' => '2',
+            'parent_id' => 2,
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
-            'is_active' => '1',
-            'include_in_menu' => '1',
+            'is_active' => 1,
+            'include_in_menu' => 1,
             'available_sort_by' => ['position', 'name'],
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
@@ -195,9 +195,9 @@ class CategoryRepositoryTest extends WebapiAbstract
                 ['attribute_code' => 'meta_description', 'value' => ''],
                 ['attribute_code' => 'display_mode', 'value' => 'PRODUCTS'],
                 ['attribute_code' => 'landing_page', 'value' => ''],
-                ['attribute_code' => 'is_anchor', 'value' => '0'],
-                ['attribute_code' => 'custom_use_parent_settings', 'value' => '0'],
-                ['attribute_code' => 'custom_apply_to_products', 'value' => '0'],
+                ['attribute_code' => 'is_anchor', 'value' => 0],
+                ['attribute_code' => 'custom_use_parent_settings', 'value' => 0],
+                ['attribute_code' => 'custom_apply_to_products', 'value' => 0],
                 ['attribute_code' => 'custom_design', 'value' => ''],
                 ['attribute_code' => 'custom_design_from', 'value' => ''],
                 ['attribute_code' => 'custom_design_to', 'value' => ''],

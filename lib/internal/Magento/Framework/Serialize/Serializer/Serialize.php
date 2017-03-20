@@ -17,7 +17,7 @@ class Serialize implements SerializerInterface
     /**
      * {@inheritDoc}
      */
-    public function serialize($data)
+    public function serialize($data, $options = [])
     {
         return serialize($data);
     }

@@ -294,8 +294,8 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
             ],
             'yymmdd to yyyy-mm-dd' => [
                 [
-                    'from_date' => '20160324',
-                    'to_date' => '20160325',
+                    'from_date' => 20160324,
+                    'to_date' => 20160325,
                     'expected_from_date' => '2016-03-24T00:00:00-0700',
                     'expected_to_date' => '2016-03-25T00:00:00-0700',
                 ]

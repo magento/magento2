@@ -35,26 +35,26 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
         $this->processor = new FieldsFilter($this->requestMock);
         $this->sampleResponseValue = [
             'customer' => [
-                    'id' => '1',
-                    'website_id' => '0',
+                    'id' => 1,
+                    'website_id' => 0,
                     'created_in' => 'Default Store View',
-                    'store_id' => '1',
-                    'group_id' => '1',
+                    'store_id' => 1,
+                    'group_id' => 1,
                     'custom_attributes' => [
                             0 => [
                                     'attribute_code' => 'disable_auto_group_change',
-                                    'value' => '0',
+                                    'value' => 0,
                                 ],
                         ],
                     'firstname' => 'Jane',
                     'lastname' => 'Doe',
                     'email' => 'jdoe@example.com',
-                    'default_billing' => '1',
-                    'default_shipping' => '1',
+                    'default_billing' => 1,
+                    'default_shipping' => 1,
                     'created_at' => '2014-05-27 18:59:43',
                     'dob' => '1983-05-26 00:00:00',
-                    'taxvat' => '1212121212',
-                    'gender' => '1',
+                    'taxvat' => 1212121212,
+                    'gender' => 1,
                 ],
             'addresses' => [
                     0 => [
@@ -70,12 +70,12 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                                     'region_id' => 57,
                                     'region_code' => 'TX',
                                 ],
-                            'postcode' => '78728',
-                            'telephone' => '1111111111',
+                            'postcode' => 78728,
+                            'telephone' => 1111111111,
                             'default_billing' => true,
                             'default_shipping' => true,
-                            'id' => '1',
-                            'customer_id' => '1',
+                            'id' => 1,
+                            'customer_id' => 1,
                         ],
                     1 => [
                             'firstname' => 'Jane',
@@ -90,12 +90,12 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                                     'region_id' => 23,
                                     'region_code' => 'CA',
                                 ],
-                            'postcode' => '98454',
-                            'telephone' => '2222222222',
+                            'postcode' => 98454,
+                            'telephone' => 2222222222,
                             'default_billing' => true,
                             'default_shipping' => true,
-                            'id' => '2',
-                            'customer_id' => '1',
+                            'id' => 2,
+                            'customer_id' => 1,
                         ],
                 ],
         ];
@@ -133,7 +133,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
     {
         $expected = [
             'customer' => [
-                    'id' => '1',
+                    'id' => 1,
                     'email' => 'jdoe@example.com',
                 ],
             'addresses' => [
@@ -143,7 +143,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                                     'region' => 'Texas',
                                     'region_code' => 'TX',
                                 ],
-                            'postcode' => '78728',
+                            'postcode' => 78728,
                         ],
                     1 => [
                             'city' => 'San Jose',
@@ -151,7 +151,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                                     'region' => 'California',
                                     'region_code' => 'CA',
                                 ],
-                            'postcode' => '98454',
+                            'postcode' => 98454,
                         ],
                 ],
         ];
@@ -169,7 +169,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
         //TODO : Make sure if this behavior is acceptable
         $expected = [
             'customer' => [
-                    'id' => '1',
+                    'id' => 1,
                     'email' => 'jdoe@example.com',
                 ],
             'addresses' => [
@@ -179,7 +179,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                                     'region' => 'Texas',
                                     'region_code' => 'TX',
                                 ],
-                            'postcode' => '78728',
+                            'postcode' => 78728,
                         ],
                     1 => [
                             //'city' => 'San Jose',
@@ -187,7 +187,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                                     'region' => 'California',
                                     'region_code' => 'CA',
                                 ],
-                            'postcode' => '98454',
+                            'postcode' => 98454,
                         ],
                 ],
         ];

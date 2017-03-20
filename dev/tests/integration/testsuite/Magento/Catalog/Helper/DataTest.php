@@ -311,7 +311,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '0',
+                        'value' => 0,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -325,7 +325,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '0',
+                        'value' => 0,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -339,7 +339,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '0',
+                        'value' => 0,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -347,7 +347,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                 ],
                 'HigherProductClass',
@@ -358,7 +358,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -372,7 +372,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -388,7 +388,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -402,7 +402,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -417,7 +417,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
@@ -425,7 +425,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         'path' => Config::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
-                        'value' => '1',
+                        'value' => 1,
                     ],
                 ],
                 'HigherProductClass',

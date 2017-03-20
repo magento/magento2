@@ -6,7 +6,7 @@
 $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
 /** @var $website \Magento\Store\Model\Website */
 if (!$website->load('test', 'code')->getId()) {
-    $website->setData(['code' => 'test', 'name' => 'Test Website', 'default_group_id' => '1', 'is_default' => '0']);
+    $website->setData(['code' => 'test', 'name' => 'Test Website', 'default_group_id' => 1, 'is_default' => 0]);
     $website->save();
 }
 $websiteId = $website->getId();

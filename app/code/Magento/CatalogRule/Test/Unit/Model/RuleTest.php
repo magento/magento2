@@ -201,13 +201,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $args['attributes'] = [];
         $args['idx'] = 0;
         $args['row'] = [
-            'entity_id' => '1',
-            'entity_type_id' => '4',
-            'attribute_set_id' => '4',
+            'entity_id' => 1,
+            'entity_type_id' => 4,
+            'attribute_set_id' => 4,
             'type_id' => 'simple',
             'sku' => 'Product',
-            'has_options' => '0',
-            'required_options' => '0',
+            'has_options' => 0,
+            'required_options' => 0,
             'created_at' => '2014-06-25 13:14:30',
             'updated_at' => '2014-06-25 14:37:15'
         ];
@@ -279,7 +279,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'simple_action' => 'by_fixed',
-                    'discount_amount' => '123',
+                    'discount_amount' => 123,
                 ],
                 true
             ],
@@ -320,7 +320,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'simple_action' => 'invalid action',
-                    'discount_amount' => '12',
+                    'discount_amount' => 12,
                 ],
                 [
                     'Unknown action.',

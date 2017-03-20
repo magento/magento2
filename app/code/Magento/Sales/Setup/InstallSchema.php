@@ -771,7 +771,7 @@ class InstallSchema implements InstallSchemaInterface
             'total_item_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Total Item Count'
         )->addColumn(
             'customer_gender',
@@ -1303,7 +1303,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_visible_on_front',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Is Visible On Front'
         )->addColumn(
             'comment',
@@ -1362,7 +1362,7 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Order Id'
         )->addColumn(
             'parent_item_id',
@@ -1464,7 +1464,7 @@ class InstallSchema implements InstallSchemaInterface
             'no_discount',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'No Discount'
         )->addColumn(
             'qty_backordered',
@@ -2706,7 +2706,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_visible_on_front',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Is Visible On Front'
         )->addColumn(
             'comment',
@@ -3488,7 +3488,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_visible_on_front',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Is Visible On Front'
         )->addColumn(
             'comment',
@@ -4297,7 +4297,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_visible_on_front',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Is Visible On Front'
         )->addColumn(
             'comment',
@@ -4361,7 +4361,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'orders_invoiced',
@@ -4442,7 +4442,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'orders_invoiced',
@@ -4523,7 +4523,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'total_qty_ordered',
@@ -4665,13 +4665,13 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Order Id'
         )->addColumn(
             'payment_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Payment Id'
         )->addColumn(
             'txn_id',
@@ -4695,7 +4695,7 @@ class InstallSchema implements InstallSchemaInterface
             'is_closed',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '1'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 1],
             'Is Closed'
         )->addColumn(
             'additional_information',
@@ -4784,7 +4784,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'refunded',
@@ -4859,7 +4859,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'refunded',
@@ -4940,7 +4940,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'total_shipping',
@@ -5015,7 +5015,7 @@ class InstallSchema implements InstallSchemaInterface
             'orders_count',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'default' => '0'],
+            ['nullable' => false, 'default' => 0],
             'Orders Count'
         )->addColumn(
             'total_shipping',
@@ -5102,7 +5102,7 @@ class InstallSchema implements InstallSchemaInterface
             'rating_pos',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Rating Pos'
         )->addIndex(
             $installer->getIdxName(
@@ -5180,7 +5180,7 @@ class InstallSchema implements InstallSchemaInterface
             'rating_pos',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Rating Pos'
         )->addIndex(
             $installer->getIdxName(
@@ -5258,7 +5258,7 @@ class InstallSchema implements InstallSchemaInterface
             'rating_pos',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Rating Pos'
         )->addIndex(
             $installer->getIdxName(
@@ -5506,13 +5506,13 @@ class InstallSchema implements InstallSchemaInterface
             'is_default',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Is Default'
         )->addColumn(
             'visible_on_front',
             \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             1,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            ['unsigned' => true, 'nullable' => false, 'default' => 0],
             'Visible on front'
         )->addForeignKey(
             $installer->getFkName('sales_order_status_state', 'status', 'sales_order_status', 'status'),

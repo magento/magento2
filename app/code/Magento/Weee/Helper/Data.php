@@ -373,7 +373,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (empty($data)) {
             return [];
         }
-        return \Zend_Json::decode($item->getWeeeTaxApplied());
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+
+        return $serializer->unserialize($item->getWeeeTaxApplied());
     }
 
     /**
@@ -385,7 +387,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function setApplied($item, $value)
     {
-        $item->setWeeeTaxApplied(\Zend_Json::encode($value));
+        $serializer = new \Magento\Framework\Serialize\Serializer\Json;
+        $item->setWeeeTaxApplied($serializer->serialize($data));
         return $this;
     }
 

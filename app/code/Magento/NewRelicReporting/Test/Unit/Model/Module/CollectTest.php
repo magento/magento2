@@ -110,19 +110,19 @@ class CollectTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $testChangesMockArray = [
-            ['entity' => '3',
+            ['entity' => 3,
             'name' => 'Name',
             'active' => 'true',
             'state' => 'enabled',
             'setup_version' => '2.0.0',
             'updated_at' => '2015-09-02 18:38:17'],
-            ['entity' => '4',
+            ['entity' => 4,
              'name' => 'Name',
              'active' => 'true',
              'state' => 'disabled',
              'setup_version' => '2.0.0',
              'updated_at' => '2015-09-02 18:38:17'],
-            ['entity' => '5',
+            ['entity' => 5,
              'name' => 'Name',
              'active' => 'true',
              'state' => 'uninstalled',
@@ -207,7 +207,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
         ];
         $itemMock->setData($data);
         $testChangesMockArray = [
-            'entity_id' => '3',
+            'entity_id' => 3,
             'name' => 'Name',
             'active' => 'true',
             'state' => 'uninstalled',
@@ -303,7 +303,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
         ];
         $itemMock->setData($data);
         $testChangesMockArray = [
-            'entity_id' => '3',
+            'entity_id' => 3,
             'name' => 'Name',
             'active' => 'false',
             'state' => 'enabled',
@@ -375,7 +375,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'entity_id' => '1',
+                    'entity_id' => 1,
                     'name' => 'Module_Name1',
                     'active' => 'true',
                     'state' => 'enabled',
@@ -384,7 +384,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'entity_id' => '2',
+                    'entity_id' => 2,
                     'name' => 'Module_Name2',
                     'active' => 'true',
                     'state' => 'disabled',
@@ -393,7 +393,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'entity_id' => '2',
+                    'entity_id' => 2,
                     'name' => 'Module_Name2',
                     'active' => 'true',
                     'state' => 'uninstalled',

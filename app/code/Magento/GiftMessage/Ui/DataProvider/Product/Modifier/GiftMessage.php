@@ -134,8 +134,8 @@ class GiftMessage extends AbstractModifier
                                     'componentType' => Field::NAME,
                                     'prefer' => 'toggle',
                                     'valueMap' => [
-                                        'false' => '0',
-                                        'true' => '1',
+                                        'false' => 0,
+                                        'true' => 1,
                                     ],
                                 ],
                             ],
@@ -151,8 +151,8 @@ class GiftMessage extends AbstractModifier
                                     'description' => __('Use Config Settings'),
                                     'dataScope' => 'use_config_' . static::FIELD_MESSAGE_AVAILABLE,
                                     'valueMap' => [
-                                        'false' => '0',
-                                        'true' => '1',
+                                        'false' => 0,
+                                        'true' => 1,
                                     ],
                                     'exports' => [
                                         'checked' => '${$.parentName}.' . static::FIELD_MESSAGE_AVAILABLE

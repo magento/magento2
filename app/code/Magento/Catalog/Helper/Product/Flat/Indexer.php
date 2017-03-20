@@ -194,7 +194,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                 'length' => 1,
                 'unsigned' => true,
                 'nullable' => false,
-                'default' => '0',
+                'default' => 0,
                 'comment' => 'Checks If Entity Is Child',
             ];
         }
@@ -203,7 +203,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             'length' => 5,
             'unsigned' => true,
             'nullable' => false,
-            'default' => '0',
+            'default' => 0,
             'comment' => 'Attribute Set ID',
         ];
         $columns['type_id'] = [

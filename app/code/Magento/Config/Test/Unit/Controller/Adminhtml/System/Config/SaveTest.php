@@ -129,8 +129,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $configStructureMock->expects($this->any())->method('getElement')->willReturn($this->_sectionMock);
         $configStructureMock->expects($this->any())->method('getSectionList')->willReturn(
             [
-                'some_key_0' => '0',
-                'some_key_1' => '1'
+                'some_key_0' => 0,
+                'some_key_1' => 1
             ]
         );
 
@@ -230,12 +230,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_sectionCheckerMock->expects($this->any())->method('isSectionAllowed')->will($this->returnValue(false));
         $inputData = [
             'some_key'   => 'some_value',
-            'some_key_0' => '0',
+            'some_key_0' => 0,
             'some_key_1' => 'some_value_1',
         ];
         $extraData = [
-            'some_key_0' => '0',
-            'some_key_1' => '1',
+            'some_key_0' => 0,
+            'some_key_1' => 1,
         ];
 
         $userMock = $this->getMock(\Magento\User\Model\User::class, [], [], '', false, false);
