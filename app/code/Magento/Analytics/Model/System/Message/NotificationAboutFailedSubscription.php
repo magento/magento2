@@ -41,7 +41,7 @@ class NotificationAboutFailedSubscription implements MessageInterface
      */
     public function getIdentity()
     {
-        return md5('ANALYTICS_NOTIFICATION');
+        return hash('sha256', 'ANALYTICS_NOTIFICATION');
     }
 
     /**
