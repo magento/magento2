@@ -22,6 +22,7 @@
     <rule scope="variation">
         <deny>
             <tag group="test_type" value="3rd_party_test" />
+            <tag group="test_type" value="3rd_party_test_single_flow" />
             <tag group="stable" value="no" />
             <tag group="to_maintain" value="yes" />
         </deny>
