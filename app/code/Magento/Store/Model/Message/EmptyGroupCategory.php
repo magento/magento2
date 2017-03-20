@@ -79,9 +79,11 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
             $groupUrl = $this->urlBuilder->getUrl('adminhtml/system_store/editGroup', ['group_id' => $group->getId()]);
             $groupLinks[] = sprintf('<a href="%s">%s</a>', $groupUrl, $group->getName());
         }
-        return __('The following stores are not associated with a root category: '
+        return __(
+            'The following stores are not associated with a root category: '
             . implode(' ,', $groupLinks) . '. For the store to be displayed in the storefront, '
-            . 'it must be associated with a root category.');
+            . 'it must be associated with a root category.'
+        );
     }
 
     /**
