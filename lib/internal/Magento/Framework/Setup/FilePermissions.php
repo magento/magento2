@@ -141,6 +141,7 @@ class FilePermissions
      */
     private function checkRecursiveDirectories($directory)
     {
+        /** @var $directoryIterator \RecursiveIteratorIterator   */
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
@@ -158,6 +159,8 @@ class FilePermissions
                 $this->directoryList->getPath(DirectoryList::SESSION) . '/',
             ]
         );
+
+        $directoryIterator->setMaxDepth(1);
 
         $foundNonWritable = false;
 
