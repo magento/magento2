@@ -24,6 +24,8 @@ class AssertDisableReportingInPopup extends AbstractConstraint
         $dashboard->open();
         $dashboard->getSubscriptionBlock()->enableCheckbox();
         $dashboard->getSubscriptionBlock()->declineAdvancedReporting();
+        $dashboard->getModalBlock()->dismissWarning();
+        $dashboard->getSubscriptionBlock()->declineAdvancedReporting();
         \PHPUnit_Framework_Assert::assertFalse(
             $dashboard->getSubscriptionBlock()->isVisible(),
             'Advanced Reporting was not disabled'
