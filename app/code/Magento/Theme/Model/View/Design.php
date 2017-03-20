@@ -76,7 +76,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $localeResolver;
+    private $localeResolver;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

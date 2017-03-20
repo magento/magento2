@@ -234,7 +234,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * @var \Magento\Framework\Locale\FormatInterface $localeFormat
      */
-    protected $localeFormat;
+    private $localeFormat;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
