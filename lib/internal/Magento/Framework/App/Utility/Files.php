@@ -407,7 +407,7 @@ class Files
         $excludedFileNames = [],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . json_encode('|', [$fileNamePattern, $excludedFileNames, $asDataSet]);
+        $cacheKey = __METHOD__ . '|' . json_encode([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->getFilesSubset(
                 $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
