@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Observer;
+namespace Magento\Signifyd\Plugin;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -58,13 +58,14 @@ class CancelOrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks a test case, when order has been cancelled and triggers event to cancel Signifyd case guarantee
+     * Checks a test case, when order has been cancelled
+     * and calls plugin to cancel Signifyd case guarantee.
      *
-     * @covers \Magento\Signifyd\Observer\CancelOrder::execute
+     * @covers \Magento\Signifyd\Plugin\OrderPlugin::afterCancel
      * @magentoDataFixture Magento/Signifyd/_files/approved_case.php
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      */
-    public function testExecute()
+    public function testAfterCancel()
     {
         $order = $this->getOrder();
 
@@ -93,7 +94,8 @@ class CancelOrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get stored order
+     * Get stored order.
+     *
      * @return OrderInterface
      */
     private function getOrder()
