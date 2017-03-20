@@ -75,20 +75,32 @@ class Validator
             }
             $text = $template->getTemplateText();
             $template->revertDesign();
-            // Check if template body has a reference to the same config path
-            if (preg_match_all(Template::CONSTRUCTION_TEMPLATE_PATTERN, $text, $constructions, PREG_SET_ORDER)) {
-                foreach ($constructions as $construction) {
-                    $configPath = isset($construction[2]) ? $construction[2] : '';
-                    $params = $this->getParameters($configPath);
-                    if (isset($params['config_path']) && $params['config_path'] == $data['config_path']) {
-                        throw new LocalizedException(
-                            __(
-                                "The %templateName contains an incorrect configuration. The template has " .
-                                "a reference to itself. Either remove or change the reference.",
-                                ["templateName" => $name]
-                            )
-                        );
-                    };
+            $this->checkTemplateConfiguration($data, $text, $name);
+        }
+    }
+    
+    /**
+     * Check if template body has a reference to the same config path
+     * 
+     * @param array $data
+     * @param string $text
+     * @param string $name
+     * @throws LocalizedException
+     */
+    private function checkTemplateConfiguration($data, $text, $name)
+    {
+        if (preg_match_all(Template::CONSTRUCTION_TEMPLATE_PATTERN, $text, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+                $configPath = isset($construction[2]) ? $construction[2] : '';
+                $params = $this->getParameters($configPath);
+                if (isset($params['config_path']) && $params['config_path'] == $data['config_path']) {
+                    throw new LocalizedException(
+                        __(
+                            "The %templateName contains an incorrect configuration. The template has " .
+                            "a reference to itself. Either remove or change the reference.",
+                            ["templateName" => $name]
+                        )
+                    );
                 }
             }
         }
