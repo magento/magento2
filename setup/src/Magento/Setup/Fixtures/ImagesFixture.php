@@ -28,6 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * because it can take pretty much time
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImagesFixture extends Fixture
 {
@@ -214,6 +215,8 @@ class ImagesFixture extends Fixture
 
     /**
      * Create image file and add it to media gallery table in DB
+     *
+     * @return void
      */
     private function createImageEntities()
     {
@@ -271,6 +274,7 @@ class ImagesFixture extends Fixture
     /**
      * Assign created images to products according to Y images per each product
      *
+     * @return void
      * @throws \Exception
      */
     private function assignImagesToProducts()
@@ -473,7 +477,7 @@ class ImagesFixture extends Fixture
     /**
      * Get eav attribute id by its code
      *
-     * @param $attributeCode
+     * @param string $attributeCode
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */

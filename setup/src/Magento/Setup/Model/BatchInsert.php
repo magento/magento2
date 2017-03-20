@@ -62,6 +62,7 @@ class BatchInsert
      * when storage size becomes equal to $batchSize
      *
      * @param array $dataToInsert
+     * @return void
      */
     public function insert(array $dataToInsert)
     {
@@ -75,6 +76,8 @@ class BatchInsert
 
     /**
      * Insert all data form $dataStorage to DB and clear $dataStorage
+     *
+     * @return void
      */
     public function flush()
     {
