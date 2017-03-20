@@ -399,4 +399,19 @@
             <argument name="runtimeConfigSource" xsi:type="object">Magento\Store\App\Config\Source\RuntimeConfigSource</argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="environment" xsi:type="array">
+                <item name="web/default/front" xsi:type="string">1</item>
+                <item name="web/secure/base_link_url" xsi:type="string">1</item>
+                <item name="web/secure/base_media_url" xsi:type="string">1</item>
+                <item name="web/secure/base_static_url" xsi:type="string">1</item>
+                <item name="web/secure/base_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_link_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_media_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_static_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_url" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
