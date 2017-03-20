@@ -58,7 +58,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test build() method
-     * 
+     *
      * @param string $locale
      * @dataProvider buildDataProvider
      */

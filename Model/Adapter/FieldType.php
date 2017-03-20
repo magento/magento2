@@ -35,8 +35,7 @@ class FieldType
 
         if (in_array($backendType, ['timestamp', 'datetime'], true)) {
             $fieldType = self::ES_DATA_TYPE_DATE;
-        } elseif (
-            (in_array($backendType, ['int', 'smallint'], true)
+        } elseif ((in_array($backendType, ['int', 'smallint'], true)
             || (in_array($frontendInput, ['select', 'boolean'], true) && $backendType !== 'varchar'))
             && !$attribute->getIsUserDefined()
         ) {
