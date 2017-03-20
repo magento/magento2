@@ -228,7 +228,7 @@ class CategoryProcessor
      * @param string $string
      * @return string
      */
-    protected function standardizeString(string $string)
+    protected function standardizeString($string)
     {
         if (function_exists('mb_strtolower')) {
             $string = mb_strtolower($string);
