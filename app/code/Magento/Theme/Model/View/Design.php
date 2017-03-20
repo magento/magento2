@@ -6,7 +6,7 @@
 
 namespace Magento\Theme\Model\View;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
