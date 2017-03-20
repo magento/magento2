@@ -21,6 +21,6 @@ phpenv rehash;
 test -n "$GITHUB_TOKEN" && composer config github-oauth.github.com "$GITHUB_TOKEN" || true
 
 # Setup Node Version Manager
-if [$TEST_SUITE == "js"]
+if [$TEST_SUITE == "js"]; then
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 fi
