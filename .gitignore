@@ -25,6 +25,10 @@ atlassian*
 /.grunt
 /Gruntfile.js
 /package.json
+/.php_cs
+/.php_cs.cache
+/grunt-config.json
+/dev/tools/grunt/configs/local-themes.js
 
 /pub/media/*.*
 !/pub/media/.htaccess
