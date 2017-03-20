@@ -8,10 +8,8 @@ namespace Magento\Config\Console\Command\ConfigSet;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
-use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Processor facade for config:set command.
@@ -21,7 +19,10 @@ use Magento\Framework\Exception\ValidatorException;
 class ProcessorFacade
 {
     /**
-     * The scope validator.
+     * The scope and scope code validator.
+     *
+     * Checks if scope and scope code exist, and scope code belongs to scope.
+     * For example, scope "websites" and scope code "base" exist, and scope code "base" belongs to scope "website".
      *
      * @var ValidatorInterface
      */
@@ -29,6 +30,8 @@ class ProcessorFacade
 
     /**
      * The path validator.
+     *
+     * Checks whether the config path present in configuration structure.
      *
      * @var PathValidator
      */
@@ -65,26 +68,27 @@ class ProcessorFacade
      * @param string $scopeCode The scope code
      * @param boolean $lock The lock flag
      * @return string Processor response message
-     * @throws LocalizedException If scope validation failed
-     * @throws ValidatorException If path validation failed
-     * @throws CouldNotSaveException If processing failed
-     * @throws ConfigurationMismatchException If processor can not be instantiated
+     * @throws RuntimeException If some validation is wrong or cannot save config value
      */
     public function process($path, $value, $scope, $scopeCode, $lock)
     {
-        $this->scopeValidator->isValid($scope, $scopeCode);
-        $this->pathValidator->validate($path);
+        try {
+            $this->scopeValidator->isValid($scope, $scopeCode);
+            $this->pathValidator->validate($path);
 
-        $processor = $lock
-            ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-            : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-        $message = $lock
-            ? 'Value was saved and locked.'
-            : 'Value was saved.';
+            $processor = $lock
+                ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
+                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
+            $message = $lock
+                ? 'Value was saved and locked.'
+                : 'Value was saved.';
 
-        // The processing flow depends on --lock option.
-        $processor->process($path, $value, $scope, $scopeCode);
+            // The processing flow depends on --lock option.
+            $processor->process($path, $value, $scope, $scopeCode);
 
-        return $message;
+            return $message;
+        } catch (LocalizedException $exception) {
+            throw new RuntimeException(__($exception->getMessage()), $exception);
+        }
     }
 }

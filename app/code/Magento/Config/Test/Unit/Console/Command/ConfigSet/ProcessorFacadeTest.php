@@ -11,6 +11,7 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -89,6 +90,19 @@ class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
             'Value was saved.',
             $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false)
         );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Some error
+     */
+    public function testProcessWithException()
+    {
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willThrowException(new LocalizedException(__('Some error')));
+
+        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
     }
 
     public function testExecuteLock()
