@@ -68,13 +68,6 @@ class Webhooks extends Block
     private $webhookDeleteButton = '[class*="webhook-delete"]';
 
     /**
-     * Css selector of popup block for delete webhook confirmation.
-     *
-     * @var string
-     */
-    private $webhookDeleteConfirmOverlay = '[class="appriseOuter"]';
-
-    /**
      * Css selector of confirming button for deleting webhook.
      *
      * @var string
@@ -96,7 +89,7 @@ class Webhooks extends Block
                 continue;
             }
 
-            $this->addWebhook($handlerUrl, $webhookEventCode, $webhookEventName, $team);
+            $this->addWebhook($handlerUrl, $webhookEventCode, $team);
         }
     }
 
@@ -135,9 +128,6 @@ class Webhooks extends Block
     /**
      * Delete webhook element with confirmation popup.
      *
-     * Signifyd creates the same popup every time Selenium click on delete button,
-     * so we need to wait that previous popup will be closed.
-     *
      * @param ElementInterface $webhook
      * @return void
      */
@@ -145,13 +135,6 @@ class Webhooks extends Block
     {
         $webhook->find($this->webhookDeleteButton)->click();
         $this->_rootElement->find($this->webhookDeleteConfirmButton)->click();
-
-        $this->_rootElement->waitUntil(
-            function () {
-                return $this->_rootElement->find($this->webhookDeleteConfirmOverlay)
-                    ->isPresent() ? null : true;
-            }
-        );
     }
 
     /**
@@ -159,20 +142,18 @@ class Webhooks extends Block
      *
      * @param string $handlerUrl
      * @param string $webhookEventCode
-     * @param string $webhookEventName
      * @param string $team
      * @return void
      */
     private function addWebhook(
         $handlerUrl,
         $webhookEventCode,
-        $webhookEventName,
         $team
     ) {
         $this->setEvent($webhookEventCode);
         $this->setTeam($team);
         $this->setUrl($handlerUrl);
-        $this->submit($webhookEventName, $handlerUrl);
+        $this->submit();
     }
 
     /**
@@ -216,25 +197,11 @@ class Webhooks extends Block
     /**
      * Add webhook element.
      *
-     * Selenium needs to wait until webhook will be added to grid
-     * before proceed to next step.
-     *
-     * @param string $webhookEventName
-     * @param string $handlerUrl
      * @return void
      */
-    private function submit($webhookEventName, $handlerUrl)
+    private function submit()
     {
         $this->_rootElement->find($this->webhookAddButton)->click();
-
-        $this->_rootElement->waitUntil(
-            function () use ($webhookEventName, $handlerUrl) {
-                return $this->_rootElement->find(
-                    sprintf($this->webhookAddedElement, $handlerUrl, $webhookEventName),
-                    Locator::SELECTOR_XPATH
-                )->isPresent() ? true : null;
-            }
-        );
     }
 
     /**
