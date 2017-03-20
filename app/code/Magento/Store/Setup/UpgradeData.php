@@ -30,6 +30,7 @@ class UpgradeData implements UpgradeDataInterface
      * Update column 'code' in store_group table.
      *
      * @param ModuleDataSetupInterface $setup
+     * @return void
      */
     private function updateStoreGroupCodes($setup)
     {

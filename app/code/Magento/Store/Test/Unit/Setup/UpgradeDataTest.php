@@ -90,12 +90,12 @@ class UpgradeDataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($groupList);
 
         $i = 2;
-        foreach ($groupList as $groupId => $groupName) {
+        foreach ($expectedCodes as $groupId => $code) {
             $this->connectionMock->expects($this->at($i++))
                 ->method('update')
                 ->with(
                     $tableName,
-                    ['code' => $expectedCodes[$groupId]],
+                    ['code' => $code],
                     ['group_id = ?' => $groupId]
                 );
         }
