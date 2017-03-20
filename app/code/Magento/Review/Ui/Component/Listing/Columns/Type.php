@@ -9,6 +9,8 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Type
+ *
+ * @api
  */
 class Type extends Column
 {

@@ -7,7 +7,7 @@
 /**
  * ImportExport MySQL resource helper model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 namespace Magento\ImportExport\Model\ResourceModel;
 
