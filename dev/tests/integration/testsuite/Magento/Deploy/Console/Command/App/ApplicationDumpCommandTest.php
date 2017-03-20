@@ -92,16 +92,39 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                 'arguments' => [
                     'configs' => [
                         'web/test/test_value_1' => '',
-                        'web/test/test_value_2' => '',
+                        'web/test/test_value_2' => '0',
                         'web/test/test_sensitive' => '1',
                     ],
                 ],
             ],
+            \Magento\Config\Model\Config\TypePool::class => [
+                'arguments' => [
+                    'sensitive' => [
+                        'web/test/test_sensitive1' => '',
+                        'web/test/test_sensitive2' => '0',
+                        'web/test/test_sensitive3' => '1',
+                        'web/test/test_sensitive_environment4' => '1',
+                        'web/test/test_sensitive_environment5' => '1',
+                        'web/test/test_sensitive_environment6' => '0',
+                    ],
+                    'environment' => [
+                        'web/test/test_sensitive_environment4' => '1',
+                        'web/test/test_sensitive_environment5' => '0',
+                        'web/test/test_sensitive_environment6' => '1',
+                        'web/test/test_environment7' => '',
+                        'web/test/test_environment8' => '0',
+                        'web/test/test_environment9' => '1',
+                    ],
+                ]
+            ]
         ]);
 
         $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
             . 'Sensitive data can be stored in the following environment variables:'
-            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive";
+            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive"
+            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE3 for web/test/test_sensitive3"
+            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT4 for web/test/test_sensitive_environment4"
+            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5";
         $outputMock = $this->getMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
@@ -129,18 +152,18 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function validateSystemSection(array $config)
     {
-        $this->assertArrayHasKey(
-            'test_value_1',
-            $config['system']['default']['web']['test']
-        );
-        $this->assertArrayHasKey(
-            'test_value_2',
-            $config['system']['default']['web']['test']
-        );
-        $this->assertArrayNotHasKey(
-            'test_sensitive',
-            $config['system']['default']['web']['test']
-        );
+        $this->assertArrayHasKey('test_value_1', $config['system']['default']['web']['test']);
+        $this->assertArrayHasKey('test_value_2', $config['system']['default']['web']['test']);
+        $this->assertArrayHasKey('test_sensitive1', $config['system']['default']['web']['test']);
+        $this->assertArrayHasKey('test_sensitive2', $config['system']['default']['web']['test']);
+        $this->assertArrayHasKey('test_environment7', $config['system']['default']['web']['test']);
+        $this->assertArrayHasKey('test_environment8', $config['system']['default']['web']['test']);
+        $this->assertArrayNotHasKey('test_sensitive', $config['system']['default']['web']['test']);
+        $this->assertArrayNotHasKey('test_sensitive3', $config['system']['default']['web']['test']);
+        $this->assertArrayNotHasKey('test_sensitive_environment4', $config['system']['default']['web']['test']);
+        $this->assertArrayNotHasKey('test_sensitive_environment5', $config['system']['default']['web']['test']);
+        $this->assertArrayNotHasKey('test_sensitive_environment6', $config['system']['default']['web']['test']);
+        $this->assertArrayNotHasKey('test_environment9', $config['system']['default']['web']['test']);
     }
 
     /**
