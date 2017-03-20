@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,7 +49,6 @@ class ReadRow
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-        $metadata = $this->metadataPool->getMetadata($entityType);
         $select = $connection->select()
             ->from(['t' => $metadata->getEntityTable()])
             ->where($metadata->getIdentifierField() . ' = ?', $identifier);

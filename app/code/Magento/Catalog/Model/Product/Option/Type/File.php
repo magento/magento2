@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog product option file type
@@ -70,16 +73,28 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $validatorFile;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
-     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param File\ValidatorInfo $validatorInfo
      * @param File\ValidatorFile $validatorFile
+     * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
+     * @param \Magento\Framework\Escaper $escaper
      * @param array $data
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @param Filesystem $filesystem
+     * @param Json|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -90,14 +105,19 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
         \Magento\Framework\Escaper $escaper,
-        array $data = []
+        array $data = [],
+        Filesystem $filesystem = null,
+        Json $serializer = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
         $this->_escaper = $escaper;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
+        $this->filesystem = $filesystem ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Filesystem::class);
+        $this->_rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
+        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(Json::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -265,7 +285,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             // Save option in request, because we have no $_FILES['options']
             $requestOptions[$this->getOption()->getId()] = $value;
-            $result = serialize($value);
+            $result = $this->serializer->serialize($value);
         } else {
             /*
              * Clear option info from request, so it won't be stored in our db upon
@@ -296,7 +316,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         if ($this->_formattedOptionValue === null) {
             try {
-                $value = unserialize($optionValue);
+                $value = $this->serializer->unserialize($optionValue);
 
                 $customOptionUrlParams = $this->getCustomOptionUrlParams() ? $this->getCustomOptionUrlParams() : [
                     'id' => $this->getConfigurationItemOption()->getId(),
@@ -306,7 +326,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $value['url'] = ['route' => $this->_customOptionDownloadUrl, 'params' => $customOptionUrlParams];
 
                 $this->_formattedOptionValue = $this->_getOptionHtml($value);
-                $this->getConfigurationItemOption()->setValue(serialize($value));
+                $this->getConfigurationItemOption()->setValue($this->serializer->serialize($value));
                 return $this->_formattedOptionValue;
             } catch (\Exception $e) {
                 return $optionValue;
@@ -354,7 +374,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if (is_array($value)) {
             return $value;
         } elseif (is_string($value) && !empty($value)) {
-            return unserialize($value);
+            return $this->serializer->unserialize($value);
         } else {
             return [];
         }
@@ -376,11 +396,13 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
+     *
+     * @deprecated
      */
     public function getEditableOptionValue($optionValue)
     {
         try {
-            $value = unserialize($optionValue);
+            $value = $this->serializer->unserialize($optionValue);
             return sprintf(
                 '%s [%d]',
                 $this->_escaper->escapeHtml($value['title']),
@@ -399,6 +421,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @return string|null
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @deprecated
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -407,7 +431,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $confItemOptionId = $matches[1];
             $option = $this->_itemOptionFactory->create()->load($confItemOptionId);
             try {
-                unserialize($option->getValue());
+                $this->serializer->unserialize($option->getValue());
                 return $option->getValue();
             } catch (\Exception $e) {
                 return null;
@@ -426,7 +450,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareOptionValueForRequest($optionValue)
     {
         try {
-            $result = unserialize($optionValue);
+            $result = $this->serializer->unserialize($optionValue);
             return $result;
         } catch (\Exception $e) {
             return null;
@@ -442,7 +466,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         $quoteOption = $this->getConfigurationItemOption();
         try {
-            $value = unserialize($quoteOption->getValue());
+            $value = $this->serializer->unserialize($quoteOption->getValue());
             if (!isset($value['quote_path'])) {
                 throw new \Exception();
             }

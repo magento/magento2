@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,6 +33,7 @@ class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
         $_COOKIE[self::NAME] = self::VALUE;
         $this->model = new PhpCookieReader();
     }
+
     public function testGetCookieExists()
     {
         $this->assertSame(self::VALUE, $this->model->getCookie(self::NAME, self::DEFAULT_VAL));

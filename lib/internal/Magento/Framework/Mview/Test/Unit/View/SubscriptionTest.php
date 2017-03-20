@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock->expects($this->any())
             ->method('getTableName')
-            ->willReturn($this->tableName);
+            ->will($this->returnArgument(0));
 
         $this->model = new Subscription(
             $this->resourceMock,
@@ -96,11 +96,15 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('columnName', $this->model->getColumnName());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreate()
     {
         $triggerName = 'trigger_name';
         $this->resourceMock->expects($this->atLeastOnce())->method('getTriggerName')->willReturn($triggerName);
         $triggerMock = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Trigger::class)
+            ->setMethods(['setName', 'getName', 'setTime', 'setEvent', 'setTable', 'addStatement'])
             ->disableOriginalConstructor()
             ->getMock();
         $triggerMock->expects($this->exactly(3))
@@ -121,8 +125,35 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->method('setTable')
             ->with($this->tableName)
             ->will($this->returnSelf());
-        $triggerMock->expects($this->exactly(6))
+
+        $triggerMock->expects($this->at(4))
             ->method('addStatement')
+            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->will($this->returnSelf());
+
+        $triggerMock->expects($this->at(5))
+            ->method('addStatement')
+            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->will($this->returnSelf());
+
+        $triggerMock->expects($this->at(11))
+            ->method('addStatement')
+            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->will($this->returnSelf());
+
+        $triggerMock->expects($this->at(12))
+            ->method('addStatement')
+            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")
+            ->will($this->returnSelf());
+
+        $triggerMock->expects($this->at(18))
+            ->method('addStatement')
+            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);")
+            ->will($this->returnSelf());
+
+        $triggerMock->expects($this->at(19))
+            ->method('addStatement')
+            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);")
             ->will($this->returnSelf());
 
         $changelogMock = $this->getMockForAbstractClass(

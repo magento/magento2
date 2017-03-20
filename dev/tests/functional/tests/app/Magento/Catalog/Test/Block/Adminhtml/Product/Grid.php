@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Backend catalog product grid.
@@ -72,12 +73,17 @@ class Grid extends DataGrid
     /**
      * Update attributes for selected items.
      *
-     * @param array $items [optional]
+     * @param array $items
      * @return void
      */
     public function updateAttributes(array $items = [])
     {
-        $this->massaction($items, 'Update attributes');
+        $products = [];
+        /** @var FixtureInterface $product */
+        foreach ($items as $product) {
+            $products[] = ["sku" => $product->getSku()];
+        }
+        $this->massaction($products, 'Update attributes');
     }
 
     /**

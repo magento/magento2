@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service;
@@ -104,7 +104,6 @@ class Gateway implements GatewayInterface
 
             $result->setData(array_change_key_case($responseArray, CASE_LOWER));
             $result->setData('result_code', $result->getData('result'));
-
         } catch (\Zend_Http_Client_Exception $e) {
             $result->addData(
                 [

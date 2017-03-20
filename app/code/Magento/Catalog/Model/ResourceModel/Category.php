@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -238,7 +238,9 @@ class Category extends AbstractResource
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
-
+        $object->setAttributeSetId(
+            $object->getAttributeSetId() ?: $this->getEntityType()->getDefaultAttributeSetId()
+        );
         if ($object->isObjectNew()) {
             if ($object->getPosition() === null) {
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);

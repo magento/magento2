@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Block;
@@ -60,12 +60,12 @@ class StoredPayments extends Block
         $result = [];
         $elements = $this->_rootElement->getElements('./tbody/tr', Locator::SELECTOR_XPATH);
         foreach ($elements as $row) {
-            $number = substr($row->find('./td[@data-th="Card Number"]', Locator::SELECTOR_XPATH)->getText(), -4, 4);
+            $card = substr($row->find('./td[@data-th="Card Number"]', Locator::SELECTOR_XPATH)->getText(), -4, 4);
             $deleteButton = $row->find(
-                "./td[text()[contains(.,'{$number}')]]/following-sibling::td[@data-th='Actions']//span[text()='Delete']",
+                "./td[text()[contains(.,'{$card}')]]/following-sibling::td[@data-th='Actions']//span[text()='Delete']",
                 Locator::SELECTOR_XPATH
             );
-            $result[$number] = $deleteButton;
+            $result[$card] = $deleteButton;
         }
         return $result;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Library;
@@ -27,13 +27,33 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected $errors = [];
 
     /**
-     * Forbidden base namespaces
+     * Allowed sub namespaces
      *
      * @return array
      */
-    protected function getForbiddenNamespaces()
+    protected function getAllowedNamespaces()
     {
-        return ['Magento'];
+        return [
+            'Framework',
+            'SomeModule',
+            'ModuleName',
+            'Setup\Console\CommandList',
+            'Setup\Console\CompilerPreparation',
+            'Setup\Model\ObjectManagerProvider',
+            'Setup\Mvc\Bootstrap\InitParamListener',
+            'Store\Model\ScopeInterface',
+            'Store\Model\StoreManagerInterface',
+            'Directory\Model\CurrencyFactory',
+            'PageCache\Model\Cache\Type',
+            'Backup\Model\ResourceModel\Db',
+            'Backend\Block\Widget\Button',
+            'Ui\Component\Container',
+            'SalesRule\Model\Rule',
+            'SalesRule\Api\Data\RuleInterface',
+            'SalesRule\Model\Rule\Interceptor',
+            'SalesRule\Model\Rule\Proxy',
+            'Theme\Model\View\Design'
+        ];
     }
 
     public function testCheckDependencies()
@@ -53,15 +73,15 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     (new Injectable())->getDependencies($fileReflection),
                     $tokens->getDependencies()
                 );
-
-                $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
+                $allowedNamespaces = str_replace('\\', '\\\\', implode('|', $this->getAllowedNamespaces()));
+                $pattern = '#Magento\\\\(?!' . $allowedNamespaces . ').*#';
                 foreach ($dependencies as $dependency) {
-                    $dependencyPaths = explode('/', $dependency);
+                    $dependencyPaths = explode('\\', $dependency);
                     $dependencyPaths = array_slice($dependencyPaths, 2);
-                    $dependency = implode('\\', $dependencyPaths);
+                    $dependencyPath = implode('\\', $dependencyPaths);
                     $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
                     foreach ($libraryPaths as $libraryPath) {
-                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependency . '.php');
+                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependencyPath . '.php');
                         if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
                             $this->errors[$fileReflection->getFileName()][] = $dependency;
                         }
@@ -142,12 +162,11 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = new ComponentRegistrar();
         include_once $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
             . '/Option/ArrayInterface.php';
-        $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist.txt');
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/blacklist*.txt');
         $dataProvider = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 
         foreach ($dataProvider as $key => $data) {
-            $file = str_replace(BP . '/', '', $data[0]);
-            if (in_array($file, $blackList)) {
+            if (in_array($data[0], $blackList)) {
                 unset($dataProvider[$key]);
             } else {
                 include_once $data[0];

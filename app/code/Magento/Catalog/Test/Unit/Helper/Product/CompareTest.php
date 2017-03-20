@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -115,7 +115,9 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $removeUrl = 'catalog/product_compare/remove';
         $postParams = [
             Action::PARAM_NAME_URL_ENCODED => '',
-            'product' => $productId
+            'product' => $productId,
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove this item from your Compare Products list?'),
         ];
 
         //Verification
@@ -156,7 +158,9 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         //Data
         $clearUrl = 'catalog/product_compare/clear';
         $postParams = [
-            Action::PARAM_NAME_URL_ENCODED => ''
+            Action::PARAM_NAME_URL_ENCODED => '',
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove all items from your Compare Products list?'),
         ];
 
         //Verification

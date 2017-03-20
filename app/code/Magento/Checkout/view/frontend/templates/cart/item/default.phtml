@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,7 +96,6 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                            size="4"
                            title="<?php echo $block->escapeHtml(__('Qty')); ?>"
                            class="input-text qty"
-                           maxlength="12"
                            data-validate="{required:true,'validate-greater-than-zero':true}"
                            data-role="cart-item-qty"/>
                 </div>

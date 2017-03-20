@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -160,14 +160,14 @@ $oldOptions = [
         'sort_order' => 0,
         'values'    => [
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 1',
                 'price'         => 3,
                 'price_type'    => 'fixed',
                 'sku'           => '3-1-select',
             ],
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 2',
                 'price'         => 3,
                 'price_type'    => 'fixed',
@@ -183,14 +183,14 @@ $oldOptions = [
         'sort_order' => 0,
         'values'    => [
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 1',
                 'price'         => 3,
                 'price_type'    => 'fixed',
                 'sku'           => '4-1-radio',
             ],
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 2',
                 'price'         => 3,
                 'price_type'    => 'fixed',
@@ -216,8 +216,8 @@ foreach ($oldOptions as $option) {
 $product->setOptions($options);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepositoryFactory = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$productRepositoryFactory->save($product);
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository->save($product);
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),

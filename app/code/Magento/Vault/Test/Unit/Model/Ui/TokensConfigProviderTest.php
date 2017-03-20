@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\Ui\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
@@ -32,24 +32,9 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|MockObject
-     */
-    private $paymentMethodList;
-
-    /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|MockObject
-     */
-    private $paymentMethodInstanceFactory;
-
-    /**
-     * @var \Magento\Payment\Api\Data\PaymentMethodInterface|MockObject
-     */
-    private $vaultPayment;
-
-    /**
      * @var VaultPaymentInterface|MockObject
      */
-    private $vaultPaymentInstance;
+    private $vaultPayment;
 
     /**
      * @var StoreInterface|MockObject
@@ -62,26 +47,23 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $customerTokenManagement;
 
     /**
+     * @var PaymentMethodListInterface|MockObject
+     */
+    private $vaultPaymentList;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
 
     protected function setUp()
     {
-        $this->paymentMethodList = $this->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->paymentMethodInstanceFactory = $this->getMockBuilder(
-            \Magento\Payment\Model\Method\InstanceFactory::class
-        )->disableOriginalConstructor()->getMock();
-
-        $this->vaultPayment = $this->getMockForAbstractClass(\Magento\Payment\Api\Data\PaymentMethodInterface::class);
-        $this->vaultPaymentInstance = $this->getMockForAbstractClass(VaultPaymentInterface::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->vaultPaymentList = $this->getMock(PaymentMethodListInterface::class);
+        $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
         $this->store = $this->getMock(StoreInterface::class);
 
-        $this->objectManager = new ObjectManager($this);
         $this->customerTokenManagement = $this->getMockBuilder(CustomerTokenManagement::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,7 +77,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $expectedConfig = [
             'payment' => [
                 'vault' => [
-                    $vaultProviderCode . '_item_' . '0' => [
+                    $vaultProviderCode . '_' . '0' => [
                         'config' => ['token_code' => 'code'],
                         'component' => 'Vendor_Module/js/vault_component'
                     ]
@@ -114,16 +96,12 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->paymentMethodList->expects(static::once())
+        $this->vaultPaymentList->expects(static::once())
             ->method('getActiveList')
             ->with($storeId)
             ->willReturn([$this->vaultPayment]);
-
-        $this->paymentMethodInstanceFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->vaultPaymentInstance);
         
-        $this->vaultPaymentInstance->expects(static::once())
+        $this->vaultPayment->expects(static::once())
             ->method('getProviderCode')
             ->willReturn($vaultProviderCode);
 
@@ -153,16 +131,10 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
                 $vaultProviderCode => $tokenUiComponentProvider
             ]
         );
-
         $this->objectManager->setBackwardCompatibleProperty(
             $configProvider,
-            'paymentMethodList',
-            $this->paymentMethodList
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'paymentMethodInstanceFactory',
-            $this->paymentMethodInstanceFactory
+            'vaultPaymentList',
+            $this->vaultPaymentList
         );
 
         static::assertEquals($expectedConfig, $configProvider->getConfig());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Layout;
@@ -300,7 +300,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
         if (isset($config['dataScope'])) {
             $dataScope = $config['dataScope'];
             unset($config['dataScope']);
-        } else if ($name !== $parentName) {
+        } elseif ($name !== $parentName) {
             $dataScope = $name;
         }
 

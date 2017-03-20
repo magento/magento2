@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,7 +104,8 @@ require([
     'mage/template',
     'jquery/file-uploader',
     'mage/mage',
-    'prototype'
+    'prototype',
+    'mage/translate'
 ], function(jQuery, registry, mageTemplate){
     registry.get('downloadable', function (Downloadable) {
         var linkTemplate = '<tr>'+

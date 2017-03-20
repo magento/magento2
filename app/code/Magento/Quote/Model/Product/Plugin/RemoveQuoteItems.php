@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Product\Plugin;
+
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
 class RemoveQuoteItems
 {
@@ -21,19 +23,17 @@ class RemoveQuoteItems
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Closure $proceed
+     * @param ProductResource $subject
+     * @param ProductResource $result
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return mixed
+     * @return ProductResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * TODO: reimplement with after plugin
      */
-    public function aroundDelete(
-        \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Closure $proceed,
+    public function afterDelete(
+        ProductResource $subject,
+        ProductResource $result,
         \Magento\Catalog\Api\Data\ProductInterface $product
     ) {
-        $result = $proceed($product);
         $this->quoteItemsCleaner->execute($product);
         return $result;
     }

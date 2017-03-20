@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -344,6 +344,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $newImage = imagecreatetruecolor($dims['frame']['width'], $dims['frame']['height']);
         } else {
             $newImage = imagecreate($dims['frame']['width'], $dims['frame']['height']);
+        }
+
+        if ($isAlpha) {
+            $this->_saveAlpha($newImage);
         }
 
         // fill new image with required color

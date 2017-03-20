@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -32,9 +32,6 @@
     </event>
     <event name="sales_order_item_cancel">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\CancelOrderItemObserver"/>
-    </event>
-    <event name="sales_order_creditmemo_save_after">
-        <observer name="inventory" instance="Magento\CatalogInventory\Observer\RefundOrderInventoryObserver"/>
     </event>
     <event name="catalog_product_save_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\SaveInventoryDataObserver"/>

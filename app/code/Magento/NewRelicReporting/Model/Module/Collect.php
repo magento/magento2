@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Module;
@@ -137,7 +137,7 @@ class Collect
         $disabledCount = $enabledCount = $uninstalledCount = 0;
 
         foreach ($stateValues as $state) {
-            switch($state){
+            switch ($state) {
                 case Config::ENABLED:
                     $enabledCount++;
                     break;

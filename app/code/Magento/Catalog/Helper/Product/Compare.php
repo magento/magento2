@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
@@ -231,6 +231,8 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $data = [
             \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
             'product' => $product->getId(),
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove this item from your Compare Products list?')
         ];
         return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
     }
@@ -254,6 +256,8 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         $params = [
             \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove all items from your Compare Products list?'),
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }

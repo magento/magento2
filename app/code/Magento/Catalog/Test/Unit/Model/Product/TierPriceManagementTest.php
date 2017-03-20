@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -424,7 +424,6 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\InputException
      * @dataProvider addDataProvider
      */
-
     public function testAddWithInvalidData($price, $qty)
     {
         $this->service->add('product_sku', 1, $price, $qty);

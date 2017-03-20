@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider;
@@ -76,6 +76,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         return $this->collection;
     }
+
     /**
      * Get Data Provider name
      *
@@ -156,6 +157,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
             [$filter->getConditionType() => $filter->getValue()]
         );
     }
+
     /**
      * Returns search criteria
      *

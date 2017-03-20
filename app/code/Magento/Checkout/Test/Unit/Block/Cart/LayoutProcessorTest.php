@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
@@ -69,7 +69,7 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         $this->countryCollection->expects($this->once())->method('loadByStore')->willReturnSelf();
         $this->countryCollection->expects($this->once())->method('toOptionArray')->willReturn($countries);
 
-        $this->regionCollection->expects($this->once())->method('load')->willReturnSelf();
+        $this->regionCollection->expects($this->once())->method('addAllowedCountriesFilter')->willReturnSelf();
         $this->regionCollection->expects($this->once())->method('toOptionArray')->willReturn($regions);
 
         $layoutMerged = $layout;
@@ -77,7 +77,12 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         ['address-fieldsets']['children']['fieldThree'] = ['param' => 'value'];
         $layoutMergedPointer = &$layoutMerged['components']['block-summary']['children']['block-shipping']
         ['children']['address-fieldsets']['children'];
-
+        $layoutMerged['components']['checkoutProvider'] = [
+            'dictionaries' => [
+                'country_id' => [],
+                'region_id' => [],
+            ]
+        ];
         $elements = [
             'city' => [
                 'visible' => false,

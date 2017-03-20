@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,13 +23,14 @@ class VerifyAdminAccountSharingEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
+    const TO_MAINTAIN = 'yes';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
      * Admin account settings page.
      *
-     * @var adminAccountSharing
+     * @var AdminAccountSharing
      */
     private $adminAccountSharing;
 
