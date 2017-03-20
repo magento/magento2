@@ -400,6 +400,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->getData(self::KEY_ZIP_IS_RANGE);
     }
+
     /**
      * Set country id
      *
@@ -509,6 +510,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->setData(self::KEY_TITLES, $titles);
     }
+
     // @codeCoverageIgnoreEnd
 
     /**

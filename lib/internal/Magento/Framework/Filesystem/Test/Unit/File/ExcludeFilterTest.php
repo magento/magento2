@@ -39,7 +39,7 @@ class ExcludeFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(!in_array(BP . '/var/session/', $result), 'Filtered path should not be in array');
     }
 
-    private function getFilesIterator ()
+    private function getFilesIterator()
     {
         $files = [
             BP . '/var/',

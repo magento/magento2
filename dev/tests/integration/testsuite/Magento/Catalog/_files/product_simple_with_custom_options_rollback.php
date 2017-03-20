@@ -20,7 +20,6 @@ try {
     $product = $productRepository->get('simple_with_custom_options', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
-
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

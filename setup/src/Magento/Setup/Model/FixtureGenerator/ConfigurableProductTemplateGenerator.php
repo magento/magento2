@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Model\FixtureGenerator;
 
-
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;

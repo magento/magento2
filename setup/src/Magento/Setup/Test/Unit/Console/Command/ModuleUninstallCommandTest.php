@@ -399,7 +399,6 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
         $this->cache->expects($this->once())->method('clean');
         $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses');
-
     }
 
     public function testExecute()

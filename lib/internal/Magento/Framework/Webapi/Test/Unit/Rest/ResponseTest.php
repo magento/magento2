@@ -212,6 +212,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $hasException = $this->responseRest->hasExceptionOfType('Exception');
         $this->assertTrue($hasException);
     }
+
     public function testHasExceptionOfTypeIfExceptionsIsEmpty()
     {
         $this->responseRest->setException(new \Exception());
