@@ -8,11 +8,21 @@
 <mapping strict="0">
 <fields>
     <customer composite="1">
-        <firstname />
-        <lastname />
-        <email />
-        <current_password />
-        <password />
+        <firstname>
+            <selector>input[name*=firstname]</selector>
+        </firstname>
+        <lastname>
+            <selector>input[name*=lastname]</selector>
+        </lastname>
+        <email>
+            <selector>input[id=email]</selector>
+        </email>
+        <current_password>
+            <selector>input[name*=current-password]</selector>
+        </current_password>>
+        <password>
+            <selector>input[name*=current-password]</selector>
+        </password>
     </customer>
     <change_password>
         <input>checkbox</input>
