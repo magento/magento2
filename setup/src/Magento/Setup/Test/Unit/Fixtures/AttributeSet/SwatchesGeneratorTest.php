@@ -90,7 +90,7 @@ class SwatchesGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $attributeImageType = $attributeColorType;
         $attributeImageType['swatchvisual']['value'] = array_map(
-            function($item) {
+            function ($item) {
                 return ltrim($item, '/');
             },
             $this->imagePathFixture
