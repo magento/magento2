@@ -136,11 +136,11 @@ class Importer implements ImporterInterface
         $messages = [];
 
         if ($newThemes) {
-            $messages[] = '<info>The following themes will be registered:</info> ' . implode(PHP_EOL, $newThemes);
+            $messages[] = '<info>The following themes will be registered:</info> ' . implode(', ', $newThemes);
         }
 
         if ($toBeRemoved) {
-            $messages[] = '<info>The following themes will be removed:</info> ' . implode(PHP_EOL, $toBeRemoved);
+            $messages[] = '<info>The following themes will be removed:</info> ' . implode(', ', $toBeRemoved);
         }
 
         return $messages;
