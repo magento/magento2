@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -213,8 +213,7 @@ class XssOutputValidator
     {
         $command = trim($command);
 
-        switch (true)
-        {
+        switch (true) {
             case preg_match(
                 '/->(' . implode('|', $this->escapeFunctions) . '|.*html.*)\(/simU',
                 $this->getLastMethod($command)
@@ -302,7 +301,6 @@ class XssOutputValidator
         $replacements = [];
         if (preg_match_all('/<[?](php|=)(.*?)[?]>/sm', $fileContent, $phpBlockMatches)) {
             foreach ($phpBlockMatches[2] as $phpBlock) {
-
                 $phpBlockQuoteReplaced = preg_replace(
                     ['/([^\\\\])\'\'/si', '/([^\\\\])""/si'],
                     ["\1'-*=single=*-'", '\1"-*=double=*-"'],

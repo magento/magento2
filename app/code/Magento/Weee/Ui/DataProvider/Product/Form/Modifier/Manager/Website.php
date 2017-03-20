@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager;
@@ -59,14 +59,12 @@ class Website
             ]
         ];
 
-        if (
-            $this->storeManager->hasSingleStore()
+        if ($this->storeManager->hasSingleStore()
             || ($eavAttribute->getEntityAttribute() && $eavAttribute->getEntityAttribute()->isScopeGlobal()
             )
         ) {
             return $this->websites = $websites;
         }
-
 
         if ($storeId = $this->locator->getStore()->getId()) {
             /** @var WebsiteInterface $website */

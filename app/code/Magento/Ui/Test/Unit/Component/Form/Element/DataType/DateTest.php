@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
@@ -70,9 +70,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
         $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
-
-        $this->assertArrayHasKey('outputDateFormat', $config);
-        $this->assertEquals($localeDateFormat, $config['outputDateFormat']);
     }
 
     public function testPrepareWithoutTimeOffset()
@@ -111,9 +108,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
         $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
-
-        $this->assertArrayHasKey('outputDateFormat', $config);
-        $this->assertEquals($localeDateFormat, $config['outputDateFormat']);
     }
 
     /**
@@ -121,6 +115,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
+        $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn('de-DE');
         $this->date = $this->objectManagerHelper->getObject(
             Date::class,
             [
@@ -133,5 +128,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->date->prepare();
         $configArray = $this->date->getData('config');
         $this->assertEquals('America/Chicago', $configArray['storeTimeZone']);
+        $this->assertEquals('de-DE', $configArray['options']['storeLocale']);
     }
 }

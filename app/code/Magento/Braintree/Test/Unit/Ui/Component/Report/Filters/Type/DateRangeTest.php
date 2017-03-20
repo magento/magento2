@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Filters\Type;
@@ -38,7 +38,6 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      * @var FilterModifier|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterModifierMock;
-
 
     /**
      * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -81,6 +80,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      * @param array|null $expectedCondition
      * @dataProvider getPrepareDataProvider
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
@@ -181,12 +181,12 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Gets Filter mock
-     * 
+     *
      * @param string $name
      * @param string $expectedType
      * @param string $expectedDate
      * @param int $i
-     * 
+     *
      * @return Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getFilterMock($name, $expectedType, $expectedDate, &$i)

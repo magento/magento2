@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Writer;
@@ -54,9 +54,23 @@ class Csv implements WriterInterface
      * Close file handler
      *
      * @return void
+     *
+     * @deprecated
      */
     public function __destructor()
     {
-        fclose($this->_fileHandler);
+        if (is_resource($this->_fileHandler)) {
+            fclose($this->_fileHandler);
+        }
+    }
+
+    /**
+     * Destructor for closing file handler
+     */
+    public function __destruct()
+    {
+        if (is_resource($this->_fileHandler)) {
+            fclose($this->_fileHandler);
+        }
     }
 }

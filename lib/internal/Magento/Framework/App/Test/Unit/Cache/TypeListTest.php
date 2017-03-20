@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\Test\Unit\Cache;
 
 use \Magento\Framework\App\Cache\TypeList;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Test class for \Magento\Framework\App\Cache\TypeList
@@ -48,6 +49,11 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
      */
     const CACHE_TYPE = \Magento\Framework\Cache\FrontendInterface::class;
 
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->_typesArray = [
@@ -85,6 +91,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(
@@ -93,7 +100,8 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->_config,
                 'cacheState' => $cacheState,
                 'factory' => $factory,
-                'cache' => $this->_cache
+                'cache' => $this->_cache,
+                'serializer' => $this->serializerMock,
             ]
         );
     }
@@ -118,8 +126,12 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
     {
         $expectation = [self::TYPE_KEY => $this->_getPreparedType()];
         $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->will(
-            $this->returnValue(serialize($this->_typesArray))
+            $this->returnValue('serializedData')
         );
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn($this->_typesArray);
         $this->assertEquals($expectation, $this->_typeList->getInvalidated());
     }
 
@@ -132,8 +144,12 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
         $expectedInvalidated = [
             self::TYPE_KEY => 1,
         ];
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($expectedInvalidated)
+            ->willReturn('serializedData');
         $this->_cache->expects($this->once())->method('save')->with(
-            serialize($expectedInvalidated),
+            'serializedData',
             TypeList::INVALIDATED_TYPES
         );
         $this->_typeList->invalidate(self::TYPE_KEY);
@@ -147,8 +163,12 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
         $expectedInvalidated = [
             self::TYPE_KEY => 1,
         ];
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($expectedInvalidated)
+            ->willReturn('serializedData');
         $this->_cache->expects($this->once())->method('save')->with(
-            serialize($expectedInvalidated),
+            'serializedData',
             TypeList::INVALIDATED_TYPES
         );
         $this->_typeList->invalidate([self::TYPE_KEY]);
@@ -156,15 +176,23 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanType()
     {
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn($this->_typesArray);
         $this->_cache->expects($this->once())->method('load')->with(TypeList::INVALIDATED_TYPES)->will(
-            $this->returnValue(serialize($this->_typesArray))
+            $this->returnValue('serializedData')
         );
         $this->_config->expects($this->once())->method('getType')->with(self::TYPE_KEY)->will(
             $this->returnValue(['instance' => self::CACHE_TYPE])
         );
         unset($this->_typesArray[self::TYPE_KEY]);
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($this->_typesArray)
+            ->willReturn('serializedData');
         $this->_cache->expects($this->once())->method('save')->with(
-            serialize($this->_typesArray),
+            'serializedData',
             TypeList::INVALIDATED_TYPES
         );
         $this->_typeList->cleanType(self::TYPE_KEY);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
@@ -120,7 +120,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             if ($isIFrameParam) {
                 $getParamCalls = 1;
                 $actionName = 'deniedIframe';
-            } else if ($isAjaxParam) {
+            } elseif ($isAjaxParam) {
                 $getParamCalls = 2;
                 $actionName = 'deniedJson';
             } else {

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridFullTextSearchTest" summary="Grid UI Component Full Text Search" ticketId="MAGETWO-41023">
         <variation name="CustomerGridFullTextSearch">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="description" xsi:type="string">Verify customer page grid full text search</data>
             <data name="itemsCount" xsi:type="string">2</data>
             <data name="fixtureName" xsi:type="string">customer</data>

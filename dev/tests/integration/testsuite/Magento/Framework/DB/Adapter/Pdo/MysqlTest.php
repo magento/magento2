@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ResourceConnection;
+use Zend_Db_Statement_Exception;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -125,9 +126,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     protected function _getConnection()
     {
         if (is_null($this->_connection)) {
-            /** @var $coreResource \Magento\Framework\App\ResourceConnection */
+            /** @var $coreResource ResourceConnection */
             $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get(\Magento\Framework\App\ResourceConnection::class);
+                ->get(ResourceConnection::class);
             $this->_connection = $coreResource->getConnection();
         }
         return $this->_connection;

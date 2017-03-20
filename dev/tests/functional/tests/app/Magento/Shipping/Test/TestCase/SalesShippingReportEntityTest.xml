@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Shipping\Test\TestCase\SalesShippingReportEntityTest" summary="Sales Shipping Report" ticketId="MAGETWO-40914">
+        <variation name="SalesShippingReportEntityTestVariation1">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_shipment</data>
+            <data name="shippingReport/report_type" xsi:type="string">Order Created</data>
+            <data name="shippingReport/period_type" xsi:type="string">Year</data>
+            <data name="shippingReport/from" xsi:type="string">m/d/Y 12:00 a-2 days</data>
+            <data name="shippingReport/to" xsi:type="string">m/d/Y 12:00 a+2 days</data>
+            <data name="shippingReport/show_order_statuses" xsi:type="string">Any</data>
+            <data name="shippingReport/show_empty_rows" xsi:type="string">Yes</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertShippingReportIntervalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertShippingReportTotalResult" />
+        </variation>
+        <variation name="SalesShippingReportEntityTestVariation2">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_shipment</data>
+            <data name="shippingReport/report_type" xsi:type="string">Order Created</data>
+            <data name="shippingReport/period_type" xsi:type="string">Month</data>
+            <data name="shippingReport/from" xsi:type="string">m/d/Y</data>
+            <data name="shippingReport/to" xsi:type="string">m/d/Y</data>
+            <data name="shippingReport/show_order_statuses" xsi:type="string">Any</data>
+            <data name="shippingReport/show_empty_rows" xsi:type="string">No</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertShippingReportIntervalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertShippingReportTotalResult" />
+        </variation>
+        <variation name="SalesShippingReportEntityTestVariation3">
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_shipment</data>
+            <data name="shippingReport/report_type" xsi:type="string">First Invoice Created Date</data>
+            <data name="shippingReport/period_type" xsi:type="string">Day</data>
+            <data name="shippingReport/from" xsi:type="string">m/d/Y</data>
+            <data name="shippingReport/to" xsi:type="string">m/d/Y</data>
+            <data name="shippingReport/show_order_statuses" xsi:type="string">Specified</data>
+            <data name="shippingReport/order_statuses" xsi:type="string">Processing</data>
+            <data name="shippingReport/show_empty_rows" xsi:type="string">No</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertShippingReportIntervalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertShippingReportTotalResult" />
+        </variation>
+    </testCase>
+</config>

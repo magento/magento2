@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -479,8 +479,7 @@ class PackagesData
         $magentoRepositories = $this->composerInformation->getRootRepositories();
 
         // Check we have only one repo.magento.com repository
-        if (
-            count($magentoRepositories) === 1
+        if (count($magentoRepositories) === 1
             && strpos($magentoRepositories[0], $this->packagesAuth->getCredentialBaseUrl())
         ) {
             $packagesJson = $this->getPackagesJson();

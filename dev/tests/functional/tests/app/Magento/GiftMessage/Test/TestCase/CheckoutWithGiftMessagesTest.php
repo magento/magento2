@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,7 @@ class CheckoutWithGiftMessagesTest extends Scenario
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S2';
     const TO_MAINTAIN = 'yes'; // Consider variation #2 to work correctly with Virtual products
     /* end tags */
 

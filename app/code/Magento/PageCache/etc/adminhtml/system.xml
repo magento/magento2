@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,7 +18,7 @@
                     <label>Varnish Configuration</label>
                     <field id="access_list" type="text" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Access list</label>
-                        <comment>IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
+                        <comment>IPs access list separated with ',' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved.</comment>
                         <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
                         <depends>
@@ -41,15 +41,23 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button_version3" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
-                        <label>Export Configuration</label>
-                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish3</frontend_model>
+                    <field id="grace_period" type="text" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Grace period</label>
+                        <comment>Specify grace period in seconds for config file generation. If field is empty default value 300 will be saved. This grace period will be used to serve cached content when the server is healthy. If the server is not healthy, cached content will be served for 3 days before failing.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button_version4" type="button" sortOrder="36" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="export_button_version4" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Export Configuration</label>
                         <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="export_button_version5" type="button" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish5</frontend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>

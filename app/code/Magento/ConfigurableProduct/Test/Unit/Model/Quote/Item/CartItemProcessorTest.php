@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item;
@@ -43,6 +43,9 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $productOptionExtensionAttributes;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectFactoryMock = $this->getMock(
@@ -84,11 +87,36 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             ['setConfigurableItemOptions']
         );
 
+        $this->serializer = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $this->model = new \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor(
             $this->objectFactoryMock,
             $this->optionFactoryMock,
             $this->optionExtensionFactoryMock,
-            $this->optionValueFactoryMock
+            $this->optionValueFactoryMock,
+            $this->serializer
         );
     }
 
@@ -174,7 +202,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $customOption->expects($this->once())->method('getValue')->willReturn(serialize([$optionId => $optionValue]));
+        $customOption->expects($this->once())->method('getValue')->willReturn(json_encode([$optionId => $optionValue]));
         $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($customOption);
 
@@ -227,7 +255,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $customOption->expects($this->once())->method('getValue')->willReturn(serialize([$optionId => $optionValue]));
+        $customOption->expects($this->once())->method('getValue')->willReturn(json_encode([$optionId => $optionValue]));
         $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($customOption);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
@@ -79,8 +79,7 @@ class Minification
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-        if (
-            $this->isEnabled($extension) &&
+        if ($this->isEnabled($extension) &&
             !$this->isExcluded($filename) &&
             !$this->isMinifiedFilename($filename)
         ) {
@@ -99,8 +98,7 @@ class Minification
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-        if (
-            $this->isEnabled($extension) &&
+        if ($this->isEnabled($extension) &&
             !$this->isExcluded($filename) &&
             $this->isMinifiedFilename($filename)
         ) {

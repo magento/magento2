@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -228,5 +228,52 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             }
         }
         return null;
+    }
+
+    /**
+     * Test for \Magento\Checkout\Controller\Cart::execute() with simple product
+     *
+     * @param string $area
+     * @param string $expectedPrice
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoAppIsolation enabled
+     * @dataProvider addAddProductDataProvider
+     */
+    public function testAddToCartSimpleProduct($area, $expectedPrice)
+    {
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $postData = [
+            'qty' => '1',
+            'product' => '1',
+            'custom_price' => 1,
+            'form_key' => $formKey->getFormKey(),
+            'isAjax' => 1
+        ];
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
+        $this->getRequest()->setPostValue($postData);
+
+        $quote =  $this->_objectManager->create(\Magento\Checkout\Model\Cart::class);
+        /** @var \Magento\Checkout\Controller\Cart\Add $controller */
+        $controller = $this->_objectManager->create(\Magento\Checkout\Controller\Cart\Add::class, [$quote]);
+        $controller->execute();
+
+        $this->assertContains(json_encode([]), $this->getResponse()->getBody());
+        $items = $quote->getItems()->getItems();
+        $this->assertTrue(is_array($items), 'Quote doesn\'t have any items');
+        $this->assertCount(1, $items, 'Expected quote items not equal to 1');
+        $item = reset($items);
+        $this->assertEquals(1, $item->getProductId(), 'Quote has more than one product');
+        $this->assertEquals($expectedPrice, $item->getPrice(), 'Expected product price failed');
+    }
+
+    /**
+     * Data provider for testAddToCartSimpleProduct
+     */
+    public function addAddProductDataProvider()
+    {
+        return [
+            'frontend' => ['frontend', 'expected_price' => 10],
+            'adminhtml' => ['adminhtml', 'expected_price' => 1]
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Catalog\Test\Fixture\Category;
 class CategoryId extends DataSource
 {
     /**
-     * Category fixture
+     * Category fixture.
      *
      * @var Category
      */
@@ -31,7 +31,10 @@ class CategoryId extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataset'])) {
+        if (isset($data['fixture']) || isset($data['category'])) {
+            $this->category = isset($data['fixture']) ? $data['fixture'] : $data['category'];
+            $this->data = $this->category->getName();
+        } elseif (isset($data['dataset'])) {
             $category = $fixtureFactory->createByCode('category', ['dataset' => $data['dataset']]);
             /** @var Category $category */
             if (!$category->getId()) {
@@ -43,7 +46,7 @@ class CategoryId extends DataSource
     }
 
     /**
-     * Return Category fixture
+     * Return Category fixture.
      *
      * @return Category
      */

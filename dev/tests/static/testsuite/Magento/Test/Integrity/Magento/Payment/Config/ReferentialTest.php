@@ -2,7 +2,7 @@
 /**
  * Validates that payment groups referenced from store configuration matches the groups declared in payment.xml
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Payment\Config;

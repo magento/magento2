@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,6 +14,16 @@
     <type name="Magento\Authorizenet\Model\Directpost\Session">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Authorizenet\Model\Directpost\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="payment/authorizenet_directpost/login" xsi:type="string">1</item>
+                <item name="payment/authorizenet_directpost/trans_key" xsi:type="string">1</item>
+                <item name="payment/authorizenet_directpost/trans_md5" xsi:type="string">1</item>
+                <item name="payment/authorizenet_directpost/merchant_email" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>
