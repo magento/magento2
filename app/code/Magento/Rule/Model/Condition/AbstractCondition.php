@@ -441,7 +441,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
         if (!empty($valueArr)) {
             $value = implode(', ', $valueArr);
-        } elseif(is_array($value)) {
+        } elseif (is_array($value)) {
             $value = implode(', ', $value);
         }
         return $value;
