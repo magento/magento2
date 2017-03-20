@@ -122,14 +122,16 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNothingImport()
     {
-        $this->markTestIncomplete('Not complete');
-
         $this->assertEmpty($this->hash->get());
+
         $application = $this->objectManager->create(Application::class);
+
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $command->setApplication($application);
+
         $commandTester = new CommandTester($command);
         $commandTester->execute(['-n' => true]);
+
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Nothing to import.', $commandTester->getDisplay());
         $this->assertEmpty($this->hash->get());
@@ -137,6 +139,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDbIsolation disabled
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testImportStores()
     {
@@ -147,7 +150,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $dumpCommandTester->execute([]);
         $dumpedData = $this->reader->load(ConfigFilePool::APP_CONFIG);
 
-        $this->saveConfigFromDumpedData(
+        $this->writeConfig(
             $dumpedData,
             require __DIR__ . '/../../../_files/scopes/config_with_stores.php'
         );
@@ -187,7 +190,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($store->getGroupId(), $group->getId());
         $this->assertSame($store->getWebsiteId(), $website->getId());
 
-        $this->saveConfigFromDumpedData(
+        $this->writeConfig(
             $dumpedData,
             require __DIR__ . '/../../../_files/scopes/config_with_changed_stores.php'
         );
@@ -217,7 +220,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($group->getName(), 'Changed Test Website Store');
         $this->assertSame($website->getId(), $group->getWebsiteId());
 
-        $this->saveConfigFromDumpedData(
+        $this->writeConfig(
             $dumpedData,
             require __DIR__ . '/../../../_files/scopes/config_with_removed_stores.php'
         );
@@ -244,23 +247,83 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     */
+    public function testImportConfig()
+    {
+        $correctData = [
+            'system' => [
+                'default' => [
+                    'web' => [
+                        'secure' => [
+                            'base_url' => 'http://magento2.local/',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $wrongData = [
+            'system' => [
+                'default' => [
+                    'web' => [
+                        'secure' => [
+                            'base_url' => 'wrong_url',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->writeConfig($this->config, $correctData);
+
+        $application = $this->objectManager->create(Application::class);
+        $command = $this->objectManager->create(ConfigImportCommand::class);
+        $command->setApplication($application);
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([]);
+
+        $this->assertContains('System config was processed', $commandTester->getDisplay());
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
+
+        $this->writeConfig(
+            $this->config,
+            $wrongData
+        );
+
+        $commandTester->execute([]);
+
+        $this->assertContains('Import is failed: Invalid value. Value must be', $commandTester->getDisplay());
+        $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
+
+        $this->writeConfig(
+            $this->config,
+            $correctData
+        );
+
+        $commandTester->execute([]);
+
+        $this->assertContains('Nothing to import', $commandTester->getDisplay());
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
+    }
+
+    /**
      * Saves new data.
      *
-     * @param array $dumpedData
-     * @param array $mergeData
+     * @param array $originalData
+     * @param array $newData
      */
-    public function saveConfigFromDumpedData(array $dumpedData, array $mergeData)
+    public function writeConfig(array $originalData, array $newData)
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             "<?php\n return array();\n"
         );
 
-        $mergeData = array_replace_recursive(
-            $dumpedData,
-            $mergeData
+        $newData = array_replace_recursive(
+            $originalData,
+            $newData
         );
-        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $mergeData], true);
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $newData], true);
     }
 
     /**
