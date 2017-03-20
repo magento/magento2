@@ -104,6 +104,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @param string[] $serviceMetadata
      * @param string[] $typeData
      * @param string $schema

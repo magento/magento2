@@ -307,7 +307,7 @@ class ErrorProcessor
     {
         $this->directoryWrite->create('report/api');
         $reportId = abs(intval(microtime(true) * rand(100, 1000)));
-        $this->directoryWrite->writeFile('report/api/' . $reportId, serialize($reportData));
+        $this->directoryWrite->writeFile('report/api/' . $reportId, json_encode($reportData));
         return $reportId;
     }
 }

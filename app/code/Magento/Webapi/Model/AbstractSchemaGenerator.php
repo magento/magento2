@@ -96,7 +96,7 @@ abstract class AbstractSchemaGenerator
     {
         /** Sort requested services by names to prevent caching of the same schema file more than once. */
         ksort($requestedServices);
-        $cacheId = $this->cache->generateCacheIdUsingContext(get_class($this) . serialize($requestedServices));
+        $cacheId = $this->cache->generateCacheIdUsingContext(get_class($this) . json_encode($requestedServices));
         $cachedSchemaContent = $this->cache->load($cacheId);
         if ($cachedSchemaContent !== false) {
             return $cachedSchemaContent;
