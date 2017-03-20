@@ -106,4 +106,10 @@
             <argument name="paymentMapping" xsi:type="object">PaymentMethodConfigData</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="cancelGuaranteeAfterOrderCancel" type="Magento\Signifyd\Plugin\OrderPlugin" />
+    </type>
+    <type name="Magento\Payment\Model\MethodInterface">
+        <plugin name="cancelGuaranteeAfterPaymentDeny" type="Magento\Signifyd\Plugin\PaymentPlugin" />
+    </type>
 </config>

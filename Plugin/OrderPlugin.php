@@ -10,9 +10,9 @@ use Magento\Sales\Model\Order;
 use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
 
 /**
- * Plugin complements Order::cancel method logic with canceling Signifyd guarantee.
+ * Plugin for Magento\Sales\Model\Order.
  *
- * @see Order::cancel
+ * @see Order
  */
 class OrderPlugin
 {
@@ -34,6 +34,7 @@ class OrderPlugin
      * Performs Signifyd guarantee cancel operation after order canceling
      * if cancel order operation was successful.
      *
+     * @see Order::cancel
      * @param Order $order
      * @param OrderInterface $result
      * @return OrderInterface
