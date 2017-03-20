@@ -76,4 +76,12 @@ case $TEST_SUITE in
 
         cd ../../..
         ;;
+    js)
+        cp package.json.sample package.json
+        cp Gruntfile.js.sample Gruntfile.js
+        nvm install --lts
+        npm install -g grunt-cli
+        npm install
+        php bin/magento setup:static-content:deploy -f
+        ;;
 esac
