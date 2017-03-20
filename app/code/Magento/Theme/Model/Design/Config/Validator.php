@@ -86,6 +86,7 @@ class Validator
      * @param string $text
      * @param string $name
      * @throws LocalizedException
+     * @return void
      */
     private function checkTemplateConfiguration($data, $text, $name)
     {
