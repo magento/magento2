@@ -86,6 +86,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
