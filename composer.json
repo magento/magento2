@@ -3,6 +3,7 @@
     "description": "Submitting Case Entry to Signifyd on Order Creation",
     "require": {
         "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "magento/module-config": "100.2.*",
         "magento/framework": "100.2.*",
         "magento/module-sales": "100.2.*",
         "magento/module-store": "100.2.*",
