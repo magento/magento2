@@ -26,7 +26,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $this->addCodeColumnToStoreGroupTable($setup);
-            $this->removeForeignKeys($setup);
         }
 
         $setup->endSetup();
@@ -59,45 +58,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ),
             ['code'],
             AdapterInterface::INDEX_TYPE_UNIQUE
-        );
-    }
-
-    /**
-     * Remove foreign keys from store and store_group tables.
-     *
-     * @param SchemaSetupInterface $setup
-     * @return void
-     */
-    private function removeForeignKeys(SchemaSetupInterface $setup)
-    {
-        $setup->getConnection()->dropForeignKey(
-            $setup->getTable('store'),
-            $setup->getConnection()->getForeignKeyName(
-                'store',
-                'website_id',
-                'store_website',
-                'website_id'
-            )
-        );
-
-        $setup->getConnection()->dropForeignKey(
-            $setup->getTable('store'),
-            $setup->getConnection()->getForeignKeyName(
-                'store',
-                'group_id',
-                'store_group',
-                'group_id'
-            )
-        );
-
-        $setup->getConnection()->dropForeignKey(
-            $setup->getTable('store_group'),
-            $setup->getConnection()->getForeignKeyName(
-                'store_group',
-                'website_id',
-                'store_website',
-                'website_id'
-            )
         );
     }
 }
