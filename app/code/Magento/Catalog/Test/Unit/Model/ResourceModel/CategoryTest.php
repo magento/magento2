@@ -153,7 +153,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnCallback(
                     function ($value) {
-                        return serialize($value);
+                        return json_encode($value);
                     }
                 )
             );

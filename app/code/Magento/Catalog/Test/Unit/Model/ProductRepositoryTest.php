@@ -309,16 +309,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnCallback(
                     function ($value) {
-                        return unserialize($value);
-                    }
-                )
-            );
-        $this->serializerMock->expects($this->any())
-            ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
+                        return json_decode($value, true);
                     }
                 )
             );
