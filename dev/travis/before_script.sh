@@ -77,9 +77,14 @@ case $TEST_SUITE in
         cd ../../..
         ;;
     js)
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+        nvm list
+        nvm install --lts
+
         cp package.json.sample package.json
         cp Gruntfile.js.sample Gruntfile.js
-        nvm install --lts
         npm install -g grunt-cli
         npm install
         php bin/magento setup:static-content:deploy -f

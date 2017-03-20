@@ -24,7 +24,9 @@ env:
     - TEST_SUITE=js
 cache:
   apt: true
-  directories: $HOME/.composer/cache
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.nvm
 matrix:
   exclude:
     - php: 5.6.29
