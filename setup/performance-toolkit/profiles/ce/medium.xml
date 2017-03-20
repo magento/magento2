@@ -21,7 +21,7 @@
             </config>
         </configurable_products>
         <product-images>
-            <images-count>100</images-count>
+            <images-count>1000</images-count>
             <images-per-product>3</images-per-product>
         </product-images>
         <categories>300</categories> <!-- Number of categories to generate -->
