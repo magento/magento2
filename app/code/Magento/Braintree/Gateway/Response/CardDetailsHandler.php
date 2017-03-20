@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Gateway\Response;
 
-use \Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
