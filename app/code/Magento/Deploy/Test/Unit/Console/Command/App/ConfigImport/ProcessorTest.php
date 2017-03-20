@@ -8,20 +8,19 @@ namespace Magento\Deploy\Test\Unit\Console\Command\App\ConfigImport;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
+use Magento\Deploy\Console\Command\App\ConfigImport\Processor;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
-use Magento\Deploy\Console\Command\App\ConfigImport\QuestionPerformer;
-use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Console\QuestionPerformer\YesNo;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Validator|\PHPUnit_Framework_MockObject_MockObject
@@ -64,14 +63,14 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $inputMock;
 
     /**
-     * @var QuestionPerformer|\PHPUnit_Framework_MockObject_MockObject
+     * @var YesNo|\PHPUnit_Framework_MockObject_MockObject
      */
     private $questionPerformerMock;
 
     /**
-     * @var Importer
+     * @var Processor
      */
-    private $importer;
+    private $processor;
 
     protected function setUp()
     {
@@ -97,11 +96,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
-        $this->questionPerformerMock = $this->getMockBuilder(QuestionPerformer::class)
+        $this->questionPerformerMock = $this->getMockBuilder(YesNo::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->importer = new Importer(
+        $this->processor = new Processor(
             $this->configValidatorMock,
             $this->configImporterPoolMock,
             $this->importerFactoryMock,
@@ -125,6 +124,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $messages = ['The import is complete'];
         $expectsMessages = ['The import is complete'];
         $importerClassName = 'someImporterClassName';
+        $question = ['Do you want to continue [yes/no]?'];
         $importers = ['someSection' => $importerClassName];
         $importerMock = $this->getMockBuilder(ImporterInterface::class)
             ->getMockForAbstractClass();
@@ -153,7 +153,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($warningMessages);
         $this->questionPerformerMock->expects($this->any())
             ->method('execute')
-            ->with($warningMessages, $this->inputMock, $this->outputMock)
+            ->with(array_merge($warningMessages, $question), $this->inputMock, $this->outputMock)
             ->willReturn($doImport);
 
         $this->loggerMock->expects($this->never())
@@ -182,7 +182,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 ->method('regenerate');
         }
 
-        $this->importer->import($this->inputMock, $this->outputMock);
+        $this->processor->execute($this->inputMock, $this->outputMock);
     }
 
     /**
@@ -232,7 +232,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Import is failed: Some error
+     * @expectedExceptionMessage Import failed: Some error
      */
     public function testImportWithException()
     {
@@ -252,7 +252,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('error')
             ->with($exception);
 
-        $this->importer->import($this->inputMock, $this->outputMock);
+        $this->processor->execute($this->inputMock, $this->outputMock);
     }
 
     /**
@@ -279,7 +279,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('writeln')
             ->with('<info>Nothing to import.</info>');
 
-        $this->importer->import($this->inputMock, $this->outputMock);
+        $this->processor->execute($this->inputMock, $this->outputMock);
     }
 
     /**

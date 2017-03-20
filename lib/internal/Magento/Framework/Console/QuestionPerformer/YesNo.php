@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Console\Command\App\ConfigImport;
+namespace Magento\Framework\Console\QuestionPerformer;
 
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,8 +16,22 @@ use Magento\Framework\Phrase;
 /**
  * Asks a questions to the user.
  */
-class QuestionPerformer
+class YesNo
 {
+    /**
+     * Provides helpers to interact with the user.
+     *
+     * @var QuestionHelper
+     */
+    private $questionHelper;
+
+    /**
+     * The factory for creating Question objects.
+     *
+     * @var QuestionFactory
+     */
+    private $questionFactory;
+
     /**
      * @param QuestionHelper $questionHelper Provides helpers to interact with the user
      * @param QuestionFactory $questionFactory The factory for creating Question objects
@@ -43,7 +57,7 @@ class QuestionPerformer
         $question = $this->getConfirmationQuestion($messages);
         $answer = $this->questionHelper->ask($input, $output, $question);
 
-        return strtolower($answer) == 'yes';
+        return in_array(strtolower($answer), ['yes', 'y']);
     }
 
     /**
@@ -55,17 +69,15 @@ class QuestionPerformer
      */
     private function getConfirmationQuestion(array $messages)
     {
-        $messages[] = 'Do you want to continue [yes/no]?';
-
         /** @var Question $question */
         $question = $this->questionFactory->create([
             'question' => implode(PHP_EOL, $messages) . PHP_EOL
         ]);
 
         $question->setValidator(function ($answer) {
-            if (!in_array(strtolower($answer), ['yes', 'no'])) {
+            if (!in_array(strtolower($answer), ['yes', 'y', 'no', 'n'])) {
                 throw new LocalizedException(
-                    new Phrase('Please type yes or no')
+                    new Phrase('Please type [y]es or [n]o')
                 );
             }
 
