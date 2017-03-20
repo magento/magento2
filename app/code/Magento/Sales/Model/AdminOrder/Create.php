@@ -232,6 +232,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $serializer;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface $localeFormat
+     */
+    protected $localeFormat;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -261,6 +266,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -292,7 +298,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Framework\Locale\FormatInterface $localeFormat = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -323,6 +330,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->quoteFactory = $quoteFactory;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->localeFormat = $localeFormat ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Locale\FormatInterface::class);
         parent::__construct($data);
     }
 
@@ -1275,7 +1284,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _parseCustomPrice($price)
     {
-        $price = $this->_objectManager->get(\Magento\Framework\Locale\FormatInterface::class)->getNumber($price);
+        $price = $this->localeFormat->getNumber($price);
         $price = $price > 0 ? $price : 0;
 
         return $price;
