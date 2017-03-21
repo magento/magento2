@@ -17,7 +17,6 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Phrase;
 use Magento\Framework\App\ProductMetadataInterface;
 use \Magento\Framework\Api\SimpleDataObjectConverter;
 
