@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Analytics\Test\TestCase;
+
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
+
+/**
+ * Steps:
+ * 1. Login as admin user in backend
+ * 2. Navigate to menu Stores>Configuration>General>Advanced Reporting->General
+ * 3. Set Option "Advanced Reporting Service"
+ * 4. Click "Save Config"
+ * 5. Perform assertions
+ *
+ * @ZephyrId MAGETWO-66465
+ */
+class EnableDisableTest extends Injectable
+{
+    /* tags */
+    const MVP = 'no';
+    /* end tags */
+
+    /**
+     * Set analytics vertical test.
+     *
+     * @param ConfigAnalytics $configAnalytics
+     * @param string $vertical
+     * @return void
+     */
+    public function test(ConfigAnalytics $configAnalytics, $vertical, $state)
+    {
+        $configAnalytics->open();
+        $configAnalytics->getAnalyticsForm()->analyticsToggle($state);
+        $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($vertical);
+        $configAnalytics->getAnalyticsForm()->saveConfig();
+    }
+}
