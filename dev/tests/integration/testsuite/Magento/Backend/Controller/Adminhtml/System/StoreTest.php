@@ -46,6 +46,9 @@ class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
     }
 
+    /**
+     * @return array
+     */
     public function saveActionWithExistCodeDataProvider()
     {
         return [
