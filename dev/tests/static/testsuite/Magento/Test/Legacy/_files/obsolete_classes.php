@@ -4230,4 +4230,5 @@ return [
     ['Magento\Framework\Acl\Cache'],
     ['Magento\Framework\Acl\CacheInterface'],
     ['Magento\Framework\Acl\Test\Unit\CacheTest'],
+    ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
 ];
