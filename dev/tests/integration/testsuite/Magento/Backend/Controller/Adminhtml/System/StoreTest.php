@@ -48,8 +48,6 @@ class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
     public function saveActionWithExistCodeDataProvider()
     {
-
-
         return [
             [
                 'post' => [
