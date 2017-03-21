@@ -56,6 +56,13 @@ class ClassesScanner implements ClassesScannerInterface
         return $classes;
     }
 
+    /**
+     * Extracts all the classes from the recursive iterator
+     *
+     * @param $recursiveIterator
+     * @return array
+     */
+
     private function extract($recursiveIterator)
     {
         $classes = [];
