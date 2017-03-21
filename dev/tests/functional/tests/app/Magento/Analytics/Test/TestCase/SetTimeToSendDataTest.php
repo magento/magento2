@@ -33,8 +33,8 @@ class SetTimeToSendDataTest extends Injectable
     /**
      * @param ConfigAnalytics $configAnalytics
      * @param TestStepFactory $testStepFactory
-     * @param $hh
-     * @param $mm
+     * @param string $hh
+     * @param string $mm
      * @param string $vertical
      * @param array $configData
      */
@@ -44,7 +44,7 @@ class SetTimeToSendDataTest extends Injectable
         $hh,
         $mm,
         $vertical,
-        $configData
+        array $configData
     ) {
         $this->configData = $configData;
         $testStepFactory->create(
