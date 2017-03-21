@@ -52,6 +52,12 @@ class ClassesScanner implements ClassesScannerInterface
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
+        $classes = $this->extract($recursiveIterator);
+        return $classes;
+    }
+
+    private function extract($recursiveIterator)
+    {
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
