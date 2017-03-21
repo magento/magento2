@@ -43,7 +43,6 @@ abstract class AbstractHelper
         return $this->_resource->getConnection($this->_modulePrefix);
     }
 
-
     /**
      * Escapes value, that participates in LIKE, with '\' symbol.
      * Note: this func cannot be used on its own, because different RDMBS may use different default escape symbols,

@@ -51,8 +51,8 @@ class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTabl
          *
          * $websitesCount - active websites
          * $customerGroupCount - active customer groups
-         * 90 - calculated memory size for one record in catalog_product_index_price table
+         * 120 - calculated memory size for one record in catalog_product_index_price table
          */
-        return ceil($websitesCount * $customerGroupCount * 90);
+        return ceil($websitesCount * $customerGroupCount * 120);
     }
 }

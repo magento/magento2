@@ -5,7 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-
 class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**

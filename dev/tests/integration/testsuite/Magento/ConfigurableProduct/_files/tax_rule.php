@@ -9,7 +9,6 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $customerTaxClass = $objectManager->create(\Magento\Tax\Model\ClassModel::class)->load('Retail Customer', 'class_name');
 $productTaxClass1 = $objectManager->create(\Magento\Tax\Model\ClassModel::class)->load('Taxable Goods', 'class_name');
 
-
 $taxRate = [
     'tax_country_id' => 'US',
     'tax_region_id' => '0',

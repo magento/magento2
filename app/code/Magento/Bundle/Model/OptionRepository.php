@@ -276,8 +276,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         }
         foreach ($firstArray as $obj) {
             foreach ($secondArray as $objToCompare) {
-                if (
-                    $obj->getId() != $objToCompare->getId()
+                if ($obj->getId() != $objToCompare->getId()
                     && $obj instanceof \Magento\Bundle\Api\Data\LinkInterface
                     && $objToCompare instanceof \Magento\Bundle\Api\Data\LinkInterface
                 ) {

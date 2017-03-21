@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
 
-
 use Magento\Sales\Model\Order\Payment\Transaction;
 
 /**

@@ -97,7 +97,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($imageName = $this->getUploadedImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
-        } else if (!is_string($value)) {
+        } elseif (!is_string($value)) {
             $object->setData($attributeName, '');
         }
 

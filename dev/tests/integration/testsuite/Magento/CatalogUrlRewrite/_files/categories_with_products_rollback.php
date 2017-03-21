@@ -17,5 +17,4 @@ $productCollection->load()->delete();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-
 require __DIR__ . '/categories_rollback.php';

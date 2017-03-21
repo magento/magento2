@@ -980,4 +980,11 @@
             <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy" shared="false" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice">
+        <arguments>
+            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
 </config>

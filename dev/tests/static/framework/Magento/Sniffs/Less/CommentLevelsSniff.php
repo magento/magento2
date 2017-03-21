@@ -180,7 +180,6 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
 
         $commentLinePtr = $stackPtr;
         while ($tokens[$commentLinePtr - 2]['line'] > 1) {
-
             $commentLinePtr = $phpcsFile->findPrevious(T_STRING, $commentLinePtr - 1, null, false, '//');
 
             if (false === $commentLinePtr) {
