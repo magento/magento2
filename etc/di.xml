@@ -154,8 +154,6 @@
             <argument name="indexerId" xsi:type="const">\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
