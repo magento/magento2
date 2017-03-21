@@ -39,6 +39,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
@@ -90,6 +95,18 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+
         $this->generator = $this->objectManager->getObject(
             \Magento\Webapi\Model\Rest\Swagger\Generator::class,
             [
@@ -98,7 +115,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $this->typeProcessorMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
-                'authorization' => $authorizationMock
+                'authorization' => $authorizationMock,
+                'serializer' => $this->serializer
             ]
         );
     }
