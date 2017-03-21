@@ -228,7 +228,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'id',
-                    'type' => 'int',
                 ],
             ],
             'body' => $body,
@@ -427,7 +426,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'id',
-                    'type' => 'int',
                 ],
             ],
             'body' => $body,

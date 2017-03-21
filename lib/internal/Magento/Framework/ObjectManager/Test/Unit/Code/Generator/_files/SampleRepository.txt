@@ -3,7 +3,7 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 /**
  * Repository class for @see \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
  */
-class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generator\SampleRepositoryInterface
+class SampleRepository implements SampleRepositoryInterface
 {
     /**
      * sampleInterfacePersistor
