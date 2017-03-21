@@ -49,8 +49,10 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             if ($isNew) {
                 return $this->resultRedirect->setPath('sales/*/new');
             }
-            return $this->resultRedirect->setPath('sales/*/edit', 
-                    ['status' => $this->getRequest()->getParam('status')]);
+            return $this->resultRedirect->setPath(
+                'sales/*/edit',
+                ['status' => $this->getRequest()->getParam('status')]
+            );
         }
         return $this->resultRedirect->setPath('sales/*/');
     }
