@@ -19,7 +19,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
-    {        
+    {
         $data = $this->getRequest()->getPostValue();
         $isNew = $this->getRequest()->getParam('is_new');
         $this->resultRedirect = $this->resultRedirectFactory->create();
@@ -41,8 +41,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
                 $label = $filterManager->stripTags($label);
             }
 
-            $redirect = $this->updateStatus($isNew, $data, $statusCode);
-            if ($redirect) {
+            if ($this->updateStatus($isNew, $data, $statusCode) !== False) {
                 return $this->resultRedirect;
             }
             
