@@ -60,6 +60,11 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
      */
     private $placeOrder;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
@@ -94,11 +99,15 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
 
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->placeOrder = new PlaceOrder(
             $contextMock,
             $this->configMock,
             $this->checkoutSessionMock,
-            $this->orderPlaceMock
+            $this->orderPlaceMock,
+            $this->loggerMock
         );
     }
 

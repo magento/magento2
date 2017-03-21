@@ -224,11 +224,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddMediaGalleryData()
     {
         $attributeId = 42;
-        $itemId = 4242;
-        $linkField = 'entity_id';
-        $mediaGalleriesMock = [[$linkField => $itemId]];
+        $rowId = 4;
+        $linkField = 'row_id';
+        $mediaGalleriesMock = [[$linkField => $rowId]];
         $itemMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -248,13 +249,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->galleryResourceMock->expects($this->once())->method('createBatchBaseSelect')->willReturn($selectMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
         $this->entityMock->expects($this->once())->method('getAttribute')->willReturn($attributeMock);
-        $itemMock->expects($this->atLeastOnce())->method('getId')->willReturn($itemId);
-        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$itemId]);
+        $itemMock->expects($this->atLeastOnce())->method('getData')->willReturn($rowId);
+        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$rowId]);
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkField);
 
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
-            [['entity_id' => $itemId]]
+            [['row_id' => $rowId]]
         );
         $this->galleryReadHandlerMock->expects($this->once())->method('addMediaDataToProduct')
             ->with($itemMock, $mediaGalleriesMock);

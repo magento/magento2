@@ -19,31 +19,42 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about captured amount in order.
      */
-    const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
+    const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of [\W]{1,2}%s online\. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about captured amount exist in Comments History section on order page in Admin.
+     * Assert that comment about captured amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
+     * @param OrderInjectable $order
      * @param string $orderId
-     * @param array $capturedPrices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        $orderId,
-        array $capturedPrices
+        OrderInjectable $order,
+        $orderId
     ) {
+        $capturedPrices = $order->getPrice()['captured_prices'];
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCapturedAmount();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $comments = $infoTab->getCommentsHistoryBlock()->getComments();
+
+        foreach ($comments as $key => $comment) {
+            if (strstr($comment['comment'], 'Captured') === false) {
+                unset($comments[$key]);
+            }
+        }
+        $comments = array_values($comments);
+
         foreach ($capturedPrices as $key => $capturedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
-                sprintf(self::CAPTURED_AMOUNT_PATTERN, $capturedPrice),
-                $actualCapturedAmount[$key],
+                sprintf(self::CAPTURED_AMOUNT_PATTERN, preg_quote(number_format($capturedPrice, 2, '.', ''))),
+                $comments[$key]['comment'],
                 'Incorrect captured amount value for the order #' . $orderId
             );
         }

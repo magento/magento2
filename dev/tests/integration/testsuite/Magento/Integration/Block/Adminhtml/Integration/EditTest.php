@@ -118,6 +118,5 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $baseUrl = Bootstrap::getObjectManager()->get(\Magento\Framework\Url::class)->getBaseUrl();
         $this->assertContains($baseUrl, $this->editBlock->getFormActionUrl());
-
     }
 }

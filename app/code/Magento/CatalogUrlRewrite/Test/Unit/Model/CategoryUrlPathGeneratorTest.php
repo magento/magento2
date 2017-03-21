@@ -5,8 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
-use \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
-
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

@@ -108,7 +108,7 @@ class ObjectManagerFactory
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
-            $this->directoryList->getPath(DirectoryList::GENERATION)
+            $this->directoryList->getPath(DirectoryList::GENERATED_CODE)
         );
 
         $definitions = $definitionFactory->createClassDefinition();

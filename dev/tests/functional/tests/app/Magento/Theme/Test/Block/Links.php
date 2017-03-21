@@ -132,6 +132,17 @@ class Links extends Block
     }
 
     /**
+     * Get text of the welcome message.
+     *
+     * @return string
+     */
+    public function getWelcomeText()
+    {
+        $this->waitForElementVisible($this->welcomeMessage);
+        return $this->_rootElement->find($this->welcomeMessage)->getText();
+    }
+
+    /**
      * Verify if authorization link is present or not.
      *
      * @return bool

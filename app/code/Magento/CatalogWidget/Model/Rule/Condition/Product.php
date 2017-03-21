@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * CatalogWidget Rule Product Condition data model
  */

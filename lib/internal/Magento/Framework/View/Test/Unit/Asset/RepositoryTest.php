@@ -185,8 +185,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'baseUrl' => '',
                     'areaType' => '',
                     'themePath' => 'Default',
-                    'localeCode' => '',
-                    'isSecure' => '',
+                    'localeCode' => ''
                 ]
             )
             ->willReturn($fallbackContextMock);
@@ -251,8 +250,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'baseUrl' => '',
                     'areaType' => 'area',
                     'themePath' => '',
-                    'localeCode' => 'locale',
-                    'isSecure' => '',
+                    'localeCode' => 'locale'
                 ]
             )
             ->willReturn($fallbackContextMock);

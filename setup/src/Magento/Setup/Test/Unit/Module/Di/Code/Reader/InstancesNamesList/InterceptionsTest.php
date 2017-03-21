@@ -39,6 +39,9 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
      */
     private $logMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
@@ -97,7 +100,7 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListNoValidation()
     {
-        $path = '/var/generation';
+        $path = '/generated/code';
 
         $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 

@@ -6,15 +6,17 @@
 namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Manages generated code.
+ */
 class Io
 {
     /**
      * Default code generation directory
      * Should correspond the value from \Magento\Framework\Filesystem
      */
-    const DEFAULT_DIRECTORY = 'var/generation';
+    const DEFAULT_DIRECTORY = 'generated/code';
 
     /**
      * Path to directory where new file must be created

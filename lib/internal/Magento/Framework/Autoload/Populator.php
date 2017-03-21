@@ -22,7 +22,7 @@ class Populator
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {
-        $generationDir = $dirList->getPath(DirectoryList::GENERATION);
+        $generationDir = $dirList->getPath(DirectoryList::GENERATED_CODE);
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 
         $autoloader->addPsr4('Magento\\', [$generationDir . '/Magento/'], true);

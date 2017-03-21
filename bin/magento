@@ -28,5 +28,5 @@ try {
         echo "\n\n";
         $e = $e->getPrevious();
     }
-    exit(Cli::RETURN_FAILURE);
+    exit(Magento\Framework\Console\Cli::RETURN_FAILURE);
 }

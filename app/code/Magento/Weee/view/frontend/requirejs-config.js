@@ -5,8 +5,8 @@
 
 var config = {
     map: {
-        "*": {
-            "taxToggle": "Magento_Weee/tax-toggle"
+        '*': {
+            'taxToggle': 'Magento_Weee/tax-toggle'
         }
     }
 };

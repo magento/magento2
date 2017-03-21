@@ -117,6 +117,5 @@ class Options implements OptionSourceInterface
             $this->currentOptions[$name]['label'] = $name;
             $this->currentOptions[$name]['value'] = array_values($groups);
         }
-
     }
 }

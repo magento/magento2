@@ -5,8 +5,8 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Theme\Model\Design\Backend\Exceptions;
 use Magento\Framework\App\Area;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
@@ -35,12 +35,13 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
-
+        $serializerMock = $this->getMockBuilder(Json::class)->getMock();
         $this->model = (new ObjectManager($this))->getObject(
             \Magento\Theme\Model\Design\Backend\Exceptions::class,
             [
                 'context' => $this->contextMock,
                 'design' => $this->designMock,
+                'serializer' => $serializerMock,
             ]
         );
     }

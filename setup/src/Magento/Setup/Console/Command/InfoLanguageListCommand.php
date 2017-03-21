@@ -56,6 +56,5 @@ class InfoLanguageListCommand extends Command
         }
 
         $table->render($output);
-
     }
 }

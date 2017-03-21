@@ -89,7 +89,7 @@ class SetModeCommand extends Command
             );
             $toMode = $input->getArgument(self::MODE_ARGUMENT);
             $skipCompilation = $input->getOption(self::SKIP_COMPILATION_OPTION);
-            switch($toMode) {
+            switch ($toMode) {
                 case State::MODE_DEVELOPER:
                     $modeController->enableDeveloperMode();
                     break;

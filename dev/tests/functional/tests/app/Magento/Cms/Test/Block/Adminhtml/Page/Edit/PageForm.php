@@ -36,6 +36,13 @@ class PageForm extends FormTabs
     protected $loader = "data-role='loader'";
 
     /**
+     * Selector for action header.
+     *
+     * @var string
+     */
+    protected $header = 'header.page-content, [data-ui-id="page-actions-toolbar-content-header"]';
+
+    /**
      * Page Content Show/Hide Editor toggle button.
      *
      * @return void

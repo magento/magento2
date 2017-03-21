@@ -29,13 +29,16 @@ class Cache extends Cli
     const PARAM_CACHE_ENABLE = 'cache:enable';
 
     /**
-     * Flush cache.
+     * Flush Cache.
+     * If no parameters are set, all cache types are flushed.
      *
+     * @param array $cacheTypes
      * @return void
      */
-    public function flush()
+    public function flush(array $cacheTypes = [])
     {
-        parent::execute(Cache::PARAM_CACHE_FLUSH);
+        $options = empty($cacheTypes) ? '' : ' ' . implode(' ', $cacheTypes);
+        parent::execute(Cache::PARAM_CACHE_FLUSH . $options);
     }
 
     /**

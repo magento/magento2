@@ -280,7 +280,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteIdMock = $this->getMock(\Magento\Quote\Model\QuoteIdMask::class, [], [], '', false);
         $quoteIdFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteIdMaskFactory::class, ['create'], [], '', false);
         $this->setPropertyValue($this->model, 'quoteIdMaskFactory', $quoteIdFactoryMock);
-
     }
 
     public function testCreateEmptyCartAnonymous()

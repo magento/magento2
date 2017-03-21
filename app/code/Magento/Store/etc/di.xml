@@ -55,7 +55,7 @@
     </type>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
-    <type name="\Magento\Framework\App\Action\AbstractAction">
+    <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
         <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
@@ -111,6 +111,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -121,6 +122,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -131,6 +133,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -197,11 +200,6 @@
                 </item>
             </argument>
             <argument name="default" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Acl\Cache">
-        <arguments>
-            <argument name="cacheKey" xsi:type="string">global_acl_resources</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Config\Initial\Converter">
@@ -367,6 +365,14 @@
                     <item name="source" xsi:type="object">scopesConfigSourceAggregated</item>
                     <item name="namespace" xsi:type="const">Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="commandStoreList" xsi:type="object">Magento\Store\Console\Command\StoreListCommand</item>
+                <item name="commandWebsiteList" xsi:type="object">Magento\Store\Console\Command\WebsiteListCommand</item>
             </argument>
         </arguments>
     </type>

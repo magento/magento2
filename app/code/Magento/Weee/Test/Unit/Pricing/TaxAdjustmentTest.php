@@ -10,7 +10,6 @@ namespace Magento\Weee\Test\Unit\Pricing;
 
 use \Magento\Weee\Pricing\TaxAdjustment;
 
-
 class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
 {
     /**

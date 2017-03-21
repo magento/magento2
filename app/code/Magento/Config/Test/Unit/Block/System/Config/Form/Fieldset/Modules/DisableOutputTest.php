@@ -7,6 +7,7 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Fieldset\Modules;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated because \Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput is deprecated
  */
 class DisableOutputTest extends \PHPUnit_Framework_TestCase
 {

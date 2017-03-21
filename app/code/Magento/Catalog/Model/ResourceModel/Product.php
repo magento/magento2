@@ -645,4 +645,17 @@ class Product extends AbstractResource
         }
         return $this->productCategoryLink;
     }
+
+    /**
+     * Extends parent method to be appropriate for product.
+     * Store id is required to correctly identify attribute value we are working with.
+     *
+     * {@inheritdoc}
+     */
+    protected function getAttributeRow($entity, $object, $attribute)
+    {
+        $data = parent::getAttributeRow($entity, $object, $attribute);
+        $data['store_id'] = $object->getStoreId();
+        return $data;
+    }
 }

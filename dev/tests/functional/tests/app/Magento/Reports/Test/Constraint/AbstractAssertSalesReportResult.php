@@ -53,8 +53,8 @@ abstract class AbstractAssertSalesReportResult extends AbstractConstraint
     protected function prepareExpectedResult(array $expectedSalesData)
     {
         $salesItems = 0;
-        $invoice = $this->order->getPrice()[0]['grand_invoice_total'];
-        $salesTotal = $this->order->getPrice()[0]['grand_order_total'];
+        $invoice = $this->order->getPrice()['invoice'][0]['grand_invoice_total'];
+        $salesTotal = $this->order->getPrice()['invoice'][0]['grand_order_total'];
         foreach ($this->order->getEntityId()['products'] as $product) {
             $salesItems += $product->getCheckoutData()['qty'];
         }

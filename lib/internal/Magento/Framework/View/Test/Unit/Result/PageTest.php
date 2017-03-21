@@ -6,61 +6,67 @@
 namespace Magento\Framework\View\Test\Unit\Result;
 
 use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\View\EntitySpecificHandlesList;
 
 /**
  * Result Page Test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\View\Result\Page
      */
-    protected $page;
+    private $page;
 
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
+    private $context;
 
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layout;
+    private $layout;
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutMerge;
+    private $layoutMerge;
 
     /**
      * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $pageConfig;
+    private $pageConfig;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $translateInline;
+    private $translateInline;
 
     /**
      * @var \Magento\Framework\View\Page\Config\Renderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $pageConfigRenderer;
+    private $pageConfigRenderer;
 
     /**
      * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewFileSystem;
+    private $viewFileSystem;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutFactory;
+    private $layoutFactory;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
+    private $entitySpecificHandlesListMock;
 
     protected function setUp()
     {
@@ -119,6 +125,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with(['pageConfig' => $this->pageConfig])
             ->willReturn($this->pageConfigRenderer);
 
+        $this->entitySpecificHandlesListMock = $this->getMock(EntitySpecificHandlesList::class, [], [], '', false);
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->page = $objectManagerHelper->getObject(
             \Magento\Framework\View\Result\Page::class,
@@ -128,6 +136,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'translateInline' => $this->translateInline,
                 'pageConfigRendererFactory' => $pageConfigRendererFactory,
+                'entitySpecificHandlesList' => $this->entitySpecificHandlesListMock
             ]
         );
     }
@@ -221,7 +230,39 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with($expected)
             ->willReturnSelf();
 
+        $this->entitySpecificHandlesListMock->expects($this->at(0))
+            ->method('addHandle')->with('full_action_name_key_one_val_one');
+        $this->entitySpecificHandlesListMock->expects($this->at(1))
+            ->method('addHandle')->with('full_action_name_key_two_val_two');
+
         $this->page->addPageLayoutHandles($parameters, $defaultHandle);
+    }
+
+    public function testAddPageLayoutHandlesNotEntitySpecific()
+    {
+        $fullActionName = 'Full_Action_Name';
+        $defaultHandle = null;
+        $parameters = [
+            'key_one' => 'val_one',
+            'key_two' => 'val_two',
+        ];
+        $expected = [
+            'full_action_name',
+            'full_action_name_key_one_val_one',
+            'full_action_name_key_two_val_two',
+        ];
+        $this->request->expects($this->any())
+            ->method('getFullActionName')
+            ->will($this->returnValue($fullActionName));
+
+        $this->layoutMerge->expects($this->any())
+            ->method('addHandle')
+            ->with($expected)
+            ->willReturnSelf();
+
+        $this->entitySpecificHandlesListMock->expects($this->never())->method('addHandle');
+
+        $this->page->addPageLayoutHandles($parameters, $defaultHandle, false);
     }
 
     public function testAddPageLayoutHandlesWithDefaultHandle()

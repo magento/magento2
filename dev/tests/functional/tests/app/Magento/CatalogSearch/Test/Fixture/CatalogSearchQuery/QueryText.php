@@ -27,7 +27,11 @@ class QueryText extends DataSource
     protected $product;
 
     /**
-     * @constructor
+     * @var InjectableFixture[]
+     */
+    private $products;
+
+    /**
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -35,24 +39,79 @@ class QueryText extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        $explodeValue = explode('::', $data['value']);
-        if (!empty($explodeValue) && count($explodeValue) > 1) {
-            $fixtureCode = $explodeValue[0];
-            $dataset = isset($explodeValue[2]) ? $explodeValue[1] : '';
-            $searchValue = isset($explodeValue[2]) ? $explodeValue[2] : $explodeValue[1];
-            $this->product = $fixtureFactory->createByCode($fixtureCode, ['dataset' => $dataset]);
-            if (!$this->product->hasData('id')) {
-                $this->product->persist();
+
+        $this->data = array_key_exists('search_query', $data) ? $data['search_query'] : null;
+
+        $this->products = $this->createProducts($fixtureFactory, (array)$data['value']);
+    }
+
+    /**
+     * @param FixtureFactory $fixtureFactory
+     * @param array $productsData
+     * @return InjectableFixture[]
+     */
+    private function createProducts(FixtureFactory $fixtureFactory, $productsData)
+    {
+        $products = [];
+        foreach ($productsData as $productStringData) {
+            $productData = explode('::', $productStringData);
+            if (!empty($productData) && count($productData) > 1) {
+                $product = $this->createProduct($fixtureFactory, $productData);
+
+                $searchValue = isset($productData[2]) ? $productData[2] : $productData[1];
+                if ($this->data === null) {
+                    if ($product->hasData($searchValue)) {
+                        $getProperty = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $searchValue)));
+                        $this->data = $product->$getProperty();
+                    } else {
+                        $this->data = $searchValue;
+                    }
+                }
+
+                $products[] = $product;
+            } elseif ($this->data === null) {
+                $this->data = strval($productData);
             }
-            if ($this->product->hasData($searchValue)) {
-                $getProperty = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $searchValue)));
-                $this->data = $this->product->$getProperty();
-            } else {
-                $this->data = $searchValue;
-            }
-        } else {
-            $this->data = strval($data['value']);
         }
+
+        return $products;
+    }
+
+    /**
+     * @param FixtureFactory $fixtureFactory
+     * @param $productData
+     * @return InjectableFixture
+     */
+    private function createProduct(FixtureFactory $fixtureFactory, $productData)
+    {
+        $fixtureCode = $this->getProductFixtureCode($productData);
+        $dataset = $this->getProductDataSet($productData);
+        $product = $fixtureFactory->createByCode($fixtureCode, ['dataset' => $dataset]);
+        if (!$product->hasData('id')) {
+            $product->persist();
+        }
+
+        return $product;
+    }
+
+    /**
+     * @param $productData
+     * @return string
+     */
+    private function getProductFixtureCode($productData)
+    {
+        $fixtureCode = $productData[0];
+
+        return $fixtureCode;
+    }
+
+    /**
+     * @param $productData
+     * @return string
+     */
+    private function getProductDataSet($productData)
+    {
+        return (isset($productData[2]) || null !== $this->data) ? $productData[1] : '';
     }
 
     /**
@@ -60,8 +119,18 @@ class QueryText extends DataSource
      *
      * @return InjectableFixture
      */
-    public function getProduct()
+    public function getFirstProduct()
     {
-        return $this->product;
+        return reset($this->products);
+    }
+
+    /**
+     * Get product fixture to search.
+     *
+     * @return InjectableFixture[]
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }

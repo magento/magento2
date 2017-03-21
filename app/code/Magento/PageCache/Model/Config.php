@@ -5,8 +5,10 @@
  */
 namespace Magento\PageCache\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Model is responsible for replacing default vcl template
@@ -41,6 +43,8 @@ class Config
 
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
 
+    const XML_VARNISH_PAGECACHE_GRACE_PERIOD = 'system/full_page_cache/varnish/grace_period';
+
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
     /**
@@ -49,9 +53,9 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to Varnish 3 config template path
+     * XML path to Varnish 5 config template path
      */
-    const VARNISH_3_CONFIGURATION_PATH = 'system/full_page_cache/varnish3/path';
+    const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
      * XML path to Varnish 4 config template path
@@ -74,21 +78,29 @@ class Config
     protected $reader;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param Dir\Reader $reader
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
-        \Magento\Framework\Module\Dir\Reader $reader
+        \Magento\Framework\Module\Dir\Reader $reader,
+        Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
         $this->reader = $reader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -138,14 +150,8 @@ class Config
     protected function _getReplacements()
     {
         return [
-            '/* {{ host }} */' => $this->_scopeConfig->getValue(
-                self::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ),
-            '/* {{ port }} */' => $this->_scopeConfig->getValue(
-                self::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ),
+            '/* {{ host }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
+            '/* {{ port }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
             '/* {{ ips }} */' => $this->_getAccessList(),
             '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions(),
             // http headers get transformed by php `X-Forwarded-Proto: https`
@@ -154,11 +160,9 @@ class Config
             '/* {{ ssl_offloaded_header }} */' => str_replace(
                 '_',
                 '-',
-                $this->_scopeConfig->getValue(
-                    \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )
+                $this->_scopeConfig->getValue(\Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER)
+            ),
+            '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
         ];
     }
 
@@ -176,10 +180,7 @@ class Config
     {
         $result = '';
         $tpl = "    \"%s\";";
-        $accessList = $this->_scopeConfig->getValue(
-            self::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
         if (!empty($accessList)) {
             $result = [];
             $ips = explode(',', $accessList);
@@ -209,7 +210,7 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($expressions) {
-            $rules = array_values(unserialize($expressions));
+            $rules = array_values($this->serializer->unserialize($expressions));
             foreach ($rules as $i => $rule) {
                 if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
                     if (!empty($matches[2])) {

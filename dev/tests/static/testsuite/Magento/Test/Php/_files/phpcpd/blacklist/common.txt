@@ -109,7 +109,7 @@ Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule
 Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
-var/generation
+generated/code
 Magento/Newsletter/Block/Adminhtml/Template/Grid/Renderer
 Magento/Newsletter/Model/Template/Filter
 Magento/Newsletter/Model/Resource/Subscriber

@@ -31,7 +31,6 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $paypalConfigFactoryMock->expects(self::once())
             ->method('create')
             ->willReturn($configMock);

@@ -23,6 +23,11 @@ class DeployStrategyFactory
     const DEPLOY_STRATEGY_QUICK = 'quick';
 
     /**
+     * Strategy for deploying js dictionary
+     */
+    const DEPLOY_STRATEGY_JS_DICTIONARY = 'js-dictionary';
+
+    /**
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
@@ -41,6 +46,7 @@ class DeployStrategyFactory
         $strategyMap = [
             self::DEPLOY_STRATEGY_STANDARD => Deploy\LocaleDeploy::class,
             self::DEPLOY_STRATEGY_QUICK => Deploy\LocaleQuickDeploy::class,
+            self::DEPLOY_STRATEGY_JS_DICTIONARY => Deploy\JsDictionaryDeploy::class
         ];
 
         if (!isset($strategyMap[$type])) {

@@ -35,7 +35,7 @@ class Group
     /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
-    /** @var StoreManagerInterface  */
+    /** @var StoreManagerInterface */
     protected $storeManager;
 
     /**

@@ -107,6 +107,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('messages', $variables);
         $this->assertFalse($variables['success']);
     }
+
     public function testStartActionInstallException()
     {
         $this->webLogger->expects($this->once())->method('clear');

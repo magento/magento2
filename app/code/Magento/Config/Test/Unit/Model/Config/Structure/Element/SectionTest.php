@@ -6,6 +6,7 @@
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
 class SectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +25,16 @@ class SectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_authorizationMock;
 
+    /**
+     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementVisibilityMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
+        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
         $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->_authorizationMock = $this->getMock(\Magento\Framework\AuthorizationInterface::class);
 
@@ -36,6 +44,12 @@ class SectionTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->_storeManagerMock,
                 'authorization' => $this->_authorizationMock,
             ]
+        );
+        $objectManager->setBackwardCompatibleProperty(
+            $this->_model,
+            'elementVisibility',
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
         );
     }
 

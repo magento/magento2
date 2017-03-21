@@ -53,8 +53,6 @@ define([
             if (isConfigurable) {
                 this.disable();
                 this.clear();
-            } else {
-                this.enable();
             }
         }
     });

@@ -88,7 +88,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
             $resourceCollection,
             $data
         );
-
     }
 
     /**
@@ -729,5 +728,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

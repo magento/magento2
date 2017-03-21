@@ -36,9 +36,8 @@ class AssertCustomerDefaultAddressFrontendAddressBook extends AbstractConstraint
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('Address Book');
 
         $shippingAddressRendered = $this->createAddressRenderer($shippingAddress)->render();
-        $validated =
-            $shippingAddressRendered == $customerAddress->getDefaultAddressBlock()->getDefaultShippingAddress();
-
+        $defaultShippingAddress = $customerAddress->getDefaultAddressBlock()->getDefaultShippingAddress();
+        $validated = strpos($defaultShippingAddress, trim($shippingAddressRendered)) !== false;
         if (null !== $billingAddress) {
             $billingAddressRendered = $customerAddress->getDefaultAddressBlock()->getDefaultBillingAddress();
             $validated =

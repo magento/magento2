@@ -70,6 +70,7 @@ class Grid extends DataGrid
      */
     public function getCreditMemoId()
     {
+        $this->resetFilter();
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         return $this->_rootElement->find($this->creditMemoId)->getText();
     }
@@ -82,6 +83,7 @@ class Grid extends DataGrid
     public function getIds()
     {
         $result = [];
+        $this->resetFilter();
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $creditMemoIds = $this->_rootElement->getElements($this->creditMemoId);
         foreach ($creditMemoIds as $creditMemoId) {

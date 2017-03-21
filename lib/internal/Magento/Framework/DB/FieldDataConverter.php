@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\DB;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select\QueryModifierInterface;
@@ -26,27 +28,36 @@ class FieldDataConverter
     private $dataConverter;
 
     /**
+     * @var SelectFactory
+     */
+    private $selectFactory;
+
+    /**
      * Constructor
      *
      * @param Generator $queryGenerator
      * @param DataConverterInterface $dataConverter
+     * @param SelectFactory $selectFactory
      */
     public function __construct(
         Generator $queryGenerator,
-        DataConverterInterface $dataConverter
+        DataConverterInterface $dataConverter,
+        SelectFactory $selectFactory = null
     ) {
         $this->queryGenerator = $queryGenerator;
         $this->dataConverter = $dataConverter;
+        $this->selectFactory = $selectFactory ?: ObjectManager::getInstance()->get(SelectFactory::class);
     }
 
     /**
-     * Convert field data from one representation to another
+     * Convert table field data from one representation to another uses DataConverterInterface
      *
      * @param AdapterInterface $connection
      * @param string $table
      * @param string $identifier
      * @param string $field
      * @param QueryModifierInterface|null $queryModifier
+     * @throws FieldDataConversionException
      * @return void
      */
     public function convert(
@@ -56,7 +67,7 @@ class FieldDataConverter
         $field,
         QueryModifierInterface $queryModifier = null
     ) {
-        $select = $connection->select()
+        $select = $this->selectFactory->create($connection)
             ->from($table, [$identifier, $field])
             ->where($field . ' IS NOT NULL');
         if ($queryModifier) {
@@ -66,9 +77,28 @@ class FieldDataConverter
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
             foreach ($rows as $row) {
-                $bind = [$field => $this->dataConverter->convert($row[$field])];
-                $where = [$identifier . ' = ?' => (int) $row[$identifier]];
-                $connection->update($table, $bind, $where);
+                try {
+                    $convertedValue = $this->dataConverter->convert($row[$field]);
+                    if ($row[$field] === $convertedValue) {
+                        // skip for data rows that have been already converted
+                        continue;
+                    }
+                    $bind = [$field => $convertedValue];
+                    $where = [$identifier . ' = ?' => (int) $row[$identifier]];
+                    $connection->update($table, $bind, $where);
+                } catch (DataConversionException $e) {
+                    throw new \Magento\Framework\DB\FieldDataConversionException(
+                        sprintf(
+                            \Magento\Framework\DB\FieldDataConversionException::MESSAGE_PATTERN,
+                            $field,
+                            $table,
+                            $identifier,
+                            $row[$identifier],
+                            get_class($this->dataConverter),
+                            $e->getMessage()
+                        )
+                    );
+                }
             }
         }
     }

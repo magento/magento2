@@ -67,7 +67,6 @@ class ContainerTest extends AbstractContainerTest
             . '<option value="content.top" >Main Content Top</option></select>';
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -154,7 +153,6 @@ class ContainerTest extends AbstractContainerTest
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -285,7 +283,6 @@ class ContainerTest extends AbstractContainerTest
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -403,7 +400,6 @@ class ContainerTest extends AbstractContainerTest
             . 'Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->exactly(2))->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')

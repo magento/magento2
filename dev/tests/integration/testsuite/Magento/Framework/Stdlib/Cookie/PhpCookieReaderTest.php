@@ -33,6 +33,7 @@ class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
         $_COOKIE[self::NAME] = self::VALUE;
         $this->model = new PhpCookieReader();
     }
+
     public function testGetCookieExists()
     {
         $this->assertSame(self::VALUE, $this->model->getCookie(self::NAME, self::DEFAULT_VAL));

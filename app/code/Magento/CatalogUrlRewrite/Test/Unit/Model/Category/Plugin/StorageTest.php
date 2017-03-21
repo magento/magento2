@@ -6,7 +6,6 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogUrlRewrite\Model\Category\ProductFactory;
 use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage as CategoryStoragePlugin;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -23,11 +22,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      * @var CategoryStoragePlugin
      */
     private $plugin;
-
-    /**
-     * @var ProductFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $productFactory;
 
     /**
      * @var UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -56,10 +50,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
         $this->storage = $this->getMockBuilder(StorageInterface::class)
             ->getMockForAbstractClass();
         $this->urlFinder = $this->getMockBuilder(UrlFinderInterface::class)
@@ -78,12 +68,15 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->plugin = (new ObjectManager($this))->getObject(
             CategoryStoragePlugin::class,
             [
-                'productFactory' => $this->productFactory,
-                'urlFinder' => $this->urlFinder
+                'urlFinder' => $this->urlFinder,
+                'productResource' => $this->productResourceModel
             ]
         );
     }
 
+    /**
+     * test AfterReplace method
+     */
     public function testAfterReplace()
     {
         $this->urlRewrite->expects(static::any())->method('getMetadata')->willReturn(['category_id' => '5']);
@@ -97,10 +90,20 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->urlFinder->expects(static::once())->method('findAllByData')->willReturn([$this->urlRewrite]);
 
-        $this->productFactory->expects(static::once())->method('create')->willReturn($this->product);
-        $this->product->expects(static::once())->method('getResource')->willReturn($this->productResourceModel);
         $this->productResourceModel->expects(static::once())->method('saveMultiple')->willReturnSelf();
 
         $this->plugin->afterReplace($this->storage, null, $productUrls);
+    }
+
+    /**
+     * test BeforeDeleteByData method
+     */
+    public function testBeforeDeleteByData()
+    {
+        $data = [1, 2, 3];
+        $this->productResourceModel->expects(static::once())
+            ->method('removeMultipleByProductCategory')
+            ->with($data)->willReturnSelf();
+        $this->plugin->beforeDeleteByData($this->storage, $data);
     }
 }

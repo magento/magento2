@@ -11,6 +11,7 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Place order in one page checkout.
@@ -60,12 +61,20 @@ class PlaceOrderStep implements TestStepInterface
     private $products;
 
     /**
+     * Fixture OrderInjectable.
+     *
+     * @var OrderInjectable
+     */
+    private $order;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param array $products
      * @param array $prices
+     * @param OrderInjectable|null $order
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
@@ -73,7 +82,8 @@ class PlaceOrderStep implements TestStepInterface
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
         array $products = [],
-        array $prices = []
+        array $prices = [],
+        OrderInjectable $order = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
@@ -81,6 +91,7 @@ class PlaceOrderStep implements TestStepInterface
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
         $this->prices = $prices;
+        $this->order = $order;
     }
 
     /**
@@ -95,14 +106,14 @@ class PlaceOrderStep implements TestStepInterface
         }
         $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
         $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
+        $data = [
+            'id' => $orderId,
+            'entity_id' => ['products' => $this->products]
+        ];
+        $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            [
-                'data' => [
-                    'id' => $orderId,
-                    'entity_id' => ['products' => $this->products],
-                ]
-            ]
+            ['data' => array_merge($data, $orderData)]
         );
 
         return [

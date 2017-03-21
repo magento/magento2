@@ -99,7 +99,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * Remove all headers
-     * 
+     *
      * @return $this
      */
     public function clearHeaders()

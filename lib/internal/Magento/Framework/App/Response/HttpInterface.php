@@ -38,7 +38,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 
     /**
      * Get header value by name
-     * 
+     *
      * Returns first found header by passed name.
      * If header with specified name was not found returns false.
      *
@@ -57,14 +57,14 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 
     /**
      * Allow granular setting of HTTP response status code, version and phrase
-     * 
+     *
      * For example, a HTTP response as the following:
      *     HTTP 200 1.1 Your response has been served
      * Can be set with the arguments
      *     $httpCode = 200
      *     $version = 1.1
      *     $phrase = 'Your response has been served'
-     * 
+     *
      * @param int|string $httpCode
      * @param null|int|string $version
      * @param null|string $phrase
@@ -74,7 +74,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 
     /**
      * Append the given string to the response body
-     * 
+     *
      * @param string $value
      * @return self
      */
@@ -82,9 +82,9 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 
     /**
      * Set the response body to the given value
-     * 
+     *
      * Any previously set contents will be replaced by the new content.
-     * 
+     *
      * @param string $value
      * @return self
      */
