@@ -106,7 +106,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-
         $this->generator = $this->objectManager->getObject(
             \Magento\Webapi\Model\Rest\Swagger\Generator::class,
             [
