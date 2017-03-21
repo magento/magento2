@@ -9,6 +9,9 @@
 
 namespace Magento\PageCache\Test\Unit\Controller\Block;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RenderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -71,7 +74,12 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
             \Magento\PageCache\Controller\Block\Render::class,
-            ['context' => $contextMock, 'translateInline' => $this->translateInline]
+            [
+                'context' => $contextMock,
+                'translateInline' => $this->translateInline,
+                'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+            ]
         );
     }
 

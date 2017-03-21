@@ -47,9 +47,12 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySpecificHandlesListMock = $this->getMock(EntitySpecificHandlesList::class, [], [], '', false);
+
         $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement(
             $this->_configMock,
-            $this->entitySpecificHandlesListMock
+            $this->entitySpecificHandlesListMock,
+            new \Magento\Framework\Serialize\Serializer\Json(),
+            new \Magento\Framework\Serialize\Serializer\Base64Json()
         );
         $this->_observerMock = $this->getMock(
             \Magento\Framework\Event\Observer::class,
