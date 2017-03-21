@@ -135,7 +135,7 @@ class Importer
                  * A user should confirm import continuing if $warnings is not empty.
                  */
                 if (
-                    !$input->getOption('no-interaction')
+                    $input->isInteractive()
                     && !empty($warnings)
                     && !$this->questionPerformer->execute($warnings, $input, $output)
                 ) {
