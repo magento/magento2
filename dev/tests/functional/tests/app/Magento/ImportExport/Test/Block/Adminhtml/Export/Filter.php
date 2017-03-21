@@ -27,4 +27,21 @@ class Filter extends Grid
             'selector' => 'input[name="attribute_code"]',
         ],
     ];
+
+    /**
+     * Locator for "Continue" button.
+     *
+     * @var string
+     */
+    private $continueButton = 'button.action-.scalable';
+
+    /**
+     * Click on "Continue" button.
+     *
+     * @return void
+     */
+    public function clickContinue()
+    {
+        $this->_rootElement->find($this->continueButton)->click();
+    }
 }
