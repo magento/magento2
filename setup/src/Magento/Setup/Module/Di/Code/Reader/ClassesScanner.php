@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Code\Reader;
@@ -52,19 +52,6 @@ class ClassesScanner implements ClassesScannerInterface
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $classes = $this->extract($recursiveIterator);
-        return $classes;
-    }
-
-    /**
-     * Extracts all the classes from the recursive iterator
-     *
-     * @param \RecursiveIteratorIterator $recursiveIterator
-     * @return array
-     */
-
-    private function extract(\RecursiveIteratorIterator $recursiveIterator)
-    {
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
@@ -95,7 +82,7 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Find out if file should be excluded
      *
-     * @param string $fileItemPath
+     * @param string $fileItem
      * @param string $patterns
      * @return bool
      */
