@@ -49,11 +49,6 @@
     <preference for="Magento\Directory\Api\Data\RegionInformationInterface" type="Magento\Directory\Model\Data\RegionInformation" />
 
     <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="currency/import/error_email" xsi:type="string">1</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
