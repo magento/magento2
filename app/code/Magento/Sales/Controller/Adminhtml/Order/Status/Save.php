@@ -41,7 +41,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
                 $label = $filterManager->stripTags($label);
             }
 
-            if ($this->updateStatus($isNew, $data, $statusCode) !== False) {
+            if ($this->updateStatus($isNew, $data, $statusCode) !== false) {
                 return $this->resultRedirect;
             }
             
@@ -49,7 +49,8 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             if ($isNew) {
                 return $this->resultRedirect->setPath('sales/*/new');
             }
-            return $this->resultRedirect->setPath('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
+            return $this->resultRedirect->setPath('sales/*/edit', 
+                    ['status' => $this->getRequest()->getParam('status')]);
         }
         return $this->resultRedirect->setPath('sales/*/');
     }
@@ -87,6 +88,6 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             );
         }
         
-        return False;
+        return false;
     }
 }
