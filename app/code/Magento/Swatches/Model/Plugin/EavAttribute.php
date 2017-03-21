@@ -186,7 +186,7 @@ class EavAttribute
     {
         if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
             foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && $optionsArray['delete'][$optionId] == 1) {
+                if (isset($optionsArray['delete'][$optionId]) & $optionsArray['delete'][$optionId]) {
                     unset($optionsArray['value'][$optionId]);
                 }
             }
