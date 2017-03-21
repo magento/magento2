@@ -69,13 +69,23 @@ class AssertExportCustomerAddresses extends AbstractConstraint
         Address $address,
         Data $exportData
     ) {
-        $regexp = '/';
+        $expectedFields = [];
+        $result = true;
+
         foreach ($fields as $field) {
             $fixture = ($field == 'email') ? $customer : $address;
-            $regexp .= '.*(' . $fixture->getData($field) . ')';
+            $expectedFields[] = $fixture->getData($field);
         }
-        $regexp .= '/U';
-        preg_match($regexp, $exportData->getContent(), $matches);
-        return !empty($matches);
+
+        $content = $exportData->getContent();
+
+        foreach ($expectedFields as $expectedField) {
+            if (strpos($content, $expectedField) === false) {
+                $result = false;
+                break;
+            }
+        }
+
+        return $result;
     }
 }
