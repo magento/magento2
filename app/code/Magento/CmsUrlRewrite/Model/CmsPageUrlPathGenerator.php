@@ -22,7 +22,6 @@ class CmsPageUrlPathGenerator
      * @param PageInterface $cmsPage
      *
      * @return string
-     * @api
      */
     public function getUrlPath(PageInterface $cmsPage)
     {
@@ -34,7 +33,6 @@ class CmsPageUrlPathGenerator
      *
      * @param PageInterface $cmsPage
      * @return string
-     * @api
      */
     public function getCanonicalUrlPath(PageInterface $cmsPage)
     {
@@ -46,7 +44,6 @@ class CmsPageUrlPathGenerator
      *
      * @param PageInterface $cmsPage
      * @return string
-     * @api
      */
     public function generateUrlKey(PageInterface $cmsPage)
     {
