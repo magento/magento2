@@ -12,6 +12,7 @@ use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * The process for updating of existing entities.
@@ -49,21 +50,31 @@ class Update implements ProcessorInterface
     private $groupFactory;
 
     /**
+     * The event manager.
+     *
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
      * @param WebsiteFactory $websiteFactory The factory for website entity
      * @param StoreFactory $storeFactory The factory for store entity
      * @param GroupFactory $groupFactory The factory for group entity
+     * @param ManagerInterface $eventManager The event manager
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
         WebsiteFactory $websiteFactory,
         StoreFactory $storeFactory,
-        GroupFactory $groupFactory
+        GroupFactory $groupFactory,
+        ManagerInterface $eventManager
     ) {
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->websiteFactory = $websiteFactory;
         $this->storeFactory = $storeFactory;
         $this->groupFactory = $groupFactory;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -163,6 +174,13 @@ class Update implements ProcessorInterface
             }
 
             $store->getResource()->save($store);
+            $store->getResource()->addCommitCallback(function () use ($store, $group, $website) {
+                $store->setGroup($group);
+                $store->setWebsite($website);
+                $store->getResource()->save($store);
+
+                $this->eventManager->dispatch('store_add', ['store' => $store]);
+            });
         }
     }
 
