@@ -207,10 +207,8 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->groupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn('2');
-
         $updateGroupData = $updateData[ScopeInterface::SCOPE_GROUPS][2];
         $updateGroupData['root_category_id'] = 2;
-
         $this->groupMock->expects($this->once())
             ->method('setData')
             ->with($updateGroupData);
