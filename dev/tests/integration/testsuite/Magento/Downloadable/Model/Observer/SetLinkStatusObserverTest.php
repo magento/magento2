@@ -126,18 +126,21 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
         $billingAddress->setAddressType('billing');
 
         $payment = $this->objectManager->create(
-            \Magento\Sales\Model\Order\Payment::class);
+            \Magento\Sales\Model\Order\Payment::class
+        );
         $payment->setMethod('checkmo');
 
         $orderItem = $this->objectManager->create(
-            \Magento\Sales\Model\Order\Item::class);
+            \Magento\Sales\Model\Order\Item::class
+        );
         $orderItem->setProductId(
             1
         )->setQtyOrdered(
             1
         )->setProductType(
             \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
-        )->setProductOptions([
+        )->setProductOptions(
+            [
                 'links' => [1]
             ]
         );
