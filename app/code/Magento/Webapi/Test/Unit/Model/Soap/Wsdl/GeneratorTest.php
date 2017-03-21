@@ -29,6 +29,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->serviceMetadata = $this->getMockBuilder(
@@ -85,6 +90,17 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->customAttributeTypeLocator = $objectManager
             ->getObject(\Magento\Eav\Model\EavCustomAttributeTypeLocator::class);
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
         $this->_wsdlGenerator = $objectManager->getObject(
             \Magento\Webapi\Model\Soap\Wsdl\Generator::class,
             [
@@ -93,7 +109,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $this->_typeProcessor,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'serviceMetadata' => $this->serviceMetadata,
-                'authorization' => $authorizationMock
+                'authorization' => $authorizationMock,
+                'serializer' => $this->serializer
             ]
         );
 
@@ -159,6 +176,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test exception for handle
      *
+     * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @expectedException        \Magento\Framework\Webapi\Exception
      * @expectedExceptionMessage exception message
      */
