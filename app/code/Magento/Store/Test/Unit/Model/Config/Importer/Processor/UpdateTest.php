@@ -207,9 +207,13 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->groupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn('2');
+
+        $updateGroupData = $updateData[ScopeInterface::SCOPE_GROUPS][2];
+        $updateGroupData['root_category_id'] = 2;
+
         $this->groupMock->expects($this->once())
             ->method('setData')
-            ->with($updateData[ScopeInterface::SCOPE_GROUPS][2]);
+            ->with($updateGroupData);
         $this->storeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->storeMock);
@@ -255,7 +259,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                     'group_id' => '2',
                     'website_id' => '2',
                     'name' => 'Changed Test Website Store',
-                    'root_category_id' => '2',
+                    'root_category_id' => '3',
                     'default_store_id' => '2',
                     'code' => 'test_website_store',
                 ],

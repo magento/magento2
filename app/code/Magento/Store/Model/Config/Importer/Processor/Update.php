@@ -179,7 +179,11 @@ class Update implements ProcessorInterface
         foreach ($items as $code => $groupData) {
             $websiteId = $groupData['website_id'];
 
-            unset($groupData['group_id'], $groupData['website_id']);
+            unset(
+                $groupData['group_id'],
+                $groupData['website_id'],
+                $groupData['root_category_id']
+            );
 
             $website = $this->findWebsiteById($data, $websiteId);
 
