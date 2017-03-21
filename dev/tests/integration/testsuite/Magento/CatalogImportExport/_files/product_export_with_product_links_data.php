@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/** Create category  */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
+/** Create fixture store */
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
+/** Create product with mulselect attribute */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
 
 $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

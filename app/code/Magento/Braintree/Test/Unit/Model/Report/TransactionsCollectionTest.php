@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
@@ -187,7 +187,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Add fields to filter
-     * 
+     *
      * @dataProvider addToFilterDataProvider
      */
     public function testAddToFilter($field, $condition, $filterMapperCall, $expectedCondition)
@@ -211,7 +211,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * addToFilter DataProvider
-     * 
+     *
      * @return array
      */
     public function addToFilterDataProvider()

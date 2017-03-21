@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,9 +53,11 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
                 $priceBlock->isVisible(),
                 'Price block is not displayed for product ' . $product->getName()
             );
-            $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
             $actualPrice['special'] = (float)$priceBlock->getSpecialPrice();
-            $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+            if ($productPrice[$key]['regular'] !== 'No') {
+                $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
+                $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+            }
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);
             \PHPUnit_Framework_Assert::assertTrue(
                 empty($diff),

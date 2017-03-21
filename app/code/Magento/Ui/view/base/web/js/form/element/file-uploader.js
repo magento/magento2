@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -18,6 +18,7 @@ define([
             value: [],
             maxFileSize: false,
             isMultipleFiles: false,
+            placeholderType: 'document', // 'image', 'video'
             allowedExtensions: false,
             previewTmpl: 'ui/form/element/uploader/preview',
             dropZone: '[data-role=drop-zone]',
@@ -72,6 +73,7 @@ define([
 
             this.value(value);
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -157,6 +159,8 @@ define([
          * @returns {Object} Modified file object.
          */
         processFile: function (file) {
+            file.previewType = this.getFilePreviewType(file);
+
             this.observe.call(file, true, [
                 'previewWidth',
                 'previewHeight'
@@ -235,6 +239,24 @@ define([
         },
 
         /**
+         * Get simplified file type.
+         *
+         * @param {Object} file - File to be checked.
+         * @returns {String}
+         */
+        getFilePreviewType: function (file) {
+            var type;
+
+            if (!file.type) {
+                return 'document';
+            }
+
+            type = file.type.split('/')[0];
+
+            return type !== 'image' && type !== 'video' ? 'document' : type;
+        },
+
+        /**
          * Checks if size of provided file exceeds
          * defined in configuration size limits.
          *
@@ -294,15 +316,20 @@ define([
         /**
          * Handler which is invoked prior to the start of a file upload.
          *
-         * @param {Event} e - Event obejct.
+         * @param {Event} e - Event object.
          * @param {Object} data - File data that will be uploaded.
          */
         onBeforeFileUpload: function (e, data) {
             var file     = data.files[0],
-                allowed  = this.isFileAllowed(file);
+                allowed  = this.isFileAllowed(file),
+                target   = $(e.target);
 
             if (allowed.passed) {
-                $(e.target).fileupload('process', data).done(function () {
+                target.on('fileuploadsend', function (event, postData) {
+                    postData.data.set('param_name', this.paramName);
+                }.bind(data));
+
+                target.fileupload('process', data).done(function () {
                     data.submit();
                 });
             } else {

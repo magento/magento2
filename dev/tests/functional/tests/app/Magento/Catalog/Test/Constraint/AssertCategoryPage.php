@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -177,8 +177,7 @@ class AssertCategoryPage extends AbstractConstraint
             }
         }
 
-        if (
-            isset($categoryData['landing_page'])
+        if (isset($categoryData['landing_page'])
             && isset($categoryData['display_mode'])
             && in_array($categoryData['display_mode'], $this->visibleCmsBlockMode)
         ) {

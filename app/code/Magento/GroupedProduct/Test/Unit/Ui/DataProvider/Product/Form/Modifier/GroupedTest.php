@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,6 @@ class GroupedTest extends AbstractModifierTest
      * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
-
 
     protected function setUp()
     {

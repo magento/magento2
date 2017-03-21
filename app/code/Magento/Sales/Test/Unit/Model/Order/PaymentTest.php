@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
@@ -1548,7 +1548,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $partialAmount = 12.00;
 
         $this->orderMock->expects(static::exactly(2))
-            ->method('getTotalDue')
+            ->method('getBaseTotalDue')
             ->willReturn($amount);
 
         static::assertFalse($this->payment->isCaptureFinal($partialAmount));

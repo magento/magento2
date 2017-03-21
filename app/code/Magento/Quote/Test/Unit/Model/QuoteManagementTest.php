@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -280,7 +280,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteIdMock = $this->getMock(\Magento\Quote\Model\QuoteIdMask::class, [], [], '', false);
         $quoteIdFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteIdMaskFactory::class, ['create'], [], '', false);
         $this->setPropertyValue($this->model, 'quoteIdMaskFactory', $quoteIdFactoryMock);
-
     }
 
     public function testCreateEmptyCartAnonymous()

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -98,7 +98,6 @@ define([
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
-                    self.reInitPayPal();
                 }
             });
 
@@ -297,7 +296,7 @@ define([
         getShippingAddress: function () {
             var address = quote.shippingAddress();
 
-            if (address.postcode === null) {
+            if (_.isNull(address.postcode) || _.isUndefined(address.postcode)) {
 
                 return {};
             }

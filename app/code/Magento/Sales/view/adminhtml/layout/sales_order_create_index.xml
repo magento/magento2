@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
 
         <referenceBlock name="page.title">
             <action method="setTitleId">
-                <argument translate="true" name="id" xsi:type="string">order-header</argument>
+                <argument translate="false" name="id" xsi:type="string">order-header</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="after.body.start">

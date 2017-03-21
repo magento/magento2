@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Block\Customer;
@@ -44,7 +44,7 @@ abstract class PaymentTokens extends Template
      * Get type of token
      * @return string
      */
-    abstract function getType();
+    abstract public function getType();
 
     /**
      * @return PaymentTokenInterface[]

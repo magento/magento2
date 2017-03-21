@@ -2,7 +2,7 @@
 /**
  * Scan source code for incorrect or undeclared modules dependencies
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -151,7 +151,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $root = BP;
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
         if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
-
             // The Dependency test is skipped for vendor/magento build
             self::markTestSkipped(
                 'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'

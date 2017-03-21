@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
@@ -199,6 +199,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
     /**
      * Handle REST request
+     *
+     * Based on request decide is it schema request or API request and process accordingly.
+     * Throws Exception in case if cannot be processed properly.
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface

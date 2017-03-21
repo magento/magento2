@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -16,7 +16,6 @@ use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -52,11 +51,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
-
-    /**
-     * @var SortOrderBuilder
-     */
-    protected $sortOrderBuilder;
 
     /**
      * @var AttributeGroupInterfaceFactory
@@ -115,7 +109,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             $attributeGroupSearchCriteria = $this->getSearchCriteriaBuilder()
                 ->addFilter('attribute_set_id', $attributeSet->getAttributeSetId())
                 ->addFilter('attribute_group_code', $groupCode)
-                ->addSortOrder($this->getSortOrderBuilder()->setAscendingDirection()->create())
                 ->setPageSize(1)
                 ->create();
 
@@ -250,18 +243,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         }
         return $this->searchCriteriaBuilder;
-    }
-
-    /**
-     * @return SortOrderBuilder
-     */
-    private function getSortOrderBuilder()
-    {
-        if (null === $this->sortOrderBuilder) {
-            $this->sortOrderBuilder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\SortOrderBuilder::class);
-        }
-        return $this->sortOrderBuilder;
     }
 
     /**

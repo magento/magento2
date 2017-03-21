@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Constraint;
@@ -10,34 +10,42 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Class AssertAcceptPaymentMessageInCommentsHistory
+ * Assert that accept payment message exists in Comments History section on order page in Admin.
  *
- * Constraint checks accept payment message in order comments history
  */
 class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
 {
-
     /**
+     * Accept payment message.
+     *
      * @var string
      */
     private static $message = 'Approved the payment online.';
 
     /**
-     * @param SalesOrderView $orderView
+     * Assert that accept payment message exists in Comments History section on order page in Admin.
+     *
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param $orderId
+     * @return void
      */
-    public function processAssert(SalesOrderView $orderView, OrderIndex $orderIndex, $orderId)
+    public function processAssert(SalesOrderView $salesOrderView, OrderIndex $orderIndex, $orderId)
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
-        $history = $orderView->getOrderHistoryBlock()->getCommentsHistory();
 
-        \PHPUnit_Framework_Assert::assertContains(self::$message, $history);
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
+
+        \PHPUnit_Framework_Assert::assertContains(self::$message, $latestComment['comment']);
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {

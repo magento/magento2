@@ -1,7 +1,8 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define(["prototype"], function(){
 
 window.Packaging = Class.create();
@@ -102,7 +103,7 @@ Packaging.prototype = {
     },
 
     sendCreateLabelRequest: function() {
-        var package = this;
+        var self = this;
         if (!this.validate()) {
             this.messages.show().update(this.validationErrorMsg);
             return;
@@ -183,11 +184,11 @@ Packaging.prototype = {
                          if (!isNaN(packedItemId)) {
                              this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][qty]']           = this.packages[packageId]['items'][packedItemId]['qty'];
                              this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][customs_value]'] = this.packages[packageId]['items'][packedItemId]['customs_value'];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][price]']         = package.defaultItemsPrice[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][name]']          = package.defaultItemsName[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][weight]']        = package.defaultItemsWeight[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][product_id]']    = package.defaultItemsProductId[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][order_item_id]'] = package.defaultItemsOrderItemId[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][price]']         = self.defaultItemsPrice[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][name]']          = self.defaultItemsName[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][weight]']        = self.defaultItemsWeight[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][product_id]']    = self.defaultItemsProductId[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][order_item_id]'] = self.defaultItemsOrderItemId[packedItemId];
                          }
                      }
                  }

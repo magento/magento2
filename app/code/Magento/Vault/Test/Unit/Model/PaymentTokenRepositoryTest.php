@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Model;
@@ -211,7 +211,6 @@ class PaymentTokenRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->paymentTokenMock->setPublicHash('');
         $this->assertFalse($this->repositoryModel->delete($this->paymentTokenMock));
         $this->assertFalse($this->paymentTokenMock->getIsActive());
-
     }
 
     /**
