@@ -544,8 +544,6 @@
         </arguments>
     </type>
     <!-- END Settlement Report Section -->
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

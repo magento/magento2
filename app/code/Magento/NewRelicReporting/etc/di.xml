@@ -11,8 +11,6 @@
             <argument name="fullModuleList" xsi:type="object">Magento\Framework\Module\FullModuleList</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

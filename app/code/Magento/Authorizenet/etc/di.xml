@@ -16,8 +16,6 @@
             <argument name="storage" xsi:type="object">Magento\Authorizenet\Model\Directpost\Session\Storage</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

@@ -965,8 +965,6 @@
     <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
         <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
     </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
