@@ -58,19 +58,20 @@ class ClassesScanner implements ClassesScannerInterface
             if ($fileItem->isDir() || $fileItem->getExtension() !== 'php') {
                 continue;
             }
+            $fileItemPath = $fileItem->getRealPath();
             foreach ($this->excludePatterns as $excludePatterns) {
-                if ($this->isExclude($fileItem, $excludePatterns)) {
+                if ($this->isExclude($fileItemPath, $excludePatterns)) {
                     continue 2;
                 }
             }
-            $fileScanner = new FileScanner($fileItem->getRealPath());
+            $fileScanner = new FileScanner($fileItemPath);
             $classNames = $fileScanner->getClassNames();
             foreach ($classNames as $className) {
                 if (empty($className)) {
                     continue;
                 }
                 if (!class_exists($className)) {
-                    require_once $fileItem->getRealPath();
+                    require_once $fileItemPath;
                 }
                 $classes[] = $className;
             }
@@ -81,17 +82,17 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Find out if file should be excluded
      *
-     * @param \SplFileInfo $fileItem
+     * @param string $fileItem
      * @param string $patterns
      * @return bool
      */
-    private function isExclude(\SplFileInfo $fileItem, $patterns)
+    private function isExclude($fileItemPath, $patterns)
     {
         if (!is_array($patterns)) {
             $patterns = (array)$patterns;
         }
         foreach ($patterns as $pattern) {
-            if (preg_match($pattern, str_replace('\\', '/', $fileItem->getRealPath()))) {
+            if (preg_match($pattern, str_replace('\\', '/', $fileItemPath))) {
                 return true;
             }
         }
