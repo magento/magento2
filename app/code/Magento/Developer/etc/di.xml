@@ -164,6 +164,7 @@
         </arguments>
     </type>
 
+    <!-- @api -->
     <virtualType name="AssetPreProcessorPool" type="Magento\Framework\View\Asset\PreProcessor\Pool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
