@@ -31,6 +31,13 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
     private $collectionFactory;
 
     /**
+     * Key is product id. Value is prepared product collection
+     *
+     * @var array
+     */
+    private $productsMap;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
      * @param CollectionFactory $collectionFactory
@@ -50,14 +57,16 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      */
     public function getProducts(ProductInterface $product)
     {
-        $productIds = $this->resource->getConnection()->fetchCol(
-            '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
-        );
+        if (!isset($this->productsMap[$product->getId()])) {
+            $productIds = $this->resource->getConnection()->fetchCol(
+                '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
+            );
 
-        $lowestPriceChildProducts = $this->collectionFactory->create()
-            ->addAttributeToSelect(['price', 'special_price'])
-            ->addIdFilter($productIds)
-            ->getItems();
-        return $lowestPriceChildProducts;
+            $this->productsMap[$product->getId()] = $this->collectionFactory->create()
+                ->addAttributeToSelect(['price', 'special_price'])
+                ->addIdFilter($productIds)
+                ->getItems();
+        }
+        return $this->productsMap[$product->getId()];
     }
 }
