@@ -44,7 +44,7 @@ class Resolver
      */
     public function getTemplateFileName($template, $params = [])
     {
-        $key = $template . '_' . serialize($params);
+        $key = $template . '_' . json_encode($params);
         if (!isset($this->_templateFilesMap[$key])) {
             $this->_templateFilesMap[$key] = $this->_viewFileSystem->getTemplateFileName($template, $params);
         }
