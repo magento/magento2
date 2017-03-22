@@ -19,11 +19,6 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
-     * @var LowestPriceOptionsProviderInterface
-     */
-    private $lowestPriceOptionsProvider;
-
-    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -32,10 +27,6 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-        // create is used for prevent internal caching in property
-        $this->lowestPriceOptionsProvider = Bootstrap::getObjectManager()->create(
-            LowestPriceOptionsProviderInterface::class
-        );
     }
 
     /**
@@ -44,7 +35,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetProductsIfOneOfChildIsDisabled()
     {
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
-        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
@@ -63,8 +54,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->save($lowestPriceChildProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 
-        $lowestPriceOptionsProvider = $this->recreateLowestPriceOptionsProvider();
-        $lowestPriceChildrenProducts = $lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
 
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
@@ -77,7 +67,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetProductsIfOneOfChildIsDisabledPerStore()
     {
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
-        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
@@ -97,9 +87,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->save($lowestPriceChildProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 
-        $lowestPriceOptionsProvider = $this->recreateLowestPriceOptionsProvider();
-        $lowestPriceChildrenProducts = $lowestPriceOptionsProvider->getProducts($configurableProduct);
-
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
@@ -111,7 +99,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetProductsIfOneOfChildIsOutOfStock()
     {
         $configurableProduct = $this->productRepository->get('configurable', false, null, true);
-        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
@@ -126,19 +114,18 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $stockItem = $lowestPriceChildProduct->getExtensionAttributes()->getStockItem();
         $stockItem->setIsInStock(0);
         $this->productRepository->save($lowestPriceChildProduct);
-
-        $lowestPriceOptionsProvider = $this->recreateLowestPriceOptionsProvider();
-        $lowestPriceChildrenProducts = $lowestPriceOptionsProvider->getProducts($configurableProduct);
-
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
     }
 
     /**
+     * As LowestPriceOptionsProviderInterface used multiple times in scope
+     * of one test we need to always recreate it and prevent internal caching in property
      * @return LowestPriceOptionsProviderInterface
      */
-    private function recreateLowestPriceOptionsProvider()
+    private function createLowestPriceOptionsProvider()
     {
         return Bootstrap::getObjectManager()->create(
             LowestPriceOptionsProviderInterface::class
