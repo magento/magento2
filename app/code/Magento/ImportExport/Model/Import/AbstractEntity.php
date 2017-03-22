@@ -278,7 +278,7 @@ abstract class AbstractEntity
      *
      * @var Json
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -288,7 +288,6 @@ abstract class AbstractEntity
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
-     * @param Json|null $json
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
