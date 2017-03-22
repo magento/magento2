@@ -106,6 +106,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             'orderInjectable',
             [
                 'data' => [
+                    'id' => $orderId,
                     'entity_id' => ['products' => $this->products]
                 ]
             ]
