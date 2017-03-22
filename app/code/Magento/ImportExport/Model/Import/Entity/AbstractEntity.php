@@ -253,7 +253,7 @@ abstract class AbstractEntity
      *
      * @var Json
      */
-    private $json;
+    protected $serializer;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -264,7 +264,6 @@ abstract class AbstractEntity
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param Json|null $json
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -275,15 +274,13 @@ abstract class AbstractEntity
         ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
-        ProcessingErrorAggregatorInterface $errorAggregator,
-        Json $json = null
+        ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->string = $string;
         $this->errorAggregator = $errorAggregator;
-        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
 
         foreach ($this->errorMessageTemplates as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
@@ -394,7 +391,7 @@ abstract class AbstractEntity
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
-                $currentDataSize = strlen($this->json->serialize($bunchRows));
+                $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
                 $startNewBunch = false;
                 $nextRowBackup = [];
             }
@@ -429,6 +426,22 @@ abstract class AbstractEntity
             }
         }
         return $this;
+    }
+
+    /**
+     * Get Serializer instance
+     *
+     * Workaround. Only way to implement dependency and not to break inherited child classes
+     *
+     * @return Json
+     * @deprecated
+     */
+    protected function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 
     /**

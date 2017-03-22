@@ -278,7 +278,7 @@ abstract class AbstractEntity
      *
      * @var Json
      */
-    private $json;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -298,11 +298,9 @@ abstract class AbstractEntity
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        array $data = [],
-        Json $json = null
+        array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
-        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->_dataSourceModel = isset(
             $data['data_source_model']
         ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
@@ -459,7 +457,7 @@ abstract class AbstractEntity
                         foreach ($entityGroup as $key => $value) {
                             $bunchRows[$key] = $value;
                         }
-                        $productDataSize = strlen($this->json->serialize($bunchRows));
+                        $productDataSize = strlen($this->getSerializer()->serialize($bunchRows));
 
                         /* Check if the new bunch should be started */
                         $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);
@@ -483,6 +481,22 @@ abstract class AbstractEntity
             }
         }
         return $this;
+    }
+
+    /**
+     * Get Serializer instance
+     *
+     * Workaround. Only way to implement dependency and not to break inherited child classes
+     *
+     * @return Json
+     * @deprecated
+     */
+    protected function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 
     /**
