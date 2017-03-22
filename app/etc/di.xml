@@ -1228,6 +1228,7 @@
         <arguments>
             <argument name="queryModifiers" xsi:type="array">
                 <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
+                <item name="like" xsi:type="string">Magento\Framework\DB\Select\LikeQueryModifier</item>
             </argument>
         </arguments>
     </type>

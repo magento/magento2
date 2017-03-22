@@ -24,21 +24,30 @@ class UpgradeData implements UpgradeDataInterface
     private $pageFactory;
 
     /**
-     * @param PageFactory $pageFactory
+     * @var \Magento\Framework\DB\FieldDataConverterFactory
      */
-    public function __construct(PageFactory $pageFactory)
-    {
-        $this->pageFactory = $pageFactory;
-    }
+    private $fieldDataConverterFactory;
 
     /**
-     * Create page
-     *
-     * @return Page
+     * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
-    private function createPage()
-    {
-        return $this->pageFactory->create();
+    private $queryModifierFactory;
+
+    /**
+     * UpgradeData constructor.
+     *
+     * @param PageFactory $pageFactory
+     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+     * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
+     */
+    public function __construct(
+        PageFactory $pageFactory,
+        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
+        \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
+    ) {
+        $this->pageFactory = $pageFactory;
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->queryModifierFactory = $queryModifierFactory;
     }
 
     /**
@@ -53,7 +62,62 @@ class UpgradeData implements UpgradeDataInterface
     {
         $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $newPageContent = <<<EOD
+            $this->upgradeVersionTwoZeroOne();
+        }
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $this->upgradeVersionTwoZeroTwo($setup);
+        }
+        $setup->endSetup();
+    }
+
+    /**
+     * Upgrade data to version 2.0.2
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroTwo(ModuleDataSetupInterface $setup)
+    {
+        $fieldDataConverter = $this->fieldDataConverterFactory->create(
+            \Magento\Cms\Setup\BlockContentConverter::class
+        );
+
+        $queryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'content' => ['%conditions_encoded%']
+                ]
+            ]
+        );
+
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('cms_block'),
+            'row_id',
+            'content',
+            $queryModifier
+        );
+    }
+
+    /**
+     * Create page
+     *
+     * @return Page
+     */
+    private function createPage()
+    {
+        return $this->pageFactory->create();
+    }
+
+    /**
+     * Upgrade data to version 2.0.1,
+     *
+     * @return void
+     */
+    private function upgradeVersionTwoZeroOne()
+    {
+        $newPageContent = <<<EOD
 <div class="privacy-policy cms-content">
     <div class="message info">
         <span>
@@ -237,16 +301,14 @@ class UpgradeData implements UpgradeDataInterface
     </table>
 </div>
 EOD;
-            $privacyAndCookiePolicyPage = $this->createPage()->load(
-                'privacy-policy-cookie-restriction-mode',
-                'identifier'
-            );
-            $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
-            if ($privacyAndCookiePolicyPageId) {
-                $privacyAndCookiePolicyPage->setContent($newPageContent);
-                $privacyAndCookiePolicyPage->save();
-            }
+        $privacyAndCookiePolicyPage = $this->createPage()->load(
+            'privacy-policy-cookie-restriction-mode',
+            'identifier'
+        );
+        $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
+        if ($privacyAndCookiePolicyPageId) {
+            $privacyAndCookiePolicyPage->setContent($newPageContent);
+            $privacyAndCookiePolicyPage->save();
         }
-        $setup->endSetup();
     }
 }
