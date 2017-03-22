@@ -67,35 +67,18 @@ class NotifyDataChangedCommand implements CommandInterface
     public function execute()
     {
         $result = false;
-        try {
-            if ($this->analyticsToken->isTokenExist()) {
-                $this->httpClient->request(
-                    ZendClient::POST,
-                    $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
-                    $this->getRequestJson(),
-                    ['Content-Type: application/json']
-                );
-                $result = true;
-            }
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+        if ($this->analyticsToken->isTokenExist()) {
+            $result = (bool)$this->httpClient->request(
+                ZendClient::POST,
+                $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
+                [
+                    "access-token" => $this->analyticsToken->getToken(),
+                    "url" => $this->config->getConfigDataValue(
+                        Store::XML_PATH_SECURE_BASE_URL
+                    ),
+                ]
+            );
         }
         return $result;
-    }
-
-    /**
-     * Prepares request data in JSON format.
-     * @return string
-     */
-    private function getRequestJson()
-    {
-        return json_encode(
-            [
-                "access-token" => $this->analyticsToken->getToken(),
-                "url" => $this->config->getConfigDataValue(
-                    Store::XML_PATH_SECURE_BASE_URL
-                ),
-            ]
-        );
     }
 }

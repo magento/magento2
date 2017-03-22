@@ -77,48 +77,45 @@ class UpdateCommand implements CommandInterface
     public function execute()
     {
         $result = false;
-        try {
-            if ($this->analyticsToken->isTokenExist()) {
-                $response = $this->httpClient->request(
-                    ZendClient::PUT,
-                    $this->config->getConfigDataValue($this->updateUrlPath),
-                    $this->getRequestJson(),
-                    ['Content-Type: application/json']
-                );
-
-                if ($response) {
-                    $result = $response->getStatus() === 201;
-                    if (!$result) {
-                        $this->logger->warning(
-                            sprintf(
-                                'Update of the subscription for MBI service has been failed: %s',
-                                !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
-                            )
-                        );
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+        if ($this->analyticsToken->isTokenExist()) {
+            $response = $this->httpClient->request(
+                ZendClient::PUT,
+                $this->config->getConfigDataValue($this->updateUrlPath),
+                [
+                    "url" => $this->flagManager->getFlagData(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE),
+                    "new-url" => $this->config->getConfigDataValue(
+                        Store::XML_PATH_SECURE_BASE_URL
+                    ),
+                    "access-token" => $this->analyticsToken->getToken(),
+                ]
+            );
+            $result = $this->parseResult($response);
         }
 
         return $result;
     }
 
     /**
-     * Prepares request data in JSON format.
-     * @return string
+     * @param \Zend_Http_Response $response
+     *
+     * @return bool
      */
-    private function getRequestJson()
+    private function parseResult($response)
     {
-        return json_encode(
-            [
-                "url" => $this->flagManager->getFlagData(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE),
-                "new-url" => $this->config->getConfigDataValue(
-                    Store::XML_PATH_SECURE_BASE_URL
-                ),
-                "access-token" => $this->analyticsToken->getToken(),
-            ]
-        );
+        $result = false;
+
+        if ($response) {
+            $result = $response->getStatus() === 201;
+            if (!$result) {
+                $this->logger->warning(
+                    sprintf(
+                        'Update of the subscription for MBI service has been failed: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                    )
+                );
+            }
+        }
+
+        return $result;
     }
 }

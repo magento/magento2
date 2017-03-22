@@ -54,47 +54,6 @@ class SignUpRequest
     }
 
     /**
-     * Prepares request data in JSON format.
-     *
-     * @param string $integrationToken
-     * @return string
-     */
-    private function getRequestJson($integrationToken)
-    {
-        return json_encode(
-            [
-                "token" => $integrationToken,
-                "url" => $this->config->getConfigDataValue(
-                    Store::XML_PATH_SECURE_BASE_URL
-                )
-            ]
-        );
-    }
-
-    /**
-     * Extracts an MBI access token from the response.
-     *
-     * Returns the token or FALSE if the token is not found.
-     *
-     * @param HttpResponse $response
-     * @return string|false
-     */
-    private function extractAccessToken(HttpResponse $response)
-    {
-        $token = false;
-
-        if ($response->getStatus() === 201) {
-            $body = json_decode($response->getBody(), 1);
-
-            if (isset($body['access-token']) && !empty($body['access-token'])) {
-                $token = $body['access-token'];
-            }
-        }
-
-        return $token;
-    }
-
-    /**
      * Performs a 'signUp' call to MBI service.
      *
      * Returns MBI access token or FALSE in case of failure.
@@ -104,32 +63,47 @@ class SignUpRequest
      */
     public function call($integrationToken)
     {
-        $token = false;
+        $response = $this->httpClient->request(
+            ZendClient::POST,
+            $this->config->getConfigDataValue($this->signUpUrlPath),
+            [
+                "token" => $integrationToken,
+                "url" => $this->config->getConfigDataValue(
+                    Store::XML_PATH_SECURE_BASE_URL
+                )
+            ]
+        );
 
-        try {
-            $response = $this->httpClient->request(
-                ZendClient::POST,
-                $this->config->getConfigDataValue($this->signUpUrlPath),
-                $this->getRequestJson($integrationToken),
-                ['Content-Type: application/json']
-            );
+        return $this->parseResult($response);
+    }
 
-            if ($response) {
-                $token = $this->extractAccessToken($response);
+    /**
+     * @param \Zend_Http_Response $response
+     *
+     * @return false|string
+     */
+    private function parseResult($response)
+    {
+        $result = false;
+        if ($response) {
+            if ($response->getStatus() === 201) {
+                $body = json_decode($response->getBody(), 1);
 
-                if (!$token) {
-                    $this->logger->warning(
-                        sprintf(
-                            'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
-                            !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
-                        )
-                    );
+                if (isset($body['access-token']) && !empty($body['access-token'])) {
+                    $result = $body['access-token'];
                 }
             }
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+
+            if (!$result) {
+                $this->logger->warning(
+                    sprintf(
+                        'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                    )
+                );
+            }
         }
 
-        return $token;
+        return $result;
     }
 }

@@ -13,6 +13,7 @@
     <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
     <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
     <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification" />
+    <preference for="Magento\Analytics\Model\Connector\Http\ConverterInterface" type="Magento\Analytics\Model\Connector\Http\JsonConverter" />
     <type name="Magento\Analytics\Model\Connector">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -146,5 +147,15 @@
     </type>
     <type name="Magento\Config\Model\Config\Backend\Baseurl">
         <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
+    </type>
+    <type name="Magento\Analytics\Model\Connector\Http\JsonConverter">
+        <arguments>
+            <argument name="contentTypeHeader" xsi:type="string">Content-Type: application/json</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\Http\Client\Curl">
+        <arguments>
+            <argument name="converter">Magento\Analytics\Model\Connector\Http\JsonConverter</argument>
+        </arguments>
     </type>
 </config>
