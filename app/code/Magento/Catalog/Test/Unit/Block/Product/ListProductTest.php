@@ -6,7 +6,9 @@
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
 use Magento\Catalog\Block\Product\Context;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Render;
+use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\View\LayoutInterface;
 
 /**
@@ -50,7 +52,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
     protected $typeInstanceMock;
 
     /**
-     * @var \Magento\Framework\Url\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlHelperMock;
 
@@ -73,11 +75,6 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $toolbarMock;
-
-    /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $layout;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -160,28 +157,15 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->urlHelperMock = $this->getMockBuilder(\Magento\Framework\Url\Helper\Data::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->urlHelperMock = $this->getMockBuilder(Data::class)->disableOriginalConstructor()->getMock();
+        $this->context = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        $this->renderer = $this->getMockBuilder(Render::class)->disableOriginalConstructor()->getMock();
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class, [], '', false);
 
-        $this->layout = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->renderer = $this->getMockBuilder(Render::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->context->expects($this->any())
-            ->method('getRegistry')
-            ->willReturn($this->registryMock);
-        $this->context->expects($this->any())
-            ->method('getCartHelper')
-            ->willReturn($this->cartHelperMock);
-        $this->context->expects($this->any())
-            ->method('getLayout')
-            ->willReturn($this->layout);
+        $this->context->expects($this->any())->method('getRegistry')->willReturn($this->registryMock);
+        $this->context->expects($this->any())->method('getCartHelper')->willReturn($this->cartHelperMock);
+        $this->context->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
 
         $this->block = $objectManager->getObject(
             \Magento\Catalog\Block\Product\ListProduct::class,
@@ -195,7 +179,6 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->block->setToolbarBlockName('mock');
-        $this->block->setLayout($this->layoutMock);
     }
 
     protected function tearDown()
@@ -305,7 +288,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with('is_product_list', true)
             ->willReturnSelf();
-        $this->layout->expects($this->once())
+        $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.price.render.default')
             ->willReturn($this->renderer);
