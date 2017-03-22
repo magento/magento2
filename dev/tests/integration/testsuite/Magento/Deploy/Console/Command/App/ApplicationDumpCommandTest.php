@@ -82,6 +82,15 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return string
+     */
+    private function loadRawConfig()
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)
+            ->readFile($this->configFilePool->getPath(ConfigFilePool::APP_CONFIG));
+    }
+
+    /**
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Deploy/_files/config_data.php
      */
@@ -118,6 +127,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
+        $this->assertContains('For the section: system', $this->loadRawConfig());
         $this->assertSame([], $this->hash->get());
     }
 

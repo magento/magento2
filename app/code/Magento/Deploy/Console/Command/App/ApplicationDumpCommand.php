@@ -90,7 +90,8 @@ class ApplicationDumpCommand extends Command
             [ConfigFilePool::APP_CONFIG => $dump],
             true,
             null,
-            $comments
+            $comments,
+            true
         );
         if (!empty($comments)) {
             $output->writeln($comments);

@@ -49,24 +49,35 @@ class Writer
     private $deploymentConfig;
 
     /**
+     * Parses and retrieves comments from configuration files.
+     *
+     * @var CommentParser
+     */
+    private $commentParser;
+
+    /**
      * @param Reader $reader
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
      * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
+     * @param CommentParser $commentParser The parser of comments from configuration files
      */
     public function __construct(
         Reader $reader,
         Filesystem $filesystem,
         ConfigFilePool $configFilePool,
         DeploymentConfig $deploymentConfig,
-        Writer\FormatterInterface $formatter = null
+        Writer\FormatterInterface $formatter = null,
+        CommentParser $commentParser = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
         $this->formatter = $formatter ?: new Writer\PhpFormatter();
+        $this->commentParser = $commentParser ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CommentParser::class);
     }
 
     /**
@@ -116,6 +127,8 @@ class Writer
 
             if (isset($paths[$fileKey])) {
                 $currentData = $this->reader->load($fileKey);
+                $currentComments = $this->commentParser->execute($paths[$fileKey]);
+
                 if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);
@@ -123,6 +136,8 @@ class Writer
                         $config = array_replace_recursive($currentData, $config);
                     }
                 }
+
+                $comments = array_merge($currentComments, $comments);
 
                 $contents = $this->formatter->format($config, $comments);
                 try {
