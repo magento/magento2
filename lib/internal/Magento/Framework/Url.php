@@ -856,7 +856,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             ksort($cachedParams);
         }
 
-        $cacheKey = md5($routePath . json_encode($cachedParams));
+        $cacheKey = sha1($routePath . json_encode($cachedParams));
         if (!isset($this->cacheUrl[$cacheKey])) {
             $this->cacheUrl[$cacheKey] = $this->getUrlModifier()->execute(
                 $this->createUrl($routePath, $routeParams)
