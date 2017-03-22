@@ -13,19 +13,29 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class IdentifierTest extends \PHPUnit_Framework_TestCase
 {
-    /** Test value for cache vary string */
+    /**
+     * Test value for cache vary string
+     */
     const VARY = '123';
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     private $objectManager;
 
-    /** @var Context */
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $contextMock;
 
-    /** @var HttpRequest */
+    /**
+     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $requestMock;
 
-    /** @var Identifier */
+    /**
+     * @var Identifier
+     */
     private $model;
 
     /**
@@ -48,6 +58,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->contextMock,
             ]
         );
+        return parent::setUp();
     }
 
     public function testSecureDifferentiator()
@@ -114,5 +125,36 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     public function trueFalseDataProvider()
     {
         return [[true], [false]];
+    }
+
+    /**
+     * Test get identifier value
+     */
+    public function testGetValue()
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->will($this->returnValue(true));
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com/path1/');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->will($this->returnValue(self::VARY));
+
+        $this->assertEquals(
+            md5(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
     }
 }
