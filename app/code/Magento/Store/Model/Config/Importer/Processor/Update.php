@@ -174,12 +174,8 @@ class Update implements ProcessorInterface
             }
 
             $store->getResource()->save($store);
-            $store->getResource()->addCommitCallback(function () use ($store, $group, $website) {
-                $store->setGroup($group);
-                $store->setWebsite($website);
-                $store->getResource()->save($store);
-
-                $this->eventManager->dispatch('store_add', ['store' => $store]);
+            $store->getResource()->addCommitCallback(function () use ($store) {
+                $this->eventManager->dispatch('store_edit', ['store' => $store]);
             });
         }
     }
@@ -213,6 +209,9 @@ class Update implements ProcessorInterface
             }
 
             $group->getResource()->save($group);
+            $group->getResource()->addCommitCallback(function () use ($group) {
+                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
+            });
         }
     }
 
