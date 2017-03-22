@@ -30,6 +30,7 @@ class EnableDisableTest extends Injectable
      * @param ConfigAnalytics $configAnalytics
      * @param string $vertical
      * @param string $state
+     * @return void
      */
     public function test(ConfigAnalytics $configAnalytics, $vertical, $state)
     {

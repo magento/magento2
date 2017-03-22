@@ -19,6 +19,7 @@ class AssertConfigAnalyticsSendingTimeAndZone extends AbstractConstraint
      * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
      * @param string $hh
      * @param string $mm
+     * @return void
      */
     public function processAssert(
         ConfigAnalytics $configAnalytics,

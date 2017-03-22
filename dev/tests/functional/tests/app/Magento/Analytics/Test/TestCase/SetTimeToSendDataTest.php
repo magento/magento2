@@ -38,6 +38,7 @@ class SetTimeToSendDataTest extends Injectable
      * @param string $mm
      * @param string $vertical
      * @param string $configData
+     * @return void
      */
     public function test(
         ConfigAnalytics $configAnalytics,
