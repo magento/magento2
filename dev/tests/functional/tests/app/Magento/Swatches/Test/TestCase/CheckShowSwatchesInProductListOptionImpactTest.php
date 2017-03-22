@@ -16,7 +16,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
  * @group Swatches (MX)
  * @ZephyrId MAGETWO-65485
  */
-class CheckSwatchesOnCategoryPageTest extends Injectable
+class CheckShowSwatchesInProductListOptionImpactTest extends Injectable
 {
     /**
      * Factory for creation SetupConfigurationStep.
