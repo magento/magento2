@@ -87,4 +87,4 @@ About other types read on
 http://jmeter.apache.org/usermanual/component_reference.html
 
 About fixtures generation
-http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-perf-data.html
+http://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-perf-data.html
