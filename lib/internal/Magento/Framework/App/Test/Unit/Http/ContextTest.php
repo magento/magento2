@@ -62,7 +62,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1'
         ];
         ksort($data);
-        $this->assertEquals(sha1(serialize($data)), $this->object->getVaryString());
+        $this->assertEquals(sha1(json_encode($data)), $this->object->getVaryString());
     }
 
     public function testToArray()
