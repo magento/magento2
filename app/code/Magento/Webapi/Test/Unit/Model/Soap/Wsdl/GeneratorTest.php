@@ -100,6 +100,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                     return json_encode($value);
                 }
             );
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                [\Magento\Framework\Serialize\Serializer\Json::class, $this->serializer]
+            ]);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
 
         $this->_wsdlGenerator = $objectManager->getObject(
             \Magento\Webapi\Model\Soap\Wsdl\Generator::class,
