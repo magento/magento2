@@ -10,6 +10,8 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Import entity abstract model
@@ -247,6 +249,13 @@ abstract class AbstractEntity
     protected $metadataPool;
 
     /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -255,6 +264,7 @@ abstract class AbstractEntity
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param Json|null $json
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -265,13 +275,15 @@ abstract class AbstractEntity
         ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
-        ProcessingErrorAggregatorInterface $errorAggregator
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        Json $json = null
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->string = $string;
         $this->errorAggregator = $errorAggregator;
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
 
         foreach ($this->errorMessageTemplates as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
@@ -382,7 +394,7 @@ abstract class AbstractEntity
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
-                $currentDataSize = strlen(serialize($bunchRows));
+                $currentDataSize = strlen($this->json->serialize($bunchRows));
                 $startNewBunch = false;
                 $nextRowBackup = [];
             }

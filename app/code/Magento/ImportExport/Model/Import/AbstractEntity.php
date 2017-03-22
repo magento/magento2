@@ -8,6 +8,8 @@ namespace Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Import entity abstract model
@@ -272,6 +274,13 @@ abstract class AbstractEntity
     protected $countItemsDeleted = 0;
 
     /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -279,6 +288,7 @@ abstract class AbstractEntity
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
+     * @param Json|null $json
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
@@ -288,9 +298,11 @@ abstract class AbstractEntity
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        array $data = []
+        array $data = [],
+        Json $json = null
     ) {
         $this->_scopeConfig = $scopeConfig;
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         $this->_dataSourceModel = isset(
             $data['data_source_model']
         ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
@@ -447,7 +459,7 @@ abstract class AbstractEntity
                         foreach ($entityGroup as $key => $value) {
                             $bunchRows[$key] = $value;
                         }
-                        $productDataSize = strlen(serialize($bunchRows));
+                        $productDataSize = strlen($this->json->serialize($bunchRows));
 
                         /* Check if the new bunch should be started */
                         $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);

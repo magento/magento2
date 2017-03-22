@@ -60,6 +60,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
         $importFactory = $this->getMock(\Magento\ImportExport\Model\ImportFactory::class, [], [], '', false);
         $resourceHelper = $this->getMock(\Magento\ImportExport\Model\ResourceModel\Helper::class, [], [], '', false);
         $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $json = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $data = [
             'coreString' => $string,
@@ -77,6 +78,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
                 'bunch_size' => 1,
                 'collection_by_pages_iterator' => 'not_used',
             ],
+            'json' => $json,
         ];
 
         return $data;

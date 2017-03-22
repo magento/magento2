@@ -43,7 +43,9 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get(\Magento\Framework\App\ResourceConnection::class),
                 $objectManager->get(
                     \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface::class
-                )
+                ),
+                [],
+                $objectManager->get(\Magento\Framework\Serialize\Serializer\Json::class)
             ],
             '',
             true,
