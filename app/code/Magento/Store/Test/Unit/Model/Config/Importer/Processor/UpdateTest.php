@@ -18,6 +18,7 @@ use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Store\Model\Store;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Test for Update processor.
@@ -83,6 +84,11 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     private $storeResourceMock;
 
     /**
+     * @var ManagerInterface|Mock
+     */
+    private $eventManagerMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -120,6 +126,8 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->storeResourceMock = $this->getMockBuilder(StoreResource::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMockForAbstractClass();
 
         $this->storeMock->expects($this->any())
             ->method('getResource')
@@ -135,7 +143,8 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             $this->dataDifferenceCalculatorMock,
             $this->websiteFactoryMock,
             $this->storeFactoryMock,
-            $this->groupFactoryMock
+            $this->groupFactoryMock,
+            $this->eventManagerMock
         );
     }
 
@@ -191,7 +200,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->groupFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->groupMock);
-        $this->groupMock->expects($this->exactly(4))
+        $this->groupMock->expects($this->exactly(5))
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
         $this->groupMock->expects($this->once())
@@ -213,7 +222,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->storeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->exactly(3))
+        $this->storeMock->expects($this->exactly(4))
             ->method('getResource')
             ->willReturn($this->storeResourceMock);
         $this->storeMock->expects($this->once())
@@ -233,6 +242,8 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->storeResourceMock->expects($this->once())
             ->method('save')
             ->with($this->storeMock);
+        $this->storeResourceMock->expects($this->once())
+            ->method('addCommitCallback');
 
         $this->model->run($data);
     }
