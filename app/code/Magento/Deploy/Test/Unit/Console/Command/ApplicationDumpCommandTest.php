@@ -89,7 +89,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             ->with('<info>Done.</info>');
         $this->writer->expects($this->once())
             ->method('saveConfig')
-            ->with($data, true, null, [], true);
+            ->with($data);
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
         $method->setAccessible(true);
         $this->assertEquals(
