@@ -21,7 +21,7 @@
                     </item>
                     <item name="template" xsi:type="array">
                         <item name="filename"
-                              xsi:type="string">Magento/CustomerImportExport/Test/_files/template/pricing/customer_addresses_variation_1</item>
+                              xsi:type="string">Magento/CustomerImportExport/Test/_files/template/address/customer_addresses_variation_1</item>
                         <item name="count" xsi:type="number">1</item>
                     </item>
                 </item>
@@ -44,7 +44,7 @@
                     </item>
                     <item name="template" xsi:type="array">
                         <item name="filename"
-                              xsi:type="string">Magento/CustomerImportExport/Test/_files/template/pricing/customer_addresses_variation_2</item>
+                              xsi:type="string">Magento/CustomerImportExport/Test/_files/template/address/customer_addresses_variation_2</item>
                         <item name="count" xsi:type="number">2</item>
                     </item>
                 </item>

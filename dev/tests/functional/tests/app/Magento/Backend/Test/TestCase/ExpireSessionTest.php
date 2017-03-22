@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
 /**
  * Steps:
  *
- * 1. Login to backend.
+ * 1. Login to Admin.
  * 2. Create customer if needed.
  * 3. Apply configuration settings.
  * 4. Wait for session to expire.

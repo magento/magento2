@@ -119,6 +119,7 @@ class CaptchaEditCustomerTest extends Injectable
         $data['captcha'] = $captcha;
         $data['group_id'] = [];
 
+        /** @var Customer $initCustomer */
         $initCustomer = $this->fixtureFactory->createByCode('customer', ['data' => $data]);
         $this->customerEdit($initCustomer, $attempts + 1);
     }

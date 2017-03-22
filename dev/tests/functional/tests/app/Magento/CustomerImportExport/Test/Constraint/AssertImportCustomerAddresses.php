@@ -157,11 +157,8 @@ class AssertImportCustomerAddresses extends AbstractConstraint
     private function deleteWasteData(array $csvData)
     {
         $necessaryData = array_flip($this->mappingKeys);
-        $wasteKeys = array_keys(array_diff_key($csvData, $necessaryData));
-        foreach ($wasteKeys as $key) {
-            unset($csvData[$key]);
-        };
-        return $csvData;
+
+        return array_intersect_key($csvData, $necessaryData);
     }
 
     /**
@@ -171,6 +168,6 @@ class AssertImportCustomerAddresses extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Imported advanced prices are correct.';
+        return 'Imported customer addresses are correct.';
     }
 }
