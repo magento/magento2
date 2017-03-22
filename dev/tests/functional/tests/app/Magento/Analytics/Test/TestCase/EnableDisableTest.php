@@ -23,14 +23,13 @@ class EnableDisableTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**
-     * Set analytics vertical test.
-     *
      * @param ConfigAnalytics $configAnalytics
      * @param string $vertical
-     * @return void
+     * @param string $state
      */
     public function test(ConfigAnalytics $configAnalytics, $vertical, $state)
     {

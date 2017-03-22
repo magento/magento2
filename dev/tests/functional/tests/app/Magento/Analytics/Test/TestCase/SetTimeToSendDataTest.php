@@ -23,6 +23,7 @@ class SetTimeToSendDataTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**
@@ -36,7 +37,7 @@ class SetTimeToSendDataTest extends Injectable
      * @param string $hh
      * @param string $mm
      * @param string $vertical
-     * @param array $configData
+     * @param string $configData
      */
     public function test(
         ConfigAnalytics $configAnalytics,
@@ -44,7 +45,7 @@ class SetTimeToSendDataTest extends Injectable
         $hh,
         $mm,
         $vertical,
-        array $configData
+        $configData
     ) {
         $this->configData = $configData;
         $testStepFactory->create(

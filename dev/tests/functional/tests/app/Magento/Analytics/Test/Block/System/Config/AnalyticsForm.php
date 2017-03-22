@@ -104,8 +104,8 @@ class AnalyticsForm extends Form
     }
 
     /**
-     * @param $hh
-     * @param $mm
+     * @param string $hh
+     * @param string $mm
      * @return $this
      */
     public function setTimeOfDayToSendData($hh, $mm)

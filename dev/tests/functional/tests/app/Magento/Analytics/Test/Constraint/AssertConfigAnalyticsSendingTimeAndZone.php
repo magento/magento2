@@ -15,15 +15,16 @@ use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 class AssertConfigAnalyticsSendingTimeAndZone extends AbstractConstraint
 {
     /**
-     * Assert sending data to the Analytics is restored.
-     *
      * @param ConfigAnalytics $configAnalytics
      * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
-     * @return void
+     * @param string $hh
+     * @param string $mm
      */
     public function processAssert(
         ConfigAnalytics $configAnalytics,
-        OpenAnalyticsConfigStep $openAnalyticsConfigStep
+        OpenAnalyticsConfigStep $openAnalyticsConfigStep,
+        $hh,
+        $mm
     ) {
         $openAnalyticsConfigStep->run();
 
@@ -33,7 +34,7 @@ class AssertConfigAnalyticsSendingTimeAndZone extends AbstractConstraint
         );
 
         \PHPUnit_Framework_Assert::assertEquals(
-            '11, 11, 00',
+            sprintf('%s, %s, 00', $hh, $mm),
             $configAnalytics->getAnalyticsForm()->getTimeOfDayToSendDate()
         );
     }
