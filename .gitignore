@@ -32,6 +32,8 @@ atlassian*
 
 /pub/media/*.*
 !/pub/media/.htaccess
+/pub/media/attribute/*
+!/pub/media/attribute/.htaccess
 /pub/media/analytics/*
 /pub/media/catalog/*
 !/pub/media/catalog/.htaccess
