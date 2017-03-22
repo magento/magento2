@@ -186,7 +186,9 @@ class EavAttribute
     {
         if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
             foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && $optionsArray['delete'][$optionId] == 1) {
+                if (isset($optionsArray['delete']) && isset($optionsArray['delete'][$optionId])
+                    && $optionsArray['delete'][$optionId] == 1
+                ) {
                     unset($optionsArray['value'][$optionId]);
                 }
             }
@@ -444,7 +446,7 @@ class EavAttribute
             if ($this->isOptionForDelete($attribute, $optionId)) {
                 continue;
             }
-            if (empty($option[0])) {
+            if (!isset($option[0]) || $option[0] === '') {
                 return false;
             }
         }
