@@ -10,6 +10,7 @@ use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Analytics\ReportXml\DB\ConditionResolver;
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class JoinAssembler
@@ -34,8 +35,11 @@ class JoinAssembler implements AssemblerInterface
     private $columnsResolver;
 
     /**
-     * JoinAssembler constructor.
-     *
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param ConditionResolver $conditionResolver
      * @param ColumnsResolver $columnsResolver
      * @param NameResolver $nameResolver
@@ -43,11 +47,13 @@ class JoinAssembler implements AssemblerInterface
     public function __construct(
         ConditionResolver $conditionResolver,
         ColumnsResolver $columnsResolver,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ResourceConnection $resourceConnection
     ) {
         $this->conditionResolver = $conditionResolver;
         $this->nameResolver = $nameResolver;
         $this->columnsResolver = $columnsResolver;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -73,7 +79,11 @@ class JoinAssembler implements AssemblerInterface
             $joins[$joinAlias]  = [
                 'link-type' => isset($join['link-type']) ? $join['link-type'] : 'left',
                 'table' => [
-                    $joinAlias => $this->nameResolver->getName($join)
+                    $joinAlias => $this->resourceConnection
+                        ->getTableName(
+                            $this->nameResolver->getName($join),
+                            $selectBuilder->getConnectionName()
+                        ),
                 ],
                 'condition' => $this->conditionResolver->getFilter(
                     $selectBuilder,
