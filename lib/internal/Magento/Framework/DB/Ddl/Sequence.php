@@ -11,22 +11,33 @@ namespace Magento\Framework\DB\Ddl;
 class Sequence
 {
     /**
+     *  Default table engine for sequences tables.
+     */
+    const DEFAULT_ENGINE = 'INNODB';
+
+    /**
      * Return SQL for create sequence
      *
-     * @param string $name
-     * @param int $startNumber
-     * @param string $columnType
-     * @param bool|true $unsigned
+     * @param string $name The name of table in create statement
+     * @param int $startNumber The auto increment start number
+     * @param string $columnType Type of sequence_value column
+     * @param bool|true $unsigned Flag to set sequence_value as UNSIGNED field
+     * @param string $dbEngine Database table engine for creating sequence table
      * @return string
      */
-    public function getCreateSequenceDdl($name, $startNumber = 1, $columnType = Table::TYPE_INTEGER, $unsigned = true)
-    {
+    public function getCreateSequenceDdl(
+        $name,
+        $startNumber = 1,
+        $columnType = Table::TYPE_INTEGER,
+        $unsigned = true,
+        $dbEngine = self::DEFAULT_ENGINE
+    ) {
         $format = "CREATE TABLE %s (
                      sequence_value %s %s NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
-            ) AUTO_INCREMENT = %d";
+            ) AUTO_INCREMENT = %d ENGINE = %s";
 
-        return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber);
+        return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber, $dbEngine);
     }
 
     /**
