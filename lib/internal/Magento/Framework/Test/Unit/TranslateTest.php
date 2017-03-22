@@ -202,7 +202,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'module original' => 'module translated',
             'module theme' => 'theme translated overwrite',
-            'module pack' => 'pack translated overwrite',
+            'module pack' => 'theme-pack translated overwrite',
             'module db' => 'db translated overwrite',
             'theme original' => 'theme translated',
             'pack original' => 'pack translated',
