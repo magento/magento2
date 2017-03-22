@@ -59,11 +59,11 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Extracts all the classes from the recursive iterator
      *
-     * @param $recursiveIterator
+     * @param \RecursiveIteratorIterator $recursiveIterator
      * @return array
      */
 
-    private function extract($recursiveIterator)
+    private function extract(\RecursiveIteratorIterator $recursiveIterator)
     {
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
@@ -95,7 +95,7 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Find out if file should be excluded
      *
-     * @param string $fileItem
+     * @param string $fileItemPath
      * @param string $patterns
      * @return bool
      */
