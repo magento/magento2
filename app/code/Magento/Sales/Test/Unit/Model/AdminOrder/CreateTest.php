@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -257,7 +257,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->customerMapper->expects($this->atLeastOnce())
             ->method('toFlatArray')
             ->willReturn(['group_id' => 1]);
-
 
         $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Store\Model\WebSite|\PHPUnit_Framework_MockObject_MockObject
      */
-     protected $webSiteModel;
+    protected $webSiteModel;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject

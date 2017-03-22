@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Setup;
@@ -42,7 +42,6 @@ class UpgradeData implements UpgradeDataInterface
         $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-
             $groupName = 'Gift Options';
 
             if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
@@ -59,7 +58,6 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         if (version_compare($context->getVersion(), '2.1.0', '<')) {
-
             $categorySetup->updateAttribute(
                 $entityTypeId,
                 $attribute['attribute_id'],

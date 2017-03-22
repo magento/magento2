@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ class CopyrightTest extends \PHPUnit_Framework_TestCase
         $invoker(
             function ($filename) {
                 $fileText = file_get_contents($filename);
-                if (strpos($fileText, 'Copyright © ' . date('Y')) === false) {
+                if (strpos($fileText, 'Copyright © 2013-' . date('Y')) === false) {
                     $this->fail('Copyright is missing or has wrong year in ' . $filename);
                 }
             },

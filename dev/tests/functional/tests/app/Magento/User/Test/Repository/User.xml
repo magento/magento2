@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -44,6 +44,34 @@
 
         <dataset name="system_admin">
             <field name="current_password" xsi:type="string">123123q</field>
+        </dataset>
+
+        <dataset name="custom_admin_with_role_without_variable">
+            <field name="username" xsi:type="string">AdminUser%isolation%</field>
+            <field name="firstname" xsi:type="string">FirstName%isolation%</field>
+            <field name="lastname" xsi:type="string">LastName%isolation%</field>
+            <field name="email" xsi:type="string">email%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="role_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">role::role_without_variable</item>
+            </field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="is_active" xsi:type="string">Active</field>
+        </dataset>
+
+        <dataset name="custom_admin_with_role_without_synonym">
+            <field name="username" xsi:type="string">AdminUser%isolation%</field>
+            <field name="firstname" xsi:type="string">FirstName%isolation%</field>
+            <field name="lastname" xsi:type="string">LastName%isolation%</field>
+            <field name="email" xsi:type="string">email%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="role_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">role::role_without_synonym</item>
+            </field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="is_active" xsi:type="string">Active</field>
         </dataset>
     </repository>
 </config>

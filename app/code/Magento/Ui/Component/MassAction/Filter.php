@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\MassAction;
@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
  * Class Filter
@@ -44,6 +45,11 @@ class Filter
     protected $filterBuilder;
 
     /**
+     * @var DataProviderInterface
+     */
+    private $dataProvider;
+
+    /**
      * @param UiComponentFactory $factory
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
@@ -74,6 +80,8 @@ class Filter
     }
 
     /**
+     * Adds filters to collection using DataProvider filter results
+     *
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
@@ -96,9 +104,7 @@ class Filter
         if ('false' === $excluded) {
             return;
         }
-        $component = $this->getComponent();
-        $this->prepareComponent($component);
-        $dataProvider = $component->getContext()->getDataProvider();
+        $dataProvider = $this->getDataProvider();
         try {
             if (is_array($excluded) && !empty($excluded)) {
                 $this->filterBuilder->setConditionType('nin')
@@ -117,6 +123,8 @@ class Filter
     }
 
     /**
+     * Applies selection to collection from POST parameters
+     *
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
@@ -159,7 +167,7 @@ class Filter
     }
 
     /**
-     * Returns RefererUrl
+     * Returns Referrer Url
      *
      * @return string|null
      */
@@ -167,5 +175,34 @@ class Filter
     {
         $data = $this->getComponent()->getContext()->getDataProvider()->getConfigData();
         return (isset($data['referer_url'])) ? $data['referer_url'] : null;
+    }
+
+    /**
+     * Get data provider
+     *
+     * @return DataProviderInterface
+     */
+    private function getDataProvider()
+    {
+        if (!$this->dataProvider) {
+            $component = $this->getComponent();
+            $this->prepareComponent($component);
+            $this->dataProvider = $component->getContext()->getDataProvider();
+        }
+        return $this->dataProvider;
+    }
+
+    /**
+     * Get filter ids as array
+     *
+     * @return int[]
+     */
+    private function getFilterIds()
+    {
+        $this->applySelectionOnTargetProvider();
+        if ($this->getDataProvider()->getSearchResult()) {
+            return $this->getDataProvider()->getSearchResult()->getAllIds();
+        }
+        return [];
     }
 }

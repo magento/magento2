@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -24,6 +24,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with default set links</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -53,6 +54,7 @@
             <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_two_samples</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -91,6 +93,7 @@
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">two_options</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
@@ -118,6 +121,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation7">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with manage stock</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -135,6 +139,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation8">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product without tax class id</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -166,6 +171,7 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
             <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -189,6 +195,7 @@
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
@@ -210,6 +217,7 @@
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -278,6 +286,7 @@
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -285,6 +294,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation16" summary="Create downloadable product and assign it to custom website">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">350</data>

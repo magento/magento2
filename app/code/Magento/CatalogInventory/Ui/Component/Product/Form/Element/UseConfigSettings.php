@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Ui\Component\Product\Form\Element;
@@ -21,8 +21,7 @@ class UseConfigSettings extends Checkbox
     public function prepare()
     {
         $config = $this->getData('config');
-        if (
-            isset($config['keyInConfiguration'])
+        if (isset($config['keyInConfiguration'])
             && isset($config['valueFromConfig'])
             && $config['valueFromConfig'] instanceof ValueSourceInterface
         ) {

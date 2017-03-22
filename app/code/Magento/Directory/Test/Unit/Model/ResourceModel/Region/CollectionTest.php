@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Region;
 
 use Magento\Directory\Model\ResourceModel\Region\Collection;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
@@ -15,7 +16,14 @@ use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\DataObject;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Class CollectionTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,15 +31,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     private $collection;
 
+    /**
+     * @var MockObject
+     */
+    private $allowedCountries;
+
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
         $entityFactoryMock = $this->getMock(EntityFactory::class, [], [], '', false);
         $loggerMock = $this->getMock(LoggerInterface::class);
         $fetchStrategyMock = $this->getMock(FetchStrategyInterface::class);
         $eventManagerMock = $this->getMock(ManagerInterface::class);
         $localeResolverMock = $this->getMock(ResolverInterface::class);
         $connectionMock = $this->getMock(Mysql::class, [], [], '', false);
-        $resourceMock = $this->getMockForAbstractClass(AbstractDb::class,
+        $resourceMock = $this->getMockForAbstractClass(
+            AbstractDb::class,
             [],
             '',
             false,
@@ -39,6 +54,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             true,
             ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
+        $this->allowedCountries = $this->getMock(AllowedCountries::class, [], [], '', false);
 
         $selectMock = $this->getMock(Select::class, [], [], '', false);
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
@@ -53,6 +69,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $localeResolverMock,
             $connectionMock,
             $resourceMock
+        );
+
+        $objectManager->setBackwardCompatibleProperty(
+            $this->collection,
+            'allowedCountriesReader',
+            $this->allowedCountries
         );
     }
 
@@ -97,5 +119,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expectedResult, $this->collection->toOptionArray());
+    }
+
+    public function testAddAllowedCountriesFilter()
+    {
+        $allowedCountries = [1, 2, 3];
+        $this->allowedCountries->expects($this->once())->method('getAllowedCountries')->with(
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            null
+        )->willReturn($allowedCountries);
+        $this->assertEquals($this->collection->addAllowedCountriesFilter(), $this->collection);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @var array
      */
     protected $fields;
+
+    /**
+     * Product website.
+     *
+     * @var array
+     */
+    protected $website;
 
     /**
      * Mapping values for data.
@@ -274,6 +281,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $this->fields = ['product' => $fixture->getData()];
 
         $this->prepareProductDetails();
+        $this->prepareWebsitesData();
         $this->prepareWebsites();
         $this->prepareAdvancedPricing();
         $this->prepareAdvancedInventory();
@@ -437,6 +445,20 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
+     * Update product websites.
+     *
+     * @return void
+     */
+    protected function prepareWebsitesData()
+    {
+        if (!empty($this->fields['product']['website_ids'])) {
+            foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
+                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
+            }
+        }
+    }
+
+    /**
      * Preparation of tier price data.
      *
      * @param array $fields
@@ -444,12 +466,19 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function preparePriceFields(array $fields)
     {
+        $this->website = $this->fixture->getDataFieldConfig('tier_price')['source']->getWebsite();
         foreach ($fields as $priceKey => &$field) {
             foreach ($this->priceData as $key => $data) {
                 if ($data['name'] == 'cust_group') {
                     $field[$data['name']] = $this->fixture->getDataFieldConfig('tier_price')['source']
                         ->getCustomerGroups()[$priceKey]->getCustomerGroupId();
                 } else {
+                    if ($this->website !== null) {
+                        unset($this->priceData['website']['data']);
+                        $this->priceData['website']['data'][$this->website->getCode()]
+                            = $this->website->getData('website_id');
+                    }
+
                     $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
                 }
                 unset($field[$key]);
@@ -488,7 +517,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (!isset($this->fields['product']['custom_options'])) {
             return;
         }
-
         $options = [];
         foreach ($this->fields['product']['custom_options'] as $key => $customOption) {
             $options[$key] = [
@@ -510,7 +538,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         }
 
         $this->fields['product']['options'] = $options;
-        $this->fields['affect_product_custom_options'] = 1;
+        $this->fields['product']['affect_product_custom_options'] = 1;
         unset($this->fields['product']['custom_options']);
     }
 

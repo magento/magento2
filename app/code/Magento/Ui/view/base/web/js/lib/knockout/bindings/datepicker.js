@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates datepicker binding and registers in to ko.bindingHandlers object */
@@ -53,7 +53,7 @@ define([
                 'setDate',
                 moment(
                     observable(),
-                    utils.normalizeDate(
+                    utils.convertToMomentFormat(
                         options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
                     )
                 ).toDate()

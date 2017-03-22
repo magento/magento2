@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -100,7 +100,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
             $this->maxRegularAmount = $this->doGetMaxRegularAmount() ?: false;
         }
         return $this->maxRegularAmount;
-
     }
 
     /**

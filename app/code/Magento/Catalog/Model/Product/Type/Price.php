@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -414,11 +414,12 @@ class Price
         $prices = [];
         foreach ($tierPrices as $price) {
             $extensionAttributes = $price->getExtensionAttributes();
-            $websiteId = $extensionAttributes && $extensionAttributes->getWebsiteId()
-                ? $extensionAttributes->getWebsiteId()
-                : $websiteId;
+            $priceWebsiteId = $websiteId;
+            if (isset($extensionAttributes) && is_numeric($extensionAttributes->getWebsiteId())) {
+                $priceWebsiteId = (string)$extensionAttributes->getWebsiteId();
+            }
             $prices[] = [
-                'website_id' => $websiteId,
+                'website_id' => $priceWebsiteId,
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),

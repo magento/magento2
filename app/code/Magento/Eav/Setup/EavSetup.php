@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Setup;
@@ -770,12 +770,12 @@ class EavSetup
         $attributeCodeMaxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
 
         if (isset(
-                $data['attribute_code']
-            ) && !\Zend_Validate::is(
-                $data['attribute_code'],
-                'StringLength',
-                ['max' => $attributeCodeMaxLength]
-            )
+            $data['attribute_code']
+        ) && !\Zend_Validate::is(
+            $data['attribute_code'],
+            'StringLength',
+            ['max' => $attributeCodeMaxLength]
+        )
         ) {
             throw new LocalizedException(
                 __('An attribute code must not be more than %1 characters.', $attributeCodeMaxLength)

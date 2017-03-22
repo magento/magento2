@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Filesystem;
+
+use Magento\Framework\Code\Generator\Io;
 
 /**
  * A Magento application specific list of directories
@@ -82,11 +84,18 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 
     /**
      * Dependency injection related file directory
+     *
+     * @deprecated this constant become unused after moving folder for generated DI configuration files
+     * to generated/metadata
+     * @see self::GENERATED_METADATA
      */
     const DI = 'di';
 
     /**
      * Relative directory key for generated code
+     *
+     * @deprecated this constant become unused after moving folder for generated files to generated/code
+     * @see self::GENERATED_CODE
      */
     const GENERATION = 'generation';
 
@@ -108,6 +117,21 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const TEMPLATE_MINIFICATION_DIR = 'html';
 
     /**
+     * Directory name for generated data.
+     */
+    const GENERATED = 'generated';
+
+    /**
+     * Relative directory key for generated code
+     */
+    const GENERATED_CODE = 'code';
+
+    /**
+     * Relative directory key for generated metadata
+     */
+    const GENERATED_METADATA = 'metadata';
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultConfig()
@@ -120,8 +144,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::VAR_DIR => [parent::PATH => 'var'],
             self::CACHE => [parent::PATH => 'var/cache'],
             self::LOG => [parent::PATH => 'var/log'],
-            self::DI => [parent::PATH => 'var/di'],
-            self::GENERATION => [parent::PATH => 'var/generation'],
+            self::DI => [parent::PATH => 'generated/metadata'],
+            self::GENERATION => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::SESSION => [parent::PATH => 'var/session'],
             self::MEDIA => [parent::PATH => 'pub/media', parent::URL_PATH => 'pub/media'],
             self::STATIC_VIEW => [parent::PATH => 'pub/static', parent::URL_PATH => 'pub/static'],
@@ -133,6 +157,9 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
             self::SETUP => [parent::PATH => 'setup/src'],
             self::COMPOSER_HOME => [parent::PATH => 'var/composer_home'],
+            self::GENERATED => [parent::PATH => 'generated'],
+            self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
+            self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
         ];
         return parent::getDefaultConfig() + $result;
     }

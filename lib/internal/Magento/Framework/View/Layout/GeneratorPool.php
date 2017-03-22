@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
-
 
 /**
  * Pool of generators for structural elements
@@ -156,8 +155,7 @@ class GeneratorPool
                 $element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING]
             );
 
-            if (
-                isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
+            if (isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
                     && $structure->hasElement($siblingElement[ScheduledStructure::ELEMENT_NAME])
             ) {
                 $this->reorderElements(

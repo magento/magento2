@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
     <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
 
     <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
-        <plugin name="PaymentVaultExtensionAttributeOperations" type="\Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
+        <plugin name="PaymentVaultExtensionAttributeOperations" type="Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
     </type>
 
     <!-- Payment Method configuration -->

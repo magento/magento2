@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,29 +16,61 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertSynonymGroupInGrid extends AbstractConstraint
 {
     /**
+     * Filters array mapping.
+     *
+     * @var array
+     */
+    private $filter;
+
+    /**
      * Assert that created Synonym Group can be found in grid via: synonyms.
      *
      * @param SynonymGroup $synonymGroup
      * @param SynonymGroupIndex $synonymGroupIndex
+     * @param array|null $synonymFilter
      * @return void
-     *
      */
-    public function processAssert(SynonymGroup $synonymGroup, SynonymGroupIndex $synonymGroupIndex)
-    {
+    public function processAssert(
+        SynonymGroup $synonymGroup,
+        SynonymGroupIndex $synonymGroupIndex,
+        $synonymFilter = null
+    ) {
         $synonymGroupIndex->open();
-        $data = $synonymGroup->getData();
-        $filter = [
-            'synonyms' => $data['synonyms'],
-        ];
 
-        $synonymGroupIndex->getSynonymGroupGrid()->search($filter);
+        $this->prepareFilter($synonymGroup, $synonymFilter);
+        $synonymGroupIndex->getSynonymGroupGrid()->search($this->filter);
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $synonymGroupIndex->getSynonymGroupGrid()->isRowVisible($filter, false, false),
-            'Synonym Group with '
-            . 'synonyms \'' . $filter['synonyms'] . '\', '
-            . 'is absent in Synonym grid.'
+            $synonymGroupIndex->getSynonymGroupGrid()->isRowVisible($this->filter, false, false),
+            'Synonym Group is absent in Synonym grid'
         );
+
+        \PHPUnit_Framework_Assert::assertEquals(
+            count($synonymGroupIndex->getSynonymGroupGrid()->getAllIds()),
+            1,
+            'There is more than one synonyms founded'
+        );
+    }
+
+    /**
+     * Prepare filter for search synonyms.
+     *
+     * @param SynonymGroup $synonymGroup
+     * @param array|null $synonymFilter
+     * @return void
+     */
+    private function prepareFilter(SynonymGroup $synonymGroup, $synonymFilter = null)
+    {
+        $data = $synonymGroup->getData();
+        $this->filter = [
+            'synonyms' => $data['synonyms'],
+            'website_id' => isset($synonymFilter['data']['website'])
+                ? $synonymFilter['data']['website']
+                : '',
+            'group_id' => isset($synonymFilter['data']['id'])
+                ? $synonymFilter['data']['id']
+                : '',
+        ];
     }
 
     /**

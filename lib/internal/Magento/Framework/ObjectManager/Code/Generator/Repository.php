@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -137,6 +137,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         return
             str_replace('Interface', '', $this->getSourceClassName()) . 'SearchResultInterfaceFactory';
     }
+
     /**
      * Returns source persistor class name
      *

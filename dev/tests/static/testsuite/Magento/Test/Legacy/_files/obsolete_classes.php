@@ -4,7 +4,7 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -3826,8 +3826,8 @@ return [
     ],
     ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
     [
-        'Magento\Setup\Console\Command\DeployStaticContentCommand',
-        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand',
+        'Magento\Setup\Console\Command\DeployStaticContentCommand'
     ],
     [
         'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
@@ -4227,4 +4227,8 @@ return [
     ['Magento\Framework\Search\Document', 'Magento\Framework\Api\Search\Document'],
     ['Magento\Framework\Search\DocumentField'],
     ['Magento\Quote\Setup\Recurring'],
+    ['Magento\Framework\Acl\Cache'],
+    ['Magento\Framework\Acl\CacheInterface'],
+    ['Magento\Framework\Acl\Test\Unit\CacheTest'],
+    ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
 ];
