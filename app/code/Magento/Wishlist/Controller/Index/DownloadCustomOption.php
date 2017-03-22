@@ -23,7 +23,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @var Json
      */
-    protected $json;
+    private $json;
 
     /**
      * @param Action\Context $context

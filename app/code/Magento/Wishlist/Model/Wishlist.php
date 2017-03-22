@@ -125,7 +125,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * @var Json
      */
-    protected $serializer;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -415,7 +415,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
-             $_buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest));
+            $_buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest));
         } elseif (is_array($buyRequest)) {
             $_buyRequest = new \Magento\Framework\DataObject($buyRequest);
         } else {
