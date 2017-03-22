@@ -253,7 +253,7 @@ abstract class AbstractEntity
      *
      * @var Json
      */
-    protected $serializer;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -436,7 +436,7 @@ abstract class AbstractEntity
      * @return Json
      * @deprecated
      */
-    protected function getSerializer()
+    private function getSerializer()
     {
         if (null === $this->serializer) {
             $this->serializer = ObjectManager::getInstance()->get(Json::class);
