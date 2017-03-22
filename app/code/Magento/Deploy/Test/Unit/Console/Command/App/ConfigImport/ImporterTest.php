@@ -113,13 +113,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isForce
      * @param bool $doImport
      * @param bool $skipImport
      * @param array $warningMessages
      * @dataProvider importDataProvider
      */
-    public function testImport($isForce, $doImport, $skipImport, array $warningMessages)
+    public function testImport($doImport, $skipImport, array $warningMessages)
     {
         $configData = ['some data'];
         $messages = ['The import is complete'];
@@ -144,9 +143,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->with('someSection')
             ->willReturn($configData);
 
-        $this->inputMock->expects($this->any())
-            ->method('isInteractive')
-            ->willReturn(!$isForce);
         $importerMock->expects($this->any())
             ->method('getWarningMessages')
             ->willReturn($warningMessages);
@@ -191,37 +187,21 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'isForce' => false,
                 'doImport' => false,
                 'skipImport' => false,
                 'warningMessages' => [],
             ],
             [
-                'isForce' => true,
-                'doImport' => false,
-                'skipImport' => false,
-                'warningMessages' => [],
-            ],
-            [
-                'isForce' => false,
                 'doImport' => true,
                 'skipImport' => false,
                 'warningMessages' => [],
             ],
             [
-                'isForce' => false,
                 'doImport' => true,
                 'skipImport' => false,
                 'warningMessages' => ['Some message'],
             ],
             [
-                'isForce' => false,
-                'doImport' => true,
-                'skipImport' => false,
-                'warningMessages' => [],
-            ],
-            [
-                'isForce' => false,
                 'doImport' => false,
                 'skipImport' => true,
                 'warningMessages' => ['Some message'],

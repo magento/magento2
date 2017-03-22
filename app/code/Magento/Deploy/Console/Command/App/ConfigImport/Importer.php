@@ -134,11 +134,7 @@ class Importer
                  * The importer return some warning questions which are contained in variable $warnings.
                  * A user should confirm import continuing if $warnings is not empty.
                  */
-                if (
-                    $input->isInteractive()
-                    && !empty($warnings)
-                    && !$this->questionPerformer->execute($warnings, $input, $output)
-                ) {
+                if (!empty($warnings) && !$this->questionPerformer->execute($warnings, $input, $output)) {
                     continue;
                 }
 
