@@ -145,7 +145,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::VARY));
 
         $this->assertEquals(
-            md5(
+            sha1(
                 json_encode(
                     [
                         true,
