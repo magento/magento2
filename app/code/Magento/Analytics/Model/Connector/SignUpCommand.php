@@ -7,6 +7,8 @@ namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
+use Magento\Config\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SignUpCommand
@@ -15,6 +17,11 @@ use Magento\Analytics\Model\IntegrationManager;
  */
 class SignUpCommand implements CommandInterface
 {
+    /**
+     * @var string
+     */
+    private $signUpUrlPath = 'analytics/url/signup';
+
     /**
      * @var AnalyticsToken
      */
@@ -26,9 +33,19 @@ class SignUpCommand implements CommandInterface
     private $integrationManager;
 
     /**
-     * @var SignUpRequest
+     * @var Config
      */
-    private $signUpRequest;
+    private $config;
+
+    /**
+     * @var Http\ClientInterface
+     */
+    private $httpClient;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * SignUpCommand constructor.
@@ -38,13 +55,17 @@ class SignUpCommand implements CommandInterface
      * @param IntegrationManager $integrationManager
      */
     public function __construct(
-        SignUpRequest $signUpRequest,
         AnalyticsToken $analyticsToken,
-        IntegrationManager $integrationManager
+        IntegrationManager $integrationManager,
+        Config $config,
+        Http\ClientInterface $httpClient,
+        LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->integrationManager = $integrationManager;
-        $this->signUpRequest = $signUpRequest;
+        $this->config = $config;
+        $this->httpClient = $httpClient;
+        $this->logger = $logger;
     }
 
     /**
@@ -61,14 +82,56 @@ class SignUpCommand implements CommandInterface
      */
     public function execute()
     {
+        $result = false;
         $integrationToken = $this->integrationManager->generateToken();
         if ($integrationToken) {
             $this->integrationManager->activateIntegration();
-            $responseToken = $this->signUpRequest->call($integrationToken->getToken());
-            if ($responseToken) {
-                $this->analyticsToken->storeToken($responseToken);
+            $response = $this->httpClient->request(
+                ZendClient::POST,
+                $this->config->getConfigDataValue($this->signUpUrlPath),
+                [
+                    "token" => $integrationToken->getToken(),
+                    "url" => $this->config->getConfigDataValue(
+                        Store::XML_PATH_SECURE_BASE_URL
+                    )
+                ]
+            );
+
+            $result = $this->parseResult($response);
+            if ($result) {
+                $this->analyticsToken->storeToken($result);
             }
         }
-        return ((bool)$integrationToken && isset($responseToken) && (bool)$responseToken);
+        return $result;
+    }
+
+    /**
+     * @param \Zend_Http_Response $response
+     *
+     * @return false|string
+     */
+    private function parseResult($response)
+    {
+        $result = false;
+        if ($response) {
+            if ($response->getStatus() === 201) {
+                $body = json_decode($response->getBody(), 1);
+
+                if (isset($body['access-token']) && !empty($body['access-token'])) {
+                    $result = $body['access-token'];
+                }
+            }
+
+            if (!$result) {
+                $this->logger->warning(
+                    sprintf(
+                        'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                    )
+                );
+            }
+        }
+
+        return $result;
     }
 }
