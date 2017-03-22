@@ -63,7 +63,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->save($lowestPriceChildProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 
-        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceOptionsProvider = $this->recreateLowestPriceOptionsProvider();
+        $lowestPriceChildrenProducts = $lowestPriceOptionsProvider->getProducts($configurableProduct);
+
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
@@ -95,7 +97,9 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->save($lowestPriceChildProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 
-        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceOptionsProvider = $this->recreateLowestPriceOptionsProvider();
+        $lowestPriceChildrenProducts = $lowestPriceOptionsProvider->getProducts($configurableProduct);
+
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
@@ -123,9 +127,21 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         $stockItem->setIsInStock(0);
         $this->productRepository->save($lowestPriceChildProduct);
 
-        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $lowestPriceOptionsProvider = $this->recreateLowestPriceOptionsProvider();
+        $lowestPriceChildrenProducts = $lowestPriceOptionsProvider->getProducts($configurableProduct);
+
         $this->assertCount(1, $lowestPriceChildrenProducts);
         $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
         $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+    }
+
+    /**
+     * @return LowestPriceOptionsProviderInterface
+     */
+    private function recreateLowestPriceOptionsProvider()
+    {
+        return Bootstrap::getObjectManager()->create(
+            LowestPriceOptionsProviderInterface::class
+        );
     }
 }
