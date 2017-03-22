@@ -99,7 +99,7 @@ class SwatchAttributeCodes
                 ]
             )->where(
                 'a.attribute_id IN (?)',
-                (string)$this->getAttributeIdsSelect()
+                new \Zend_Db_Expr($this->getAttributeIdsSelect())
             );
         $result = $this->resourceConnection->getConnection()->fetchPairs($select);
         return $result;
