@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
