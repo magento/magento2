@@ -10,7 +10,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
 
 /**
- * Checks possibility to use payment method at particular currency
+ * Checks possibility to use payment method at particular country
  *
  * @api
  */
