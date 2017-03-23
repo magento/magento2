@@ -80,10 +80,7 @@ class JoinAssembler implements AssemblerInterface
                 'link-type' => isset($join['link-type']) ? $join['link-type'] : 'left',
                 'table' => [
                     $joinAlias => $this->resourceConnection
-                        ->getTableName(
-                            $this->nameResolver->getName($join),
-                            $selectBuilder->getConnectionName()
-                        ),
+                        ->getTableName($this->nameResolver->getName($join)),
                 ],
                 'condition' => $this->conditionResolver->getFilter(
                     $selectBuilder,

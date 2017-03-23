@@ -59,10 +59,7 @@ class FromAssembler implements AssemblerInterface
             [
                 $this->nameResolver->getAlias($queryConfig['source']) =>
                     $this->resourceConnection
-                        ->getTableName(
-                            $this->nameResolver->getName($queryConfig['source']),
-                            $selectBuilder->getConnectionName()
-                        ),
+                        ->getTableName($this->nameResolver->getName($queryConfig['source'])),
             ]
         );
         $columns = $this->columnsResolver->getColumns($selectBuilder, $queryConfig['source']);

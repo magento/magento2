@@ -103,16 +103,10 @@ class FromAssemblerTest extends \PHPUnit_Framework_TestCase
             ->with($queryConfig['source'])
             ->willReturn($queryConfig['source']['name']);
 
-        $this->selectBuilderMock
-            ->expects($this->once())
-            ->method('getConnectionName')
-            ->with()
-            ->willReturn(ResourceConnection::DEFAULT_CONNECTION);
-
         $this->resourceConnection
             ->expects($this->once())
             ->method('getTableName')
-            ->with($queryConfig['source']['name'], ResourceConnection::DEFAULT_CONNECTION)
+            ->with($queryConfig['source']['name'])
             ->willReturn($tableName);
 
         $this->selectBuilderMock->expects($this->once())

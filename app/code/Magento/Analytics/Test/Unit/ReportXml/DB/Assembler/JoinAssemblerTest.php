@@ -152,12 +152,6 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
             ->with($queryConfigMock['source']['link-source'][0])
             ->willReturn($queryConfigMock['source']['link-source'][0]['name']);
 
-        $this->selectBuilderMock
-            ->expects($this->once())
-            ->method('getConnectionName')
-            ->with()
-            ->willReturn(ResourceConnection::DEFAULT_CONNECTION);
-
         $this->resourceConnection
             ->expects($this->any())
             ->method('getTableName')
