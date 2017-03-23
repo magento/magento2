@@ -77,7 +77,7 @@ class CommentParser implements CommentParserInterface
         );
 
         foreach ($comments as $comment) {
-            $text = $this->getCommentTest($comment[1]);
+            $text = $this->getCommentText($comment[1]);
             $section = $this->getSectionName($comment[1]);
 
             if ($section && $text) {
@@ -94,7 +94,7 @@ class CommentParser implements CommentParserInterface
      * @param string $comment The comment
      * @return string|null
      */
-    private function getCommentTest($comment)
+    private function getCommentText($comment)
     {
         $pattern = '/\s+\* (.+)\s+/';
         $comment = preg_replace('/\s+\* For the section: .+\S/', '', $comment);
