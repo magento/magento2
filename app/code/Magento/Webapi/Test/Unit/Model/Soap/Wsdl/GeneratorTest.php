@@ -108,7 +108,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ]);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
-
         $this->_wsdlGenerator = $objectManager->getObject(
             \Magento\Webapi\Model\Soap\Wsdl\Generator::class,
             [
