@@ -196,7 +196,7 @@ class Rule extends AbstractResource
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
-            $this->getTable('rule_customer'),
+            $this->getTable('salesrule_customer'),
             ['cnt' => 'count(*)']
         )->where(
             'rule_id = :rule_id'
