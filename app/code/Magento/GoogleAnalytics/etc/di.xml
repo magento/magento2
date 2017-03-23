@@ -13,4 +13,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="google/analytics/account" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
