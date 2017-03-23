@@ -5,6 +5,7 @@
  */
 namespace Magento\SampleData\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Composer\ComposerInformation;
@@ -38,6 +39,11 @@ class Dependency
     private $componentRegistrar;
 
     /**
+     * @var Filesystem\Directory\ReadInterfaceFactory
+     */
+    private $directoryReadFactory;
+
+    /**
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
@@ -47,11 +53,16 @@ class Dependency
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
         PackageFactory $packageFactory,
-        ComponentRegistrarInterface $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar,
+        \Magento\Framework\Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
+        if ($directoryReadFactory === null) {
+            $directoryReadFactory = ObjectManager::getInstance()->get(Filesystem\Directory\ReadInterfaceFactory::class);
+        }
+        $this->directoryReadFactory = $directoryReadFactory;
     }
 
     /**
@@ -81,14 +92,15 @@ class Dependency
     {
         $suggests = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $file = $moduleDir . '/composer.json';
-
-            if (!file_exists($file) || !is_readable($file)) {
+            /** @var Filesystem\Directory\ReadInterface $directory */
+            $directory = $this->directoryReadFactory->create(['path' => $moduleDir]);
+            echo "path=$moduleDir\n";
+            if (!$directory->isExist('composer.json') || !$directory->isReadable('composer.json')) {
                 continue;
             }
 
             /** @var Package $package */
-            $package = $this->getModuleComposerPackage($file);
+            $package = $this->getModuleComposerPackage($directory);
             $suggest = json_decode(json_encode($package->get('suggest')), true);
             if (!empty($suggest)) {
                 $suggests += $suggest;
@@ -100,11 +112,12 @@ class Dependency
     /**
      * Load package
      *
-     * @param string $file
+     * @param Filesystem\Directory\ReadInterface $directory
      * @return Package
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    protected function getModuleComposerPackage($file)
+    protected function getModuleComposerPackage(Filesystem\Directory\ReadInterface $directory)
     {
-        return $this->packageFactory->create(['json' => json_decode(file_get_contents($file))]);
+        return $this->packageFactory->create(['json' => json_decode($directory->readFile('composer.json'))]);
     }
 }
