@@ -230,10 +230,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $expectedResult = '
             <root>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
+                    <block class="Magento\Framework\View\Element\Template" 
+                           template="Magento_Framework::fixture_template_one.phtml"/>
                 </body>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
+                    <block class="Magento\Framework\View\Element\Template" 
+                           template="Magento_Framework::fixture_template_two.phtml"/>
                 </body>
             </root>
         ';
@@ -249,7 +251,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             <root>
                 <body>
                     <referenceContainer name="main.container">
-                        <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
+                        <block class="Magento\Framework\View\Element\Template" 
+                               template="Magento_Framework::fixture_template_one.phtml"/>
                     </referenceContainer>
                 </body>
             </root>
