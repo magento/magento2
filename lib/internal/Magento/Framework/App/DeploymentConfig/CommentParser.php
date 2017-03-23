@@ -69,16 +69,16 @@ class CommentParser implements CommentParserInterface
         }
 
         $fileContent = $dirReader->readFile($fileName);
-        $comments = array_filter(
+        $commentBlocks = array_filter(
             token_get_all($fileContent),
             function ($entry) {
                 return T_DOC_COMMENT == $entry[0];
             }
         );
 
-        foreach ($comments as $comment) {
-            $text = $this->getCommentText($comment[1]);
-            $section = $this->getSectionName($comment[1]);
+        foreach ($commentBlocks as $commentBlock) {
+            $text = $this->getCommentText($commentBlock[1]);
+            $section = $this->getSectionName($commentBlock[1]);
 
             if ($section && $text) {
                 $result[$section] = $text;
@@ -91,16 +91,23 @@ class CommentParser implements CommentParserInterface
     /**
      * Retrieves text of comment.
      *
-     * @param string $comment The comment
+     * @param string $commentBlock The comment
      * @return string|null
      */
-    private function getCommentText($comment)
+    private function getCommentText($commentBlock)
     {
-        $pattern = '/\s+\* (.+)\s+/';
-        $comment = preg_replace('/\s+\* For the section: .+\S/', '', $comment);
-        preg_match_all($pattern, $comment, $matches);
+        $commentsLine = [];
+        foreach (preg_split("/(\r?\n)/", $commentBlock) as $commentLine) {
+            if (preg_match('/^(?=\s+?\*[^\/])(.+)/', $commentLine, $matches)
+                && false === strpos($commentLine, 'For the section')
+            ) {
+                $line = $matches[1];
+                $line = trim($line);
+                $commentsLine[] = preg_replace('/^(\*\s?)/', '', $line);
+            }
+        }
 
-        return empty($matches[1]) ? null : implode(PHP_EOL, $matches[1]);
+        return empty($commentsLine) ? null : implode(PHP_EOL, $commentsLine);
     }
 
     /**
