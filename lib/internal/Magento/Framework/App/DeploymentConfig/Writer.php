@@ -76,8 +76,7 @@ class Writer
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
         $this->formatter = $formatter ?: new Writer\PhpFormatter();
-        $this->commentParser = $commentParser ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(CommentParser::class);
+        $this->commentParser = $commentParser ?: new CommentParser($filesystem, $configFilePool);
     }
 
     /**
