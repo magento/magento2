@@ -25,6 +25,8 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api Use this class as a base for virtual types declaration
  */
 class Adapter implements MethodInterface
 {

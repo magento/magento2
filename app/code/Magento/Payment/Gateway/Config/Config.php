@@ -9,6 +9,16 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Default implementation of Payment Gateway Config.
+ *
+ * This class should not be extended or directly injected in to other classes as a dependency.
+ * Use \Magento\Payment\Gateway\ConfigInterface instead.
+ *
+ * To process value retrieved from config implementation of \Magento\Payment\Gateway\Config\ValueHandlerInterface
+ * should be used (inheritance and overriding of getValue method or introduction of new public methods
+ * is not recommended).
+ */
 class Config implements ConfigInterface
 {
     const DEFAULT_PATH_PATTERN = 'payment/%s/%s';

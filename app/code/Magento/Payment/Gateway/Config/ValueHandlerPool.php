@@ -8,6 +8,14 @@ namespace Magento\Payment\Gateway\Config;
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 
+/**
+ * Default implementation of config value handlers pool.
+ * This class designed to be base for virtual types.
+ * Direct injection of this class is not recommended (inject ValueHandlerPoolInterface instead).
+ * Inheritance from this class is not recommended (declare virtual type or implement ValueHandlerPoolInterface instead).
+ *
+ * @api
+ */
 class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface
 {
     /**
