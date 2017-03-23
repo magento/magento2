@@ -12,6 +12,7 @@ class FileClassScanner
 
     protected $filename;
     protected $classNames = false;
+    protected $tokens;
 
     public function __construct( $filename )
     {
@@ -42,12 +43,8 @@ class FileClassScanner
         $triggerNamespace = false;
         $paramNestingLevel = $currentParamNestingLevel = 0;
         foreach ($tokens as $key => $token) {
-            if (!is_array($token)) {
-                if ($token == '{') {
-                    $paramNestingLevel++;
-                } else if ($token == '}') {
-                    $paramNestingLevel--;
-                }
+            if ($token == '{') {
+                return $classes;
             }
             if ($triggerNamespace) {
                 if (is_array($token)) {
@@ -85,6 +82,5 @@ class FileClassScanner
         }
         return $this->classNames;
     }
-
 
 }
