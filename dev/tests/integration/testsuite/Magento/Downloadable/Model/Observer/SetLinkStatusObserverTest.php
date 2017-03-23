@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Downloadable\Model\Observer;
 
 /**
@@ -12,13 +15,7 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
      * Object manager
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
-
-    /**
-     * Order repository
-     * @var \Magento\Sales\Model\OrderRepository
-     */
-    protected $orderRepository;
+    private $objectManager;
 
     /**
      * Initialization of dependencies
@@ -26,48 +23,25 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->orderRepository = $this->objectManager->get(
-            \Magento\Sales\Api\OrderRepositoryInterface::class
-        );
     }
 
     /**
      * Asserting, that links status is expired after canceling of order.
+     * This test relates to the GitHub issue magento/magento2#8515.
      *
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product_with_links.php
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
      */
     public function testCheckStatusOnOrderCancel()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->orderRepository->get(1);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
+        $order->loadByIncrementId('100000001');
 
         $orderItems = $order->getAllItems();
         $items = array_values($orderItems);
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
         $orderItem = array_shift($items);
-
-        /** @var \Magento\Sales\Model\Service\InvoiceService $invoiceService */
-        $invoiceService = $this->objectManager->create(
-            \Magento\Sales\Model\Service\InvoiceService::class
-        );
-
-        /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-        $invoice = $invoiceService->prepareInvoice($order);
-
-        /** Register invoice */
-        $invoice->register();
-        $invoice->save();
-
-        /** @var \Magento\Framework\DB\Transaction $transactionService */
-        $transactionService = $this->objectManager->create(
-            \Magento\Framework\DB\Transaction::class
-        );
-        $transactionService->addObject($invoice)
-            ->addObject($invoice->getOrder())
-            ->save();
 
         /** Canceling order to reproduce test case */
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED);
@@ -79,6 +53,9 @@ class SetLinkStatusObserverTest extends \PHPUnit_Framework_TestCase
         )->create();
 
         $linkCollection->addFieldToFilter('order_item_id', $orderItem->getId());
+
+        /** Assert there are items in linkCollection to avoid false-positive test result. */
+        $this->assertGreaterThan(0, $linkCollection->count());
 
         /** @var \Magento\Downloadable\Model\Link\Purchased\Item $linkItem */
         foreach ($linkCollection->getItems() as $linkItem) {
