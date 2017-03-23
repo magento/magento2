@@ -77,16 +77,10 @@ class ClassesScanner implements ClassesScannerInterface
                     continue 2;
                 }
             }
-            $fileScanner = new FileScanner($fileItemPath);
+            $fileScanner = new FileClassScanner($fileItemPath);
             $classNames = $fileScanner->getClassNames();
-            foreach ($classNames as $className) {
-                if (empty($className)) {
-                    continue;
-                }
-                if (!class_exists($className)) {
-                    require_once $fileItemPath;
-                }
-                $classes[] = $className;
+            if ($classNames) {
+                $classes = array_merge($classes, $classNames);
             }
         }
         return $classes;
