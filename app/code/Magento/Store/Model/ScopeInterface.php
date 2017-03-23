@@ -11,7 +11,7 @@ interface ScopeInterface
      * Scope types
      */
     const SCOPE_STORES = 'stores';
-
+    const SCOPE_GROUPS   = 'groups';
     const SCOPE_WEBSITES = 'websites';
 
     const SCOPE_STORE   = 'store';
