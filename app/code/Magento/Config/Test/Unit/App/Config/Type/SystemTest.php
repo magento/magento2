@@ -72,11 +72,25 @@ class SystemTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param bool $isCached
-     * @dataProvider getDataProvider
-     */
-    public function testGet($isCached)
+    public function testGetCached()
+    {
+        $path = 'default/dev/unsecure/url';
+        $url = 'http://magento.test/';
+        $data = [
+            'unsecure' => [
+                'url' => $url
+            ]
+        ];
+
+        $this->cache->expects($this->any())
+            ->method('load')
+            ->withConsecutive(['system_CACHE_EXISTS'], ['system_defaultdev'])
+            ->willReturnOnConsecutiveCalls('1', serialize($data));
+
+        $this->assertEquals($url, $this->configType->get($path));
+    }
+
+    public function testGetNotCached()
     {
         $path = 'default/dev/unsecure/url';
         $url = 'http://magento.test/';
@@ -89,47 +103,47 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $this->cache->expects($this->once())
+        $dataToCache = [
+            'unsecure' => [
+                'url' => $url
+            ]
+        ];
+        $this->cache->expects($this->any())
             ->method('load')
-            ->with(System::CONFIG_TYPE)
-            ->willReturn($isCached ? serialize(new DataObject($data)) : null);
+            ->withConsecutive(['system_CACHE_EXISTS'], ['system_defaultdev'])
+            ->willReturnOnConsecutiveCalls(false, false);
 
-        if (!$isCached) {
-            $this->source->expects($this->once())
-                ->method('get')
-                ->willReturn($data);
-            $this->fallback->expects($this->once())
-                ->method('process')
-                ->with($data)
-                ->willReturnArgument(0);
-            $this->preProcessor->expects($this->once())
-                ->method('process')
-                ->with($data)
-                ->willReturnArgument(0);
-            $this->postProcessor->expects($this->once())
-                ->method('process')
-                ->with($data)
-                ->willReturnArgument(0);
-            $this->cache->expects($this->once())
-                ->method('save')
-                ->with(
-                    serialize(new DataObject($data)),
-                    System::CONFIG_TYPE,
+        $this->source->expects($this->once())
+            ->method('get')
+            ->willReturn($data);
+        $this->fallback->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturnArgument(0);
+        $this->preProcessor->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturnArgument(0);
+        $this->postProcessor->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturnArgument(0);
+
+        $this->cache->expects($this->any())
+            ->method('save')
+            ->withConsecutive(
+                [
+                    serialize($dataToCache),
+                    'system_defaultdev',
                     [System::CACHE_TAG]
-                );
-        }
+                ],
+                [
+                    '1',
+                    'system_CACHE_EXISTS',
+                    [System::CACHE_TAG]
+                ]
+            );
 
         $this->assertEquals($url, $this->configType->get($path));
-    }
-
-    /**
-     * @return array
-     */
-    public function getDataProvider()
-    {
-        return [
-            [true],
-            [false]
-        ];
     }
 }
