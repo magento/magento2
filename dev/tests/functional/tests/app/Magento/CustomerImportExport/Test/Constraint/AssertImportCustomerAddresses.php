@@ -22,15 +22,24 @@ class AssertImportCustomerAddresses extends AbstractConstraint
      * @var array
      */
     private $mappingKeys = [
-        'firstname' => 'firstname',
-        'lastname' => 'lastname',
-        'postcode' => 'postcode',
-        'region' => 'region_id',
-        'city' => 'city',
-        'company' => 'company',
-        'country_id' => 'country_id',
-        'street' => 'street',
-        'telephone' => 'telephone',
+        'region' => 'region_id'
+    ];
+
+    /**
+     * Imported fields keys.
+     *
+     * @var array
+     */
+    private $importedFieldsKeys = [
+        'firstname',
+        'lastname',
+        'postcode',
+        'region_id',
+        'city',
+        'company',
+        'country_id',
+        'street',
+        'telephone'
     ];
 
     /**
@@ -156,7 +165,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
      */
     private function deleteWasteData(array $csvData)
     {
-        $necessaryData = array_flip($this->mappingKeys);
+        $necessaryData = array_flip($this->importedFieldsKeys);
 
         return array_intersect_key($csvData, $necessaryData);
     }

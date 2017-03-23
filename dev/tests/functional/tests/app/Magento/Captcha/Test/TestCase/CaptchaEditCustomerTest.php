@@ -121,6 +121,7 @@ class CaptchaEditCustomerTest extends Injectable
 
         /** @var Customer $initCustomer */
         $initCustomer = $this->fixtureFactory->createByCode('customer', ['data' => $data]);
+        //Add + 1 to attempts to get over maximum attempts count.
         $this->customerEdit($initCustomer, $attempts + 1);
     }
 
