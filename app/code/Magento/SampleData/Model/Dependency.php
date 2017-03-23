@@ -6,10 +6,11 @@
 namespace Magento\SampleData\Model;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
+use Magento\Framework\Filesystem;
 
 /**
  * Sample Data dependency
@@ -32,7 +33,7 @@ class Dependency
     private $packageFactory;
 
     /**
-     * @var ComponentRegistrar
+     * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
@@ -40,13 +41,13 @@ class Dependency
      * @param ComposerInformation $composerInformation
      * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
         PackageFactory $packageFactory,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
