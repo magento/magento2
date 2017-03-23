@@ -27,11 +27,6 @@ class Dependency
     protected $composerInformation;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var PackageFactory
      */
     private $packageFactory;
@@ -54,7 +49,6 @@ class Dependency
         ComponentRegistrar $componentRegistrar
     ) {
         $this->composerInformation = $composerInformation;
-        $this->filesystem = $filesystem;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
     }
