@@ -215,11 +215,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Reindex categories using given SQL select and condition.
      *
-     * @param \Magento\Framework\DB\Select $resultSelect
+     * @param \Magento\Framework\DB\Select $basicSelect
      * @param string $whereCondition
      * @return void
      */
-    private function reindexCategoriesBySelect(\Magento\Framework\DB\Select $resultSelect, $whereCondition)
+    private function reindexCategoriesBySelect(\Magento\Framework\DB\Select $basicSelect, $whereCondition)
     {
         $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $columns = array_keys($this->connection->describeTable($this->getMainTmpTable()));
@@ -231,6 +231,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->batchSize
         );
         foreach ($batches as $batch) {
+            $resultSelect = clone $basicSelect;
             $select = $this->connection->select();
             $select->distinct(true);
             $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
