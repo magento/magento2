@@ -117,42 +117,15 @@ PHP
         self::assertCount(1, $result);
         self::assertContains('This\Is\My\Namespace\ThisIsMyTest', $result);
     }
-    public function testGetMultipleClassesInMultiNamespace()
+
+    public function testTheWeirdExceptionCaseThatHappens()
     {
-        $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
-            'getFileContents'
-        ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<PHP
-<?php
-
-namespace This\Is\My\Namespace;
-
-class ThisIsMyTest {
-
-}
-
-class ThisIsAnotherTest {
-
-    public function __construct()
-    {
-    
-    }
-    
-    public function test()
-    {
-        return self::class;
-    }
-
-}
-PHP
-        );
-        /* @var $scanner FileClassScanner */
-
+        $filename = __DIR__ . '/../../../../../../../../../../app/code/Magento/Catalog/Model/ResourceModel/Product/Indexer/Eav/AbstractEav.php';
+        $filename = realpath($filename);
+        $scanner = new FileClassScanner($filename);
         $result = $scanner->getClassNames();
 
-        self::assertCount(2, $result);
-        self::assertContains('This\Is\My\Namespace\ThisIsMyTest', $result);
-        self::assertContains('This\Is\My\Namespace\ThisIsAnotherTest', $result);
+        self::assertCount(1, $result);
     }
 
 
