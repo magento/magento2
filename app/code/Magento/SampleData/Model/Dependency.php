@@ -48,13 +48,15 @@ class Dependency
      * @param Filesystem $filesystem
      * @param PackageFactory $packageFactory
      * @param ComponentRegistrarInterface $componentRegistrar
+     * @param Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         ComposerInformation $composerInformation,
         Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        \Magento\Framework\Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
+        Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
@@ -69,6 +71,7 @@ class Dependency
      * Retrieve list of sample data packages from suggests
      *
      * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getSampleDataPackages()
     {
@@ -87,20 +90,13 @@ class Dependency
      * Retrieve suggested sample data packages from modules composer.json
      *
      * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function getSuggestsFromModules()
     {
         $suggests = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            /** @var Filesystem\Directory\ReadInterface $directory */
-            $directory = $this->directoryReadFactory->create(['path' => $moduleDir]);
-            echo "path=$moduleDir\n";
-            if (!$directory->isExist('composer.json') || !$directory->isReadable('composer.json')) {
-                continue;
-            }
-
-            /** @var Package $package */
-            $package = $this->getModuleComposerPackage($directory);
+            $package = $this->getModuleComposerPackage($moduleDir);
             $suggest = json_decode(json_encode($package->get('suggest')), true);
             if (!empty($suggest)) {
                 $suggests += $suggest;
@@ -112,12 +108,26 @@ class Dependency
     /**
      * Load package
      *
-     * @param Filesystem\Directory\ReadInterface $directory
+     * @param string $moduleDir
      * @return Package
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    protected function getModuleComposerPackage(Filesystem\Directory\ReadInterface $directory)
+    private function getModuleComposerPackage($moduleDir): Package
     {
-        return $this->packageFactory->create(['json' => json_decode($directory->readFile('composer.json'))]);
+        /*
+         * Also look in parent directory of registered module directory to allow modules to follow the pds/skeleton
+         * standard and have their source code in a "src" subdirectory of the repository
+         *
+         * see: https://github.com/php-pds/skeleton
+         */
+        foreach ([$moduleDir, $moduleDir . DIRECTORY_SEPARATOR . '..'] as $dir) {
+            /** @var Filesystem\Directory\ReadInterface $directory */
+            $directory = $this->directoryReadFactory->create(['path' => $dir]);
+            if ($directory->isExist('composer.json') && $directory->isReadable('composer.json')) {
+                /** @var Package $package */
+                return $this->packageFactory->create(['json' => json_decode($directory->readFile('composer.json'))]);
+            }
+        }
+        return $this->packageFactory->create(['json' => new \stdClass]);
     }
 }

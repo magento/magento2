@@ -79,6 +79,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     'app/code/LocalModule',
                     'app/code/LocalModuleWithoutComposerJson',
                     'vendor/company/module',
+                    'vendor/company2/module/src'
                 ],
                 'composerJsonGenerator' => function(DependencyTest $test) {
                     return [
@@ -98,6 +99,28 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                                 ['name' => 'company/module', 'suggest' => ['company/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.0.0-beta']]
                             )
                         ],
+                        [
+                            ['path' => 'vendor/company2/module/src/..'],
+                            $test->stubComposerJsonReader(
+                                ['name' => 'company2/module', 'suggest' => ['company2/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.10']]
+                            )
+                        ],
+                        [
+                            ['path' => 'vendor/company2/module/src'],
+                            $test->stubFileNotFoundReader()
+                        ],
+                        [
+                            ['path' => 'vendor/company/module/..'],
+                            $test->stubFileNotFoundReader()
+                        ],
+                        [
+                            ['path' => 'app/code/LocalModuleWithoutComposerJson/..'],
+                            $test->stubFileNotFoundReader()
+                        ],
+                        [
+                            ['path' => 'app/code/LocalModule/..'],
+                            $test->stubFileNotFoundReader()
+                        ],
                     ];
                 },
                 'suggestions' => [
@@ -110,6 +133,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     'thirdparty/bar-sample-data' => '1.2.3',
                     'local/module-sample-data' => '0.1.0',
                     'company/module-sample-data' => '1.0.0-beta',
+                    'company2/module-sample-data' => '1.10',
                 ]
             ]
         ];
