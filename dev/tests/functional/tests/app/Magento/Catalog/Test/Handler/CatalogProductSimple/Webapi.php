@@ -153,6 +153,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->prepareAdvancedInventory();
         $this->prepareTierPrice();
         $this->prepareCustomOptions();
+        $this->prepareMediaGallery();
+        $this->prepareSpecialPrice();
     }
 
     /**
@@ -288,6 +290,21 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     }
 
     /**
+     * Preparation of product special price data.
+     *
+     * @return void
+     */
+    protected function prepareSpecialPrice()
+    {
+        if (isset($this->fields['product']['special_from_date'])) {
+            $this->fields['product']['special_from_date'] = date('n/j/Y', strtotime($this->fields['product']['special_from_date']));
+        }
+        if (isset($this->fields['product']['special_to_date'])) {
+            $this->fields['product']['special_to_date'] = date('n/j/Y', strtotime($this->fields['product']['special_to_date']));
+        }
+    }
+
+    /**
      * Preparation of "Custom Options" tab data.
      *
      * @return void
@@ -311,5 +328,70 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $this->fields['product']['options'][$ko] = $option;
             }
         }
+    }
+
+    /**
+     * Create test image file.
+     *
+     * @param string $filename
+     * @return void
+     */
+    protected function prepareMediaGallery($filename = 'test1.jpg')
+    {
+        if (isset($this->fields['product']['media_gallery'])) {
+            if (!file_exists($filename)) {
+
+                // Create an image with the specified dimensions
+                $image = imageCreate(300, 200);
+
+                // Create a color (this first call to imageColorAllocate
+                // also automatically sets the image background color)
+                $colorYellow = imageColorAllocate($image, 255, 255, 0);
+
+                // Draw a rectangle
+                imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
+
+                $directory = dirname($filename);
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0777, true);
+                }
+
+                imageJpeg($image, $filename);
+
+                // Release memory
+                imageDestroy($image);
+            }
+
+            $encodedImage = base64_encode(file_get_contents($filename));
+
+            //create a product with media gallery
+            $this->fields['product']['media_gallery_entries'] = $this->getImageData($filename, $encodedImage);
+            unset($this->fields['product']['media_gallery']);
+        }
+    }
+
+    /**
+     * Get media gallery data.
+     *
+     * @param $filename
+     * @param $encodedImage
+     * @return array
+     */
+    private function getImageData($filename, $encodedImage)
+    {
+        return [
+            [
+                'position' => 1,
+                'media_type' => 'image',
+                'disabled' => false,
+                'label' => $filename,
+                'types' => [],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ]
+        ];
     }
 }

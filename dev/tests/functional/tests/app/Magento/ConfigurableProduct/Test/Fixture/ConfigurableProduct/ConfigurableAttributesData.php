@@ -34,11 +34,25 @@ class ConfigurableAttributesData extends DataSource
     protected $attributesData = [];
 
     /**
+     * Temporary media path.
+     *
+     * @var string
+     */
+    protected $mediaPathTmp = '/pub/media/tmp/catalog/product/';
+
+    /**
      * Prepared variation matrix.
      *
      * @var array
      */
     protected $variationsMatrix = [];
+
+    /**
+     * Add media gallery.
+     *
+     * @var bool
+     */
+    private $addMediaGallery = false;
 
     /**
      * Prepared attributes.
@@ -80,6 +94,11 @@ class ConfigurableAttributesData extends DataSource
         if (isset($data['dataset']) && isset($this->params['repository'])) {
             $dataset = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
             unset($data['dataset']);
+        }
+
+        if (isset($data['media_gallery'])) {
+            $this->addMediaGallery = true;
+            unset($data['media_gallery']);
         }
 
         $data = array_replace_recursive($data, $dataset);
@@ -352,6 +371,9 @@ class ConfigurableAttributesData extends DataSource
                 $row['name'] = $rowName . ' ' . $randIsolation . ' ' . $index;
                 $row['sku'] = $rowSku . '_' . $randIsolation . '_' . $index;
                 $row['price'] = $option['pricing_value'];
+                if ($this->addMediaGallery) {
+                    $row['media_gallery'] = $this->prepareMediaGallery();
+                }
                 $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
                 $result[$newRowKey] = $row;
                 $index++;
@@ -359,6 +381,61 @@ class ConfigurableAttributesData extends DataSource
         }
 
         return $result;
+    }
+
+    /**
+     * Create test image file.
+     *
+     * @param string $filename
+     * @return void
+     */
+    protected function prepareMediaGallery($filename = 'option_image.jpg')
+    {
+        $filePath = $this->getFullPath($filename);
+        if (!file_exists($filePath)) {
+
+            // Create an image with the specified dimensions
+            $image = imageCreate(300, 200);
+
+            // Create a color (this first call to imageColorAllocate
+            // also automatically sets the image background color)
+            $colorYellow = imageColorAllocate($image, 255, 255, 0);
+
+            // Draw a rectangle
+            imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
+
+            $directory = dirname($filePath);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }
+
+            imageJpeg($image, $filePath);
+
+            // Release memory
+            imageDestroy($image);
+        }
+
+        return [
+            'images' => [
+                0 => [
+                    'position' => 1,
+                    'file' => $filename,
+                    'disabled' => 0,
+                    'label' => '1231414',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Gets full path based on filename.
+     *
+     * @param string $filename
+     * @return string
+     */
+    private function getFullPath($filename)
+    {
+        return BP . $this->mediaPathTmp . $filename;
     }
 
     /**
@@ -390,6 +467,7 @@ class ConfigurableAttributesData extends DataSource
             'price',
             'qty',
             'weight',
+            'media_gallery'
         ];
 
         $this->data = [
