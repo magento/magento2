@@ -121,6 +121,18 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             ]
         );
 
+        $fieldset->addField(
+            'group_code',
+            'text',
+            [
+                'name' => 'group[code]',
+                'label' => __('Code'),
+                'value' => $groupModel->getCode(),
+                'required' => true,
+                'disabled' => $groupModel->isReadOnly()
+            ]
+        );
+
         $categories = $this->_category->toOptionArray();
 
         $fieldset->addField(
