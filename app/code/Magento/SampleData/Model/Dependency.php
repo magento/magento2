@@ -51,16 +51,17 @@ class Dependency
      * @param Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory
      * @throws \RuntimeException
      */
+    // @codingStandardsIgnoreStart
     public function __construct(
         ComposerInformation $composerInformation,
         // $filesystem kept for BC
-        // @codingStandardsIgnoreLine
         Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
         // $directoryReadFactory optional for BC
         Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
+    // @codingStandardsIgnoreEnd
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;
         $this->componentRegistrar = $componentRegistrar;
@@ -115,7 +116,7 @@ class Dependency
      * @return Package
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    private function getModuleComposerPackage($moduleDir): Package
+    private function getModuleComposerPackage($moduleDir)
     {
         /*
          * Also look in parent directory of registered module directory to allow modules to follow the pds/skeleton
