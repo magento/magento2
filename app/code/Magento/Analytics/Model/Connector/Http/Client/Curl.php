@@ -60,7 +60,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
      */
     public function request($method, $url, array $body = [], array $headers = [], $version = '1.1')
     {
-        $response = false;
+        $response = new \Zend_Http_Response(0, []);
 
         try {
             $curl = $this->curlFactory->create();

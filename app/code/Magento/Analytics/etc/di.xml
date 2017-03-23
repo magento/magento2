@@ -153,9 +153,40 @@
             <argument name="contentTypeHeader" xsi:type="string">Content-Type: application/json</argument>
         </arguments>
     </type>
-    <type name="Magento\Analytics\Model\Connector\Http\Client\Curl">
+    <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
         <arguments>
-            <argument name="converter">Magento\Analytics\Model\Connector\Http\JsonConverter</argument>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">\Magento\Analytics\Model\Connector\ResponseHandler\SignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UpdateResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\Update</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OtpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\OTP</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Analytics\Model\Connector\SignUpCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">SignUpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\UpdateCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\UpdateCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
         </arguments>
     </type>
 </config>

@@ -62,13 +62,13 @@ class NotifyDataChangedCommand implements CommandInterface
 
     /**
      * Notify MBI about that data collection was finished
+     *
      * @return bool
      */
     public function execute()
     {
-        $result = false;
         if ($this->analyticsToken->isTokenExist()) {
-            $result = (bool)$this->httpClient->request(
+            $this->httpClient->request(
                 ZendClient::POST,
                 $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
                 [
@@ -79,6 +79,6 @@ class NotifyDataChangedCommand implements CommandInterface
                 ]
             );
         }
-        return $result;
+        return true;
     }
 }

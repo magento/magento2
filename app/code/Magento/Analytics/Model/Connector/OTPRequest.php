@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ConverterInterface;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
@@ -51,6 +52,11 @@ class OTPRequest
     private $config;
 
     /**
+     * @var ResponseResolver
+     */
+    private $responseResolver;
+
+    /**
      * Path to the configuration value which contains
      * an URL that provides an OTP.
      *
@@ -63,6 +69,7 @@ class OTPRequest
      * @param Http\ClientInterface $httpClient
      * @param ConverterInterface $converter
      * @param ScopeConfigInterface $config
+     * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -70,12 +77,14 @@ class OTPRequest
         Http\ClientInterface $httpClient,
         ConverterInterface $converter,
         ScopeConfigInterface $config,
+        ResponseResolver $responseResolver,
         LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->httpClient = $httpClient;
         $this->converter = $converter;
         $this->config = $config;
+        $this->responseResolver = $responseResolver;
         $this->logger = $logger;
     }
 
@@ -100,27 +109,7 @@ class OTPRequest
                 ]
             );
 
-            $result = $this->parseResult($response);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param \Zend_Http_Response $response
-     *
-     * @return false|string
-     */
-    private function parseResult($response)
-    {
-        $result = false;
-
-        if ($response) {
-            if ($response->getStatus() === 201) {
-                $body = $this->converter->fromBody($response->getBody());
-                $result = !empty($body['otp']) ? $body['otp'] : false;
-            }
-
+            $result = $this->responseResolver->getResult($response);
             if (!$result) {
                 $this->logger->warning(
                     sprintf(

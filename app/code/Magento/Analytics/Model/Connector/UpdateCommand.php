@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Config\Model\Config;
@@ -50,28 +51,37 @@ class UpdateCommand implements CommandInterface
     private $flagManager;
 
     /**
+     * @var ResponseResolver
+     */
+    private $responseResolver;
+
+    /**
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
      * @param Config $config
      * @param LoggerInterface $logger
      * @param FlagManager $flagManager
+     * @param ResponseResolver $responseResolver
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
         Config $config,
         LoggerInterface $logger,
-        FlagManager $flagManager
+        FlagManager $flagManager,
+        ResponseResolver $responseResolver
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->httpClient = $httpClient;
         $this->config = $config;
         $this->logger = $logger;
         $this->flagManager = $flagManager;
+        $this->responseResolver = $responseResolver;
     }
 
     /**
      * Executes update request to MBI api in case store url was changed
+     *
      * @return bool
      */
     public function execute()
@@ -89,23 +99,7 @@ class UpdateCommand implements CommandInterface
                     "access-token" => $this->analyticsToken->getToken(),
                 ]
             );
-            $result = $this->parseResult($response);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param \Zend_Http_Response $response
-     *
-     * @return bool
-     */
-    private function parseResult($response)
-    {
-        $result = false;
-
-        if ($response) {
-            $result = $response->getStatus() === 201;
+            $result = $this->responseResolver->getResult($response);
             if (!$result) {
                 $this->logger->warning(
                     sprintf(

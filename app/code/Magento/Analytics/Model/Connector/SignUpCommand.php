@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -48,24 +49,36 @@ class SignUpCommand implements CommandInterface
     private $logger;
 
     /**
+     * @var ResponseResolver
+     */
+    private $responseResolver;
+
+    /**
      * SignUpCommand constructor.
      *
-     * @param SignUpRequest $signUpRequest
      * @param AnalyticsToken $analyticsToken
      * @param IntegrationManager $integrationManager
+     * @param Config $config
+     * @param Http\ClientInterface $httpClient
+     * @param LoggerInterface $logger
+     * @param ResponseResolver $responseResolver
+     *
+     * @internal param SignUpRequest $signUpRequest
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
         IntegrationManager $integrationManager,
         Config $config,
         Http\ClientInterface $httpClient,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ResponseResolver $responseResolver
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->integrationManager = $integrationManager;
         $this->config = $config;
         $this->httpClient = $httpClient;
         $this->logger = $logger;
+        $this->responseResolver = $responseResolver;
     }
 
     /**
@@ -97,31 +110,7 @@ class SignUpCommand implements CommandInterface
                 ]
             );
 
-            $result = $this->parseResult($response);
-            if ($result) {
-                $this->analyticsToken->storeToken($result);
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * @param \Zend_Http_Response $response
-     *
-     * @return false|string
-     */
-    private function parseResult($response)
-    {
-        $result = false;
-        if ($response) {
-            if ($response->getStatus() === 201) {
-                $body = json_decode($response->getBody(), 1);
-
-                if (isset($body['access-token']) && !empty($body['access-token'])) {
-                    $result = $body['access-token'];
-                }
-            }
-
+            $result = $this->responseResolver->getResult($response);
             if (!$result) {
                 $this->logger->warning(
                     sprintf(
