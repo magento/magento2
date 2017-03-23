@@ -84,7 +84,7 @@ interface DeployStaticOptionsInterface
     const EXCLUDE_AREA = 'exclude-area';
 
     /**
-     * Jey for jobs option
+     * Key for jobs option
      */
     const JOBS_AMOUNT = 'jobs';
 
