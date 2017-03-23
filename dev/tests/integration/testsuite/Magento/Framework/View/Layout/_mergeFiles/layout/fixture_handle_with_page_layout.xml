@@ -8,7 +8,7 @@
 <page layout="fixture_handle_page_layout">
     <body>
         <referenceContainer name="main.container">
-            <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
         </referenceContainer>
     </body>
 </page>
