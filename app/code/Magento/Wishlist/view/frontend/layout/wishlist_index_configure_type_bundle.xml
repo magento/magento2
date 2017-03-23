@@ -17,7 +17,7 @@
                         <argument name="zone" xsi:type="string">item_view</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="product/view/addtocart.phtml" />
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="Magento_Catalog::product/view/addtocart.phtml" />
                 <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.bundle" as="addto" after="product.info.addtocart.bundle"
                        template="Magento_Catalog::product/view/addto.phtml" cacheable="false">
                     <block class="Magento\Wishlist\Block\Item\Configure" name="view.addto.wishlist.bundle"
