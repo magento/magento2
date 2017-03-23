@@ -134,6 +134,9 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      */
     protected function setMissingValues(InputInterface &$input, OutputInterface $output)
     {
+        if (!method_exists($input, 'promptForOption')) {
+            return;
+        }
         $dialog = $this->getHelper('dialog');
         $keys = [
             AdminAccount::KEY_FIRST_NAME,
