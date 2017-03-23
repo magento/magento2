@@ -5,6 +5,7 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
@@ -30,7 +31,7 @@ class SignifydCancelOrderStep implements TestStepInterface
      *
      * @var OrderInjectable
      */
-    private $orderInjectable;
+    private $order;
 
     /**
      * Order View page.
@@ -40,48 +41,28 @@ class SignifydCancelOrderStep implements TestStepInterface
     private $salesOrderView;
 
     /**
-     * Cancel order step.
+     * Test step factory.
      *
-     * @var CancelOrderStep
+     * @var TestStepFactory
      */
-    private $cancelOrderStep;
-
-    /**
-     * Deny order step.
-     *
-     * @var DenyPaymentStep
-     */
-    private $denyPaymentStep;
-
-    /**
-     * Unhold order step.
-     *
-     * @var UnholdOrderStep
-     */
-    private $unholdOrderStep;
+    private $testStepFactory;
 
     /**
      * @param OrderIndex $orderIndex
-     * @param OrderInjectable $orderInjectable
+     * @param OrderInjectable $order
      * @param SalesOrderView $salesOrderView
-     * @param CancelOrderStep $cancelOrderStep
-     * @param DenyPaymentStep $denyPaymentStep
-     * @param UnholdOrderStep $unholdOrderStep
+     * @param TestStepFactory $testStepFactory
      */
     public function __construct(
         OrderIndex $orderIndex,
-        OrderInjectable $orderInjectable,
+        OrderInjectable $order,
         SalesOrderView $salesOrderView,
-        CancelOrderStep $cancelOrderStep,
-        DenyPaymentStep $denyPaymentStep,
-        UnholdOrderStep $unholdOrderStep
+        TestStepFactory $testStepFactory
     ) {
         $this->orderIndex = $orderIndex;
-        $this->orderInjectable = $orderInjectable;
+        $this->order = $order;
         $this->salesOrderView = $salesOrderView;
-        $this->cancelOrderStep = $cancelOrderStep;
-        $this->denyPaymentStep = $denyPaymentStep;
-        $this->unholdOrderStep = $unholdOrderStep;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -91,20 +72,34 @@ class SignifydCancelOrderStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()
-            ->searchAndOpen(['id' => $this->orderInjectable->getId()]);
+            ->searchAndOpen(['id' => $this->order->getId()]);
 
         switch ($this->salesOrderView->getOrderInfoBlock()->getOrderStatus()) {
             case 'Suspected Fraud':
-                $this->denyPaymentStep->run();
+                $this->getStepInstance(DenyPaymentStep::class)->run();
                 break;
             case 'On Hold':
-                $this->unholdOrderStep->run();
-                $this->cancelOrderStep->run();
+                $this->getStepInstance(UnholdOrderStep::class)->run();
+                $this->getStepInstance(CancelOrderStep::class)->run();
                 break;
             case 'Canceled':
                 break;
             default:
-                $this->cancelOrderStep->run();
+                $this->getStepInstance(CancelOrderStep::class)->run();
         }
+    }
+
+    /**
+     * Creates test step instance with preset params.
+     *
+     * @param string $class
+     * @return TestStepInterface
+     */
+    private function getStepInstance($class)
+    {
+        return $this->testStepFactory->create(
+            $class,
+            ['order' => $this->order]
+        );
     }
 }

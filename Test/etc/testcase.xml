@@ -12,13 +12,12 @@
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
-        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="signifydCreateCustomer" />
+        <step name="signifydCreateCustomer" module="Magento_Signifyd" next="selectCheckoutMethod" />
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="signifydFillShippingAddress" />
         <step name="signifydFillShippingAddress" module="Magento_Signifyd" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
-        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
-        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="signifydObserveCase" />
         <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />
         <step name="openOrderGrid" module="Magento_Signifyd" next="unholdAndCancelOrder" />
@@ -30,11 +29,10 @@
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
-        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="signifydCreateCustomer" />
+        <step name="signifydCreateCustomer" module="Magento_Signifyd" next="selectCheckoutMethod" />
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="signifydFillShippingAddress" />
         <step name="signifydFillShippingAddress" module="Magento_Signifyd" next="fillShippingMethod" />
-        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
         <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="signifydObserveCase" />
         <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />
@@ -47,11 +45,10 @@
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
-        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="signifydCreateCustomer" />
+        <step name="signifydCreateCustomer" module="Magento_Signifyd" next="selectCheckoutMethod" />
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="signifydFillShippingAddress" />
         <step name="signifydFillShippingAddress" module="Magento_Signifyd" next="fillShippingMethod" />
-        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
         <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="signifydObserveCase" />
         <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />

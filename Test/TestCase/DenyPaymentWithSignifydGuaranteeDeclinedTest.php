@@ -6,11 +6,6 @@
 namespace Magento\Signifyd\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\TestStep\CancelOrderStep;
-use Magento\Signifyd\Test\Page\SignifydConsole\SignifydNotifications;
 
 /**
  * * Preconditions:

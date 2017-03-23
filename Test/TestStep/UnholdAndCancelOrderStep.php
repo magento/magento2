@@ -5,10 +5,15 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\TestStep\CancelOrderStep;
 use Magento\Sales\Test\TestStep\UnholdOrderStep;
 
+/**
+ * Unhold and cancel order.
+ */
 class UnholdAndCancelOrderStep implements TestStepInterface
 {
     /**
@@ -19,28 +24,32 @@ class UnholdAndCancelOrderStep implements TestStepInterface
     private $placeOrderStatus;
 
     /**
-     * @var CancelOrderStep
+     * Order fixture.
+     *
+     * @var OrderInjectable
      */
-    private $cancelOrderStep;
+    private $order;
 
     /**
-     * @var UnholdOrderStep
+     * Test step factory.
+     *
+     * @var TestStepFactory
      */
-    private $unholdOrderStep;
+    private $testStepFactory;
 
     /**
      * @param string $placeOrderStatus
-     * @param CancelOrderStep $cancelOrderStep
-     * @param UnholdOrderStep $unholdOrderStep
+     * @param OrderInjectable $order
+     * @param TestStepFactory $testStepFactory
      */
     public function __construct(
         $placeOrderStatus,
-        CancelOrderStep $cancelOrderStep,
-        UnholdOrderStep $unholdOrderStep
+        OrderInjectable $order,
+        TestStepFactory $testStepFactory
     ) {
         $this->placeOrderStatus = $placeOrderStatus;
-        $this->cancelOrderStep = $cancelOrderStep;
-        $this->unholdOrderStep = $unholdOrderStep;
+        $this->order = $order;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -53,9 +62,23 @@ class UnholdAndCancelOrderStep implements TestStepInterface
     public function run()
     {
         if ($this->placeOrderStatus === 'On Hold') {
-            $this->unholdOrderStep->run();
+            $this->getStepInstance(UnholdOrderStep::class)->run();
         }
 
-        $this->cancelOrderStep->run();
+        $this->getStepInstance(CancelOrderStep::class)->run();
+    }
+
+    /**
+     * Creates test step instance with preset params.
+     *
+     * @param string $class
+     * @return TestStepInterface
+     */
+    private function getStepInstance($class)
+    {
+        return $this->testStepFactory->create(
+            $class,
+            ['order' => $this->order]
+        );
     }
 }

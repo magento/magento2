@@ -5,8 +5,9 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
-use Magento\Customer\Test\TestStep\DeleteCustomerStep;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnSignifydConsole;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
 use Magento\Signifyd\Test\Fixture\SignifydData;
@@ -54,20 +55,6 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $signifydData;
 
     /**
-     * Signifyd cancel order step.
-     *
-     * @var SignifydCancelOrderStep
-     */
-    private $signifydCancelOrderStep;
-
-    /**
-     * Delete customer step.
-     *
-     * @var DeleteCustomerStep
-     */
-    private $deleteCustomerStep;
-
-    /**
      * Prices list.
      *
      * @var array
@@ -75,11 +62,18 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $prices;
 
     /**
-     * Order id.
+     * Order fixture.
      *
      * @var string
      */
-    private $orderId;
+    private $order;
+
+    /**
+     * Test step factory.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
 
     /**
      * @param AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
@@ -87,10 +81,9 @@ class SignifydObserveCaseStep implements TestStepInterface
      * @param SignifydCases $signifydCases
      * @param SignifydNotifications $signifydNotifications
      * @param SignifydData $signifydData
-     * @param SignifydCancelOrderStep $signifydCancelOrderStep
-     * @param DeleteCustomerStep $deleteCustomerStep
+     * @param OrderInjectable $order
+     * @param TestStepFactory $testStepFactory
      * @param array $prices
-     * @param $orderId
      */
     public function __construct(
         AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole,
@@ -98,20 +91,18 @@ class SignifydObserveCaseStep implements TestStepInterface
         SignifydCases $signifydCases,
         SignifydNotifications $signifydNotifications,
         SignifydData $signifydData,
-        SignifydCancelOrderStep $signifydCancelOrderStep,
-        DeleteCustomerStep $deleteCustomerStep,
-        array $prices,
-        $orderId
+        OrderInjectable $order,
+        TestStepFactory $testStepFactory,
+        array $prices
     ) {
         $this->assertCaseInfo = $assertCaseInfoOnSignifydConsole;
         $this->signifydAddress = $signifydAddress;
         $this->signifydCases = $signifydCases;
         $this->signifydNotifications = $signifydNotifications;
         $this->signifydData = $signifydData;
-        $this->signifydCancelOrderStep = $signifydCancelOrderStep;
-        $this->deleteCustomerStep = $deleteCustomerStep;
+        $this->order = $order;
+        $this->testStepFactory = $testStepFactory;
         $this->prices = $prices;
-        $this->orderId = $orderId;
     }
 
     /**
@@ -130,21 +121,22 @@ class SignifydObserveCaseStep implements TestStepInterface
             $this->signifydAddress,
             $this->signifydData,
             $this->prices,
-            $this->orderId,
+            $this->order->getId(),
             $this->getCustomerFullName($this->signifydAddress)
         );
     }
 
     /**
      * Cancel order if test fails, or in the end of variation.
-     * Cleanup customer for next variations.
      *
      * @return void
      */
     public function cleanup()
     {
-        $this->signifydCancelOrderStep->run();
-        $this->deleteCustomerStep->run();
+        $this->testStepFactory->create(
+            SignifydCancelOrderStep::class,
+            ['order' => $this->order]
+        )->run();
     }
 
     /**
