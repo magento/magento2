@@ -166,7 +166,7 @@
                     <item name="sortOrder" xsi:type="string">100</item>
                 </item>
                 <item name="initial" xsi:type="array">
-                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\RuntimeSnapshotConfigSource</item>
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\InitialSnapshotConfigSource</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
             </argument>

@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
-use Magento\Config\App\Config\Source\RuntimeSnapshotConfigSource;
+use Magento\Config\App\Config\Source\InitialSnapshotConfigSource;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Flag;
@@ -15,10 +15,10 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * @inheritdoc
  */
-class RuntimeSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
+class InitialSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RuntimeSnapshotConfigSource
+     * @var InitialSnapshotConfigSource
      */
     private $model;
 
@@ -76,7 +76,7 @@ class RuntimeSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->dataObjectMock);
 
-        $this->model = new RuntimeSnapshotConfigSource(
+        $this->model = new InitialSnapshotConfigSource(
             $this->flagFactoryMock,
             $this->dataObjectFactoryMock
         );

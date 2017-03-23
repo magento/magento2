@@ -10,9 +10,9 @@ use Magento\Framework\DataObjectFactory;
 use Magento\Framework\FlagFactory;
 
 /**
- * The source with previously imported runtime configuration.
+ * The source with previously imported configuration.
  */
-class RuntimeSnapshotConfigSource implements ConfigSourceInterface
+class InitialSnapshotConfigSource implements ConfigSourceInterface
 {
     /**
      * The factory of Flag instances.
@@ -39,7 +39,7 @@ class RuntimeSnapshotConfigSource implements ConfigSourceInterface
     }
 
     /**
-     * Retrieves snapshot of previously imported configuration.
+     * Retrieves previously imported configuration.
      * Snapshots are stored in flags.
      *
      * {@inheritdoc}
