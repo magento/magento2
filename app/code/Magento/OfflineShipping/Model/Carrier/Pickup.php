@@ -7,6 +7,11 @@ namespace Magento\OfflineShipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
 
+/**
+ * Pickup shipping model
+ *
+ * @api
+ */
 class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {

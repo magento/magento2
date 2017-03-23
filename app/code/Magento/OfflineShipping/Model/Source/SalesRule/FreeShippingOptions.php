@@ -8,6 +8,9 @@ namespace Magento\OfflineShipping\Model\Source\SalesRule;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\OfflineShipping\Model\SalesRule\Rule;
 
+/**
+ * @api
+ */
 class FreeShippingOptions implements OptionSourceInterface
 {
     /**
