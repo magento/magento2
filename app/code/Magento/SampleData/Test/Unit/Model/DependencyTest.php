@@ -24,8 +24,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      * @param string[] $suggestionsFromLockFile
      * @param string[] $expectedPackages
      */
-    public function testPackagesFromComposerSuggest($moduleDirectories, callable $composerJsonGenerator, $suggestionsFromLockFile, $expectedPackages)
-    {
+    public function testPackagesFromComposerSuggest(
+        array $moduleDirectories,
+        callable $composerJsonGenerator,
+        array $suggestionsFromLockFile,
+        array $expectedPackages
+    ) {
         /** @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject $composerInformation */
         $composerInformation = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()
@@ -42,7 +46,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $packageFactory->method('create')
-            ->willReturnCallback(function($args) {
+            ->willReturnCallback(function ($args) {
                 return new Package($args['json']);
             });
 
@@ -81,12 +85,17 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     'vendor/company/module',
                     'vendor/company2/module/src'
                 ],
-                'composerJsonGenerator' => function(DependencyTest $test) {
+                'composerJsonGenerator' => function (DependencyTest $test) {
                     return [
                         [
                             ['path' => 'app/code/LocalModule'],
                             $test->stubComposerJsonReader(
-                                ['name' => 'local/module', 'suggest' => ['local/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '0.1.0']]
+                                [
+                                    'name' => 'local/module',
+                                    'suggest' => [
+                                        'local/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '0.1.0'
+                                    ]
+                                ]
                             )
                         ],
                         [
@@ -96,13 +105,23 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                         [
                             ['path' => 'vendor/company/module'],
                             $test->stubComposerJsonReader(
-                                ['name' => 'company/module', 'suggest' => ['company/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.0.0-beta']]
+                                [
+                                    'name' => 'company/module',
+                                    'suggest' => [
+                                        'company/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.0.0-beta'
+                                    ]
+                                ]
                             )
                         ],
                         [
                             ['path' => 'vendor/company2/module/src/..'],
                             $test->stubComposerJsonReader(
-                                ['name' => 'company2/module', 'suggest' => ['company2/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.10']]
+                                [
+                                    'name' => 'company2/module',
+                                    'suggest' => [
+                                        'company2/module-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.10'
+                                    ]
+                                ]
                             )
                         ],
                         [
@@ -168,4 +187,3 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         return $stub;
     }
 }
-

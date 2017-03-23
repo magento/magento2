@@ -53,9 +53,12 @@ class Dependency
      */
     public function __construct(
         ComposerInformation $composerInformation,
+        // $filesystem kept for BC
+        // @codingStandardsIgnoreLine
         Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
+        // $directoryReadFactory optional for BC
         Filesystem\Directory\ReadInterfaceFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
