@@ -21,4 +21,12 @@ interface ImporterInterface
      * All changed during importing data is rolled back
      */
     public function import(array $data);
+
+    /**
+     * Returns array of warning messages that describes what changes could happen during the import.
+     *
+     * @param array $data Data that should be imported
+     * @return string[] The array of warning messages
+     */
+    public function getWarningMessages(array $data);
 }
