@@ -15,6 +15,6 @@
         <field name="id" is_required="1" />
         <field name="entity" is_required="" />
         <field name="file_format" is_required="" />
-        <field name="data_export" is_required="" />
+        <field name="data_export" is_required="" source="Magento\ImportExport\Test\Fixture\ExportData\DataExport"/>
     </fixture>
 </config>

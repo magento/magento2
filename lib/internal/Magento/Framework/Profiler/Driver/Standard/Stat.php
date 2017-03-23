@@ -15,23 +15,14 @@ class Stat
      * #@+ Timer statistics data keys
      */
     const ID = 'id';
-
     const START = 'start';
-
     const TIME = 'sum';
-
     const COUNT = 'count';
-
     const AVG = 'avg';
-
     const REALMEM = 'realmem';
-
     const REALMEM_START = 'realmem_start';
-
     const EMALLOC = 'emalloc';
-
     const EMALLOC_START = 'emalloc_start';
-
     /**#@-*/
 
     /**

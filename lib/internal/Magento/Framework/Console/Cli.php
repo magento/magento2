@@ -191,8 +191,7 @@ class Cli extends Console\Application
         /** @var State $state */
         $state = $this->objectManager->get(State::class);
 
-        if (
-            $state->getMode() !== State::MODE_PRODUCTION
+        if ($state->getMode() !== State::MODE_PRODUCTION
             && !$generationDirectoryAccess->check()
         ) {
             $this->writeGenerationDirectoryReadError();

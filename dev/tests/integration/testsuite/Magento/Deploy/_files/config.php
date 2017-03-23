@@ -25,4 +25,9 @@ return [
             'someField' => 'testValue',
         ]
     ],
+    'integrationTestSecondImporter' => [
+        'someGroup' => [
+            'someField' => 'testSecondValue',
+        ]
+    ],
 ];

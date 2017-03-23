@@ -132,7 +132,7 @@ class AssertImagesAreVisibleOnProductPage extends AbstractAssertForm
 
     /**
      * Check is image file can be loaded (displayed)
-     * 
+     *
      * @param string $src
      * @return bool
      */

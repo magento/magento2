@@ -20,7 +20,6 @@ try {
     $product = $productRepository->get('downloadable-product', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
-
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
