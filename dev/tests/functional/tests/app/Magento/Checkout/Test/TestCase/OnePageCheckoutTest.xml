@@ -81,7 +81,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603, MAGETWO-43282, MAGETWO-43318">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1, stable:no</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="expectedQty/0" xsi:type="string">0</data>
             <data name="expectedStockStatus/0" xsi:type="string">out of stock</data>
