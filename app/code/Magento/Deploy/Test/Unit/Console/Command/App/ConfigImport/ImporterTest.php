@@ -9,7 +9,7 @@ use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,9 +24,9 @@ use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 class ImporterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChangeDetector|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configValidatorMock;
+    private $changeDetectorMock;
 
     /**
      * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject
@@ -78,7 +78,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configValidatorMock = $this->getMockBuilder(Validator::class)
+        $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configImporterPoolMock = $this->getMockBuilder(ImporterPool::class)
@@ -102,7 +102,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->importer = new Importer(
-            $this->configValidatorMock,
+            $this->changeDetectorMock,
             $this->configImporterPoolMock,
             $this->importerFactoryMock,
             $this->deploymentConfigMock,
@@ -136,9 +136,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($importerClassName)
             ->willReturn($importerMock);
-        $this->configValidatorMock->expects($this->any())
-            ->method('isValid')
-            ->willReturn(false);
+        $this->changeDetectorMock->expects($this->any())
+            ->method('hasChanges')
+            ->willReturn(true);
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with('someSection')
@@ -241,8 +241,8 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('writeln');
         $this->configHashMock->expects($this->never())
             ->method('regenerate');
-        $this->configValidatorMock->expects($this->never())
-            ->method('isValid');
+        $this->changeDetectorMock->expects($this->never())
+            ->method('hasChanges');
         $this->deploymentConfigMock->expects($this->never())
             ->method('getConfigData');
         $this->configImporterPoolMock->expects($this->once())
@@ -265,8 +265,8 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
             ->willReturn($importers);
-        $this->configValidatorMock->expects($this->any())
-            ->method('isValid')
+        $this->changeDetectorMock->expects($this->any())
+            ->method('hasChanges')
             ->willReturn($isValid);
         $this->deploymentConfigMock->expects($this->never())
             ->method('getConfigData');
@@ -288,9 +288,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     public function importNothingToImportDataProvider()
     {
         return [
-            ['importers' => [], 'isValid' => true],
             ['importers' => [], 'isValid' => false],
-            ['importers' => ['someImporter'], 'isValid' => true],
+            ['importers' => [], 'isValid' => true],
+            ['importers' => ['someImporter'], 'isValid' => false],
         ];
     }
 }

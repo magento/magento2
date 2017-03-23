@@ -8,12 +8,13 @@ namespace Magento\Deploy\Model\DeploymentConfig;
 use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 
 /**
- * Configuration data validator of specific sections in the deployment configuration files.
+ * Configuration data changes detector.
  *
- * This validator checks that configuration data from specific sections was not changed.
- * If the data was changed validator returns false.
+ * Detects changes in specific sections of the deployment configuration files.
+ * This detector checks that configuration data from specific sections was not changed.
+ * If the data was changed detector returns false.
  */
-class Validator
+class ChangeDetector
 {
     /**
      * Hash storage.
@@ -52,17 +53,17 @@ class Validator
     }
 
     /**
-     * Checks if config data in the deployment configuration files is valid.
+     * Checks if config data in the deployment configuration files is changed.
      *
      * Checks if config data was changed based on its hash.
-     * If the new hash of config data and the saved hash are different returns false.
-     * If config data is empty always returns true.
-     * In the other cases returns true.
+     * If the new hash of config data and the saved hash are different returns true.
+     * If config data is empty always returns false.
+     * In the other cases returns false.
      *
      * @param string $sectionName is section name for check data of the specific section
      * @return bool
      */
-    public function isValid($sectionName = null)
+    public function hasChanges($sectionName = null)
     {
         $configs = $this->dataConfigCollector->getConfig($sectionName);
         $hashes = $this->configHash->get();
@@ -71,10 +72,10 @@ class Validator
             $savedHash = isset($hashes[$section]) ? $hashes[$section] : null;
             $generatedHash = empty($config) && !$savedHash ? null : $this->hashGenerator->generate($config);
             if ($generatedHash !== $savedHash) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

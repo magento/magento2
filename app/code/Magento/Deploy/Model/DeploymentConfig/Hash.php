@@ -16,7 +16,7 @@ use Magento\Framework\FlagFactory;
  * This hash keeps version of last imported data. Hash is used to define whether data was updated
  * and import is required.
  *
- * @see \Magento\Deploy\Model\DeploymentConfig\Validator::isValid()
+ * @see \Magento\Deploy\Model\DeploymentConfig\ChangeDetector::hasChanges()
  */
 class Hash
 {
