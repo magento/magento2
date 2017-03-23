@@ -10,7 +10,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture XML instruction(s) to be used in tests
      */
-    const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture.phtml"/>';
+    const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture.phtml"/>';
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge
@@ -32,7 +32,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $layoutUpdate1->setHandle('fixture_handle_one');
         $layoutUpdate1->setXml(
             '<body>
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
             </body>'
         );
         $layoutUpdate1->setHasDataChanges(true);
@@ -49,7 +49,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $layoutUpdate2->setHandle('fixture_handle_two');
         $layoutUpdate2->setXml(
             '<body>
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
             </body>'
         );
         $layoutUpdate2->setHasDataChanges(true);
@@ -74,10 +74,10 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $expectedResult = '
             <root>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                    <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_one.phtml"/>
                 </body>
                 <body>
-                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+                    <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
                 </body>
             </root>
         ';
