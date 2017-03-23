@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Module\Di\Code\Reader;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Setup\Module\Di\Code\Reader\FileScanner;
 
 class ClassesScanner implements ClassesScannerInterface
 {
@@ -16,11 +16,25 @@ class ClassesScanner implements ClassesScannerInterface
     protected $excludePatterns = [];
 
     /**
+     * @var array
+     */
+
+    protected $fileResults = [];
+
+    /**
+     * @var DirectoryList
+     */
+
+    protected $directoryList;
+
+    /**
+     * @param DirectoryList $directoryList
      * @param array $excludePatterns
      */
-    public function __construct(array $excludePatterns = [])
+    public function __construct(DirectoryList $directoryList, array $excludePatterns = [])
     {
         $this->excludePatterns = $excludePatterns;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -43,7 +57,14 @@ class ClassesScanner implements ClassesScannerInterface
      */
     public function getList($path)
     {
+        $generation = $this->directoryList->getPath(DirectoryList::GENERATION);
         $realPath = realpath($path);
+        $isGeneration = strpos($realPath, $generation) !== false;
+        if (!$isGeneration) {
+            if (isset($this->fileResults[$realPath])) {
+                return $this->fileResults[$realPath];
+            }
+        }
         if (!(bool)$realPath) {
             throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', [$path]));
         }
@@ -53,6 +74,9 @@ class ClassesScanner implements ClassesScannerInterface
         );
 
         $classes = $this->extract($recursiveIterator);
+        if (!$isGeneration) {
+            $this->fileResults[$realPath] = $classes;
+        }
         return $classes;
     }
 
@@ -79,8 +103,17 @@ class ClassesScanner implements ClassesScannerInterface
             }
             $fileScanner = new FileClassScanner($fileItemPath);
             $classNames = $fileScanner->getClassNames();
+            $classExists = false;
             if ($classNames) {
+                foreach ($classNames as $className) {
+                    if (class_exists($className)) {
+                        $classExists = true;
+                    }
+                }
                 $classes = array_merge($classes, $classNames);
+            }
+            if (!$classExists) {
+                require_once $fileItemPath;
             }
         }
         return $classes;
