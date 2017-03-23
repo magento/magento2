@@ -30,7 +30,9 @@ class AssertImportCheckData extends AbstractConstraint
     public function processAssert(AdminImportIndex $adminImportIndex, ImportData $import)
     {
         $rowsCount = $import->getDataFieldConfig('import_file')['source']->getValue()['template']['count'];
-        $entitiesCount = count($import->getDataFieldConfig('import_file')['source']->getEntities());
+        $entitiesCount = isset($import->getDataFieldConfig('import_file')['source']->getValue()['template']['entities'])
+            ? $import->getDataFieldConfig('import_file')['source']->getValue()['template']['entities']
+            : count($import->getDataFieldConfig('import_file')['source']->getEntities());
 
         $message = $adminImportIndex->getMessagesBlock()->getNoticeMessage();
         \PHPUnit_Framework_Assert::assertEquals(

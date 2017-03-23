@@ -191,7 +191,7 @@ class File extends DataSource
                 $entities[$key]->persist();
             }
         }
-
+        ksort($entities);
         return $entities;
     }
 
@@ -238,21 +238,93 @@ class File extends DataSource
             ? "[{$this->value['template']['websiteCurrency']}]"
             : '[USD]';
         $entityData = $entity->getData();
-
-        $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
-        foreach ($websites as $website) {
-            if ($website->getCode() === 'base') {
-                $currency = isset($this->value['template']['mainWebsiteCurrency'])
-                ? $this->value['template']['websiteCurrency']
-                : '[USD]';
-                $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
-                break;
+        if (isset($entityData['quantity_and_stock_status'])) {
+            $entityData = array_merge($entityData, $entityData['quantity_and_stock_status']);
+        }
+        if (isset($entityData['website_ids'])) {
+            $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
+            foreach ($websites as $website) {
+                if ($website->getCode() === 'base') {
+                    $currency = isset($this->value['template']['mainWebsiteCurrency'])
+                        ? $this->value['template']['mainWebsiteCurrency']
+                        : '[USD]';
+                    $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
+                    break;
+                }
+                $entityData['code'] = $website->getCode();
+                $entityData[$website->getCode()] = $website->getName() . $currency;
             }
-            $entityData['code'] = $website->getCode();
-            $entityData[$website->getCode()] = $website->getName() . $currency;
+        }
+        if ($entity->getDataConfig() && ('simple' !== $entity->getDataConfig()['type_id'])) {
+            $class = ucfirst($entity->getDataConfig()['type_id']);
+            $file = ObjectManager::getInstance()->create("\\Magento\\{$class}ImportExport\\Test\\Fixture\\Import\\File");
+            $entityData = $file->getData($entity, $this->fixtureFactory);
         }
         return $entityData;
     }
+
+    /**
+     * Prepare bundle product data.
+     *
+     * @param FixtureInterface $product
+     * @return array
+     */
+    private function getBundleProductData(FixtureInterface $product)
+    {
+        $newProduct = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
+        $newProduct->persist();
+        $newProductData = $newProduct->getData();
+        $productData = $product->getData();
+
+        $productData['bundle_attribute_sku'] = $newProductData['sku'];
+        $productData['bundle_attribute_name'] = $newProductData['name'];
+        $productData['bundle_attribute_url_key'] = $newProductData['url_key'];
+
+        return $productData;
+    }
+    /**
+     * Prepare grouped product data.
+     *
+     * @param FixtureInterface $product
+     * @return array
+     */
+    private function getGroupedProductData(FixtureInterface $product)
+    {
+        $newProduct = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
+        $newProduct->persist();
+        $newProductData = $newProduct->getData();
+        $productData = $product->getData();
+
+        $productData['grouped_associated_skus'] = $newProductData['sku'];
+        $productData['grouped_attribute_sku'] = $newProductData['sku'];
+        $productData['grouped_attribute_name'] = $newProductData['name'];
+        $productData['grouped_attribute_url_key'] = $newProductData['url_key'];
+        return $productData;
+    }
+
+    /**
+     * Prepare configurable product data.
+     *
+     * @param FixtureInterface $product
+     * @return array
+     */
+    private function getConfigurableProductData(FixtureInterface $product)
+    {
+        $newProduct = $this->fixtureFactory->createByCode('configurableProduct', ['dataset' => 'with_one_attribute']);
+        $newProduct->persist();
+        $newProductData = $newProduct->getData();
+        $newAttributeData = $newProductData['configurable_attributes_data']['matrix']['attribute_key_0:option_key_0'];
+        $productData = $product->getData();
+
+        $productData['configurable_attribute_sku'] = $newAttributeData['sku'];
+        $productData['configurable_attribute_name'] = $newAttributeData['name'];
+        $productData['configurable_attribute_url_key'] = str_replace('_', '-', $newAttributeData['sku']);
+        $productData['configurable_additional_attributes'] =
+            $newProductData['configurable_attributes_data']['attributes_data']['attribute_key_0']['frontend_label'];
+
+        return $productData;
+    }
+
 
     /**
      * Convert csv to array.
@@ -267,10 +339,28 @@ class File extends DataSource
                 $csvContent = strtr($csvContent, $data);
             }
         }
-        $csvContent = strtr($csvContent, $this->mainWebsiteMapping);
+        if (is_array($this->mainWebsiteMapping)) {
+            $csvContent = strtr($csvContent, $this->mainWebsiteMapping);
+        }
         $this->csv = array_map(
             function ($value) {
-                return explode(',', str_replace('"', '', $value));
+                $explodedArray = explode(",", $value);
+                $count = count($explodedArray);
+                for ($i = 0; $i < $count; $i++) {
+                    if (preg_match('/^\".*[^"]$/U', $explodedArray[$i])) {
+                        $implodedKey = $i;
+                        while ((++$i <= $count) && !preg_match('/^[^"].*\"$/U', $explodedArray[$i])) {
+                            $explodedArray[$implodedKey] .= ',' . $explodedArray[$i];
+                            $explodedArray[$i] = '%%deleted%%';
+                        }
+                        $explodedArray[$implodedKey] .= ',' . $explodedArray[$i];
+                        $explodedArray[$i] = '%%deleted%%';
+                        $explodedArray[$implodedKey] = str_replace('"', '', $explodedArray[$implodedKey]);
+                    } else {
+                        $explodedArray[$i] = str_replace('"', '', $explodedArray[$i]);
+                    };
+                }
+                return array_diff($explodedArray, ['%%deleted%%']);
             },
             str_getcsv($csvContent, "\n")
         );

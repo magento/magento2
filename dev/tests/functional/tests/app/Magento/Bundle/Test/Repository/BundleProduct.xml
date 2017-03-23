@@ -35,6 +35,7 @@
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
             <field name="sku_type" xsi:type="string">Yes</field>
             <field name="price_type" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>

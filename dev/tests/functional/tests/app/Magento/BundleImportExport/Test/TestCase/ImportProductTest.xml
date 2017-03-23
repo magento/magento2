@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductTest" summary="Import bundle products">
+        <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Replace Products">
+            <data name="import/data/import_file/entities/3" xsi:type="string">bundleProduct::default_with_one_simple_product</data>
+            <constraint name="Magento\BundleImportExport\Test\Constraint\AssertBundleImportProduct" />
+        </variation>
+    </testCase>
+</config>
