@@ -17,29 +17,41 @@ define([
 
         describe('isActive method', function () {
             it('record status is 1', function () {
-                expect(timeline.isActive({status: 1})).toBe(true);
+                expect(timeline.isActive({
+                    status: 1
+                })).toBe(true);
             });
 
             it('record status is "1"', function () {
-                expect(timeline.isActive({status: '1'})).toBe(true);
+                expect(timeline.isActive({
+                    status: '1'
+                })).toBe(true);
             });
 
             it('record status is 2', function () {
-                expect(timeline.isActive({status: 2})).toBe(false);
+                expect(timeline.isActive({
+                    status: 2
+                })).toBe(false);
             });
         });
 
         describe('isUpcoming method', function () {
             it('record status is 2', function () {
-                expect(timeline.isUpcoming({status: 2})).toBe(true);
+                expect(timeline.isUpcoming({
+                    status: 2
+                })).toBe(true);
             });
 
             it('record status is "2"', function () {
-                expect(timeline.isUpcoming({status: '2'})).toBe(true);
+                expect(timeline.isUpcoming({
+                    status: '2'
+                })).toBe(true);
             });
 
             it('record status is 1', function () {
-                expect(timeline.isUpcoming({status: 1})).toBe(false);
+                expect(timeline.isUpcoming({
+                    status: 1
+                })).toBe(false);
             });
         });
     });
