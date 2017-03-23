@@ -1,0 +1,31 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Scheduled changes modal
+//  _____________________________________________
+
+//
+//  Slide modal panel with store switcher
+//  ---------------------------------------------
+
+.scheduled-changes-modal-slide {
+    .page-actions {
+        .lib-vendor-prefix-display(flex);
+        width: 100%;
+
+        .store-switcher {
+            .lib-vendor-prefix-order(-1);
+            -ms-flex: 1;
+            -webkit-flex: 1;
+            flex: 1;
+
+            .admin__action-dropdown {
+                font-size: @action-dropdown__font-size;
+                letter-spacing: -.025em;
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $validSaveHandlers = [
         ConfigOptionsListConstants::SESSION_SAVE_FILES,
         ConfigOptionsListConstants::SESSION_SAVE_DB,
-        ConfigOptionsListConstants::SESSION_SAVE_REDIS
     ];
 
     /**
@@ -72,13 +71,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
                 'Session save handler',
                 ConfigOptionsListConstants::SESSION_SAVE_FILES
-            ),
-            new SelectConfigOption(
-                ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
-                SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                DefinitionFactory::getSupportedFormats(),
-                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
-                'Type of definitions used by Object Manager'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
@@ -164,7 +156,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
         $configData = [];
-        $configData[] = $this->configGenerator->createInstallConfig($deploymentConfig);
         $configData[] = $this->configGenerator->createCryptConfig($data, $deploymentConfig);
         $configData[] = $this->configGenerator->createSessionConfig($data);
         $definitionConfig = $this->configGenerator->createDefinitionsConfig($data);
@@ -303,7 +294,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private function validateHttpCacheHosts($option)
     {
         $errors = [];
-        if (!preg_match('/^[a-zA-Z0-9_:,.]+$/', $option)
+        if (!preg_match('/^[\-\w:,.]+$/', $option)
         ) {
             $errors[] = "Invalid http cache hosts '{$option}'";
         }
@@ -344,7 +335,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
         ) {
             try {
-
                 $options = $this->getDbSettings($options, $deploymentConfig);
 
                 $this->dbValidator->checkDatabaseConnection(

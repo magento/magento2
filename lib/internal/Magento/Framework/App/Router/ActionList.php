@@ -1,26 +1,28 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
 class ActionList
 {
+    /**
+     * Not allowed string in route's action path to avoid disclosing admin url
+     */
+    const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
+
     /**
      * List of application actions
      *
      * @var array
      */
     protected $actions;
-
-    /**
-     * @var ModuleReader
-     */
-    protected $moduleReader;
 
     /**
      * @var array
@@ -32,32 +34,46 @@ class ActionList
         'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'instanceof',
         'insteadof','interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected',
         'public', 'require', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var',
-        'while', 'xor',
+        'while', 'xor', 'void',
     ];
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var string
+     */
+    private $actionInterface;
+
+    /**
+     * ActionList constructor
+     *
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         ModuleReader $moduleReader,
-        $actionInterface = '\Magento\Framework\App\ActionInterface',
+        $actionInterface = \Magento\Framework\App\ActionInterface::class,
         $cacheKey = 'app_action_list',
-        $reservedWords = []
+        $reservedWords = [],
+        SerializerInterface $serializer = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
         $data = $cache->load($cacheKey);
-        $this->moduleReader = $moduleReader;
         if (!$data) {
-            $this->actions = $this->moduleReader->getActionFiles();
-            $cache->save(serialize($this->actions), $cacheKey);
+            $this->actions = $moduleReader->getActionFiles();
+            $cache->save($this->serializer->serialize($this->actions), $cacheKey);
         } else {
-            $this->actions = unserialize($data);
+            $this->actions = $this->serializer->unserialize($data);
         }
     }
 
@@ -75,6 +91,9 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
+        if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
+            return null;
+        }
         if (in_array(strtolower($action), $this->reservedWords)) {
             $action .= 'action';
         }
@@ -88,7 +107,6 @@ class ActionList
         if (isset($this->actions[$fullPath])) {
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
         }
-
         return null;
     }
 }

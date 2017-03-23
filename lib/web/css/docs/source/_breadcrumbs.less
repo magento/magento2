@@ -1,0 +1,537 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Breadcrumbs
+//  Breadcrumbs or breadcrumb trail is a navigation aid used in user interfaces. It allows users to keep track of their location within programs, websites or documents.
+//
+//  Breadcrumbs layout with links can be separated by any symbol, for example <code>></code> symbol.
+//
+//  The following markup corresponds to the accesibility demands:
+//  ```html
+//  <div class="example-breadcrumbs-1">
+//      <span class="label" id="breadcrumb-label">You are here:</span>
+//      <ul class="items" aria-labelledby="breadcrumb-label">
+//          <li class="item home">
+//              <a title="Go to Home Page" href="#">Home</a>
+//          </li>
+//          <li class="item category1">
+//              <a title="Category" href="#">Category</a>
+//          </li>
+//          <li class="item category2">
+//              <a title="Category" href="#">Subcategory</a>
+//          </li>
+//          <li class="item category3">
+//              <strong>Products</strong>
+//          </li>
+//      </ul>
+//  </div>
+//  ```
+
+.example-breadcrumbs-1 {
+    .lib-breadcrumbs();
+}
+
+//  # Breadcrumbs variables
+//
+//  <pre>
+//    <table>
+//      <tr>
+//        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-font-size</th>
+//        <td>@breadcrumbs__font-size</td>
+//        <td class="vars_value">@font-size__s</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs font size</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-display</th>
+//        <td>@breadcrumbs__display</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | inline | block | inline-block</td>
+//        <td>Breadcrumbs links display property</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs__container-margin</th>
+//        <td>@breadcrumbs__container-margin</td>
+//        <td class="vars_value"> 0 0 @indent__base</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs items padding</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-padding</th>
+//        <td>@breadcrumbs__padding</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs items padding</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs - separator symbol</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-separator-symbol</th>
+//        <td>@breadcrumbs-separator__symbol</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | any symbol</td>
+//        <td>Breadcrumbs separating symbol</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-separator-color</th>
+//        <td>@breadcrumbs-separator__color</td>
+//        <td class="vars_value" nowrap="nowrap">@breadcrumbs-current__color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs separating symbol color</td>
+//      </tr>
+//     <tr>
+//        <th>@_breadcrumbs-icon-use</th>
+//        <td>@breadcrumbs-icon__use</td>
+//        <td class="vars_value">true</td>
+//        <td class="vars_value">true | false</td>
+//        <td>Breadcrumbs separating symbol is an icon</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-icon-font-content</th>
+//        <td>@breadcrumbs-icon__font-content</td>
+//        <td class="vars_value">@icon-next</td>
+//        <td class="vars_value">'' | false | icon</td>
+//        <td>Breadcrumbs separating icon symbol</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font</th>
+//        <td>@breadcrumbs-icon__font</td>
+//        <td class="vars_value">@icon-font</td>
+//        <td class="vars_value">'' | false | font</td>
+//        <td>Breadcrumbs separating icon font</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font-size</th>
+//        <td>@breadcrumbs-icon__font-size</td>
+//        <td class="vars_value">24px</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs separating icon font size</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font-line-height</th>
+//        <td>@breadcrumbs-icon__font-line-height</td>
+//        <td class="vars_value">18px</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs separating icon line height</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font-color</th>
+//        <td>@breadcrumbs-icon__font-color</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs separating icon color</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font-margin</th>
+//        <td>@breadcrumbs-icon__font-margin</td>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs separating icon margin</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font-vertical-align</th>
+//        <td>@breadcrumbs-icon__font-vertical-align</td>
+//        <td class="vars_value">top</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs separating icon vertical align</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs - current page</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-color</th>
+//        <td>@breadcrumbs-current__color</td>
+//        <td class="vars_value">#a3a3a3</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs current page color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-font-weight</th>
+//        <td>@breadcrumbs-current__font-weight</td>
+//        <td class="vars_value">@font-weight__regular</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs current page font weight</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-background</th>
+//        <td>@breadcrumbs-current__background</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs current page background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-border</th>
+//        <td>@breadcrumbs-current__border</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs current page border</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-gradient</th>
+//        <td>@breadcrumbs-current__gradient</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">true | false</td>
+//        <td>Breadcrumbs current page have gradient background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-gradient-direction</th>
+//        <td>@breadcrumbs-current__gradient-direction</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | vertical | horizontal</td>
+//        <td>Direction of breadcrumbs current page background gradient (if there is any)</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-gradient-color-start</th>
+//        <td>@breadcrumbs-current__gradient-color-start</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs current page gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-current-gradient-color-end</th>
+//        <td>@breadcrumbs-current__gradient-color-end</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs current page gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs link</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient</th>
+//        <td>@breadcrumbs-link__gradient</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">true | false</td>
+//        <td>Breadcrumbs items have gradient background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-direction</th>
+//        <td>@breadcrumbs-link__gradient-direction</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | vertical | horizontal</td>
+//        <td>Direction of breadcrumbs item background gradient (if there is any)</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs link - default</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-color</th>
+//        <td>@breadcrumbs-link__color</td>
+//        <td class="vars_value">@primary__color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-background</th>
+//        <td>@breadcrumbs-link__background</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-border</th>
+//        <td>@breadcrumbs-link__border</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item border</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-text-decoration</th>
+//        <td>@breadcrumbs-link__text-decoration</td>
+//        <td class="vars_value">none</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-start</th>
+//        <td>@breadcrumbs-link__gradient-color-start</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-end</th>
+//        <td>@breadcrumbs-link__gradient-color-end</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs link - visited</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-color-visited</th>
+//        <td>@breadcrumbs-link__visited__color</td>
+//        <td class="vars_value">@primary__color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item visited color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-background-visited</th>
+//        <td>@breadcrumbs-link__visited__background</td>
+//        <td class="vars_value">@breadcrumbs-link__background</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item visited background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-border-visited</th>
+//        <td>@breadcrumbs-link__visited__border</td>
+//        <td class="vars_value">@breadcrumbs-link__border</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item visited border</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-text-decoration-visited</th>
+//        <td>@breadcrumbs-link__visited__text-decoration</td>
+//        <td class="vars_value">none</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-start-visited</th>
+//        <td>@breadcrumbs-link__visited__gradient-color-start</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item visited gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-end-visited</th>
+//        <td>@breadcrumbs-link__visited__gradient-color-end</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item visited gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs link - hover</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-color-hover</th>
+//        <td>@breadcrumbs-link__hover__color</td>
+//        <td class="vars_value">@primary__color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item hover color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-background-hover</th>
+//        <td>@breadcrumbs-link__hover__background</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item hover background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-border-hover</th>
+//        <td>@breadcrumbs-link__hover__border</td>
+//        <td class="vars_value">@breadcrumbs-link__border</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item hover border</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-text-decoration-hover</th>
+//        <td>@breadcrumbs-link__hover__text-decoration</td>
+//        <td class="vars_value">underline</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item hover text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-start-hover</th>
+//        <td>@breadcrumbs-link__hover__gradient-color-start</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item hover gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-end-hover</th>
+//        <td>@breadcrumbs-link__hover__gradient-color-end</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item hover gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="5" class="vars_section">Breadcrumbs link - active</th>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-color-active</th>
+//        <td>@breadcrumbs-link__active__color</td>
+//        <td class="vars_value">@primary__color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item active color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-background-active</th>
+//        <td>@breadcrumbs-link__active__background</td>
+//        <td class="vars_value">@breadcrumbs-link__background</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item active background</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-border-active</th>
+//        <td>@breadcrumbs-link__active__border</td>
+//        <td class="vars_value">@breadcrumbs-link__border</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item active border</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-text-decoration-active</th>
+//        <td>@breadcrumbs-link__active__text-decoration</td>
+//        <td class="vars_value">none</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item active text decoration</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@_breadcrumbs-link-gradient-color-start-active</th>
+//        <td>@breadcrumbs-link__active__gradient-color-start</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item active gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_breadcrumbs-link-gradient-color-end-active</th>
+//        <td>@breadcrumbs-link__active__gradient-color-end</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Breadcrumbs item active gradient end color</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  # Button-styled breadcrumbs with gradient background, border, and no separating symbol
+//
+//  Set values for the following variables to:
+//
+//  hide separating symbol:
+//  ```css
+//  @_breadcrumbs-separator-symbol: ''
+//  ```
+//  set up links gradient background for default and hover state:
+//  ```css
+//  @_breadcrumbs-link-gradient: true,
+//  @_breadcrumbs-link-gradient-direction: vertical,
+//  @_breadcrumbs-link-gradient-color-start: #f4f4f4,
+//  @_breadcrumbs-link-gradient-color-end: #ccc,
+//  @_breadcrumbs-link-gradient-color-start-hover: #ccc,
+//  @_breadcrumbs-link-gradient-color-end-hover: #f4f4f4
+//  ```
+//  set up current page gradient background:
+//  ```css
+//  @_breadcrumbs-current-gradient: true,
+//  @_breadcrumbs-current-gradient-color-start: #f7b32e,
+//  @_breadcrumbs-current-gradient-color-end: #ff5501
+//  ```
+//  ```html
+//  <div class="example-breadcrumbs-2">
+//      <ul class="items">
+//          <li class="item home">
+//              <a title="Go to Home Page" href="#">Home</a>
+//          </li>
+//          <li class="item category1">
+//              <a title="Category" href="#">Category</a>
+//          </li>
+//          <li class="item category2">
+//              <a title="Category" href="#">Subcategory</a>
+//          </li>
+//          <li class="item category3">
+//              <strong>Products</strong>
+//          </li>
+//      </ul>
+//  </div>
+//  ```
+
+.example-breadcrumbs-2 {
+    .lib-breadcrumbs(
+        @_breadcrumbs-separator-symbol: '',
+        @_breadcrumbs-display: inline-block,
+        @_breadcrumbs-padding: 3px 5px,
+        @_breadcrumbs-link-border: 1px solid #ccc,
+        @_breadcrumbs-link-gradient: true,
+        @_breadcrumbs-link-gradient-direction: vertical,
+        @_breadcrumbs-link-gradient-color-start: #f4f4f4,
+        @_breadcrumbs-link-gradient-color-end: #ccc,
+        @_breadcrumbs-link-gradient-color-start-hover: #ccc,
+        @_breadcrumbs-link-gradient-color-end-hover: #f4f4f4,
+        @_breadcrumbs-link-text-decoration-hover: none,
+        @_breadcrumbs-current-color: #1979c3,
+        @_breadcrumbs-current-gradient: true,
+        @_breadcrumbs-current-gradient-color-start: #f7b32e,
+        @_breadcrumbs-current-gradient-color-end: #ff5501,
+        @_breadcrumbs-current-border: 1px solid #d04b0a
+    );
+}
+
+//  # Breadcrumbs with solid background
+//
+//  Breadcrumbs with solid background and a triangle right on the right side, without separating symbol.
+//
+//  Set values for the following variables to:
+//
+//  hide separating symbol use:
+//  ```css
+//  @_breadcrumbs-separator-symbol: ''
+//  ```
+//  set up solid background for links for default and hover state:
+//  ```css
+//  @_breadcrumbs-link-background: #f4f4f4,
+//  @_breadcrumbs-link-background-hover: #ccc
+//  ```
+//  set up gradient background for current page:
+//  ```css
+//  @_breadcrumbs-current-background: #e7e7e7,
+//  @_breadcrumbs-current-color: #333,
+//  ```
+//
+//  User can also add customization that was not provided with the breadcrumbs mixin. Here we can add solid arrow right for each link:
+//  ```html
+//  <div class="example-breadcrumbs-3">
+//      <ul class="items">
+//          <li class="item home">
+//              <a title="Go to Home Page" href="#">Home</a>
+//          </li>
+//          <li class="item category1">
+//              <a title="Category" href="#">Category</a>
+//          </li>
+//          <li class="item category2">
+//              <a title="Category" href="#">Subcategory</a>
+//          </li>
+//          <li class="item category3">
+//              <strong>Products</strong>
+//          </li>
+//      </ul>
+//  </div>
+//  ```
+
+.example-breadcrumbs-3 {
+    .lib-breadcrumbs(
+        @_breadcrumbs-separator-symbol: '',
+        @_breadcrumbs-display: inline-block,
+        @_breadcrumbs-padding: 3px 5px,
+        @_breadcrumbs-current-background: #e7e7e7,
+        @_breadcrumbs-current-color: #333,
+        @_breadcrumbs-link-text-decoration-hover: none,
+        @_breadcrumbs-link-background: #f4f4f4,
+        @_breadcrumbs-link-background-hover: #ccc
+    );
+    .item a {
+        position: relative;
+        margin: 0 11px 0 0;
+        &:after {
+            .lib-arrow(right, 12px, #f4f4f4);
+            content: "";
+            position: absolute;
+            display: block;
+            top: 0;
+            right: -23px;
+        }
+        &:hover:after {
+            border-color: transparent transparent transparent #ccc;
+        }
+    }
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Model;
@@ -12,7 +12,7 @@ class VideoExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtrac
     /**
      * Media Entry type code
      */
-    const MEDIA_TYPE_CODE = 'image';
+    const MEDIA_TYPE_CODE = 'video';
 
     /**
      * Extract configuration data of videos from the DOM structure

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -158,7 +158,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $this->setChild(
             'export_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Export'),
@@ -257,6 +257,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $break = false;
 
         while ($break !== true) {
+            $originalCollection->clear();
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();

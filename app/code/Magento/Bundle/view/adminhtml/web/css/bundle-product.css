@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,15 +49,11 @@
 .field-sku .control .sku {
     display: inline-block;
     width: 140px;
-    margin-right: 15px;
+    margin-right: 11px;
 }
 
 .field-sku .control .sku > input[type='text'] {
     width: 100%;
-}
-
-.field-sku .control .sku + .select {
-    vertical-align: middle;
 }
 
 .field-price .addon > .price {
@@ -73,7 +69,6 @@
 }
 
 .field-price .addon > .price + .select {
-    width: 96px;
     float: left;
 }
 

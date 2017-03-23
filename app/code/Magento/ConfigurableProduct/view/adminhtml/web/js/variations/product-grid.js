@@ -1,14 +1,16 @@
 // jscs:disable requireDotNotation
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'uiComponent',
     'jquery',
     'Magento_Ui/js/core/app',
     'underscore',
-    'notification'
+    'notification',
+    'mage/translate'
 ], function (Component, $, bootstrap, _) {
     'use strict';
 
@@ -29,12 +31,13 @@ define([
             listens: {
                 '${ $.productsProvider }:data': '_showMessageAssociatedGrid _handleManualGridOpening',
                 '${ $.productsMassAction }:selected': '_handleManualGridSelect',
-                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual'
+                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual _switchProductType'
             }
         },
 
         /**
          * Initialize
+         *
          * @param {Array} options
          */
         initialize: function (options) {
@@ -46,10 +49,7 @@ define([
                     {
                         text: $.mage.__('Cancel'),
 
-                        /**
-                         * Close modal
-                         * @event
-                         */
+                        /** Close modal */
                         click: function () {
                             this.closeModal();
                         }
@@ -68,6 +68,12 @@ define([
             }.bind(this));
 
             this._initGrid = _.once(this._initGrid);
+            this._switchProductType = _.wrap(this._switchProductType.bind(this), function (func, params) {
+                if (!!params.length !== !!this.init) {
+                    this.init = !!params.length;
+                    func(params);
+                }
+            }.bind(this._switchProductType));
         },
 
         /**
@@ -129,7 +135,7 @@ define([
          */
         close: function (rowIndex) {
             try {
-                if (this.productsMassAction().selected.length) {
+                if (this.productsMassAction().selected.getLength()) {
                     this.variationsComponent()[this.callbackName](this.productsMassAction()
                         .selected.map(this.getProductById.bind(this)));
                     this.productsMassAction().deselectAll();
@@ -195,6 +201,14 @@ define([
         },
 
         /**
+         * @param {Array} variations
+         * @private
+         */
+        _switchProductType: function (variations) {
+            $(document).trigger('changeConfigurableTypeProduct', variations.length);
+        },
+
+        /**
          * Get attributes codes used for configurable
          * @private
          */
@@ -211,9 +225,7 @@ define([
 
             if (data.items.length) {
                 this.productsModal.notification('add', {
-                    message: $.mage.__(
-                        'Choose a new product to delete and replace the current product configuration.'
-                    ),
+                    message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
                     messageContainer: this.gridSelector
                 });
             } else {
@@ -235,7 +247,7 @@ define([
                 }),
                 usedProductIds = _.values(this.variationsComponent().productAttributesMap);
 
-            if (usedProductIds) {
+            if (usedProductIds && usedProductIds.length > 0) {
                 filterModifier['entity_id'] = {
                     'condition_type': 'nin', value: usedProductIds
                 };
@@ -255,7 +267,7 @@ define([
          * @private
          */
         _handleManualGridOpening: function (data) {
-            if (data.items.length && this.callbackName == 'appendProducts') {
+            if (data.items.length && this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
                 this.productsColumns().elems().each(function (rowElement) {
                     rowElement.disableAction = true;
                 });
@@ -284,7 +296,7 @@ define([
                     rowsForDisable = _.keys(_.pick(
                         variationKeyMap,
                         function (variationKey) {
-                            return configurableVariationKeys.indexOf(variationKey) != -1;
+                            return configurableVariationKeys.indexOf(variationKey) !== -1;
                         }
                     ));
 
@@ -296,11 +308,13 @@ define([
          * @private
          */
         _handleManualGridSelect: function (selected) {
-            if (this.callbackName == 'appendProducts') {
-                var selectedRows = _.filter(this.productsProvider().data.items, function (row) {
-                        return selected.indexOf(row['entity_id']) != -1;
-                    }),
-                    selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
+            var selectedRows, selectedVariationKeys;
+
+            if (this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
+                selectedRows = _.filter(this.productsProvider().data.items, function (row) {
+                    return selected.indexOf(row['entity_id']) !== -1;
+                });
+                selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
                 this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);
             }
         },
@@ -308,7 +322,7 @@ define([
         /**
          * Get variation key map used in manual grid.
          *
-         * @param items
+         * @param {Object} items
          * @returns {Array} [{entity_id: variation-key}, ...]
          * @private
          */

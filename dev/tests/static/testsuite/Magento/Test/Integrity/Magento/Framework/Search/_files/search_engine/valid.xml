@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<engines xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_engine.xsd">
+    <engine name="engine1">
+        <feature name="feature1" support="true" />
+        <feature name="feature2" support="1" />
+    </engine>
+    <engine name="engine2">
+        <feature name="feature1" support="1" />
+        <feature name="feature2" support="false" />
+    </engine>
+    <engine name="engine3">
+        <feature name="feature1" support="0" />
+        <feature name="feature2" support="0" />
+    </engine>
+</engines>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Api;
@@ -29,7 +29,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testGetAll()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load(
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load(
             'test_order_bundle',
             'reserved_order_id'
         );
@@ -69,8 +69,8 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testAddItem()
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load(3);
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load(
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load(3);
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load(
             'test_order_item_with_items',
             'reserved_order_id'
         );
@@ -94,7 +94,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'items',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -133,7 +133,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load(
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load(
             'test_order_bundle',
             'reserved_order_id'
         );
@@ -161,7 +161,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'items/' . $itemId,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -185,8 +185,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $this->_webApiCall($serviceInfo, $requestData);
 
-
-        $quoteUpdated = $this->objectManager->create('Magento\Quote\Model\Quote')->load(
+        $quoteUpdated = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load(
             'test_order_bundle',
             'reserved_order_id'
         );

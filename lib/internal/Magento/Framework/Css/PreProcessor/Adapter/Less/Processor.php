@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
+use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
+use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
 /**
@@ -59,9 +61,11 @@ class Processor implements ContentProcessorInterface
 
     /**
      * @inheritdoc
+     * @throws ContentProcessorException
      */
     public function processContent(File $asset)
     {
+        $path = $asset->getPath();
         try {
             $parser = new \Less_Parser(
                 [
@@ -76,17 +80,23 @@ class Processor implements ContentProcessorInterface
                 return '';
             }
 
-            $tmpFilePath = $this->temporaryFile->createFile($asset->getPath(), $content);
-            $parser->parseFile($tmpFilePath, '');
+            $tmpFilePath = $this->temporaryFile->createFile($path, $content);
 
+            gc_disable();
+            $parser->parseFile($tmpFilePath, '');
             $content = $parser->getCss();
+            gc_enable();
+
+            if (trim($content) === '') {
+                $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path;
+                $this->logger->critical($errorMessage);
+
+                throw new ContentProcessorException(new Phrase($errorMessage));
+            }
 
             return $content;
         } catch (\Exception $e) {
-            $errorMessage = self::ERROR_MESSAGE_PREFIX . $e->getMessage();
-            $this->logger->critical($errorMessage);
-
-            return $errorMessage;
+            throw new ContentProcessorException(new Phrase($e->getMessage()));
         }
     }
 }

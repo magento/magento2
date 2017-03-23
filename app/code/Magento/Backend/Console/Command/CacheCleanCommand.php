@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,7 @@ class CacheCleanCommand extends AbstractCacheTypeManageCommand
      */
     protected function performAction(array $cacheTypes)
     {
+        $this->eventManager->dispatch('adminhtml_cache_flush_system');
         $this->cacheManager->clean($cacheTypes);
     }
 

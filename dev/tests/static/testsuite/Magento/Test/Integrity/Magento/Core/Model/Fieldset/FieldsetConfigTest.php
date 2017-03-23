@@ -2,7 +2,7 @@
 /**
  * Find "fieldset.xml" files and validate them
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Core\Model\Fieldset;
@@ -63,6 +63,9 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSchemaUsingInvalidXml()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
+        }
         $xmlFile = __DIR__ . '/_files/invalid_fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
@@ -92,6 +95,9 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testFileSchemaUsingInvalidXml()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped due to MAGETWO-45033');
+        }
         $xmlFile = __DIR__ . '/_files/invalid_fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));

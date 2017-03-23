@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="front_fieldset">
+        <field name="is_filterable">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\LayeredNavigation\Model\Attribute\Source\FilterableOptions</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-on-option/select</item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
+                    <item name="dataScope" xsi:type="string">is_filterable</item>
+                    <item name="notice" xsi:type="string" translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price.</item>
+                    <item name="title" xsi:type="string" translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_filterable_in_search">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-on-option/yesno</item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="label" xsi:type="string" translate="true">Use in Search Results Layered Navigation</item>
+                    <item name="dataScope" xsi:type="string">is_filterable_in_search</item>
+                    <item name="notice" xsi:type="string" translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price.</item>
+                    <item name="title" xsi:type="string" translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price</item>
+                </item>
+            </argument>
+        </field>
+        <field name="position">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-on-option/input</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="toggleDisable" xsi:type="string">${ $.parentName}.is_filterable:value</item>
+                    </item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="1" xsi:type="string">1</item>
+                        <item name="2" xsi:type="string">2</item>
+                    </item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Position</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-digits" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

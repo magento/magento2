@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -27,7 +28,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
         $this->assertEquals(1, $messages->getCountByType('error'));
         $message = $messages->getItemsByType('error')[0];
         $this->assertEquals('Input type "some_input" not found in the input types list.', $message->getText());
@@ -52,7 +53,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
         $this->assertEquals(1, $messages->getCountByType('success'));
         $message = $messages->getItemsByType('success')[0];
         $this->assertEquals('You saved the product attribute.', $message->getText());
@@ -72,7 +73,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
         $this->assertEquals(1, $messages->getCountByType('error'));
     }
 
@@ -90,7 +91,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
         $this->assertEquals(1, $messages->getCountByType('error'));
         /** @var \Magento\Framework\Message\Error $message */
         $message = $messages->getItemsByType('error')[0];
@@ -115,7 +116,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
         $this->assertEquals(1, $messages->getCountByType('success'));
         /** @var \Magento\Framework\Message\Success $message */
         $message = $messages->getItemsByType('success')[0];
@@ -136,7 +137,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $this->getResponse()->getHeader('Location')->getFieldValue()
         );
         /** @var \Magento\Framework\Message\Collection $messages */
-        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $messages = $this->_objectManager->create(\Magento\Framework\Message\ManagerInterface::class)->getMessages();
         $this->assertEquals(1, $messages->getCountByType('error'));
         /** @var \Magento\Framework\Message\Error $message */
         $message = $messages->getItemsByType('error')[0];
@@ -170,7 +171,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $postData = $this->_getAttributeData() + ['attribute_id' => '2'];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
-        $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
+        $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $model->load($postData['attribute_id']);
         $this->assertNull($model->getData('apply_to'));
     }
@@ -184,7 +185,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
-        $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
+        $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $model->load($postData['attribute_id']);
         $this->assertEquals('simple', $model->getData('apply_to'));
     }
@@ -198,7 +199,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         unset($postData['apply_to']);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
-        $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
+        $model = $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $model->load($postData['attribute_id']);
         $this->assertEquals(['simple'], $model->getApplyTo());
     }
@@ -211,7 +212,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     public function testSaveActionCleanAttributeLabelCache()
     {
         /** @var \Magento\Translation\Model\ResourceModel\StringUtils $string */
-        $string = $this->_objectManager->create('Magento\Translation\Model\ResourceModel\StringUtils');
+        $string = $this->_objectManager->create(\Magento\Translation\Model\ResourceModel\StringUtils::class);
         $this->assertEquals('predefined string translation', $this->_translate('string to translate'));
         $string->saveTranslate('string to translate', 'new string translation');
         $postData = $this->_getAttributeData() + ['attribute_id' => 1];
@@ -230,12 +231,12 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         // emulate admin store and design
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setDesignTheme(
             1
         );
         /** @var \Magento\Framework\TranslateInterface $translate */
-        $translate = $this->_objectManager->get('Magento\Framework\TranslateInterface');
+        $translate = $this->_objectManager->get(\Magento\Framework\TranslateInterface::class);
         $translate->loadData(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, true);
         return __($string);
     }
@@ -248,7 +249,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected function _getAttributeData()
     {
         return [
-            'is_global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE,
+            'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
             'default_value_text' => '0',
             'default_value_yesno' => '0',
             'default_value_date' => '',

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
+
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Rating model
@@ -18,7 +20,7 @@ namespace Magento\Review\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rating extends \Magento\Framework\Model\AbstractModel
+class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
     /**
      * rating entity codes
@@ -69,7 +71,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Rating');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**
@@ -160,5 +162,16 @@ class Rating extends \Magento\Framework\Model\AbstractModel
     public function getEntityIdByCode($entityCode)
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        // clear cache for all reviews
+        return [Review::CACHE_TAG];
     }
 }

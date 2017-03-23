@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,10 +20,32 @@ class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'FPC';
 
     /**
-     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @var \Magento\Framework\Event\ManagerInterface
      */
-    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
-    {
+    private $eventManager;
+
+    /**
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     */
+    public function __construct(
+        \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool,
+        \Magento\Framework\Event\ManagerInterface $eventManager
+    ) {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
+        $this->eventManager = $eventManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $mode
+     * @param array $tags
+     * @return bool
+     */
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    {
+        $this->eventManager->dispatch('adminhtml_cache_refresh_type');
+        return parent::clean($mode, $tags);
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 class Navigation
 {
@@ -34,12 +35,11 @@ class Navigation
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(ServiceLocatorInterface $serviceLocator, DeploymentConfig $deploymentConfig)
     {
-        $objectManager = $objectManagerProvider->get();
-        if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+        if ($deploymentConfig->isAvailable()) {
             $this->navStates = $serviceLocator->get('config')[self::NAV_UPDATER];
             $this->navType = self::NAV_UPDATER;
             $this->titles = $serviceLocator->get('config')[self::NAV_UPDATER . 'Titles'];

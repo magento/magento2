@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,13 @@ use Magento\Backend\Model\Session;
 
 abstract class Statistics extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::statistics';
+
     /**
      * Admin session model
      *
@@ -90,16 +97,6 @@ abstract class Statistics extends \Magento\Backend\App\Action
     }
 
     /**
-     * Determine if action is allowed for reports module
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Reports::statistics');
-    }
-
-    /**
      * Retrieve admin session model
      *
      * @return AuthSession|Session|mixed|null
@@ -107,7 +104,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
     protected function _getSession()
     {
         if ($this->_adminSession === null) {
-            $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
+            $this->_adminSession = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
         }
         return $this->_adminSession;
     }

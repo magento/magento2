@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -53,14 +53,14 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
     protected $messageFactory;
 
     /**
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GiftMessageManager $giftMessageManager
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager,
         \Magento\GiftMessage\Helper\Message $helper,
@@ -119,7 +119,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
         };
 
         if ($item->getIsVirtual()) {
-            throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
+            throw new InvalidTransitionException(__('Gift Messages are not applicable for virtual products'));
         }
         $messageText = $giftMessage->getMessage();
         if ($messageText && !$this->helper->isMessagesAllowed('items', $quote, $this->storeManager->getStore())) {

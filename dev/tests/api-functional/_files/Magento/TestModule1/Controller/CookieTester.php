@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModule1\Controller;
@@ -27,6 +27,11 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
     protected $_response;
 
     /**
+     * @var
+     */
+    protected $request;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param PhpCookieManager $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
@@ -39,6 +44,7 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFacory = $cookieMetadataFactory;
         $this->_response = $context->getResponse();
+        $this->request = $context->getRequest();
     }
 
     /**
@@ -58,12 +64,6 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
     }
 
     /**
-     * @param RequestInterface $request
-     * @return mixed
-     */
-    abstract protected function execute(RequestInterface $request);
-
-    /**
      * Dispatch request
      *
      * @param RequestInterface $request
@@ -71,7 +71,8 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
      */
     public function dispatch(RequestInterface $request)
     {
-        $result = $this->execute($request);
+        $this->request = $request;
+        $result = $this->execute();
         return $result ? $result : $this->_response;
     }
 }

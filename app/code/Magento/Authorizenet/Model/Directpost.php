@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
 
 use Magento\Authorizenet\Model\TransactionService;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
@@ -23,12 +24,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info';
+    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
     /**
      * Payment Method feature
@@ -92,7 +93,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -119,6 +120,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     protected $transactionRepository;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $psrLogger;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -132,9 +138,10 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param Directpost\Request\Factory $requestFactory
      * @param Directpost\Response\Factory $responseFactory
      * @param \Magento\Authorizenet\Model\TransactionService $transactionService
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param OrderSender $orderSender
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -156,9 +163,10 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory,
         TransactionService $transactionService,
+        ZendClientFactory $httpClientFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -187,6 +195,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $requestFactory,
             $responseFactory,
             $transactionService,
+            $httpClientFactory,
             $resource,
             $resourceCollection,
             $data
@@ -272,15 +281,14 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         switch ($result->getXResponseCode()) {
             case self::RESPONSE_CODE_APPROVED:
             case self::RESPONSE_CODE_HELD:
-                if (
-                    in_array(
-                        $result->getXResponseReasonCode(),
-                        [
+                if (in_array(
+                    $result->getXResponseReasonCode(),
+                    [
                             self::RESPONSE_REASON_CODE_APPROVED,
                             self::RESPONSE_REASON_CODE_PENDING_REVIEW,
                             self::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED
                         ]
-                    )
+                )
                 ) {
                     if (!$payment->getParentTransactionId()
                         || $result->getXTransId() != $payment->getParentTransactionId()
@@ -404,9 +412,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                     if ($result->getXTransId() != $payment->getParentTransactionId()) {
                         $payment->setTransactionId($result->getXTransId());
                     }
-                    $shouldCloseCaptureTransaction = $payment->getOrder()->canCreditmemo() ? 0 : 1;
-                    $payment->setIsTransactionClosed(1)
-                        ->setShouldCloseParentTransaction($shouldCloseCaptureTransaction)
+                    $payment->setIsTransactionClosed(true)
                         ->setTransactionAdditionalInfo(self::REAL_TRANSACTION_ID_KEY, $result->getXTransId());
                     return $this;
                 }
@@ -527,8 +533,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         $response = $this->getResponse();
         //md5 check
-        if (
-            !$this->getConfigData('trans_md5')
+        if (!$this->getConfigData('trans_md5')
             || !$this->getConfigData('login')
             || !$response->isValidHash($this->getConfigData('trans_md5'), $this->getConfigData('login'))
         ) {
@@ -759,7 +764,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $transactionId = $this->getResponse()->getXTransId();
-            $data = $payment->getMethodInstance()->getTransactionDetails($transactionId);
+            $data = $this->transactionService->getTransactionDetails($this, $transactionId);
             $transactionStatus = (string)$data->transaction->transactionStatus;
             $fdsFilterAction = (string)$data->transaction->FDSFilterAction;
 
@@ -777,6 +782,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 $payment->getOrder()->addStatusHistoryComment($message);
             }
         } catch (\Exception $e) {
+            $this->getPsrLogger()->critical($e);
             //this request is optional
         }
         return $this;
@@ -794,8 +800,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $response = $this->getResponse();
-            if (
-                $voidPayment && $response->getXTransId() && strtoupper($response->getXType())
+            if ($voidPayment && $response->getXTransId() && strtoupper($response->getXType())
                 == self::REQUEST_TYPE_AUTH_ONLY
             ) {
                 $order->getPayment()->setTransactionId(null)->setParentTransactionId($response->getXTransId())->void();
@@ -803,7 +808,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $order->registerCancellation($message)->save();
         } catch (\Exception $e) {
             //quiet decline
-            $this->logger->critical($e);
+            $this->getPsrLogger()->critical($e);
         }
     }
 
@@ -970,5 +975,19 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
 
         return $response;
+    }
+
+    /**
+     * @return \Psr\Log\LoggerInterface
+     *
+     * @deprecated
+     */
+    private function getPsrLogger()
+    {
+        if (null === $this->psrLogger) {
+            $this->psrLogger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->psrLogger;
     }
 }

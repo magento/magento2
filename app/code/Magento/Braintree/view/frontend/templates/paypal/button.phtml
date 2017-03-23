@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Braintree\Block\Paypal\Button $block
+ */
+
+$id = $block->getContainerId() . mt_rand();
+
+$config = [
+    'Magento_Braintree/js/paypal/button' => [
+        'id' => $id,
+        'clientToken' => $block->getClientToken(),
+        'displayName' => $block->getMerchantName(),
+        'actionSuccess' => $block->getActionSuccess()
+    ]
+];
+
+?>
+<div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
+     class="paypal checkout paypal-logo braintree-paypal-logo<?php
+     /* @noEscape */ echo $block->getContainerId(); ?>-container">
+    <button data-currency="<?php /* @noEscape */ echo $block->getCurrency(); ?>"
+       data-locale="<?php /* @noEscape */ echo $block->getLocale(); ?>"
+       data-amount="<?php /* @noEscape */ echo $block->getAmount(); ?>"
+       id="<?php /* @noEscape */ echo $id; ?>"
+       class="action-braintree-paypal-logo" disabled>
+        <img class="braintree-paypal-button-hidden"
+             src="https://checkout.paypal.com/pwpp/2.17.6/images/pay-with-paypal.png"
+             alt="Pay with PayPal"/>
+    </button>
+</div>

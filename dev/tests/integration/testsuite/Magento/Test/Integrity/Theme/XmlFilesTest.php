@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Theme;
@@ -10,18 +10,39 @@ use Magento\Framework\Component\ComponentRegistrar;
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    protected $validationStateMock;
+
+    public function setUp()
+    {
+        $this->validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+    }
+
+    /**
      * @param string $file
      * @dataProvider viewConfigFileDataProvider
      */
     public function testViewConfigFile($file)
     {
-        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Xsd\Reader'
+        $domConfig = new \Magento\Framework\Config\Dom(
+            file_get_contents($file),
+            $this->validationStateMock
         );
-        $mergeXsd = $reader->read();
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $errors = [];
-        $result = $domConfig->validate($mergeXsd, $errors);
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $result = $domConfig->validate(
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
+            $errors
+        );
         $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
     }
 
@@ -33,7 +54,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         $result = [];
         /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
         $componentDirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Component\DirSearch');
+            ->get(\Magento\Framework\Component\DirSearch::class);
         $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'etc/view.xml');
         foreach ($files as $file) {
             $result[substr($file, strlen(BP))] = [$file];
@@ -58,7 +79,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         $result = [];
         /** @var \Magento\Framework\Component\ComponentRegistrar $componentRegistrar */
         $componentRegistrar = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Framework\Component\ComponentRegistrar');
+            ->get(\Magento\Framework\Component\ComponentRegistrar::class);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             $result[substr($themeDir, strlen(BP))] = [$themeDir];
         }
@@ -71,7 +92,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testThemeConfigFileSchema($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $this->validationStateMock);
         $errors = [];
         $result = $domConfig->validate('urn:magento:framework:Config/etc/theme.xsd', $errors);
         $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
@@ -99,7 +120,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         $result = [];
         /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
         $componentDirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Component\DirSearch');
+            ->get(\Magento\Framework\Component\DirSearch::class);
         $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'theme.xml');
         foreach ($files as $file) {
             $result[substr($file, strlen(BP))] = [$file];

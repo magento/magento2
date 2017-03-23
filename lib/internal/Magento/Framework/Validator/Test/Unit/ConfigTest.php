@@ -2,11 +2,14 @@
 /**
  * Unit Test for \Magento\Framework\Validator\Config
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator\Test\Unit;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -24,6 +27,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
@@ -55,20 +61,35 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\ObjectManager\Relations\Runtime()
         );
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config);
-        $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
-        $factory->setObjectManager($realObjectManager);
-        $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
+        $appObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
+        $factory->setObjectManager($appObjectManager);
+        /** @var \Magento\Framework\Validator\UniversalFactory $universalFactory */
+        $universalFactory = $appObjectManager->get(\Magento\Framework\Validator\UniversalFactory::class);
         /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
-        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
         $urnResolverMock->expects($this->any())
             ->method('getRealPath')
             ->with('urn:magento:framework:Validator/etc/validation.xsd')
             ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd'));
+        $appObjectManager->configure(
+            [
+                'preferences' => [
+                    \Magento\Framework\Config\ValidationStateInterface::class =>
+                        \Magento\Framework\App\Arguments\ValidationState::class,
+                ],
+                \Magento\Framework\App\Arguments\ValidationState::class => [
+                    'arguments' => [
+                        'appMode' => 'developer',
+                    ]
+                ]
+            ]
+        );
         $this->_config = $this->_objectManager->getObject(
-            'Magento\Framework\Validator\Config',
+            \Magento\Framework\Validator\Config::class,
             [
                 'configFiles' => $configFiles,
                 'builderFactory' => $universalFactory,
+                'domFactory' => new \Magento\Framework\Config\DomFactory($appObjectManager),
                 'urnResolver' => $urnResolverMock
             ]
         );
@@ -131,7 +152,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_initConfig();
         $builder = $this->_config->createValidatorBuilder('test_entity_a', 'check_alnum');
-        $this->assertInstanceOf('Magento\Framework\Validator\Builder', $builder);
+        $this->assertInstanceOf(\Magento\Framework\Validator\Builder::class, $builder);
     }
 
     /**
@@ -204,16 +225,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuilderConfiguration()
     {
-        $this->getMockBuilder('Magento\Framework\Validator\Builder')->disableOriginalConstructor()->getMock();
+        $this->getMockBuilder(\Magento\Framework\Validator\Builder::class)->disableOriginalConstructor()->getMock();
 
         $this->_initConfig([__DIR__ . '/_files/validation/positive/builder/validation.xml']);
         $builder = $this->_config->createValidatorBuilder('test_entity_a', 'check_builder');
-        $this->assertInstanceOf('Magento\Framework\Validator\Builder', $builder);
+        $this->assertInstanceOf(\Magento\Framework\Validator\Builder::class, $builder);
 
         $expected = [
             [
                 'alias' => '',
-                'class' => 'Magento\Framework\Validator\Test\Unit\Test\NotEmpty',
+                'class' => \Magento\Framework\Validator\Test\Unit\Test\NotEmpty::class,
                 'options' => null,
                 'property' => 'int',
                 'type' => 'property',
@@ -228,14 +249,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                             ['option1' => 'value1', 'option2' => 'value2']
                         ),
                         new \Magento\Framework\Validator\Constraint\Option\Callback(
-                            ['Magento\Framework\Validator\Test\Unit\Test\Callback', 'getId'],
+                            [\Magento\Framework\Validator\Test\Unit\Test\Callback::class, 'getId'],
                             null,
                             true
                         ),
                     ],
                     'callback' => [
                         new \Magento\Framework\Validator\Constraint\Option\Callback(
-                            ['Magento\Framework\Validator\Test\Unit\Test\Callback', 'configureValidator'],
+                            [\Magento\Framework\Validator\Test\Unit\Test\Callback::class, 'configureValidator'],
                             null,
                             true
                         ),
@@ -248,7 +269,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                                     ['argOption' => 'argOptionValue']
                                 ),
                                 new \Magento\Framework\Validator\Constraint\Option\Callback(
-                                    ['Magento\Framework\Validator\Test\Unit\Test\Callback', 'getId'],
+                                    [\Magento\Framework\Validator\Test\Unit\Test\Callback::class, 'getId'],
                                     null,
                                     true
                                 ),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,22 +54,35 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      * @param AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         $this->setElement($element);
-        $html = $this->_getHeaderHtml($element);
+        $header = $this->_getHeaderHtml($element);
 
+        $elements = $this->_getChildrenElementsHtml($element);
+
+        $footer = $this->_getFooterHtml($element);
+
+        return $header . $elements . $footer;
+    }
+
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getChildrenElementsHtml(AbstractElement $element)
+    {
+        $elements = '';
         foreach ($element->getElements() as $field) {
             if ($field instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
-                $html .= '<tr id="row_' . $field->getHtmlId() . '"><td colspan="4">' . $field->toHtml() . '</td></tr>';
+                $elements .= '<tr id="row_' . $field->getHtmlId() . '">'
+                    . '<td colspan="4">' . $field->toHtml() . '</td></tr>';
             } else {
-                $html .= $field->toHtml();
+                $elements .= $field->toHtml();
             }
         }
 
-        $html .= $this->_getFooterHtml($element);
-
-        return $html;
+        return $elements;
     }
 
     /**
@@ -226,8 +239,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      */
     protected function _isCollapseState($element)
     {
-        if (
-            $element->getExpanded() ||
+        if ($element->getExpanded() ||
             ($element->getForm() && $element->getForm()->getElements()->count() === 1)
         ) {
             return true;

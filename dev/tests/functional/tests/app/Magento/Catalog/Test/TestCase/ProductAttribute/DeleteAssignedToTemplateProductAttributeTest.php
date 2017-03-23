@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
- * 1. Create Product template, based on Default.
+ * 1. Create Attribute set, based on Default.
  * 2. Create product attribute and add to created template.
  *
  * Test Flow:
@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click on the "Delete Attribute" button.
  * 6. Perform all assertions.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-26011
  */
 class DeleteAssignedToTemplateProductAttributeTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -64,14 +63,14 @@ class DeleteAssignedToTemplateProductAttributeTest extends Injectable
     /**
      * Run test.
      *
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @return array
      */
-    public function test(CatalogAttributeSet $productTemplate)
+    public function test(CatalogAttributeSet $attributeSet)
     {
         // Precondition
-        $productTemplate->persist();
-        $attribute = $productTemplate->getDataFieldConfig('assigned_attributes')['source']->getAttributes()[0];
+        $attributeSet->persist();
+        $attribute = $attributeSet->getDataFieldConfig('assigned_attributes')['source']->getAttributes()[0];
 
         // Steps
         $filter = ['attribute_code' => $attribute->getAttributeCode()];
@@ -80,6 +79,6 @@ class DeleteAssignedToTemplateProductAttributeTest extends Injectable
         $this->attributeNew->getPageActions()->delete();
         $this->attributeNew->getModalBlock()->acceptAlert();
 
-        return ['productTemplate' => $productTemplate, 'attribute' => $attribute];
+        return ['attributeSet' => $attributeSet, 'attribute' => $attribute];
     }
 }

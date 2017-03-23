@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
@@ -30,6 +30,11 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @var string
      */
     protected $_eventPrefix = 'review';
+
+    /**
+     * Cache tag
+     */
+    const CACHE_TAG = 'review_block';
 
     /**
      * Product entity review code
@@ -156,7 +161,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Review');
+        $this->_init(\Magento\Review\Model\ResourceModel\Review::class);
     }
 
     /**
@@ -369,7 +374,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     public function getIdentities()
     {
         $tags = [];
-        if ($this->isApproved() && $this->getEntityPkValue()) {
+        if ($this->getEntityPkValue()) {
             $tags[] = Product::CACHE_TAG . '_' . $this->getEntityPkValue();
         }
         return $tags;

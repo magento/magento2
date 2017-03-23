@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,7 +10,7 @@
     <container name="root">
         <block class="Magento\Paypal\Block\Express\Review\Details" name="page.block" template="Magento_Paypal::express/review/details.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list"/>
-            <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="Magento_Checkout::onepage/review/totals.phtml"/>
+            <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="Magento_Paypal::checkout/onepage/review/totals.phtml"/>
         </block>
     </container>
 </layout>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@
 
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PreviewTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -36,7 +39,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
     public function testToHtml($requestParamMap)
     {
         $storeId = 1;
-        $template = $this->getMockBuilder('Magento\Email\Model\Template')
+        $template = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods([
                 'setDesignConfig',
                 'getDesignConfig',
@@ -46,73 +49,76 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 'revertDesign'
             ])
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $template->expects($this->once())
             ->method('getProcessedTemplate')
             ->with($this->equalTo([]))
-            ->will($this->returnValue(self::MALICIOUS_TEXT));
-        $designConfigData = [
-            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-            'store' => $storeId
-        ];
+            ->willReturn(self::MALICIOUS_TEXT);
+        $designConfigData = [];
         $template->expects($this->atLeastOnce())
             ->method('getDesignConfig')
-            ->will($this->returnValue(new \Magento\Framework\DataObject(
+            ->willReturn(new \Magento\Framework\DataObject(
                 $designConfigData
-            )));
-        $emailFactory = $this->getMock('Magento\Email\Model\TemplateFactory', ['create'], [], '', false);
-        $emailFactory->expects($this->once())
+            ));
+        $emailFactory = $this->getMock(\Magento\Email\Model\TemplateFactory::class, ['create'], [], '', false);
+        $emailFactory->expects($this->any())
             ->method('create')
-            ->with($this->equalTo(['data' => $designConfigData]))
-            ->will($this->returnValue($template));
+            ->willReturn($template);
 
-        $request = $this->getMock('Magento\Framework\App\RequestInterface');
-        $request->expects($this->any())->method('getParam')->will($this->returnValueMap($requestParamMap));
-        $eventManage = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $design = $this->getMock('Magento\Framework\View\DesignInterface');
-        $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
-        $store->expects($this->any())->method('getId')->will($this->returnValue($storeId));
-        $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $request->expects($this->any())->method('getParam')->willReturnMap($requestParamMap);
+        $eventManage = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
+        $store->expects($this->any())->method('getId')->willReturn($storeId);
+        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storeManager->expects($this->atLeastOnce())
             ->method('getDefaultStoreView')
-            ->will($this->returnValue($store));
-        $storeManager->expects($this->any())->method('getDefaultStoreView')->will($this->returnValue(null));
-        $storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$store]));
-        $appState = $this->getMockBuilder('Magento\Framework\App\State')
+            ->willReturn($store);
+        $storeManager->expects($this->any())->method('getDefaultStoreView')->willReturn(null);
+        $storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
+        $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->setConstructorArgs([
                 $scopeConfig
             ])
-            ->setMethods(null)
+            ->setMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
+        $appState->expects($this->any())
+            ->method('emulateAreaCode')
+            ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA, [$template, 'getProcessedTemplate'])
+            ->willReturn($template->getProcessedTemplate());
 
-        $context = $this->getMock('Magento\Backend\Block\Template\Context',
+        $context = $this->getMock(
+            \Magento\Backend\Block\Template\Context::class,
             ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState'],
             [], '', false
         );
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($request));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManage));
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
-        $context->expects($this->any())->method('getDesignPackage')->will($this->returnValue($design));
-        $context->expects($this->any())->method('getStoreManager')->will($this->returnValue($storeManager));
-        $context->expects($this->once())->method('getAppState')->will($this->returnValue($appState));
+        $context->expects($this->any())->method('getRequest')->willReturn($request);
+        $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->expects($this->any())->method('getDesignPackage')->willReturn($design);
+        $context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
+        $context->expects($this->once())->method('getAppState')->willReturn($appState);
 
         $maliciousCode = $this->getMock(
-            'Magento\Framework\Filter\Input\MaliciousCode',
+            \Magento\Framework\Filter\Input\MaliciousCode::class,
             ['filter'],
             [],
             '',
             false
         );
-        $maliciousCode->expects($this->once())->method('filter')->with($this->equalTo($requestParamMap[1][2]))
-            ->will($this->returnValue(self::MALICIOUS_TEXT));
+        $maliciousCode->expects($this->once())
+            ->method('filter')
+            ->with($this->equalTo($requestParamMap[1][2]))
+            ->willReturn(self::MALICIOUS_TEXT);
 
+        /** @var \Magento\Email\Block\Adminhtml\Template\Preview $preview */
         $preview = $this->objectManagerHelper->getObject(
-            'Magento\Email\Block\Adminhtml\Template\Preview',
+            \Magento\Email\Block\Adminhtml\Template\Preview::class,
             [
                 'context' => $context,
                 'maliciousCode' => $maliciousCode,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class SimplifiedselectElement extends SelectElement
      *
      * @var string
      */
-    protected $optionGroupValue = ".//*[@data-title='%s']";
+    protected $optionGroupValue = ".//*[@data-title='%s' or contains(normalize-space(.), %s)]";
 
     /**
      * Select value in ropdown which has option groups.
@@ -29,7 +29,7 @@ class SimplifiedselectElement extends SelectElement
     public function setValue($value)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-        $xpath = sprintf($this->optionGroupValue, $value);
+        $xpath = sprintf($this->optionGroupValue, $value, $this->escapeQuotes($value));
         $option = $this->find($xpath, Locator::SELECTOR_XPATH);
         $option->click();
     }

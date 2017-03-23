@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Manages generated code.
+ */
 class Io
 {
     /**
      * Default code generation directory
      * Should correspond the value from \Magento\Framework\Filesystem
      */
-    const DEFAULT_DIRECTORY = 'var/generation';
+    const DEFAULT_DIRECTORY = 'generated/code';
 
     /**
      * Path to directory where new file must be created
@@ -61,7 +63,7 @@ class Io
      */
     public function getResultFileDirectory($className)
     {
-        $fileName = $this->getResultFileName($className);
+        $fileName = $this->generateResultFileName($className);
         $pathParts = explode('/', $fileName);
         unset($pathParts[count($pathParts) - 1]);
 
@@ -72,7 +74,7 @@ class Io
      * @param string $className
      * @return string
      */
-    public function getResultFileName($className)
+    public function generateResultFileName($className)
     {
         return $this->_generationDirectory . ltrim(str_replace(['\\', '_'], '/', $className), '/') . '.php';
     }
@@ -98,7 +100,7 @@ class Io
         try {
             $success = $this->filesystemDriver->rename($tmpFile, $fileName);
         } catch (FileSystemException $e) {
-            if (!file_exists($fileName)) {
+            if (!$this->fileExists($fileName)) {
                 throw $e;
             } else {
                 /**
@@ -147,6 +149,18 @@ class Io
     }
 
     /**
+     * Wrapper for include
+     *
+     * @param string $fileName
+     * @return mixed
+     * @codeCoverageIgnore
+     */
+    public function includeFile($fileName)
+    {
+        return include $fileName;
+    }
+
+    /**
      * @param string $directory
      * @return bool
      */
@@ -157,7 +171,7 @@ class Io
         }
         try {
             if (!$this->filesystemDriver->isDirectory($directory)) {
-                $this->filesystemDriver->createDirectory($directory, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+                $this->filesystemDriver->createDirectory($directory);
             }
             return true;
         } catch (FileSystemException $e) {

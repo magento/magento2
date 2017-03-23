@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -158,7 +158,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Queue');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Queue::class);
     }
 
     /**
@@ -236,7 +236,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             )->setTemplateVars(
                 ['subscriber' => $item]
             )->setFrom(
-                ['name' => $this->getNewsletterSenderEmail(), 'email' => $this->getNewsletterSenderName()]
+                ['name' => $this->getNewsletterSenderName(), 'email' => $this->getNewsletterSenderEmail()]
             )->addTo(
                 $item->getSubscriberEmail(),
                 $item->getSubscriberFullName()

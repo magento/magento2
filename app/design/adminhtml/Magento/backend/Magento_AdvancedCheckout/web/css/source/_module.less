@@ -1,0 +1,47 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.add-by-sku-wrapper {
+    .accordion & {
+        margin: 0 0 @indent__base;
+    }
+
+    .add-sku-csv {
+        .admin__field-label {
+            &:before {
+                display: none;
+            }
+        }
+    }
+}
+
+.order-search-items {
+    .col-select {
+        text-align: center;
+
+        .data-grid-checkbox-cell-inner {
+            text-align: center;
+        }
+    }
+}
+
+.order-discounts {
+    .action-secondary {
+        + .action-secondary {
+            margin-right: @indent__s;
+        }
+    }
+}
+
+.order-errors {
+    .admin__fieldset-wrapper {
+        .title {
+            &:extend(.message all);
+            &:extend(.message-notice all);
+            display: block;
+            margin: 0 0 @indent__base;
+        }
+    }
+}

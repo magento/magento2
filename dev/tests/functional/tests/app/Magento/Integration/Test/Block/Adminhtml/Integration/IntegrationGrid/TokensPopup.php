@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class TokensPopup extends Form
      *
      * @var string
      */
-    protected $doneButtonSelector = '.action-primary[role="button"]';
+    protected $doneButtonSelector = '.action-primary[type="button"]';
 
     /**
      * Click Done button on Integration tokens popup window.

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -28,28 +28,11 @@ define([
         },
 
         /**
-         * @param {Integer} id
+         * @param {Number} id
          * @returns {*}
          */
         getLabel: function (id) {
             return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
-        },
-
-        /**
-         * Initializes components' static properties.
-         *
-         * @returns {Column} Chainable.
-         */
-        initProperties: function () {
-            this.actions = [{
-                value: 'selectPage',
-                label: $t('Select all on this page')
-            }, {
-                value: 'deselectPage',
-                label: $t('Deselect all on this page')
-            }];
-
-            return this._super();
         },
 
         /**
@@ -58,14 +41,38 @@ define([
          */
         setDefaultSelections: function () {
             var positionCacheValid = registry.get('position_cache_valid'),
+                selectedFromCache = registry.get('selected_cache'),
                 key,
                 i;
 
-            registry.set('position_cache_valid', true);
+            if (positionCacheValid && this.selected().length === 0) {
+                // Check selected data
+                selectedFromCache = JSON.parse(selectedFromCache);
 
-            if (this.selected().length === this.selectedData.length || positionCacheValid) {
+                for (i = 0; i < selectedFromCache.length; i++) {
+                    this.selected.push(selectedFromCache[i]);
+                }
+
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify(this.selected()));
+
                 return;
             }
+
+            if (positionCacheValid && this.selected().length > 0) {
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify(this.selected()));
+
+                return;
+            }
+
+            if (this.selectedData.length === 0) {
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify([]));
+
+                return;
+            }
+
             // Check selected data
             for (key in this.selectedData) {
                 if (this.selectedData.hasOwnProperty(key) && this.selected().indexOf(key) === -1) {
@@ -76,12 +83,15 @@ define([
             for (i = 0; i < this.selected().length; i++) {
                 key = this.selected()[i];
                 this.selectedData.hasOwnProperty(key) || this.selected.splice(this.selected().indexOf(key), 1);
+                this.selectedData.hasOwnProperty(key) || i--;
             }
+            registry.set('position_cache_valid', true);
+            registry.set('selected_cache', JSON.stringify(this.selected()));
         },
 
         /**
          * Show/hide action in the massaction menu
-         * @param {Integer} actionId
+         * @param {Number} actionId
          * @returns {Boolean}
          */
         isActionRelevant: function (actionId) {
@@ -104,14 +114,20 @@ define([
          * Updates values of the 'allSelected'
          * and 'indetermine' properties.
          *
-         * @returns {Multiselect} Chainable.
+         * @returns {Object} Chainable.
          */
         updateState: function () {
-            var totalRecords    = this.totalRecords(),
+            var positionCacheValid = registry.get('position_cache_valid'),
+                totalRecords    = this.totalRecords(),
                 selected        = this.selected().length,
                 excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 allSelected;
+
+            if (positionCacheValid && this.selected().length > 0) {
+                registry.set('position_cache_valid', true);
+                registry.set('selected_cache', JSON.stringify(this.selected()));
+            }
 
             // When filters are enabled then totalRecords is unknown
             if (this.getFiltering()) {

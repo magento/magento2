@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 return [
     'db-host' => '127.0.0.1',
-    'db-user' => 'travis',
+    'db-user' => 'root',
     'db-password' => '',
     'db-name' => 'magento_integration_tests',
-    'db-prefix' => 'travis_',
+    'db-prefix' => 'trv_',
     'backend-frontname' => 'backend',
     'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
     'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,

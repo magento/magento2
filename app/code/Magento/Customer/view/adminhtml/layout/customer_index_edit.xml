@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
             <referenceBlock name="customer_form">
                 <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="Magento_Customer::tab/view.phtml">
                     <arguments>
-                        <argument name="tab_label" xsi:type="string">Customer View</argument>
+                        <argument name="tab_label" xsi:type="string" translate="true">Customer View</argument>
                         <argument name="sort_order" xsi:type="number">10</argument>
                     </arguments>
                     <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="Magento_Customer::tab/view/personal_info.phtml"/>

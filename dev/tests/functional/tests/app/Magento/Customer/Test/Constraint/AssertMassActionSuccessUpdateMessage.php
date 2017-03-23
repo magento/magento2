@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,16 +28,14 @@ class AssertMassActionSuccessUpdateMessage extends AbstractConstraint
     /**
      * Assert update message is appears on customer grid (Customers > All Customers)
      *
-     * @param Customer|Customer[] $customer
+     * @param Customer[] $customers
      * @param CustomerIndex $pageCustomerIndex
      * @return void
      */
-    public function processAssert($customer, CustomerIndex $pageCustomerIndex)
+    public function processAssert(array $customers, CustomerIndex $pageCustomerIndex)
     {
-        $customers = is_array($customer) ? $customer : [$customer];
-        $customerCount = count($customers);
-        $actualMessage = $pageCustomerIndex->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertEquals(sprintf(self::UPDATE_MESSAGE, $customerCount), $actualMessage);
+        $actualMessage = $pageCustomerIndex->getMessagesBlock()->getSuccessMessage();
+        \PHPUnit_Framework_Assert::assertEquals(sprintf(self::UPDATE_MESSAGE, count($customers)), $actualMessage);
     }
 
     /**

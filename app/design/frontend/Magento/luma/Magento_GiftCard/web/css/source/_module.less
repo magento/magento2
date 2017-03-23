@@ -1,0 +1,190 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    .page-product-giftcard {
+        .giftcard-amount {
+            border-top: 1px @color-gray-light5 solid;
+            clear: both;
+            margin-bottom: 0;
+            padding-top: 15px;
+            text-align: left;
+
+            .field:last-child {
+                padding-bottom: @form-field__vertical-indent !important;
+            }
+        }
+
+        .product-info-main {
+            .price-box {
+                .old-price {
+                    font-size: 20px;
+                }
+
+                .price-container {
+                    &.price-final {
+                        > span {
+                            display: block;
+                            margin-bottom: @indent__xs;
+
+                            &:last-child {
+                                margin-bottom: 0;
+                            }
+                        }
+
+                        .price {
+                            font-size: 22px;
+                            font-weight: @font-weight__semibold;
+                            line-height: 22px;
+                        }
+                    }
+                }
+
+                & + .giftcard.form {
+                    border-top: 1px @color-gray-light5 solid;
+                    padding-top: 15px;
+                }
+            }
+
+            .alert {
+                clear: left;
+            }
+        }
+
+        .product-info-stock-sku {
+            display: block;
+        }
+
+        .product-add-form {
+            border: 0;
+            clear: none;
+            padding-top: 0;
+
+            .product-options-wrapper .field:not(.text) {
+                margin-bottom: @form-field__vertical-indent;
+                margin-top: @form-field__vertical-indent;
+            }
+        }
+
+        .giftcard.form {
+            clear: both;
+        }
+
+        .price-box {
+            margin-bottom: 10px;
+        }
+
+        .product-info-price {
+            border: 0;
+            display: block;
+            float: right;
+            white-space: nowrap;
+            width: auto;
+        }
+
+        .fieldset.giftcard {
+            >.legend {
+                &:extend(.abs-visually-hidden all);
+            }
+
+            >.legend + br {
+                &:extend(.abs-no-display all);
+            }
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .cart-discount {
+        .giftcard .content {
+            padding-bottom: 35px;
+        }
+
+        .actions-toolbar {
+            .secondary {
+                bottom: 17px;
+            }
+        }
+    }
+
+    .field.open-amount {
+        width: 100%;
+    }
+
+    .page-product-giftcard {
+        .product-info-main {
+            .product-info-stock-sku {
+                display: block;
+                padding-left: @indent__s;
+                text-align: left;
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .page-product-giftcard {
+        .product-info-main {
+            .price-box {
+                .price-container {
+                    &.price-final {
+                        font-size: @font-size__xl;
+
+                        .price {
+                            font-size: 36px;
+                            line-height: 36px;
+                        }
+                    }
+                }
+            }
+
+            .product-info-stock-sku {
+                padding-bottom: 0;
+            }
+
+            .product-reviews-summary {
+                float: none;
+            }
+        }
+
+        .product-add-form {
+            margin-top: -@indent__base;
+
+            .field:not(.text) {
+                .lib-form-field(
+                    @_type: block,
+                    @_column: true
+                );
+
+                &:nth-child(odd) {
+                    padding-right: 25px;
+                }
+
+                &:nth-child(even) {
+                    padding-right: 0;
+                }
+            }
+
+            .product-options-wrapper {
+                .field:not(.date) > .control {
+                    width: auto;
+                }
+            }
+        }
+    }
+}

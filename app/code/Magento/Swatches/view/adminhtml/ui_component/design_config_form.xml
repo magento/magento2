@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="other_settings">
+        <fieldset name="watermark">
+            <fieldset name="swatch_image">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Swatch Image</item>
+                        <item name="sortOrder" xsi:type="number">40</item>
+                        <item name="level" xsi:type="number">2</item>
+                    </item>
+                </argument>
+                <field name="watermark_swatch_image_image">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Image</item>
+                            <item name="formElement" xsi:type="string">fileUploader</item>
+                            <item name="componentType" xsi:type="string">fileUploader</item>
+                            <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
+                            <item name="maxFileSize" xsi:type="number">2097152</item>
+                            <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
+                            <item name="uploaderConfig" xsi:type="array">
+                                <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="watermark_swatch_image_imageOpacity">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Image Opacity</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">watermark_swatch_image_imageOpacity</item>
+                            <item name="addafter" xsi:type="string">%</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-number" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="watermark_swatch_image_size">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="component" xsi:type="string">Magento_Catalog/component/image-size-field</item>
+                            <item name="label" xsi:type="string" translate="true">Image Size</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">watermark_swatch_image_size</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-image-size-range" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="watermark_swatch_image_position">
+                    <argument name="data" xsi:type="array">
+                        <item name="options" xsi:type="object">Magento\Catalog\Model\Config\Source\Watermark\Position</item>
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Image Position</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="dataScope" xsi:type="string">watermark_swatch_image_position</item>
+                        </item>
+                    </argument>
+                </field>
+            </fieldset>
+        </fieldset>
+    </fieldset>
+</form>

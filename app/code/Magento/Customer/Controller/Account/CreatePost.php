@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
@@ -32,7 +31,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreatePost extends Action implements AccountInterface
+class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $accountManagement;
@@ -82,6 +81,16 @@ class CreatePost extends Action implements AccountInterface
      * @var AccountRedirect
      */
     private $accountRedirect;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private $cookieMetadataManager;
 
     /**
      * @param Context $context
@@ -146,6 +155,38 @@ class CreatePost extends Action implements AccountInterface
     }
 
     /**
+     * Retrieve cookie manager
+     *
+     * @deprecated
+     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private function getCookieManager()
+    {
+        if (!$this->cookieMetadataManager) {
+            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
+            );
+        }
+        return $this->cookieMetadataManager;
+    }
+
+    /**
+     * Retrieve cookie metadata factory
+     *
+     * @deprecated
+     * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private function getCookieMetadataFactory()
+    {
+        if (!$this->cookieMetadataFactory) {
+            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            );
+        }
+        return $this->cookieMetadataFactory;
+    }
+
+    /**
      * Add address to customer during create account
      *
      * @return AddressInterface|null
@@ -183,7 +224,7 @@ class CreatePost extends Action implements AccountInterface
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         $addressDataObject->setRegion($regionDataObject);
 
@@ -200,6 +241,7 @@ class CreatePost extends Action implements AccountInterface
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -259,8 +301,20 @@ class CreatePost extends Action implements AccountInterface
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
                 $this->messageManager->addSuccess($this->getSuccessMessage());
+                $requestedRedirect = $this->accountRedirect->getRedirectCookie();
+                if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
+                    $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
+                    $this->accountRedirect->clearRedirectCookie();
+                    return $resultRedirect;
+                }
                 $resultRedirect = $this->accountRedirect->getRedirect();
             }
+            if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
+                $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
+                $metadata->setPath('/');
+                $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
+            }
+
             return $resultRedirect;
         } catch (StateException $e) {
             $url = $this->urlModel->getUrl('customer/account/forgotpassword');
@@ -276,6 +330,8 @@ class CreatePost extends Action implements AccountInterface
             foreach ($e->getErrors() as $error) {
                 $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
             }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t save the customer.'));
         }

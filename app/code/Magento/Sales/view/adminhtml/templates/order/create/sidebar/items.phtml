@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -66,18 +66,27 @@
                         <?php endif; ?>
 
                         <?php if ($block->canDisplayPrice()): ?>
-                            <td class="col-price"><?php /* @escapeNotVerified */ echo $block->convertPrice($_item->getPrice()) ?></td>
+                            <td class="col-price">
+                                <?php if ($block->getDataId() == 'cart'): ?>
+                                    <?php /* @noEscape */ echo $block->getItemPrice($_item->getProduct()) ?>
+                                <?php else: ?>
+                                    <?php /* @noEscape */ echo $block->getItemPrice($_item) ?>
+                                <?php endif; ?>
+                            </td>
                         <?php endif; ?>
 
                         <?php if ($block->canRemoveItems()): ?>
                             <td class="col-remove">
                                 <div class="admin__field-option">
-                                    <input type="checkbox"
+                                    <input id="sidebar-remove-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>"
+                                           type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>]"
                                            value="<?php /* @escapeNotVerified */ echo $block->getDataId() ?>"
                                            title="<?php echo $block->escapeHtml(__('Remove')); ?>" />
-                                    <label class="admin__field-label"></label>
+                                    <label class="admin__field-label"
+                                           for="sidebar-remove-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>">
+                                    </label>
                                 </div>
                             </td>
                         <?php endif; ?>
@@ -99,12 +108,15 @@
                                         <span><?php /* @escapeNotVerified */ echo __('Configure and Add to Order') ?></span>
                                     </a>
                                 <?php else: ?>
-                                    <input type="checkbox"
+                                    <input id="sidebar-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>"
+                                           type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>][<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>]"
                                            value="<?php /* @escapeNotVerified */ echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
                                            title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"/>
-                                    <label class="admin__field-label"></label>
+                                    <label class="admin__field-label"
+                                           for="sidebar-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>">
+                                    </label>
                                 <?php endif; ?>
                             </div>
                         </td>

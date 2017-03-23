@@ -1,0 +1,437 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Ratings
+//
+//  Ratings styling mixins are based on using font icons as rate symbols. There are two types of ratings: rating which allows user to vote and rating which displays voting results summary. Depending on the rating type mixin <code>.lib-rating-vote()</code> or <code>.lib-rating-summary()</code> is used.
+//
+//  # Global rating variables
+//
+//  Global styles for both types of ratings can be modified by changing global variables. To set different styles to types of ratings these variables should be used directly in the mixin call.
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_icon-content</th>
+//            <td>@rating-icon__content</td>
+//            <td class="vars_value">@icon-star</td>
+//            <td class="vars_value">'' | false | icon code</td>
+//            <td>Rating icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-count</th>
+//            <td>@rating-icon__count</td>
+//            <td class="vars_value">5</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Number of rating icon symbols</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font</th>
+//            <td>@rating-icon__font</td>
+//            <td class="vars_value">@icon-font</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Icon font</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-size</th>
+//            <td>@rating-icon__font-size</td>
+//            <td class="vars_value">28px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-letter-spacing</th>
+//            <td>@rating-icon__letter-spacing</td>
+//            <td class="vars_value">-10px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Icon letter spacing</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-color</th>
+//            <td>@rating-icon__color</td>
+//            <td class="vars_value">#c7c7c7</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Unselected icons color</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-color-active</th>
+//            <td>@rating-icon__active__color</td>
+//            <td class="vars_value">#ff5601</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Selected and hovered icons color</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-hide</th>
+//            <td>@rating-label__hide</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Rating label is displayed</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+
+//  # Rating with vote
+//
+//  To implement rating with vote, use the <code>.lib-rating-vote()</code> mixin.
+//  ``` html
+//  <div class="rating vote example-ratings-1">
+//      <input type="radio" name="rating-price" id="rating-price-1" value="1" />
+//      <label class="rating-1" for="rating-price-1" title="1 star">
+//          <span>1 star</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-2" value="2" />
+//      <label class="rating-2" for="rating-price-2" title="2 stars">
+//          <span>2 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-3" value="3" />
+//      <label class="rating-3" for="rating-price-3" title="3 stars">
+//          <span>3 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-4" value="4" />
+//      <label class="rating-4" for="rating-price-4" title="4 stars">
+//          <span>4 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-5" value="5" />
+//      <label class="rating-5" for="rating-price-5" title="5 stars">
+//          <span>5 stars</span>
+//      </label>
+//  </div>
+//  ```
+
+.example-ratings-1 {
+    .lib-rating-vote();
+}
+
+//  # Rating with vote icons number customization
+//
+//  To change number of icons, add desired number of rating icons (input + label) to the markup. Then set this number to the <code>@_icon-count</code> mixin variable.
+//
+// ``` html
+//  <div class="rating vote example-ratings-2">
+//      <input type="radio" name="rating-price" id="rating-price-1" value="1" />
+//      <label class="rating-1" for="rating-price-1" title="1 star">
+//          <span>1 star</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-2" value="2" />
+//      <label class="rating-2" for="rating-price-2" title="2 stars">
+//          <span>2 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-3" value="3" />
+//      <label class="rating-3" for="rating-price-3" title="3 stars">
+//          <span>3 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-4" value="4" />
+//      <label class="rating-4" for="rating-price-4" title="4 stars">
+//          <span>4 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-5" value="5" />
+//      <label class="rating-5" for="rating-price-5" title="5 stars">
+//          <span>5 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-6" value="6" />
+//      <label class="rating-6" for="rating-price-6" title="6 stars">
+//          <span>6 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-7" value="7" />
+//      <label class="rating-7" for="rating-price-7" title="7 stars">
+//          <span>7 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-8" value="8" />
+//      <label class="rating-8" for="rating-price-8" title="8 stars">
+//          <span>8 stars</span>
+//      </label>
+//  </div>
+//  ```
+
+.example-ratings-2 {
+    .lib-rating-vote(
+        @_icon-count: 8
+    );
+}
+
+//  # Rating with vote icons colors customization
+//
+//  These variables control default and active icon colors:
+//  ```css
+//  @_icon-color: value,
+//  @_icon-color-active: value
+//  ```
+//
+//  ``` html
+//  <div class="rating vote example-ratings-3">
+//      <input type="radio" name="rating-price" id="rating-price-1" value="1" />
+//      <label class="rating-1" for="rating-price-1" title="1 star">
+//          <span>1 star</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-2" value="2" />
+//      <label class="rating-2" for="rating-price-2" title="2 stars">
+//          <span>2 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-3" value="3" />
+//      <label class="rating-3" for="rating-price-3" title="3 stars">
+//          <span>3 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-4" value="4" />
+//      <label class="rating-4" for="rating-price-4" title="4 stars">
+//          <span>4 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-5" value="5" />
+//     <label class="rating-5" for="rating-price-5" title="5 stars">
+//          <span>5 stars</span>
+//      </label>
+//  </div>
+//  ```
+
+.example-ratings-3 {
+    .lib-rating-vote(
+        @_icon-color: #aff5e3,
+        @_icon-color-active: #0a6767
+    );
+}
+
+//  # Rating with vote icons symbol customization
+//
+//  To set custom icon symbol, use the <code>@_icon-content</code> variable
+//
+// ``` html
+//  <div class="rating vote example-ratings-4">
+//      <input type="radio" name="rating-price" id="rating-price-1" value="1" />
+//      <label class="rating-1" for="rating-price-1" title="1 star">
+//          <span>1 star</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-2" value="2" />
+//      <label class="rating-2" for="rating-price-2" title="2 stars">
+//          <span>2 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-3" value="3" />
+//      <label class="rating-3" for="rating-price-3" title="3 stars">
+//          <span>3 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-4" value="4" />
+//      <label class="rating-4" for="rating-price-4" title="4 stars">
+//          <span>4 stars</span>
+//      </label>
+//      <input type="radio" name="rating-price" id="rating-price-5" value="5" />
+//      <label class="rating-5" for="rating-price-5" title="5 stars">
+//          <span>5 stars</span>
+//      </label>
+//  </div>
+//  ```
+
+.example-ratings-4 {
+    .lib-rating-vote(
+        @_icon-content: @icon-wishlist-full
+    );
+}
+
+//  # Accessible rating with vote
+//
+//  The following markup corresponds to **accesibility** demands
+//  ``` html
+//  <fieldset class="exapmle-ratings-5 fieldset ratings vote">
+//      <legend>How do you rate this product?</legend>
+//      <div class="field price">
+//          <label class="label" for="rating-1" id="price-rating-label"><span>Price</span></label>
+//          <div class="control rating vote">
+//              <input type="radio" name="rating-price" id="rating-price-1" value="1" aria-labelledby="price-rating-label rating-price-label-1" />
+//              <label class="rating-1" for="rating-price-1" title="1 star" id="rating-price-label-1">
+//                  <span>1 star</span>
+//              </label>
+//              <input type="radio" name="rating-price" id="rating-price-2" value="2" aria-labelledby="price-rating-label rating-price-label-2" />
+//              <label class="rating-2" for="rating-price-2" title="2 stars" id="rating-price-label-2">
+//                  <span>2 stars</span>
+//              </label>
+//              <input type="radio" name="rating-price" id="rating-price-3" value="3" aria-labelledby="price-rating-label rating-price-label-3" />
+//              <label class="rating-3" for="rating-price-3" title="3 stars" id="rating-price-label-3">
+//                  <span>3 stars</span>
+//              </label>
+//              <input type="radio" name="rating-price" id="rating-price-4" value="4" aria-labelledby="price-rating-label rating-price-label-4" />
+//              <label class="rating-4" for="rating-price-4" title="4 stars" id="rating-price-label-4">
+//                  <span>4 stars</span>
+//              </label>
+//              <input type="radio" name="rating-price" id="rating-price-5" value="5" aria-labelledby="price-rating-label rating-price-label-5" />
+//              <label class="rating-5" for="rating-price-5" title="5 stars" id="rating-price-label-5">
+//                  <span>5 stars</span>
+//              </label>
+//          </div>
+//      </div>
+//  </fieldset>
+//  ```
+
+.exapmle-ratings-5 {
+    .control.rating.vote {
+        .lib-rating-vote();
+    }
+}
+
+//  # Rating summary
+//
+//  To implement rating summary, use the following markup
+//  ``` html
+//  <div class="example-rating-summary-1">
+//      <span class="label"><span>Rating</span></span>
+//      <div class="rating-result" title="60%">
+//          <span style="width:60%"><span>60</span></span>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-1 {
+    .lib-rating-summary();
+}
+
+//  # Rating summary icons number customization
+//
+//  To set up number of icons, use the variable:
+//  ```css
+//  @_icon-count: number
+//  ```
+//
+//  ``` html
+//  <div class="example-rating-summary-2">
+//      <span class="label"><span>Rating</span></span>
+//      <div class="rating-result" title="40%">
+//          <span style="width:40%"><span>40</span></span>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-2 {
+    .lib-rating-summary(
+        @_icon-count: 8
+    );
+}
+
+//  # Rating summary icons color customization
+//
+//  To set up the icons default and selected color, use variables:
+//  ```css
+//  @_icon-color: value
+//  @_icon-color-active: value
+//  ```
+//
+//  ``` html
+//  <div class="example-rating-summary-3">
+//      <span class="label"><span>Rating</span></span>
+//      <div class="rating-result" title="40%">
+//          <span style="width:40%"><span>40</span></span>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-3 {
+    .lib-rating-summary(
+        @_icon-color: #aff5e3,
+        @_icon-color-active: #0a6767
+    );
+}
+
+// # Rating summary icons symbol customization
+//
+//  To set up the icons symbol use variable:
+//  ```css
+//  @_icon-content: icon_code
+//  ```
+//
+//  ``` html
+//  <div class="example-rating-summary-4">
+//      <span class="label"><span>Rating</span></span>
+//      <div class="rating-result" title="40%">
+//          <span style="width:40%"><span>40</span></span>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-4 {
+    .lib-rating-summary(
+        @_icon-content: @icon-wishlist-full
+    );
+}
+
+//  # Rating summary hide label
+//
+//  To hide the rating summary label set:
+//  ```css
+//  @_label-hide: true
+//  ```
+//
+//  ``` html
+//  <div class="example-rating-summary-5">
+//      <span class="label"><span>Rating</span></span>
+//      <div class="rating-result" title="40%">
+//          <span style="width:40%"><span>40</span></span>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-5 {
+    .lib-rating-summary(
+        @_label-hide: true
+    );
+}
+
+//  # Rating summary multiple ratings
+//
+//  ``` html
+//  <div class="example-rating-summary-6" tabindex="1">
+//      <strong>Your Rating:</strong>
+//      <div class="rating-summary item">
+//          <span class="label"><span>Value</span></span>
+//          <div class="rating-result" title="100%" >
+//              <span style="width:100%"><span>100%</span></span>
+//          </div>
+//      </div>
+//      <div class="rating-summary item">
+//          <span class="label"><span>Quality</span></span>
+//          <div class="rating-result" title="100%">
+//              <span style="width:100%"><span>100%</span></span>
+//          </div>
+//      </div>
+//      <div class="rating-summary item">
+//          <span class="label"><span>rating +</span></span>
+//          <div class="rating-result" title="20%">
+//              <span style="width:20%"><span>20%</span></span>
+//          </div>
+//      </div>
+//      <div class="rating-summary item">
+//          <span class="label"><span>Price</span></span>
+//          <div class="rating-result" title="40%">
+//              <span style="width:40%"><span>40%</span></span>
+//          </div>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-6 {
+    .rating-summary {
+        .lib-rating-summary();
+    }
+}
+
+//  # Rating hide label mixin
+//
+//  The <code>.lib-rating-summary-label-hide()</code> mixin is used to hide rating label in summary rating.
+//
+//  ``` html
+//  <div class="example-rating-summary-7">
+//      <span class="label"><span>Rating</span></span>
+//      <div class="rating-result" title="40%">
+//          <span style="width:40%"><span>40</span></span>
+//      </div>
+//  </div>
+//  ```
+
+.example-rating-summary-7 {
+    .lib-rating-summary();
+    .lib-rating-summary-label-hide();
+}

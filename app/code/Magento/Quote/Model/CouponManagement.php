@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,17 +20,17 @@ class CouponManagement implements CouponManagementInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
      * Constructs a coupon read service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
     }

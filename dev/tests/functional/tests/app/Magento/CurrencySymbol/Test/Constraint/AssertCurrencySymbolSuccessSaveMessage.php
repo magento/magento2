@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class AssertCurrencySymbolSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(SystemCurrencySymbolIndex $currencySymbolIndex)
     {
-        $actualMessage = $currencySymbolIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $currencySymbolIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_SAVE_MESSAGE,
             $actualMessage,

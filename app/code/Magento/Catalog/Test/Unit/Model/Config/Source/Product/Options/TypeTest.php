@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\Source\Product\Options;
@@ -21,14 +21,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productOptionConfig = $this->getMockBuilder('Magento\Catalog\Model\ProductOptions\ConfigInterface')
+        $this->productOptionConfig = $this->getMockBuilder(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class)
             ->setMethods(['getAll'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\Catalog\Model\Config\Source\Product\Options\Type',
+            \Magento\Catalog\Model\Config\Source\Product\Options\Type::class,
             ['productOptionConfig' => $this->productOptionConfig]
         );
     }
@@ -51,7 +51,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         ];
         $expect = [
             ['value' => '', 'label' => __('-- Please select --')],
-            ['label' => 'optionLabel', 'value' => [['label' => 'typeLabel', 'value' => 'typeName']]],
+            [
+                'label' => 'optionLabel',
+                'optgroup-name' => 'optionLabel',
+                'value' => [['label' => 'typeLabel', 'value' => 'typeName']]
+            ],
         ];
 
         $this->productOptionConfig->expects($this->any())->method('getAll')->will($this->returnValue($allOptions));

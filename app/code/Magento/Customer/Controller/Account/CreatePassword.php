@@ -1,19 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class CreatePassword extends Action implements AccountInterface
+class CreatePassword extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $accountManagement;

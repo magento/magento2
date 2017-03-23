@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product\Flat;
@@ -204,7 +204,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
-            'comment' => 'Product Template ID',
+            'comment' => 'Attribute Set ID',
         ];
         $columns['type_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,

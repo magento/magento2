@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category;
@@ -30,17 +30,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalog_category_product');
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\ResourceModel\Product'
+            \Magento\Catalog\Model\ResourceModel\Product::class
         );
     }
 
     /**
+     * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @magentoDbIsolation enabled
      */
@@ -73,7 +74,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 $this->assertTrue((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
             }
 
-            $this->assertFalse(
+            $this->assertTrue(
                 (bool)$this->productResource->canBeShowInCategory($product, $categoryThird->getParentId())
             );
         }
@@ -81,19 +82,22 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     *
      */
     public function testCategoryMove()
     {
-        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(2);
 
         /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
+        foreach ($products as $product) {
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product->setCategoryIds([$categoryFourth->getId()]);
+            $product->save();
+        }
 
         /** @var Category $categorySecond */
         $categorySecond = $categories[1];
@@ -102,6 +106,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categoryThird */
         $categoryThird = $categories[2];
+        $categoryThird->setIsAnchor(true);
+        $categoryThird->save();
+
+        $this->clearIndex();
+        $this->indexer->reindexAll();
 
         /**
          * Move category from $categoryThird to $categorySecond
@@ -149,9 +158,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     *
-     */
     public function testCategoryCreate()
     {
         $this->testReindexAll();
@@ -168,7 +174,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categorySixth */
         $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $categorySixth->setName(
             'Category 6'
@@ -187,12 +193,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productThird->setCategoryIds([$categorySixth->getId()]);
         $productThird->save();
 
-        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId()];
+        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFifth->getId()];
         foreach ($categories as $categoryId) {
             $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
 
-        $categories = [$categoryFifth->getId(), $categorySecond->getId()];
+        $categories = [$categorySecond->getId()];
         foreach ($categories as $categoryId) {
             $this->assertFalse((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
@@ -206,10 +212,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
 
-        $result = $category->getCollection()->getItems();
+        $result = $category->getCollection()->addAttributeToSelect('name')->getItems();
         $result = array_slice($result, 2);
 
         return array_slice($result, 0, $count);
@@ -223,10 +229,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
-        $result = $product->getCollection()->getItems();
+        $result[] = $product->load(1);
+        $result[] = $product->load(2);
+        $result[] = $product->load(3);
 
         return array_slice($result, 0, $count);
     }

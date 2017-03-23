@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -33,18 +34,23 @@ class InvoiceRepository implements InvoiceRepositoryInterface
      */
     protected $searchResultFactory;
 
+    /** @var  CollectionProcessorInterface */
+    private $collectionProcessor;
+
     /**
-     * Repository constructor
-     *
+     * InvoiceRepository constructor.
      * @param Metadata $invoiceMetadata
      * @param SearchResultFactory $searchResultFactory
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         Metadata $invoiceMetadata,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->metadata = $invoiceMetadata;
         $this->searchResultFactory = $searchResultFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -62,8 +68,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         }
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\InvoiceInterface $entity */
-            $entity = $this->metadata->getNewInstance();
-            $this->metadata->getMapper()->load($entity, $id);
+            $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
@@ -83,21 +88,15 @@ class InvoiceRepository implements InvoiceRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria  $criteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Api\Data\InvoiceInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection $collection */
         $collection = $this->searchResultFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $collection->setSearchCriteria($searchCriteria);
         return $collection;
     }
 
@@ -137,5 +136,21 @@ class InvoiceRepository implements InvoiceRepositoryInterface
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

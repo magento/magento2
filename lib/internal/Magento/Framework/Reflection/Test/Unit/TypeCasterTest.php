@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection\Test\Unit;
@@ -20,10 +20,10 @@ class TypeCasterTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up helper.
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Framework\Reflection\TypeCaster');
+        $this->model = $objectManager->getObject(\Magento\Framework\Reflection\TypeCaster::class);
     }
 
     /**

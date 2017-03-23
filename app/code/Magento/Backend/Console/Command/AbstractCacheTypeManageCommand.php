@@ -1,16 +1,33 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Cache\Manager;
 
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
+    /** @var EventManagerInterface */
+    protected $eventManager;
+
+    /**
+     * @param Manager $cacheManager
+     * @param EventManagerInterface $eventManager
+     */
+    public function __construct(
+        Manager $cacheManager,
+        EventManagerInterface $eventManager
+    ) {
+        $this->eventManager = $eventManager;
+        parent::__construct($cacheManager);
+    }
+
     /**
      * Perform a cache management action on cache types
      *

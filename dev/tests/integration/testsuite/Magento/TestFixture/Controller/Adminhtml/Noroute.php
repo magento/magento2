@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFixture\Controller\Adminhtml;
@@ -16,13 +16,10 @@ class Noroute implements \Magento\Framework\App\ActionInterface
     /**
      * Dispatch request
      *
-     * @param RequestInterface $request
      * @return ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function dispatch(RequestInterface $request)
+    public function execute()
     {
     }
 

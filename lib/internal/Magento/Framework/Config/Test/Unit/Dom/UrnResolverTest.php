@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
-use \Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class UrnResolverTest extends \PHPUnit_Framework_TestCase
@@ -20,10 +20,10 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urnResolver = $this->objectManagerHelper->getObject('Magento\Framework\Config\Dom\UrnResolver');
+        $this->urnResolver = $this->objectManagerHelper->getObject(\Magento\Framework\Config\Dom\UrnResolver::class);
     }
 
     public function testGetRealPathNoUrn()
@@ -53,8 +53,8 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Unsupported format of schema location: urn:magento:test:test:etc/test_test.xsd
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Unsupported format of schema location: 'urn:magento:test:test:etc/test_test.xsd'
      */
     public function testGetRealPathWrongSection()
     {
@@ -63,7 +63,7 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \Magento\Framework\Exception\NotFoundException
      * @expectedExceptionMessage Could not locate schema: 'urn:magento:module:Magento_Test:test.xsd' at '/test.xsd'
      */
     public function testGetRealPathWrongModule()

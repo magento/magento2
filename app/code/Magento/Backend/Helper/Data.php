@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper;
@@ -198,10 +198,11 @@ class Data extends AbstractHelper
     /**
      * Return Backend area front name
      *
-     * @return string
+     * @param bool $checkHost
+     * @return bool|string
      */
-    public function getAreaFrontName()
+    public function getAreaFrontName($checkHost = false)
     {
-        return $this->_frontNameResolver->getFrontName();
+        return $this->_frontNameResolver->getFrontName($checkHost);
     }
 }

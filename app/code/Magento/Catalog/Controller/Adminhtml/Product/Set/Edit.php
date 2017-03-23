@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
@@ -33,7 +33,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     public function execute()
     {
         $this->_setTypeId();
-        $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+        $attributeSet = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
             ->load($this->getRequest()->getParam('id'));
 
         if (!$attributeSet->getId()) {
@@ -45,7 +45,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
-        $resultPage->getConfig()->getTitle()->prepend(__('Product Templates'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Attribute Sets'));
         $resultPage->getConfig()->getTitle()->prepend(
             $attributeSet->getId() ? $attributeSet->getAttributeSetName() : __('New Set')
         );

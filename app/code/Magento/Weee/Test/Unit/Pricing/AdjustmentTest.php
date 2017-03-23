@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,10 +35,10 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     protected $sortOrder = 5;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->weeeHelper = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->weeeHelper = $this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->will($this->returnCallback(
@@ -46,6 +46,14 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
                         return round($arg * 0.5, 2);
                     }
                 )
+            );
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('convert')
+            ->will($this->returnCallback(
+                function ($arg) {
+                    return $arg * 0.5;
+                }
+            )
             );
 
         $this->adjustment = new Adjustment($this->weeeHelper, $this->priceCurrencyMock, $this->sortOrder);
@@ -89,44 +97,16 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param float $amount
-     * @param float $expectedResult
-     * @dataProvider extractAdjustmentDataProvider
-     */
-    public function testExtractAdjustment($amount, $expectedResult)
-    {
-        $saleableItem = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
-
-        $this->weeeHelper->expects($this->any())
-            ->method('getAmount')
-            ->with($saleableItem)
-            ->will($this->returnValue($amount));
-
-        $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $saleableItem));
-    }
-
-    /**
-     * @return array
-     */
-    public function extractAdjustmentDataProvider()
-    {
-        return [
-            [1.1, 0.55],
-            [0.0, 0.0],
-        ];
-    }
-
-    /**
-     * @param float $amount
      * @param float $amountOld
      * @param float $expectedResult
      * @dataProvider applyAdjustmentDataProvider
      */
     public function testApplyAdjustment($amount, $amountOld, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
+        $object = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
 
         $this->weeeHelper->expects($this->any())
-            ->method('getAmount')
+            ->method('getAmountExclTax')
             ->will($this->returnValue($amountOld));
 
         $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
@@ -181,7 +161,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, $this->sortOrder],
-            [false, -1]
+            [false, $this->sortOrder]
         ];
     }
 }

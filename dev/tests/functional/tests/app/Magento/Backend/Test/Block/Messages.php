@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,13 @@ class Messages extends Block
     protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
+     * Last success message selector.
+     *
+     * @var string
+     */
+    protected $lastSuccessMessage = '[data-ui-id$=message-success]:last-child';
+
+    /**
      * Message link.
      *
      * @var string
@@ -33,14 +40,14 @@ class Messages extends Block
      *
      * @var string
      */
-    protected $errorMessage = '[data-ui-id$=message-error]';
+    protected $errorMessage = '[data-ui-id$=message-error], .message-error';
 
     /**
      * Notice message selector.
      *
      * @var string
      */
-    protected $noticeMessage = '[data-ui-id$=message-notice]';
+    protected $noticeMessage = '[data-ui-id$=message-notice], .message-notice';
 
     /**
      * Warning message selector.
@@ -62,7 +69,7 @@ class Messages extends Block
     /**
      * Get all success messages which are present on the page.
      *
-     * @return string|array
+     * @return array
      */
     public function getSuccessMessages()
     {
@@ -74,7 +81,19 @@ class Messages extends Block
             $messages[] = $element->getText();
         }
 
-        return count($messages) > 1 ? $messages : $messages[0];
+        return $messages;
+    }
+
+    /**
+     * Get last success message which is present on the page.
+     *
+     * @return string
+     */
+    public function getSuccessMessage()
+    {
+        $this->waitForElementVisible($this->successMessage);
+
+        return $this->_rootElement->find($this->lastSuccessMessage)->getText();
     }
 
     /**
@@ -96,25 +115,25 @@ class Messages extends Block
     }
 
     /**
-     * Get all error messages which are present on the page.
+     * Get all error message which is present on the page.
      *
      * @return string
      */
-    public function getErrorMessages()
+    public function getErrorMessage()
     {
-        return $this->_rootElement
-            ->find($this->errorMessage, Locator::SELECTOR_CSS)
-            ->getText();
+        $this->waitForElementVisible($this->errorMessage);
+
+        return $this->_rootElement->find($this->errorMessage)->getText();
     }
 
     /**
-     * Click on link in the messages which are present on the page.
+     * Click on link in the message which is present on the page.
      *
      * @param string $messageType
      * @param string $linkText
      * @return void
      */
-    public function clickLinkInMessages($messageType, $linkText)
+    public function clickLinkInMessage($messageType, $linkText)
     {
         if ($this->isVisibleMessage($messageType)) {
             $this->_rootElement
@@ -148,6 +167,16 @@ class Messages extends Block
     }
 
     /**
+     * Check for success message.
+     *
+     * @return bool
+     */
+    public function assertSuccessMessage()
+    {
+        return $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
      * Check for notice message.
      *
      * @return bool
@@ -162,10 +191,28 @@ class Messages extends Block
      *
      * @return string
      */
-    public function getNoticeMessages()
+    public function getNoticeMessage()
     {
         $this->waitForElementVisible($this->noticeMessage);
         return $this->_rootElement->find($this->noticeMessage)->getText();
+    }
+
+    /**
+     * Get all notice messages which are present on the page.
+     *
+     * @return array
+     */
+    public function getNoticeMessages()
+    {
+        $this->waitForElementVisible($this->noticeMessage);
+        $elements = $this->_rootElement->getElements($this->noticeMessage);
+
+        $messages = [];
+        foreach ($elements as $element) {
+            $messages[] = $element->getText();
+        }
+
+        return $messages;
     }
 
     /**
@@ -173,7 +220,7 @@ class Messages extends Block
      *
      * @return string
      */
-    public function getWarningMessages()
+    public function getWarningMessage()
     {
         $this->waitForElementVisible($this->warningMessage);
         return $this->_rootElement->find($this->warningMessage)->getText();

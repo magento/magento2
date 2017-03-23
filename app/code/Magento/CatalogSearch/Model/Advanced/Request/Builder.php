@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Advanced\Request;
@@ -27,7 +27,7 @@ class Builder extends RequestBuilder
         } elseif (!is_array($attributeValue)) {
             $this->bind($attributeCode, $attributeValue);
         } elseif (isset($attributeValue['like'])) {
-            $this->bind($attributeCode, trim($attributeValue['like'], '%'));
+            $this->bind($attributeCode, $attributeValue['like']);
         } elseif (isset($attributeValue['in'])) {
             $this->bind($attributeCode, $attributeValue['in']);
         } elseif (isset($attributeValue['in_set'])) {

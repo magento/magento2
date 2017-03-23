@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,11 +16,12 @@
 
         <referenceBlock name="page.title">
             <action method="setTitleId">
-                <argument translate="true" name="id" xsi:type="string">order-header</argument>
+                <argument translate="false" name="id" xsi:type="string">order-header</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="after.body.start">
             <block class="Magento\Backend\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml"/>
         </referenceContainer>
         <referenceContainer name="js">
             <block class="Magento\Backend\Block\Template" template="Magento_Sales::order/create/js.phtml" name="create"/>
@@ -75,8 +76,5 @@
                 </block>
             </block>
         </referenceBlock>
-        <referenceContainer name="before.body.end">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml"/>
-        </referenceContainer>
     </body>
 </page>

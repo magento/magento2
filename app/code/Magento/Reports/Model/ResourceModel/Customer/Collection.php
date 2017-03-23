@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,7 +57,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
     protected $_orderEntityField;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -83,7 +83,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
      * @param mixed $connection
@@ -103,7 +103,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
@@ -189,10 +189,13 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
             $connection = $this->orderResource->getConnection();
             $baseSubtotalRefunded = $connection->getIfNullSql('orders.base_subtotal_refunded', 0);
             $baseSubtotalCanceled = $connection->getIfNullSql('orders.base_subtotal_canceled', 0);
+            $baseDiscountCanceled = $connection->getIfNullSql('orders.base_discount_canceled', 0);
 
             $totalExpr = $this->_addOrderStatFilter ?
-                "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded})*orders.base_to_global_rate" :
-                "orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded}";
+                "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded} - {$baseDiscountCanceled}"
+                    . " - ABS(orders.base_discount_amount))*orders.base_to_global_rate" :
+                "orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded} - {$baseDiscountCanceled}"
+                    . " - ABS(orders.base_discount_amount)";
 
             $select = $this->orderResource->getConnection()->select();
             $select->from(

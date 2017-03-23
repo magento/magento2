@@ -1,0 +1,1624 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Tables
+//
+//  Table cells padding, width and bottom margin customization  options.
+//
+//  ```html
+//    <table class="example-table-1">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-1 {
+    .lib-table();
+}
+
+//  # Table mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table-width</th>
+//            <td>@table__width</td>
+//            <td class="vars_value">100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table width</td>
+//        </tr>
+//        <tr>
+//            <th>@_cell-padding-horizontal</th>
+//            <td>@table-cell__padding-horizontal</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell horizontal padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_cell-padding-vertical</th>
+//            <td>@table-cell__padding-vertical</td>
+//            <td class="vars_value">8px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell vertical padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-margin-bottom</th>
+//            <td>@table__margin-bottom</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table margin bottom</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table typography
+//
+//  The <code>.lib-table-typography()</code> mixin provides table typography customization options.
+//
+//  ```html
+//    <table class="example-table-2">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-2 {
+    .lib-table-typography();
+}
+
+//  # Table typography mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table-td-font-size</th>
+//            <td>@table-td__font-size</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-td-color</th>
+//            <td>@table-td__color</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell font color</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-td-font-family</th>
+//            <td>@table-td__font-family</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell font family</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_table-td-font-weight</th>
+//            <td>@table-td__font-weight</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-td-line-height</th>
+//            <td>@table-td__line-height</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-td-font-style</th>
+//            <td>@table-td__font-style</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-font-size</th>
+//            <td>@table-th__font-size</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-color</th>
+//            <td>@table-th__color</td>
+//            <td class="vars_value">@text__color__intense</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell font color</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-font-family</th>
+//            <td>@table-th__font-family</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-font-weight</th>
+//            <td>@table-th__font-weight</td>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-line-height</th>
+//            <td>@table-th__line-height</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-font-style</th>
+//            <td>@table-th__font-style</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell font style</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table caption
+//
+//  The <code>.lib-table-caption()</code> mixin is used to customize table caption.
+//
+//  ```html
+//    <table class="example-table-3">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-3 {
+    .lib-table();
+    .lib-table-caption(@_table-caption-color: #f00);
+}
+
+//  # Table caption mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-hide</th>
+//            <td>@table-caption__hide</td>
+//            <td class="vars_value">true</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption is visible</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-font-size</th>
+//            <td>@table-caption__font-size</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-color</th>
+//            <td>@table-caption__color</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_table-caption-font-family</th>
+//            <td>@table-caption__font-family</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-font-weight</th>
+//            <td>@table-caption__font-weight</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-font-style</th>
+//            <td>@table-caption__font-style</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-line-height</th>
+//            <td>@table-caption__line-height</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-alignment</th>
+//            <td>@table-caption__alignment</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption alignment</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-caption-margin-top</th>
+//            <td>@table-caption__margin-top</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption top margin</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_table-caption-margin-bottom</th>
+//            <td>@table-caption__margin-bottom</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table caption bottom margin</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table cells resize
+//
+//  The <code>.lib-table-resize()</code> mixin provides table header cells and table cells paddings reset.
+//
+//  ```html
+//    <table class="example-table-4">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-4 {
+    .lib-table();
+    .lib-table-resize(
+        @_td-padding-top: 15px,
+        @_td-padding-right: 25px,
+        @_td-padding-bottom: 5px,
+        @_td-padding-left: 0,
+        @_th-padding-top: 15px,
+        @_th-padding-right: 25px,
+        @_th-padding-bottom: 10px,
+        @_th-padding-left: 0
+    );
+}
+
+//  # Table cells resize variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_th-padding-top</th>
+//            <td>@table-cell__padding-vertical / 2</td>
+//            <td class="vars_value">@_td-padding-top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell top padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_th-padding-right</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
+//            <td class="vars_value">@_td-padding-right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell right padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_th-padding-bottom</th>
+//            <td>@table-cell__padding-vertical / 2</td>
+//            <td class="vars_value">@_td-padding-top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell bottom padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_th-padding-left</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
+//            <td class="vars_value">@_td-padding-right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cell left padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-top</th>
+//            <td>@table-cell__padding-vertical / 2</td>
+//            <td class="vars_value">@table-cell__padding-vertical / 2</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell top padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-right</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
+//            <td class="vars_value">@table-cell__padding-horizontal / 2</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell right padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-bottom</th>
+//            <td>@table-cell__padding-vertical / 2</td>
+//            <td class="vars_value">@_td-padding-top</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell bottom padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_td-padding-left</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
+//            <td class="vars_value" nowrap="nowrap">@_td-padding-right</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cell left padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table background customization
+//
+//  The <code>.lib-table-background-color()</code> mixin provides table cells background customization options.
+//
+//  ```html
+//    <table class="example-table-5">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-5 {
+    .lib-table();
+    .lib-table-background-color(
+        @_table-background-color: #fff,
+        @_table-head-background-color: #ccf,
+        @_table-foot-background-color: #cff,
+        @_table-td-background-color: #fcc,
+        @_table-body-th-background-color: #ffc
+    );
+}
+
+//  # Table background mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table-background-color</th>
+//            <td>@table__background-color</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table background</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-head-background-color</th>
+//            <td>@table-head__background-color</td>
+//            <td class="vars_value">@table__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table thead background</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-foot-background-color</th>
+//            <td>@table-foot__background-color</td>
+//            <td class="vars_value">@table__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table tfoot background</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-body-th-background-color</th>
+//            <td>@table-body-th__background-color</td>
+//            <td class="vars_value">@table__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table header cells background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_table-td-background-color</th>
+//            <td>@table-td__background-color</td>
+//            <td class="vars_value">@table__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table cells background</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table borders customization
+//
+//  The <code>.lib-table-bordered()</code> mixin provides table borders customization options. To setup table borders use the following allowed values for the <code>@_type</code> variable:
+//
+//  ```css
+//  normal - all borders are set up
+//  horizontal - table head and table cells have only horizontal borders
+//  vertical - table head and table cells have only vertical borders
+//  light - only table head cells have bottom border
+//  clear - table does not have borders
+//  ```
+//
+//  ```html
+//    <table class="example-table-6">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-6 {
+    .lib-table();
+    .lib-table-bordered();
+}
+
+//  # Table borders mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table_type</th>
+//            <td>-</td>
+//            <td class="vars_value">normal</td>
+//            <td class="vars_value">normal | horizontal | vertical | light | clear | horizontal_body</td>
+//            <td>Table border settings. When is set to "horizontal_body", the table border settings are applied only for tbody</td>
+//        </tr>
+//        <tr>
+//            <th>@_table_border-width</th>
+//            <td>@table__border-width</td>
+//            <td class="vars_value" nowrap="nowrap">@border-width__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table border width</td>
+//        </tr>
+//        <tr>
+//            <th>@_table_border-style</th>
+//            <td>@table__border-style</td>
+//            <td class="vars_value">solid</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table border style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_table_border-color</th>
+//            <td>@table__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Table border color</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table with horizontal borders
+//
+//  To set only horizontal borders for a table use:
+//  ```css
+//  .lib-table-bordered(@_table_type: horizontal)
+//  ```
+//
+//  ```html
+//    <table class="example-table-7">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-7 {
+    .lib-table();
+    .lib-table-bordered(
+        @_table_type: horizontal
+    );
+}
+
+//  # Table with vertical borders
+//
+//  To set only horizontal borders for a table use:
+//  ```css
+//  .lib-table-bordered(@_table_type: vertical)
+//  ```
+//
+//  ```html
+//    <table class="example-table-8">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-8 {
+    .lib-table();
+    .lib-table-bordered(
+        @_table_type: vertical
+    );
+}
+
+//  # Table with light borders
+//
+//  To set bottom borders only for a table caption use:
+//  ```css
+//  .lib-table-bordered(@_table_type: light)
+//  ```
+//
+//  ```html
+//    <table class="example-table-9">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-9 {
+    .lib-table();
+    .lib-table-bordered(
+        @_table_type: light
+    );
+}
+
+//  # Table without borders
+//
+//  To clear all table borders use:
+//  ```css
+//  .lib-table-bordered(@_table_type: clear)
+//  ```
+//
+//  ```html
+//    <table class="example-table-10">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-10 {
+    .lib-table();
+    .lib-table-bordered(
+        @_table_type: clear
+    );
+}
+
+//  # Striped table
+//
+//  The <code>.lib-table-striped()</code> mixin sets color backgrounds to table rows.
+//
+//  ```html
+//    <table class="example-table-11">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-11 {
+    .lib-table();
+    .lib-table-striped(
+        @_stripped-background-color: #ffc,
+        @_stripped-color: #000,
+        @_stripped-direction: horizontal,
+        @_stripped-highlight: even
+    );
+}
+
+//  # Striped table mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_stripped-background-color</th>
+//            <td class="vars_value">@table-cell-stripped__background-color</td>
+//            <td class="vars_value">lighten(@table-cell__hover__background-color, 15%)</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Striped cells background color</td>
+//        </tr>
+//        <tr>
+//            <th>@_stripped-color</th>
+//            <td class="vars_value">@table-cell-stripped__color</td>
+//            <td class="vars_value">@text__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Striped cells text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_stripped-direction</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">horizontal</td>
+//            <td class="vars_value">horizontal | vertical</td>
+//            <td>Stripes direction</td>
+//        </tr>
+//        <tr>
+//            <th>@_stripped-highlight</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">odd</td>
+//            <td class="vars_value">odd | even</td>
+//            <td>Rows stripes are applied to</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Table with rows hover
+//
+//  The <code>.lib-table-hover()</code> mixin sets color backgrounds to hovered table rows.
+//
+//  ```html
+//    <table class="example-table-12">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th>Name</th>
+//                <th>Username</th>
+//                <th>Phone</th>
+//                <th>Site</th>
+//                <th>Age</th>
+//                <th>Job</th>
+//                <th>Status</th>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th scope="row">Mark</th>
+//                <td>@mdo</td>
+//                <td>+1 123 456 432</td>
+//                <td><a href="https://www.google.com">www.google.com</a></td>
+//                <td>23</td>
+//                <td>qa</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Alex</th>
+//                <td>@alex</td>
+//                <td>+1 333 222 111</td>
+//                <td><a href="http://magento.com/">magento.com</a></td>
+//                <td>32</td>
+//                <td>manager</td>
+//                <td>online</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Daniel</th>
+//                <td>@danik</td>
+//                <td>+1 334 328 975</td>
+//                <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>offline</td>
+//            </tr>
+//            <tr>
+//                <th scope="row">Kate</th>
+//                <td>@kateUA</td>
+//                <td>+1 888 777 888</td>
+//                <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td>18</td>
+//                <td>developer</td>
+//                <td>HR</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-12 {
+    .lib-table();
+    .lib-table-hover();
+}
+
+//  # Table with rows hover mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table_cell-background-color-hover</th>
+//            <td>@table-cell__hover__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered table row background</td>
+//        </tr>
+//        <tr>
+//            <th>@_table_cell-odd-background-color-hover</th>
+//            <td>@table-cell__hover__background-color</td>
+//            <td class="vars_value">@_table_cell-background-color-hover</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered table odd row background</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Responsive table technics #1
+//
+//  Magento UI library employs two responsive tables technics which are applied by calling an appropriate mixin.
+//
+//  The <code>.lib-table-overflow()</code> mixin adds a horizontal scrollbar for a table. This mixin accepts no variables.
+//
+//  ```html
+//    <div class="example-table-14">
+//        <table class="example-table-13">
+//            <caption>Table caption</caption>
+//            <thead>
+//                <tr>
+//                    <th scope="col">Name</th>
+//                    <th scope="col">Username</th>
+//                    <th scope="col">Phone</th>
+//                    <th scope="col">Site</th>
+//                    <th scope="col">Age</th>
+//                    <th scope="col">Job</th>
+//                    <th scope="col">Status</th>
+//                </tr>
+//            </thead>
+//            <tfoot>
+//                <tr>
+//                    <th>Name</th>
+//                    <th>Username</th>
+//                    <th>Phone</th>
+//                    <th>Site</th>
+//                    <th>Age</th>
+//                    <th>Job</th>
+//                    <th>Status</th>
+//                </tr>
+//            </tfoot>
+//            <tbody>
+//                <tr>
+//                    <th scope="row">Mark</th>
+//                    <td>@mdo</td>
+//                    <td>+1 123 456 432</td>
+//                    <td><a href="https://www.google.com">www.google.com</a></td>
+//                    <td>23</td>
+//                    <td>qa</td>
+//                    <td>offline</td>
+//                </tr>
+//                <tr>
+//                    <th scope="row">Alex</th>
+//                    <td>@alex</td>
+//                    <td>+1 333 222 111</td>
+//                    <td><a href="http://magento.com/">magento.com</a></td>
+//                    <td>32</td>
+//                    <td>manager</td>
+//                    <td>online</td>
+//                </tr>
+//                <tr>
+//                    <th scope="row">Daniel</th>
+//                    <td>@danik</td>
+//                    <td>+1 334 328 975</td>
+//                    <td><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                    <td>18</td>
+//                    <td>developer</td>
+//                    <td>offline</td>
+//                </tr>
+//                <tr>
+//                    <th scope="row">Kate</th>
+//                    <td>@kateUA</td>
+//                    <td>+1 888 777 888</td>
+//                    <td><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                    <td>18</td>
+//                    <td>developer</td>
+//                    <td>offline</td>
+//                </tr>
+//            </tbody>
+//        </table>
+//    </div>
+//  ```
+
+.example-table-13 {
+    .lib-table();
+    .lib-table-bordered();
+    .lib-table-striped();
+    .lib-table-hover();
+}
+
+@media only screen and (max-width: @screen__m) {
+    .example-table-14 {
+        .lib-table-overflow();
+    }
+}
+
+//  # Responsive table technics #2
+//
+//  The <code>.lib-table-responsive()</code> mixin rearranges table cells for mobile version.
+//
+//  ```html
+//    <table class="example-table-15">
+//        <caption>Table caption</caption>
+//        <thead>
+//            <tr>
+//                <th scope="col">Name</th>
+//                <th scope="col">Username</th>
+//                <th scope="col">Phone</th>
+//                <th scope="col">Site</th>
+//                <th scope="col">Age</th>
+//                <th scope="col">Job</th>
+//                <th scope="col">Status</th>
+//            </tr>
+//        </thead>
+//        <tfoot>
+//            <tr>
+//                <th colspan="6">Table summary</th>
+//                <td data-th="Table summary">Table footer text</td>
+//            </tr>
+//        </tfoot>
+//        <tbody>
+//            <tr>
+//                <th data-th="Name" scope="row">Mark</th>
+//                <td data-th="Username">@mdo</td>
+//                <td data-th="Phone">+1 123 456 432</td>
+//                <td data-th="Site"><a href="https://www.google.com">www.google.com</a></td>
+//                <td data-th="Age">23</td>
+//                <td data-th="Job">qa</td>
+//                <td data-th="Status">offline</td>
+//            </tr>
+//            <tr>
+//                <th data-th="Name" scope="row">Alex</th>
+//                <td data-th="Username">@alex</td>
+//                <td data-th="Phone">+1 333 222 111</td>
+//                <td data-th="Site"><a href="http://magento.com/">magento.com</a></td>
+//                <td data-th="Age">32</td>
+//                <td data-th="Job">manager</td>
+//                <td data-th="Status">online</td>
+//            </tr>
+//            <tr>
+//                <th data-th="Name" scope="row">Daniel</th>
+//                <td data-th="Username">@danik</td>
+//                <td data-th="Phone">+1 334 328 975</td>
+//                <td data-th="Site"><a href="https://www.yahoo.com">www.yahoo.com</a></td>
+//                <td data-th="Age">18</td>
+//                <td data-th="Job">developer</td>
+//                <td data-th="Status">offline</td>
+//            </tr>
+//            <tr>
+//                <th data-th="Name" scope="row">Kate</th>
+//                <td data-th="Username">@kateUA</td>
+//                <td data-th="Phone">+1 888 777 888</td>
+//                <td data-th="Site"><a href="https://www.twitter.com">www.twitter.com</a></td>
+//                <td data-th="Age">18</td>
+//                <td data-th="Job">HR</td>
+//                <td data-th="Status">online</td>
+//            </tr>
+//        </tbody>
+//    </table>
+//  ```
+
+.example-table-15 {
+    .lib-table();
+    .lib-table-bordered();
+    .lib-table-striped();
+    .lib-table-hover();
+}
+
+@media only screen and (max-width: @screen__m) {
+    .example-table-15 {
+        .lib-table-responsive(
+            @_table-background-color-responsive: #cff,
+            @_table-th-background-color-responsive: #ffc,
+            @_reset-table-striped: true,
+            @_reset-table-hover: true
+        );
+    }
+}
+
+//  # Responsive table technics #2 mixin variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_table-background-color-responsive</th>
+//            <td class="vars_value">@table-responsive__background-color</td>
+//            <td class="vars_value">@table__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Responsive table background</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-th-background-color-responsive</th>
+//            <td class="vars_value">@table-responsive-th__background-color</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Responsive table header cells background</td>
+//        </tr>
+//        <tr>
+//            <th>@_reset-table-striped</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Responsive table striped cells</td>
+//        </tr>
+//        <tr>
+//            <th>@_reset-table-hover</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Responsive table hovered table row background</td>
+//        </tr>
+//        <tr>
+//            <th>@_table-responsive-cell-padding</th>
+//            <td class="vars_value">@table-responsive-cell__padding</td>
+//            <td class="vars_value">@indent__xs 0</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Responsive table cells padding</td>
+//        </tr>
+//    </table>
+//  </pre>

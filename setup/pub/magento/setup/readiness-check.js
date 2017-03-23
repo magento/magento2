@@ -1,20 +1,22 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 'use strict';
-angular.module('readiness-check', [])
+angular.module('readiness-check', ['remove-dialog'])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', 'ngDialog', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER, ngDialog) {
         $scope.Object = Object;
         $scope.titles = $localStorage.titles;
         $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
+        $rootScope.needReCheck = false;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
         };
         $scope.componentDependency = {
+            enabled: true,
             visible: false,
             processed: false,
             expanded: false,
@@ -24,14 +26,15 @@ angular.module('readiness-check', [])
         };
         switch ($state.current.type) {
             case 'uninstall':
-                $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
+                $scope.dependencyUrl = 'index.php/dependency-check/uninstall-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
                 break;
             case 'enable':
             case 'disable':
-                $scope.dependencyUrl = 'index.php/environment/enable-disable-dependency-check';
+                $scope.componentDependency.enabled = $localStorage.packages[0].isComposerPackage;
+                $scope.dependencyUrl = 'index.php/dependency-check/enable-disable-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = {
                         type: $state.current.type,
@@ -40,7 +43,7 @@ angular.module('readiness-check', [])
                 }
                 break;
             default:
-                $scope.dependencyUrl = 'index.php/environment/component-dependency';
+                $scope.dependencyUrl = 'index.php/dependency-check/component-dependency';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = $localStorage.packages;
                 }
@@ -77,7 +80,8 @@ angular.module('readiness-check', [])
             visible: false,
             processed: false,
             expanded: false,
-            isRequestError: false
+            isRequestError: false,
+            isRequestWarning: false
         };
         $scope.extensions = {
             visible: false,
@@ -109,26 +113,10 @@ angular.module('readiness-check', [])
             updaterNoticeMessage: ''
         };
         $scope.items = {
-            'php-version': {
-                url:'index.php/environment/php-version',
-                params: $scope.actionFrom,
-                show: function() {
-                    $scope.startProgress();
-                    $scope.version.visible = true;
-                },
-                process: function(data) {
-                    $scope.version.processed = true;
-                    angular.extend($scope.version, data);
-                    $scope.updateOnProcessed($scope.version.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.version);
-                }
-            },
             'php-settings': {
                 url:'index.php/environment/php-settings',
                 params: $scope.actionFrom,
+                useGet: true,
                 show: function() {
                     $scope.startProgress();
                     $scope.settings.visible = true;
@@ -146,6 +134,7 @@ angular.module('readiness-check', [])
             'php-extensions': {
                 url:'index.php/environment/php-extensions',
                 params: $scope.actionFrom,
+                useGet: true,
                 show: function() {
                     $scope.startProgress();
                     $scope.extensions.visible = true;
@@ -153,7 +142,9 @@ angular.module('readiness-check', [])
                 process: function(data) {
                     $scope.extensions.processed = true;
                     angular.extend($scope.extensions, data);
-                    $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    if(data.responseType !== 'error') {
+                        $scope.extensions.length = Object.keys($scope.extensions.data.required).length;
+                    }
                     $scope.updateOnProcessed($scope.extensions.responseType);
                     $scope.stopProgress();
                 },
@@ -164,6 +155,24 @@ angular.module('readiness-check', [])
         };
 
         if ($scope.actionFrom === 'installer') {
+            $scope.items['php-version'] = {
+                url:'index.php/environment/php-version',
+                params: $scope.actionFrom,
+                useGet: true,
+                show: function() {
+                    $scope.startProgress();
+                    $scope.version.visible = true;
+                },
+                process: function(data) {
+                    $scope.version.processed = true;
+                    angular.extend($scope.version, data);
+                    $scope.updateOnProcessed($scope.version.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.version);
+                }
+            };
             $scope.items['file-permissions'] = {
                 url:'index.php/environment/file-permissions',
                 show: function() {
@@ -229,35 +238,42 @@ angular.module('readiness-check', [])
                     $scope.requestFailedHandler($scope.cronScript);
                 }
             };
-            $scope.items['component-dependency'] = {
-                url: $scope.dependencyUrl,
-                params: $scope.componentDependency.packages,
-                show: function() {
-                    $scope.startProgress();
-                    $scope.componentDependency.visible = true;
-                },
-                process: function(data) {
-                    $scope.componentDependency.processed = true;
-                    if (data.errorMessage) {
-                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+            if ($scope.componentDependency.enabled) {
+                $scope.items['component-dependency'] = {
+                    url: $scope.dependencyUrl,
+                    params: $scope.componentDependency.packages,
+                    show: function() {
+                        $scope.startProgress();
+                        $scope.componentDependency.visible = true;
+                    },
+                    process: function(data) {
+                        $scope.componentDependency.processed = true;
+                        if (data.errorMessage) {
+                            data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                        }
+                        angular.extend($scope.componentDependency, data);
+                        $scope.updateOnProcessed($scope.componentDependency.responseType);
+                        $scope.stopProgress();
+                    },
+                    fail: function() {
+                        $scope.requestFailedHandler($scope.componentDependency);
                     }
-                    angular.extend($scope.componentDependency, data);
-                    $scope.updateOnProcessed($scope.componentDependency.responseType);
-                    $scope.stopProgress();
-                },
-                fail: function() {
-                    $scope.requestFailedHandler($scope.componentDependency);
-                }
-            };
+                };
+            }
         }
 
         $scope.isCompleted = function() {
-            return $scope.version.processed
-                && $scope.settings.processed
+            var cronProcessed = (
+                $scope.cronScript.processed
+                && ($scope.componentDependency.processed || !$scope.componentDependency.enabled)
+                && $scope.updater.processed
+            );
+
+            return $scope.settings.processed
                 && $scope.extensions.processed
                 && ($scope.permissions.processed || ($scope.actionFrom === 'updater'))
-                && (($scope.cronScript.processed && $scope.componentDependency.processed && $scope.updater.processed)
-                || ($scope.actionFrom !== 'updater'));
+                && ($scope.version.processed || ($scope.actionFrom === 'updater'))
+                && (cronProcessed || ($scope.actionFrom !== 'updater'));
         };
 
         $scope.updateOnProcessed = function(value) {
@@ -285,11 +301,25 @@ angular.module('readiness-check', [])
 
         $scope.query = function(item) {
             if (item.params) {
-                return $http.post(item.url, item.params)
-                    .success(function(data) { item.process(data) })
-                    .error(function(data, status) {
-                        item.fail();
-                    });
+                if (item.useGet === true) {
+                    // The http request type has been changed from POST to GET for a reason. The POST request
+                    // results in PHP throwing a warning regards to 'always_populate_raw_post_data'
+                    // being incorrectly set to a value different than -1. This warning is throw during the initial
+                    // boot up sequence when POST request is received before the control gets transferred over to
+                    // the Magento customer error handler, hence not catchable. To avoid that warning, the HTTP
+                    // request type is being changed from POST to GET for select queries. Those queries are:
+                    // (1) PHP Version Check (2) PHP Settings Check and (3) PHP Extensions Check.
+
+                    item.url = item.url + '?type=' + item.params;
+                } else {
+                    return $http.post(item.url, item.params)
+                        .success(function (data) {
+                            item.process(data)
+                        })
+                        .error(function (data, status) {
+                            item.fail();
+                        });
+                }
             }
             // setting 1 minute timeout to prevent system from timing out
             return $http.get(item.url, {timeout: 60000})
@@ -317,4 +347,82 @@ angular.module('readiness-check', [])
                 $scope.progress();
             }
         });
+
+        $scope.wordingOfReadinessCheckAction = function() {
+            var $actionString = 'We\'re making sure your server environment is ready for ';
+            if ($localStorage.moduleName) {
+                $actionString += $localStorage.packageTitle ? $localStorage.packageTitle : $localStorage.moduleName;
+            } else {
+                if($state.current.type === 'install' || $state.current.type === 'upgrade') {
+                    $actionString += 'Magento';
+                    if ($state.current.type === 'upgrade' && $localStorage.packages.length > 1 ) {
+                        $actionString += ' and selected components';
+                    }
+                } else {
+                    $actionString += 'package';
+                    if ($scope.getObjectSize($localStorage.packages) > 1) {
+                        $actionString += 's';
+                    }
+                }
+            }
+            $actionString += " to be " + $state.current.type;
+            if ($scope.endsWith($state.current.type, 'e')) {
+                $actionString += 'd';
+            } else {
+                $actionString +='ed';
+            }
+
+            if ($localStorage.moduleName
+                && $localStorage.packageTitle
+                && $localStorage.moduleName != $localStorage.packageTitle
+            ) {
+                $actionString += ', which consists of the following packages:<br/>- ' + $localStorage.moduleName;
+            }
+
+            return $actionString;
+        };
+
+        $scope.getExtensionsList = function () {
+            return $scope.componentDependency.packages ? $scope.componentDependency.packages : {};
+        };
+
+        $scope.openDialog = function (name) {
+            $scope.extensionToRemove = name;
+            ngDialog.open({scope: $scope, template: 'removeDialog', controller: 'removeDialogController'});
+        };
+
+        $scope.getCurrentVersion = function (name) {
+            if ($scope.getExtensionInfo(name).hasOwnProperty('currentVersion')) {
+                return $scope.getExtensionInfo(name)['currentVersion'];
+            }
+            
+            return '';
+        };
+
+        $scope.getVersionsList = function (name) {
+            if ($scope.getExtensionInfo(name).hasOwnProperty('versions')) {
+                return $scope.getExtensionInfo(name)['versions'];
+            }
+
+            return {};
+        };
+
+        $scope.getExtensionInfo = function (name) {
+            var extensionsVersions = $localStorage.extensionsVersions;
+            return extensionsVersions.hasOwnProperty(name) ? extensionsVersions[name] : {};
+        };
+
+        $scope.versionChanged = function () {
+            $rootScope.needReCheck = true;
+        };
+
+        $scope.getObjectSize = function (obj) {
+            var size = 0, key;
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    ++size;
+                }
+            }
+            return size;
+        };
     }]);

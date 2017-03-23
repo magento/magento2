@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export\RowCustomizer;
@@ -34,7 +34,7 @@ class Composite implements RowCustomizerInterface
      * Prepare data for export
      *
      * @param mixed $collection
-     * @param int $productIds
+     * @param int[] $productIds
      * @return mixed|void
      */
     public function prepareData($collection, $productIds)

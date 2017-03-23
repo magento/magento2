@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testConfigureActionWithConfigurableProduct()
     {
         /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
+        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
 
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
         $this->assertNotNull($quoteItem, 'Cannot get quote item for configurable product');
@@ -32,7 +32,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
+            'button[type="submit"][title="Update Cart"]',
             1,
             $response->getBody(),
             'Response for configurable product doesn\'t contain "Update Cart" button'

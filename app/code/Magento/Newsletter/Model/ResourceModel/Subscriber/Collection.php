@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Subscriber;
@@ -87,7 +87,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Newsletter\Model\Subscriber', 'Magento\Newsletter\Model\ResourceModel\Subscriber');
+        $this->_init(
+            \Magento\Newsletter\Model\Subscriber::class,
+            \Magento\Newsletter\Model\ResourceModel\Subscriber::class
+        );
         $this->_queueLinkTable = $this->getTable('newsletter_queue_link');
         $this->_storeTable = $this->getTable('store');
 
@@ -146,7 +149,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             [
                 'customer' => $this->getTable('customer_entity')
             ],
-            'main_table.customer_id = customer.entity_id'
+            'main_table.customer_id = customer.entity_id',
+            ['firstname', 'lastname']
         );
         return $this;
     }

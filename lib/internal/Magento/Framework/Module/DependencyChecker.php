@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -34,6 +34,11 @@ class DependencyChecker
     private $graph;
 
     /**
+     * @var PackageInfo
+     */
+    protected $packageInfo;
+
+    /**
      * Constructor
      *
      * @param ModuleList $list
@@ -44,8 +49,7 @@ class DependencyChecker
     {
         $this->enabledModuleList = $list->getNames();
         $this->fullModuleList = $loader->load();
-        $packageInfo = $packageInfoFactory->create();
-        $this->graph = $this->createGraph($packageInfo);
+        $this->packageInfo = $packageInfoFactory->create();
     }
 
     /**
@@ -88,16 +92,21 @@ class DependencyChecker
      */
     private function checkDependencyGraph($isEnable, $moduleNames, $enabledModules)
     {
+        $this->graph = $this->createGraph();
         $dependenciesMissingAll = [];
         $graphMode = $isEnable ? Graph::DIRECTIONAL : Graph::INVERSE;
         foreach ($moduleNames as $moduleName) {
             $dependenciesMissing = [];
             $paths = $this->graph->findPathsToReachableNodes($moduleName, $graphMode);
-            foreach (array_keys($this->fullModuleList) as $module) {
+            $modules = array_merge(
+                array_keys($this->fullModuleList),
+                $this->packageInfo->getNonExistingDependencies()
+            );
+            foreach ($modules as $module) {
                 if (isset($paths[$module])) {
                     if ($isEnable && !in_array($module, $enabledModules)) {
                         $dependenciesMissing[$module] = $paths[$module];
-                    } else if (!$isEnable && in_array($module, $enabledModules)) {
+                    } elseif (!$isEnable && in_array($module, $enabledModules)) {
                         $dependenciesMissing[$module] = array_reverse($paths[$module]);
                     }
                 }
@@ -110,10 +119,9 @@ class DependencyChecker
     /**
      * Create the dependency graph
      *
-     * @param PackageInfo $packageInfo
      * @return Graph
      */
-    private function createGraph(PackageInfo $packageInfo)
+    private function createGraph()
     {
         $nodes = [];
         $dependencies = [];
@@ -121,13 +129,15 @@ class DependencyChecker
         // build the graph data
         foreach (array_keys($this->fullModuleList) as $moduleName) {
             $nodes[] = $moduleName;
-            foreach ($packageInfo->getRequire($moduleName) as $dependModuleName) {
+            foreach ($this->packageInfo->getRequire($moduleName) as $dependModuleName) {
                 if ($dependModuleName) {
                     $dependencies[] = [$moduleName, $dependModuleName];
                 }
             }
         }
-        $nodes = array_unique($nodes);
+        $nodes = array_unique(
+            array_merge($nodes, $this->packageInfo->getNonExistingDependencies())
+        );
 
         return new Graph($nodes, $dependencies);
     }

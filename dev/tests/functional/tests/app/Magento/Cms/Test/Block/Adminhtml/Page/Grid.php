@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Element\SimpleElement;
  */
 class Grid extends DataGrid
 {
+    /**
+     * Action button (located above the Grid).
+     *
+     * @var string
+     */
+    protected $actionButton = 'button.action-select';
+
     /**
      * Select action toggle.
      *
@@ -41,16 +48,18 @@ class Grid extends DataGrid
             'selector' => '[name="identifier"]',
         ],
         'page_layout' => [
-            'selector' => '[name="page_layout"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Layout"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'store_id' => [
             'selector' => '[name="store_id"]',
             'input' => 'selectstore'
         ],
         'is_active' => [
-            'selector' => '[name="is_active"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Status"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'creation_time_from' => [
             'selector' => '[name="creation_time[from]"]',
@@ -63,10 +72,7 @@ class Grid extends DataGrid
         ],
         'update_time_to' => [
             'selector' => '[name="update_time[to]"]',
-        ],
-        'under_version_control' => [
-            'selector' => '[name="under_version_control"]',
-        ],
+        ]
     ];
 
     /**
@@ -74,7 +80,7 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = "..//a[contains(@class, 'action-menu-item') and text() = 'Preview']";
+    protected $previewCmsPage = '[data-action="item-preview"]';
 
     /**
      * Click on "Edit" link.
@@ -101,9 +107,9 @@ class Grid extends DataGrid
         $rowItem = $this->getRow([$filter['title']]);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectAction)->click();
-            $rowItem->find($this->previewCmsPage, Locator::SELECTOR_XPATH)->click();
+            $rowItem->find($this->previewCmsPage)->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,14 +17,18 @@ class Config extends \Magento\Framework\Config\AbstractXml
     /**
      * Instantiate with the list of files to merge
      *
-     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @param array $configFiles
+     * @param \Magento\Framework\Config\DomFactory $domFactory
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      * @throws \InvalidArgumentException
      */
-    public function __construct($configFiles, \Magento\Framework\Config\Dom\UrnResolver $urnResolver)
-    {
+    public function __construct(
+        $configFiles,
+        \Magento\Framework\Config\DomFactory $domFactory,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+    ) {
         $this->urnResolver = $urnResolver;
-        parent::__construct($configFiles);
+        parent::__construct($configFiles, $domFactory);
     }
 
     /**

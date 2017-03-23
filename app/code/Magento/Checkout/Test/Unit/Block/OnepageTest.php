@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block;
@@ -32,78 +32,49 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      */
     protected $layoutProcessorMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
-        $contextMock = $this->getMock('\Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $directoryHelperMock = $this->getMock('\Magento\Directory\Helper\Data', [], [], '', false);
-        $configCacheTypeMock = $this->getMock('\Magento\Framework\App\Cache\Type\Config', [], [], '', false);
-        $customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $resourceSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-        $addressConfigMock = $this->getMock('\Magento\Customer\Model\Address\Config', [], [], '', false);
-        $httpContextMock = $this->getMock('\Magento\Framework\App\Http\Context', [], [], '', false);
-        $addressMapperMock = $this->getMock('\Magento\Customer\Model\Address\Mapper', [], [], '', false);
-        $this->formKeyMock = $this->getMock('\Magento\Framework\Data\Form\FormKey', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->formKeyMock = $this->getMock(\Magento\Framework\Data\Form\FormKey::class, [], [], '', false);
         $this->configProviderMock = $this->getMock(
-            '\Magento\Checkout\Model\CompositeConfigProvider',
-            [],
-            [],
-            '',
-            false
-        );
-        $countryCollectionFactoryMock = $this->getMock(
-            'Magento\Directory\Model\ResourceModel\Country\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $regionCollectionFactoryMock = $this->getMock(
-            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $customerRepositoryMock = $this->getMock(
-            '\Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Checkout\Model\CompositeConfigProvider::class,
             [],
             [],
             '',
             false
         );
 
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
         $this->layoutProcessorMock = $this->getMock(
-            '\Magento\Checkout\Block\Checkout\LayoutProcessorInterface',
+            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class,
             [],
             [],
             '',
             false
         );
+
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
-            $directoryHelperMock,
-            $configCacheTypeMock,
-            $customerSessionMock,
-            $resourceSessionMock,
-            $countryCollectionFactoryMock,
-            $regionCollectionFactoryMock,
-            $customerRepositoryMock,
-            $addressConfigMock,
-            $httpContextMock,
-            $addressMapperMock,
             $this->formKeyMock,
             $this->configProviderMock,
-            [$this->layoutProcessorMock]
+            [$this->layoutProcessorMock],
+            [],
+            $this->serializer
         );
     }
 
     public function testGetBaseUrl()
     {
         $baseUrl = 'http://magento.com';
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
@@ -132,7 +103,21 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $processedLayout = ['layout' => ['processed' => true]];
         $jsonLayout = '{"layout":{"processed":true}}';
         $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue(json_encode($processedLayout))
+        );
 
         $this->assertEquals($jsonLayout, $this->model->getJsLayout());
+    }
+
+    public function testGetSerializedCheckoutConfig()
+    {
+        $checkoutConfig = ['checkout', 'config'];
+        $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue(json_encode($checkoutConfig))
+        );
+
+        $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }
 }

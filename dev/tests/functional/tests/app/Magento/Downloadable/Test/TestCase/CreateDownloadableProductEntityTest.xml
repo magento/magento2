@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Downloadable\Test\TestCase\CreateDownloadableProductEntityTest" summary="Create Downloadable Product" ticketId="MAGETWO-23425">
         <variation name="CreateDownloadableProductEntityTestVariation1" summary="Create Downloadable Product with Required Fields Only and Assign it to the Category" ticketId="MAGETWO-13595">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/price/value" xsi:type="string">1</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">one_separately_link</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">downloadable_one_dollar_product_with_separated_link</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with default set links</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -29,7 +32,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
@@ -48,11 +50,11 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_two_samples</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -68,7 +70,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
@@ -88,11 +89,11 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_three_samples</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">two_options</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
@@ -111,7 +112,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">50</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
@@ -121,14 +121,13 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation7">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with manage stock</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">9999</data>
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
             <data name="product/data/stock_data/qty" xsi:type="string">123</data>
             <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">No</data>
             <data name="product/data/stock_data/min_qty" xsi:type="string">123</data>
@@ -140,6 +139,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation8">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product without tax class id</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -147,7 +147,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
             <data name="product/data/description" xsi:type="string">This is description for downloadable product</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
@@ -165,7 +164,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/short_description" xsi:type="string">This is short description for downloadable product</data>
             <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_two_samples</data>
@@ -173,6 +171,7 @@
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
             <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -189,7 +188,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">11</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/description" xsi:type="string">This is description for downloadable product</data>
             <data name="product/data/short_description" xsi:type="string">This is short description for downloadable product</data>
@@ -197,6 +195,7 @@
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
@@ -213,12 +212,12 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">11</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_sample/dataset" xsi:type="string">with_two_samples</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -232,8 +231,8 @@
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
-            <data name="product/data/category" xsi:type="string">Default Category</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">123</data>
+            <data name="product/data/category" xsi:type="string">default_category</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -249,7 +248,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/special_price" xsi:type="string">5</data>
@@ -268,7 +266,6 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">23</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
@@ -276,7 +273,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation15">
             <data name="description" xsi:type="string">Create product with tier price</data>
@@ -286,16 +282,29 @@
             <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">65</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/product_has_weight" xsi:type="string">No</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
             <data name="product/data/downloadable_links/dataset" xsi:type="string">with_two_separately_links</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
+        </variation>
+        <variation name="CreateDownloadableProductEntityTestVariation16" summary="Create downloadable product and assign it to custom website">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">350</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">75</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/downloadable_links/dataset" xsi:type="string">one_separately_link</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <data name="product/data/website_ids/0/dataset" xsi:type="string">custom_store</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite" />
         </variation>
     </testCase>
 </config>

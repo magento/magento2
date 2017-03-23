@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -345,35 +345,26 @@ abstract class AbstractElement extends AbstractForm
     public function getElementHtml()
     {
         $html = '';
-        if ($this->getBeforeElementHtml() && $this->getBeforeElementHtml() != '') {
-            $html .= '<label class="addbefore" for="' .
-                $this->getHtmlId() .
-                '">' .
-                $this->getBeforeElementHtml() .
-                '</label>';
+        $htmlId = $this->getHtmlId();
+
+        $beforeElementHtml = $this->getBeforeElementHtml();
+        if ($beforeElementHtml) {
+            $html .= '<label class="addbefore" for="' . $htmlId . '">' . $beforeElementHtml . '</label>';
         }
-        $html .= '<input id="' .
-            $this->getHtmlId() .
-            '" name="' .
-            $this->getName() .
-            '" ' .
-            $this->_getUiId() .
-            ' value="' .
-            $this->getEscapedValue() .
-            '" ' .
-            $this->serialize(
-                $this->getHtmlAttributes()
-            ) . '/>';
-        if ($this->getAfterElementJs() && $this->getAfterElementJs() != '') {
-            $html .= $this->getAfterElementJs();
+
+        $html .= '<input id="' . $htmlId . '" name="' . $this->getName() . '" ' . $this->_getUiId() . ' value="' .
+            $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
+
+        $afterElementJs = $this->getAfterElementJs();
+        if ($afterElementJs) {
+            $html .= $afterElementJs;
         }
-        if ($this->getAfterElementHtml() && $this->getAfterElementHtml() != '') {
-            $html .= '<label class="addafter" for="' .
-                $this->getHtmlId() .
-                '">' .
-                $this->getAfterElementHtml() .
-                '</label>';
+
+        $afterElementHtml = $this->getAfterElementHtml();
+        if ($afterElementHtml) {
+            $html .= '<label class="addafter" for="' . $htmlId . '">' . $afterElementHtml . '</label>';
         }
+
         return $html;
     }
 
@@ -411,15 +402,18 @@ abstract class AbstractElement extends AbstractForm
      * Render HTML for element's label
      *
      * @param string $idSuffix
+     * @param string $scopeLabel
      * @return string
      */
-    public function getLabelHtml($idSuffix = '')
+    public function getLabelHtml($idSuffix = '', $scopeLabel = '')
     {
+        $scopeLabel = $scopeLabel ? ' data-config-scope="' . $scopeLabel . '"' : '';
+
         if ($this->getLabel() !== null) {
             $html = '<label class="label admin__field-label" for="' .
                 $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                     'label'
-                ) . '><span>' . $this->_escape(
+                ) . '><span' . $scopeLabel . '>' . $this->_escape(
                     $this->getLabel()
                 ) . '</span></label>' . "\n";
         } else {
@@ -437,10 +431,10 @@ abstract class AbstractElement extends AbstractForm
     {
         $html = $this->getData('default_html');
         if ($html === null) {
-            $html = $this->getNoSpan() === true ? '' : '<span class="field-row">' . "\n";
+            $html = $this->getNoSpan() === true ? '' : '<div class="admin__field">' . "\n";
             $html .= $this->getLabelHtml();
             $html .= $this->getElementHtml();
-            $html .= $this->getNoSpan() === true ? '' : '</span>' . "\n";
+            $html .= $this->getNoSpan() === true ? '' : '</div>' . "\n";
         }
         return $html;
     }

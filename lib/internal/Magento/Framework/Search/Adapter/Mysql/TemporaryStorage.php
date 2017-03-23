@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,20 +31,46 @@ class TemporaryStorage
     }
 
     /**
-     * @param \ArrayIterator|\Magento\Framework\Search\Document[] $documents
+     * Stores Documents
+     *
+     * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @deprecated
      */
     public function storeDocuments($documents)
+    {
+        return $this->storeApiDocuments($documents);
+    }
+
+    /**
+     * Stores Api type Documents
+     *
+     * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
+     * @return Table
+     */
+    public function storeApiDocuments($documents)
     {
         $data = [];
         foreach ($documents as $document) {
             $data[] = [
                 $document->getId(),
-                $document->getField('score')->getValue(),
+                $document->getCustomAttribute('score')->getValue(),
             ];
         }
 
-        $table = $this->createTemporaryTable();
+        return $this->populateTemporaryTable($this->createTemporaryTable(), $data);
+    }
+
+    /**
+     * Populates temporary table
+     *
+     * @param Table $table
+     * @param array $data
+     * @return Table
+     * @throws \Zend_Db_Exception
+     */
+    private function populateTemporaryTable(Table $table, $data)
+    {
         if (count($data)) {
             $this->getConnection()->insertArray(
                 $table->getName(),

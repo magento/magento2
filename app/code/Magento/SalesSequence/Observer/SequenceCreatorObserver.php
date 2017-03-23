@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Observer;
@@ -56,7 +56,7 @@ class SequenceCreatorObserver implements ObserverInterface
     {
         $storeId = $observer->getData('store')->getId();
         foreach ($this->entityPool->getEntities() as $entityType) {
-            $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
+            $this->sequenceBuilder->setPrefix($storeId)
                 ->setSuffix($this->sequenceConfig->get('suffix'))
                 ->setStartValue($this->sequenceConfig->get('startValue'))
                 ->setStoreId($storeId)

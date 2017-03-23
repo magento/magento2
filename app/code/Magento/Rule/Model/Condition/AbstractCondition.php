@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@
  * Abstract Rule condition data model
  *
  * @method string getOperator()
+ * @method string getFormName()
+ * @method setFormName()
  */
 namespace Magento\Rule\Model\Condition;
 
@@ -439,6 +441,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
         if (!empty($valueArr)) {
             $value = implode(', ', $valueArr);
+        } elseif (is_array($value)) {
+            $value = implode(', ', $value);
         }
         return $value;
     }
@@ -496,7 +500,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][type]',
                 'value' => $this->getType(),
                 'no_span' => true,
-                'class' => 'hidden'
+                'class' => 'hidden',
+                'data-form-part' => $this->getFormName()
             ]
         );
     }
@@ -527,10 +532,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute]',
                 'values' => $this->getAttributeSelectOptions(),
                 'value' => $this->getAttribute(),
-                'value_name' => $this->getAttributeName()
+                'value_name' => $this->getAttributeName(),
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
@@ -567,10 +573,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'name' => $elementName,
                 'values' => $options,
                 'value' => $this->getOperator(),
-                'value_name' => $this->getOperatorName()
+                'value_name' => $this->getOperatorName(),
+                'data-form-part' => $this->getFormName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
@@ -602,7 +609,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if (strpos($this->getValueElementType(), '/') !== false) {
             return $this->_layout->getBlockSingleton($this->getValueElementType());
         }
-        return $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable');
+        return $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class);
     }
 
     /**
@@ -617,6 +624,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             'value_name' => $this->getValueName(),
             'after_element_html' => $this->getValueAfterElementHtml(),
             'explicit_apply' => $this->getExplicitApply(),
+            'data-form-part' => $this->getFormName()
         ];
         if ($this->getInputType() == 'date') {
             // date format intentionally hard-coded

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,15 +26,50 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      * @var array
      */
     protected $mappingData = [
+        'gender' => [
+            'Male' => 1,
+            'Female' => 2,
+            'Not Specified' => 3
+        ],
         'country_id' => [
             'United States' => 'US',
-            'United Kingdom' => 'GB'
+            'United Kingdom' => 'GB',
+            'Germany' => 'DE'
         ],
         'region_id' => [
             'California' => 12,
             'New York' => 43,
             'Texas' => 57,
         ],
+    ];
+
+    /**
+     * Attributes that has a setter while creating customer using web api.
+     *
+     * @var array
+     */
+    protected $basicAttributes = [
+        'id',
+        'confirmation',
+        'created_at',
+        'updated_at',
+        'created_in',
+        'dob',
+        'email',
+        'firstname',
+        'gender',
+        'group_id',
+        'lastname',
+        'middlename',
+        'prefix',
+        'store_id',
+        'suffix',
+        'taxvat',
+        'website_id',
+        'default_billing',
+        'default_shipping',
+        'addresses',
+        'disable_auto_group_change',
     ];
 
     /**
@@ -70,13 +105,16 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      */
     protected function prepareData(Customer $customer)
     {
-        $data['customer'] = $customer->getData();
+        $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
+        if ($customer->hasData('website_id')) {
+            $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
+        }
         unset($data['customer']['password']);
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
-
+        $data = $this->prepareExtensionAttributes($data);
         return $data;
     }
 
@@ -105,7 +143,6 @@ class Webapi extends AbstractWebapi implements CustomerInterface
             return $data;
         }
         foreach ($data['customer']['address'] as $key => $addressData) {
-            $addressData['country_id'] = $this->mappingData['country_id'][$addressData['country_id']];
             $addressData = $this->prepareRegionData($addressData);
             $addressData = $this->prepareStreetData($addressData);
             $addressData = $this->prepareDefaultAddressData($addressData);
@@ -132,7 +169,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
         if (isset($addressData['region_id'])) {
             $addressData['region'] = [
-                'region_id' => $this->mappingData['region_id'][$addressData['region_id']]
+                'region_id' => $addressData['region_id']
             ];
             unset($addressData['region_id']);
         }
@@ -176,5 +213,34 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
 
         return $addressData;
+    }
+
+    /**
+     * Prepare customer website data.
+     *
+     * @param Customer $customer
+     * @return int
+     */
+    private function getCustomerWebsite(Customer $customer)
+    {
+        return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
+    }
+
+    /**
+     * Prepare extension attributes for the customer.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareExtensionAttributes($data)
+    {
+        foreach ($data['customer'] as $fieldName => $fieldValue) {
+            if (!in_array($fieldName, $this->basicAttributes)) {
+                $data['customer']['extension_attributes'][$fieldName] = $fieldValue;
+                unset($data['customer'][$fieldName]);
+            }
+        }
+
+        return $data;
     }
 }

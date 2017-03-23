@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,21 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             $this->taxDetailsItem,
             $this->calculate($this->totalBaseCalculator)
         );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+    }
+
+    public function testCalculateWithTaxInPriceNoRounding()
+    {
+        $this->initTotalBaseCalculator();
+        $this->totalBaseCalculator->expects($this->exactly(3))
+            ->method('deltaRound')->will($this->returnValue(0));
+        $this->initMocks(true);
+
+        $this->assertSame(
+            $this->taxDetailsItem,
+            $this->calculate($this->totalBaseCalculator, false)
+        );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
     }
 
     public function testCalculateWithTaxNotInPrice()
@@ -39,9 +54,9 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initTotalBaseCalculator()
     {
-        $taxClassService = $this->getMock('Magento\Tax\Api\TaxClassManagementInterface');
+        $taxClassService = $this->getMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
         $this->totalBaseCalculator = $this->getMock(
-            'Magento\Tax\Model\Calculation\TotalBaseCalculator',
+            \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
             ['deltaRound'],
             [
                 'taxClassService' => $taxClassService,

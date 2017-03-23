@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -148,7 +148,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             foreach ($element->getValue() as $rowId => $row) {
                 $rowColumnValues = [];
                 foreach ($row as $key => $value) {
-                    $row[$key] = $this->escapeHtml($value);
+                    $row[$key] = $value;
                     $rowColumnValues[$this->_getCellInputElementId($rowId, $key)] = $row[$key];
                 }
                 $row['_id'] = $rowId;
@@ -278,5 +278,13 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function getColumns()
     {
         return $this->_columns;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddButtonLabel()
+    {
+        return $this->_addButtonLabel;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Model;
@@ -58,6 +58,7 @@ class PurgeCache
         $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $tagsPattern];
         $socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
+            $headers['Host'] = $server->getHost();
             try {
                 $socketAdapter->connect($server->getHost(), $server->getPort());
                 $socketAdapter->write(
@@ -66,6 +67,7 @@ class PurgeCache
                     '1.1',
                     $headers
                 );
+                $socketAdapter->read();
                 $socketAdapter->close();
             } catch (\Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));

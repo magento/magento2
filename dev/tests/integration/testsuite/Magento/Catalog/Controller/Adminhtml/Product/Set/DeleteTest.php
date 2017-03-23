@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
@@ -21,7 +21,7 @@ class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $this->assertNull($this->getAttributeSetByName('empty_attribute_set'));
         $this->assertSessionMessages(
-            $this->equalTo(['The product template has been removed.']),
+            $this->equalTo(['The attribute set has been removed.']),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains('catalog/product_set/index/'));
@@ -36,7 +36,7 @@ class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     protected function getAttributeSetByName($attributeSetName)
     {
         $attributeSet = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Eav\Model\Entity\Attribute\Set'
+            \Magento\Eav\Model\Entity\Attribute\Set::class
         )->load($attributeSetName, 'attribute_set_name');
         return $attributeSet->getId() === null ? null : $attributeSet;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
  */
 namespace Magento\Cron\Observer;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Console\CLI;
 use Magento\Framework\Event\ObserverInterface;
 use \Magento\Cron\Model\Schedule;
@@ -101,14 +102,32 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $timezone;
 
     /**
+     * @var \Symfony\Component\Process\PhpExecutableFinder
+     */
+    protected $phpExecutableFinder;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    private $state;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param ScheduleFactory $scheduleFactory
+     * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param ConfigInterface $config
+     * @param \Magento\Cron\Model\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Console\Request $request
      * @param \Magento\Framework\ShellInterface $shell
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -118,7 +137,10 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Console\Request $request,
         \Magento\Framework\ShellInterface $shell,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
+        \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\App\State $state
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -128,6 +150,9 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_request = $request;
         $this->_shell = $shell;
         $this->timezone = $timezone;
+        $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
+        $this->logger = $logger;
+        $this->state = $state;
     }
 
     /**
@@ -147,8 +172,12 @@ class ProcessCronQueueObserver implements ObserverInterface
         $currentTime = $this->timezone->scopeTimeStamp();
         $jobGroupsRoot = $this->_config->getJobs();
 
+        $phpPath = $this->phpExecutableFinder->find() ?: 'php';
+
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
-            if ($this->_request->getParam('group') !== null && $this->_request->getParam('group') != $groupId) {
+            if ($this->_request->getParam('group') !== null
+                && $this->_request->getParam('group') !== '\'' . ($groupId) . '\''
+                && $this->_request->getParam('group') !== $groupId) {
                 continue;
             }
             if (($this->_request->getParam(self::STANDALONE_PROCESS_STARTED) !== '1') && (
@@ -158,7 +187,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                     ) == 1
                 )) {
                 $this->_shell->execute(
-                    'php %s cron:run --group=' . $groupId . ' --' . CLI::INPUT_KEY_BOOTSTRAP . '='
+                    $phpPath . ' %s cron:run --group=' . $groupId . ' --' . CLI::INPUT_KEY_BOOTSTRAP . '='
                     . self::STANDALONE_PROCESS_STARTED . '=1',
                     [
                         BP . '/bin/magento'
@@ -184,6 +213,21 @@ class ProcessCronQueueObserver implements ObserverInterface
                     }
                 } catch (\Exception $e) {
                     $schedule->setMessages($e->getMessage());
+                    if ($schedule->getStatus() === Schedule::STATUS_ERROR) {
+                        $this->logger->critical($e);
+                    }
+                    if ($schedule->getStatus() === Schedule::STATUS_MISSED
+                        && $this->state->getMode() === State::MODE_DEVELOPER
+                    ) {
+                        $this->logger->info(
+                            sprintf(
+                                "%s Schedule Id: %s Job Code: %s",
+                                $schedule->getMessages(),
+                                $schedule->getScheduleId(),
+                                $schedule->getJobCode()
+                            )
+                        );
+                    }
                 }
                 $schedule->save();
             }
@@ -232,7 +276,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->timezone->scopeTimeStamp()))->save();
 
         try {
-            call_user_func($callback);
+            call_user_func_array($callback, [$schedule]);
         } catch (\Exception $e) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
             throw $e;

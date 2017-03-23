@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -170,7 +171,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'required' => true,
                     'disabled' => true,
                     'class' => $behaviorCode,
-                    'value' => ',',
+                    'value' => Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                ]
+            );
+            $fieldsets[$behaviorCode]->addField(
+                $behaviorCode . \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                'checkbox',
+                [
+                    'name' => \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE,
+                    'label' => __('Fields enclosure'),
+                    'title' => __('Fields enclosure'),
+                    'value' => 1,
                 ]
             );
         }

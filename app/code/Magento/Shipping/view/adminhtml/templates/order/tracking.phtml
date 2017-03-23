@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -90,11 +90,12 @@ require(['prototype'], function(){
                    disabled="disabled" />
         </td>
         <td class="col-delete">
-            <a href="#"
-               class="action-default action-delete"
-               onclick="trackingControl.deleteRow(event);return false">
+            <button
+                type="button"
+                class="action-default action-delete"
+                onclick="trackingControl.deleteRow(event);return false">
                 <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
-            </a>
+            </button>
         </td>
     </tr>
 </script>

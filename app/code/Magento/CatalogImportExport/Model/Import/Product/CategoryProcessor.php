@@ -1,17 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 class CategoryProcessor
 {
-    /**
-     * Delimiter in import file between categories.
-     */
-    const DELIMITER_CATEGORIES = '|';
-
     /**
      * Delimiter in category path.
      */
@@ -42,6 +37,13 @@ class CategoryProcessor
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
+
+    /**
+     * Failed categories during creation
+     *
+     * @var array
+     */
+    protected $failedCategories = [];
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
@@ -112,12 +114,11 @@ class CategoryProcessor
         return $category->getId();
     }
 
-
     /**
      * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
-     * 
+     *
      * @return int
      */
     protected function upsertCategory($categoryPath)
@@ -144,19 +145,52 @@ class CategoryProcessor
      * Returns IDs of categories by string path creating nonexistent ones.
      *
      * @param string $categoriesString
+     * @param string $categoriesSeparator
      *
      * @return array
      */
-    public function upsertCategories($categoriesString)
+    public function upsertCategories($categoriesString, $categoriesSeparator)
     {
         $categoriesIds = [];
-        $categories = explode(self::DELIMITER_CATEGORIES, $categoriesString);
+        $categories = explode($categoriesSeparator, $categoriesString);
 
         foreach ($categories as $category) {
-            $categoriesIds[] = $this->upsertCategory($category);
+            try {
+                $categoriesIds[] = $this->upsertCategory($category);
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->addFailedCategory($category, $e);
+            }
         }
 
         return $categoriesIds;
+    }
+
+    /**
+     * Add failed category
+     *
+     * @param string $category
+     * @param \Magento\Framework\Exception\AlreadyExistsException $exception
+     *
+     * @return array
+     */
+    private function addFailedCategory($category, $exception)
+    {
+        $this->failedCategories[] =
+            [
+                'category' => $category,
+                'exception' => $exception,
+            ];
+        return $this;
+    }
+
+    /**
+     * Return failed categories
+     *
+     * @return array
+     */
+    public function getFailedCategories()
+    {
+        return  $this->failedCategories;
     }
 
     /**

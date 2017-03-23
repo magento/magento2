@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
@@ -55,6 +55,14 @@ class TaxConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $defaultRegionId = $this->scopeConfig->getValue(
+            \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        // prevent wrong assignment on shipping rate estimation requests
+        if (0 == $defaultRegionId) {
+            $defaultRegionId = null;
+        }
         return [
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
             'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
@@ -65,6 +73,15 @@ class TaxConfigProvider implements ConfigProviderInterface
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
             'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
+            'defaultCountryId' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
+            'defaultRegionId' => $defaultRegionId,
+            'defaultPostcode' => $this->scopeConfig->getValue(
+                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ),
         ];
     }
 
@@ -164,7 +181,10 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected function reloadOnBillingAddress()
     {
         $quote = $this->checkoutSession->getQuote();
-        return 'billing' == $this->scopeConfig->getValue(Config::CONFIG_XML_PATH_BASED_ON)
-            || $quote->isVirtual();
+        $configValue = $this->scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_BASED_ON,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return 'billing' == $configValue || $quote->isVirtual();
     }
 }

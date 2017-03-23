@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Reports\Test\TestCase;
 use Magento\Reports\Test\Page\Adminhtml\SalesReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Preconditions:
@@ -30,14 +31,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Show Report"
  * 5. Perform all assertions
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-29136
  */
 class SalesOrderReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -48,14 +48,23 @@ class SalesOrderReportEntityTest extends Injectable
     protected $salesReport;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Inject page.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param SalesReport $salesReport
      * @return void
      */
-    public function __inject(SalesReport $salesReport)
+    public function __inject(FixtureFactory $fixtureFactory, SalesReport $salesReport)
     {
         $this->salesReport = $salesReport;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -69,14 +78,20 @@ class SalesOrderReportEntityTest extends Injectable
     {
         // Preconditions
         $this->salesReport->open();
-        $this->salesReport->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->salesReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $this->salesReport->getFilterBlock()->viewsReport($salesReport);
         $this->salesReport->getActionBlock()->showReport();
         $initialSalesResult = $this->salesReport->getGridBlock()->getLastResult();
         $initialSalesTotalResult = $this->salesReport->getGridBlock()->getTotalResult();
 
         $order->persist();
-        $invoice = $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order]);
+        $products = $order->getEntityId()['products'];
+        $cart['data']['items'] = ['products' => $products];
+        $cart = $this->fixtureFactory->createByCode('cart', $cart);
+        $invoice = $this->objectManager->create(
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
+            ['order' => $order, 'cart' => $cart]
+        );
         $invoice->run();
 
         return ['initialSalesResult' => $initialSalesResult, 'initialSalesTotalResult' => $initialSalesTotalResult];

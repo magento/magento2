@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Parser;
@@ -63,7 +63,7 @@ class Contextual extends AbstractParser
      */
     protected function _addPhrase($phraseData, $contextType, $contextValue)
     {
-        $phraseKey = $contextType . stripslashes($phraseData['phrase']);
+        $phraseKey = $contextType . $contextValue. stripslashes($phraseData['phrase']);
 
         if (isset($this->_phrases[$phraseKey])) {
             /** @var \Magento\Setup\Module\I18n\Dictionary\Phrase $phrase */

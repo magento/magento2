@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
@@ -121,20 +121,5 @@ class Address extends SalesResource implements OrderAddressResourceInterface
             );
         }
         return $this;
-    }
-
-    /**
-     * Update related grid table after object save
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $resource = parent::_afterSave($object);
-        if ($object->getParentId()) {
-            $this->gridPool->refreshByOrderId($object->getParentId());
-        }
-        return $resource;
     }
 }

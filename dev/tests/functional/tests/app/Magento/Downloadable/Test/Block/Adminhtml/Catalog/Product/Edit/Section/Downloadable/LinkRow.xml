@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <title>
+            <selector>[name$='[title]']</selector>
+            <strategy>css selector</strategy>
+        </title>
+        <price>
+            <selector>[name$='[price]']</selector>
+            <strategy>css selector</strategy>
+        </price>
+        <number_of_downloads>
+            <selector>[name$='[number_of_downloads]']</selector>
+            <strategy>css selector</strategy>
+        </number_of_downloads>
+        <is_unlimited>
+            <selector>[name$='[is_unlimited]']</selector>
+            <strategy>css selector</strategy>
+            <input>checkbox</input>
+        </is_unlimited>
+        <is_shareable>
+            <selector>[name$='[is_shareable]']</selector>
+            <strategy>css selector</strategy>
+            <input>select</input>
+        </is_shareable>
+        <sample composite="1">
+            <sample_type>
+                <selector>[name$='[sample][type]']</selector>
+                <strategy>css selector</strategy>
+                <input>select</input>
+            </sample_type>
+            <sample_url>
+                <selector>[name$='[sample][url]']</selector>
+                <strategy>css selector</strategy>
+            </sample_url>
+        </sample>
+        <file_type>
+            <selector>[name*='[type]']:not([name*='[sample]'])</selector>
+            <strategy>css selector</strategy>
+            <input>select</input>
+        </file_type>
+        <file_link_url>
+            <selector>[name$='[link_url]']</selector>
+            <strategy>css selector</strategy>
+        </file_link_url>
+    </fields>
+</mapping>

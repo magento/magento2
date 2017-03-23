@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,5 +17,20 @@
     </event>
     <event name="catalog_product_import_bunch_delete_after">
         <observer name="catalog_product_import_rewrites_delete" instance="Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver"/>
+    </event>
+    <event name="catalog_product_delete_before">
+        <observer name="process_url_rewrite_removing" instance="Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteRemovingObserver"/>
+    </event>
+    <event name="catalog_product_save_before">
+        <observer name="product_url_key_autogeneration" instance="Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver"/>
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver"/>
+    </event>
+    <event name="catalog_category_save_before">
+        <observer name="category_url_path_autogeneration" instance="Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver"/>
+    </event>
+    <event name="catalog_category_move_after">
+        <observer name="process_url_rewrite_moving" instance="Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteMovingObserver"/>
     </event>
 </config>

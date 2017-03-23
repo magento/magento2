@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -11,14 +11,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Session\Generic as WishlistSession;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\Layout as ResultLayout;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Send extends Action\Action implements IndexInterface
+class Send extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Customer\Helper\View

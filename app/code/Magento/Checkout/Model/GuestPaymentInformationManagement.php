@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Model;
 
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
 {
 
@@ -27,7 +31,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $cartManagement;
 
     /**
-     * @var \Magento\Checkout\Model\PaymentInformationManagement
+     * @var \Magento\Checkout\Api\PaymentInformationManagementInterface
      */
     protected $paymentInformationManagement;
 
@@ -42,10 +46,15 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $cartRepository;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
-     * @param PaymentInformationManagement $paymentInformationManagement
+     * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
      * @codeCoverageIgnore
@@ -54,7 +63,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
-        \Magento\Checkout\Model\PaymentInformationManagement $paymentInformationManagement,
+        \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository
     ) {
@@ -76,7 +85,21 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
-        return $this->cartManagement->placeOrder($cartId);
+        try {
+            $orderId = $this->cartManagement->placeOrder($cartId);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            throw new CouldNotSaveException(
+                __($e->getMessage()),
+                $e
+            );
+        } catch (\Exception $e) {
+            $this->getLogger()->critical($e);
+            throw new CouldNotSaveException(
+                __('An error occurred on the server. Please try to place the order again.'),
+                $e
+            );
+        }
+        return $orderId;
     }
 
     /**
@@ -107,5 +130,19 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->paymentInformationManagement->getPaymentInformation($quoteIdMask->getQuoteId());
+    }
+
+    /**
+     * Get logger instance
+     *
+     * @return \Psr\Log\LoggerInterface
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if (!$this->logger) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }

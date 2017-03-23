@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Config\Source\Product\Options;
@@ -43,7 +43,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
                 $types[] = ['label' => __($type['label']), 'value' => $type['name']];
             }
             if (count($types)) {
-                $groups[] = ['label' => __($option['label']), 'value' => $types];
+                $groups[] = ['label' => __($option['label']), 'value' => $types, 'optgroup-name' => $option['label']];
             }
         }
 

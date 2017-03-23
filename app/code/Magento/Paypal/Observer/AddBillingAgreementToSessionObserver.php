@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Observer;
@@ -53,6 +53,7 @@ class AddBillingAgreementToSessionObserver implements ObserverInterface
             if ($agreement->isValid()) {
                 $message = __('Created billing agreement #%1.', $agreement->getReferenceId());
                 $order->addRelatedObject($agreement);
+                $agreement->addOrderRelation($order);
                 $this->checkoutSession->setLastBillingAgreementReferenceId($agreement->getReferenceId());
                 $agreementCreated = true;
             } else {

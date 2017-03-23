@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
-use Magento\Theme\Model\Design\Backend\Exceptions;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\Area;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
@@ -18,60 +19,30 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registry;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $config;
+    protected $contextMock;
 
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $design;
-
-    /**
-     * @var \Magento\Theme\Model\ResourceModel\Design|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resource;
-
-    /**
-     * @var \Magento\Theme\Model\ResourceModel\Design\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resourceCollection;
+    protected $designMock;
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->config = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
-        $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->once())
+        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
+        $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder('Magento\Framework\Event\ManagerInterface')->getMock());
-
-        $this->model = new Exceptions(
-            $this->context,
-            $this->registry,
-            $this->config,
-            $this->design,
-            $this->resource,
-            $this->resourceCollection
+            ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
+        $serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Theme\Model\Design\Backend\Exceptions::class,
+            [
+                'context' => $this->contextMock,
+                'design' => $this->designMock,
+                'serializer' => $serializerMock,
+            ]
         );
     }
 
@@ -85,11 +56,34 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave()
     {
-        $value = ['__empty' => '', 'test' => ['search' => '1qwe', 'value' => '#val#', 'regexp' => '[a-zA-Z0-9]*']];
-        $this->design->expects($this->once())
+        $value = ['test' => ['search' => '1qwe', 'value' => '#val#', 'regexp' => '[a-zA-Z0-9]*']];
+        $this->designMock->expects($this->once())
             ->method('setDesignTheme')
             ->with('#val#', Area::AREA_FRONTEND);
         $this->model->setValue($value);
         $this->model->beforeSave();
+    }
+
+    public function testAfterLoad()
+    {
+        $this->model->setValue(
+            [
+                [
+                    'value' => 'value',
+                    'search' => 'qwe',
+                    'record_id' => 1
+                ],
+            ]
+        );
+        $this->model->afterLoad();
+        $this->assertEquals(
+            [
+                [
+                    'value' => 'value',
+                    'search' => 'qwe',
+                ],
+            ],
+            $this->model->getValue()
+        );
     }
 }

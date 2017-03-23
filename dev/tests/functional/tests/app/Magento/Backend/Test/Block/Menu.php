@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,10 +68,11 @@ class Menu extends Block
      * Open backend page via menu.
      *
      * @param string $menuItem
+     * @param bool $waitMenuItemNotVisible
      * @return void
      * @throws \Exception
      */
-    public function navigate($menuItem)
+    public function navigate($menuItem, $waitMenuItemNotVisible = true)
     {
         $menuChain = array_map('trim', explode('>', $menuItem));
         $mainMenu = $menuChain[0];
@@ -92,7 +93,41 @@ class Menu extends Block
         $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
         $subMenuItem = $subMenuSelector . sprintf($this->subMenuItem, $subMenu);
         $this->waitForElementVisible($subMenuItem, Locator::SELECTOR_XPATH);
+        // Resolve an issue on with "Offset within element cannot be scrolled into view" on low screen resolution
+        try {
+            $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->hover();
+        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException  $e) {
+        }
         $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
+        if ($waitMenuItemNotVisible) {
+            $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
+        }
+    }
+
+    /**
+     * Check if menu item is visible.
+     *
+     * @param string $menuItem
+     * @return bool
+     */
+    public function isMenuItemVisible($menuItem)
+    {
+        $menuChain = array_map('trim', explode('>', $menuItem));
+        $mainMenu = $menuChain[0];
+        $subMenu = isset($menuChain[1]) ? $menuChain[1] : null;
+
+        $mainMenuElement = $this->_rootElement->find(sprintf($this->mainMenu, $mainMenu), Locator::SELECTOR_XPATH);
+        if (!$mainMenuElement->isVisible()) {
+            return false;
+        }
+        if ($subMenu === null) {
+            return true;
+        }
+        $mainMenuElement->click();
+
+        $subMenuSelector = sprintf($this->subMenu, $mainMenu);
+        $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
+        $subMenuItem = $subMenuSelector . sprintf($this->subMenuItem, $subMenu);
+        return $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->isVisible();
     }
 }

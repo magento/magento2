@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
+
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Error processor
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Processor
 {
@@ -20,42 +22,42 @@ class Processor
      * Page title
      *
      * @var string
-    */
+     */
     public $pageTitle;
 
     /**
      * Skin URL
      *
      * @var string
-    */
+     */
     public $skinUrl;
 
     /**
      * Base URL
      *
      * @var string
-    */
+     */
     public $baseUrl;
 
     /**
      * Post data
      *
      * @var array
-    */
+     */
     public $postData;
 
     /**
      * Report data
      *
      * @var array
-    */
+     */
     public $reportData;
 
     /**
      * Report action
      *
      * @var string
-    */
+     */
     public $reportAction;
 
     /**
@@ -69,28 +71,28 @@ class Processor
      * Report file
      *
      * @var string
-    */
+     */
     protected $_reportFile;
 
     /**
      * Show error message
      *
      * @var bool
-    */
+     */
     public $showErrorMsg;
 
     /**
      * Show message after sending email
      *
      * @var bool
-    */
+     */
     public $showSentMsg;
 
     /**
      * Show form for sending
      *
      * @var bool
-    */
+     */
     public $showSendForm;
 
     /**
@@ -102,21 +104,21 @@ class Processor
      * Server script name
      *
      * @var string
-    */
+     */
     protected $_scriptName;
 
     /**
      * Is root
      *
      * @var bool
-    */
+     */
     protected $_root;
 
     /**
      * Internal config object
      *
      * @var \stdClass
-    */
+     */
     protected $_config;
 
     /**
@@ -301,7 +303,7 @@ class Processor
     {
         $documentRoot = '';
         if (!empty($_SERVER['DOCUMENT_ROOT'])) {
-            $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+            $documentRoot = rtrim(realpath($_SERVER['DOCUMENT_ROOT']), '/');
         }
         return dirname($documentRoot . $this->_scriptName) . '/';
     }
@@ -310,6 +312,8 @@ class Processor
      * Prepare config data
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareConfig()
     {
@@ -325,10 +329,10 @@ class Processor
         $config->skin           = self::DEFAULT_SKIN;
 
         //combine xml data to one object
-        if (!is_null($design) && (string)$design->skin) {
+        if ($design !== null && (string)$design->skin) {
             $this->_setSkin((string)$design->skin, $config);
         }
-        if (!is_null($local)) {
+        if ($local !== null) {
             if ((string)$local->report->action) {
                 $config->action = $local->report->action;
             }
@@ -391,7 +395,7 @@ class Processor
      */
     protected function _getFilePath($file, $directories = null)
     {
-        if (is_null($directories)) {
+        if ($directories === null) {
             $directories[] = $this->_errorDir;
         }
 
@@ -445,6 +449,7 @@ class Processor
      *
      * @param array $reportData
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function saveReport($reportData)
     {
@@ -454,11 +459,10 @@ class Processor
         $this->_setReportData($reportData);
 
         if (!file_exists($this->_reportDir)) {
-            @mkdir($this->_reportDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+            @mkdir($this->_reportDir, 0777, true);
         }
 
         @file_put_contents($this->_reportFile, serialize($reportData));
-        @chmod($this->_reportFile, DriverInterface::WRITEABLE_FILE_MODE);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -478,6 +482,7 @@ class Processor
      *
      * @param int $reportId
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function loadReport($reportId)
     {
@@ -495,6 +500,8 @@ class Processor
      * Send report
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendReport()
     {
@@ -569,7 +576,7 @@ class Processor
      */
     protected function _setSkin($value, \stdClass $config = null)
     {
-        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_indexDir . self::ERROR_DIR . '/' . $value)) {
+        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
             if (!$config) {
                 if ($this->_config) {
                     $config = $this->_config;

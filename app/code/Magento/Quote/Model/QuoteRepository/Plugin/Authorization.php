@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\QuoteRepository\Plugin;
@@ -28,14 +28,14 @@ class Authorization
     /**
      * Check if quote is allowed
      *
-     * @param \Magento\Quote\Model\QuoteRepository $subject
+     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetActive(
-        \Magento\Quote\Model\QuoteRepository $subject,
+        \Magento\Quote\Api\CartRepositoryInterface $subject,
         \Magento\Quote\Model\Quote $quote
     ) {
         if (!$this->isAllowed($quote)) {
@@ -47,14 +47,14 @@ class Authorization
     /**
      * Check if quote is allowed
      *
-     * @param \Magento\Quote\Model\QuoteRepository $subject
+     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetActiveForCustomer(
-        \Magento\Quote\Model\QuoteRepository $subject,
+        \Magento\Quote\Api\CartRepositoryInterface $subject,
         \Magento\Quote\Model\Quote $quote
     ) {
         if (!$this->isAllowed($quote)) {
@@ -72,7 +72,7 @@ class Authorization
     protected function isAllowed(\Magento\Quote\Model\Quote $quote)
     {
         return $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER
-            ? $quote->getCustomerId() == $this->userContext->getUserId()
+            ? $quote->getCustomerId() === null || $quote->getCustomerId() == $this->userContext->getUserId()
             : true;
     }
 }

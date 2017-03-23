@@ -2,7 +2,7 @@
 /**
  * Catalog super product configurable part block
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
@@ -93,6 +93,18 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Get cache key informative items.
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $parentData = parent::getCacheKeyInfo();
+        $parentData[] = $this->priceCurrency->getCurrencySymbol();
+        return $parentData;
+    }
+
+    /**
      * Get allowed attributes
      *
      * @return array
@@ -124,7 +136,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Get Allowed Products
      *
-     * @return array
+     * @return \Magento\Catalog\Model\Product[]
      */
     public function getAllowProducts()
     {
@@ -181,18 +193,19 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = [
             'attributes' => $attributesData['attributes'],
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
+            'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->_registerJsPrice($this->_convertPrice($regularPrice->getAmount()->getValue())),
+                    'amount' => $this->_registerJsPrice($regularPrice->getAmount()->getValue()),
                 ],
                 'basePrice' => [
                     'amount' => $this->_registerJsPrice(
-                        $this->_convertPrice($finalPrice->getAmount()->getBaseAmount())
+                        $finalPrice->getAmount()->getBaseAmount()
                     ),
                 ],
                 'finalPrice' => [
-                    'amount' => $this->_registerJsPrice($this->_convertPrice($finalPrice->getAmount()->getValue())),
+                    'amount' => $this->_registerJsPrice($finalPrice->getAmount()->getValue()),
                 ],
             ],
             'productId' => $currentProduct->getId(),
@@ -217,26 +230,37 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
+            $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
+            $tierPriceModel =  $priceInfo->getPrice('tier_price');
+            $tierPricesList = $tierPriceModel->getTierPriceList();
+            foreach ($tierPricesList as $tierPrice) {
+                $tierPrices[] = [
+                    'qty' => $this->_registerJsPrice($tierPrice['price_qty']),
+                    'price' => $this->_registerJsPrice($tierPrice['price']->getValue()),
+                    'percentage' => $this->_registerJsPrice($tierPriceModel->getSavePercent($tierPrice['price'])),
+                ];
+            }
 
             $prices[$product->getId()] =
                 [
                     'oldPrice' => [
                         'amount' => $this->_registerJsPrice(
-                            $this->_convertPrice($priceInfo->getPrice('regular_price')->getAmount()->getValue())
+                            $priceInfo->getPrice('regular_price')->getAmount()->getValue()
                         ),
                     ],
                     'basePrice' => [
                         'amount' => $this->_registerJsPrice(
-                            $this->_convertPrice($priceInfo->getPrice('final_price')->getAmount()->getBaseAmount())
+                            $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
                         ),
                     ],
                     'finalPrice' => [
                         'amount' => $this->_registerJsPrice(
-                            $this->_convertPrice($priceInfo->getPrice('final_price')->getAmount()->getValue())
+                            $priceInfo->getPrice('final_price')->getAmount()->getValue()
                         ),
-                    ]
-                ];
+                    ],
+                    'tierPrices' => $tierPrices,
+                 ];
         }
         return $prices;
     }
@@ -253,23 +277,12 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Convert price from default currency to current currency
+     * Should we generate "As low as" block or not
      *
-     * @param float $price
-     * @param bool $round
-     * @return float
+     * @return bool
      */
-    protected function _convertPrice($price, $round = false)
+    public function showMinimalPrice()
     {
-        if (empty($price)) {
-            return 0;
-        }
-
-        $price = $this->priceCurrency->convert($price);
-        if ($round) {
-            $price = $this->priceCurrency->round($price);
-        }
-
-        return $price;
+        return true;
     }
 }

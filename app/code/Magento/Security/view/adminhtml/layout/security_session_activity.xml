@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-popup" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magento_Security::css/activity.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Security\Block\Adminhtml\Session\Activity" name="session.activity" template="Magento_Security::session/activity.phtml" />
+        </referenceContainer>
+    </body>
+</page>

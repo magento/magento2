@@ -1,13 +1,15 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/*
 define([
     'jquery',
+    'Magento_Catalog/catalog/type-events',
     'notification',
     'mage/translate'
-], function ($) {
+], function ($, productType) {
     'use strict';
 
     return {
@@ -26,9 +28,9 @@ define([
             }
             this.hideWarning();
             $(this.messageSelector).notification('add', {
-                message: $.mage.__('We can\'t save custom-defined options with price type "percent" for ' +
+                message: $.mage.__('Custom options with price type "percent" is not available for ' +
                     'configurable product.'),
-                error: true,
+                error: false,
                 messageContainer: this.messageSelector
             });
         },
@@ -36,13 +38,7 @@ define([
             $(this.messageSelector).notification('clear');
         },
         init: function () {
-            $('[data-form=edit-product]')
-                .on('change_configurable_type', function (event, isConfigurable) {
-                    this.isConfigurable = isConfigurable;
-                    if (this.isPercentPriceTypeExist()) {
-                        this.percentPriceTypeHandler();
-                    }
-                }.bind(this));
+            $(document).on('changeTypeProduct', this._initType.bind(this));
 
             $('#product-edit-form-tabs').on('change', '.opt-type > select', function () {
                 var selected = $('.opt-type > select :selected'),
@@ -60,6 +56,14 @@ define([
                     this.percentPriceTypeHandler();
                 }
             }.bind(this));
+
+            this._initType();
+        },
+        _initType: function () {
+            this.isConfigurable = productType.type.current === 'configurable';
+            if (this.isPercentPriceTypeExist()) {
+                this.percentPriceTypeHandler();
+            }
         },
         percentPriceTypeHandler: function () {
             var priceType = $('[data-attr="price-type"]'),
@@ -77,3 +81,4 @@ define([
         }
     };
 });
+*/

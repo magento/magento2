@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Abstract Rule entity data model
  */
 namespace Magento\Rule\Model;
 
-abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+
+/**
+ * Abstract Rule entity data model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
     /**
      * Store rule combine conditions model
@@ -47,6 +50,11 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     protected $_isReadonly = false;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serializer;
+
+    /**
      * Getter for rule combine conditions instance
      *
      * @return \Magento\Rule\Model\Condition\Combine
@@ -75,15 +83,19 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     protected $_localeDate;
 
     /**
-     * Constructor
+     * AbstractModel constructor
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param ExtensionAttributesFactory|null $extensionFactory
+     * @param AttributeValueFactory|null $customAttributeFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -92,11 +104,25 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ExtensionAttributesFactory $extensionFactory = null,
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_formFactory = $formFactory;
         $this->_localeDate = $localeDate;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Serialize\Serializer\Json::class
+        );
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory ?: $this->getExtensionFactory(),
+            $customAttributeFactory ?: $this->getCustomAttributeFactory(),
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -117,14 +143,14 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
 
         // Serialize conditions
         if ($this->getConditions()) {
-            $this->setConditionsSerialized(serialize($this->getConditions()->asArray()));
-            $this->unsConditions();
+            $this->setConditionsSerialized($this->serializer->serialize($this->getConditions()->asArray()));
+            $this->_conditions = null;
         }
 
         // Serialize actions
         if ($this->getActions()) {
-            $this->setActionsSerialized(serialize($this->getActions()->asArray()));
-            $this->unsActions();
+            $this->setActionsSerialized($this->serializer->serialize($this->getActions()->asArray()));
+            $this->_actions = null;
         }
 
         /**
@@ -180,7 +206,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         if ($this->hasConditionsSerialized()) {
             $conditions = $this->getConditionsSerialized();
             if (!empty($conditions)) {
-                $conditions = unserialize($conditions);
+                $conditions = $this->serializer->unserialize($conditions);
                 if (is_array($conditions) && !empty($conditions)) {
                     $this->_conditions->loadArray($conditions);
                 }
@@ -218,7 +244,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         if ($this->hasActionsSerialized()) {
             $actions = $this->getActionsSerialized();
             if (!empty($actions)) {
-                $actions = unserialize($actions);
+                $actions = $this->serializer->unserialize($actions);
                 if (is_array($actions) && !empty($actions)) {
                     $this->_actions->loadArray($actions);
                 }
@@ -450,5 +476,25 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
             $this->setData('website_ids', (array)$websiteIds);
         }
         return $this->_getData('website_ids');
+    }
+
+    /**
+     * @return \Magento\Framework\Api\ExtensionAttributesFactory
+     * @deprecated
+     */
+    private function getExtensionFactory()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+    }
+
+    /**
+     * @return \Magento\Framework\Api\AttributeValueFactory
+     * @deprecated
+     */
+    private function getCustomAttributeFactory()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\AttributeValueFactory::class);
     }
 }

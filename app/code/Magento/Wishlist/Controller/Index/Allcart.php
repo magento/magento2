@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -8,12 +8,11 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\ItemCarrier;
 use Magento\Framework\Controller\ResultFactory;
 
-class Allcart extends Action\Action implements IndexInterface
+class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -66,6 +66,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends Abs
         $actualPrices = $this->getProductPagePrices($actualPrices);
         $catalogProductView->getViewBlock()->clickAddToCart();
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCart->open();
         $actualPrices = $this->getCartPrices($product, $actualPrices);
         $actualPrices = $this->getTotals($actualPrices);
         //Prices verification

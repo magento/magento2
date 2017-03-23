@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Setup;
@@ -59,7 +59,7 @@ class EavSetup
      *
      * @var array
      */
-    private $defaultGroupIdAssociations = ['General' => 1];
+    private $defaultGroupIdAssociations = ['general' => 1];
 
     /**
      * Default attribute group name
@@ -134,12 +134,12 @@ class EavSetup
     public function installDefaultGroupIds()
     {
         $setIds = $this->getAllAttributeSetIds();
-        foreach ($this->defaultGroupIdAssociations as $defaultGroupName => $defaultGroupId) {
+        foreach ($this->defaultGroupIdAssociations as $defaultGroupCode => $defaultGroupId) {
             foreach ($setIds as $set) {
                 $groupId = $this->setup->getTableRow(
                     'eav_attribute_group',
-                    'attribute_group_name',
-                    $defaultGroupName,
+                    'attribute_group_code',
+                    $defaultGroupCode,
                     'attribute_group_id',
                     'attribute_set_id',
                     $set
@@ -192,6 +192,9 @@ class EavSetup
             'additional_attribute_table' => $this->_getValue($params, 'additional_attribute_table'),
             'entity_attribute_collection' => $this->_getValue($params, 'entity_attribute_collection'),
         ];
+        if (isset($params['entity_type_id'])) {
+            $data['entity_type_id'] = $params['entity_type_id'];
+        }
 
         if ($this->getEntityType($code, 'entity_type_id')) {
             $this->updateEntityType($code, $data);
@@ -199,7 +202,11 @@ class EavSetup
             $this->setup->getConnection()->insert($this->setup->getTable('eav_entity_type'), $data);
         }
 
-        $this->addAttributeSet($code, $this->_defaultAttributeSetName);
+        if (isset($params['entity_type_id'])) {
+            $this->addAttributeSet($code, $this->_defaultAttributeSetName, null, $params['entity_type_id']);
+        } else {
+            $this->addAttributeSet($code, $this->_defaultAttributeSetName);
+        }
         $this->addAttributeGroup($code, $this->_defaultGroupName, $this->_generalGroupName);
 
         return $this;
@@ -310,15 +317,20 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param string $name
      * @param int $sortOrder
+     * @param int $setId
      * @return $this
      */
-    public function addAttributeSet($entityTypeId, $name, $sortOrder = null)
+    public function addAttributeSet($entityTypeId, $name, $sortOrder = null, $setId = null)
     {
         $data = [
             'entity_type_id' => $this->getEntityTypeId($entityTypeId),
             'attribute_set_name' => $name,
             'sort_order' => $this->getAttributeSetSortOrder($entityTypeId, $sortOrder),
         ];
+
+        if ($setId !== null) {
+            $data['attribute_set_id'] = $setId;
+        }
 
         $setId = $this->getAttributeSet($entityTypeId, $name, 'attribute_set_id');
         if ($setId) {
@@ -511,26 +523,43 @@ class EavSetup
     {
         $setId = $this->getAttributeSetId($entityTypeId, $setId);
         $data = ['attribute_set_id' => $setId, 'attribute_group_name' => $name];
+        $attributeGroupCode = $this->convertToAttributeGroupCode($name);
 
-        if (isset($this->defaultGroupIdAssociations[$name])) {
-            $data['default_id'] = $this->defaultGroupIdAssociations[$name];
+        if (isset($this->defaultGroupIdAssociations[$attributeGroupCode])) {
+            $data['default_id'] = $this->defaultGroupIdAssociations[$attributeGroupCode];
         }
 
         if ($sortOrder !== null) {
             $data['sort_order'] = $sortOrder;
         }
 
-        $groupId = $this->getAttributeGroup($entityTypeId, $setId, $name, 'attribute_group_id');
+        $groupId = $this->getAttributeGroup($entityTypeId, $setId, $attributeGroupCode, 'attribute_group_id');
         if ($groupId) {
             $this->updateAttributeGroup($entityTypeId, $setId, $groupId, $data);
         } else {
             if ($sortOrder === null) {
                 $data['sort_order'] = $this->getAttributeGroupSortOrder($entityTypeId, $setId, $sortOrder);
             }
+            if (empty($data['attribute_group_code'])) {
+                if (empty($attributeGroupCode)) {
+                    // in the following code md5 is not used for security purposes
+                    $attributeGroupCode = md5($name);
+                }
+                $data['attribute_group_code'] = $attributeGroupCode;
+            }
             $this->setup->getConnection()->insert($this->setup->getTable('eav_attribute_group'), $data);
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $groupName
+     * @return string
+     */
+    public function convertToAttributeGroupCode($groupName)
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($groupName)), '-');
     }
 
     /**
@@ -569,22 +598,43 @@ class EavSetup
      */
     public function getAttributeGroup($entityTypeId, $setId, $id, $field = null)
     {
-        $searchId = $id;
         if (is_numeric($id)) {
             $searchField = 'attribute_group_id';
         } else {
+            $id = $this->convertToAttributeGroupCode($id);
             if (isset($this->defaultGroupIdAssociations[$id])) {
                 $searchField = 'default_id';
-                $searchId = $this->defaultGroupIdAssociations[$id];
+                $id = $this->defaultGroupIdAssociations[$id];
             } else {
-                $searchField = 'attribute_group_name';
+                $searchField = 'attribute_group_code';
             }
         }
 
         return $this->setup->getTableRow(
             'eav_attribute_group',
             $searchField,
-            $searchId,
+            $id,
+            $field,
+            'attribute_set_id',
+            $this->getAttributeSetId($entityTypeId, $setId)
+        );
+    }
+
+    /**
+     * Retrieve Attribute Group Data by Code
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param string $code
+     * @param string $field
+     * @return mixed
+     */
+    public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
+    {
+        return $this->setup->getTableRow(
+            'eav_attribute_group',
+            'attribute_group_code',
+            $code,
             $field,
             'attribute_set_id',
             $this->getAttributeSetId($entityTypeId, $setId)
@@ -720,15 +770,15 @@ class EavSetup
         $attributeCodeMaxLength = \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH;
 
         if (isset(
-                $data['attribute_code']
-            ) && !\Zend_Validate::is(
-                $data['attribute_code'],
-                'StringLength',
-                ['max' => $attributeCodeMaxLength]
-            )
+            $data['attribute_code']
+        ) && !\Zend_Validate::is(
+            $data['attribute_code'],
+            'StringLength',
+            ['max' => $attributeCodeMaxLength]
+        )
         ) {
             throw new LocalizedException(
-                __('An attribute code must be fewer than %1 characters.', $attributeCodeMaxLength)
+                __('An attribute code must not be more than %1 characters.', $attributeCodeMaxLength)
             );
         }
 
@@ -871,7 +921,7 @@ class EavSetup
      *
      * @param int|string $entityTypeId
      * @param int|string $id
-     * @param string $field
+     * @param string|array $field
      * @param mixed $value
      * @param int $sortOrder
      * @return $this

@@ -1,0 +1,156 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  # Components
+// Components are complete ready-for-use parts both for Storefront or Admin area.
+// They are not mixins, but classes. To use them, include this file with @import.
+//
+//  ``` less
+//  @import 'components/_component.less';
+//  ```
+
+@import '../../source/components/_modals.less';
+
+// ## Modals
+//
+// This component contains two kinds of modals: popups and slide panels.
+// ### Modal popups
+// To have a modal popup use <code>.lib-modal-popup</code> class.
+// <textarea class="preview-code" spellcheck="false">
+// <div class="modals-wrapper">
+//    <aside
+//        class="modal-popup _show"
+//        data-role="modal"
+//        data-type="popup">
+//        <div class="modal-inner-wrap">
+//             <header class="modal-header">
+//                 <h1 class="modal-title" data-role="title">Modal Popup</h1>
+//                 <button
+//                     class="action-close"
+//                     data-role="closeBtn"
+//                     type="button">
+//                     <span>Close</span>
+//                 </button>
+//             </header>
+//             <div class="modal-content" data-role="content">
+//                 Modal Content
+//             </div>
+//             <footer class="modal-content" data-role="content">
+//                 Modal Footer
+//             </footer>
+//        </div>
+//    </aside>
+//    <div class="modals-overlay"></div>
+// </div>
+// </textarea>
+//
+// ### Modal slide panels
+// To have a modal slide panel use <code>.lib-modal-slide</code> class.
+// <textarea class="preview-code" spellcheck="false">
+// <div class="modals-wrapper">
+//    <aside
+//        class="modal-slide _show"
+//        data-role="modal"
+//        data-type="slide">
+//        <div class="modal-inner-wrap">
+//             <header class="modal-header">
+//                 <h1 class="modal-title" data-role="title">Modal Slide</h1>
+//                 <button
+//                     class="action-close"
+//                     data-role="closeBtn"
+//                     type="button">
+//                     <span>Close</span>
+//                 </button>
+//             </header>
+//             <div class="modal-content" data-role="content">
+//                 Modal Content
+//             </div>
+//             <footer class="modal-content" data-role="content">
+//                 Modal Footer
+//             </footer>
+//        </div>
+//    </aside>
+//    <div class="modals-overlay"></div>
+// </div>
+// </textarea>
+
+// #  Components Variables
+//
+// <pre>
+//    <table>
+//      <tr>
+//        <th class="vars_head">Variable</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Allowable values</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@modal__background-color</th>
+//        <td class="vars_value">@color-white</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal background color</td>
+//      </tr>
+//      <tr>
+//        <th>@modal__box-shadow</th>
+//        <td class="vars_value">0 0 12px 2px rgba(0, 0, 0, .35)</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal shadow</td>
+//      </tr>
+//      <tr>
+//        <th class="vars_section" colspan="4">Popups</th>
+//      </tr>
+//      <tr>
+//        <th>@modal-popup__indent-vertical</th>
+//        <td class="vars_value">5rem</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal popup top window indent</td>
+//      </tr>
+//      <tr>
+//        <th>@modal-popup__padding</th>
+//        <td class="vars_value">5rem</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal popup inner indent</td>
+//      </tr>
+//      <tr>
+//        <th>@modal-popup__width</th>
+//        <td class="vars_value">75%</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal popup width</td>
+//      </tr>
+//      <tr>
+//        <th>@modal-popup__z-index</th>
+//        <td class="vars_value">@modal__z-index</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal popup z-index</td>
+//      </tr>
+//      <tr>
+//        <th class="vars_section" colspan="4">Slide panels</th>
+//      </tr>
+//      <tr>
+//        <th>@modal-slide__first__indent-left</th>
+//        <td class="vars_value">14.8rem</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal first slide window indent</td>
+//      </tr>
+//      <tr>
+//        <th>@modal-slide__indent-left</th>
+//        <td class="vars_value">4.5rem</td>
+//        <td class="vars_value">constant</td>
+//        <td>Indent between modal slide panels</td>
+//      </tr>
+//      <tr>
+//        <th>@modal-slide__padding</th>
+//        <td class="vars_value">2.6rem</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal popup inner indent</td>
+//      </tr>
+//      <tr>
+//        <th>@modal-slide__z-index</th>
+//        <td class="vars_value">@modal__z-index</td>
+//        <td class="vars_value">constant</td>
+//        <td>Modal slide z-index</td>
+//      </tr>
+//    </table>
+// </pre>

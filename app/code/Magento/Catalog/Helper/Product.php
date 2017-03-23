@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -132,7 +132,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve data for price indexer update
      *
      * @param \Magento\Catalog\Model\Product|array $data
-     * @return boolean
+     * @return bool
      */
     public function isDataForPriceIndexerWasChanged($data)
     {
@@ -161,7 +161,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve data for product category indexer update
      *
      * @param \Magento\Catalog\Model\Product $data
-     * @return boolean
+     * @return bool
      */
     public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
     {
@@ -177,7 +177,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve product view page url
      *
      * @param int|ModelProduct $product
-     * @return string|false
+     * @return string|bool
      */
     public function getProductUrl($product)
     {
@@ -290,7 +290,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct|int $product
      * @param string $where
-     * @return boolean
+     * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canShow($product, $where = 'catalog')
@@ -338,8 +338,8 @@ class Product extends \Magento\Framework\Url\Helper\Data
          * @todo specify there all relations for properties depending on input type
          */
         $inputTypes = [
-            'multiselect' => ['backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend'],
-            'boolean' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
+            'multiselect' => ['backend_model' => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class],
+            'boolean' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
         ];
 
         if ($inputType === null) {
@@ -392,7 +392,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Framework\App\Action\Action $controller
      * @param \Magento\Framework\DataObject $params
      *
-     * @return false|ModelProduct
+     * @return bool|ModelProduct
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -547,7 +547,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Get flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
      *
-     * @return boolean
+     * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSkipSaleableCheck()

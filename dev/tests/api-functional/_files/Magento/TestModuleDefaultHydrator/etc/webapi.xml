@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/TestModuleDefaultHydrator" method="POST">
+        <service class="Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface" method="save"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/TestModuleDefaultHydrator/:id" method="GET">
+        <service class="Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface" method="getById"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/TestModuleDefaultHydrator/:id" method="DELETE">
+        <service class="Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface" method="delete"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/TestModuleDefaultHydrator/:id" method="PUT">
+        <service class="Magento\TestModuleDefaultHydrator\Api\CustomerPersistenceInterface" method="save"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

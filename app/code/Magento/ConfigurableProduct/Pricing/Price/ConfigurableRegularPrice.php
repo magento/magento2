@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
@@ -39,21 +40,35 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     protected $priceResolver;
 
     /**
+     * @var ConfigurableOptionsProviderInterface
+     */
+    private $configurableOptionsProvider;
+
+    /**
+     * @var LowestPriceOptionsProviderInterface
+     */
+    private $lowestPriceOptionsProvider;
+
+    /**
      * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
      * @param float $quantity
      * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceResolverInterface $priceResolver
+     * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      */
     public function __construct(
         \Magento\Framework\Pricing\SaleableInterface $saleableItem,
         $quantity,
         \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        PriceResolverInterface $priceResolver
+        PriceResolverInterface $priceResolver,
+        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->priceResolver = $priceResolver;
+        $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
+            ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
     }
 
     /**
@@ -61,20 +76,19 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     public function getValue()
     {
-        $selectedConfigurableOption = $this->product->getSelectedConfigurableOption();
-        $productId = $selectedConfigurableOption ? $selectedConfigurableOption->getId() : $this->product->getId();
-        if (!isset($this->values[$productId])) {
-            $this->values[$productId] = $this->priceResolver->resolvePrice($this->product);
+        if (!isset($this->values[$this->product->getId()])) {
+            $this->values[$this->product->getId()] = $this->priceResolver->resolvePrice($this->product);
         }
 
-        return $this->values[$productId];
+        return $this->values[$this->product->getId()];
     }
+
     /**
      * {@inheritdoc}
      */
     public function getAmount()
     {
-        return $this->getMinRegularAmount($this->product);
+        return $this->getMinRegularAmount();
     }
 
     /**
@@ -83,15 +97,13 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMaxRegularAmount()
     {
         if (null === $this->maxRegularAmount) {
-            $this->maxRegularAmount = $this->doGetMaxRegularAmount();
             $this->maxRegularAmount = $this->doGetMaxRegularAmount() ?: false;
         }
         return $this->maxRegularAmount;
-
     }
 
     /**
-     * Get max regular amount. Template method
+     * Get max regular amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
@@ -113,21 +125,20 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMinRegularAmount()
     {
         if (null === $this->minRegularAmount) {
-            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: false;
+            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: parent::getAmount();
         }
         return $this->minRegularAmount;
-
     }
 
     /**
-     * Get min regular amount. Template method
+     * Get min regular amount
      *
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function doGetMinRegularAmount()
     {
         $minAmount = null;
-        foreach ($this->getUsedProducts() as $product) {
+        foreach ($this->lowestPriceOptionsProvider->getProducts($this->product) as $product) {
             $childPriceAmount = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount();
             if (!$minAmount || ($childPriceAmount->getValue() < $minAmount->getValue())) {
                 $minAmount = $childPriceAmount;
@@ -143,6 +154,19 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     protected function getUsedProducts()
     {
-        return $this->product->getTypeInstance()->getUsedProducts($this->product);
+        return $this->getConfigurableOptionsProvider()->getProducts($this->product);
+    }
+
+    /**
+     * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
+     * @deprecated
+     */
+    private function getConfigurableOptionsProvider()
+    {
+        if (null === $this->configurableOptionsProvider) {
+            $this->configurableOptionsProvider = ObjectManager::getInstance()
+                ->get(ConfigurableOptionsProviderInterface::class);
+        }
+        return $this->configurableOptionsProvider;
     }
 }

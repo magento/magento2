@@ -1,16 +1,27 @@
-Email,Email
-Name,Name
-Submit,Submit
+"Page not found.","Page not found."
+"Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.","Thanks for contacting us with your comments and questions. We\'ll respond to you very soon."
+"We can\'t process your request right now. Sorry, that\'s all we know.","We can\'t process your request right now. Sorry, that\'s all we know."
 "* Required Fields","* Required Fields"
-Telephone,Telephone
-"Thanks for contacting us with your comments and questions. We'll respond to you very soon.","Thanks for contacting us with your comments and questions. We'll respond to you very soon."
-"We can't process your request right now. Sorry, that's all we know.","We can't process your request right now. Sorry, that's all we know."
-"Contact Information","Contact Information"
-Comment,Comment
-"Email Template","Email Template"
+"Write Us","Write Us"
+"Jot us a note and we’ll get back to you as quickly as possible.","Jot us a note and we’ll get back to you as quickly as possible."
+Name,Name
+Email,Email
+"Phone Number","Phone Number"
+"What’s on your mind?","What’s on your mind?"
+Submit,Submit
+"Name: %name","Name: %name"
+"Email: %email","Email: %email"
+"Phone Number: %telephone","Phone Number: %telephone"
+"Comment: %comment","Comment: %comment"
+"Contacts Section","Contacts Section"
 Contacts,Contacts
 "Contact Us","Contact Us"
 "Enable Contact Us","Enable Contact Us"
 "Email Options","Email Options"
 "Send Emails To","Send Emails To"
 "Email Sender","Email Sender"
+"Email Template","Email Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+"Comment is missing","Comment is missing"
+"Name is missing","Name is missing"
+"Invalid email address","Invalid email address"

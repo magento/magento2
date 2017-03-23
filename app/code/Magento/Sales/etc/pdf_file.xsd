@@ -3,12 +3,12 @@
 /**
  * XSD for an individual file with PDF settings
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:redefine schemaLocation="pdf.xsd">
+    <xs:redefine schemaLocation="urn:magento:module:Magento_Sales:etc/pdf.xsd">
         <xs:complexType name="totalItemType">
             <xs:complexContent>
                 <xs:restriction base="totalItemType">

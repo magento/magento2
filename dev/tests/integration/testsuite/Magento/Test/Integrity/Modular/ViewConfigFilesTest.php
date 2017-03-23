@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -13,17 +13,26 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        /** @var \Magento\Framework\View\Xsd\Reader $reader */
-        $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Xsd\Reader'
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
         );
-        $mergeXsd = $reader->read();
-        $domConfig = new \Magento\Framework\Config\Dom($file);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom($file, $validationStateMock);
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
-            $mergeXsd,
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
-        $this->assertTrue($result, "Invalid XML-file: {$file}\n" . join("\n", $errors));
+        $message = "Invalid XML-file: {$file}\n";
+        foreach ($errors as $error) {
+            $message .= "{$error->message} Line: {$error->line}\n";
+        }
+        $this->assertTrue($result, $message);
     }
 
     /**
@@ -33,7 +42,7 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Module\Dir\Reader'
+            \Magento\Framework\Module\Dir\Reader::class
         )->getConfigurationFiles(
             'view.xml'
         );

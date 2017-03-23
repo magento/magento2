@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -22,16 +22,16 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
         // delete an item from cart
         $deleteItemId = $this->getRequest()->getPost('delete');
         if ($deleteItemId) {
-            /** @var \Magento\Quote\Model\QuoteRepository $quoteRepository */
-            $quoteRepository = $this->_objectManager->create('Magento\Quote\Model\QuoteRepository');
+            /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+            $quoteRepository = $this->_objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
             /** @var \Magento\Quote\Model\Quote $quote */
             try {
                 $quote = $quoteRepository->getForCustomer($customerId);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $quote = $quoteRepository->create();
+                $quote = $this->_objectManager->create(\Magento\Quote\Model\QuoteFactory::class)->create();
             }
             $quote->setWebsite(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)
+                $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getWebsite($websiteId)
             );
             $item = $quote->getItemById($deleteItemId);
             if ($item && $item->getId()) {

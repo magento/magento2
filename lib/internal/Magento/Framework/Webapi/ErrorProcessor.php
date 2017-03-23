@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -165,8 +165,7 @@ class ErrorProcessor
      */
     public function renderException(\Exception $exception, $httpCode = self::DEFAULT_ERROR_HTTP_CODE)
     {
-        if (
-            $this->_appState->getMode() == State::MODE_DEVELOPER ||
+        if ($this->_appState->getMode() == State::MODE_DEVELOPER ||
             $exception instanceof \Magento\Framework\Webapi\Exception
         ) {
             $this->renderErrorMessage($exception->getMessage(), $exception->getTraceAsString(), $httpCode);
@@ -189,14 +188,11 @@ class ErrorProcessor
      */
     protected function _critical(\Exception $exception)
     {
-        $exceptionClass = get_class($exception);
         $reportId = uniqid("webapi-");
-        $exceptionForLog = new $exceptionClass(
-            /** Trace is added separately by critical. */
-            "Report ID: {$reportId}; Message: {$exception->getMessage()}",
-            $exception->getCode()
-        );
-        $this->_logger->critical($exceptionForLog);
+        $message = "Report ID: {$reportId}; Message: {$exception->getMessage()}";
+        $code = $exception->getCode();
+        $exception = new \Exception($message, $code, $exception);
+        $this->_logger->critical($exception);
         return $reportId;
     }
 

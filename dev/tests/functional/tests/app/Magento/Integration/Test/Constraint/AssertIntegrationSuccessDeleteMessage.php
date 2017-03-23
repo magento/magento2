@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class AssertIntegrationSuccessDeleteMessage extends AbstractConstraint
     public function processAssert(IntegrationIndex $integrationIndexPage, Integration $integration)
     {
         $expectedMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, $integration->getName());
-        $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $integrationIndexPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
             $actualMessage,

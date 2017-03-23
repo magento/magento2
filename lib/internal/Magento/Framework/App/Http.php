@@ -2,7 +2,7 @@
 /**
  * Http application
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -67,6 +67,11 @@ class Http implements \Magento\Framework\AppInterface
     protected $registry;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Event\Manager $eventManager
      * @param AreaList $areaList
@@ -100,6 +105,21 @@ class Http implements \Magento\Framework\AppInterface
     }
 
     /**
+     * Add new dependency
+     *
+     * @return \Psr\Log\LoggerInterface
+     *
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if (!$this->logger instanceof \Psr\Log\LoggerInterface) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
+    }
+
+    /**
      * Run application
      *
      * @throws \InvalidArgumentException
@@ -111,7 +131,7 @@ class Http implements \Magento\Framework\AppInterface
         $this->_state->setAreaCode($areaCode);
         $this->_objectManager->configure($this->_configLoader->load($areaCode));
         /** @var \Magento\Framework\App\FrontControllerInterface $frontController */
-        $frontController = $this->_objectManager->get('Magento\Framework\App\FrontControllerInterface');
+        $frontController = $this->_objectManager->get(\Magento\Framework\App\FrontControllerInterface::class);
         $result = $frontController->dispatch($this->_request);
         // TODO: Temporary solution until all controllers return ResultInterface (MAGETWO-28359)
         if ($result instanceof ResultInterface) {
@@ -161,11 +181,44 @@ class Http implements \Magento\Framework\AppInterface
             }
             $this->_response->setHttpResponseCode(500);
             $this->_response->setHeader('Content-Type', 'text/plain');
-            $this->_response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            $this->_response->setBody($this->buildContentFromException($exception));
             $this->_response->sendResponse();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Build content based on an exception
+     *
+     * @param \Exception $exception
+     * @return string
+     */
+    private function buildContentFromException(\Exception $exception)
+    {
+        /** @var \Exception[] $exceptions */
+        $exceptions = [];
+        do {
+            $exceptions[] = $exception;
+        } while ($exception = $exception->getPrevious());
+
+        $buffer = sprintf("%d exception(s):\n", count($exceptions));
+
+        foreach ($exceptions as $index => $exception) {
+            $buffer .= sprintf("Exception #%d (%s): %s\n", $index, get_class($exception), $exception->getMessage());
+        }
+
+        foreach ($exceptions as $index => $exception) {
+            $buffer .= sprintf(
+                "\nException #%d (%s): %s\n%s\n",
+                $index,
+                get_class($exception),
+                $exception->getMessage(),
+                $exception->getTraceAsString()
+            );
+        }
+
+        return $buffer;
     }
 
     /**
@@ -184,9 +237,11 @@ class Http implements \Magento\Framework\AppInterface
             $this->_response->setRedirect($setupInfo->getUrl());
             $this->_response->sendHeaders();
         } else {
-            $newMessage = $exception->getMessage() . "\nNOTE: web setup wizard is not accessible.\n"
-                . 'In order to install, use Magento Setup CLI or configure web access to the following directory: '
-                . $setupInfo->getDir($projectRoot);
+            $newMessage = $exception->getMessage() . "\nNOTE: You cannot install Magento using the Setup Wizard "
+                . "because the Magento setup directory cannot be accessed. \n"
+                . 'You can install Magento using either the command line or you must restore access '
+                . 'to the following directory: ' . $setupInfo->getDir($projectRoot) . "\n";
+
             throw new \Exception($newMessage, 0, $exception);
         }
     }
@@ -241,6 +296,7 @@ class Http implements \Magento\Framework\AppInterface
     private function handleInitException(\Exception $exception)
     {
         if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
+            $this->getLogger()->critical($exception);
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
             return true;
         }

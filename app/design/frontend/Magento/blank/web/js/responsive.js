@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,13 @@ define([
 
     mediaCheck({
         media: '(min-width: 768px)',
-        // Switch to Desktop Version
+
+        /**
+         * Switch to Desktop Version.
+         */
         entry: function () {
+            var galleryElement;
+
             (function () {
 
                 var productInfoMain = $('.product-info-main'),
@@ -27,7 +32,7 @@ define([
 
             })();
 
-            var galleryElement = $('[data-role=media-gallery]');
+            galleryElement = $('[data-role=media-gallery]');
 
             if (galleryElement.length && galleryElement.data('mageZoom')) {
                 galleryElement.zoom('enable');
@@ -38,28 +43,28 @@ define([
                 galleryElement.gallery('option', 'showNav', false);
                 galleryElement.gallery('option', 'showThumbs', true);
             }
-
-            setTimeout(function () {
-                $('.product.data.items').tabs('option', 'openOnFocus', true);
-            }, 500);
         },
-        // Switch to Mobile Version
+
+        /**
+         * Switch to Mobile Version.
+         */
         exit: function () {
-            $('.action.toggle.checkout.progress')
-                .on('click.gotoCheckoutProgress', function () {
-                    var myWrapper = '#checkout-progress-wrapper';
-                    scrollTo(myWrapper + ' .title');
-                    $(myWrapper + ' .title').addClass('active');
-                    $(myWrapper + ' .content').show();
-                });
+            var galleryElement;
 
-            $('body')
-                .on('click.checkoutProgress', '#checkout-progress-wrapper .title', function () {
-                    $(this).toggleClass('active');
-                    $('#checkout-progress-wrapper .content').toggle();
-                });
+            $('.action.toggle.checkout.progress').on('click.gotoCheckoutProgress', function () {
+                var myWrapper = '#checkout-progress-wrapper';
 
-            var galleryElement = $('[data-role=media-gallery]');
+                scrollTo(myWrapper + ' .title');
+                $(myWrapper + ' .title').addClass('active');
+                $(myWrapper + ' .content').show();
+            });
+
+            $('body').on('click.checkoutProgress', '#checkout-progress-wrapper .title', function () {
+                $(this).toggleClass('active');
+                $('#checkout-progress-wrapper .content').toggle();
+            });
+
+            galleryElement = $('[data-role=media-gallery]');
 
             setTimeout(function () {
                 if (galleryElement.length && galleryElement.data('mageZoom')) {
@@ -72,10 +77,6 @@ define([
                     galleryElement.gallery('option', 'showThumbs', false);
                 }
             }, 2000);
-
-            setTimeout(function () {
-                $('.product.data.items').tabs('option', 'openOnFocus', false);
-            }, 500);
         }
     });
 });

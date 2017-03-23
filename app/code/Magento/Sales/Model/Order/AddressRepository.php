@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -14,6 +15,8 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\OrderAddressInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInterface
 {
@@ -32,16 +35,23 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      */
     protected $registry = [];
 
+    /** @var  CollectionProcessorInterface */
+    private $collectionProcessor;
+
     /**
+     * AddressRepository constructor.
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         Metadata $metadata,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -60,10 +70,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
 
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\OrderAddressInterface $entity */
-            $entity = $this->metadata->getNewInstance();
-
-            $this->metadata->getMapper()->load($entity, $id);
-
+            $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
@@ -77,25 +84,16 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     /**
      * Find order addresses by criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria  $criteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
-        //@TODO: fix search logic
-        /** @var \Magento\Sales\Api\Data\OrderAddressSearchResultInterface $searchResult */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Address\Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
-
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-
-        $searchResult->setCurPage($criteria->getCurrentPage());
-        $searchResult->setPageSize($criteria->getPageSize());
-
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
+        $searchResult->setSearchCriteria($searchCriteria);
+        
         return $searchResult;
     }
 
@@ -159,5 +157,21 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
     public function create()
     {
         return $this->metadata->getNewInstance();
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

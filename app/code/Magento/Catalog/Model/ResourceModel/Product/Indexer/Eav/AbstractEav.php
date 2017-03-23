@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
@@ -157,11 +159,17 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $select = $connection->select()->from($idxTable, null);
 
+        $select->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.entity_id = {$idxTable}.entity_id",
+            []
+        );
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
             $select,
             'visibility',
-            $idxTable . '.entity_id',
+            "cpe.{$linkField}",
             $idxTable . '.store_id',
             $condition
         );
@@ -182,10 +190,14 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     {
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
-
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['l' => $this->getTable('catalog_product_relation')],
-            'parent_id'
+            []
+        )->joinLeft(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.' . $linkField .' = l.parent_id',
+            []
         )->join(
             ['cs' => $this->getTable('store')],
             '',
@@ -193,12 +205,20 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         )->join(
             ['i' => $idxTable],
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
-            ['attribute_id', 'store_id', 'value']
+            []
         )->group(
-            ['l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
+            ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
+        )->columns(
+            [
+                'parent_id' => 'e.entity_id',
+                'attribute_id' => 'i.attribute_id',
+                'store_id' => 'i.store_id',
+                'value' => 'i.value',
+                'source_id' => 'l.child_id'
+            ]
         );
         if ($parentIds !== null) {
-            $select->where('l.parent_id IN(?)', $parentIds);
+            $select->where('e.entity_id IN(?)', $parentIds);
         }
 
         /**
@@ -210,7 +230,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('l.parent_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
 
@@ -251,6 +271,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             'ca.is_filterable_in_search > 0',
             'ca.is_visible_in_advanced_search > 0',
             'ca.is_filterable > 0',
+            // Visibility is attribute that isn't used by search, but required to determine is product should be shown
+            "ea.attribute_code = 'visibility'"
         ];
 
         return implode(' OR ', $conditions);

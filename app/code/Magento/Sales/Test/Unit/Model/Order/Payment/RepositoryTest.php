@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -45,6 +47,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $paymentResource;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @var \Magento\Sales\Model\Order\Payment\Repository
      */
     protected $repository;
@@ -53,59 +60,67 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metaData = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Metadata',
+            \Magento\Sales\Model\ResourceModel\Metadata::class,
             [],
             [],
             '',
             false
         );
         $this->searchResultFactory = $this->getMock(
-            'Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory',
+            \Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->searchCriteria = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             [],
             [],
             '',
             false
         );
         $this->collection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Collection::class,
             [],
             [],
             '',
             false
         );
         $this->paymentResource = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment',
+            \Magento\Sales\Model\ResourceModel\Order\Payment::class,
             [],
             [],
             '',
             false
         );
         $this->filterGroup = $this->getMock(
-            'Magento\Framework\Api\Search\FilterGroup',
+            \Magento\Framework\Api\Search\FilterGroup::class,
             [],
             [],
             '',
             false
         );
         $this->filter = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
             [],
             [],
             '',
             false
         );
         $this->repository = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Payment\Repository',
+            \Magento\Sales\Model\Order\Payment\Repository::class,
             [
                 'searchResultFactory' => $this->searchResultFactory,
                 'metaData' => $this->metaData,
+                'collectionProcessor' => $this->collectionProcessor,
             ]
         );
     }
@@ -139,9 +154,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $paymentId = 1;
         $payment = $this->mockPayment($paymentId);
+        $payment->expects($this->any())->method('load')->with($paymentId)->willReturn($payment);
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($payment);
-        $this->metaData->expects($this->once())->method('getMapper')->willReturn($this->paymentResource);
-        $this->paymentResource->expects($this->once())->method('load')->with($payment, $paymentId);
         $this->assertSame($payment, $this->repository->get($paymentId));
     }
 
@@ -164,54 +178,34 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $paymentId = 1;
         $payment = $this->mockPayment(null);
+        $payment->expects($this->any())->method('load')->with($paymentId)->willReturn($payment);
         $this->metaData->expects($this->once())->method('getNewInstance')->willReturn($payment);
-        $this->metaData->expects($this->once())->method('getMapper')->willReturn($this->paymentResource);
-        $this->paymentResource->expects($this->once())->method('load')->with($payment, $paymentId);
         $this->assertSame($payment, $this->repository->get($paymentId));
     }
 
     public function testGetList()
     {
-        $field = 'order_id';
-        $value = 45;
-        $this->getListMock($field, $value);
+        $this->searchResultFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->collection);
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($this->searchCriteria, $this->collection);
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
     protected function mockPayment($id = false)
     {
         $payment = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
+            \Magento\Sales\Model\Order\Payment::class,
             [],
             [],
             '',
             false
         );
+
         if ($id !== false) {
             $payment->expects($this->once())->method('getId')->willReturn($id);
         }
 
         return $payment;
-    }
-
-    /**
-     * @param $field
-     * @param $value
-     */
-    protected function getListMock($field, $value)
-    {
-        $currentPage = 1;
-        $pageSize = 10;
-        $this->searchResultFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->collection);
-        $this->searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$this->filterGroup]);
-        $this->filterGroup->expects($this->once())->method('getFilters')->willReturn([$this->filter]);
-        $this->filter->expects($this->once())->method('getConditionType')->willReturn(null);
-        $this->filter->expects($this->once())->method('getField')->willReturn($field);
-        $this->filter->expects($this->once())->method('getValue')->willReturn($value);
-        $this->collection->expects($this->once())->method('addFieldToFilter')->with($field, ['eq' => $value]);
-        $this->searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $this->searchCriteria->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $this->collection->expects($this->once())->method('setCurPage')->with();
-        $this->collection->expects($this->once())->method('setPageSize')->with();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -17,7 +17,17 @@ class FlagTest extends \PHPUnit_Framework_TestCase
      */
     protected $flag;
 
-    public function setUp()
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $json;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Serialize
+     */
+    private $serialize;
+
+    protected function setUp()
     {
         $data = ['flag_code' => 'synchronize'];
         $this->createInstance($data);
@@ -25,15 +35,15 @@ class FlagTest extends \PHPUnit_Framework_TestCase
 
     protected function createInstance(array $data = [])
     {
-        $eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false, false);
-        $context = $this->getMock('Magento\Framework\Model\Context', [], [], '', false, false);
+        $eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, ['dispatch'], [], '', false, false);
+        $context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false, false);
         $context->expects($this->once())
             ->method('getEventDispatcher')
             ->will($this->returnValue($eventManager));
-        $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
+        $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false, false);
 
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Adapter',
+            \Magento\Framework\DB\Adapter\Adapter::class,
             ['beginTransaction'],
             [],
             '',
@@ -44,7 +54,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->method('beginTransaction')
             ->will($this->returnSelf());
         $appResource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -55,10 +65,10 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($connection));
 
-        $dbContextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $dbContextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $dbContextMock->expects($this->once())->method('getResources')->willReturn($appResource);
         $resource = $this->getMock(
-            '\Magento\Framework\Flag\FlagResource',
+            \Magento\Framework\Flag\FlagResource::class,
             ['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'],
             ['context' => $dbContextMock],
             '',
@@ -68,16 +78,25 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->method('addCommitCallback')
             ->will($this->returnSelf());
 
-        $resourceCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+        $resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->json = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(null)
+            ->getMock();
+
+        $this->serialize = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Serialize::class)
+            ->setMethods(null)
+            ->getMock();
 
         $this->flag = new \Magento\Framework\Flag(
             $context,
             $registry,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $this->json,
+            $this->serialize
         );
     }
 
@@ -94,7 +113,17 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flagCode, $this->flag->getFlagCode());
     }
 
-    public function testGetFlagData()
+    public function testGetFlagDataJson()
+    {
+        $result = $this->flag->getFlagData();
+        $this->assertNull($result);
+        $flagData = json_encode('data');
+        $this->flag->setData('flag_data', $flagData);
+        $result = $this->flag->getFlagData();
+        $this->assertEquals(json_decode($flagData), $result);
+    }
+
+    public function testGetFlagDataSerialized()
     {
         $result = $this->flag->getFlagData();
         $this->assertNull($result);
@@ -108,13 +137,13 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     {
         $flagData = 'data';
         $this->flag->setFlagData($flagData);
-        $result = unserialize($this->flag->getData('flag_data'));
+        $result = json_decode($this->flag->getData('flag_data'));
         $this->assertEquals($flagData, $result);
     }
 
     public function testLoadSelf()
     {
-        $this->assertInstanceOf('Magento\Framework\Flag', $this->flag->loadSelf());
+        $this->assertInstanceOf(\Magento\Framework\Flag::class, $this->flag->loadSelf());
     }
 
     /**

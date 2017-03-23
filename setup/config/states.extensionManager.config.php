@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,8 @@ return [
             'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
             'order'       => 2,
-            'type'        => 'install'
+            'type'        => 'install',
+            'wrapper'     => 1
         ],
         [
             'id'          => 'root.readiness-check-install.progress',
@@ -30,7 +31,8 @@ return [
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 3,
-            'type'        => 'install'
+            'type'        => 'install',
+            'wrapper'     => 1
         ],
         [
             'id'          => 'root.create-backup-install',
@@ -42,7 +44,8 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 4,
-            'type'        => 'install'
+            'type'        => 'install',
+            'wrapper'     => 1
         ],
         [
             'id'          => 'root.create-backup-install.progress',
@@ -53,7 +56,8 @@ return [
             'controller'  => 'completeBackupController',
             'nav'         => false,
             'order'       => 5,
-            'type'        => 'install'
+            'type'        => 'install',
+            'wrapper'     => 1
         ],
         [
             'id'          => 'root.start-updater-install',
@@ -61,10 +65,11 @@ return [
             'templateUrl' => "$base/start-updater",
             'controller'  => 'startUpdaterController',
             'title'       => "Component \n Install",
-            'header'      => 'Step 3: Component Install',
+            'header'      => 'Step 3: Install',
             'nav'         => true,
             'order'       => 6,
-            'type'        => 'install'
+            'type'        => 'install',
+            'wrapper'     => 1
         ],
     ],
 ];

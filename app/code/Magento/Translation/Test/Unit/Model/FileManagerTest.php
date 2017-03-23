@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,19 +20,46 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $assetRepoMock;
 
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryListMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $driverFileMock;
+
     protected function setUp()
     {
-        $this->assetRepoMock = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->model = new FileManager($this->assetRepoMock);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->assetRepoMock = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->directoryListMock = $this->getMock(
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->driverFileMock = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
+
+        $this->model = $objectManager->getObject(
+            \Magento\Translation\Model\FileManager::class,
+            [
+                'assetRepo' => $this->assetRepoMock,
+                'directoryList' => $this->directoryListMock,
+                'driverFile' => $this->driverFileMock,
+            ]
+        );
     }
 
     public function testCreateTranslateConfigAsset()
     {
         $path = 'relative path';
         $expectedPath = $path . '/' . FileManager::TRANSLATION_CONFIG_FILE_NAME;
-        $fileMock = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $fileMock = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $contextMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\View\Asset\ContextInterface',
+            \Magento\Framework\View\Asset\ContextInterface::class,
             [],
             '',
             true,
@@ -49,5 +76,50 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($fileMock);
 
         $this->assertSame($fileMock, $this->model->createTranslateConfigAsset());
+    }
+
+    public function testGetTranslationFileTimestamp()
+    {
+
+        $path = 'path';
+        $contextMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Asset\ContextInterface::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getPath']
+        );
+        $this->assetRepoMock->expects($this->atLeastOnce())
+            ->method('getStaticViewFileContext')
+            ->willReturn($contextMock);
+        $contextMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
+        $this->directoryListMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
+        $this->driverFileMock->expects($this->once())
+            ->method('isExists')
+            ->with('path/path/js-translation.json')
+            ->willReturn(true);
+        $this->driverFileMock->expects($this->once())->method('stat')->willReturn(['mtime' => 1445736974]);
+        $this->assertEquals(1445736974, $this->model->getTranslationFileTimestamp());
+    }
+
+    public function testGetTranslationFilePath()
+    {
+        $path = 'path';
+        $contextMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Asset\ContextInterface::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getPath']
+        );
+        $this->assetRepoMock->expects($this->atLeastOnce())
+            ->method('getStaticViewFileContext')
+            ->willReturn($contextMock);
+        $contextMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
+        $this->assertEquals($path, $this->model->getTranslationFilePath());
     }
 }

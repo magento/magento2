@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,9 +46,7 @@ class CodeMessDetector implements ToolInterface
      */
     public function canRun()
     {
-        /** TODO: Remove provided check after PHPMD will support PHP version 7 */
-        $isPhpVersionSupported = PHP_VERSION_ID < 70000;
-        return class_exists('PHPMD\TextUI\Command') && $isPhpVersionSupported;
+        return class_exists(\PHPMD\TextUI\Command::class);
     }
 
     /**
@@ -63,7 +61,7 @@ class CodeMessDetector implements ToolInterface
         $commandLineArguments = [
             'run_file_mock', //emulate script name in console arguments
             implode(',', $whiteList),
-            'xml', //report format
+            'text', //report format
             $this->rulesetFile,
             '--reportfile',
             $this->reportFile,

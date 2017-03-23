@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,10 +32,10 @@ interface CreditmemoCommentRepositoryInterface
      *
      * Returns a credit memo comment search results interface.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterface Credit memo comment search results interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 
     /**
      * Deletes a specified credit memo comment.

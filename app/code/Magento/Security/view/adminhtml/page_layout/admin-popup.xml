@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <container name="backend.session.activity">
+        <container name="after.body.start" as="after.body.start" label="Page Top" before="-"/>
+        <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
+            <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="page-columns">
+                <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col">
+                    <container name="content" as="content" />
+                </container>
+            </container>
+            <container name="js" as="js" label="JavaScript"/>
+        </container>
+        <container name="before.body.end" as="before_body_end" label="Before Body End" after="-"/>
+    </container>
+</layout>

@@ -1,0 +1,75 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .my-credit-cards {
+        .status {
+            font-style: italic;
+        }
+
+        .action.delete {
+            .lib-button-reset();
+            .lib-button-as-link();
+        }
+    }
+
+    .my-credit-cards-popup {
+        .modal-footer {
+            text-align: right;
+        }
+
+        .action.secondary {
+            .lib-button-reset();
+            .lib-button-as-link();
+            margin-right: @indent__base;
+        }
+    }
+}
+
+//
+//  Mobile @screen__s
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .my-credit-cards {
+        .table:not(.totals):not(.cart):not(.table-comparison) {
+            .status {
+                display: none;
+
+                &:before {
+                    display: none;
+                }
+
+                &._default {
+                    display: block;
+                }
+            }
+        }
+
+        .card-type {
+            img {
+                vertical-align: middle;
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .my-credit-cards {
+        .card-type {
+            img {
+                display: block;
+            }
+        }
+    }
+}

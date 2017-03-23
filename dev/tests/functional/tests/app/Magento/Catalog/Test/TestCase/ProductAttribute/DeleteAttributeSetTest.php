@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Delete Attribute Set (Product Template)
+ * Test Creation for Delete Attribute Set (Attribute Set)
  *
  * Preconditions:
  * 1. An attribute is created.
@@ -22,19 +22,18 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * Test Flow:
  * 1. Log in to Backend.
- * 2. Navigate to Stores > Attributes > Product Template.
- * 3. Open created Product Template.
+ * 2. Navigate to Stores > Attributes > Attribute Set.
+ * 3. Open created Attribute Set.
  * 4. Click 'Delete' button.
  * 5. Perform all assertions.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-25473
  */
 class DeleteAttributeSetTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -70,26 +69,26 @@ class DeleteAttributeSetTest extends Injectable
      * Run DeleteAttributeSet test
      *
      * @param FixtureFactory $fixtureFactory
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @return array
      */
-    public function test(FixtureFactory $fixtureFactory, CatalogAttributeSet $productTemplate)
+    public function test(FixtureFactory $fixtureFactory, CatalogAttributeSet $attributeSet)
     {
         // Precondition
-        $productTemplate->persist();
+        $attributeSet->persist();
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
                 'dataset' => 'default',
                 'data' => [
-                    'attribute_set_id' => ['attribute_set' => $productTemplate],
+                    'attribute_set_id' => ['attribute_set' => $attributeSet],
                 ],
             ]
         );
         $product->persist();
 
         // Steps
-        $filter = ['set_name' => $productTemplate->getAttributeSetName()];
+        $filter = ['set_name' => $attributeSet->getAttributeSetName()];
         $this->productSetIndex->open();
         $this->productSetIndex->getGrid()->searchAndOpen($filter);
         $this->productSetEdit->getPageActions()->delete();

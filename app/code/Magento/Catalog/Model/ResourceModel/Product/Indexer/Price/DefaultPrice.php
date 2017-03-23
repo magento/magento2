@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
@@ -225,8 +225,41 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function _prepareFinalPriceData($entityIds = null)
     {
+        return $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
+    }
+
+    /**
+     * Prepare products default final price in temporary index table
+     *
+     * @param int|array $entityIds the entity ids limitation
+     * @param string|null $type product type, all if null
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function prepareFinalPriceDataForType($entityIds, $type)
+    {
         $this->_prepareDefaultFinalPriceTable();
 
+        $select = $this->getSelect($entityIds, $type);
+        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
+        $this->getConnection()->query($query);
+        return $this;
+    }
+
+    /**
+     * Forms Select for collecting price related data for final price index table
+     * Next types of prices took into account: default, special, tier price
+     * Moved to protected for possible reusing
+     *
+     * @param int|array $entityIds Ids for filtering output result
+     * @param string|null $type Type for filtering output result by specified product type (all if null)
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function getSelect($entityIds = null, $type = null)
+    {
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -260,28 +293,61 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
             ' AND tp.customer_group_id = cg.customer_group_id',
             []
-        )->where(
-            'e.type_id = ?',
-            $this->getTypeId()
         );
+
+        if ($type !== null) {
+            $select->where('e.type_id = ?', $type);
+        }
 
         // add enable products limitation
         $statusCond = $connection->quoteInto(
             '=?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
-        $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
+        $this->_addAttributeToSelect(
+            $select,
+            'status',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id',
+            $statusCond,
+            true
+        );
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
-            $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');
+            $taxClassId = $this->_addAttributeToSelect(
+                $select,
+                'tax_class_id',
+                'e.' . $metadata->getLinkField(),
+                'cs.store_id'
+            );
         } else {
             $taxClassId = new \Zend_Db_Expr('0');
         }
         $select->columns(['tax_class_id' => $taxClassId]);
 
-        $price = $this->_addAttributeToSelect($select, 'price', 'e.entity_id', 'cs.store_id');
-        $specialPrice = $this->_addAttributeToSelect($select, 'special_price', 'e.entity_id', 'cs.store_id');
-        $specialFrom = $this->_addAttributeToSelect($select, 'special_from_date', 'e.entity_id', 'cs.store_id');
-        $specialTo = $this->_addAttributeToSelect($select, 'special_to_date', 'e.entity_id', 'cs.store_id');
+        $price = $this->_addAttributeToSelect(
+            $select,
+            'price',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
+        $specialPrice = $this->_addAttributeToSelect(
+            $select,
+            'special_price',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
+        $specialFrom = $this->_addAttributeToSelect(
+            $select,
+            'special_from_date',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
+        $specialTo = $this->_addAttributeToSelect(
+            $select,
+            'special_to_date',
+            'e.' . $metadata->getLinkField(),
+            'cs.store_id'
+        );
         $currentDate = $connection->getDatePartSql('cwd.website_date');
 
         $specialFromDate = $connection->getDatePartSql($specialFrom);
@@ -299,10 +365,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
 
         $select->columns(
             [
-                'orig_price' => $price,
-                'price' => $finalPrice,
-                'min_price' => $finalPrice,
-                'max_price' => $finalPrice,
+                'orig_price' => $connection->getIfNullSql($price, 0),
+                'price' => $connection->getIfNullSql($finalPrice, 0),
+                'min_price' => $connection->getIfNullSql($finalPrice, 0),
+                'max_price' => $connection->getIfNullSql($finalPrice, 0),
                 'tier_price' => new \Zend_Db_Expr('tp.min_price'),
                 'base_tier' => new \Zend_Db_Expr('tp.min_price'),
             ]
@@ -321,13 +387,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('e.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cw.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
-
-        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
-        $connection->query($query);
-        return $this;
+        return $select;
     }
 
     /**
@@ -554,9 +617,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * Mode Final Prices index to primary temporary index table
      *
+     * @param int[]|null $entityIds
      * @return $this
      */
-    protected function _movePriceDataToIndexTable()
+    protected function _movePriceDataToIndexTable($entityIds = null)
     {
         $columns = [
             'entity_id' => 'entity_id',
@@ -573,6 +637,10 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connection = $this->getConnection();
         $table = $this->_getDefaultFinalPriceTable();
         $select = $connection->select()->from($table, $columns);
+
+        if ($entityIds !== null) {
+            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0);
+        }
 
         $query = $select->insertFromSelect($this->getIdxTable(), [], false);
         $connection->query($query);

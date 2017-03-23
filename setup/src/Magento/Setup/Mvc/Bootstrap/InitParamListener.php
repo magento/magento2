@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Setup\Mvc\Bootstrap;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
@@ -16,6 +17,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
@@ -40,13 +42,23 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     private $listeners = [];
 
     /**
+     * List of controllers which should be skipped from auth check
+     *
+     * @var array
+     */
+    private $controllersToSkip = [
+        \Magento\Setup\Controller\Session::class,
+        \Magento\Setup\Controller\Success::class
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function attach(EventManagerInterface $events)
     {
         $sharedEvents = $events->getSharedManager();
         $this->listeners[] = $sharedEvents->attach(
-            'Zend\Mvc\Application',
+            \Zend\Mvc\Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this, 'onBootstrap']
         );
@@ -77,8 +89,92 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $initParams = $application->getServiceManager()->get(self::BOOTSTRAP_PARAM);
         $directoryList = $this->createDirectoryList($initParams);
         $serviceManager = $application->getServiceManager();
-        $serviceManager->setService('Magento\Framework\App\Filesystem\DirectoryList', $directoryList);
-        $serviceManager->setService('Magento\Framework\Filesystem', $this->createFilesystem($directoryList));
+        $serviceManager->setService(\Magento\Framework\App\Filesystem\DirectoryList::class, $directoryList);
+        $serviceManager->setService(\Magento\Framework\Filesystem::class, $this->createFilesystem($directoryList));
+
+        if (!($application->getRequest() instanceof Request)) {
+            $eventManager = $application->getEventManager();
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$this, 'authPreDispatch'], 100);
+        }
+    }
+
+    /**
+     * Check if user logged-in and has permissions
+     *
+     * @param \Zend\Mvc\MvcEvent $event
+     * @return false|\Zend\Http\Response
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function authPreDispatch($event)
+    {
+        /** @var RouteMatch $routeMatch */
+        $routeMatch = $event->getRouteMatch();
+        $controller = $routeMatch->getParam('controller');
+
+        if (!in_array($controller, $this->controllersToSkip)) {
+            /** @var Application $application */
+            $application = $event->getApplication();
+            $serviceManager = $application->getServiceManager();
+
+            if ($serviceManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
+                /** @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider */
+                $objectManagerProvider = $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
+                /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+                $objectManager = $objectManagerProvider->get();
+                /** @var \Magento\Framework\App\State $adminAppState */
+                $adminAppState = $objectManager->get(\Magento\Framework\App\State::class);
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+                /** @var \Magento\Backend\Model\Session\AdminConfig $sessionConfig */
+                $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
+                $cookiePath = $this->getSetupCookiePath($objectManager);
+                $sessionConfig->setCookiePath($cookiePath);
+                /** @var \Magento\Backend\Model\Auth\Session $adminSession */
+                $adminSession = $objectManager->create(
+                    \Magento\Backend\Model\Auth\Session::class,
+                    [
+                        'sessionConfig' => $sessionConfig,
+                        'appState' => $adminAppState
+                    ]
+                );
+                /** @var \Magento\Backend\Model\Auth $auth */
+                $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
+
+                if (!$authentication->isLoggedIn() ||
+                    !$adminSession->isAllowed('Magento_Backend::setup_wizard')
+                ) {
+                    $adminSession->destroy();
+                    /** @var \Zend\Http\Response $response */
+                    $response = $event->getResponse();
+                    $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
+                    $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');
+                    $response->setStatusCode(302);
+                    $event->stopPropagation();
+
+                    return $response;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get cookie path
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @return string
+     */
+    private function getSetupCookiePath(\Magento\Framework\ObjectManagerInterface $objectManager)
+    {
+        /** @var \Magento\Backend\App\BackendAppList $backendAppList */
+        $backendAppList = $objectManager->get(\Magento\Backend\App\BackendAppList::class);
+        $backendApp = $backendAppList->getBackendApp('setup');
+        /** @var \Magento\Backend\Model\UrlFactory $backendUrlFactory */
+        $backendUrlFactory = $objectManager->get(\Magento\Backend\Model\UrlFactory::class);
+        $baseUrl = parse_url($backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
+        $cookiePath = $baseUrl . $backendApp->getCookiePath();
+        return $cookiePath;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n;
@@ -30,9 +30,7 @@ class Locale
      */
     public function __construct($locale)
     {
-        if ($locale == self::DEFAULT_SYSTEM_LOCALE) {
-            throw new \InvalidArgumentException('Target locale is system default locale.');
-        } elseif (!preg_match('/[a-z]{2}_[A-Z]{2}/', $locale)) {
+        if (!preg_match('/[a-z]{2}_[A-Z]{2}/', $locale)) {
             throw new \InvalidArgumentException('Target locale must match the following format: "aa_AA".');
         }
         $this->_locale = $locale;

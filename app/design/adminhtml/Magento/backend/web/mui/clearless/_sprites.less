@@ -1,0 +1,56 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+// ==============================================
+// Sprite helpers
+// ==============================================
+
+.sprite(@x, @y, @sprite-image:@sprite-image, @sprite-grid:@sprite-grid) {
+    .sprite-image(@sprite-image);
+    .sprite-pos(@x, @y, @sprite-grid);
+}
+
+.sprite-sized(@x, @y, @size, @sprite-image:@sprite-image, @sprite-grid:@sprite-grid) when not (isnumber(@sprite-image)) {
+    .sprite(@x, @y, @sprite-image, @sprite-grid);
+    .size(@size);
+}
+
+.sprite-sized(@x, @y, @width, @height, @sprite-image:@sprite-image, @sprite-grid:@sprite-grid) when (isnumber(@height)) {
+    .sprite(@x, @y, @sprite-image, @sprite-grid);
+    .size(@width,@height);
+}
+
+.sprite-ir(@x, @y, @size, @sprite-image:@sprite-image, @sprite-grid:@sprite-grid) when not (isnumber(@sprite-image)) {
+    .ir();
+    .sprite(@x, @y, @sprite-image, @sprite-grid);
+    .size(@size);
+}
+
+.sprite-ir(@x, @y, @width, @height, @sprite-image:@sprite-image, @sprite-grid:@sprite-grid) when (isnumber(@height)) {
+    .ir();
+    .sprite(@x, @y, @sprite-image, @sprite-grid);
+    .size(@width,@height);
+}
+
+.sprite-image(@sprite-image:@sprite-image) {
+    background-image: url(@sprite-image);
+    background-repeat: no-repeat;
+}
+
+.sprite-pos(@x, @y, @sprite-grid:@sprite-grid) {
+    background-position: -(@x*@sprite-grid*1px)  -(@y*@sprite-grid*1px);
+}
+
+.sprite-pos-sized(@x, @y, @size, @sprite-grid:@sprite-grid) when not (isnumber(@sprite-image)) {
+    .sprite-pos(@x, @y, @sprite-grid);
+    .size(@size);
+}
+
+.sprite-pos-sized(@x, @y, @width, @height, @sprite-grid:@sprite-grid) when (isnumber(@height)) {
+    .sprite-pos(@x, @y, @sprite-grid);
+    .size(@width,@height);
+}
+
+

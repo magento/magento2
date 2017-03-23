@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -19,6 +19,9 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\ObjectManager;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class AfterImportDataObserver
@@ -51,6 +54,9 @@ class AfterImportDataObserver implements ObserverInterface
     /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry */
     protected $productCategories;
 
+    /** @var UrlFinderInterface */
+    protected $urlFinder;
+
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
@@ -66,9 +72,6 @@ class AfterImportDataObserver implements ObserverInterface
     /** @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory */
     protected $catalogProductFactory;
 
-    /** @var int */
-    protected $urlKeyAttribute;
-
     /** @var array */
     protected $acceptableCategories;
 
@@ -77,9 +80,6 @@ class AfterImportDataObserver implements ObserverInterface
 
     /** @var array */
     protected $websitesToStoreIds;
-
-    /** @var array */
-    protected $entityStoresToCheckOverridden = [];
 
     /** @var array */
     protected $storesCache = [];
@@ -96,33 +96,35 @@ class AfterImportDataObserver implements ObserverInterface
         'url_key',
         'url_path',
         'name',
+        'visibility',
     ];
+
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    private $mergeDataProviderPrototype;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
-     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory
      * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
-     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
-        \Magento\Eav\Model\Config $eavConfig,
         \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory $objectRegistryFactory,
         \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
-        \Magento\Framework\App\ResourceConnection $resource,
         \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -131,17 +133,11 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
-        $attribute = $eavConfig->getAttribute(Product::ENTITY, self::URL_KEY_ATTRIBUTE_CODE);
-        if (!$attribute) {
-            throw new \InvalidArgumentException(sprintf(
-                'Cannot retrieve attribute for entity type "%s"',
-                Product::ENTITY
-            ));
-        }
-        $this->connection = $resource->getConnection();
-        $this->urlKeyAttributeId = $attribute->getId();
-        $this->urlKeyAttributeBackendTable = $attribute->getBackendTable();
         $this->urlFinder = $urlFinder;
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -180,6 +176,10 @@ class AfterImportDataObserver implements ObserverInterface
         if (empty($newSku) || !isset($newSku['entity_id'])) {
             return null;
         }
+        if ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
+            && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE])) {
+            return null;
+        }
         $rowData['entity_id'] = $newSku['entity_id'];
 
         $product = $this->catalogProductFactory->create();
@@ -190,6 +190,7 @@ class AfterImportDataObserver implements ObserverInterface
                 $product->setData($field, $rowData[$field]);
             }
         }
+
         $this->categoryCache[$rowData['entity_id']] = $this->import->getProductCategories($rowData['sku']);
         $this->websiteCache[$rowData['entity_id']] = $this->import->getProductWebsites($rowData['sku']);
         foreach ($this->websiteCache[$rowData['entity_id']] as $websiteId) {
@@ -197,11 +198,9 @@ class AfterImportDataObserver implements ObserverInterface
                 $this->websitesToStoreIds[$websiteId] = $this->storeManager->getWebsite($websiteId)->getStoreIds();
             }
         }
-        if (!empty($rowData[ImportProduct::COL_STORE])
-            && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
-        ) {
-            $product->setStoreId($storeId);
-        }
+
+        $this->setStoreToProduct($product, $rowData);
+
         if ($this->isGlobalScope($product->getStoreId())) {
             $this->populateGlobalProduct($product);
         } else {
@@ -211,25 +210,44 @@ class AfterImportDataObserver implements ObserverInterface
     }
 
     /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $rowData
+     * @return void
+     */
+    protected function setStoreToProduct(\Magento\Catalog\Model\Product $product, array $rowData)
+    {
+        if (!empty($rowData[ImportProduct::COL_STORE])
+            && ($storeId = $this->import->getStoreIdByCode($rowData[ImportProduct::COL_STORE]))
+        ) {
+            $product->setStoreId($storeId);
+        } elseif (!$product->hasData(\Magento\Catalog\Model\Product::STORE_ID)) {
+            $product->setStoreId(Store::DEFAULT_STORE_ID);
+        }
+    }
+
+    /**
      * Add product to import
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @param string $storeId
      * @return $this
      */
     protected function addProductToImport($product, $storeId)
     {
+        if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
+            return $this;
+        }
         if (!isset($this->products[$product->getId()])) {
             $this->products[$product->getId()] = [];
-            $this->products[$product->getId()][$storeId] = $product;
         }
+        $this->products[$product->getId()][$storeId] = $product;
         return $this;
     }
 
     /**
      * Populate global product
      *
-     * @param \Magento\CatalogImportExport\Model\Import\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     protected function populateGlobalProduct($product)
@@ -239,8 +257,6 @@ class AfterImportDataObserver implements ObserverInterface
                 $this->storesCache[$storeId] = true;
                 if (!$this->isGlobalScope($storeId)) {
                     $this->addProductToImport($product, $storeId);
-                    $this->entityStoresToCheckOverridden[] = $this->connection->quoteInto('(store_id = ?', $storeId)
-                        . $this->connection->quoteInto(' AND entity_id = ?)', $product->getId());
                 }
             }
         }
@@ -254,45 +270,16 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
-        $this->cleanOverriddenUrlKey();
-
-        /**
-         * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-         */
-        $urls = array_merge(
-            $this->canonicalUrlRewriteGenerate(),
-            $this->categoriesUrlRewriteGenerate(),
-            $this->currentUrlRewritesRegenerate()
-        );
-
-        /* Reduce duplicates. Last wins */
-        $result = [];
-        foreach ($urls as $url) {
-            $result[$url->getTargetPath() . '-' . $url->getStoreId()] = $url;
-        }
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $mergeDataProvider->merge($this->canonicalUrlRewriteGenerate());
+        $mergeDataProvider->merge($this->categoriesUrlRewriteGenerate());
+        $mergeDataProvider->merge($this->currentUrlRewritesRegenerate());
         $this->productCategories = null;
 
+        unset($this->products);
         $this->products = [];
-        return $result;
-    }
 
-    /**
-     * @return $this
-     */
-    protected function cleanOverriddenUrlKey()
-    {
-        if (empty($this->entityStoresToCheckOverridden)) {
-            return $this;
-        }
-        $select = $this->connection->select()
-            ->from($this->urlKeyAttributeBackendTable, ['store_id', 'entity_id'])
-            ->where('attribute_id = ?', $this->urlKeyAttributeId)
-            ->where(implode(' OR ', $this->entityStoresToCheckOverridden));
-        $entityStoresToClean = $this->connection->fetchAll($select);
-        foreach ($entityStoresToClean as $entityStore) {
-            unset($this->products[$entityStore['entity_id']][$entityStore['store_id']]);
-        }
-        return $this;
+        return $mergeDataProvider->getData();
     }
 
     /**
@@ -342,6 +329,9 @@ class AfterImportDataObserver implements ObserverInterface
             foreach ($productsByStores as $storeId => $product) {
                 foreach ($this->categoryCache[$productId] as $categoryId) {
                     $category = $this->import->getCategoryProcessor()->getCategoryById($categoryId);
+                    if ($category->getParentId() == Category::TREE_ROOT_ID) {
+                        continue;
+                    }
                     $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
@@ -377,14 +367,10 @@ class AfterImportDataObserver implements ObserverInterface
             if ($category === false) {
                 continue;
             }
-            if ($currentUrlRewrite->getIsAutogenerated()) {
-                $urlRewrite = $this->generateForAutogenerated($currentUrlRewrite, $category);
-            } else {
-                $urlRewrite = $this->generateForCustom($currentUrlRewrite, $category);
-            }
-            if ($urlRewrite) {
-                $urlRewrites[] = $urlRewrite;
-            }
+            $url = $currentUrlRewrite->getIsAutogenerated()
+                ? $this->generateForAutogenerated($currentUrlRewrite, $category)
+                : $this->generateForCustom($currentUrlRewrite, $category);
+            $urlRewrites = array_merge($urlRewrites, $url);
         }
 
         $this->product = null;

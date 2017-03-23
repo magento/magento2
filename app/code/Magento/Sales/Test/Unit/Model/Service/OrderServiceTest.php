@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
 
 /**
  * Class OrderUnHoldTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,115 +16,138 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Service\OrderService
      */
     protected $orderService;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\OrderRepositoryInterface
      */
     protected $orderRepositoryMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\OrderStatusHistoryRepositoryInterface
      */
     protected $orderStatusHistoryRepositoryMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilderMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\SearchCriteria
      */
     protected $searchCriteriaMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\FilterBuilder
      */
     protected $filterBuilderMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\Filter
      */
     protected $filterMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\OrderNotifier
      */
     protected $orderNotifierMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order
      */
     protected $orderMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Status\History
      */
     protected $orderStatusHistoryMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface
      */
     protected $orderSearchResultMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
      */
     protected $eventManagerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Email\Sender\OrderCommentSender
+     */
+    protected $orderCommentSender;
+
     protected function setUp()
     {
         $this->orderRepositoryMock = $this->getMockBuilder(
-            'Magento\Sales\Api\OrderRepositoryInterface'
+            \Magento\Sales\Api\OrderRepositoryInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderStatusHistoryRepositoryMock = $this->getMockBuilder(
-            'Magento\Sales\Api\OrderStatusHistoryRepositoryInterface'
+            \Magento\Sales\Api\OrderStatusHistoryRepositoryInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchCriteriaMock = $this->getMockBuilder(
-            'Magento\Framework\Api\SearchCriteria'
+            \Magento\Framework\Api\SearchCriteria::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterBuilderMock = $this->getMockBuilder(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterMock = $this->getMockBuilder(
-            'Magento\Framework\Api\Filter'
+            \Magento\Framework\Api\Filter::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderNotifierMock = $this->getMockBuilder(
-            'Magento\Sales\Model\OrderNotifier'
+            \Magento\Sales\Model\OrderNotifier::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Order'
+            \Magento\Sales\Model\Order::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderStatusHistoryMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Order\Status\History'
+            \Magento\Sales\Model\Order\Status\History::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderSearchResultMock = $this->getMockBuilder(
-            'Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface'
+            \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(
-            'Magento\Framework\Event\ManagerInterface'
+            \Magento\Framework\Event\ManagerInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
+        $this->orderCommentSender = $this->getMockBuilder(
+            \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->orderService = new \Magento\Sales\Model\Service\OrderService(
             $this->orderRepositoryMock,
             $this->orderStatusHistoryRepositoryMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
             $this->orderNotifierMock,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->orderCommentSender
         );
     }
 
@@ -174,6 +199,7 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testAddComment()
     {
+        $clearComment = "Comment text here...";
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with(123)
@@ -182,10 +208,16 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
             ->method('addStatusHistory')
             ->with($this->orderStatusHistoryMock)
             ->willReturn($this->orderMock);
+        $this->orderStatusHistoryMock->expects($this->once())
+            ->method('getComment')
+            ->willReturn("<h1>" . $clearComment);
         $this->orderRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->orderMock)
             ->willReturn([]);
+        $this->orderCommentSender->expects($this->once())
+            ->method('send')
+            ->with($this->orderMock, false, $clearComment);
         $this->assertTrue($this->orderService->addComment(123, $this->orderStatusHistoryMock));
     }
 

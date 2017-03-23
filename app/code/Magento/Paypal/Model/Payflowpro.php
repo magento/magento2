@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Model\Method\Online\GatewayInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Payment;
-use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Magento\Payment\Model\Method\ConfigInterface;
-use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -78,6 +80,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     const RESPONSE_CODE_CAPTURE_ERROR = 111;
 
     const RESPONSE_CODE_VOID_ERROR = 108;
+
+    const PNREF = 'pnref';
 
     /**#@-*/
 
@@ -396,12 +400,12 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        if ($payment->getAdditionalInformation('pnref')) {
+        if ($payment->getAdditionalInformation(self::PNREF)) {
             $request = $this->buildBasicRequest();
             $request->setAmt(round($amount, 2));
             $request->setTrxtype(self::TRXTYPE_SALE);
-            $request->setOrigid($payment->getAdditionalInformation('pnref'));
-            $payment->unsAdditionalInformation('pnref');
+            $request->setOrigid($payment->getAdditionalInformation(self::PNREF));
+            $payment->unsAdditionalInformation(self::PNREF);
         } elseif ($payment->getParentTransactionId()) {
             $request = $this->buildBasicRequest();
             $request->setOrigid($payment->getParentTransactionId());
@@ -500,8 +504,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $this->processErrors($response);
 
         if ($response->getResultCode() == self::RESPONSE_CODE_APPROVED) {
-            $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(1);
-            $payment->setShouldCloseParentTransaction(!$payment->getCreditmemo()->getInvoice()->canRefund());
+            $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(true);
         }
         return $this;
     }
@@ -515,11 +518,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
-        $request = $this->buildBasicRequest();
-        $request->setTrxtype(self::TRXTYPE_DELAYED_INQUIRY);
-        $transactionId = $payment->getCcTransId() ? $payment->getCcTransId() : $transactionId;
-        $request->setOrigid($transactionId);
-        $response = $this->postRequest($request, $this->getConfig());
+        $response = $this->transactionInquiryRequest($payment, $transactionId);
 
         $this->processErrors($response);
 
@@ -575,7 +574,14 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
-        return $this->gateway->postRequest($request, $config);
+        try {
+            return $this->gateway->postRequest($request, $config);
+        } catch (\Zend_Http_Client_Exception $e) {
+            throw new LocalizedException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
+                $e
+            );
+        }
     }
 
     /**
@@ -616,7 +622,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setPartner($this->getConfigData('partner'));
         $request->setPwd($this->getConfigData('pwd'));
         $request->setVerbosity($this->getConfigData('verbosity'));
-        $request->setData('BNCODE', $config->getBuildNotationCode());
+        $request->setData('BUTTONSOURCE', $config->getBuildNotationCode());
         $request->setTender(self::TENDER_CC);
 
         return $request;
@@ -841,7 +847,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @param Order $order
      * @return void
      */
-    protected function addRequestOrderInfo(DataObject $request, Order $order)
+    public function addRequestOrderInfo(DataObject $request, Order $order)
     {
         $id = $order->getId();
         // for auth request order id is not exists yet
@@ -852,5 +858,52 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setCustref($orderIncrementId)
             ->setInvnum($orderIncrementId)
             ->setComment1($orderIncrementId);
+    }
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param array|DataObject $data
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function assignData(DataObject $data)
+    {
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data_' . $this->getCode(),
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param InfoInterface $payment
+     * @param string $transactionId
+     * @return DataObject
+     * @throws LocalizedException
+     */
+    protected function transactionInquiryRequest(InfoInterface $payment, $transactionId)
+    {
+        $request = $this->buildBasicRequest();
+        $request->setTrxtype(self::TRXTYPE_DELAYED_INQUIRY);
+        $transactionId = $payment->getCcTransId() ? $payment->getCcTransId() : $transactionId;
+        $request->setOrigid($transactionId);
+        $response = $this->postRequest($request, $this->getConfig());
+
+        return $response;
     }
 }

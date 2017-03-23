@@ -2,7 +2,7 @@
 /**
  * Front controller responsible for dispatching application requests
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -24,7 +24,7 @@ class FrontController implements FrontControllerInterface
      * @param \Magento\Framework\App\Response\Http $response
      */
     public function __construct(
-        RouterList $routerList,
+        RouterListInterface $routerList,
         \Magento\Framework\App\Response\Http $response
     ) {
         $this->_routerList = $routerList;
@@ -51,7 +51,11 @@ class FrontController implements FrontControllerInterface
                     if ($actionInstance) {
                         $request->setDispatched(true);
                         $this->response->setNoCacheHeaders();
-                        $result = $actionInstance->dispatch($request);
+                        if ($actionInstance instanceof \Magento\Framework\App\Action\AbstractAction) {
+                            $result = $actionInstance->dispatch($request);
+                        } else {
+                            $result = $actionInstance->execute();
+                        }
                         break;
                     }
                 } catch (\Magento\Framework\Exception\NotFoundException $e) {

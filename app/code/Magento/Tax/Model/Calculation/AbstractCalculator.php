@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
@@ -205,6 +205,7 @@ abstract class AbstractCalculator
     {
         $this->customerId = $customerId;
     }
+
     // @codeCoverageIgnoreEnd
 
     /**
@@ -433,14 +434,18 @@ abstract class AbstractCalculator
      * @param float $storePriceInclTax
      * @param float $storeRate
      * @param float $customerRate
+     * @param boolean $round
      * @return float
      */
-    protected function calculatePriceInclTax($storePriceInclTax, $storeRate, $customerRate)
+    protected function calculatePriceInclTax($storePriceInclTax, $storeRate, $customerRate, $round = true)
     {
         $storeTax = $this->calculationTool->calcTaxAmount($storePriceInclTax, $storeRate, true, false);
         $priceExclTax = $storePriceInclTax - $storeTax;
         $customerTax = $this->calculationTool->calcTaxAmount($priceExclTax, $customerRate, false, false);
-        $customerPriceInclTax = $this->calculationTool->round($priceExclTax + $customerTax);
+        $customerPriceInclTax = $priceExclTax + $customerTax;
+        if ($round) {
+            $customerPriceInclTax = $this->calculationTool->round($customerPriceInclTax);
+        }
         return $customerPriceInclTax;
     }
 }

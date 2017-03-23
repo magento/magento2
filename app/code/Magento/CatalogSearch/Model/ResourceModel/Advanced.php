@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
@@ -81,7 +81,7 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } else {
             if (strlen($value) > 0) {
                 if (in_array($attribute->getBackendType(), ['varchar', 'text', 'static'])) {
-                    $condition = ['like' => '%' . $value . '%']; // text search
+                    $condition = ['like' => $value]; // text search
                 } else {
                     $condition = $value;
                 }

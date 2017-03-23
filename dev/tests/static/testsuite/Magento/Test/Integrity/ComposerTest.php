@@ -1,30 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\MagentoComponent;
-use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Shell;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A test that enforces validity of composer.json files and any other conventions in Magento components
  */
 class ComposerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\Shell
-     */
-    private static $shell;
-
-    /**
-     * @var bool
-     */
-    private static $isComposerAvailable;
 
     /**
      * @var string
@@ -42,20 +31,16 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private static $dependencies;
 
     /**
-     * @var string
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    private static $composerPath = 'composer';
+    private static $objectManager;
 
     public static function setUpBeforeClass()
     {
-        if (defined('TESTS_COMPOSER_PATH')) {
-            self::$composerPath = TESTS_COMPOSER_PATH;
-        }
-        self::$shell = self::createShell();
-        self::$isComposerAvailable = self::isComposerAvailable();
-        self::$root = Files::init()->getPathToSource();
+        self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
         self::$dependencies = [];
+        self::$objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
     }
 
     public function testValidComposerJson()
@@ -84,7 +69,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
      */
     public function validateComposerJsonDataProvider()
     {
-        $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $root = BP;
         $componentRegistrar = new ComponentRegistrar();
         $result = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $dir) {
@@ -111,9 +96,10 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
      */
     private function validateComposerJsonFile($path)
     {
-        if (self::$isComposerAvailable) {
-            self::$shell->execute(self::$composerPath . ' validate --working-dir=%s', [$path]);
-        }
+        /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
+        $appFactory = self::$objectManager->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
+        $app = $appFactory->create();
+        $app->runComposerCommand(['command' => 'validate'], $path);
     }
 
     /**
@@ -141,7 +127,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('license', $json);
         $this->assertObjectHasAttribute('type', $json);
         $this->assertObjectHasAttribute('version', $json);
-        $this->assertVersionInSync($json->name, $json->version);
         $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
@@ -154,6 +139,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $xml = simplexml_load_file("$dir/etc/module.xml");
                 $this->assertConsistentModuleName($xml, $json->name);
                 $this->assertDependsOnPhp($json->require);
+                $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
@@ -166,12 +152,14 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             case 'magento2-theme':
                 $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
                 $this->assertDependsOnPhp($json->require);
+                $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
                 $this->assertRegExp('/^magento\/framework*/', $json->name);
+                $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertRequireInSync($json);
                 $this->assertAutoload($json);
                 break;
@@ -262,19 +250,21 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Assert that versions in root composer.json and Magento component's composer.json are not out of sync
+     * Assert that PHP versions in root composer.json and Magento component's composer.json are not out of sync
      *
      * @param string $name
-     * @param string $version
+     * @param string $phpVersion
      */
-    private function assertVersionInSync($name, $version)
+    private function assertPhpVersionInSync($name, $phpVersion)
     {
-        $this->assertEquals(
-            self::$rootJson['version'],
-            $version,
-            "Version {$version} in component {$name} is inconsistent with version "
-            . self::$rootJson['version'] . ' in root composer.json'
-        );
+        if (isset(self::$rootJson['require']['php'])) {
+            $this->assertEquals(
+                self::$rootJson['require']['php'],
+                $phpVersion,
+                "PHP version {$phpVersion} in component {$name} is inconsistent with version "
+                . self::$rootJson['require']['php'] . ' in root composer.json'
+            );
+        }
     }
 
     /**
@@ -327,31 +317,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             $package .= $chunk ? "-{$chunk}" : '';
         }
         return strtolower("{$vendor}/{$package}");
-    }
-
-    /**
-     * Create shell wrapper
-     *
-     * @return \Magento\Framework\Shell
-     */
-    private static function createShell()
-    {
-        return new Shell(new Shell\CommandRenderer, null);
-    }
-
-    /**
-     * Check if composer command is available in the environment
-     *
-     * @return bool
-     */
-    private static function isComposerAvailable()
-    {
-        try {
-            self::$shell->execute(self::$composerPath . ' --version');
-        } catch (LocalizedException $e) {
-            return false;
-        }
-        return true;
     }
 
     public function testComponentPathsInRoot()

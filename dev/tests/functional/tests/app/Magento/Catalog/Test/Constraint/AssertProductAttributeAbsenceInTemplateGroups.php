@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,45 +13,45 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductAttributeAbsenceInTemplateGroups
- * Checks that product attribute isn't displayed in Product template's Groups section
+ * Checks that product attribute isn't displayed in Attribute set's Groups section
  */
 class AssertProductAttributeAbsenceInTemplateGroups extends AbstractConstraint
 {
     /**
-     * Assert that deleted attribute isn't displayed in Product template's Groups section
+     * Assert that deleted attribute isn't displayed in Attribute set's Groups section
      *
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductSetIndex $productSetIndex
      * @param CatalogProductSetEdit $productSetEdit
      * @return void
      */
     public function processAssert(
-        CatalogAttributeSet $productTemplate,
+        CatalogAttributeSet $attributeSet,
         CatalogProductSetIndex $productSetIndex,
         CatalogProductSetEdit $productSetEdit
     ) {
-        $filter = ['set_name' => $productTemplate->getAttributeSetName()];
+        $filter = ['set_name' => $attributeSet->getAttributeSetName()];
         $productSetIndex->open();
         $productSetIndex->getGrid()->searchAndOpen($filter);
 
-        $attributeCode = $productTemplate
+        $attributeCode = $attributeSet
             ->getDataFieldConfig('assigned_attributes')['source']
             ->getAttributes()[0]
             ->getAttributeCode();
 
         \PHPUnit_Framework_Assert::assertFalse(
             $productSetEdit->getAttributeSetEditBlock()->checkProductAttribute($attributeCode),
-            "Attribute " . $attributeCode . " is present in Product template's Groups section."
+            "Attribute " . $attributeCode . " is present in Attribute set's Groups section."
         );
     }
 
     /**
-     * Text absent Product Attribute in Product template's Groups section
+     * Text absent Product Attribute in Attribute set's Groups section
      *
      * @return string
      */
     public function toString()
     {
-        return "Product Attribute is absent in Product template's Groups section.";
+        return "Product Attribute is absent in Attribute set's Groups section.";
     }
 }

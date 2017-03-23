@@ -1,33 +1,34 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 'use strict';
 angular.module('create-admin-account', ['ngStorage'])
-    .controller('createAdminAccountController', ['$scope', '$state', '$localStorage', function ($scope, $state, $localStorage) {
+    .controller('createAdminAccountController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
         $scope.admin = {
             'passwordStatus': {
                 class: 'none',
                 label: 'None'
             }
         };
-        
+
         $scope.passwordStatusChange = function () {
             if (angular.isUndefined($scope.admin.password)) {
                 return;
             }
             var p = $scope.admin.password;
-            if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
+            var MIN_ADMIN_PASSWORD_LENGTH = 7;
+            if (p.length >= MIN_ADMIN_PASSWORD_LENGTH && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
                 $scope.admin.passwordStatus.class = 'strong';
                 $scope.admin.passwordStatus.label = 'Strong';
-            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
+            } else if (p.length >= MIN_ADMIN_PASSWORD_LENGTH && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'good';
                 $scope.admin.passwordStatus.label = 'Good';
-            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
+            } else if (p.length >= MIN_ADMIN_PASSWORD_LENGTH && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'fair';
                 $scope.admin.passwordStatus.label = 'Fair';
-            } else if (p.length >= 6) {
+            } else if (p.length >= MIN_ADMIN_PASSWORD_LENGTH) {
                 $scope.admin.passwordStatus.class = 'weak';
                 $scope.admin.passwordStatus.label = 'Weak';
             } else {
@@ -39,6 +40,25 @@ angular.module('create-admin-account', ['ngStorage'])
         if ($localStorage.admin) {
             $scope.admin = $localStorage.admin;
         }
+
+        $scope.validateCredentials = function () {
+            var data = {
+                'db': $localStorage.db,
+                'admin': $localStorage.admin,
+                'store': $localStorage.store,
+                'config': $localStorage.config
+            };
+            $http.post('index.php/validate-admin-credentials', data)
+                .success(function (data) {
+                    $scope.validateCredentials.result = data;
+                    if ($scope.validateCredentials.result.success) {
+                        $scope.nextState();
+                    }
+                })
+                .error(function (data) {
+                    $scope.validateCredentials.failed = data;
+                });
+        };
 
         $scope.$on('nextState', function () {
             $localStorage.admin = $scope.admin;

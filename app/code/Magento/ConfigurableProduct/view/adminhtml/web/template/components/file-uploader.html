@@ -1,0 +1,47 @@
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="data-grid-file-uploader" data-role="drop-zone" css="_loading: isLoading">
+    <div class="data-grid-file-uploader-inner">
+        <!-- ko if: $data.processedFile().url -->
+        <img class="file-uploader-image" attr="src: $data.processedFile().url, alt: $data.processedFile().name"/>
+        <!-- /ko -->
+        <!-- ko if: !$data.processedFile().url && $data.thumbnail() && $data.thumbnailUrl() -->
+        <img class="file-uploader-image" attr="src: $data.thumbnailUrl()"/>
+        <!-- /ko -->
+        <!-- ko if: !$data.processedFile().url && !$data.thumbnail() -->
+        <text args="$data.processedFile().name"/>
+        <!-- /ko -->
+        <div class="file-uploader-area">
+            <input type="file"
+                   class="file-uploader-input"
+                   afterRender="onElementRender"
+                   attr="id: uid, name: fileInputName, multiple: isMultipleFiles"/>
+            <label class="file-uploader-button" attr="for: uid, title: $t('Upload Image')"><span translate="'Upload Image'"/></label>
+            <span class="file-uploader-spinner"/>
+        </div>
+    </div>
+    <!-- ko if: $data.processedFile().url || $data.thumbnail() -->
+    <div class="action-select-wrap" data-bind="
+    css : {'_active': $data.actionsListOpened()},
+    outerClick: $data.closeList.bind($data)"
+    >
+        <button type="button" class="action-select" data-bind="click: function(){ $data.toggleActionsList(); }"/>
+        <ul class="action-menu" data-bind="css: {'_active': $data.actionsListOpened()}">
+            <li>
+                <a class="action-menu-item" data-bind="
+                click: function(){
+                    $data.deleteImage();
+                    $data.closeList();
+                },
+                text: $t('No Image')
+            "></a>
+            </li>
+        </ul>
+    </div>
+    <!-- /ko -->
+</div>

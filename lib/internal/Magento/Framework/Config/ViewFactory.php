@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Config;
+
+use Magento\Framework\ObjectManagerInterface;
 
 class ViewFactory
 {
@@ -18,20 +20,44 @@ class ViewFactory
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
 
     /**
-     * @param array $configFiles
-     * @return View
+     * Create new view object
+     *
+     * @param array $arguments
+     * @return \Magento\Framework\Config\View
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create($configFiles)
+    public function create(array $arguments = [])
     {
+        $viewConfigArguments = [];
+
+        if (isset($arguments['themeModel']) && isset($arguments['area'])) {
+            if (!($arguments['themeModel'] instanceof \Magento\Framework\View\Design\ThemeInterface)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase('%1 doesn\'t implement ThemeInterface', [$arguments['themeModel']])
+                );
+            }
+            /** @var \Magento\Theme\Model\View\Design $design */
+            $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class);
+            $design->setDesignTheme($arguments['themeModel'], $arguments['area']);
+            /** @var \Magento\Framework\Config\FileResolver $fileResolver */
+            $fileResolver = $this->objectManager->create(
+                \Magento\Framework\Config\FileResolver::class,
+                [
+                    'designInterface' => $design,
+                ]
+            );
+            $viewConfigArguments['fileResolver'] = $fileResolver;
+        }
+
         return $this->objectManager->create(
-            'Magento\Framework\Config\View',
-            ['configFiles' => $configFiles]
+            \Magento\Framework\Config\View::class,
+            $viewConfigArguments
         );
     }
 }

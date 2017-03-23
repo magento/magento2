@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -27,6 +27,22 @@ class ShippingInformation extends AbstractExtensibleModel implements ShippingInf
     public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address)
     {
         return $this->setData(self::SHIPPING_ADDRESS, $address);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBillingAddress()
+    {
+        return $this->getData(self::BILLING_ADDRESS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address)
+    {
+        return $this->setData(self::BILLING_ADDRESS, $address);
     }
 
     /**

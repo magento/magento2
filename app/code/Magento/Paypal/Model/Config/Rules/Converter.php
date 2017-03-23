@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Config\Rules;
@@ -58,8 +58,8 @@ class Converter implements ConverterInterface
     protected function createEvents(\DOMElement $node)
     {
         $result = [];
-        /** @var \DOMElement $child */
         foreach ($node->childNodes as $child) {
+            /** @var \DOMElement $child */
             if ($this->hasNodeElement($child)) {
                 $result[$child->getAttribute('name')] = [
                     'value' => $child->getAttribute('value'),
@@ -80,8 +80,8 @@ class Converter implements ConverterInterface
     protected function createPredicate(\DOMElement $node)
     {
         $result = [];
-        /** @var \DOMElement $child */
         foreach ($node->childNodes as $child) {
+            /** @var \DOMElement $child */
             if ($this->hasNodeElement($child)) {
                 $result = [
                     'name' => $child->getAttribute('name'),
@@ -105,31 +105,16 @@ class Converter implements ConverterInterface
     {
         $result = [];
         foreach ($node->childNodes as $child) {
+            /** @var \DOMElement $child */
             if ($this->hasNodeElement($child)) {
-                $result = array_merge($result, $this->createRule($child));
+                $result[$child->getAttribute('type')][] = [
+                    'event' => $child->getAttribute('event'),
+                    'argument' => $this->createArgument($child),
+                ];
             }
         }
 
         return [$node->getAttribute('target') => $result];
-    }
-
-    /**
-     * Creating rules
-     *
-     * @param \DOMElement $node
-     * @return array
-     */
-    protected function createRule(\DOMElement $node)
-    {
-        $result = [];
-        $type = $node->getAttribute('type');
-        /** @var \DOMElement $node */
-        $result[$type] = [
-            'event' => $node->getAttribute('event'),
-        ];
-        $result[$type]['argument'] = $this->createArgument($node);
-
-        return $result;
     }
 
     /**
@@ -141,8 +126,8 @@ class Converter implements ConverterInterface
     protected function createArgument(\DOMElement $node)
     {
         $result = [];
-        /** @var \DOMElement $child */
         foreach ($node->childNodes as $child) {
+            /** @var \DOMElement $child */
             if ($this->hasNodeElement($child)) {
                 $result[$child->getAttribute('name')] = $child->textContent;
             }

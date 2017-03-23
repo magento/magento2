@@ -1,16 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Api\Data;
 
+/**
+ * Interface ShippingInformationInterface
+ * @api
+ */
 interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
     const SHIPPING_ADDRESS = 'shipping_address';
+
+    const BILLING_ADDRESS = 'billing_address';
 
     const SHIPPING_METHOD_CODE = 'shipping_method_code';
 
@@ -32,6 +38,21 @@ interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttr
      * @return $this
      */
     public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address);
+
+    /**
+     * Returns billing address
+     *
+     * @return \Magento\Quote\Api\Data\AddressInterface|null
+     */
+    public function getBillingAddress();
+
+    /**
+     * Set billing address if additional synchronization needed
+     *
+     * @param \Magento\Quote\Api\Data\AddressInterface $address
+     * @return $this
+     */
+    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address);
 
     /**
      * Returns shipping method code

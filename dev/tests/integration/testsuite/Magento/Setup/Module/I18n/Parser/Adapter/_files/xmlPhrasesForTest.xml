@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config>
+    <node name="Name only" translate="name"/>
+    <node name="Name and title space delimiter" title="title1" translate="name title"/>
+    <node name="Name and title comma delimiter" title="title2" translate="name, title"/>
+    <node translate="name">
+        <name>Name only in sub node</name>
+        <notName>This shouldn't be picked up</notName>
+    </node>
+    <node translate="true">Text outside of attribute</node>
+</config>

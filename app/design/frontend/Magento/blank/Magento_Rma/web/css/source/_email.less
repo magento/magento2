@@ -1,0 +1,17 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  RMA table styles
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    //  Shrink table size on small screens to fit as much as possible without requiring horizontal scrolling
+    .rma-items td,
+    .rma-items th {
+        font-size: @font-size__s !important;
+        padding: 5px !important;
+    }
+}

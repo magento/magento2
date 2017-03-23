@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\TestCase;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
+use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -20,52 +20,60 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click 'Create account' button.
  * 5. Perform assertions.
  *
- * @group Customer_Account_(CS)
+ * @group Customer_Account
  * @ZephyrId MAGETWO-23546
  */
 class RegisterCustomerFrontendEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
+     * Customer registry page.
+     *
      * @var CustomerAccountCreate
      */
     protected $customerAccountCreate;
 
     /**
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
-
-    /**
+     * Cms page.
+     *
      * @var CmsIndex $cmsIndex
      */
     protected $cmsIndex;
 
     /**
+     * Customer log out step.
+     *
+     * @var LogoutCustomerOnFrontendStep
+     */
+    protected $logoutCustomerOnFrontendStep;
+
+    /**
+     * Inject data.
+     *
      * @param CustomerAccountCreate $customerAccountCreate
-     * @param CustomerAccountLogout $customerAccountLogout
      * @param CmsIndex $cmsIndex
+     * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontendStep
+     * @return void
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
-        CustomerAccountLogout $customerAccountLogout,
-        CmsIndex $cmsIndex
+        CmsIndex $cmsIndex,
+        LogoutCustomerOnFrontendStep $logoutCustomerOnFrontendStep
     ) {
-        $this->customerAccountLogout = $customerAccountLogout;
         $this->customerAccountCreate = $customerAccountCreate;
         $this->cmsIndex = $cmsIndex;
-        $this->customerAccountLogout->open();
+        $this->logoutCustomerOnFrontendStep = $logoutCustomerOnFrontendStep;
     }
 
     /**
      * Create Customer account on Storefront.
      *
      * @param Customer $customer
+     * @return void
      */
     public function test(Customer $customer)
     {
@@ -76,12 +84,12 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     }
 
     /**
-     * Logout customer from frontend account
+     * Logout customer from frontend account.
      *
-     * return void
+     * @return void
      */
     public function tearDown()
     {
-        $this->customerAccountLogout->open();
+        $this->logoutCustomerOnFrontendStep->run();
     }
 }

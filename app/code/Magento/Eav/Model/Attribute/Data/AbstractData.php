@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -242,7 +242,7 @@ abstract class AbstractData
         if ($filterCode) {
             $filterClass = 'Magento\Framework\Data\Form\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver->getLocale());
+                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver);
             } else {
                 $filter = new $filterClass();
             }
@@ -364,9 +364,7 @@ abstract class AbstractData
                     __("'%value%' appears to be a DNS hostname but cannot extract TLD part")
                     __("'%value%' appears to be a DNS hostname but cannot match TLD against known list")
                     */
-                    $validator = new \Zend_Validate_EmailAddress(
-                        ['allow' => ['allow' => \Zend_Validate_Hostname::ALLOW_ALL, 'tld' => false]]
-                    );
+                    $validator = new \Zend_Validate_EmailAddress();
                     $validator->setMessage(
                         __('"%1" invalid type entered.', $label),
                         \Zend_Validate_EmailAddress::INVALID

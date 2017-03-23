@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,7 +61,7 @@ class CheckoutTotalsJsLayoutDataProvider implements JsLayoutDataProviderInterfac
     protected function getTotalsConfig()
     {
         return [
-            'display_subtotal_incl_tax' => (int)$this->taxConfig->displayCartSubtotalInclTax(),
+            'display_cart_subtotal_incl_tax' => (int)$this->taxConfig->displayCartSubtotalInclTax(),
             'display_cart_subtotal_excl_tax' => (int)$this->taxConfig->displayCartSubtotalExclTax(),
         ];
     }

@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class AVSResponse
  */
-class AVSResponse extends AbstractFilterValidator implements ValidatorInterface
+class AVSResponse implements ValidatorInterface
 {
     /**
      * AVS address responses are for advice only. This
@@ -37,19 +38,19 @@ class AVSResponse extends AbstractFilterValidator implements ValidatorInterface
      */
     const IAVS = 'iavs';
 
-    /** Values of the response */
+    /**#@+ Values of the response */
     const RESPONSE_YES = 'y';
 
     const RESPONSE_NO = 'n';
 
     const RESPONSE_NOT_SUPPORTED = 'x';
-    /**  */
+    /**#@-*/
 
-    /** Values of the validation settings payments */
+    /**#@+ Values of the validation settings payments */
     const CONFIG_ON = 1;
 
     const CONFIG_OFF = 0;
-    /**  */
+    /**#@-*/
 
     /**
      * @var array
@@ -72,12 +73,13 @@ class AVSResponse extends AbstractFilterValidator implements ValidatorInterface
     /**
      * Validate data
      *
-     * @param Object $response
+     * @param DataObject|Object $response
+     * @param Transparent $transparentModel
      * @return bool
      */
-    public function validate(DataObject $response)
+    public function validate(DataObject $response, Transparent $transparentModel)
     {
-        $config = $this->getConfig();
+        $config = $transparentModel->getConfig();
         foreach ($this->avsCheck as $fieldName => $settingName) {
             if ($config->getValue($settingName) == static::CONFIG_ON
                 && strtolower((string) $response->getData($fieldName)) === static::RESPONSE_NO

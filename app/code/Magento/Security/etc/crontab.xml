@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="security_clean_admin_expired_sessions" instance="Magento\Security\Model\AdminSessionsManager" method="cleanExpiredSessions">
+            <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="security_clean_password_reset_request_event_records" instance="Magento\Security\Model\SecurityManager" method="cleanExpiredRecords">
+            <schedule>0 0 * * *</schedule>
+        </job>
+    </group>
+</config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class AssertWidgetSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(WidgetInstanceIndex $widgetInstanceIndex)
     {
-        $actualMessage = $widgetInstanceIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $widgetInstanceIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

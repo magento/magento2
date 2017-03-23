@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     {
         $componentRegistrar = new ComponentRegistrar();
         $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Component\DirSearch');
+            ->create(\Magento\Framework\Component\DirSearch::class);
         $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\View\Design\Theme\ThemePackageList');
+            ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
         $this->model = new Files($componentRegistrar, $dirSearch, $themePackageList);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
@@ -102,6 +102,21 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($actual);
         foreach ($actual as $file) {
             $this->assertStringEndsWith('.xml', $file[0]);
+        }
+    }
+
+    public function testGetXmlCatalogFiles()
+    {
+        $actual = $this->model->getXmlCatalogFiles('*.xml');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xml', $file[0]);
+        }
+
+        $actual = $this->model->getXmlCatalogFiles('*.xsd');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xsd', $file[0]);
         }
     }
 

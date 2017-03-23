@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\Event\Observer;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\Store;
 
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
@@ -19,28 +21,40 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
+    /** @var StoreViewService */
+    protected $storeViewService;
+
     /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
+     * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        ChildrenCategoriesProvider $childrenCategoriesProvider
+        ChildrenCategoriesProvider $childrenCategoriesProvider,
+        StoreViewService $storeViewService
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
+        $this->storeViewService = $storeViewService;
     }
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
-        if ($category->getUrlKey() !== false) {
-            $category->setUrlKey($this->categoryUrlPathGenerator->generateUrlKey($category))
+        $useDefaultAttribute = !$category->isObjectNew() && !empty($category->getData('use_default')['url_key']);
+        if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
+            $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
+            if (empty($resultUrlKey)) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
+            }
+            $category->setUrlKey($resultUrlKey)
                 ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             if (!$category->isObjectNew()) {
                 $category->getResource()->saveAttribute($category, 'url_path');
@@ -57,10 +71,48 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      */
     protected function updateUrlPathForChildren(Category $category)
     {
-        foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $childCategory->unsUrlPath();
-            $childCategory->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($childCategory));
-            $childCategory->getResource()->saveAttribute($childCategory, 'url_path');
+        $children = $this->childrenCategoriesProvider->getChildren($category, true);
+
+        if ($this->isGlobalScope($category->getStoreId())) {
+            foreach ($children as $child) {
+                foreach ($category->getStoreIds() as $storeId) {
+                    if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+                        $storeId,
+                        $child->getId(),
+                        Category::ENTITY
+                    )) {
+                        $child->setStoreId($storeId);
+                        $this->updateUrlPathForCategory($child);
+                    }
+                }
+            }
+        } else {
+            foreach ($children as $child) {
+                $child->setStoreId($category->getStoreId());
+                $this->updateUrlPathForCategory($child);
+            }
         }
+    }
+
+    /**
+     * Check is global scope
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    protected function isGlobalScope($storeId)
+    {
+        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
+    }
+
+    /**
+     * @param Category $category
+     * @return void
+     */
+    protected function updateUrlPathForCategory(Category $category)
+    {
+        $category->unsUrlPath();
+        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+        $category->getResource()->saveAttribute($category, 'url_path');
     }
 }

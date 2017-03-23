@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -97,7 +97,7 @@ abstract class EntityAbstract
             if ($this->_validateData()) {
                 $sourceCode = $this->_generateCode();
                 if ($sourceCode) {
-                    $fileName = $this->_ioObject->getResultFileName($this->_getResultClassName());
+                    $fileName = $this->_ioObject->generateResultFileName($this->_getResultClassName());
                     $this->_ioObject->writeResultFile($fileName, $sourceCode);
                     return $fileName;
                 } else {
@@ -187,7 +187,7 @@ abstract class EntityAbstract
             'visibility' => 'protected',
             'docblock' => [
                 'shortDescription' => 'Object Manager instance',
-                'tags' => [['name' => 'var', 'description' => '\Magento\Framework\ObjectManagerInterface']],
+                'tags' => [['name' => 'var', 'description' => '\\' . \Magento\Framework\ObjectManagerInterface::class]],
             ],
         ];
 
@@ -252,11 +252,7 @@ abstract class EntityAbstract
         if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif ($this->definedClasses->isClassLoadableFromDisc($resultClassName)) {
-            $this->_addError('Result class ' . $resultClassName . ' already exists.');
-            return false;
-        } elseif (
-            /**
+        } elseif (/**
              * If makeResultFileDirectory only fails because the file is already created,
              * a competing process has generated the file, no exception should be thrown.
              */
@@ -328,6 +324,8 @@ abstract class EntityAbstract
             $parameterInfo['type'] = 'array';
         } elseif ($parameter->getClass()) {
             $parameterInfo['type'] = $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
+        } elseif ($parameter->isCallable()) {
+            $parameterInfo['type'] = 'callable';
         }
 
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {

@@ -1,0 +1,136 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//&:extend(._layout-width all);
+._layout-width {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.visually-hidden {
+    .visually-hidden();
+}
+
+.validation-symbol {
+    &:after {
+        content: '*';
+        color: @validation__color;
+        font-weight: normal;
+        margin-left: 3px;
+    }
+}
+
+.validation-symbol-light {
+    &:after {
+        content: '*';
+        color: @validation__color-light;
+        font-weight: normal;
+        margin-left: 3px;
+    }
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.delete-first-last-border {
+    &:first-child {
+        border-left: 0;
+    }
+    &:last-child {
+        border-right: 0;
+    }
+}
+
+.massaction-form-inline-label-reset {
+    .label {
+        padding: 0;
+        width: auto;
+    }
+}
+
+//  Table columns widths
+.col-50 {
+    width: 50px;
+}
+
+.col-70 {
+    width: 70px;
+}
+
+.col-70-max {
+    max-width: 70px;
+    width: 70px;
+}
+
+.col-150-max {
+    max-width: 150px;
+    width: 150px;
+}
+
+.col-220-max {
+    max-width: 220px;
+    width: 220px;
+}
+
+.col-110-max {
+    max-width: 110px;
+    width: 110px;
+}
+
+.col-370-max {
+    max-width: 370px;
+    width: 370px;
+}
+
+.col-570-max {
+    max-width: 570px;
+    width: 570px;
+}
+
+.col-670-max {
+    max-width: 670px;
+    width: 670px;
+}
+
+.col-auto {
+    width: auto;
+}
+
+.col-40 {
+    width: 40px;
+}
+
+.side-paddings-0 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.col-actions-links {
+    display: block;
+    margin: 0 0 3px;
+    white-space: nowrap;
+}
+
+.data-table-td-max {
+    .data-table td {
+        &:extend(.ellipsis all);
+        max-width: 250px;
+        width: 250px;
+    }
+}
+
+.h-scroll {
+    overflow-x: auto;
+}
+
+.add-clearer {
+    .lib-clearer();
+}

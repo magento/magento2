@@ -2,7 +2,7 @@
 /**
  * Filter for removing malicious code from HTML
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class MaliciousCode implements \Zend_Filter_Interface
         //js attributes
         '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onload|onunload|onerror)=[^<]*(?=\/*\>)/Uis',
         //tags
-        '/<\/?(script|meta|link|frame|iframe).*>/Uis',
+        '/<\/?(script|meta|link|frame|iframe|object).*>/Uis',
         //base64 usage
         '/src=[^<]*base64[^<]*(?=\/*\>)/Uis',
     ];
@@ -44,7 +44,11 @@ class MaliciousCode implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return preg_replace($this->_expressions, '', $value);
+        $replaced = 0;
+        do {
+            $value = preg_replace($this->_expressions, '', $value, -1, $replaced);
+        } while ($replaced !== 0);
+        return  $value;
     }
 
     /**

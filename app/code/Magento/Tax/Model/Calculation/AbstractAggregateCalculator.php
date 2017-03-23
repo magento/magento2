@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
@@ -28,7 +28,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
         $rowTotalInclTax = $priceInclTax * $quantity;
         if (!$this->isSameRateAsStore($rate, $storeRate)) {
-            $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate);
+            $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate, $round);
             $rowTotalInclTax = $priceInclTax * $quantity;
         }
         $rowTaxExact = $this->calculationTool->calcTaxAmount($rowTotalInclTax, $rate, true, false);

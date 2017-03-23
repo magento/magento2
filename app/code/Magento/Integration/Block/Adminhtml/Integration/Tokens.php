@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Integration;
@@ -37,7 +37,7 @@ class Tokens extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
-            ['legend' => __('Integration Tokens for Extensions'), 'class' => 'fieldset-wide']
+            ['legend' => __('Integration Tokens for Extensions'), 'class' => ' fieldset-wide']
         );
 
         foreach ($this->getFormFields() as $field) {

@@ -1,0 +1,95 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\DB\Select;
+
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Platform\Quote;
+
+class FromRenderer implements RendererInterface
+{
+    /**
+     * @var Quote
+     */
+    protected $quote;
+
+    /**
+     * @param Quote $quote
+     */
+    public function __construct(
+        Quote $quote
+    ) {
+        $this->quote = $quote;
+    }
+
+    /**
+     * Render FROM & JOIN's section
+     *
+     * @param Select $select
+     * @param string $sql
+     * @return string
+     * @throws \Zend_Db_Select_Exception
+     */
+    public function render(Select $select, $sql = '')
+    {
+        /*
+         * If no table specified, use RDBMS-dependent solution
+         * for table-less query.  e.g. DUAL in Oracle.
+         */
+        $source = $select->getPart(Select::FROM);
+        if (empty($source)) {
+            $source = [];
+        }
+        $from = [];
+        foreach ($source as $correlationName => $table) {
+            $tmp = '';
+            $joinType = ($table['joinType'] == Select::FROM) ? Select::INNER_JOIN : $table['joinType'];
+            // Add join clause (if applicable)
+            if (!empty($from)) {
+                $tmp .= ' ' . strtoupper($joinType) . ' ';
+            }
+            $tmp .= $this->getQuotedSchema($table['schema']);
+            $tmp .= $this->getQuotedTable($table['tableName'], $correlationName);
+
+            // Add join conditions (if applicable)
+            if (!empty($from) && !empty($table['joinCondition'])) {
+                $tmp .= ' ' . Select::SQL_ON . ' ' . $table['joinCondition'];
+            }
+            // Add the table name and condition add to the list
+            $from[] = $tmp;
+        }
+        // Add the list of all joins
+        if (!empty($from)) {
+            $sql .= ' ' . Select::SQL_FROM . ' ' . implode("\n", $from);
+        }
+        return $sql;
+    }
+
+    /**
+     * Return a quoted schema name
+     *
+     * @param string   $schema  The schema name OPTIONAL
+     * @return string|null
+     */
+    protected function getQuotedSchema($schema = null)
+    {
+        if ($schema === null) {
+            return null;
+        }
+        return $this->quote->quoteIdentifier($schema) . '.';
+    }
+
+    /**
+     * Return a quoted table name
+     *
+     * @param string   $tableName        The table name
+     * @param string   $correlationName  The correlation name OPTIONAL
+     * @return string
+     */
+    protected function getQuotedTable($tableName, $correlationName = null)
+    {
+        return $this->quote->quoteTableAs($tableName, $correlationName);
+    }
+}

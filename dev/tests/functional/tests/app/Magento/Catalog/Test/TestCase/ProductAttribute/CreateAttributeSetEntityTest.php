@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,21 +18,20 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * Test Flow:
  * 1. Log in to Backend.
- * 2. Navigate to Stores > Attributes > Product Template.
- * 3. Start to create new Product Template.
+ * 2. Navigate to Stores > Attributes > Attribute Set.
+ * 3. Start to create new Attribute Set.
  * 4. Fill out fields data according to data set.
- * 5. Add created Product Attribute to Product Template.
- * 6. Save new Product Template.
- * 7. Verify created Product Template.
+ * 5. Add created Product Attribute to Attribute Set.
+ * 6. Save new Attribute Set.
+ * 7. Verify created Attribute Set.
  *
- * @group Product_Attributes_(MX)
+ * @group Product_Attributes
  * @ZephyrId MAGETWO-25104
  */
 class CreateAttributeSetEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,6 +33,12 @@
             newAttributeSetContainer = $('[data-role=affected-attribute-set-new-name-container]'),
             existingAttributeSetContainer = $('[data-role=affected-attribute-set-existing-name-container]');
 
+        $form.find('input[type=text]').on('keypress',function(e){
+            if(e.keyCode === 13){
+                e.preventDefault();
+                $form.closest('[data-role=modal]').find('button[data-action=confirm]').click();
+            }
+        });
 
         $('[data-form=edit-product]').append($('<input>', {
             type: 'hidden',
@@ -42,13 +48,16 @@
 
         $form
             .modal({
-                title: '<?php /* @escapeNotVerified */ echo __('Choose Affected Product Template'); ?>',
+                title: '<?php /* @escapeNotVerified */ echo __('Choose Affected Attribute Set'); ?>',
                 closed: function () {
                     resetValidation();
                 },
                 buttons: [{
                     text: '<?php /* @escapeNotVerified */ echo __('Confirm'); ?>',
-                    'class': 'action-secondary',
+                    attr: {
+                        'data-action': 'confirm'
+                    },
+                    'class': 'action-primary',
                     click: function() {
                         var affectedAttributeSetId = $form.find('input[name=affected-attribute-set]:checked').val();
                         if (affectedAttributeSetId == 'current') {

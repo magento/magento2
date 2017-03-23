@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit\Config;
@@ -25,16 +25,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileResolverMock = $this->getMock(
-            'Magento\Framework\App\Config\FileResolver',
+            \Magento\Framework\App\Config\FileResolver::class,
             ['get'],
             [],
             '',
             false
         );
 
-        $this->_converter = $this->getMock('Magento\Framework\Indexer\Config\Converter', ['convert']);
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
+        $this->_converter = $this->getMock(\Magento\Framework\Indexer\Config\Converter::class, ['convert']);
+        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationState->expects($this->any())
+            ->method('isValidationRequired')
+            ->willReturn(false);
 
         $this->_model = new \Magento\Framework\Indexer\Config\Reader(
             $this->_fileResolverMock,

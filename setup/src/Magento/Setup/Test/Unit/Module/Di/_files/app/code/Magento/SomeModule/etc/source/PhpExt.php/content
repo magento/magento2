@@ -1,0 +1,21 @@
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * This file exists for the sake of \Magento\Setup\Test\Unit\Module\Di\Code\Reader\ClassesScannerTest, in order
+ * to verify that PHP files are correctly scanned and things that are not PHP files (like this file and its parent
+ * directory) are not scanned.
+ */
+
+/**
+ * True Function
+ *
+ * @return bool
+ */
+public function someTrueFunction()
+{
+    return true;
+}
+

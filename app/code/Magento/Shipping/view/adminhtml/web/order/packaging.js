@@ -1,7 +1,8 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define(["prototype"], function(){
 
 window.Packaging = Class.create();
@@ -70,13 +71,10 @@ Packaging.prototype = {
         if (this.packagesContent.childElements().length == 0) {
             this.newPackage();
         }
-        this.window.show().setStyle({
-            'marginLeft': -this.window.getDimensions().width/2 + 'px'
-        });
+        jQuery(this.window).modal('openModal')
     },
 
     cancelPackaging: function() {
-        packaging.window.hide();
         if (Object.isFunction(this.cancelCallback)) {
             this.cancelCallback();
         }
@@ -105,7 +103,7 @@ Packaging.prototype = {
     },
 
     sendCreateLabelRequest: function() {
-        var package = this;
+        var self = this;
         if (!this.validate()) {
             this.messages.show().update(this.validationErrorMsg);
             return;
@@ -186,11 +184,11 @@ Packaging.prototype = {
                          if (!isNaN(packedItemId)) {
                              this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][qty]']           = this.packages[packageId]['items'][packedItemId]['qty'];
                              this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][customs_value]'] = this.packages[packageId]['items'][packedItemId]['customs_value'];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][price]']         = package.defaultItemsPrice[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][name]']          = package.defaultItemsName[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][weight]']        = package.defaultItemsWeight[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][product_id]']    = package.defaultItemsProductId[packedItemId];
-                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][order_item_id]'] = package.defaultItemsOrderItemId[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][price]']         = self.defaultItemsPrice[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][name]']          = self.defaultItemsName[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][weight]']        = self.defaultItemsWeight[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][product_id]']    = self.defaultItemsProductId[packedItemId];
+                             this.paramsCreateLabelRequest['packages['+packageId+']'+'[items]'+'['+packedItemId+'][order_item_id]'] = self.defaultItemsOrderItemId[packedItemId];
                          }
                      }
                  }
@@ -233,7 +231,7 @@ Packaging.prototype = {
 
     validate: function() {
         var dimensionElements = $("packaging_window").select(
-            'input[name=container_length],input[name=container_width],input[name=container_height]'
+            'input[name=container_length],input[name=container_width],input[name=container_height],input[name=container_girth]:not("._disabled")'
         );
         var callback = null;
         if ( dimensionElements.any(function(element) { return !!element.value; })) {
@@ -269,7 +267,7 @@ Packaging.prototype = {
         var itemsPacked = [];
 
         this.packagesContent.childElements().each(function(pack) {
-            itemsPrepare = pack.select('.package_prapare')[0];
+            itemsPrepare = pack.select('[data-role="package-items"]')[0];
             if (itemsPrepare) {
                 items = items.concat(itemsPrepare.select('.grid tbody tr'));
             }
@@ -298,14 +296,15 @@ Packaging.prototype = {
         var pack = this.template.cloneNode(true);
         pack.id = 'package_block_' + (++this.packageIncrement);
         pack.addClassName('package-block');
-        pack.select('.package-number span')[0].update(this.packageIncrement);
+        pack.select('[data-role=package-number]')[0].update(this.packageIncrement);
         this.packagesContent.insert({top: pack});
-        pack.select('.AddSelectedBtn')[0].hide();
+        pack.select('[data-action=package-save-items]')[0].hide();
         pack.show();
     },
 
     deletePackage: function(obj) {
-        var pack = $(obj).up('div[id^="package_block"]');
+        var pack = $(obj).up('[id^="package_block"]');
+
         var packItems = pack.select('.package_items')[0];
         var packageId = this.getPackageId(pack);
 
@@ -318,7 +317,7 @@ Packaging.prototype = {
     deleteItem: function(obj) {
         var item = $(obj).up('tr');
         var itemId = item.select('[type="checkbox"]')[0].value;
-        var pack = $(obj).up('div[id^="package_block"]');
+        var pack = $(obj).up('[id^="package_block"]');
         var packItems = pack.select('.package_items')[0];
         var packageId = this.getPackageId(pack);
 
@@ -333,7 +332,7 @@ Packaging.prototype = {
     },
 
     recalcContainerWeightAndCustomsValue: function(obj) {
-        var pack = $(obj).up('div[id^="package_block"]');
+        var pack = $(obj).up('[id^="package_block"]');
         var packItems = pack.select('.package_items')[0];
         if (packItems) {
             if (!this.validateCustomsValue()) {
@@ -347,7 +346,7 @@ Packaging.prototype = {
         if (this.itemsGridUrl) {
             var parameters = $H({'shipment_id': this.shipmentId});
             var packageBlock = $(obj).up('[id^="package_block"]');
-            var packagePrapare = packageBlock.select('.package_prapare')[0];
+            var packagePrapare = packageBlock.select('[data-role=package-items]')[0];
             var packagePrapareGrid = packagePrapare.select('.grid_prepare')[0];
             new Ajax.Request(this.itemsGridUrl, {
                 parameters: parameters,
@@ -355,10 +354,10 @@ Packaging.prototype = {
                     var response = transport.responseText;
                     if (response) {
                         packagePrapareGrid.update(response);
-                        this._processPackagePrapare(packagePrapareGrid);
+                        this.processPackagePrepare(packagePrapareGrid);
                         if (packagePrapareGrid.select('.grid tbody tr').length) {
-                            packageBlock.select('.AddItemsBtn')[0].hide();
-                            packageBlock.select('.AddSelectedBtn')[0].show();
+                            packageBlock.select('[data-action=package-add-items]')[0].hide();
+                            packageBlock.select('[data-action=package-save-items]')[0].show();
                             packagePrapare.show();
                         } else {
                             packagePrapareGrid.update();
@@ -399,7 +398,7 @@ Packaging.prototype = {
         var anySelected = false;
         var packageBlock = $(obj).up('[id^="package_block"]');
         var packageId = this.getPackageId(packageBlock);
-        var packagePrepare = packageBlock.select('.package_prapare')[0];
+        var packagePrepare = packageBlock.select('[data-role=package-items]')[0];
         var packagePrepareGrid = packagePrepare.select('.grid_prepare')[0];
 
         // check for exceeds the total shipped quantity
@@ -432,9 +431,9 @@ Packaging.prototype = {
                 item.select('[name="qty"]')[0].value = qtyValue;
                 anySelected = true;
                 qty.disabled = 'disabled';
-                checkbox.up('td').hide();
-                packagePrepareGrid.select('.grid th [type="checkbox"]')[0].up('th').hide();
-                item.select('.delete')[0].show();
+                checkbox.disabled = 'disabled';
+                packagePrepareGrid.select('.grid th [type="checkbox"]')[0].up('th label').hide();
+                item.select('[data-action=package-delete-item]')[0].show();
             } else {
                 item.remove();
             }
@@ -488,8 +487,8 @@ Packaging.prototype = {
 
         // show/hide disable/enable
         packagePrepare.hide();
-        packageBlock.select('.AddSelectedBtn')[0].hide();
-        packageBlock.select('.AddItemsBtn')[0].show();
+        packageBlock.select('[data-action=package-save-items]')[0].hide();
+        packageBlock.select('[data-action=package-add-items]')[0].show();
         this._setAllItemsPackedState()
     },
 
@@ -545,20 +544,19 @@ Packaging.prototype = {
             return;
         }
 
-        var girthEnabled = (packageSize[0].value == 'LARGE' && (packageContainer[0].value == 'NONRECTANGULAR'
-            || packageContainer[0].value == 'VARIABLE' ));
+        var girthEnabled = packageContainer[0].value == 'NONRECTANGULAR' || packageContainer[0].value == 'VARIABLE';
 
         if (!girthEnabled) {
             packageGirth[0].value='';
             packageGirth[0].disable();
-            packageGirth[0].addClassName('disabled');
+            packageGirth[0].addClassName('_disabled');
             packageGirthDimensionUnits[0].disable();
-            packageGirthDimensionUnits[0].addClassName('disabled');
+            packageGirthDimensionUnits[0].addClassName('_disabled');
         } else {
             packageGirth[0].enable();
-            packageGirth[0].removeClassName('disabled');
+            packageGirth[0].removeClassName('_disabled');
             packageGirthDimensionUnits[0].enable();
-            packageGirthDimensionUnits[0].removeClassName('disabled');
+            packageGirthDimensionUnits[0].removeClassName('_disabled');
         }
 
         var sizeEnabled = (packageContainer[0].value == 'NONRECTANGULAR' || packageContainer[0].value == 'RECTANGULAR'
@@ -571,7 +569,7 @@ Packaging.prototype = {
             packageSize[0].options.add(option);
             packageSize[0].value = '';
             packageSize[0].disable();
-            packageSize[0].addClassName('disabled');
+            packageSize[0].addClassName('_disabled');
         } else {
             for (i = 0; i < packageSize[0].length; i ++) {
                 if (packageSize[0].options[i].value == '') {
@@ -579,7 +577,7 @@ Packaging.prototype = {
                 }
             }
             packageSize[0].enable();
-            packageSize[0].removeClassName('disabled');
+            packageSize[0].removeClassName('_disabled');
         }
     },
 
@@ -609,13 +607,13 @@ Packaging.prototype = {
         ).each(function(inputElement) {
             if (disable) {
                 Form.Element.disable(inputElement);
-                inputElement.addClassName('disabled');
+                inputElement.addClassName('_disabled');
                 if (inputElement.nodeName == 'INPUT') {
                     $(inputElement).value = ''
                 }
             } else {
                 Form.Element.enable(inputElement);
-                inputElement.removeClassName('disabled');
+                inputElement.removeClassName('_disabled');
             }
         })
     },
@@ -626,10 +624,10 @@ Packaging.prototype = {
         var contentTypeOther = packageBlock.select('[name=content_type_other]')[0];
         if (contentType.value == 'OTHER') {
             Form.Element.enable(contentTypeOther);
-            contentTypeOther.removeClassName('disabled');
+            contentTypeOther.removeClassName('_disabled');
         } else {
             Form.Element.disable(contentTypeOther);
-            contentTypeOther.addClassName('disabled');
+            contentTypeOther.addClassName('_disabled');
         }
 
     },
@@ -649,18 +647,18 @@ Packaging.prototype = {
      * Show/hide disable/enable buttons in case of all items packed state
      */
     _setAllItemsPackedState: function() {
-        var addPackageBtn = this.window.select('.AddPackageBtn')[0];
-        var savePackagesBtn = this.window.select('.SavePackagesBtn')[0];
+        var addPackageBtn = $$('[data-action=add-packages]')[0];
+        var savePackagesBtn = $$('[data-action=save-packages]')[0];
         if (this._getItemsCount(this.itemsAll) > 0
                 && (this._checkExceedsQtyFinal(this._getItemsCount(this.getPackedItemsQty()),this._getItemsCount(this.itemsAll)))
         ) {
-            this.packagesContent.select('.AddItemsBtn').each(function(button){
+            this.packagesContent.select('[data-action=package-add-items]').each(function(button){
                 button.disabled = 'disabled';
-                button.addClassName('disabled');
+                button.addClassName('_disabled');
             });
-            addPackageBtn.addClassName('disabled');
+            addPackageBtn.addClassName('_disabled');
             Form.Element.disable(addPackageBtn);
-            savePackagesBtn.removeClassName('disabled');
+            savePackagesBtn.removeClassName('_disabled');
             Form.Element.enable(savePackagesBtn);
             savePackagesBtn.title = '';
 
@@ -676,41 +674,46 @@ Packaging.prototype = {
             this.packagesContent.childElements().each(function(pack) {
                 var packageId = this.getPackageId(pack);
                 pack.id = 'package_block_' + packagesCount;
-                pack.select('.package-number span')[0].update(packagesCount);
+                pack.select('[data-role=package-number]')[0].update(packagesCount);
                 packagesRecalc[packagesCount] = this.packages[packageId];
                 --packagesCount;
             }.bind(this));
             this.packages = packagesRecalc;
 
         } else {
-            this.packagesContent.select('.AddItemsBtn').each(function(button){
-                button.removeClassName('disabled');
+            this.packagesContent.select('[data-action=package-add-items]').each(function(button){
+                button.removeClassName('_disabled');
                 Form.Element.enable(button);
             });
-            addPackageBtn.removeClassName('disabled');
+            addPackageBtn.removeClassName('_disabled');
             Form.Element.enable(addPackageBtn);
-            savePackagesBtn.addClassName('disabled');
+            savePackagesBtn.addClassName('_disabled');
             Form.Element.disable(savePackagesBtn);
             savePackagesBtn.title = this.titleDisabledSaveBtn;
         }
     },
 
-    _processPackagePrapare: function(packagePrapare) {
-        var itemsAll = [];
-        packagePrapare.select('.grid tbody tr').each(function(item) {
-            var qty  = item.select('[name="qty"]')[0];
-            var itemId = item.select('[type="checkbox"]')[0].value;
-            var qtyValue = 0;
+    processPackagePrepare: function(packagePrepare) {
+        var itemsAll = [],
+            qty,
+            itemId,
+            qtyValue = 0,
+            value = 1;
+
+        packagePrepare.select('.grid tbody tr').each(function(item) {
+            qty = item.select('[name="qty"]')[0],
+                itemId = item.select('[type="checkbox"]')[0].value,
+                qtyValue = parseFloat(qty.value);
+
             if (Object.isFunction(this.itemQtyCallback)) {
-                var value = this.itemQtyCallback(itemId);
-                qtyValue = ((typeof value == 'string') && (value.length == 0)) ? 0 : parseFloat(value);
-                if (isNaN(qtyValue) || qtyValue < 0) {
-                    qtyValue = 1;
+                value = this.itemQtyCallback(itemId);
+                if (typeof value !== 'undefined') {
+                    qtyValue = parseFloat(value);
+                    qtyValue = this.validateItemQty(itemId, qtyValue);
+                    qty.value = qtyValue;
                 }
-                qtyValue = this.validateItemQty(itemId, qtyValue);
-                qty.value = qtyValue;
             } else {
-                var value = item.select('[name="qty"]')[0].value;
+                value = item.select('[name="qty"]')[0].value;
                 qtyValue = ((typeof value == 'string') && (value.length == 0)) ? 0 : parseFloat(value);
                 if (isNaN(qtyValue) || qtyValue < 0) {
                     qtyValue = 1;
@@ -730,7 +733,7 @@ Packaging.prototype = {
                             item.remove();
                         } else if (qtyValue > packedQty) {
                             /* fix float number precision */
-                            qty.value = Number((qtyValue - packedQty).toFixed(4));
+                            qty.value = Number(Number(Math.round((qtyValue - packedQty) + "e+4") + "e-4").toFixed(4));
                         }
                     }
                 }
@@ -740,10 +743,10 @@ Packaging.prototype = {
             this.itemsAll = itemsAll;
         }
 
-        packagePrapare.select('tbody input[type="checkbox"]').each(function(item){
+        packagePrepare.select('tbody input[type="checkbox"]').each(function(item){
             $(item).observe('change', this._observeQty);
             this._observeQty.call(item);
-        }.bind(this))
+        }.bind(this));
     },
 
     _observeQty: function() {
@@ -752,9 +755,9 @@ Packaging.prototype = {
             qty = $(tr.cells[tr.cells.length - 1]).select('input[name="qty"]')[0];
 
         if (qty.disabled = !this.checked) {
-            $(qty).addClassName('disabled');
+            $(qty).addClassName('_disabled');
         } else {
-            $(qty).removeClassName('disabled');
+            $(qty).removeClassName('_disabled');
         }
     },
 
@@ -782,14 +785,14 @@ Packaging.prototype = {
                 qtyValue = 1;
                 item.select('[name="qty"]')[0].value = qtyValue;
             }
-            var itemWeight = parseFloat(this._getElementText(item.select('.weight')[0]));
+            var itemWeight = parseFloat(this._getElementText(item.select('[data-role=item-weight]')[0]));
             containerWeight.value = parseFloat(containerWeight.value) + (itemWeight * qtyValue);
             var itemCustomsValue = parseFloat(item.select('[name="customs_value"]')[0].value) || 0;
             containerCustomsValue.value = parseFloat(containerCustomsValue.value) + itemCustomsValue * qtyValue;
             this.packages[packageId]['items'][itemId]['customs_value'] = itemCustomsValue;
         }.bind(this));
-        containerWeight.value = parseFloat(parseFloat(containerWeight.value).toFixed(4));
-        containerCustomsValue.value = parseFloat(containerCustomsValue.value).toFixed(2);
+        containerWeight.value = parseFloat(parseFloat(Math.round(containerWeight.value + "e+4") + "e-4").toFixed(4));
+        containerCustomsValue.value = parseFloat(Math.round(containerCustomsValue.value + "e+2") + "e-2").toFixed(2);
         if (containerCustomsValue.value == 0) {
             containerCustomsValue.value = '';
         }

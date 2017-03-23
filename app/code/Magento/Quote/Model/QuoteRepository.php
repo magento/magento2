@@ -1,18 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
+use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Quote\Model\QuoteRepository\SaveHandler;
+use Magento\Quote\Model\QuoteRepository\LoadHandler;
 
 /**
  * Class QuoteRepository
@@ -57,67 +63,63 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     private $extensionAttributesJoinProcessor;
 
     /**
+     * @var SaveHandler
+     */
+    private $saveHandler;
+
+    /**
+     * @var LoadHandler
+     */
+    private $loadHandler;
+
+    /** @var  CollectionProcessorInterface */
+    private $collectionProcessor;
+
+    /**
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection,
         \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
-        JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
         $this->searchResultsDataFactory = $searchResultsDataFactory;
-        $this->quoteCollection = $quoteCollection;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
-     * Create new quote
-     *
-     * @param array $data
-     * @return Quote
-     */
-    public function create(array $data = [])
-    {
-        return $this->quoteFactory->create($data);
-    }
-
-    /**
-     * Get quote by id
-     *
-     * @param int $cartId
-     * @param int[] $sharedStoreIds
-     * @throws NoSuchEntityException
-     * @return \Magento\Quote\Api\Data\CartInterface
+     * {@inheritdoc}
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesById[$cartId])) {
             $quote = $this->loadQuote('load', 'cartId', $cartId, $sharedStoreIds);
+            $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
-            $this->quotesByCustomerId[$quote->getCustomerId()] = $quote;
         }
         return $this->quotesById[$cartId];
     }
 
     /**
-     * Get quote by customer Id
-     *
-     * @param int $customerId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesByCustomerId[$customerId])) {
             $quote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
+            $this->getLoadHandler()->load($quote);
             $this->quotesById[$quote->getId()] = $quote;
             $this->quotesByCustomerId[$customerId] = $quote;
         }
@@ -125,12 +127,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get active quote by id
-     *
-     * @param int $cartId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
@@ -142,12 +139,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get active quote by customer Id
-     *
-     * @param int $customerId
-     * @param int[] $sharedStoreIds
-     * @return Quote
-     * @throws NoSuchEntityException
+     * {@inheritdoc}
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = [])
     {
@@ -159,25 +151,29 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Save quote
-     *
-     * @param Quote $quote
-     * @return void
+     * {@inheritdoc}
      */
-    public function save(Quote $quote)
+    public function save(\Magento\Quote\Api\Data\CartInterface $quote)
     {
-        $quote->save();
+        if ($quote->getId()) {
+            $currentQuote = $this->get($quote->getId(), [$quote->getStoreId()]);
+
+            foreach ($currentQuote->getData() as $key => $value) {
+                if (!$quote->hasData($key)) {
+                    $quote->setData($key, $value);
+                }
+            }
+        }
+
+        $this->getSaveHandler()->save($quote);
         unset($this->quotesById[$quote->getId()]);
         unset($this->quotesByCustomerId[$quote->getCustomerId()]);
     }
 
     /**
-     * Delete quote
-     *
-     * @param Quote $quote
-     * @return void
+     * {@inheritdoc}
      */
-    public function delete(Quote $quote)
+    public function delete(\Magento\Quote\Api\Data\CartInterface $quote)
     {
         $quoteId = $quote->getId();
         $customerId = $quote->getCustomerId();
@@ -211,34 +207,37 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
+     * Get quote collection
+     * Temporary method to support release backward compatibility.
+     *
+     * @deprecated
+     * @return QuoteCollection
+     */
+    protected function getQuoteCollection()
+    {
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory */
+        $collectionFactory = ObjectManager::getInstance()->get(QuoteCollectionFactory::class);
+        return $collectionFactory->create();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
+        $this->quoteCollection = $this->getQuoteCollection();
+        /** @var \Magento\Quote\Api\Data\CartSearchResultsInterface $searchData */
         $searchData = $this->searchResultsDataFactory->create();
         $searchData->setSearchCriteria($searchCriteria);
 
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $this->quoteCollection);
-        }
-
-        $searchData->setTotalCount($this->quoteCollection->getSize());
-        $sortOrders = $searchCriteria->getSortOrders();
-        if ($sortOrders) {
-            /** @var SortOrder $sortOrder */
-            foreach ($sortOrders as $sortOrder) {
-                $this->quoteCollection->addOrder(
-                    $sortOrder->getField(),
-                    $sortOrder->getDirection() == SortOrder::SORT_ASC ? 'ASC' : 'DESC'
-                );
-            }
-        }
-        $this->quoteCollection->setCurPage($searchCriteria->getCurrentPage());
-        $this->quoteCollection->setPageSize($searchCriteria->getPageSize());
+        $this->collectionProcessor->process($searchCriteria, $this->quoteCollection);
         $this->extensionAttributesJoinProcessor->process($this->quoteCollection);
-
+        foreach ($this->quoteCollection->getItems() as $quote) {
+            /** @var CartInterface $quote */
+            $this->getLoadHandler()->load($quote);
+        }
         $searchData->setItems($this->quoteCollection->getItems());
-
+        $searchData->setTotalCount($this->quoteCollection->getSize());
         return $searchData;
     }
 
@@ -248,6 +247,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param FilterGroup $filterGroup The filter group.
      * @param QuoteCollection $collection The quote collection.
      * @return void
+     * @deprecated
      * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)
@@ -262,5 +262,46 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }
+    }
+
+    /**
+     * Get new SaveHandler dependency for application code.
+     * @return SaveHandler
+     * @deprecated
+     */
+    private function getSaveHandler()
+    {
+        if (!$this->saveHandler) {
+            $this->saveHandler = ObjectManager::getInstance()->get(SaveHandler::class);
+        }
+        return $this->saveHandler;
+    }
+
+    /**
+     * @return LoadHandler
+     * @deprecated
+     */
+    private function getLoadHandler()
+    {
+        if (!$this->loadHandler) {
+            $this->loadHandler = ObjectManager::getInstance()->get(LoadHandler::class);
+        }
+        return $this->loadHandler;
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessor::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

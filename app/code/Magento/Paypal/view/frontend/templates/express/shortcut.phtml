@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,16 +17,20 @@ if ($block->isOrPositionBefore()) {
     $labelPosition = ' after';
 }
 $shortcutHtmlId = $block->escapeHtml($block->getShortcutHtmlId());
-$confirmationUrl = '';
 $isInCatalogProduct = false;
-if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
-    $confirmationUrl = $block->escapeUrl($block->getConfirmationUrl());
+if ($block->getIsInCatalogProduct()) {
     $isInCatalogProduct = $block->getIsInCatalogProduct();
 }
 ?>
 <div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
      class="paypal checkout <?php /* @noEscape */ echo $labelPosition; ?> paypal-logo
         <?php /* @noEscape */ echo $shortcutHtmlId; ?>"
+     data-mage-init='{
+     "paypalCheckout": {
+                "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false;?>",
+                "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
+            }
+     }'
     >
     <input type="image" data-action="checkout-form-submit"
            data-checkout-url="<?php echo $block->escapeUrl($block->getCheckoutUrl()); ?>"
@@ -39,21 +43,4 @@ if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()) {
             <img src="<?php echo $block->escapeHtml($linkImage['src']);?>" />
         </a>
     <?php endif; ?>
-<script type="text/x-magento-init">
-    {
-        ".paypal-logo.<?php /* @noEscape */ echo $shortcutHtmlId; ?>": {
-            "paypalCheckout": {
-                "confirmMessage": "<?php /* @noEscape */ echo $block->escapeJsQuote(
-                        $block->getConfirmationMessage()
-                    ); ?>",
-                "confirmUrl": "<?php /* @noEscape */ echo !empty($confirmationUrl) ? $confirmationUrl : false; ?>",
-                "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ?
-                        (bool)$isInCatalogProduct : false;
-                    ?>",
-                "paypalCheckoutSelector": "#pp-checkout-url",
-                "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
-            }
-        }
-    }
-</script>
 </div>

@@ -1,19 +1,25 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <design>
+            <invalid_caches>
+                <block_html />
+                <layout />
+                <translate />
+            </invalid_caches>
             <head translate="default_description">
                 <default_title>Magento Commerce</default_title>
                 <default_description>Default Description</default_description>
                 <default_keywords>Magento, Varien, E-commerce</default_keywords>
                 <default_media_type>text/html</default_media_type>
                 <default_charset>utf-8</default_charset>
+                <demonotice>0</demonotice>
             </head>
             <search_engine_robots>
                 <default_robots>INDEX,FOLLOW</default_robots>
@@ -42,7 +48,7 @@ Disallow: /*SID=
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright">
-                <copyright>Copyright &#169; 2015 Magento. All rights reserved.</copyright>
+                <copyright>Copyright &#169; 2013-2017 Magento, Inc. All rights reserved.</copyright>
             </footer>
         </design>
         <theme>
@@ -54,8 +60,14 @@ Disallow: /*SID=
             <media_storage_configuration>
                 <allowed_resources>
                     <site_favicons>favicon</site_favicons>
+                    <site_logos>logo</site_logos>
                 </allowed_resources>
             </media_storage_configuration>
         </system>
+        <dev>
+            <static>
+                <sign>1</sign>
+            </static>
+        </dev>
     </default>
 </config>

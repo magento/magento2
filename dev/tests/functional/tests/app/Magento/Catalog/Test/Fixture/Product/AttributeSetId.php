@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 
 /**
- * Product template entity data source.
+ * Attribute set entity data source.
  *
  *  Data keys:
  *  - dataset

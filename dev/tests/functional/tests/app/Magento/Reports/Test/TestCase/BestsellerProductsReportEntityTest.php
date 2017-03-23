@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click "Show report".
  * 5. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28222
  */
 class BestsellerProductsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -64,7 +63,7 @@ class BestsellerProductsReportEntityTest extends Injectable
         // Preconditions
         $order->persist();
         $this->bestsellers->open();
-        $this->bestsellers->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->bestsellers->getMessagesBlock()->clickLinkInMessage('notice', 'here');
 
         // Steps
         $this->bestsellers->getFilterBlock()->viewsReport($bestsellerReport);

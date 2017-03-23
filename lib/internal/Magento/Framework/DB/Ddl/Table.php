@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,13 +41,12 @@ class Table
 
     // Capable to support long date-time before 1970
     const TYPE_TEXT = 'text';
-
+    
+    // A real blob, stored as binary inside DB
     const TYPE_BLOB = 'blob';
 
     // Used for back compatibility, when query param can't use statement options
     const TYPE_VARBINARY = 'varbinary';
-
-    // A real blob, stored as binary inside DB
 
     /**
      * Default and maximal TEXT and BLOB columns sizes we can support for different DB systems.
@@ -310,8 +309,8 @@ class Table
             case self::TYPE_DECIMAL:
             case self::TYPE_NUMERIC:
                 $match = [];
-                $scale = 10;
-                $precision = 0;
+                $scale = 0;
+                $precision = 10;
                 // parse size value
                 if (is_array($size)) {
                     if (count($size) == 2) {

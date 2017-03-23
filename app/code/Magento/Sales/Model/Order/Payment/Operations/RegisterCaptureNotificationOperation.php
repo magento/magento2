@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Payment\Operations;
@@ -44,6 +44,7 @@ class RegisterCaptureNotificationOperation extends AbstractOperation
                 $invoice->setOrder($order);
                 $order->addRelatedObject($invoice);
                 $payment->setCreatedInvoice($invoice);
+                $payment->setShouldCloseParentTransaction(true);
             } else {
                 $payment->setIsFraudDetected(!$skipFraudDetection);
                 $this->updateTotals($payment, ['base_amount_paid_online' => $amount]);

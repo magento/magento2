@@ -1,21 +1,45 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*global define*/
-define(['underscore'],
-    function (_) {
-        "use strict";
-        return {
-            options: [],
-            addOption: function(option) {
-                if(!this.options.hasOwnProperty(option.itemId)) {
-                    this.options[option.itemId] = option;
-                }
-            },
-            getOptionByItemId: function(itemId) {
-                return this.options.hasOwnProperty(itemId) ? this.options[itemId] : null;
+
+define([
+    'underscore',
+    'ko'
+], function (_, ko) {
+    'use strict';
+
+    return {
+        options: ko.observableArray([]),
+
+        /**
+         * @param {Object} option
+         */
+        addOption: function (option) {
+            if (!this.options().hasOwnProperty(option.itemId)) {
+                this.options.push({
+                        id: option.itemId, value: option
+                    }
+                );
             }
+        },
+
+        /**
+         * @param {*} itemId
+         * @return {*}
+         */
+        getOptionByItemId: function (itemId) {
+            var option = null;
+
+            _.each(this.options(), function (data) {
+                if (data.id === itemId) {
+                    option = data.value;
+
+                    return false;
+                }
+            });
+
+            return option;
         }
-    }
-);
+    };
+});

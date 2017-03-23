@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Console\Command;
@@ -40,7 +40,6 @@ class UpgradeHashAlgorithmCommand extends Command
     ) {
         parent::__construct();
         $this->customerCollectionFactory = $customerCollectionFactory;
-        $this->collection = $customerCollectionFactory->create();
         $this->encryptor = $encryptor;
     }
 
@@ -58,6 +57,7 @@ class UpgradeHashAlgorithmCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->collection = $this->customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $customerCollection = $this->collection->getItems();
         /** @var $customer Customer */

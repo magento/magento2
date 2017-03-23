@@ -1,0 +1,19 @@
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+body {
+   background: #333333;
+   color: #454545;
+}
+a {
+   color: #ff9900;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   color: #333333;
+}

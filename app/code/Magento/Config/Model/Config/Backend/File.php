@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Backend;
@@ -8,11 +8,13 @@ namespace Magento\Config\Model\Config\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * System config file field backend model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class File extends \Magento\Framework\App\Config\Value
 {
@@ -47,6 +49,7 @@ class File extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
      * @param Filesystem $filesystem
@@ -58,6 +61,7 @@ class File extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         Filesystem $filesystem,
@@ -69,7 +73,7 @@ class File extends \Magento\Framework\App\Config\Value
         $this->_requestData = $requestData;
         $this->_filesystem = $filesystem;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -81,25 +85,18 @@ class File extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         $value = $this->getValue();
-        $tmpName = $this->_requestData->getTmpName($this->getPath());
-        $file = [];
-        if ($tmpName) {
-            $file['tmp_name'] = $tmpName;
-            $file['name'] = $this->_requestData->getName($this->getPath());
-        } elseif (!empty($value['tmp_name'])) {
-            $file['tmp_name'] = $value['tmp_name'];
-            $file['name'] = $value['value'];
-        }
+        $file = $this->getFileData();
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
             try {
+                /** @var Uploader $uploader */
                 $uploader = $this->_uploaderFactory->create(['fileId' => $file]);
                 $uploader->setAllowedExtensions($this->_getAllowedExtensions());
                 $uploader->setAllowRenameFiles(true);
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
+                throw new \Magento\Framework\Exception\LocalizedException(__('%1', $e->getMessage()));
             }
 
             $filename = $result['file'];
@@ -118,6 +115,27 @@ class File extends \Magento\Framework\App\Config\Value
         }
 
         return $this;
+    }
+
+    /**
+     * Receiving uploaded file data
+     *
+     * @return array
+     */
+    protected function getFileData()
+    {
+        $file = [];
+        $value = $this->getValue();
+        $tmpName = $this->_requestData->getTmpName($this->getPath());
+        if ($tmpName) {
+            $file['tmp_name'] = $tmpName;
+            $file['name'] = $this->_requestData->getName($this->getPath());
+        } elseif (!empty($value['tmp_name'])) {
+            $file['tmp_name'] = $value['tmp_name'];
+            $file['name'] = isset($value['value']) ? $value['value'] : $value['name'];
+        }
+
+        return $file;
     }
 
     /**
@@ -161,7 +179,6 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _getUploadDir()
     {
         $fieldConfig = $this->getFieldConfig();
-        /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -171,19 +188,31 @@ class File extends \Magento\Framework\App\Config\Value
 
         if (is_array($fieldConfig['upload_dir'])) {
             $uploadDir = $fieldConfig['upload_dir']['value'];
-            if (array_key_exists('scope_info', $fieldConfig['upload_dir']) && $fieldConfig['upload_dir']['scope_info']
+            if (array_key_exists('scope_info', $fieldConfig['upload_dir'])
+                && $fieldConfig['upload_dir']['scope_info']
             ) {
                 $uploadDir = $this->_appendScopeInfo($uploadDir);
             }
 
             if (array_key_exists('config', $fieldConfig['upload_dir'])) {
-                $uploadDir = $this->_mediaDirectory->getAbsolutePath($uploadDir);
+                $uploadDir = $this->getUploadDirPath($uploadDir);
             }
         } else {
             $uploadDir = (string)$fieldConfig['upload_dir'];
         }
 
         return $uploadDir;
+    }
+
+    /**
+     * Retrieve upload directory path
+     *
+     * @param string $uploadDir
+     * @return string
+     */
+    protected function getUploadDirPath($uploadDir)
+    {
+        return $this->_mediaDirectory->getAbsolutePath($uploadDir);
     }
 
     /**

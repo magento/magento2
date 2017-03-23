@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -162,7 +162,7 @@ class Options extends \Magento\Framework\View\Element\Template
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->pricingHelper->currency($option->getPrice(false), false, false),
+                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
                     'adjustments' => [],
                 ],
                 'basePrice' => [
@@ -208,13 +208,10 @@ class Options extends \Magento\Framework\View\Element\Template
         $config = [];
         foreach ($this->getOptions() as $option) {
             /* @var $option \Magento\Catalog\Model\Product\Option */
-            $priceValue = 0;
             if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
                 $tmpPriceValues = [];
-                foreach ($option->getValues() as $value) {
-                    /* @var $value \Magento\Catalog\Model\Product\Option\Value */
-                    $id = $value->getId();
-                    $tmpPriceValues[$id] = $this->_getPriceConfiguration($value);
+                foreach ($option->getValues() as $valueId => $value) {
+                    $tmpPriceValues[$valueId] = $this->_getPriceConfiguration($value);
                 }
                 $priceValue = $tmpPriceValues;
             } else {

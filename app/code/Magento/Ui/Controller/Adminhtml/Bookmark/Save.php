@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Controller\Adminhtml\Bookmark;
@@ -87,7 +87,7 @@ class Save extends AbstractAction
      *
      * @return void
      */
-    protected function execute()
+    public function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');
@@ -96,7 +96,7 @@ class Save extends AbstractAction
         }
         $data = $this->jsonDecoder->decode($jsonData);
         $action = key($data);
-        switch($action) {
+        switch ($action) {
             case self::ACTIVE_IDENTIFIER:
                 $this->updateCurrentBookmark($data[$action]);
                 break;

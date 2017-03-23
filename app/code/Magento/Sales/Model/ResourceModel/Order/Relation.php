@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -74,13 +74,11 @@ class Relation implements RelationInterface
                 $this->orderItemRepository->save($item);
             }
         }
-        if (null !== $object->getPayments()) {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
-            foreach ($object->getPayments() as $payment) {
-                $payment->setParentId($object->getId());
-                $payment->setOrder($object);
-                $this->orderPaymentResource->save($payment);
-            }
+        if (null !== $object->getPayment()) {
+            $payment = $object->getPayment();
+            $payment->setParentId($object->getId());
+            $payment->setOrder($object);
+            $this->orderPaymentResource->save($payment);
         }
         if (null !== $object->getStatusHistories()) {
             /** @var \Magento\Sales\Model\Order\Status\History $statusHistory */
@@ -88,7 +86,6 @@ class Relation implements RelationInterface
                 $statusHistory->setParentId($object->getId());
                 $statusHistory->setOrder($object);
                 $this->orderStatusHistoryResource->save($statusHistory);
-
             }
         }
         if (null !== $object->getRelatedObjects()) {

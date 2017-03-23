@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
@@ -40,34 +40,34 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false
         );
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
+            \Magento\Framework\View\Element\UiComponentFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
+            \Magento\Framework\Api\FilterBuilder::class,
             [],
             [],
             '',
             false
         );
         $this->filterModifierMock = $this->getMock(
-            'Magento\Ui\Component\Filters\FilterModifier',
+            \Magento\Ui\Component\Filters\FilterModifier::class,
             ['applyFilterModifier'],
             [],
             '',
@@ -105,7 +105,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var FormDate $uiComponent */
         $uiComponent = $this->getMock(
-            'Magento\Ui\Component\Form\Element\DataType\Date',
+            \Magento\Ui\Component\Form\Element\DataType\Date::class,
             [],
             [],
             '',
@@ -127,7 +127,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
         $dataProvider = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
+            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class,
             [],
             '',
             false
@@ -141,7 +141,6 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             $dataProvider->expects($this->any())
                 ->method('addFilter')
                 ->with($expectedCondition, $name);
-
 
             $uiComponent->expects($this->any())
                 ->method('getLocale')

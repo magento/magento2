@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -35,6 +35,7 @@ class BackendTemplate extends Template
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -53,7 +54,8 @@ class BackendTemplate extends Template
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Config\Model\Config\Structure $structure,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->structure = $structure;
         parent::__construct(
@@ -70,7 +72,8 @@ class BackendTemplate extends Template
             $filterManager,
             $urlModel,
             $filterFactory,
-            $data
+            $data,
+            $serializer
         );
     }
 
@@ -88,7 +91,7 @@ class BackendTemplate extends Template
 
         $templatePaths = $this->structure->getFieldPathsByAttribute(
             'source_model',
-            'Magento\Config\Model\Config\Source\Email\Template'
+            \Magento\Config\Model\Config\Source\Email\Template::class
         );
 
         if (!count($templatePaths)) {

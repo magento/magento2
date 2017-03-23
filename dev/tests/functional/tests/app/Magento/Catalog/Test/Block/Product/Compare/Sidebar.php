@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,11 +33,11 @@ class Sidebar extends ListCompare
     protected $clearAll = '#compare-clear-all';
 
     /**
-     * Selector for alert.
+     * Selector for confirm.
      *
      * @var string
      */
-    protected $alertModal = '._show[data-role=modal]';
+    protected $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
      * Get compare products block content.
@@ -86,9 +86,12 @@ class Sidebar extends ListCompare
             }
         );
         $this->_rootElement->find($this->clearAll)->click();
-        $element = $this->browser->find($this->alertModal);
+        $modalElement = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal = $this->blockFactory->create(
+            \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+            ['element' => $modalElement]
+        );
         $modal->acceptAlert();
     }
 }

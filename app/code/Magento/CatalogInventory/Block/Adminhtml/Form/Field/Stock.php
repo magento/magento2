@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -188,6 +188,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                                 '{$inStockFieldId}': 'inventory_stock_availability'
                             };
 
+                        var qtyDefaultValue = qty.val();
                         var disabler = function(event) {
                             if (typeof(event) === 'undefined') {
                                 return;
@@ -197,8 +198,13 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                             if (stockBeforeDisable.result !== false) {
                                 var manageStockValue = {$isNewProduct}
                                     ? (qty.val() === '' ? 0 : 1)
-                                    : parseInt(manageStockField.val()),
-                                    stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
+                                    : parseInt(manageStockField.val());
+                                if ({$isNewProduct} && qtyDefaultValue !== null && qtyDefaultValue === qty.val()) {
+                                    manageStockValue = parseInt(manageStockField.val());
+                                } else {
+                                    qtyDefaultValue = null;
+                                }
+                                var stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
                                 stockAvailabilityField.prop('disabled', !manageStockValue);
                                 stockAssociations.prop('disabled', !manageStockValue);
                                 if ($(event.currentTarget).attr('id') === qty.attr('id') && event.type != 'change') {

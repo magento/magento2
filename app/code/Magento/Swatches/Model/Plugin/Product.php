@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
@@ -10,11 +10,6 @@ namespace Magento\Swatches\Model\Plugin;
  */
 class Product
 {
-    /**
-     * Name of swatch image role
-     */
-    const ROLE_SWATCH_IMAGE_NAME = 'swatch_image';
-
     /**
      * Unset swatch image role if product is not simple
      *
@@ -28,7 +23,7 @@ class Product
             && $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
         ) {
             if (is_array($imageRoles)) {
-                unset($imageRoles[self::ROLE_SWATCH_IMAGE_NAME]);
+                unset($imageRoles[\Magento\Swatches\Model\Swatch::SWATCH_IMAGE_NAME]);
             }
         }
 

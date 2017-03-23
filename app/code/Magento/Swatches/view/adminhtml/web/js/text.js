@@ -1,10 +1,9 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/* eslint-disable no-undef */
-// jscs:disable jsDoc
+/* global $break $ $$ */
 
 define([
     'jquery',
@@ -24,9 +23,16 @@ define([
                 rendered: 0,
                 isReadOnly: config.isReadOnly,
                 template: mageTemplate('#swatch-text-row-template'),
+
+                /**
+                 * Add option
+                 *
+                 * @param {Object} data
+                 * @param {Object} render
+                 */
                 add: function (data, render) {
                     var isNewOption = false,
-                        element, visibleRadio;
+                        element;
 
                     if (typeof data.id == 'undefined') {
                         data = {
@@ -44,18 +50,8 @@ define([
                         data: data
                     });
 
-                    if (isNewOption) {
-                        visibleRadio = $$('#swatch-text-options-panel [name="defaulttext[]"]').findAll(function (el) {
-                            return el.up().up().visible();
-                        });
-
-                        if (visibleRadio.length === 1) {
-                            visibleRadio[0].checked = true;
-                        }
-
-                        if (!this.isReadOnly) {
-                            this.enableNewOptionDeleteButton(data.id);
-                        }
+                    if (isNewOption && !this.isReadOnly) {
+                        this.enableNewOptionDeleteButton(data.id);
                     }
                     this.itemCount++;
                     this.totalItems++;
@@ -65,6 +61,12 @@ define([
                         this.render();
                     }
                 },
+
+                /**
+                 * Remove option
+                 *
+                 * @param {Object} event
+                 */
                 remove: function (event) {
                     var element = $(Event.findElement(event, 'tr')),
                         elementFlags; // !!! Button already have table parent in safari
@@ -93,22 +95,50 @@ define([
                         this.updateItemsCountField();
                     }
                 },
+
+                /**
+                 * Update items count field
+                 */
                 updateItemsCountField: function () {
                     $('swatch-text-option-count-check').value = this.totalItems > 0 ? '1' : '';
                 },
+
+                /**
+                 * Enable delete button for new option
+                 *
+                 * @param {String} id
+                 */
                 enableNewOptionDeleteButton: function (id) {
                     $$('#delete_button_swatch_container_' + id + ' button').each(function (button) {
                         button.enable();
                         button.removeClassName('disabled');
                     });
                 },
+
+                /**
+                 * Bind remove button
+                 */
                 bindRemoveButtons: function () {
                     jQuery('#swatch-text-options-panel').on('click', '.delete-option', this.remove.bind(this));
                 },
+
+                /**
+                 * Render action
+                 */
                 render: function () {
                     Element.insert($$('[data-role=swatch-text-options-container]')[0], this.elements);
                     this.elements = '';
                 },
+
+                /**
+                 * Render action with delay (performance fix)
+                 *
+                 * @param {Object} data
+                 * @param {Number} from
+                 * @param {Number} step
+                 * @param {Number} delay
+                 * @returns {Boolean}
+                 */
                 renderWithDelay: function (data, from, step, delay) {
                     var arrayLength = data.length,
                         len;
@@ -120,7 +150,6 @@ define([
 
                     if (from === arrayLength) {
                         this.updateItemsCountField();
-                        this.bindRemoveButtons();
                         this.rendered = 1;
                         jQuery('body').trigger('processStop');
 
@@ -128,6 +157,10 @@ define([
                     }
                     setTimeout(this.renderWithDelay.bind(this, data, from, step, delay), delay);
                 },
+
+                /**
+                 * Ignore validate action
+                 */
                 ignoreValidate: function () {
                     var ignore = '.ignore-validate input, ' +
                         '.ignore-validate select, ' +
@@ -162,6 +195,10 @@ define([
                     tolerance: 'pointer',
                     cancel: 'input, button',
                     axis: 'y',
+
+                    /**
+                     * Update components
+                     */
                     update: function () {
                         $('[data-role=swatch-text-options-container] [data-role=order]').each(
                             function (index, element) {

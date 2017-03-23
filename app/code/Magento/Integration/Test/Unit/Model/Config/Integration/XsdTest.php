@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\Config\Integration;
@@ -13,12 +13,15 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $_schemaFile;
+    protected $schemaFile;
 
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->_schemaFile = $urnResolver->getRealPath(
+        $this->schemaFile = $urnResolver->getRealPath(
             'urn:magento:module:Magento_Integration:etc/integration/api.xsd'
         );
     }
@@ -30,9 +33,18 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
         $messageFormat = '%message%';
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, [], null, null, $messageFormat);
-        $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
+        $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
     }

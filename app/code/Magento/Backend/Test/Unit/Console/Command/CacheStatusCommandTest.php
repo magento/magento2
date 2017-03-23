@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,16 +11,16 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheStatusCommandTest extends AbstractCacheCommandTest
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
-        $this->command = new CacheStatusCommand($this->cacheManager);
+        $this->command = new CacheStatusCommand($this->cacheManagerMock);
     }
 
     public function testExecute()
     {
         $cacheTypes = ['A' => 0, 'B' => 1, 'C' => 1];
-        $this->cacheManager->expects($this->once())->method('getStatus')->willReturn($cacheTypes);
+        $this->cacheManagerMock->expects($this->once())->method('getStatus')->willReturn($cacheTypes);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
 

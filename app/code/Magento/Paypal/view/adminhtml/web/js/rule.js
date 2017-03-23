@@ -1,29 +1,33 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
-    "uiClass",
-    "underscore"
-], function (Class, _) {
-    "use strict";
+    'uiClass',
+    'Magento_Paypal/js/rules'
+], function (Class, Rules) {
+    'use strict';
+
     return Class.extend({
+
         /**
          * Constructor
+         *
+         * @param {Object} config
+         * @returns {exports.initialize}
          */
         initialize: function (config) {
+            this.rules = new Rules();
             this.initConfig(config);
+
             return this;
         },
+
         /**
          * To apply the rule
          */
         apply: function () {
-            require([
-                    'Magento_Paypal/js/rules/' + this.name
-                ], function (applicableRule) {
-                    applicableRule(this.$target, this.$owner, this.data);
-                }.bind(this));
+            this.rules[this.name](this.$target, this.$owner, this.data);
         }
     });
 });

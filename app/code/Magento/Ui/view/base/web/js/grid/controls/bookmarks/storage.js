@@ -1,15 +1,23 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'mageUtils',
-    'Magento_Ui/js/lib/core/storage',
+    'Magento_Ui/js/lib/core/storage/local',
     'uiClass'
 ], function ($, utils, storage, Class) {
     'use strict';
 
+    /**
+     * Removes ns prefix for path.
+     *
+     * @param {String} ns
+     * @param {String} path
+     * @returns {String}
+     */
     function removeNs(ns, path) {
         return path.replace(ns + '.', '');
     }

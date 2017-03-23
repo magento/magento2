@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\ObjectManager\Code\Generator;
+
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * Class Repository
@@ -81,7 +84,22 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+                            'description' =>
+                                '\\' . JoinProcessorInterface::class,
+                        ],
+                    ],
+                ]
+            ],
+            [
+                'name' => 'collectionProcessor',
+                'visibility' => 'private',
+                'docblock' => [
+                    'shortDescription' => 'Search Criteria Collection processor.',
+                    'tags' => [
+                        [
+                            'name' => 'var',
+                            'description' =>
+                                '\\' . CollectionProcessorInterface::class,
                         ],
                     ],
                 ]
@@ -119,6 +137,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         return
             str_replace('Interface', '', $this->getSourceClassName()) . 'SearchResultInterfaceFactory';
     }
+
     /**
      * Returns source persistor class name
      *
@@ -153,7 +172,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     'name' => 'extensionAttributesJoinProcessor',
-                    'type' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+                    'type' => '\\' . JoinProcessorInterface::class,
                 ],
             ],
             'body' => "\$this->"
@@ -174,12 +193,11 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'param',
                         'description' => $this->_getCollectionFactoryClassName()
-                            . " \$" . $this->_getSourceCollectionFactoryPropertyName()
+                            . " \$" . $this->_getSourceCollectionFactoryPropertyName(),
                     ],
                     [
                         'name' => 'param',
-                        'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface'
-                            . " \$extensionAttributesJoinProcessor"
+                        'description' => '\\' . JoinProcessorInterface::class . " \$extensionAttributesJoinProcessor",
                     ],
                 ],
             ]
@@ -467,20 +485,13 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $body = "\$collection = \$this->" . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
         . "\$this->extensionAttributesJoinProcessor->process(\$collection);\n"
-        . "foreach (\$criteria->getFilterGroups() as \$filterGroup) {\n"
-        . "    foreach (\$filterGroup->getFilters() as \$filter) {\n"
-        . "        \$condition = \$filter->getConditionType() ? \$filter->getConditionType() : 'eq';\n"
-        . "        \$collection->addFieldToFilter(\$filter->getField(), [\$condition => \$filter->getValue()]);\n"
-        . "    }\n"
-        . "}\n"
-        . "\$collection->setCurPage(\$criteria->getCurrentPage());\n"
-        . "\$collection->setPageSize(\$criteria->getPageSize());\n"
+        . "\$this->getCollectionProcessor()->process(\$searchCriteria, \$collection);\n"
         . "return \$collection;\n";
         return [
             'name' => 'getList',
             'parameters' => [
                 [
-                    'name' => 'criteria',
+                    'name' => 'searchCriteria',
                     'type' => self::SEARCH_CRITERIA,
                 ],
             ],
@@ -490,11 +501,44 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => self::SEARCH_CRITERIA . '  $criteria',
+                        'description' => self::SEARCH_CRITERIA . ' $searchCriteria',
                     ],
                     [
                         'name' => 'return',
                         'description' => $this->getSourceClassName() . '[]',
+                    ],
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Returns getList() method
+     *
+     * @return string
+     */
+    private function _getGetCollectionProcessorMethod()
+    {
+        $body = "if (!\$this->collectionProcessor) {\n"
+            . "    \$this->collectionProcessor = \\Magento\\Framework\\App\\ObjectManager::getInstance()->get(\n"
+            . "        \\" . CollectionProcessorInterface::class . "::class\n"
+            . "    );\n"
+            . "}\n"
+            . "return \$this->collectionProcessor;\n";
+        return [
+            'name' => 'getCollectionProcessor',
+            'visibility' => 'private',
+            'parameters' => [],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Retrieve collection processor',
+                'tags' => [
+                    [
+                        'name' => 'deprecated',
+                    ],
+                    [
+                        'name' => 'return',
+                        'description' => "\\" . CollectionProcessorInterface::class,
                     ],
                 ],
             ]
@@ -518,7 +562,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             $this->_getDeleteMethod(),
             $this->_getDeleteByIdMethod(),
             $this->_getFlushMethod(),
-            $this->_getSaveMethod()
+            $this->_getSaveMethod(),
+            $this->_getGetCollectionProcessorMethod(),
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 /**
  * Abstract class for webapi handlers.
  */
-abstract class Webapi implements HandlerInterface
+abstract class Webapi extends Curl implements HandlerInterface
 {
     /**
      * Configuration parameters array.

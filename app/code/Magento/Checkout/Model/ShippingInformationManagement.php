@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -8,8 +8,14 @@ namespace Magento\Checkout\Model;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Psr\Log\LoggerInterface as Logger;
-use \Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Api\Data\CartExtensionFactory;
+use Magento\Quote\Model\ShippingAssignmentFactory;
+use Magento\Quote\Model\ShippingFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,7 +40,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -68,10 +74,25 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected $totalsCollector;
 
     /**
+     * @var \Magento\Quote\Api\Data\CartExtensionFactory
+     */
+    private $cartExtensionFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingAssignmentFactory
+     */
+    protected $shippingAssignmentFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingFactory
+     */
+    private $shippingFactory;
+
+    /**
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\QuoteAddressValidator $addressValidator
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
@@ -83,7 +104,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
@@ -103,70 +124,48 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
     /**
      * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveAddressInformation(
         $cartId,
         \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
     ) {
         $address = $addressInformation->getShippingAddress();
+        $billingAddress = $addressInformation->getBillingAddress();
         $carrierCode = $addressInformation->getShippingCarrierCode();
         $methodCode = $addressInformation->getShippingMethodCode();
 
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->getActive($cartId);
-        $this->validateQuote($quote);
-
-        $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
-        $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
-        $customerAddressId = $address->getCustomerAddressId();
-        $this->addressValidator->validate($address);
-        $quote->setShippingAddress($address);
-        $address = $quote->getShippingAddress();
-
-        if ($customerAddressId) {
-            $addressData = $this->addressRepository->getById($customerAddressId);
-            $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
+        if (!$address->getCustomerAddressId()) {
+            $address->setCustomerAddressId(null);
         }
-
-        $address->setSaveInAddressBook($saveInAddressBook);
-        $address->setSameAsBilling($sameAsBilling);
-        $address->setCollectShippingRates(true);
 
         if (!$address->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
         }
 
-        $address->setShippingMethod($carrierCode . '_' . $methodCode);
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->getActive($cartId);
+        $address->setLimitCarrier($carrierCode);
+        $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . '_' . $methodCode);
+        $this->validateQuote($quote);
+        $quote->setIsMultiShipping(false);
 
-        try {
-            $this->totalsCollector->collectAddressTotals($quote, $address);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please, check input data.'));
-        }
-
-        if (!$address->getShippingRateByCode($address->getShippingMethod())) {
-            throw new NoSuchEntityException(
-                __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
-            );
-        }
-
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->scopeConfig->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $quote->getStoreId()
-            ));
+        if ($billingAddress) {
+            $quote->setBillingAddress($billingAddress);
         }
 
         try {
-            $address->save();
-            $quote->collectTotals();
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save shipping information. Please, check input data.'));
+            throw new InputException(__('Unable to save shipping information. Please check input data.'));
+        }
+
+        $shippingAddress = $quote->getShippingAddress();
+
+        if (!$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())) {
+            throw new NoSuchEntityException(
+                __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
+            );
         }
 
         /** @var \Magento\Checkout\Api\Data\PaymentDetailsInterface $paymentDetails */
@@ -186,14 +185,73 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      */
     protected function validateQuote(\Magento\Quote\Model\Quote $quote)
     {
-        if ($quote->isVirtual()) {
-            throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
-            );
-        }
-
         if (0 == $quote->getItemsCount()) {
             throw new InputException(__('Shipping method is not applicable for empty cart'));
         }
+    }
+
+    /**
+     * @param CartInterface $quote
+     * @param AddressInterface $address
+     * @param string $method
+     * @return CartInterface
+     */
+    private function prepareShippingAssignment(CartInterface $quote, AddressInterface $address, $method)
+    {
+        $cartExtension = $quote->getExtensionAttributes();
+        if ($cartExtension === null) {
+            $cartExtension = $this->getCartExtensionFactory()->create();
+        }
+
+        $shippingAssignments = $cartExtension->getShippingAssignments();
+        if (empty($shippingAssignments)) {
+            $shippingAssignment = $this->getShippingAssignmentFactory()->create();
+        } else {
+            $shippingAssignment = $shippingAssignments[0];
+        }
+
+        $shipping = $shippingAssignment->getShipping();
+        if ($shipping === null) {
+            $shipping = $this->getShippingFactory()->create();
+        }
+
+        $shipping->setAddress($address);
+        $shipping->setMethod($method);
+        $shippingAssignment->setShipping($shipping);
+        $cartExtension->setShippingAssignments([$shippingAssignment]);
+        return $quote->setExtensionAttributes($cartExtension);
+    }
+
+    /**
+     * @return CartExtensionFactory
+     */
+    private function getCartExtensionFactory()
+    {
+        if (!$this->cartExtensionFactory) {
+            $this->cartExtensionFactory = ObjectManager::getInstance()->get(CartExtensionFactory::class);
+        }
+        return $this->cartExtensionFactory;
+    }
+
+    /**
+     * @return ShippingAssignmentFactory
+     */
+    private function getShippingAssignmentFactory()
+    {
+        if (!$this->shippingAssignmentFactory) {
+            $this->shippingAssignmentFactory = ObjectManager::getInstance()->get(ShippingAssignmentFactory::class);
+        }
+        return $this->shippingAssignmentFactory;
+    }
+
+    /**
+     * @return ShippingFactory
+     */
+    private function getShippingFactory()
+    {
+        if (!$this->shippingFactory) {
+            $this->shippingFactory = ObjectManager::getInstance()->get(ShippingFactory::class);
+        }
+        return $this->shippingFactory;
     }
 }

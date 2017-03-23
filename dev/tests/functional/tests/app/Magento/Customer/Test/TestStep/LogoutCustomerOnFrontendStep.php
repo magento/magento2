@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,11 +15,6 @@ use Magento\Customer\Test\Page\CustomerAccountIndex;
  */
 class LogoutCustomerOnFrontendStep implements TestStepInterface
 {
-    /**
-     * Logout page title.
-     */
-    const LOGOUT_PAGE_TITLE = 'You are signed out.';
-
     /**
      * Cms index page.
      *

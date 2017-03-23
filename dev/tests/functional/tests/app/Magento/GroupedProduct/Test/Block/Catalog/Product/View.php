@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class View extends ParentView
      *
      * @var string
      */
-    protected $groupedProductBlock = '.table-wrapper.grouped';
+    protected $groupedProductBlock = '[class="table-wrapper grouped"]';
 
     /**
      * This member holds the class name of the tier price block.
@@ -44,7 +44,7 @@ class View extends ParentView
     public function getGroupedProductBlock()
     {
         return $this->blockFactory->create(
-            'Magento\GroupedProduct\Test\Block\Catalog\Product\View\Type\Grouped',
+            \Magento\GroupedProduct\Test\Block\Catalog\Product\View\Type\Grouped::class,
             [
                 'element' => $this->_rootElement->find($this->groupedProductBlock)
             ]
@@ -81,8 +81,7 @@ class View extends ParentView
      */
     public function getOptions(FixtureInterface $product)
     {
-        $groupedOptions = $this->getGroupedProductBlock()->getOptions($product);
-        return ['grouped_options' => $groupedOptions] + parent::getOptions($product);
+        return ['grouped_options' => $this->getGroupedProductBlock()->getOptions($product)];
     }
 
     /**
@@ -94,5 +93,20 @@ class View extends ParentView
     public function fillOptions(FixtureInterface $product)
     {
         $this->getGroupedProductBlock()->fill($product);
+    }
+
+    /**
+     * Set quantity and click add to cart.
+     * @param FixtureInterface $product
+     * @param string|int $qty
+     */
+    public function setQtyAndClickAddToCartGrouped(FixtureInterface $product, $qty)
+    {
+        $associatedProducts = $product->getAssociated()['products'];
+        $groupedProductBlock = $this->getGroupedProductBlock();
+        foreach ($associatedProducts as $product) {
+            $groupedProductBlock->setQty($product->getId(), $qty);
+        }
+        $this->clickAddToCart();
     }
 }

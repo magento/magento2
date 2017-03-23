@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save order status.
  * 6. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29868
  */
 class UpdateCustomOrderStatusTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -117,6 +116,11 @@ class UpdateCustomOrderStatusTest extends Injectable
         // Preconditions:
         $orderStatusInitial->persist();
         if ($orderExist == 'Yes') {
+            $config = $fixtureFactory->createByCode('configData', [
+                'dataset' => 'checkmo_custom_new_order_status',
+                'data' => ['payment/checkmo/order_status' => ['value' => $orderStatusInitial->getStatus()]]
+            ]);
+            $config->persist();
             $order->persist();
         }
         // Steps:
@@ -154,6 +158,10 @@ class UpdateCustomOrderStatusTest extends Injectable
             $this->orderIndex->open()->getSalesOrderGrid()->massaction([['id' => $this->order->getId()]], 'Cancel');
             $filter = ['label' => $this->orderStatus->getLabel(), 'status' => $this->orderStatusInitial->getStatus()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => 'checkmo_custom_new_order_status_rollback']
+            )->run();
         }
     }
 }

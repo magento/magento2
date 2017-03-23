@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -16,7 +16,7 @@ class Address extends AbstractCustomer
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 
@@ -38,6 +38,8 @@ class Address extends AbstractCustomer
     const COLUMN_REGION = 'region';
 
     const COLUMN_COUNTRY_ID = 'country_id';
+
+    const COLUMN_POSTCODE = 'postcode';
 
     /**#@-*/
 
@@ -231,6 +233,11 @@ class Address extends AbstractCustomer
     ];
 
     /**
+     * @var \Magento\Customer\Model\Address\Validator\Postcode
+     */
+    protected $postcodeValidator;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -247,7 +254,9 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -268,6 +277,7 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
         array $data = []
     ) {
         $this->_customerFactory = $customerFactory;
@@ -275,6 +285,7 @@ class Address extends AbstractCustomer
         $this->_eavConfig = $eavConfig;
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
+        $this->postcodeValidator = $postcodeValidator;
 
         if (!isset($data['attribute_collection'])) {
             /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
@@ -516,7 +527,6 @@ class Address extends AbstractCustomer
                         continue;
                     }
                 } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
-
                 } elseif ('select' == $attributeParams['type']) {
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
@@ -533,7 +543,6 @@ class Address extends AbstractCustomer
             }
         }
 
-
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
@@ -543,6 +552,7 @@ class Address extends AbstractCustomer
         }
 
         // let's try to find region ID
+        $entityRow['region_id'] = null;
         if (!empty($rowData[self::COLUMN_REGION])) {
             $countryNormalized = strtolower($rowData[self::COLUMN_COUNTRY_ID]);
             $regionNormalized = strtolower($rowData[self::COLUMN_REGION]);
@@ -588,7 +598,6 @@ class Address extends AbstractCustomer
                 $fields = array_diff(array_keys($row), ['entity_id', 'parent_id', 'created_at']);
                 $this->_connection->insertOnDuplicate($this->_entityTable, $row, $fields);
             }
-
         }
         return $this;
     }
@@ -634,7 +643,6 @@ class Address extends AbstractCustomer
                 );
                 $this->_connection->insertOnDuplicate($tableName, $data, array_keys($defaultsData));
             }
-
         }
         return $this;
     }
@@ -740,6 +748,16 @@ class Address extends AbstractCustomer
                         ) {
                             $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                         }
+                    }
+
+                    if (isset($rowData[self::COLUMN_POSTCODE])
+                        && isset($rowData[self::COLUMN_COUNTRY_ID])
+                        && !$this->postcodeValidator->isValid(
+                            $rowData[self::COLUMN_COUNTRY_ID],
+                            $rowData[self::COLUMN_POSTCODE]
+                        )
+                    ) {
+                        $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, self::COLUMN_POSTCODE);
                     }
 
                     if (isset($rowData[self::COLUMN_COUNTRY_ID]) && isset($rowData[self::COLUMN_REGION])) {

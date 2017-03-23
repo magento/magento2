@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Ui\Component\Listing\Column;
@@ -50,7 +50,14 @@ class Price extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->priceFormatter->format($item[$this->getData('name')], false);
+                $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
+                $item[$this->getData('name')] = $this->priceFormatter->format(
+                    $item[$this->getData('name')],
+                    false,
+                    null,
+                    null,
+                    $currencyCode
+                );
             }
         }
 

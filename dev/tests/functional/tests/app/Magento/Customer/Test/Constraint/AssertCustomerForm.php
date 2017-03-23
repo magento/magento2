@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,7 @@ class AssertCustomerForm extends AbstractConstraint
         'id',
         'password',
         'password_confirmation',
+        'current_password',
         'is_subscribed',
         'address'
     ];
@@ -41,26 +42,18 @@ class AssertCustomerForm extends AbstractConstraint
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexEdit $pageCustomerIndexEdit
      * @param Address $address[optional]
-     * @param Customer $initialCustomer [optional]
      * @return void
      */
     public function processAssert(
         Customer $customer,
         CustomerIndex $pageCustomerIndex,
         CustomerIndexEdit $pageCustomerIndexEdit,
-        Address $address = null,
-        Customer $initialCustomer = null
+        Address $address = null
     ) {
         $data = [];
         $filter = [];
 
-        if ($initialCustomer) {
-            $data['customer'] = $customer->hasData()
-                ? array_merge($initialCustomer->getData(), $customer->getData())
-                : $initialCustomer->getData();
-        } else {
-            $data['customer'] = $customer->getData();
-        }
+        $data['customer'] = $customer->getData();
         if ($address) {
             $data['addresses'][1] = $address->hasData() ? $address->getData() : [];
         } else {

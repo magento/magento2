@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Payment\Operations;
@@ -37,13 +37,6 @@ class CaptureOperation extends AbstractOperation
         $amountToCapture = $payment->formatAmount($invoice->getBaseGrandTotal());
         $order = $payment->getOrder();
 
-        // prepare parent transaction and its amount
-        $paidWorkaround = 0;
-        if (!$invoice->wasPayCalled()) {
-            $paidWorkaround = (double)$amountToCapture;
-        }
-        $payment->isCaptureFinal($paidWorkaround);
-
         $payment->setTransactionId(
             $this->transactionManager->generateTransactionId(
                 $payment,
@@ -66,44 +59,56 @@ class CaptureOperation extends AbstractOperation
             $method->setStore(
                 $order->getStoreId()
             );
-            $method->fetchTransactionInfo(
-                $payment,
-                $invoice->getTransactionId()
-            );
-        }
-
-        if (!$invoice->getIsPaid()) {
-            // attempt to capture: this can trigger "is_transaction_pending"
-            $method = $payment->getMethodInstance();
-            $method->setStore(
-                $order->getStoreId()
-            );
-            //TODO replace for sale usage
-            $method->capture($payment, $amountToCapture);
-
-            $transactionBuilder = $this->transactionBuilder->setPayment($payment);
-            $transactionBuilder->setOrder($order);
-            $transactionBuilder->setFailSafe(true);
-            $transactionBuilder->setTransactionId($payment->getTransactionId());
-            $transactionBuilder->setAdditionalInformation($payment->getTransactionAdditionalInfo());
-            $transactionBuilder->setSalesDocument($invoice);
-            $transaction = $transactionBuilder->build(Transaction::TYPE_CAPTURE);
-
-            $message = $this->stateCommand->execute($payment, $amountToCapture, $order);
-            if ($payment->getIsTransactionPending()) {
-                $invoice->setIsPaid(false);
-            } else {
-                $invoice->setIsPaid(true);
-                $this->updateTotals($payment, ['base_amount_paid_online' => $amountToCapture]);
+            if ($method->canFetchTransactionInfo()) {
+                $method->fetchTransactionInfo(
+                    $payment,
+                    $invoice->getTransactionId()
+                );
             }
-            $message = $payment->prependMessage($message);
-            $payment->addTransactionCommentsToOrder($transaction, $message);
-            $invoice->setTransactionId($payment->getLastTransId());
-
-            return $payment;
         }
-        throw new \Magento\Framework\Exception\LocalizedException(
-            __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
+
+        if ($invoice->getIsPaid()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
+            );
+        }
+
+        // attempt to capture: this can trigger "is_transaction_pending"
+        $method = $payment->getMethodInstance();
+        $method->setStore(
+            $order->getStoreId()
         );
+        //TODO replace for sale usage
+        $method->capture($payment, $amountToCapture);
+
+        // prepare parent transaction and its amount
+        $paidWorkaround = 0;
+        if (!$invoice->wasPayCalled()) {
+            $paidWorkaround = (double)$amountToCapture;
+        }
+        if ($payment->isCaptureFinal($paidWorkaround)) {
+            $payment->setShouldCloseParentTransaction(true);
+        }
+
+        $transactionBuilder = $this->transactionBuilder->setPayment($payment);
+        $transactionBuilder->setOrder($order);
+        $transactionBuilder->setFailSafe(true);
+        $transactionBuilder->setTransactionId($payment->getTransactionId());
+        $transactionBuilder->setAdditionalInformation($payment->getTransactionAdditionalInfo());
+        $transactionBuilder->setSalesDocument($invoice);
+        $transaction = $transactionBuilder->build(Transaction::TYPE_CAPTURE);
+
+        $message = $this->stateCommand->execute($payment, $amountToCapture, $order);
+        if ($payment->getIsTransactionPending()) {
+            $invoice->setIsPaid(false);
+        } else {
+            $invoice->setIsPaid(true);
+            $this->updateTotals($payment, ['base_amount_paid_online' => $amountToCapture]);
+        }
+        $message = $payment->prependMessage($message);
+        $payment->addTransactionCommentsToOrder($transaction, $message);
+        $invoice->setTransactionId($payment->getLastTransId());
+
+        return $payment;
     }
 }

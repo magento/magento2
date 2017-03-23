@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(1);
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 
 $options = [];
-
 /** @var $option \Magento\Catalog\Model\Product\Option */
 foreach ($product->getOptions() as $option) {
     switch ($option->getGroupByType()) {
@@ -31,10 +31,10 @@ foreach ($product->getOptions() as $option) {
 $requestInfo = new \Magento\Framework\DataObject(['qty' => 1, 'options' => $options]);
 
 /** @var $cart \Magento\Checkout\Model\Cart */
-$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Cart');
+$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Checkout\Model\Cart::class);
 $cart->addProduct($product, $requestInfo);
 $cart->save();
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->removeSharedInstance('Magento\Checkout\Model\Session');
+$objectManager->removeSharedInstance(\Magento\Checkout\Model\Session::class);

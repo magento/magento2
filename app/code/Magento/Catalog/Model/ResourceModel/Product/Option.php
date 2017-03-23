@@ -1,17 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog product custom option resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Store manager
      *
@@ -119,23 +127,21 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $optionId = $connection->fetchOne($statement);
 
                 if ($optionId) {
-                    if ($object->getStoreId() == '0') {
-                        $data = $this->_prepareDataForTable(
-                            new \Magento\Framework\DataObject(
-                                ['price' => $object->getPrice(), 'price_type' => $object->getPriceType()]
-                            ),
-                            $priceTable
-                        );
+                    $data = $this->_prepareDataForTable(
+                        new \Magento\Framework\DataObject(
+                            ['price' => $object->getPrice(), 'price_type' => $object->getPriceType()]
+                        ),
+                        $priceTable
+                    );
 
-                        $connection->update(
-                            $priceTable,
-                            $data,
-                            [
-                                'option_id = ?' => $object->getId(),
-                                'store_id  = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                            ]
-                        );
-                    }
+                    $connection->update(
+                        $priceTable,
+                        $data,
+                        [
+                            'option_id = ?' => $object->getId(),
+                            'store_id  = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                        ]
+                    );
                 } else {
                     $data = $this->_prepareDataForTable(
                         new \Magento\Framework\DataObject(
@@ -241,14 +247,20 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $titleTableName = $this->getTable('catalog_product_option_title');
         foreach ([\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()] as $storeId) {
             $existInCurrentStore = $this->getColFromOptionTable($titleTableName, (int)$object->getId(), (int)$storeId);
-            $existInDefaultStore = $this->getColFromOptionTable(
-                $titleTableName,
-                (int)$object->getId(),
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            );
+            $existInDefaultStore = (int)$storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID ?
+                $existInCurrentStore :
+                $this->getColFromOptionTable(
+                    $titleTableName,
+                    (int)$object->getId(),
+                    \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                );
+
             if ($object->getTitle()) {
+                $isDeleteStoreTitle = (bool)$object->getData('is_delete_store_title');
                 if ($existInCurrentStore) {
-                    if ($object->getStoreId() == $storeId) {
+                    if ($isDeleteStoreTitle && (int)$storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                        $connection->delete($titleTableName, ['option_title_id = ?' => $existInCurrentStore]);
+                    } elseif ($object->getStoreId() == $storeId) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(['title' => $object->getTitle()]),
                             $titleTableName
@@ -264,8 +276,12 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     }
                 } else {
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore)
-                        || ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInCurrentStore)
+                    if (($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                        (
+                            $storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID &&
+                            !$existInCurrentStore &&
+                            !$isDeleteStoreTitle
+                        )
                     ) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(
@@ -441,6 +457,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @param int $storeId
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getSearchableData($productId, $storeId)
     {
@@ -479,12 +496,19 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['option_title_default' => $this->getTable('catalog_product_option_title')],
             $defaultOptionJoin,
             []
+        )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.%s = product_option.product_id',
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
         )->joinLeft(
             ['option_title_store' => $this->getTable('catalog_product_option_title')],
             $storeOptionJoin,
             ['title' => $titleCheckSql]
         )->where(
-            'product_option.product_id = ?',
+            'cpe.entity_id = ?',
             $productId
         );
 
@@ -520,6 +544,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'option_type.option_id=product_option.option_id',
             []
         )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.%s = product_option.product_id',
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
+        )->join(
             ['option_title_default' => $this->getTable('catalog_product_option_type_title')],
             $defaultOptionJoin,
             []
@@ -528,7 +559,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $storeOptionJoin,
             ['title' => $titleCheckSql]
         )->where(
-            'product_option.product_id = ?',
+            'cpe.entity_id = ?',
             $productId
         );
 
@@ -537,5 +568,17 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $searchData;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

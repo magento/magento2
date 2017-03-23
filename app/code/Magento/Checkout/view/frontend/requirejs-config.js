@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,10 +9,10 @@ var config = {
             discountCode:           'Magento_Checkout/js/discount-codes',
             shoppingCart:           'Magento_Checkout/js/shopping-cart',
             regionUpdater:          'Magento_Checkout/js/region-updater',
-            opcOrderReview:         'Magento_Checkout/js/opc-order-review',
             sidebar:                'Magento_Checkout/js/sidebar',
-            payment:                'Magento_Checkout/js/payment',
-            paymentAuthentication:  'Magento_Checkout/js/payment-authentication'
+            checkoutLoader:         'Magento_Checkout/js/checkout-loader',
+            checkoutData:           'Magento_Checkout/js/checkout-data',
+            proceedToCheckout:      'Magento_Checkout/js/proceed-to-checkout'
         }
     }
 };

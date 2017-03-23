@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -51,7 +51,7 @@ class OrderGetTest extends WebapiAbstract
         ];
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
         $serviceInfo = [
@@ -72,18 +72,19 @@ class OrderGetTest extends WebapiAbstract
             $this->assertEquals($value, $result[$field]);
         }
 
-        $this->assertArrayHasKey('payments', $result);
+        $this->assertArrayHasKey('payment', $result);
         foreach ($expectedPayments as $field => $value) {
-            $paymentsKey = key($result['payments']);
-            $this->assertArrayHasKey($field, $result['payments'][$paymentsKey]);
-            $this->assertEquals($value, $result['payments'][$paymentsKey][$field]);
+            $this->assertEquals($value, $result['payment'][$field]);
         }
 
         $this->assertArrayHasKey('billing_address', $result);
-        $this->assertArrayHasKey('shipping_address', $result);
         foreach ($expectedBillingAddressNotEmpty as $field) {
             $this->assertArrayHasKey($field, $result['billing_address']);
-            $this->assertArrayHasKey($field, $result['shipping_address']);
+        }
+
+        //check that nullable fields were marked as optional and were not sent
+        foreach ($result as $value) {
+            $this->assertNotNull($value);
         }
     }
 }

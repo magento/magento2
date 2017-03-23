@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">product_attribute_add_form.product_attribute_add_form_data_source</item>
+            <item name="deps" xsi:type="string">product_attribute_add_form.product_attribute_add_form_data_source</item>
+        </item>
+        <item name="buttons" xsi:type="array">
+            <item name="cancel" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Cancel</item>
+            <item name="saveInNewSet" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\SaveInNewAttributeSet</item>
+            <item name="save" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Save</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">New Attribute</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">product_attribute_add_form</item>
+            <item name="ajaxSave" xsi:type="boolean">true</item>
+            <item name="ajaxSaveType" xsi:type="string">simple</item>
+            <item name="component" xsi:type="string">Magento_Catalog/js/components/new-attribute-form</item>
+            <item name="newSetPromptMessage" xsi:type="string" translate="true">Enter Name for New Attribute Set</item>
+        </item>
+        <item name="childrenFromMeta" xsi:type="boolean">true</item>
+    </argument>
+    <dataSource name="product_attribute_add_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Attribute\DataProvider</argument>
+            <argument name="name" xsi:type="string">product_attribute_add_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">attribute_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="catalog/product_attribute/save"/>
+                    <item name="validate_url" xsi:type="url" path="catalog/product_attribute/validate"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+    <fieldset name="base_fieldset">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Attribute Properties</item>
+                <item name="collapsible" xsi:type="boolean">false</item>
+                <item name="sortOrder" xsi:type="number">10</item>
+            </item>
+        </argument>
+        <field name="frontend_label[0]">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Attribute Label</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="frontend_input">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Inputtype</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="label" xsi:type="string" translate="true">Catalog Input Type for Store Owner</item>
+                    <item name="dataScope" xsi:type="string">frontend_input</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_required">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Required</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_required</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="date" xsi:type="string">date</item>
+                        <item name="boolean" xsi:type="string">boolean</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+    <fieldset name="attribute_options_select_container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
+                <item name="label" xsi:type="string" translate="true">Values</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">15</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="select" xsi:type="string">select</item>
+                </item>
+            </item>
+        </argument>
+        <dynamicRows name="attribute_options_select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add Value</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="admin__field-wide" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <item name="positionProvider" xsi:type="string">attribute_options.position</item>
+                    </item>
+                </argument>
+                <field name="is_default">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">boolean</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputCheckBoxName" xsi:type="string">default.</item>
+                            <item name="label" xsi:type="string" translate="true">Is Default</item>
+                            <item name="prefer" xsi:type="string">radio</item>
+                            <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
+                            <item name="additionalClasses" xsi:type="string">control-table-options-cell</item>
+                            <item name="modules" xsi:type="array">
+                                <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_select</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">option.order</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="_hidden" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+        </dynamicRows>
+    </fieldset>
+
+    <fieldset name="attribute_options_multiselect_container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
+                <item name="label" xsi:type="string" translate="true">Values</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">15</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="multiselect" xsi:type="string">multiselect</item>
+                </item>
+            </item>
+        </argument>
+        <dynamicRows name="attribute_options_multiselect">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add Value</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="admin__field-wide" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <item name="positionProvider" xsi:type="string">attribute_options.position</item>
+                    </item>
+                </argument>
+                <field name="is_default">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">boolean</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="label" xsi:type="string" translate="true">Is Default</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputCheckBoxName" xsi:type="string">default</item>
+                            <item name="isMultiple" xsi:type="boolean">true</item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
+                            <item name="additionalClasses" xsi:type="string">control-table-options-cell</item>
+                            <item name="modules" xsi:type="array">
+                                <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_multiselect</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">option.order</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="_hidden" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+        </dynamicRows>
+    </fieldset>
+
+    <fieldset name="advanced_fieldset">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Advanced Attribute Properties</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">20</item>
+            </item>
+        </argument>
+        <field name="attribute_code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Attribute Code</item>
+                    <item name="dataScope" xsi:type="string">attribute_code</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-code" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_global">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Attribute\Source\Scopes</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Scope</item>
+                    <item name="notice" xsi:type="string" translate="true">Declare attribute value saving scope.</item>
+                    <item name="dataScope" xsi:type="string">is_global</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/select</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="date" xsi:type="string">date</item>
+                        <item name="boolean" xsi:type="string">boolean</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="media_image" xsi:type="string">media_image</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_value_text">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Default Value</item>
+                    <item name="dataScope" xsi:type="string">default_value_text</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/input</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_value_textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string" translate="true">Default Value</item>
+                    <item name="dataScope" xsi:type="string">default_value_textarea</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/textarea</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="textarea" xsi:type="string">textarea</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_value_yesno">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Default Value</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="boolean" xsi:type="string">boolean</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">default_value_yesno</item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_value_date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/date</item>
+                    <item name="label" xsi:type="string" translate="true">Default Value</item>
+                    <item name="dataScope" xsi:type="string">default_value_date</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="date" xsi:type="string">date</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_unique">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Unique Value</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="media_image" xsi:type="string">media_image</item>
+                    </item>
+                    <item name="inverseVisibility" xsi:type="boolean">true</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="notice" xsi:type="string" translate="true">Not shared with other products.</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_unique</item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="frontend_class">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Eav\Model\Adminhtml\Attribute\Validation\Rules\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Input Validation for Store Owner</item>
+                    <item name="dataScope" xsi:type="string">frontend_class</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-hide-select</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="date" xsi:type="string">date</item>
+                        <item name="boolean" xsi:type="string">boolean</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="is_used_in_grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Add to Column Options</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="notice" xsi:type="string" translate="true">Add this attribute to the list of column options in the product grid.</item>
+                    <item name="default" xsi:type="number">1</item>
+                    <item name="dataScope" xsi:type="string">is_used_in_grid</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_visible_in_grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">hidden</item>
+                    <item name="dataScope" xsi:type="string">is_visible_in_grid</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_filterable_in_grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Use in Filter Options</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="notice" xsi:type="string" translate="true">Add this attribute to the list of filter options in the product grid.</item>
+                    <item name="default" xsi:type="number">1</item>
+                    <item name="dataScope" xsi:type="string">is_filterable_in_grid</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+
+    <fieldset name="manage-titles">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Manage Titles (Size, Color, etc.)</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">25</item>
+            </item>
+        </argument>
+    </fieldset>
+
+    <fieldset name="front_fieldset">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Storefront Properties</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">30</item>
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="media_image" xsi:type="string">media_image</item>
+                </item>
+                <item name="openOnShow" xsi:type="boolean">false</item>
+                <item name="inverseVisibility" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <field name="is_searchable">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Use in Search</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_searchable</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_visible_in_advanced_search">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Visible in Advanced Search</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">${ $.parentName}.is_searchable:checked</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_visible_in_advanced_search</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_comparable">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Comparable on Storefront</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_comparable</item>
+                </item>
+            </argument>
+        </field>
+
+        <!--TODO: Add 3 fields from other modules-->
+
+        <field name="is_used_for_promo_rules">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Use for Promo Rule Conditions</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_used_for_promo_rules</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_html_allowed_on_front">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Allow HTML Tags on Storefront</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                    </item>
+                    <item name="dataScope" xsi:type="string">is_html_allowed_on_front</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_wysiwyg_enabled">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Enable WYSIWYG</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="textarea" xsi:type="string">textarea</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">is_wysiwyg_enabled</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_visible_on_front">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">100</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Visible on Catalog Pages on Storefront</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">1</item>
+                    <item name="dataScope" xsi:type="string">is_visible_on_front</item>
+                </item>
+            </argument>
+        </field>
+        <field name="used_in_product_listing">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">110</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Used in Product Listing</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="notice" xsi:type="string" translate="true">Depends on design theme.</item>
+                    <item name="default" xsi:type="number">1</item>
+                    <item name="dataScope" xsi:type="string">used_in_product_listing</item>
+                </item>
+            </argument>
+        </field>
+        <field name="used_for_sort_by">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">120</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Used for Sorting in Product Listing</item>
+                    <item name="notice" xsi:type="string" translate="true">Depends on design theme.</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">used_for_sort_by</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

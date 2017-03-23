@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class AssertProductSuccessDeleteMessage extends AbstractConstraint
     {
         $products = is_array($product) ? $product : [$product];
         $deleteMessage = sprintf(self::SUCCESS_DELETE_MESSAGE, count($products));
-        $actualMessage = $productPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $productPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             $deleteMessage,
             $actualMessage,

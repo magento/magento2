@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @see \Magento\Checkout\Block\Cart\Totals
+ */
+?>
+<?php if ($block->getTotals()): ?>
+    <?php $_colspan = 3; ?>
+    <?php /* @escapeNotVerified */ echo $block->renderTotals(null, $_colspan); ?>
+    <?php /* @escapeNotVerified */ echo $block->renderTotals('footer', $_colspan); ?>
+    <?php if ($block->needDisplayBaseGrandtotal()):?>
+    <tr class="totals charge">
+        <th class="mark" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>" scope="row">
+            <?php /* @escapeNotVerified */ echo __('Your credit card will be charged for') ?>
+        </th>
+        <td class="amount" data-th="<?php echo $block->escapeHtml(__('Your credit card will be charged for')); ?>">
+            <?php /* @escapeNotVerified */ echo $block->displayBaseGrandtotal() ?>
+        </td>
+    </tr>
+    <?php endif?>
+<?php endif; ?>

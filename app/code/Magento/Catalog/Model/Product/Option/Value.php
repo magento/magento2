@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,7 +93,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option\Value');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Option\Value::class);
     }
 
     /**
@@ -172,6 +172,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $this->_product = $product;
         return $this;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -201,13 +202,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 $this->getOption()->getStoreId()
             );
 
-            if ($this->getData('option_type_id') == '-1') {
-                //change to 0
-                $this->unsetData('option_type_id');
-            } else {
-                $this->setId($this->getData('option_type_id'));
-            }
-
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());
@@ -232,6 +226,21 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
             $basePrice = $this->getOption()->getProduct()->getFinalPrice();
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            return $price;
+        }
+        return $this->_getData(self::KEY_PRICE);
+    }
+
+    /**
+     * Return regular price.
+     *
+     * @return float|int
+     */
+    public function getRegularPrice()
+    {
+        if ($this->getPriceType() == self::TYPE_PERCENT) {
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }
@@ -358,6 +367,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->_getData(self::KEY_OPTION_TYPE_ID);
     }
+
     /**
      * Set option title
      *
@@ -423,5 +433,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -15,7 +16,7 @@ class Customer extends AbstractCustomer
     /**
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**#@+
      * Permanent column names
@@ -135,25 +136,28 @@ class Customer extends AbstractCustomer
     /**
      * Customer fields in file
      */
-    public $customerFields = [
-        'group_id',
-        'store_id',
-        'updated_at',
-        'created_at',
-        'created_in',
-        'prefix',
-        'firstname',
-        'middlename',
-        'lastname',
-        'suffix',
-        'dob',
+    protected $customerFields = [
+        CustomerInterface::GROUP_ID,
+        CustomerInterface::STORE_ID,
+        CustomerInterface::UPDATED_AT,
+        CustomerInterface::CREATED_AT,
+        CustomerInterface::CREATED_IN,
+        CustomerInterface::PREFIX,
+        CustomerInterface::FIRSTNAME,
+        CustomerInterface::MIDDLENAME,
+        CustomerInterface::LASTNAME,
+        CustomerInterface::SUFFIX,
+        CustomerInterface::DOB,
         'password_hash',
-        'taxvat',
-        'confirmation',
-        'gender',
+        CustomerInterface::TAXVAT,
+        CustomerInterface::CONFIRMATION,
+        CustomerInterface::GENDER,
         'rp_token',
         'rp_token_created_at',
-        ];
+        'failures_num',
+        'first_failure',
+        'lock_expires',
+    ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -236,11 +240,6 @@ class Customer extends AbstractCustomer
         $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Please enter a password with a valid length.'));
 
         $this->_initStores(true)->_initAttributes();
-
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
-        );
 
         $this->_customerModel = $customerFactory->create();
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
@@ -366,26 +365,28 @@ class Customer extends AbstractCustomer
 
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
-            $entityRow['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
+            $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
 
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
-            if ($newCustomer && !strlen($value)) {
-                continue;
+            $attributeParameters = $this->_attributes[$attributeCode];
+            if ('select' == $attributeParameters['type']) {
+                $value = isset($attributeParameters['options'][strtolower($value)])
+                    ? $attributeParameters['options'][strtolower($value)]
+                    : 0;
+            } elseif ('datetime' == $attributeParameters['type'] && !empty($value)) {
+                $value = (new \DateTime())->setTimestamp(strtotime($value));
+                $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             }
+
             if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
                 $attribute = $this->_customerModel->getAttribute($attributeCode);
                 $backendModel = $attribute->getBackendModel();
-                $attributeParameters = $this->_attributes[$attributeCode];
-
-                if ('select' == $attributeParameters['type']) {
-                    $value = $attributeParameters['options'][strtolower($value)];
-                } elseif ('datetime' == $attributeParameters['type']) {
-                    $value = (new \DateTime())->setTimestamp(strtotime($value));
-                    $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-                } elseif ($backendModel) {
+                if ($backendModel
+                    && $attribute->getFrontendInput() != 'select'
+                    && $attribute->getFrontendInput() != 'datetime') {
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);
                 }
@@ -561,5 +562,18 @@ class Customer extends AbstractCustomer
     public function getEntityTable()
     {
         return $this->_entityTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValidColumnNames()
+    {
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->customerFields
+        );
+
+        return $this->validColumnNames;
     }
 }

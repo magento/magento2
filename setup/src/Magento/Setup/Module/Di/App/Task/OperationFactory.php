@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\App\Task;
@@ -33,6 +33,11 @@ class OperationFactory
     const REPOSITORY_GENERATOR = 'repository_generator';
 
     /**
+     * Proxy generator
+     */
+    const PROXY_GENERATOR = 'proxy_generator';
+
+    /**
      * Service data attributes generator
      */
     const DATA_ATTRIBUTES_GENERATOR = 'extension_attributes_generator';
@@ -48,12 +53,14 @@ class OperationFactory
      * @var array
      */
     private $operationsDefinitions = [
-        self::DATA_ATTRIBUTES_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator',
-        self::AREA_CONFIG_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\Area',
-        self::APPLICATION_CODE_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator',
-        self::INTERCEPTION => 'Magento\Setup\Module\Di\App\Task\Operation\Interception',
-        self::INTERCEPTION_CACHE => 'Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache',
-        self::REPOSITORY_GENERATOR => 'Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator'
+        self::DATA_ATTRIBUTES_GENERATOR =>
+            \Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator::class,
+        self::AREA_CONFIG_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\Area::class,
+        self::APPLICATION_CODE_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator::class,
+        self::INTERCEPTION => \Magento\Setup\Module\Di\App\Task\Operation\Interception::class,
+        self::INTERCEPTION_CACHE => \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class,
+        self::REPOSITORY_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator::class,
+        self::PROXY_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator::class,
     ];
 
     /**

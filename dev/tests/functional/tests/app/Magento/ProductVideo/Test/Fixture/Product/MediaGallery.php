@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,7 +47,6 @@ class MediaGallery extends DataSource
      *
      * @param string $filename
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function createTestImage($filename)
     {
@@ -58,8 +57,6 @@ class MediaGallery extends DataSource
 
             // Create a color (this first call to imageColorAllocate
             //  also automatically sets the image background color)
-            $colorRed = imageColorAllocate($image, 255, 0, 0);
-            // Create another color
             $colorYellow = imageColorAllocate($image, 255, 255, 0);
 
             // Draw a rectangle

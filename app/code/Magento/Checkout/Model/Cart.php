@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 /**
  * Shopping cart model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
  */
 class Cart extends DataObject implements CartInterface
 {
@@ -81,7 +82,7 @@ class Cart extends DataObject implements CartInterface
     protected $stockState;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -89,6 +90,11 @@ class Cart extends DataObject implements CartInterface
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
+
+    /**
+     * @var \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
+     */
+    private $requestInfoFilter;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -100,7 +106,7 @@ class Cart extends DataObject implements CartInterface
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $data
      * @codeCoverageIgnore
@@ -116,7 +122,7 @@ class Cart extends DataObject implements CartInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
@@ -256,7 +262,11 @@ class Cart extends DataObject implements CartInterface
         if ($orderItem->getParentItem() === null) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
-                $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId);
+                /**
+                 * We need to reload product in this place, because products
+                 * with the same id may have different sets of order attributes.
+                 */
+                $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId, true);
             } catch (NoSuchEntityException $e) {
                 return $this;
             }
@@ -310,6 +320,7 @@ class Cart extends DataObject implements CartInterface
      *
      * @param   \Magento\Framework\DataObject|int|array $requestInfo
      * @return  \Magento\Framework\DataObject
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProductRequest($requestInfo)
     {
@@ -317,13 +328,14 @@ class Cart extends DataObject implements CartInterface
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
             $request = new \Magento\Framework\DataObject(['qty' => $requestInfo]);
-        } else {
+        } elseif (is_array($requestInfo)) {
             $request = new \Magento\Framework\DataObject($requestInfo);
+        } else {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid request for adding product to quote.')
+            );
         }
-
-        if (!$request->hasQty()) {
-            $request->setQty(1);
-        }
+        $this->getRequestInfoFilter()->filter($request);
 
         return $request;
     }
@@ -346,11 +358,10 @@ class Cart extends DataObject implements CartInterface
         if ($productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId, $product->getStore()->getWebsiteId());
             $minimumQty = $stockItem->getMinSaleQty();
-            //If product was not found in cart and there is set minimal qty for it
+            //If product quantity is not specified in request and there is set minimal qty for it
             if ($minimumQty
                 && $minimumQty > 0
-                && $request->getQty() < $minimumQty
-                && !$this->getQuote()->hasProductId($productId)
+                && !$request->getQty()
             ) {
                 $request->setQty($minimumQty);
             }
@@ -689,7 +700,7 @@ class Cart extends DataObject implements CartInterface
                 // If product was not found in cart and there is set minimal qty for it
                 if ($minimumQty
                     && $minimumQty > 0
-                    && $request->getQty() < $minimumQty
+                    && !$request->getQty()
                     && !$this->getQuote()->hasProductId($productId)
                 ) {
                     $request->setQty($minimumQty);
@@ -718,5 +729,20 @@ class Cart extends DataObject implements CartInterface
         );
         $this->_checkoutSession->setLastAddedProductId($productId);
         return $result;
+    }
+
+    /**
+     * Getter for RequestInfoFilter
+     *
+     * @deprecated
+     * @return \Magento\Checkout\Model\Cart\RequestInfoFilterInterface
+     */
+    private function getRequestInfoFilter()
+    {
+        if ($this->requestInfoFilter === null) {
+            $this->requestInfoFilter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Checkout\Model\Cart\RequestInfoFilterInterface::class);
+        }
+        return $this->requestInfoFilter;
     }
 }

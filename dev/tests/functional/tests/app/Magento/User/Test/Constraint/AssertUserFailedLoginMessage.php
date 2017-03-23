@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +34,7 @@ class AssertUserFailedLoginMessage extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::FAILED_LOGIN_MESSAGE,
-            $adminAuth->getMessagesBlock()->getErrorMessages(),
+            $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::FAILED_LOGIN_MESSAGE . '" is not visible.'
         );
     }

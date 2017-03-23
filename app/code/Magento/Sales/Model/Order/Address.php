@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -88,7 +88,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
             $resourceCollection,
             $data
         );
-
     }
 
     /**
@@ -98,7 +97,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Address');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Address::class);
     }
 
     /**
@@ -122,14 +121,14 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     public function getRegionCode()
     {
-        if (is_string($this->getRegion())) {
-            return $this->getRegion();
-        }
-        $model = $this->regionFactory->create()->load(
-            ((!$this->getRegionId() && is_numeric($this->getRegion())) ? $this->getRegion() : $this->getRegionId())
-        );
+        $regionId = (!$this->getRegionId() && is_numeric($this->getRegion())) ?
+            $this->getRegion() :
+            $this->getRegionId();
+        $model = $this->regionFactory->create()->load($regionId);
         if ($model->getCountryId() == $this->getCountryId()) {
             return $model->getCode();
+        } elseif (is_string($this->getRegion())) {
+            return $this->getRegion();
         } else {
             return null;
         }
@@ -257,6 +256,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns address_type
      *
@@ -419,16 +419,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * Returns quote_address_id
-     *
-     * @return int
-     */
-    public function getQuoteAddressId()
-    {
-        return $this->getData(OrderAddressInterface::QUOTE_ADDRESS_ID);
-    }
-
-    /**
      * Returns region
      *
      * @return string
@@ -532,14 +522,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function setCustomerAddressId($id)
     {
         return $this->setData(OrderAddressInterface::CUSTOMER_ADDRESS_ID, $id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setQuoteAddressId($id)
-    {
-        return $this->setData(OrderAddressInterface::QUOTE_ADDRESS_ID, $id);
     }
 
     /**
@@ -746,5 +728,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

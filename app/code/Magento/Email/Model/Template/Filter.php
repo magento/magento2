@@ -1,10 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
 /**
@@ -153,6 +157,16 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $configVariables;
 
     /**
+     * @var \Magento\Email\Model\Template\Css\Processor
+     */
+    private $cssProcessor;
+
+    /**
+     * @var ReadInterface
+     */
+    private $pubDirectory;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -295,6 +309,31 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
+     * @deprecated
+     * @return Css\Processor
+     */
+    private function getCssProcessor()
+    {
+        if (!$this->cssProcessor) {
+            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
+        }
+        return $this->cssProcessor;
+    }
+
+    /**
+     * @deprecated
+     * @param string $dirType
+     * @return ReadInterface
+     */
+    private function getPubDirectory($dirType)
+    {
+        if (!$this->pubDirectory) {
+            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
+        }
+        return $this->pubDirectory;
+    }
+
+    /**
      * Get design parameters
      *
      * @return array
@@ -334,7 +373,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($blockParameters['class'])) {
             $block = $this->_layout->createBlock($blockParameters['class'], null, ['data' => $blockParameters]);
         } elseif (isset($blockParameters['id'])) {
-            $block = $this->_layout->createBlock('Magento\Cms\Block\Block');
+            $block = $this->_layout->createBlock(\Magento\Cms\Block\Block::class);
             if ($block) {
                 $block->setBlockId($blockParameters['id']);
             }
@@ -787,7 +826,9 @@ class Filter extends \Magento\Framework\Filter\Template
             return '/* ' . __('"file" parameter must be specified') . ' */';
         }
 
-        $css = $this->getCssFilesContent([$params['file']]);
+        $css = $this->getCssProcessor()->process(
+            $this->getCssFilesContent([$params['file']])
+        );
 
         if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
             // Return compilation error wrapped in CSS comment
@@ -885,10 +926,22 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         $css = '';
-        foreach ($files as $file) {
-            $asset = $this->_assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
+        try {
+            foreach ($files as $file) {
+                $asset = $this->_assetRepo->createAsset($file, $designParams);
+                $pubDirectory = $this->getPubDirectory($asset->getContext()->getBaseDirType());
+                if ($pubDirectory->isExist($asset->getPath())) {
+                    $css .= $pubDirectory->readFile($asset->getPath());
+                } else {
+                    $css .= $asset->getContent();
+                }
+            }
+        } catch (ContentProcessorException $exception) {
+            $css = $exception->getMessage();
+        } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
+            $css = '';
         }
+
         return $css;
     }
 
@@ -906,6 +959,8 @@ class Filter extends \Magento\Framework\Filter\Template
         $cssToInline = $this->getCssFilesContent(
             $this->getInlineCssFiles()
         );
+        $cssToInline = $this->getCssProcessor()->process($cssToInline);
+
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
@@ -914,7 +969,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(
-                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
 
@@ -963,7 +1018,7 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this email.");
+                $value = __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }

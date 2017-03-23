@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config\Initial;
@@ -20,12 +20,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Config\FileResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileResolverMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Initial\Converter | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\Initial\Converter|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $converterMock;
 
@@ -35,29 +35,41 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $filePath;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validationStateMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Initial\SchemaLocator | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\Initial\SchemaLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $schemaLocatorMock;
 
+    /**
+     * @var \Magento\Framework\Config\DomFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $domFactoryMock;
+
     protected function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->filePath = __DIR__ . '/_files/';
-        $this->fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
-        $this->converterMock = $this->getMock('Magento\Framework\App\Config\Initial\Converter');
+        $this->fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->converterMock = $this->getMock(\Magento\Framework\App\Config\Initial\Converter::class);
         $this->schemaLocatorMock = $this->getMock(
-            'Magento\Framework\App\Config\Initial\SchemaLocator',
+            \Magento\Framework\App\Config\Initial\SchemaLocator::class,
             [],
             [],
             '',
             false
         );
-        $this->validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $this->validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $this->validationStateMock->expects($this->any())
+            ->method('isValidationRequired')
+            ->will($this->returnValue(true));
+        $this->domFactoryMock = $this->getMock(\Magento\Framework\Config\DomFactory::class, [], [], '', false);
     }
 
     public function testConstructor()
@@ -85,6 +97,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadValidConfig()
     {
         $this->createModelAndVerifyConstructor();
+        $this->prepareDomFactoryMock();
         $testXmlFilesList = [
             file_get_contents($this->filePath . 'initial_config1.xml'),
             file_get_contents($this->filePath . 'initial_config2.xml'),
@@ -104,6 +117,24 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedConfig, $this->model->read());
     }
 
+    private function prepareDomFactoryMock()
+    {
+        $validationStateMock = $this->validationStateMock;
+        $this->domFactoryMock->expects($this->once())
+            ->method('createDom')
+            ->willReturnCallback(
+                function ($arguments) use ($validationStateMock) {
+                    return new \Magento\Framework\Config\Dom(
+                        $arguments['xml'],
+                        $validationStateMock,
+                        [],
+                        null,
+                        $arguments['schemaFile']
+                    );
+                }
+            );
+    }
+
     /**
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
      * @expectedException \Magento\Framework\Exception\LocalizedException
@@ -112,6 +143,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadInvalidConfig()
     {
         $this->createModelAndVerifyConstructor();
+        $this->prepareDomFactoryMock();
         $testXmlFilesList = [
             file_get_contents($this->filePath . 'invalid_config.xml'),
             file_get_contents($this->filePath . 'initial_config2.xml'),
@@ -133,17 +165,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     private function createModelAndVerifyConstructor()
     {
-        $this->validationStateMock->expects($this->once())->method('isValidated')->will($this->returnValue(true));
         $schemaFile = $this->filePath . 'config.xsd';
         $this->schemaLocatorMock->expects($this->once())->method('getSchema')->will($this->returnValue($schemaFile));
-
         $this->model = $this->objectManager->getObject(
-            'Magento\Framework\App\Config\Initial\Reader',
+            \Magento\Framework\App\Config\Initial\Reader::class,
             [
                 'fileResolver' => $this->fileResolverMock,
                 'converter' => $this->converterMock,
                 'schemaLocator' => $this->schemaLocatorMock,
-                'validationState' => $this->validationStateMock
+                'domFactory' => $this->domFactoryMock
             ]
         );
     }

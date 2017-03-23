@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <name>
+            <selector>[name$="[name]"]</selector>
+        </name>
+        <sku>
+            <selector>[name$="[sku]"]</selector>
+        </sku>
+        <price>
+            <selector>[name$="[price]"]</selector>
+        </price>
+        <qty>
+            <selector>[name$="[qty]"]</selector>
+        </qty>
+        <weight>
+            <selector>[name$="[weight]"]</selector>
+        </weight>
+    </fields>
+</mapping>
+

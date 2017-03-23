@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block;
@@ -9,6 +9,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Class ConfigurableInfo
+ * @api
+ */
 class ConfigurableInfo extends \Magento\Payment\Block\Info
 {
     /**
@@ -33,13 +37,13 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
             $this->config->setPathPattern($data['pathPattern']);
         }
 
-        if (isset($data['pathPattern'])) {
+        if (isset($data['methodCode'])) {
             $this->config->setMethodCode($data['methodCode']);
         }
     }
 
     /**
-     * Prepare PayPal-specific payment information
+     * Prepare payment information
      *
      * @param \Magento\Framework\DataObject|array|null $transport
      * @return \Magento\Framework\DataObject
@@ -48,22 +52,21 @@ class ConfigurableInfo extends \Magento\Payment\Block\Info
     {
         $transport = parent::_prepareSpecificInformation($transport);
         $payment = $this->getInfo();
-        $fieldsToStore = explode(',', (string)$this->config->getValue('paymentInfoKeys'));
+        $storedFields = explode(',', (string)$this->config->getValue('paymentInfoKeys'));
         if ($this->getIsSecureMode()) {
-            $fieldsToStore = array_diff(
-                $fieldsToStore,
+            $storedFields = array_diff(
+                $storedFields,
                 explode(',', (string)$this->config->getValue('privateInfoKeys'))
             );
         }
 
-        foreach ($fieldsToStore as $field) {
+        foreach ($storedFields as $field) {
             if ($payment->getAdditionalInformation($field) !== null) {
                 $this->setDataToTransfer(
                     $transport,
                     $field,
                     $payment->getAdditionalInformation($field)
                 );
-
             }
         }
 

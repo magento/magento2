@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,12 +41,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Payflow\Link\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Payflow\Link\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Link\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payflow\Link\Info::class;
 
     /**
      * Availability option
@@ -92,7 +92,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $_requestFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -112,6 +112,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $orderSender;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -127,7 +132,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param HandlerInterface $errorHandler
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param Payflow\RequestFactory $requestFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\RequestInterface $requestHttp
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
@@ -153,7 +158,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         HandlerInterface $errorHandler,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
@@ -393,12 +398,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             !$amountCompared
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__(self::RESPONSE_ERROR_MSG, 'Order'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Order'])
+            );
         }
 
         $fetchData = $this->fetchTransactionInfo($order->getPayment(), $response->getPnref());
         if (!isset($fetchData['custref']) || $fetchData['custref'] != $order->getIncrementId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__(self::RESPONSE_ERROR_MSG, 'Transaction'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Transaction'])
+            );
         }
 
         return $order;

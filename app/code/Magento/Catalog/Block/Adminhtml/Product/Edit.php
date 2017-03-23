@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,7 +95,7 @@ class Edit extends \Magento\Backend\Block\Widget
             if ($this->getToolbar()) {
                 $this->getToolbar()->addChild(
                     'back_button',
-                    'Magento\Backend\Block\Widget\Button',
+                    \Magento\Backend\Block\Widget\Button::class,
                     [
                         'label' => __('Back'),
                         'title' => __('Back'),
@@ -110,7 +110,7 @@ class Edit extends \Magento\Backend\Block\Widget
         } else {
             $this->addChild(
                 'back_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 ['label' => __('Close Window'), 'onclick' => 'window.close()', 'class' => 'cancel']
             );
         }
@@ -118,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly()) {
             $this->addChild(
                 'reset_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Reset'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', ['_current' => true]) . '\')'
@@ -129,11 +129,11 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly() && $this->getToolbar()) {
             $this->getToolbar()->addChild(
                 'save-split-button',
-                'Magento\Backend\Block\Widget\Button\SplitButton',
+                \Magento\Backend\Block\Widget\Button\SplitButton::class,
                 [
                     'id' => 'save-split-button',
                     'label' => __('Save'),
-                    'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                    'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
                     'button_class' => 'widget-button-save',
                     'options' => $this->_getSaveSplitButtonOptions()
                 ]
@@ -299,25 +299,6 @@ class Edit extends \Magento\Backend\Block\Widget
     public function getAttributesAllowedForAutogeneration()
     {
         return $this->_productHelper->getAttributesAllowedForAutogeneration();
-    }
-
-    /**
-     * Get data for JS (product type transition)
-     *
-     * @return string
-     */
-    public function getTypeSwitcherData()
-    {
-        return $this->jsonEncoder->encode(
-            [
-                'tab_id' => 'product_info_tabs_downloadable_items',
-                'weight_switcher' => '[data-role=weight-switcher]',
-                'product_has_weight_flag' => \Magento\Catalog\Model\Product\Edit\WeightResolver::HAS_WEIGHT,
-                'weight_id' => 'weight',
-                'current_type' => $this->getProduct()->getTypeId(),
-                'attributes' => $this->_getAttributes(),
-            ]
-        );
     }
 
     /**

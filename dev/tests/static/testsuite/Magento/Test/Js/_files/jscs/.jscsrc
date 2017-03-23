@@ -75,6 +75,7 @@
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": true,
     "disallowYodaConditions": true,
+    "maxErrors": null,
     "requireBlocksOnNewline": true,
     "requireDotNotation": "except_snake_case",
     "requireCamelCaseOrUpperCaseIdentifiers": true,
@@ -101,7 +102,8 @@
         "checkAnnotations": {
             "preset": "jsdoc3",
             "extra": {
-                "override": true
+                "override": true,
+                "inheritdoc": true
             }
         },
         "checkParamNames": true,

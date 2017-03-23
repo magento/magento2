@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -12,6 +12,9 @@ use Magento\Framework\Api\SortOrder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartRepositoryTest extends WebapiAbstract
 {
     /**
@@ -38,13 +41,13 @@ class CartRepositoryTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
         $this->sortOrderBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SortOrderBuilder'
+            \Magento\Framework\Api\SortOrderBuilder::class
         );
         $this->searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
     }
 
@@ -69,7 +72,7 @@ class CartRepositoryTest extends WebapiAbstract
     protected function getCart($reservedOrderId)
     {
         /** @var $cart \Magento\Quote\Model\Quote */
-        $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
+        $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
         $cart->load($reservedOrderId, 'reserved_order_id');
         if (!$cart->getId()) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
@@ -183,7 +186,7 @@ class CartRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/carts' . '?' . http_build_query($requestData),
+                'resourcePath' => '/V1/carts/search' . '?' . http_build_query($requestData),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -221,7 +224,7 @@ class CartRepositoryTest extends WebapiAbstract
                 'operation' => 'quoteCartRepositoryV1GetList',
             ],
             'rest' => [
-                'resourcePath' => '/V1/carts',
+                'resourcePath' => '/V1/carts/search',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];

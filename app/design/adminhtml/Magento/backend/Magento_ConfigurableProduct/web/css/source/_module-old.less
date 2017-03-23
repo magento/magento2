@@ -1,0 +1,153 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.product-actions {
+    .lib-clearfix();
+    .switcher {
+        float: right;
+    }
+}
+
+#configurable-attributes-container .actions-select {
+    .lib-dropdown(
+    @_dropdown-list-pointer: false
+    );
+
+    .action.toggle {
+        background: #fff;
+        border-radius: 0 1px 1px 0;
+        border: 1px solid #ada89e;
+        height: 33px;
+        padding: 4px 5px;
+
+        > span {
+            display: inline-block;
+            padding-top: 3px;
+        }
+
+        &:after {
+            width: 14px;
+            text-indent: -2px;
+        }
+    }
+
+    ul.dropdown {
+        li:hover {
+            background: #eef8fc;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+    }
+}
+
+#product-variations-matrix {
+    .actions-image-uploader {
+        .lib-dropdown-split(
+        @_dropdown-split-list-pointer: false
+        );
+
+        display: block;
+        position: static;
+        width: 70px;
+
+        .action.toggle {
+            padding: 0 3px;
+            border: 1px solid #b7b2a7;
+            background: #fff;
+            border-radius: 0 1px 1px 0;
+            border-left: none;
+            height: 50px;
+            float: left;
+
+            &.no-display {
+                display: none;
+            }
+
+            &:after {
+                width: 12px;
+                text-indent: -5px;
+            }
+        }
+
+        ul.dropdown {
+            left: 0;
+            margin-top: 50px;
+            min-width: 0;
+            top: auto;
+            width: 100px;
+
+            li:hover {
+                background: #eef8fc;
+            }
+
+            a {
+                color: #333;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .col-name {
+        background-clip: padding-box; // Firefox missing border fix
+    }
+
+    .action-choose {
+        margin-left: 5px;
+        position: absolute;
+    }
+
+    input {
+        + .action-choose {
+            top: 17px;
+        }
+    }
+
+    .col-qty,
+    .col-weight {
+        > input {
+            width: 5.5rem;
+        }
+    }
+
+    .col-price {
+        .addon {
+            direction: rtl;
+            position: relative;
+            width: auto;
+
+            .addafter {
+                background: #fff;
+                border-width: 1px 0 1px 1px;
+                direction: ltr;
+                height: 33px;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 16px;
+
+                strong {
+                    background: none;
+                    top: 4px;
+                }
+            }
+
+            input {
+                border-width: 1px 1px 1px 0;
+                direction: ltr;
+                margin-left: 16px;
+                width: 100px;
+
+                &[disabled] {
+                    + .addafter {
+                        background: #e8e8e8;
+                    }
+                }
+            }
+        }
+    }
+}

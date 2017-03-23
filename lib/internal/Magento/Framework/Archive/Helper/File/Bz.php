@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 
         if (false === $this->_fileHandler) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to open file ', [$this->_filePath])
+                new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath])
             );
         }
     }
@@ -38,7 +38,7 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 
         if (false === $result) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to write data to ', [$this->_filePath])
+                new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath])
             );
         }
     }
@@ -52,7 +52,7 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 
         if (false === $data) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Failed to read data from ', [$this->_filePath])
+                new \Magento\Framework\Phrase('Failed to read data from %1', [$this->_filePath])
             );
         }
 

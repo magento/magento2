@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
@@ -41,61 +41,49 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $gridPoolMock;
-
-    /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address',
+            \Magento\Sales\Model\Order\Address::class,
             ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
             [],
             '',
             false
         );
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['__wakeup', 'getId'],
             [],
             '',
             false
         );
         $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
             false
         );
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
             false
         );
         $this->validatorMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address\Validator',
+            \Magento\Sales\Model\Order\Address\Validator::class,
             [],
-            [],
-            '',
-            false
-        );
-        $this->gridPoolMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\GridPool',
-            ['refreshByOrderId'],
             [],
             '',
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
             [],
             [],
             '',
@@ -113,11 +101,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->addressResource = $objectManager->getObject(
-            'Magento\Sales\Model\ResourceModel\Order\Address',
+            \Magento\Sales\Model\ResourceModel\Order\Address::class,
             [
                 'resource' => $this->appResourceMock,
                 'validator' => $this->validatorMock,
-                'gridPool' => $this->gridPoolMock,
                 'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
@@ -136,13 +123,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
-        $this->addressMock->expects($this->exactly(3))
+        $this->addressMock->expects($this->once())
             ->method('getParentId')
             ->will($this->returnValue(1));
-        $this->gridPoolMock->expects($this->once())
-            ->method('refreshByOrderId')
-            ->with($this->equalTo(1))
-            ->will($this->returnSelf());
 
         $this->addressResource->save($this->addressMock);
     }

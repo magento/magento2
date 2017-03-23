@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Plugin\Indexer\Product\Save;
 
-use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
 class ApplyRules
@@ -24,21 +23,22 @@ class ApplyRules
     }
 
     /**
-     * Apply catalog rules after product save
+     * Apply catalog rules after product resource model save
      *
-     * @param Product $subject
-     * @param Product $result
-     * @return Product
-     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param \Magento\Framework\Model\AbstractModel $product
+     * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
-        Product $subject,
-        Product $result
+        \Magento\Catalog\Model\ResourceModel\Product $subject,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
+        \Magento\Framework\Model\AbstractModel $product
     ) {
-        if (!$result->getIsMassupdate()) {
-            $this->productRuleProcessor->reindexRow($result->getId());
+        if (!$product->getIsMassupdate()) {
+            $this->productRuleProcessor->reindexRow($product->getId());
         }
-        return $result;
+        return $productResource;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,6 +54,13 @@ abstract class Grid extends Block
      * @var string
      */
     protected $rowItem = 'tbody tr';
+
+    /**
+     * The last row in the grid.
+     *
+     * @var string
+     */
+    protected $lastRowItem = 'tbody tr:last-child';
 
     /**
      * Locator value for link in action column
@@ -189,7 +196,7 @@ abstract class Grid extends Block
     protected $rowPattern = '//tbody/tr[%s]';
 
     /**
-     *  Selector for confirm.
+     * Selector for confirm.
      *
      * @var string
      */
@@ -259,6 +266,7 @@ abstract class Grid extends Block
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
+        $this->waitLoader();
     }
 
     /**
@@ -268,13 +276,7 @@ abstract class Grid extends Block
      */
     protected function waitLoader()
     {
-        $this->browser->waitUntil(
-            function () {
-                $element = $this->browser->find($this->loader);
-                return $element->isVisible() == false ? true : null;
-            }
-        );
-
+        $this->waitForElementNotVisible($this->loader);
         $this->getTemplateBlock()->waitLoader();
     }
 
@@ -291,7 +293,7 @@ abstract class Grid extends Block
         if ($selectItem->isVisible()) {
             $selectItem->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
     }
 
@@ -349,7 +351,10 @@ abstract class Grid extends Block
         if ($acceptAlert) {
             $element = $this->browser->find($this->confirmModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal = $this->blockFactory->create(
+                \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+                ['element' => $element]
+            );
             $modal->acceptAlert();
         }
     }
@@ -465,6 +470,7 @@ abstract class Grid extends Block
      */
     public function openFirstRow()
     {
+        $this->waitLoader();
         $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
     }
 

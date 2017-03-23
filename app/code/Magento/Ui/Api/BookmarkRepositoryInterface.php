@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Api;
 
 /**
  * Bookmark CRUD interface.
+ * @api
  */
 interface BookmarkRepositoryInterface
 {
     /**
      * Save bookmark.
      *
-     * @api
      * @param \Magento\Ui\Api\Data\BookmarkInterface $bookmark
      * @return \Magento\Ui\Api\Data\BookmarkInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -23,7 +23,6 @@ interface BookmarkRepositoryInterface
     /**
      * Retrieve bookmark.
      *
-     * @api
      * @param int $bookmarkId
      * @return \Magento\Ui\Api\Data\BookmarkInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -33,7 +32,6 @@ interface BookmarkRepositoryInterface
     /**
      * Retrieve bookmarks matching the specified criteria.
      *
-     * @api
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Ui\Api\Data\BookmarkSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -43,7 +41,6 @@ interface BookmarkRepositoryInterface
     /**
      * Delete bookmark.
      *
-     * @api
      * @param \Magento\Ui\Api\Data\BookmarkInterface $bookmark
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -53,7 +50,6 @@ interface BookmarkRepositoryInterface
     /**
      * Delete bookmark by ID.
      *
-     * @api
      * @param int $bookmarkId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException

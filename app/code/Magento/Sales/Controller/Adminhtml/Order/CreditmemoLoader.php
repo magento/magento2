@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -14,14 +14,14 @@ use \Magento\Sales\Model\Order\CreditmemoFactory;
  * Class CreditmemoLoader
  *
  * @package Magento\Sales\Controller\Adminhtml\Order
- * @method CreditmemoLoader setCreditmemoId
- * @method CreditmemoLoader setCreditmemo
- * @method CreditmemoLoader setInvoiceId
- * @method CreditmemoLoader setOrderId
- * @method int getCreditmemoId
- * @method string getCreditmemo
- * @method int getInvoiceId
- * @method int getOrderId
+ * @method CreditmemoLoader setCreditmemoId($id)
+ * @method CreditmemoLoader setCreditmemo($creditMemo)
+ * @method CreditmemoLoader setInvoiceId($id)
+ * @method CreditmemoLoader setOrderId($id)
+ * @method int getCreditmemoId()
+ * @method string getCreditmemo()
+ * @method int getInvoiceId()
+ * @method int getOrderId()
  */
 class CreditmemoLoader extends DataObject
 {
@@ -217,9 +217,9 @@ class CreditmemoLoader extends DataObject
             foreach ($creditmemo->getAllItems() as $creditmemoItem) {
                 $orderItem = $creditmemoItem->getOrderItem();
                 $parentId = $orderItem->getParentItemId();
-                if (isset($backToStock[$orderItem->getId()])) {
+                if ($parentId && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
                     $creditmemoItem->setBackToStock(true);
-                } elseif ($orderItem->getParentItem() && isset($backToStock[$parentId]) && $backToStock[$parentId]) {
+                } elseif (isset($backToStock[$orderItem->getId()])) {
                     $creditmemoItem->setBackToStock(true);
                 } elseif (empty($savedData)) {
                     $creditmemoItem->setBackToStock(

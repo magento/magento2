@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
 
 use Magento\Framework\Autoload\AutoloaderInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -190,7 +189,8 @@ class Application
         if (null === $this->_db) {
             if ($this->isInstalled()) {
                 $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
-                $reader = new Reader($this->dirList, $configPool);
+                $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+                $reader = new Reader($this->dirList, $driverPool, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
                 $host = $deploymentConfig->get(
                     ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
@@ -294,65 +294,65 @@ class Application
             ? $overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : [];
         $directoryList = new DirectoryList(BP, $directories);
-
         /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = Helper\Bootstrap::getObjectManager();
         if (!$objectManager) {
             $objectManager = $this->_factory->create($overriddenParams);
-            $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
-            $objectManager->addSharedInstance($directoryList, 'Magento\Framework\Filesystem\DirectoryList');
+            $objectManager->addSharedInstance($directoryList, \Magento\Framework\App\Filesystem\DirectoryList::class);
+            $objectManager->addSharedInstance($directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
         } else {
             $objectManager = $this->_factory->restore($objectManager, $directoryList, $overriddenParams);
         }
-
         /** @var \Magento\TestFramework\App\Filesystem $filesystem */
-        $filesystem = $objectManager->get('Magento\TestFramework\App\Filesystem');
-        $objectManager->removeSharedInstance('Magento\Framework\Filesystem');
-        $objectManager->addSharedInstance($filesystem, 'Magento\Framework\Filesystem');
-
+        $filesystem = $objectManager->get(\Magento\TestFramework\App\Filesystem::class);
+        $objectManager->removeSharedInstance(\Magento\Framework\Filesystem::class);
+        $objectManager->addSharedInstance($filesystem, \Magento\Framework\Filesystem::class);
         /** @var \Psr\Log\LoggerInterface $logger */
         $logger = $objectManager->create(
-            'Magento\TestFramework\ErrorLog\Logger',
+            \Magento\TestFramework\ErrorLog\Logger::class,
             [
                 'name' => 'integration-tests',
                 'handlers' => [
                     'system' => $objectManager->create(
-                        'Magento\Framework\Logger\Handler\System',
+                        \Magento\Framework\Logger\Handler\System::class,
                         [
                             'exceptionHandler' => $objectManager->create(
-                                'Magento\Framework\Logger\Handler\Exception',
+                                \Magento\Framework\Logger\Handler\Exception::class,
                                 ['filePath' => $this->installDir]
                             ),
                             'filePath' => $this->installDir
                         ]
                     ),
                     'debug'  => $objectManager->create(
-                        'Magento\Framework\Logger\Handler\Debug',
+                        \Magento\Framework\Logger\Handler\Debug::class,
                         ['filePath' => $this->installDir]
                     ),
                 ]
             ]
         );
-        $objectManager->removeSharedInstance('Magento\Framework\Logger\Monolog');
-        $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\Monolog');
-        $sequenceBuilder = $objectManager->get('\Magento\TestFramework\Db\Sequence\Builder');
-        $objectManager->addSharedInstance($sequenceBuilder, 'Magento\SalesSequence\Model\Builder');
+        $objectManager->removeSharedInstance(\Magento\Framework\Logger\Monolog::class);
+        $objectManager->addSharedInstance($logger, \Magento\Framework\Logger\Monolog::class);
+        $sequenceBuilder = $objectManager->get(\Magento\TestFramework\Db\Sequence\Builder::class);
+        $objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);
         Helper\Bootstrap::setObjectManager($objectManager);
         $objectManagerConfiguration = [
             'preferences' => [
-                'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
-                'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
-                'Magento\Framework\Mail\Template\TransportBuilder'
-                    => 'Magento\TestFramework\Mail\Template\TransportBuilderMock',
+                \Magento\Framework\App\State::class => \Magento\TestFramework\App\State::class,
+                \Magento\Framework\Mail\TransportInterface::class =>
+                    \Magento\TestFramework\Mail\TransportInterfaceMock::class,
+                \Magento\Framework\Mail\Template\TransportBuilder::class
+                    => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
             $objectManagerConfiguration = array_merge(
                 $objectManagerConfiguration,
                 [
-                    'Magento\Framework\Api\ExtensionAttribute\Config\Reader' => [
+                    \Magento\Framework\Api\ExtensionAttribute\Config\Reader::class => [
                         'arguments' => [
-                            'fileResolver' => ['instance' => 'Magento\TestFramework\Api\Config\Reader\FileResolver'],
+                            'fileResolver' => [
+                                'instance' => \Magento\TestFramework\Api\Config\Reader\FileResolver::class
+                            ],
                         ],
                     ],
                 ]
@@ -361,12 +361,12 @@ class Application
         $objectManager->configure($objectManagerConfiguration);
         /** Register event observer of Integration Framework */
         /** @var \Magento\Framework\Event\Config\Data $eventConfigData */
-        $eventConfigData = $objectManager->get('Magento\Framework\Event\Config\Data');
+        $eventConfigData = $objectManager->get(\Magento\Framework\Event\Config\Data::class);
         $eventConfigData->merge(
             [
                 'core_app_init_current_store_after' => [
                     'integration_tests' => [
-                        'instance' => 'Magento\TestFramework\Event\Magento',
+                        'instance' => \Magento\TestFramework\Event\Magento::class,
                         'name' => 'integration_tests'
                     ]
                 ]
@@ -374,13 +374,15 @@ class Application
         );
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
-            $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
+            $objectManager->get(\Magento\Framework\ObjectManager\DynamicConfigInterface::class)->getConfiguration()
         );
-        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\Renderer\Placeholder'));
+        \Magento\Framework\Phrase::setRenderer(
+            $objectManager->get(\Magento\Framework\Phrase\Renderer\Placeholder::class)
+        );
         /** @var \Magento\TestFramework\Db\Sequence $sequence */
-        $sequence = $objectManager->get('Magento\TestFramework\Db\Sequence');
+        $sequence = $objectManager->get(\Magento\TestFramework\Db\Sequence::class);
         $sequence->generateSequences();
-        $objectManager->create('Magento\TestFramework\Config', ['configPath' => $this->globalConfigFile])
+        $objectManager->create(\Magento\TestFramework\Config::class, ['configPath' => $this->globalConfigFile])
             ->rewriteAdditionalConfig();
     }
 
@@ -405,7 +407,7 @@ class Application
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\Http $app */
-        $app = $objectManager->get('Magento\Framework\App\Http');
+        $app = $objectManager->get(\Magento\Framework\App\Http::class);
         $response = $app->launch();
         $response->sendResponse();
     }
@@ -425,7 +427,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s setup:uninstall -n --magento-init-params=%s',
+            PHP_BINARY . ' -f %s setup:uninstall -vvv -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -441,6 +443,7 @@ class Application
         $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
         $this->_ensureDirExists($this->installDir);
         $this->_ensureDirExists($this->_configDir);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::PUB][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::MEDIA][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::STATIC_VIEW][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
@@ -457,15 +460,18 @@ class Application
 
         // run install script
         $this->_shell->execute(
-            'php -f %s setup:install ' . implode(' ', array_keys($installParams)),
+            PHP_BINARY . ' -f %s setup:install -vvv ' . implode(' ', array_keys($installParams)),
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute('php -f %s cache:disable --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
         $this->_shell->execute(
-            'php -f %s cache:enable %s %s %s %s --bootstrap=%s',
+            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
+            [BP . '/bin/magento', $initParamsQuery]
+        );
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
             [
                 BP . '/bin/magento',
                 \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
@@ -489,14 +495,16 @@ class Application
      */
     private function copyAppConfigFiles()
     {
-        $globalConfigFiles = glob(
-            $this->_globalConfigDir . '/{di.xml,vendor_path.php}',
-            GLOB_BRACE
+        $globalConfigFiles = Glob::glob(
+            $this->_globalConfigDir . '/{di.xml,*/di.xml,vendor_path.php}',
+            Glob::GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
             $this->_ensureDirExists(dirname($targetFile));
-            copy($file, $targetFile);
+            if ($file !== $targetFile) {
+                copy($file, $targetFile);
+            }
         }
     }
 
@@ -551,7 +559,6 @@ class Application
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->clearCache();
-
         \Magento\Framework\Data\Form::setElementRenderer(null);
         \Magento\Framework\Data\Form::setFieldsetRenderer(null);
         \Magento\Framework\Data\Form::setFieldsetElementRenderer(null);
@@ -569,7 +576,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            mkdir($dir);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
@@ -595,16 +602,18 @@ class Application
     public function loadArea($areaCode)
     {
         $this->_appArea = $areaCode;
-        $scope = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Config\Scope');
+        $scope = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Config\Scope::class
+        );
         $scope->setCurrentScope($areaCode);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\ObjectManager\ConfigLoader'
+                \Magento\Framework\App\ObjectManager\ConfigLoader::class
             )->load(
                 $areaCode
             )
         );
-        $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList');
+        $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class);
         if ($areaCode == \Magento\TestFramework\Application::DEFAULT_APP_AREA) {
             $app->getArea($areaCode)->load(\Magento\Framework\App\Area::PART_CONFIG);
         } else {
@@ -621,17 +630,19 @@ class Application
     {
         $path = DirectoryList::PATH;
         $var = "{$this->installDir}/var";
+        $generated = "{$this->installDir}/generated";
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
-            DirectoryList::MEDIA => [$path => "{$this->installDir}/media"],
-            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub_static"],
-            DirectoryList::GENERATION => [$path => "{$var}/generation"],
+            DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
+            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
+            DirectoryList::GENERATED_CODE => [$path => "{$generated}/code"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
             DirectoryList::SESSION => [$path => "{$var}/session"],
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],
+            DirectoryList::PUB => [$path => "{$this->installDir}/pub"],
         ];
         return $customDirs;
     }

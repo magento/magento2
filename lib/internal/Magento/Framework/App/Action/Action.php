@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Action;
@@ -118,11 +118,6 @@ abstract class Action extends AbstractAction
         \Magento\Framework\Profiler::stop($profilerKey);
         return $result ?: $this->_response;
     }
-
-    /**
-     * @return ResultInterface
-     */
-    abstract protected function execute();
 
     /**
      * Throw control to different action (control and module if was specified).

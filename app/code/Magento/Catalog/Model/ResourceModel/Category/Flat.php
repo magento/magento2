@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory as CategoryFlatCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Category flat model
@@ -68,6 +70,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Category collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @deprecated
      */
     protected $_categoryCollectionFactory;
 
@@ -77,6 +80,11 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $_categoryFactory;
+
+    /**
+     * @var CategoryFlatCollectionFactory
+     */
+    private $categoryFlatCollectionFactory;
 
     /**
      * Class constructor
@@ -399,7 +407,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             );
             $parentPath = $this->getConnection()->fetchOne($select);
 
-            $collection = $this->_categoryCollectionFactory
+            $collection = $this->getCategoryFlatCollectionFactory()
                 ->create()
                 ->addNameToResult()
                 ->addUrlRewriteToResult()
@@ -670,5 +678,39 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         );
 
         return $this->getConnection()->fetchCol($select);
+    }
+
+    /**
+     * Get positions of associated to category products
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @return array
+     */
+    public function getProductsPosition($category)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getTable('catalog_category_product'),
+            ['product_id', 'position']
+        )->where(
+            'category_id = :category_id'
+        );
+        $bind = ['category_id' => (int)$category->getId()];
+
+        return $this->getConnection()->fetchPairs($select, $bind);
+    }
+
+    /**
+     * Get instance of CategoryFlatCollectionFactory
+     *
+     * @return CategoryFlatCollectionFactory
+     */
+    private function getCategoryFlatCollectionFactory()
+    {
+        if (!$this->categoryFlatCollectionFactory instanceof CategoryFlatCollectionFactory) {
+            $this->categoryFlatCollectionFactory = ObjectManager::getInstance()
+                ->get(CategoryFlatCollectionFactory::class);
+        }
+
+        return $this->categoryFlatCollectionFactory;
     }
 }

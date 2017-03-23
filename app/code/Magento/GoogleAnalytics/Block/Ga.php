@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -77,12 +77,16 @@ class Ga extends \Magento\Framework\View\Element\Template
         $pageName = trim($this->getPageName());
         $optPageURL = '';
         if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
-            $optPageURL = ", '{$this->escapeJsQuote($pageName)}'";
+            $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
 
-        return "\nga('create', '{$this->escapeJsQuote(
-            $accountId
-        )}', 'auto');\nga('send', 'pageview'{$optPageURL});\n";
+        $anonymizeIp = "";
+        if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
+          $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
+        }
+
+        return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
+           . ", 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**
@@ -106,13 +110,8 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result = [];
 
         $result[] = "ga('require', 'ec', 'ec.js');";
-        foreach ($collection as $order) {
-            if ($order->getIsVirtual()) {
-                $address = $order->getBillingAddress();
-            } else {
-                $address = $order->getShippingAddress();
-            }
 
+        foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
@@ -121,8 +120,8 @@ class Ga extends \Magento\Framework\View\Element\Template
                         'price': '%s',
                         'quantity': %s
                     });",
-                    $this->escapeJsQuote($item->getSku()),
-                    $this->escapeJsQuote($item->getName()),
+                    $this->escapeJs($item->getSku()),
+                    $this->escapeJs($item->getName()),
                     $item->getBasePrice(),
                     $item->getQtyOrdered()
                 );
@@ -137,7 +136,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                     'shipping': '%s'
                 });",
                 $order->getIncrementId(),
-                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                $this->escapeJs($this->_storeManager->getStore()->getFrontendName()),
                 $order->getBaseGrandTotal(),
                 $order->getBaseTaxAmount(),
                 $order->getBaseShippingAmount()

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -66,7 +66,7 @@
         .icon {
             &:extend(.abs-icon all);
             display: inline-block;
-            font-size: @order-create-sidebar__font-size + 0.1rem;
+            font-size: @order-create-sidebar__font-size + .1rem;
             text-decoration: none;
             vertical-align: middle;
             &:after {
@@ -94,7 +94,7 @@
                 }
             }
             > span {
-                .extend__visually-hidden();
+                &:extend(.abs-visually-hidden all);
             }
         }
         .col-add {
@@ -122,29 +122,47 @@
             text-decoration: none;
         }
         > span {
-            .extend__visually-hidden();
+            &:extend(.abs-visually-hidden all);
         }
     }
+
     .create-order-sidebar-block {
         .sidebar-title-block {
             margin: 0 0 @order-create-sidebar__margin;
         }
+
         .auto-scroll {
             margin: 0 -@order-create-sidebar__padding @order-create-sidebar__margin__s;
             max-height: @order-create-sidebar-scroll__height;
             overflow: auto;
             position: relative;
+
+            //  Force a scroll bar to appear on IOS devices
+            &::-webkit-scrollbar {
+                -webkit-appearance: none;
+                height: 4px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+                background-color: rgba(0,0,0,.5);
+                border-radius: 4px;
+            }
+
             + .action-default {
                 margin-top: @order-create-sidebar__margin__reqular;
             }
+
             .no-items {
                 padding-left: @order-create-sidebar__padding;
             }
         }
+
         .admin__field-option {
             padding-top: 0;
         }
     }
+
     .create-order-sidebar-label {
         display: table-cell;
         font-size: @order-create-sidebar__font-size;

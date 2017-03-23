@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Test\Unit\Layout\ScheduledStructure;
 
 use Magento\Framework\View\Layout;
+use Magento\Framework\App\State;
 
 /**
  * Class HelperTest
@@ -22,7 +23,17 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataStructure;
+    protected $dataStructureMock;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stateMock;
 
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
@@ -32,18 +43,25 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+        $this->scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->dataStructure = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
+        $this->dataStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->helper = $helperObjectManager->getObject('Magento\Framework\View\Layout\ScheduledStructure\Helper');
+        $this->helper = $helperObjectManager->getObject(
+            \Magento\Framework\View\Layout\ScheduledStructure\Helper::class,
+            [
+                'logger' => $this->loggerMock,
+                'state' => $this->stateMock
+            ]
+        );
     }
 
     /**
@@ -122,7 +140,75 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructureMock->expects($this->once())->method('unsetPathElement')->with($key);
         $this->scheduledStructureMock->expects($this->once())->method('unsetStructureElement')->with($key);
 
-        $this->helper->scheduleElement($this->scheduledStructureMock, $this->dataStructure, $key);
+        $this->helper->scheduleElement($this->scheduledStructureMock, $this->dataStructureMock, $key);
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $loggerExpects
+     * @param string $stateMode
+     * @return void
+     * @dataProvider scheduleElementLogDataProvider
+     */
+    public function testScheduleElementLog($loggerExpects, $stateMode)
+    {
+        $key = 'key';
+        $parentName = 'parent';
+        $alias = 'alias';
+        $block = 'block';
+        $siblingName = null;
+        $isAfter = false;
+
+        $this->scheduledStructureMock->expects($this->once())
+            ->method('getStructureElement')
+            ->willReturn(
+                [
+                    Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_TYPE => $block,
+                    Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_ALIAS => $alias,
+                    Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME => $parentName,
+                    Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME => $siblingName,
+                    Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_IS_AFTER => $isAfter
+                ]
+            );
+        $this->scheduledStructureMock->expects($this->once())
+            ->method('hasStructureElement')
+            ->with($parentName)
+            ->willReturn(false);
+        $this->dataStructureMock->expects($this->once())
+            ->method('hasElement')
+            ->with($parentName)
+            ->willReturn(false);
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn($stateMode);
+        $this->loggerMock->expects($loggerExpects)
+            ->method('info')
+            ->with(
+                "Broken reference: the '{$key}' element cannot be added as child to '{$parentName}', " .
+                'because the latter doesn\'t exist'
+            );
+
+        $this->helper->scheduleElement($this->scheduledStructureMock, $this->dataStructureMock, $key);
+    }
+
+    /**
+     * @return array
+     */
+    public function scheduleElementLogDataProvider()
+    {
+        return [
+            [
+                'loggerExpects' => $this->once(),
+                'stateMode' => State::MODE_DEVELOPER
+            ],
+            [
+                'loggerExpects' => $this->never(),
+                'stateMode' => State::MODE_DEFAULT
+            ],
+            [
+                'loggerExpects' => $this->never(),
+                'stateMode' => State::MODE_PRODUCTION
+            ]
+        ];
     }
 
     /**
@@ -170,14 +256,15 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             );
         $this->scheduledStructureMock->expects($this->any())->method('hasStructureElement')->willReturn(true);
         $this->scheduledStructureMock->expects($this->once())->method('setElement')->with($key, [$block, $data]);
-
-        $this->dataStructure->expects($this->once())->method('createElement')->with($key, ['type' => $block]);
-        $this->dataStructure->expects($this->once())->method('hasElement')->with($parentName)->willReturn($hasParent);
-        $this->dataStructure->expects($this->exactly($setAsChild))
+        $this->dataStructureMock->expects($this->once())->method('createElement')->with($key, ['type' => $block]);
+        $this->dataStructureMock->expects($this->once())
+            ->method('hasElement')
+            ->with($parentName)
+            ->willReturn($hasParent);
+        $this->dataStructureMock->expects($this->exactly($setAsChild))
             ->method('setAsChild')
             ->with($key, $parentName, $alias)
             ->willReturn(true);
-
         $this->scheduledStructureMock->expects($this->exactly($toRemoveList))
             ->method('setElementToBrokenParentList')
             ->with($key);
@@ -185,7 +272,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('setElementToSortList')
             ->with($parentName, $key, $siblingName, $isAfter);
 
-        $this->helper->scheduleElement($this->scheduledStructureMock, $this->dataStructure, $key);
+        $this->helper->scheduleElement($this->scheduledStructureMock, $this->dataStructureMock, $key);
     }
 
     /**

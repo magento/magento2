@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
@@ -39,27 +39,34 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
      */
     protected $writeDirectoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $driverMock;
+
     protected function setUp()
     {
-        $this->writeDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Write')
+        $this->writeDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Write::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::ROOT)
+            ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->writeDirectoryMock));
 
-        $this->storageMock = $this->getMockBuilder('Magento\MediaStorage\Helper\File\Storage\Database')
+        $this->driverMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->storageMock = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storageFactoryMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Storage\DatabaseFactory')
-            ->disableOriginalConstructor()
+        $this->storageFactoryMock = $this->getMockBuilder(
+            \Magento\MediaStorage\Model\File\Storage\DatabaseFactory::class
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->httpFileFactoryMock = $this->getMockBuilder('Magento\Framework\App\Response\Http\FileFactory')
+        $this->httpFileFactoryMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -79,21 +86,27 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             $this->storageFactoryMock,
             $this->httpFileFactoryMock
         );
-        $this->assertInstanceOf('Magento\Sales\Model\Download', $model);
+        $this->assertInstanceOf(\Magento\Sales\Model\Download::class, $model);
     }
 
     /**
-     * @expectedException \Exception
+     * @param $realPatchCheck
+     * @param $isFile
+     * @param $isReadable
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @dataProvider dataProviderForTestDownloadFileException
      */
-    public function testDownloadFileException()
+    public function testDownloadFileException($realPatchCheck, $isFile, $isReadable)
     {
         $info = ['order_path' => 'test/path', 'quote_path' => 'test/path2', 'title' => 'test title'];
-        $isFile = true;
-        $isReadable = false;
 
         $this->writeDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnArgument(0));
+        $this->writeDirectoryMock->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($this->driverMock);
+        $this->driverMock->expects($this->any())->method('getRealPath')->willReturn($realPatchCheck);
         $this->writeDirectoryMock->expects($this->any())
             ->method('isFile')
             ->will($this->returnValue($isFile));
@@ -104,12 +117,25 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->storageFactoryMock->expects($this->any())
             ->method('checkDbUsage')
             ->will($this->returnValue(false));
+        $this->httpFileFactoryMock->expects($this->never())->method('create');
 
         $this->model->downloadFile($info);
     }
 
     /**
-     * @expectedException \Exception
+     * @return array
+     */
+    public function dataProviderForTestDownloadFileException()
+    {
+        return [
+            [1, true, false],
+            [1, false, true],
+            [false, true, true],
+        ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testDownloadFileNoStorage()
     {
@@ -121,6 +147,11 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->method('getAbsolutePath')
             ->will($this->returnArgument(0));
         $this->writeDirectoryMock->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($this->driverMock);
+        $this->driverMock->expects($this->any())->method('getRealPath')->willReturn(true);
+
+        $this->writeDirectoryMock->expects($this->any())
             ->method('isFile')
             ->will($this->returnValue($isFile));
         $this->writeDirectoryMock->expects($this->any())
@@ -130,11 +161,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->storageMock->expects($this->any())
             ->method('checkDbUsage')
             ->will($this->returnValue(true));
-        $this->storageMock->expects($this->any())
-            ->method('getMediaRelativePath')
-            ->will($this->returnArgument(0));
 
-        $storageDatabaseMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Storage\Database')
+        $storageDatabaseMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storageDatabaseMock->expects($this->at(0))
@@ -153,6 +181,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->storageFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($storageDatabaseMock));
+        $this->httpFileFactoryMock->expects($this->never())->method('create');
 
         $this->model->downloadFile($info);
     }
@@ -163,7 +192,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $isFile = true;
         $isReadable = false;
 
-        $writeMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\Write')
+        $writeMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Write::class)
             ->disableOriginalConstructor()
             ->getMock();
         $writeMock->expects($this->any())
@@ -178,6 +207,11 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->writeDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnArgument(0));
+        $this->writeDirectoryMock->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($this->driverMock);
+        $this->driverMock->expects($this->any())->method('getRealPath')->willReturn(true);
+
         $this->writeDirectoryMock->expects($this->any())
             ->method('isFile')
             ->will($this->returnValue($isFile));
@@ -195,11 +229,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->storageMock->expects($this->any())
             ->method('checkDbUsage')
             ->will($this->returnValue(true));
-        $this->storageMock->expects($this->any())
-            ->method('getMediaRelativePath')
-            ->will($this->returnArgument(0));
 
-        $storageDatabaseMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Storage\Database')
+        $storageDatabaseMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByFilename', 'getId', '__wakeup'])
             ->getMock();
@@ -220,7 +251,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $info['title'],
                 ['value' => $info['order_path'], 'type' => 'filename'],
-                DirectoryList::ROOT,
+                DirectoryList::MEDIA,
                 'application/octet-stream',
                 null
             );

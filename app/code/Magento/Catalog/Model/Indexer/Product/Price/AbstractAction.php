@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
@@ -69,6 +69,11 @@ abstract class AbstractAction
      * @var array|null
      */
     protected $_indexers;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product
+     */
+    private $productResource;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -213,14 +218,26 @@ abstract class AbstractAction
         $table = $this->_defaultIndexerResource->getTable('catalog_product_index_tier_price');
         $this->_emptyTable($table);
 
-        $websiteExpression = $this->_connection->getCheckSql(
-            'tp.website_id = 0',
-            'ROUND(tp.value * cwd.rate, 4)',
+        $tierPriceExpression = $this->_connection->getCheckSql(
+            'tp.value = 0',
+            'product_price.value * (1 - tp.percentage_value / 100)',
             'tp.value'
         );
+        $websiteExpression = $this->_connection->getCheckSql(
+            'tp.website_id = 0',
+            'ROUND(' . $tierPriceExpression . ' * cwd.rate, 4)',
+            $tierPriceExpression
+        );
+        $linkField = $this->getProductIdFieldName();
+        $priceAttribute = $this->getProductResource()->getAttribute('price');
+
         $select = $this->_connection->select()->from(
+            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            ['cpe.entity_id']
+        )->join(
             ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
-            ['entity_id']
+            'tp.' . $linkField . ' = cpe.' . $linkField,
+            []
         )->join(
             ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
             'tp.all_groups = 1 OR (tp.all_groups = 0 AND tp.customer_group_id = cg.customer_group_id)',
@@ -233,16 +250,23 @@ abstract class AbstractAction
             ['cwd' => $this->_defaultIndexerResource->getTable('catalog_product_index_website')],
             'cw.website_id = cwd.website_id',
             []
+        )->join(
+            ['product_price' => $priceAttribute->getBackend()->getTable()],
+            'tp.' . $linkField . ' = product_price.' . $linkField,
+            []
         )->where(
             'cw.website_id != 0'
+        )->where(
+            'product_price.attribute_id = ?',
+            $priceAttribute->getAttributeId()
         )->columns(
             new \Zend_Db_Expr("MIN({$websiteExpression})")
         )->group(
-            ['tp.entity_id', 'cg.customer_group_id', 'cw.website_id']
+            ['cpe.entity_id', 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
-            $select->where('tp.entity_id IN(?)', $entityIds);
+            $select->where("cpe.entity_id IN(?)", $entityIds);
         }
 
         $query = $select->insertFromSelect($table);
@@ -373,11 +397,11 @@ abstract class AbstractAction
         if (!empty($notCompositeIds)) {
             $select = $this->_connection->select()->from(
                 ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
-                'parent_id'
+                ''
             )->join(
                 ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-                'e.entity_id = l.parent_id',
-                ['type_id']
+                'e.' . $this->getProductIdFieldName() . ' = l.parent_id',
+                ['e.entity_id as parent_id', 'type_id']
             )->where(
                 'l.child_id IN(?)',
                 $notCompositeIds
@@ -385,7 +409,7 @@ abstract class AbstractAction
             $pairs = $this->_connection->fetchPairs($select);
             foreach ($pairs as $productId => $productType) {
                 if (!in_array($productId, $changedIds)) {
-                    $changedIds[] = $productId;
+                    $changedIds[] = (string) $productId;
                     $byType[$productType][$productId] = $productId;
                     $compositeIds[$productId] = $productId;
                 }
@@ -417,11 +441,15 @@ abstract class AbstractAction
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
+        $linkField = $this->getProductIdFieldName();
         $select = $this->_connection->select()->from(
             $this->_defaultIndexerResource->getTable('catalog_product_relation'),
             ['child_id']
+        )->join(
+            ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            'e.' . $linkField . ' = parent_id'
         )->where(
-            'parent_id IN(?)',
+            'e.entity_id IN(?)',
             $parentIds
         );
         if (!empty($excludeIds)) {
@@ -442,5 +470,28 @@ abstract class AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->_defaultIndexerResource->getTable('catalog_product_entity');
+        $indexList = $this->_connection->getIndexList($table);
+        return $indexList[$this->_connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @deprecated
+     */
+    private function getProductResource()
+    {
+        if (null === $this->productResource) {
+            $this->productResource = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+        }
+        return $this->productResource;
     }
 }

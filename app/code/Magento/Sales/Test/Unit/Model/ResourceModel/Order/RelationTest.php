@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\ResourceModel\Order\Relation
      */
     protected $relationProcessor;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Handler\Address|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -60,97 +61,59 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderInvoiceMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->addressHandlerMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Handler\Address')
+        $this->addressHandlerMock = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Order\Handler\Address::class
+        )
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'removeEmptyAddresses',
-                    'process'
-                ]
-            )
+            ->setMethods(['removeEmptyAddresses', 'process'])
             ->getMock();
-        $this->orderItemRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderItemRepositoryInterface')
+        $this->orderItemRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
+            ->setMethods(['save'])
             ->getMockForAbstractClass();
-        $this->orderPaymentResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Payment')
+        $this->orderPaymentResourceMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
+            ->setMethods(['save'])
             ->getMock();
-        $this->statusHistoryResource = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Status\History')
+        $this->statusHistoryResource = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Order\Status\History::class
+        )
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
+            ->setMethods(['save'])
             ->getMock();
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
                     'getId',
                     'getItems',
-                    'getPayments',
+                    'getPayment',
                     'getStatusHistories',
                     'getRelatedObjects'
                 ]
             )
             ->getMock();
-        $this->orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setOrderId',
-                    'setOrder'
-                ]
-            )
+            ->setMethods(['setOrderId', 'setOrder'])
             ->getMock();
-        $this->orderPaymentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+        $this->orderPaymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setParentId',
-                    'setOrder'
-                ]
-            )
+            ->setMethods(['setParentId', 'setOrder'])
             ->getMock();
-        $this->orderStatusHistoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $this->orderStatusHistoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setParentId',
-                    'setOrder'
-                ]
-            )
+            ->setMethods(['setParentId', 'setOrder'])
             ->getMock();
-        $this->orderStatusHistoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\Status\History')
+        $this->orderStatusHistoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Status\History::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setParentId',
-                    'setOrder'
-                ]
-            )
+            ->setMethods(['setParentId', 'setOrder'])
             ->getMock();
-        $this->orderInvoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $this->orderInvoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setOrder',
-                    'save'
-                ]
-            )
+            ->setMethods(['setOrder', 'save'])
             ->getMock();
         $this->relationProcessor = new \Magento\Sales\Model\ResourceModel\Order\Relation(
             $this->addressHandlerMock,
@@ -189,8 +152,8 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ->with($this->orderItemMock)
             ->willReturnSelf();
         $this->orderMock->expects($this->exactly(2))
-            ->method('getPayments')
-            ->willReturn([$this->orderPaymentMock]);
+            ->method('getPayment')
+            ->willReturn($this->orderPaymentMock);
         $this->orderPaymentMock->expects($this->once())
             ->method('setParentId')
             ->with('order-id-value')

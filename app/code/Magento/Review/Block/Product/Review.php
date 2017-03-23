@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Product Review Tab
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Review extends \Magento\Framework\View\Element\Template
+class Review extends Template implements IdentityInterface
 {
     /**
      * Core registry
@@ -64,7 +66,13 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function getProductReviewUrl()
     {
-        return $this->getUrl('review/product/listAjax', ['id' => $this->getProductId()]);
+        return $this->getUrl(
+            'review/product/listAjax',
+            [
+                '_secure' => $this->getRequest()->isSecure(),
+                'id' => $this->getProductId(),
+            ]
+        );
     }
 
     /**
@@ -97,5 +105,15 @@ class Review extends \Magento\Framework\View\Element\Template
         );
 
         return $collection->getSize();
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [\Magento\Review\Model\Review::CACHE_TAG];
     }
 }

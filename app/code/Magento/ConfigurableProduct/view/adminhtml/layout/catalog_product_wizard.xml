@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <container name="root">
+        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard-ajax.phtml" as="wizard">
+            <arguments>
+                <argument name="config" xsi:type="array">
+                    <item name="collapsible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true" />
+                    <item name="sortOrder" xsi:type="string">3333</item>
+                    <item name="canShow" xsi:type="boolean">true</item>
+                    <item name="componentType" xsi:type="string">fieldset</item>
+                    <item name="form" xsi:type="string">product_form.product_form</item>
+                    <item name="modal" xsi:type="string">configurableModal</item>
+                    <item name="nameStepWizard" xsi:type="string">variation-steps-wizard</item>
+                    <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                </argument>
+            </arguments>
+            <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
+                <arguments>
+                    <argument name="config" xsi:type="array">
+                        <item name="form" xsi:type="string">product_form.product_form</item>
+                        <item name="modal" xsi:type="string">configurableModal</item>
+                        <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                    </argument>
+                </arguments>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">product_form.product_form</item>
+                            <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="multiselectName" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.ids</item>
+                            <item name="providerName" xsi:type="string">product_attributes_listing.product_attributes_listing_data_source</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                        </argument>
+                    </arguments>
+                    <uiComponent name="product_attributes_listing"/>
+                </block>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">product_form.product_form</item>
+                            <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">product_form.product_form</item>
+                            <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">product_form.product_form</item>
+                            <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                        </argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </container>
+</layout>

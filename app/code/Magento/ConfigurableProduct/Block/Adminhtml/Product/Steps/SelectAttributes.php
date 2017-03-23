@@ -2,7 +2,7 @@
 /**
  * Adminhtml block for fieldset of configurable product
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
@@ -31,18 +31,20 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
     /**
      * Get Add new Attribute button
      *
+     * @param string $dataProvider
      * @return string
      */
-    public function getAddNewAttributeButton()
+    public function getAddNewAttributeButton($dataProvider = '')
     {
         /** @var \Magento\Backend\Block\Widget\Button $attributeCreate */
         $attributeCreate = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         );
         $attributeCreate->setDataAttribute(
             [
                 'mage-init' => [
                     'productAttributes' => [
+                        'dataProvider' => $dataProvider,
                         'url' => $this->getUrl('catalog/product_attribute/new', [
                             'store' => $this->registry->registry('current_product')->getStoreId(),
                             'product_tab' => 'variations',

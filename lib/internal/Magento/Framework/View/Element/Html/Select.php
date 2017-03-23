@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Html;
@@ -125,6 +125,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _toHtml()
     {
@@ -139,7 +140,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             '" class="' .
             $this->getClass() .
             '" title="' .
-            $this->getTitle() .
+            $this->escapeHtml($this->getTitle()) .
             '" ' .
             $this->getExtraParams() .
             '>';
@@ -151,9 +152,11 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
 
         $isArrayOption = true;
         foreach ($this->getOptions() as $key => $option) {
+            $optgroupName = '';
             if ($isArrayOption && is_array($option)) {
                 $value = $option['value'];
                 $label = (string)$option['label'];
+                $optgroupName = isset($option['optgroup-name']) ? $option['optgroup-name'] : $label;
                 $params = !empty($option['params']) ? $option['params'] : [];
             } else {
                 $value = (string)$key;
@@ -163,7 +166,8 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             }
 
             if (is_array($value)) {
-                $html .= '<optgroup label="' . $label . '">';
+                $html .= '<optgroup label="' . $this->escapeHtml($label)
+                    . '" data-optgroup-name="' . $this->escapeHtml($optgroupName) . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
                         $optionGroup = ['value' => $keyGroup, 'label' => $optionGroup];
@@ -201,10 +205,10 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             foreach ($option['params'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $keyMulti => $valueMulti) {
-                        $params .= sprintf(' %s="%s" ', $keyMulti, $valueMulti);
+                        $params .= sprintf(' %s="%s" ', $keyMulti, $this->escapeHtml($valueMulti));
                     }
                 } else {
-                    $params .= sprintf(' %s="%s" ', $key, $value);
+                    $params .= sprintf(' %s="%s" ', $key, $this->escapeHtml($value));
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
@@ -135,7 +135,10 @@ class DataProvider implements DataProviderInterface
         $column = $select->getPart(Select::COLUMNS)[0];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
-            $this->connection->quoteInto('(FLOOR(' . $column[1] . ' / ? ) + 1)', $range)
+            $this->connection->getIfNullSql(
+                $this->connection->quoteInto('FLOOR(' . $column[1] . ' / ? ) + 1', $range),
+                1
+            )
         );
 
         $select

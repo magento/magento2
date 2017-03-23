@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -23,18 +23,29 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_localeDate;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_localeDate = $localeDate;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -114,7 +125,6 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             }
         } else {
             $this->setUserValue(null);
-            return $this;
         }
 
         return $this;
@@ -191,19 +201,25 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::MEDIUM,
-                    \IntlDateFormatter::NONE
+                    \IntlDateFormatter::NONE,
+                    null,
+                    'UTC'
                 );
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::SHORT,
-                    \IntlDateFormatter::SHORT
+                    \IntlDateFormatter::SHORT,
+                    null,
+                    'UTC'
                 );
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::NONE,
-                    \IntlDateFormatter::SHORT
+                    \IntlDateFormatter::SHORT,
+                    null,
+                    'UTC'
                 );
             } else {
                 $result = $optionValue;
@@ -264,7 +280,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $confItem = $this->getConfigurationItem();
         $infoBuyRequest = $confItem->getOptionByCode('info_buyRequest');
         try {
-            $value = unserialize($infoBuyRequest->getValue());
+            $value = $this->serializer->unserialize($infoBuyRequest->getValue());
             if (is_array($value) && isset($value['options']) && isset($value['options'][$this->getOption()->getId()])
             ) {
                 return $value['options'][$this->getOption()->getId()];
@@ -336,6 +352,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         $requestOptions = $this->getRequest()->getOptions();
         if (!isset($requestOptions[$this->getOption()->getId()])) {
+            $requestOptions[$this->getOption()->getId()] = [];
+        }
+        if (!is_array($requestOptions[$this->getOption()->getId()])) {
             $requestOptions[$this->getOption()->getId()] = [];
         }
         $requestOptions[$this->getOption()->getId()]['date_internal'] = $internalValue;

@@ -2,7 +2,7 @@
 /**
  * Backend no route handler
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App\Router;
@@ -42,7 +42,7 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
         $requestPathParams = explode('/', trim($request->getPathInfo(), '/'));
         $areaFrontName = array_shift($requestPathParams);
 
-        if ($areaFrontName == $this->helper->getAreaFrontName()) {
+        if ($areaFrontName === $this->helper->getAreaFrontName(true)) {
             $moduleName = $this->routeConfig->getRouteFrontName('adminhtml');
             $actionNamespace = 'noroute';
             $actionName = 'index';

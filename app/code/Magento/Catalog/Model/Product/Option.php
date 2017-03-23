@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product option model
@@ -25,8 +27,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Option extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
+class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
     const OPTION_GROUP_TEXT = 'text';
 
@@ -56,6 +57,16 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
 
     const OPTION_TYPE_TIME = 'time';
 
+    /**
+     * @var Option\Repository
+     */
+    protected $optionRepository;
+
+    /**
+     * Option type percent
+     */
+    protected static $typePercent = 'percent';
+
     /**#@+
      * Constants
      */
@@ -77,31 +88,31 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * @var Product
      */
-    protected $_product;
+    protected $product;
 
     /**
      * @var array
      */
-    protected $_options = [];
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected $_values = null;
+    protected $values = null;
 
     /**
      * Catalog product option value
      *
      * @var Option\Value
      */
-    protected $_productOptionValue;
+    protected $productOptionValue;
 
     /**
      * Product option factory
      *
      * @var \Magento\Catalog\Model\Product\Option\Type\Factory
      */
-    protected $_optionFactory;
+    protected $optionTypeFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
@@ -112,6 +123,11 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * @var Option\Validator\Pool
      */
     protected $validatorPool;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -140,8 +156,8 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_productOptionValue = $productOptionValue;
-        $this->_optionFactory = $optionFactory;
+        $this->productOptionValue = $productOptionValue;
+        $this->optionTypeFactory = $optionFactory;
         $this->validatorPool = $validatorPool;
         $this->string = $string;
         parent::__construct(
@@ -170,7 +186,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Option::class);
         parent::_construct();
     }
 
@@ -182,7 +198,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function addValue(Option\Value $value)
     {
-        $this->_values[$value->getId()] = $value;
+        $this->values[$value->getId()] = $value;
         return $this;
     }
 
@@ -194,8 +210,8 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getValueById($valueId)
     {
-        if (isset($this->_values[$valueId])) {
-            return $this->_values[$valueId];
+        if (isset($this->values[$valueId])) {
+            return $this->values[$valueId];
         }
 
         return null;
@@ -206,7 +222,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getValues()
     {
-        return $this->_values;
+        return $this->values;
     }
 
     /**
@@ -216,7 +232,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getValueInstance()
     {
-        return $this->_productOptionValue;
+        return $this->productOptionValue;
     }
 
     /**
@@ -227,7 +243,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function addOption($option)
     {
-        $this->_options[] = $option;
+        $this->options[] = $option;
         return $this;
     }
 
@@ -238,7 +254,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getOptions()
     {
-        return $this->_options;
+        return $this->options;
     }
 
     /**
@@ -249,7 +265,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setOptions($options)
     {
-        $this->_options = $options;
+        $this->options = $options;
         return $this;
     }
 
@@ -260,7 +276,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function unsetOptions()
     {
-        $this->_options = [];
+        $this->options = [];
         return $this;
     }
 
@@ -271,7 +287,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getProduct()
     {
-        return $this->_product;
+        return $this->product;
     }
 
     /**
@@ -282,7 +298,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setProduct(Product $product = null)
     {
-        $this->_product = $product;
+        $this->product = $product;
         return $this;
     }
 
@@ -294,7 +310,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getGroupByType($type = null)
     {
-        if (is_null($type)) {
+        if ($type === null) {
             $type = $this->getType();
         }
         $optionGroupsToTypes = [
@@ -324,7 +340,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         $group = $this->getGroupByType($type);
         if (!empty($group)) {
-            return $this->_optionFactory->create(
+            return $this->optionTypeFactory->create(
                 'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
             );
         }
@@ -332,82 +348,48 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * Save options.
-     *
-     * @return $this
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function saveOptions()
+    public function beforeSave()
     {
-        foreach ($this->getOptions() as $option) {
-            $this->_validatorBeforeSave = null;
-            $this->setData(
-                $option
-            )->setData(
-                'product_id',
-                $this->getProduct()->getId()
-            )->setData(
-                'store_id',
-                $this->getProduct()->getStoreId()
-            );
-            /** Reset is delete flag from the previous iteration */
-            $this->isDeleted(false);
+        parent::beforeSave();
+        if ($this->getData('previous_type') != '') {
+            $previousType = $this->getData('previous_type');
 
-            if ($this->getData('option_id') == '0') {
-                $this->unsetData('option_id');
-            } else {
-                $this->setId($this->getData('option_id'));
-            }
-            $isEdit = (bool)$this->getId() ? true : false;
-
-            if ($this->getData('is_delete') == '1') {
-                if ($isEdit) {
-                    $this->getValueInstance()->deleteValue($this->getId());
-                    $this->deletePrices($this->getId());
-                    $this->deleteTitles($this->getId());
-                    $this->delete();
+            /**
+             * if previous option has different group from one is came now
+             * need to remove all data of previous group
+             */
+            if ($this->getGroupByType($previousType) != $this->getGroupByType($this->getData('type'))) {
+                switch ($this->getGroupByType($previousType)) {
+                    case self::OPTION_GROUP_SELECT:
+                        $this->unsetData('values');
+                        if ($this->getId()) {
+                            $this->getValueInstance()->deleteValue($this->getId());
+                        }
+                        break;
+                    case self::OPTION_GROUP_FILE:
+                        $this->setData('file_extension', '');
+                        $this->setData('image_size_x', '0');
+                        $this->setData('image_size_y', '0');
+                        break;
+                    case self::OPTION_GROUP_TEXT:
+                        $this->setData('max_characters', '0');
+                        break;
+                    case self::OPTION_GROUP_DATE:
+                        break;
                 }
-            } else {
-                if ($this->getData('previous_type') != '') {
-                    $previousType = $this->getData('previous_type');
-
-                    /**
-                     * if previous option has different group from one is came now
-                     * need to remove all data of previous group
-                     */
-                    if ($this->getGroupByType($previousType) != $this->getGroupByType($this->getData('type'))) {
-                        switch ($this->getGroupByType($previousType)) {
-                            case self::OPTION_GROUP_SELECT:
-                                $this->unsetData('values');
-                                if ($isEdit) {
-                                    $this->getValueInstance()->deleteValue($this->getId());
-                                }
-                                break;
-                            case self::OPTION_GROUP_FILE:
-                                $this->setData('file_extension', '');
-                                $this->setData('image_size_x', '0');
-                                $this->setData('image_size_y', '0');
-                                break;
-                            case self::OPTION_GROUP_TEXT:
-                                $this->setData('max_characters', '0');
-                                break;
-                            case self::OPTION_GROUP_DATE:
-                                break;
-                        }
-                        if ($this->getGroupByType($this->getData('type')) == self::OPTION_GROUP_SELECT) {
-                            $this->setData('sku', '');
-                            $this->unsetData('price');
-                            $this->unsetData('price_type');
-                            if ($isEdit) {
-                                $this->deletePrices($this->getId());
-                            }
-                        }
+                if ($this->getGroupByType($this->getData('type')) == self::OPTION_GROUP_SELECT) {
+                    $this->setData('sku', '');
+                    $this->unsetData('price');
+                    $this->unsetData('price_type');
+                    if ($this->getId()) {
+                        $this->deletePrices($this->getId());
                     }
                 }
-                $this->save();
             }
         }
-        //eof foreach()
         return $this;
     }
 
@@ -418,9 +400,15 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     public function afterSave()
     {
         $this->getValueInstance()->unsetValues();
-        if (is_array($this->getData('values'))) {
-            foreach ($this->getData('values') as $value) {
-                $this->getValueInstance()->addValue($value);
+        $values = $this->getValues() ?: $this->getData('values');
+        if (is_array($values)) {
+            foreach ($values as $value) {
+                if ($value instanceof \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface) {
+                    $data = $value->getData();
+                } else {
+                    $data = $value;
+                }
+                $this->getValueInstance()->addValue($data);
             }
 
             $this->getValueInstance()->setOption($this)->saveValues();
@@ -440,7 +428,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == 'percent') {
+        if ($flag && $this->getPriceType() == self::$typePercent) {
             $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
@@ -451,24 +439,24 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * Delete prices of option
      *
-     * @param int $option_id
+     * @param int $optionId
      * @return $this
      */
-    public function deletePrices($option_id)
+    public function deletePrices($optionId)
     {
-        $this->getResource()->deletePrices($option_id);
+        $this->getResource()->deletePrices($optionId);
         return $this;
     }
 
     /**
      * Delete titles of option
      *
-     * @param int $option_id
+     * @param int $optionId
      * @return $this
      */
-    public function deleteTitles($option_id)
+    public function deleteTitles($optionId)
     {
-        $this->getResource()->deleteTitles($option_id);
+        $this->getResource()->deleteTitles($optionId);
         return $this;
     }
 
@@ -478,29 +466,9 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
-    public function getProductOptionCollection(Product $product)
+    public function getProductOptions(Product $product)
     {
-        $collection = $this->getCollection()->addFieldToFilter(
-            'product_id',
-            $product->getId()
-        )->addTitleToResult(
-            $product->getStoreId()
-        )->addPriceToResult(
-            $product->getStoreId()
-        )->setOrder(
-            'sort_order',
-            'asc'
-        )->setOrder(
-            'title',
-            'asc'
-        );
-
-        if ($this->getAddRequiredFilter()) {
-            $collection->addRequiredFilter($this->getAddRequiredFilterValue());
-        }
-
-        $collection->addValuesToResult($product->getStoreId());
-        return $collection;
+        return $this->getOptionRepository()->getProductOptions($product, $this->getAddRequiredFilter());
     }
 
     /**
@@ -519,12 +487,12 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * Get collection of values by given option ids
      *
      * @param array $optionIds
-     * @param int $store_id
+     * @param int $storeId
      * @return Collection
      */
-    public function getOptionValuesByOptionId($optionIds, $store_id)
+    public function getOptionValuesByOptionId($optionIds, $storeId)
     {
-        $collection = $this->_productOptionValue->getValuesByOption($optionIds, $this->getId(), $store_id);
+        $collection = $this->productOptionValue->getValuesByOption($optionIds, $this->getId(), $storeId);
 
         return $collection;
     }
@@ -563,7 +531,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     protected function _clearData()
     {
         $this->_data = [];
-        $this->_values = null;
+        $this->values = null;
         return $this;
     }
 
@@ -574,8 +542,8 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     protected function _clearReferences()
     {
-        if (!empty($this->_values)) {
-            foreach ($this->_values as $value) {
+        if (!empty($this->values)) {
+            foreach ($this->values as $value) {
                 $value->unsetOption();
             }
         }
@@ -598,7 +566,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     public function getProductSku()
     {
         $productSku = $this->_getData(self::KEY_PRODUCT_SKU);
-        if (!$productSku) {
+        if (!$productSku && $this->getProduct()) {
             $productSku = $this->getProduct()->getSku();
         }
         return $productSku;
@@ -707,6 +675,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         return $this->getData(self::KEY_IMAGE_SIZE_Y);
     }
+
     /**
      * Set product SKU
      *
@@ -848,7 +817,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setValues(array $values = null)
     {
-        $this->_values = $values;
+        $this->values = $values;
         return $this;
     }
 
@@ -863,6 +832,51 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
+     * Return regular price.
+     *
+     * @return float|int
+     */
+    public function getRegularPrice()
+    {
+        if ($this->getPriceType() == self::$typePercent) {
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            return $price;
+        }
+        return $this->_getData(self::KEY_PRICE);
+    }
+
+    /**
+     * @param Product $product
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     */
+    public function getProductOptionCollection(Product $product)
+    {
+        $collection = clone $this->getCollection();
+        $collection->addFieldToFilter(
+            'product_id',
+            $product->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField())
+        )->addTitleToResult(
+            $product->getStoreId()
+        )->addPriceToResult(
+            $product->getStoreId()
+        )->setOrder(
+            'sort_order',
+            'asc'
+        )->setOrder(
+            'title',
+            'asc'
+        );
+
+        if ($this->getAddRequiredFilter()) {
+            $collection->addRequiredFilter($this->getAddRequiredFilterValue());
+        }
+
+        $collection->addValuesToResult($product->getStoreId());
+        return $collection;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
@@ -873,5 +887,30 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * @return Option\Repository
+     */
+    private function getOptionRepository()
+    {
+        if (null === $this->optionRepository) {
+            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
+        }
+        return $this->optionRepository;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
+    }
+
     //@codeCoverageIgnoreEnd
 }

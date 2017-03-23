@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeSaveMessage extends AbstractConstraint
 {
+    /**
+     * Product attribute success save message.
+     */
     const SUCCESS_MESSAGE = 'You saved the product attribute.';
 
     /**
@@ -24,12 +27,13 @@ class AssertProductAttributeSaveMessage extends AbstractConstraint
      */
     public function processAssert(CatalogProductAttributeIndex $attributeIndex)
     {
+        $actualMessage = $attributeIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $attributeIndex->getMessagesBlock()->getSuccessMessages(),
+            $actualMessage,
             'Wrong success message is displayed.'
             . "\nExpected: " . self::SUCCESS_MESSAGE
-            . "\nActual: " . $attributeIndex->getMessagesBlock()->getSuccessMessages()
+            . "\nActual: " . $actualMessage
         );
     }
 

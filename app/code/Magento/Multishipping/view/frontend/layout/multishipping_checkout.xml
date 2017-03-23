@@ -1,14 +1,10 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
-    <body>
-        <referenceContainer name="sidebar.main">
-            <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="Magento_Multishipping::checkout/state.phtml" cacheable="false"/>
-        </referenceContainer>
-    </body>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
+    <body/>
 </page>

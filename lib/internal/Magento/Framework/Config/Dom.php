@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Phrase;
 
 /**
  * Class Dom
@@ -29,6 +31,11 @@ class Dom
      * Format of items in errors array to be used by default. Available placeholders - fields of \LibXMLError.
      */
     const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
+
+    /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    private $validationState;
 
     /**
      * Dom document
@@ -71,7 +78,7 @@ class Dom
     protected $rootNamespace;
 
     /**
-     * \Magento\Framework\Config\Dom\UrnResolver
+     * @var \Magento\Framework\Config\Dom\UrnResolver
      */
     private static $urnResolver;
 
@@ -82,6 +89,7 @@ class Dom
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
      * @param string $xml
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param array $idAttributes
      * @param string $typeAttributeName
      * @param string $schemaFile
@@ -89,17 +97,39 @@ class Dom
      */
     public function __construct(
         $xml,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         array $idAttributes = [],
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
+        $this->validationState = $validationState;
         $this->schema = $schemaFile;
         $this->nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
         $this->typeAttributeName = $typeAttributeName;
         $this->errorFormat = $errorFormat;
         $this->dom = $this->_initDom($xml);
         $this->rootNamespace = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
+    }
+
+    /**
+     * Retrieve array of xml errors
+     *
+     * @param $errorFormat
+     * @return string[]
+     */
+    private static function getXmlErrors($errorFormat)
+    {
+        $errors = [];
+        $validationErrors = libxml_get_errors();
+        if (count($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                $errors[] = self::_renderErrorMessage($error, $errorFormat);
+            }
+        } else {
+            $errors[] = 'Unknown validation error';
+        }
+        return $errors;
     }
 
     /**
@@ -221,7 +251,7 @@ class Dom
                 $value = $node->getAttribute($attribute);
                 $constraints[] = "@{$attribute}='{$value}'";
             }
-            $path .= '[' . join(' and ', $constraints) . ']';
+            $path .= '[' . implode(' and ', $constraints) . ']';
         } elseif ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
@@ -268,32 +298,29 @@ class Dom
         $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            return [];
+        }
+
         if (!self::$urnResolver) {
             self::$urnResolver = new UrnResolver();
         }
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
+        libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
+        $errors = [];
         try {
-            if (file_exists($schema)) {
-                $result = $dom->schemaValidate($schema);
-            } else {
-                $result = $dom->schemaValidateSource($schema);
-            }
-            $errors = [];
+            $result = $dom->schemaValidate($schema);
             if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = self::_renderErrorMessage($error, $errorFormat);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
+                $errors = self::getXmlErrors($errorFormat);
             }
         } catch (\Exception $exception) {
+            $errors = self::getXmlErrors($errorFormat);
             libxml_use_internal_errors(false);
-            throw $exception;
+            array_unshift($errors, new Phrase('Processed schema file: %1', [$schema]));
+            throw new ValidationSchemaException(new Phrase(implode("\n", $errors)));
         }
+        libxml_set_external_entity_loader(null);
         libxml_use_internal_errors(false);
         return $errors;
     }
@@ -324,7 +351,7 @@ class Dom
                 }
                 if (!empty($unsupported)) {
                     throw new \InvalidArgumentException(
-                        "Error format '{$format}' contains unsupported placeholders: " . join(', ', $unsupported)
+                        "Error format '{$format}' contains unsupported placeholders: " . implode(', ', $unsupported)
                     );
                 }
             }
@@ -352,8 +379,15 @@ class Dom
     protected function _initDom($xml)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML($xml);
-        if ($this->schema) {
+        $useErrors = libxml_use_internal_errors(true);
+        $res = $dom->loadXML($xml);
+        if (!$res) {
+            $errors = self::getXmlErrors($this->errorFormat);
+            libxml_use_internal_errors($useErrors);
+            throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
+        }
+        libxml_use_internal_errors($useErrors);
+        if ($this->validationState->isValidationRequired() && $this->schema) {
             $errors = $this->validateDomDocument($dom, $this->schema, $this->errorFormat);
             if (count($errors)) {
                 throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
@@ -371,8 +405,11 @@ class Dom
      */
     public function validate($schemaFileName, &$errors = [])
     {
-        $errors = $this->validateDomDocument($this->dom, $schemaFileName, $this->errorFormat);
-        return !count($errors);
+        if ($this->validationState->isValidationRequired()) {
+            $errors = $this->validateDomDocument($this->dom, $schemaFileName, $this->errorFormat);
+            return !count($errors);
+        }
+        return true;
     }
 
     /**

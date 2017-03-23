@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,9 +36,6 @@ class StockItemTest extends WebapiAbstract
      */
     const RESOURCE_PUT_PATH = '/V1/products/:productSku/stockItems/:itemId';
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection */
-    protected $productCollection;
-
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
@@ -48,25 +45,6 @@ class StockItemTest extends WebapiAbstract
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
-    }
-
-    /**
-     * Execute per test cleanup
-     */
-    public function tearDown()
-    {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
-
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-
-        $this->productCollection->addFieldToFilter('entity_id', ['in' => [10, 11, 12]])->delete();
-        unset($this->productCollection);
-
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
     }
 
     /**
@@ -121,24 +99,29 @@ class StockItemTest extends WebapiAbstract
             ],
         ];
 
-        $stockItemDetailsDo = $this->objectManager->get(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory'
-        )->create();
-        $dataObjectHelper = $this->objectManager->get('\Magento\Framework\Api\DataObjectHelper');
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemDetailsDo */
+        $stockItemDetailsDo = $this->objectManager
+            ->get(\Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory::class)
+            ->create();
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = $this->objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
         $dataObjectHelper->populateWithArray(
             $stockItemDetailsDo,
             $newData,
-            '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+            \Magento\CatalogInventory\Api\Data\StockItemInterface::class
         );
         $data = $stockItemDetailsDo->getData();
         $data['show_default_notification_message'] = false;
         $arguments = ['productSku' => $productSku, 'stockItem' => $data];
         $this->assertEquals($stockItemOld['item_id'], $this->_webApiCall($serviceInfo, $arguments));
 
-        $stockItemFactory = $this->objectManager->get('Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory');
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory */
+        $stockItemFactory = $this->objectManager
+            ->get(\Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory::class);
         $stockItem = $stockItemFactory->create();
-        $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
-        $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
+        /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItemResource */
+        $stockItemResource = $this->objectManager->get(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
+        $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['stock_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
         $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
     }
@@ -154,7 +137,6 @@ class StockItemTest extends WebapiAbstract
                     'item_id' => 222,
                     'product_id' => 222,
                     'stock_id' => 1,
-                    'website_id' => 1,
                     'qty' => '111.0000',
                     'min_qty' => '0.0000',
                     'use_config_min_qty' => 1,
@@ -204,13 +186,11 @@ class StockItemTest extends WebapiAbstract
                     'use_config_enable_qty_inc' => '1',
                     'enable_qty_increments' => '0',
                     'is_decimal_divided' => '0',
-                    'website_id' => '1',
                     'type_id' => 'simple',
                 ],
                 [
                     'item_id' => 1,
                     'product_id' => 10,
-                    'website_id' => 1,
                     'stock_id' => 1,
                     'qty' => 100,
                     'is_in_stock' => 1,

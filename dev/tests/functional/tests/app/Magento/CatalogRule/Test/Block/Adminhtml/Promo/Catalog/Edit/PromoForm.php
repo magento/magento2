@@ -1,51 +1,35 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
+use \Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Element;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Form for creation of a Catalog Price Rule.
  */
-class PromoForm extends FormTabs
+class PromoForm extends FormSections
 {
-    /**
-     * Add button.
-     *
-     * @var string
-     */
-    protected $addButton = '.rule-param-new-child a';
-
-    /**
-     * Locator for Customer Segment Conditions.
-     *
-     * @var string
-     */
-    protected $conditionFormat = '//*[@id="conditions__1__new_child"]//option[contains(.,"%s")]';
-
     /**
      * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement $element
      * @param array $replace
-     * @return $this|FormTabs
+     * @return $this
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
-        $tabs = $this->getFieldsByTabs($fixture);
+        $sections = $this->getFixtureFieldsByContainers($fixture);
         if ($replace) {
-            $tabs = $this->prepareData($tabs, $replace);
+            $sections = $this->prepareData($sections, $replace);
         }
-        $this->fillTabs($tabs, $element);
+        return $this->fillContainers($sections, $element);
     }
 
     /**
@@ -70,20 +54,5 @@ class PromoForm extends FormTabs
         }
 
         return $tabs;
-    }
-
-    /**
-     * Check if attribute is available in conditions.
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isAttributeInConditions($name)
-    {
-        $this->_rootElement->find($this->addButton)->click();
-        return $this->_rootElement->find(
-            sprintf($this->conditionFormat, $name),
-            Locator::SELECTOR_XPATH
-        )->isVisible();
     }
 }

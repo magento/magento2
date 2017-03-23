@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,13 +33,11 @@ $debug = function ($val) {
 };
 
 /**
- * Caution, this is very experimental stuff
- * no guarantee for working result
- * has tons of potential big security holes
+ * Note: the code below is experimental and not intended to be used outside development environment.
+ * The code is protected against running outside of PHP built-in web server.
  */
 
 if (php_sapi_name() === 'cli-server') {
-
     $debug($_SERVER["REQUEST_URI"]);
     if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
         return false;    // serve the requested resource as-is.
@@ -65,8 +63,7 @@ if (php_sapi_name() === 'cli-server') {
 
     $debug($route);
 
-    if (
-        strpos($route, 'media/') === 0 ||
+    if (strpos($route, 'media/') === 0 ||
         strpos($route, 'opt/') === 0 ||
         strpos($route, 'static/') === 0 ||
         strpos($route, 'errors/default/css/') === 0 ||

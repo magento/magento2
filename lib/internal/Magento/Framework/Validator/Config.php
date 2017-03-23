@@ -2,7 +2,7 @@
 /**
  * Validation configuration files handler
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
@@ -19,35 +19,30 @@ class Config extends \Magento\Framework\Config\AbstractXml
     const CONSTRAINT_TYPE_ENTITY = 'entity';
 
     const CONSTRAINT_TYPE_PROPERTY = 'property';
-
     /**#@-*/
 
     /**
      * @var string
      */
-    protected $_defaultBuilderClass = 'Magento\Framework\Validator\Builder';
+    protected $_defaultBuilderClass = \Magento\Framework\Validator\Builder::class;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_builderFactory;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
-    protected $urnResolver;
-
     /**
      * @param array $configFiles
+     * @param \Magento\Framework\Config\DomFactory $domFactory
      * @param \Magento\Framework\Validator\UniversalFactory $builderFactory
-     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
     public function __construct(
         $configFiles,
-        \Magento\Framework\Validator\UniversalFactory $builderFactory,
-        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+        \Magento\Framework\Config\DomFactory $domFactory,
+        \Magento\Framework\Validator\UniversalFactory $builderFactory
     ) {
         $this->_builderFactory = $builderFactory;
-        $this->urnResolver = $urnResolver;
-        parent::__construct($configFiles);
+        parent::__construct($configFiles, $domFactory);
     }
 
     /**
@@ -407,7 +402,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd');
+        return __DIR__ . '/etc/validation.xsd';
     }
 
     /**

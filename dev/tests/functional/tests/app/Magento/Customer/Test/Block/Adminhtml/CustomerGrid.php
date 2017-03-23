@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,10 +39,10 @@ class CustomerGrid extends DataGrid
             'input' => 'select',
         ],
         'entity_id_from' => [
-            'selector' => '[name="filters[entity_id][from]"]',
+            'selector' => '[name="entity_id[from]"]',
         ],
         'entity_id_to' => [
-            'selector' => '[name="filters[entity_id][to]"]',
+            'selector' => '[name="entity_id[to]"]',
         ],
     ];
 }

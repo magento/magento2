@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,15 +36,26 @@ class Suffix extends \Magento\Framework\App\Config\Value
     protected $connection;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    protected $resource;
+
+    /**
+     * @var \Magento\Framework\App\Config
+     */
+    private $appConfig;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\ResourceConnection $appResource
+     * @param ResourceConnection $appResource
      * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -52,6 +63,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\UrlRewrite\Helper\UrlRewrite $urlRewriteHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $appResource,
@@ -60,11 +72,28 @@ class Suffix extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->urlRewriteHelper = $urlRewriteHelper;
         $this->connection = $appResource->getConnection();
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
+        $this->resource = $appResource;
+    }
+
+    /**
+     * Get instance of ScopePool
+     *
+     * @return \Magento\Framework\App\Config
+     * @deprecated
+     */
+    private function getAppConfig()
+    {
+        if ($this->appConfig === null) {
+            $this->appConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\Config::class
+            );
+        }
+        return $this->appConfig;
     }
 
     /**
@@ -85,8 +114,43 @@ class Suffix extends \Magento\Framework\App\Config\Value
     {
         if ($this->isValueChanged()) {
             $this->updateSuffixForUrlRewrites();
+            if ($this->isCategorySuffixChanged()) {
+                $this->cacheTypeList->invalidate([
+                    \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
+                    \Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER
+                ]);
+            }
         }
         return parent::afterSave();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterDeleteCommit()
+    {
+        if ($this->isValueChanged()) {
+            $this->updateSuffixForUrlRewrites();
+            if ($this->isCategorySuffixChanged()) {
+                $this->cacheTypeList->invalidate([
+                    \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
+                    \Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER
+                ]);
+            }
+        }
+
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Check is category suffix changed
+     *
+     * @return bool
+     */
+    private function isCategorySuffixChanged()
+    {
+        return $this->isValueChanged()
+            && ($this->getPath() == CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
     }
 
     /**
@@ -110,13 +174,18 @@ class Suffix extends \Magento\Framework\App\Config\Value
         }
         $entities = $this->urlFinder->findAllByData($dataFilter);
         $oldSuffixPattern = '~' . preg_quote($this->getOldValue()) . '$~';
-        $suffix = $this->getValue();
+        if ($this->getValue() !== null) {
+            $suffix = $this->getValue();
+        } else {
+            $this->getAppConfig()->clean();
+            $suffix = $this->_config->getValue($this->getPath());
+        }
         foreach ($entities as $urlRewrite) {
             $bind = $urlRewrite->getIsAutogenerated()
                 ? [UrlRewrite::REQUEST_PATH => preg_replace($oldSuffixPattern, $suffix, $urlRewrite->getRequestPath())]
                 : [UrlRewrite::TARGET_PATH => preg_replace($oldSuffixPattern, $suffix, $urlRewrite->getTargetPath())];
             $this->connection->update(
-                DbStorage::TABLE_NAME,
+                $this->resource->getTableName(DbStorage::TABLE_NAME),
                 $bind,
                 $this->connection->quoteIdentifier(UrlRewrite::URL_REWRITE_ID) . ' = ' . $urlRewrite->getUrlRewriteId()
             );

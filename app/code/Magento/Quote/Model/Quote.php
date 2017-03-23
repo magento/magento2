@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -10,7 +10,6 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\ResourceModel;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -345,6 +344,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $shippingAssignmentFactory;
 
     /**
+     * Quote shipping addresses items cache
+     *
+     * @var array
+     */
+    protected $shippingAddressesItems;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -480,7 +486,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote::class);
     }
 
     /**
@@ -712,6 +718,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         return $this->setData(self::KEY_CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -834,6 +841,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
+     * @deprecated
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -955,7 +963,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             )
         );
         $customer->setAddresses($origAddresses);
@@ -1017,6 +1025,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
+        $this->updateCustomerData($this->customerRepository->save($this->getCustomer()));
         return $this;
     }
 
@@ -1563,6 +1572,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             );
         }
 
+        if (!$product->isSalable()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Product that you are trying to add is not available.')
+            );
+        }
+
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
 
         /**
@@ -1610,10 +1625,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
-                $message = $item->getMessage();
-                if (!in_array($message, $errors)) {
-                    // filter duplicate messages
-                    $errors[] = $message;
+                foreach ($item->getMessage(false) as $message) {
+                    if (!in_array($message, $errors)) {
+                        // filter duplicate messages
+                        $errors[] = $message;
+                    }
                 }
             }
         }
@@ -1622,7 +1638,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
-
         return $parentItem;
     }
 
@@ -1821,6 +1836,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /*********************** PAYMENTS ***************************/
+
     /**
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
@@ -1862,27 +1878,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param string $paymentId
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getPaymentById($paymentId)
-    {
-        foreach ($this->getPaymentsCollection() as $payment) {
-            if ($payment->getId() == $paymentId) {
-                return $payment;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Adds a payment to quote
      *
      * @param PaymentInterface $payment
      * @return $this
      */
-    public function addPayment(PaymentInterface $payment)
+    protected function addPayment(PaymentInterface $payment)
     {
         $payment->setQuote($this);
         if (!$payment->getId()) {
@@ -2163,6 +2164,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         if (!$this->getReservedOrderId()) {
             $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+        } else {
+            //checking if reserved order id was already used for some order
+            //if yes reserving new one if not using old one
+            if ($this->_getResource()->isOrderIncrementIdUsed($this->getReservedOrderId())) {
+                $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+            }
         }
         return $this;
     }
@@ -2411,6 +2418,48 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             return self::CHECKOUT_METHOD_LOGIN_IN;
         }
         return $this->_getData(self::KEY_CHECKOUT_METHOD);
+    }
+
+    /**
+     * Get quote items assigned to different quote addresses populated per item qty.
+     * Based on result array we can display each item separately
+     *
+     * @return array
+     */
+    public function getShippingAddressesItems()
+    {
+        if ($this->shippingAddressesItems !== null) {
+            return $this->shippingAddressesItems;
+        }
+        $items = [];
+        $addresses = $this->getAllAddresses();
+        foreach ($addresses as $address) {
+            foreach ($address->getAllItems() as $item) {
+                if ($item->getParentItemId()) {
+                    continue;
+                }
+                if ($item->getProduct()->getIsVirtual()) {
+                    $items[] = $item;
+                    continue;
+                }
+                if ($item->getQty() > 1) {
+                    for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
+                        if ($itemIndex == 0) {
+                            $addressItem = $item;
+                        } else {
+                            $addressItem = clone $item;
+                        }
+                        $addressItem->setQty(1)->setCustomerAddressId($address->getCustomerAddressId())->save();
+                        $items[] = $addressItem;
+                    }
+                } else {
+                    $item->setCustomerAddressId($address->getCustomerAddressId());
+                    $items[] = $item;
+                }
+            }
+        }
+        $this->shippingAddressesItems = $items;
+        return $items;
     }
 
     /**

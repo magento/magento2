@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<ruleset name="Magento">
+    <description>LESS Coding Standard.</description>
+    <rule ref="Generic.Files.EndFileNewline"/>
+    <rule ref="Generic.Files.LineEndings"/>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+    <rule ref="Squiz.CSS.NamedColours"/>
+    <rule ref="../../../../../../framework/Magento/Sniffs/Less"/>
+</ruleset>

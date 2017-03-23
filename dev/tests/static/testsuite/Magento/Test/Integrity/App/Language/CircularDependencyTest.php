@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,6 @@ namespace Magento\Test\Integrity\App\Language;
 
 use Magento\Framework\App\Language\Config;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Config\Dom\UrnResolver;
 
 class CircularDependencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,12 +21,42 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCircularDependencies()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $componentRegistrar = new ComponentRegistrar();
         $declaredLanguages = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
-        $urnResolver = new UrnResolver();
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domFactoryMock = $this->getMock(\Magento\Framework\Config\DomFactory::class, [], [], '', false);
+        $domFactoryMock->expects($this->any())
+            ->method('createDom')
+            ->willReturnCallback(
+                function ($arguments) use ($validationStateMock) {
+                    return new \Magento\Framework\Config\Dom(
+                        $arguments['xml'],
+                        $validationStateMock,
+                        [],
+                        null,
+                        $arguments['schemaFile']
+                    );
+                }
+            );
+
         $packs = [];
         foreach ($declaredLanguages as $language) {
-            $languageConfig = new Config(file_get_contents($language . '/language.xml'), $urnResolver);
+            $languageConfig = $objectManager->getObject(
+                \Magento\Framework\App\Language\Config::class,
+                [
+                    'source' => file_get_contents($language . '/language.xml'),
+                    'domFactory' => $domFactoryMock
+                ]
+            );
             $this->packs[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
             $packs[] = $languageConfig;
         }

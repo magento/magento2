@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,15 +24,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Go to Stores > Attributes > Product and add new attribute.
  * 8. Select Fixed Product Tax type and fill attribute label.
  * 9. Save attribute.
- * 10. Go to Stores > Attributes > Product Template.
- * 11. Add new product template based on default.
+ * 10. Go to Stores > Attributes > Attribute Set.
+ * 11. Add new attribute set based on default.
  * 12. Add created FPT attribute to Product Details group and fill set name.
  * 13. Save attribute set.
  *
  * Steps:
  * 1. Go to Products > Catalog.
  * 2. Add new product.
- * 3. Select created product template.
+ * 3. Select created attribute set.
  * 4. Fill data according to dataset.
  * 5. Save product.
  * 6. Go to Stores > Configuration.
@@ -41,14 +41,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 9. Go to frontend and login with customer
  * 10. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-29551
  */
 class CreateTaxWithFptTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -69,12 +68,12 @@ class CreateTaxWithFptTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
         $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'johndoe_with_addresses']);
         $customer->persist();
-        $productTemplate = $this->fixtureFactory
+        $attributeSet = $this->fixtureFactory
             ->createByCode('catalogAttributeSet', ['dataset' => 'custom_attribute_set_with_fpt']);
-        $productTemplate->persist();
+        $attributeSet->persist();
         return [
             'customer' => $customer,
-            'productTemplate' => $productTemplate
+            'attributeSet' => $attributeSet
         ];
     }
 
@@ -87,7 +86,7 @@ class CreateTaxWithFptTest extends Injectable
     protected function loginCustomer(Customer $customer)
     {
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
     }
@@ -97,7 +96,7 @@ class CreateTaxWithFptTest extends Injectable
      *
      * @param string $configData
      * @param Customer $customer
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param array $productData
      * @return array
      */
@@ -105,16 +104,16 @@ class CreateTaxWithFptTest extends Injectable
         $productData,
         $configData,
         Customer $customer,
-        CatalogAttributeSet $productTemplate
+        CatalogAttributeSet $attributeSet
     ) {
         $this->fixtureFactory->createByCode('taxRule', ['dataset' => 'tax_rule_default'])->persist();
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataset' => $productData, 'data' => ['attribute_set_id' => ['attribute_set' => $productTemplate]]]
+            ['dataset' => $productData, 'data' => ['attribute_set_id' => ['attribute_set' => $attributeSet]]]
         );
         $product->persist();
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
         $this->loginCustomer($customer);
@@ -129,9 +128,9 @@ class CreateTaxWithFptTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
+        $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class)->run();
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'default_tax_configuration,shipping_tax_class_taxable_goods_rollback']
         )->run();
     }

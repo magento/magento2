@@ -2,7 +2,7 @@
 /**
  * Backend Session configuration object
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
@@ -14,8 +14,6 @@ use Magento\Framework\Session\Config;
 
 /**
  * Magento Backend session configuration
- *
- * @method Config setSaveHandler()
  */
 class AdminConfig extends Config
 {
@@ -30,14 +28,14 @@ class AdminConfig extends Config
     protected $_frontNameResolver;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Backend\App\BackendAppList
      */
     private $backendAppList;
+
+    /**
+     * @var \Magento\Backend\Model\UrlFactory
+     */
+    private $backendUrlFactory;
 
     /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
@@ -49,7 +47,7 @@ class AdminConfig extends Config
      * @param string $scopeType
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param FrontNameResolver $frontNameResolver
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param string $lifetimePath
      * @param string $sessionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -64,7 +62,7 @@ class AdminConfig extends Config
         $scopeType,
         \Magento\Backend\App\BackendAppList $backendAppList,
         FrontNameResolver $frontNameResolver,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
         $sessionName = self::SESSION_NAME_ADMIN
     ) {
@@ -79,11 +77,12 @@ class AdminConfig extends Config
             $lifetimePath
         );
         $this->_frontNameResolver = $frontNameResolver;
-        $this->_storeManager = $storeManager;
         $this->backendAppList = $backendAppList;
+        $this->backendUrlFactory = $backendUrlFactory;
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
+        $this->setCookieSecure($this->_httpRequest->isSecure());
     }
 
     /**
@@ -95,7 +94,7 @@ class AdminConfig extends Config
     {
         $backendApp = $this->backendAppList->getCurrentApp();
         $cookiePath = null;
-        $baseUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
             return $cookiePath;
@@ -105,5 +104,15 @@ class AdminConfig extends Config
         $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
         $cookiePath = $baseUrl . $backendApp->getCookiePath();
         return $cookiePath;
+    }
+
+    /**
+     * Set session cookie lifetime to session duration
+     *
+     * @return $this
+     */
+    protected function configureCookieLifetime()
+    {
+        return $this->setCookieLifetime(0);
     }
 }

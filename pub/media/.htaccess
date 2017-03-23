@@ -1,10 +1,19 @@
 Options All -Indexes
+
 <IfModule mod_php5.c>
+php_flag engine 0
+</IfModule>
+
+<IfModule mod_php7.c>
 php_flag engine 0
 </IfModule>
 
 AddHandler cgi-script .php .pl .py .jsp .asp .htm .shtml .sh .cgi
 Options -ExecCGI
+
+<FilesMatch ".+\.(ph(p[3457]?|t|tml)|[aj]sp|p[ly]|sh|cgi|shtml?|html?)$">
+SetHandler default-handler
+</FilesMatch>
 
 <IfModule mod_rewrite.c>
 

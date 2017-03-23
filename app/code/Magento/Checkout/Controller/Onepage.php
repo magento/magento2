@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
@@ -57,7 +57,7 @@ abstract class Onepage extends Action
     protected $layoutFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -91,7 +91,7 @@ abstract class Onepage extends Action
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -110,7 +110,7 @@ abstract class Onepage extends Action
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
@@ -150,7 +150,7 @@ abstract class Onepage extends Action
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote();
+        $quote = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getQuote();
         if ($quote->isMultipleShippingAddresses()) {
             $quote->removeAllAddresses();
         }
@@ -184,7 +184,7 @@ abstract class Onepage extends Action
             return true;
         }
         $action = $this->getRequest()->getActionName();
-        if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getCartWasUpdated(true)
+        if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getCartWasUpdated(true)
             &&
             !in_array($action, ['index', 'progress'])
         ) {
@@ -258,7 +258,7 @@ abstract class Onepage extends Action
      */
     public function getOnepage()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Type\Onepage');
+        return $this->_objectManager->get(\Magento\Checkout\Model\Type\Onepage::class);
     }
 
     /**
@@ -269,13 +269,13 @@ abstract class Onepage extends Action
     protected function _canShowForUnregisteredUsers()
     {
         return $this->_objectManager->get(
-            'Magento\Customer\Model\Session'
+            \Magento\Customer\Model\Session::class
         )->isLoggedIn() || $this->getRequest()->getActionName() == 'index' || $this->_objectManager->get(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->isAllowedGuestCheckout(
             $this->getOnepage()->getQuote()
         ) || !$this->_objectManager->get(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->isCustomerMustBeLogged();
     }
 }

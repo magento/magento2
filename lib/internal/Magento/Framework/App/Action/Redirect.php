@@ -2,7 +2,7 @@
 /**
  * Redirect action class
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Action;
@@ -20,6 +20,14 @@ class Redirect extends AbstractAction
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dispatch(RequestInterface $request)
+    {
+        return $this->execute();
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function execute()
     {
         return $this->_response;
     }

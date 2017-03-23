@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ class Adjustment extends AbstractAdjustment
             $this->amountRender->setDisplayValue(
                 $this->amountRender->getAmount()->getValue($this->getAdjustmentCode())
             );
-            if ($this->taxHelper->priceIncludesTax()) {
+            if ($this->taxHelper->priceIncludesTax() && $this->amountRender->getPriceType() == 'finalPrice') {
                 // for dynamic calculations of prices with any options, use the base price amount
                 $this->amountRender->setPriceType('basePrice');
             }
@@ -91,6 +91,11 @@ class Adjustment extends AbstractAdjustment
      */
     public function getDisplayAmountExclTax($exclude = null, $includeContainer = false)
     {
+        //If exclude is not supplied, use the default
+        if ($exclude === null) {
+            $exclude = $this->getDefaultExclusions();
+        }
+
         return $this->formatCurrency(
             $this->getRawAmount($exclude),
             $includeContainer

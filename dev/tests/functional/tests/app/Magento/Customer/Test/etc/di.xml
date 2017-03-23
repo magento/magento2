@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -39,6 +39,21 @@
     <type name="Magento\Customer\Test\Constraint\AssertCustomerForgotPasswordSuccessMessage">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Test\Constraint\AssertCustomerBackendBackButton">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Test\Constraint\AssertCustomerBackendDuplicateErrorMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
     </type>
 </config>

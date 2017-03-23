@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
@@ -23,7 +23,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $this->_initRule();
 
         /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule->getId()) {
             $result['error'] = __('Rule is not defined');
@@ -36,7 +36,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 }
 
                 /** @var $generator \Magento\SalesRule\Model\Coupon\Massgenerator */
-                $generator = $this->_objectManager->get('Magento\SalesRule\Model\Coupon\Massgenerator');
+                $generator = $this->_objectManager->get(\Magento\SalesRule\Model\Coupon\Massgenerator::class);
                 if (!$generator->validateData($data)) {
                     $result['error'] = __('Invalid data provided');
                 } else {
@@ -53,11 +53,11 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $result['error'] = __(
                     'Something went wrong while generating coupons. Please review the log and try again.'
                 );
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
     }
 }

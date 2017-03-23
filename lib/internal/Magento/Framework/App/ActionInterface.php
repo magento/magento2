@@ -2,11 +2,14 @@
 /**
  * Magento application action
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * @api
+ */
 interface ActionInterface
 {
     const FLAG_NO_DISPATCH = 'no-dispatch';
@@ -22,9 +25,8 @@ interface ActionInterface
     /**
      * Dispatch request
      *
-     * @param RequestInterface $request
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function dispatch(RequestInterface $request);
+    public function execute();
 }

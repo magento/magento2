@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
@@ -157,27 +157,13 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve Purchased Separately HTML select
+     * Get Links can be purchased separately value for current product
      *
-     * @return string
+     * @return bool
      */
-    public function getPurchasedSeparatelySelect()
+    public function isProductLinksCanBePurchasedSeparately()
     {
-        $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
-        )->setName(
-            'product[links_purchased_separately]'
-        )->setId(
-            'downloadable_link_purchase_type'
-        )->setOptions(
-            $this->_sourceModel->toOptionArray()
-        )->setValue(
-            $this->getProduct()->getLinksPurchasedSeparately()
-        )->setClass(
-            'admin__control-select'
-        );
-
-        return $select->getHtml();
+        return (bool) $this->getProduct()->getData('links_purchased_separately');
     }
 
     /**
@@ -188,7 +174,7 @@ class Links extends \Magento\Backend\Block\Template
     public function getAddButtonHtml()
     {
         $addButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'label' => __('Add New Link'),
@@ -370,7 +356,7 @@ class Links extends \Magento\Backend\Block\Template
     {
         $this->addChild(
             'upload_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'id' => '',
                 'label' => __('Upload Files'),
@@ -462,5 +448,14 @@ class Links extends \Magento\Backend\Block\Template
     public function getBaseCurrencyCode($storeId)
     {
         return $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
+    }
+
+    /**
+     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
+     * @return string
+     */
+    public function getBaseCurrencySymbol($storeId)
+    {
+        return $this->_storeManager->getStore($storeId)->getBaseCurrency()->getCurrencySymbol();
     }
 }

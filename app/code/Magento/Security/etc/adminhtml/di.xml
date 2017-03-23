@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Backend\Model\Auth">
+        <plugin name="security_admin_sessions_login" type="Magento\Security\Model\Plugin\Auth" />
+    </type>
+    <type name="Magento\Backend\Model\Auth\Session">
+        <plugin name="security_admin_sessions_prolong" type="Magento\Security\Model\Plugin\AuthSession" />
+    </type>
+    <type name="Magento\Backend\Controller\Adminhtml\Auth\Login">
+        <plugin name="security_login_form" type="Magento\Security\Model\Plugin\LoginController" />
+    </type>
+    <type name="Magento\Security\Model\Plugin\AccountManagement">
+        <arguments>
+            <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Security\Model\SecurityManager">
+        <arguments>
+            <argument name="securityCheckers" xsi:type="array">
+                <item name="frequency" xsi:type="object">Magento\Security\Model\SecurityChecker\Frequency</item>
+                <item name="wuantity" xsi:type="object">Magento\Security\Model\SecurityChecker\Quantity</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

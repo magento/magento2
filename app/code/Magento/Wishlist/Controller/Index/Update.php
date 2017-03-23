@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Update extends Action\Action implements IndexInterface
+class Update extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -71,7 +70,7 @@ class Update extends Action\Action implements IndexInterface
             $updatedItems = 0;
 
             foreach ($post['description'] as $itemId => $description) {
-                $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId);
+                $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class)->load($itemId);
                 if ($item->getWishlistId() != $wishlist->getId()) {
                     continue;
                 }
@@ -79,7 +78,9 @@ class Update extends Action\Action implements IndexInterface
                 // Extract new values
                 $description = (string)$description;
 
-                if ($description == $this->_objectManager->get('Magento\Wishlist\Helper\Data')->defaultCommentString()
+                if ($description == $this->_objectManager->get(
+                    \Magento\Wishlist\Helper\Data::class
+                )->defaultCommentString()
                 ) {
                     $description = '';
                 } elseif (!strlen($description)) {
@@ -99,7 +100,7 @@ class Update extends Action\Action implements IndexInterface
                     try {
                         $item->delete();
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                        $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                         $this->messageManager->addError(__('We can\'t delete item from Wish List right now.'));
                     }
                 }
@@ -115,7 +116,7 @@ class Update extends Action\Action implements IndexInterface
                     $this->messageManager->addError(
                         __(
                             'Can\'t save description %1',
-                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($description)
+                            $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($description)
                         )
                     );
                 }
@@ -125,7 +126,7 @@ class Update extends Action\Action implements IndexInterface
             if ($updatedItems) {
                 try {
                     $wishlist->save();
-                    $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+                    $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
                 } catch (\Exception $e) {
                     $this->messageManager->addError(__('Can\'t update wish list'));
                 }

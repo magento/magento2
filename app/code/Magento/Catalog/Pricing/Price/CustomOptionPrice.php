@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Pricing\Price;
@@ -41,7 +41,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param string $excludeAdjustment
+     * @param array $excludeAdjustment
      */
     public function __construct(
         SaleableInterface $saleableItem,
@@ -113,7 +113,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
 
     /**
      * @param float $amount
-     * @param null|bool|string $exclude
+     * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return AmountInterface|bool|float
      */

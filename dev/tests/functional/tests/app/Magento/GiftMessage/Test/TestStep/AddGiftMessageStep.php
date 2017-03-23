@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,14 +51,16 @@ class AddGiftMessageStep implements TestStepInterface
     }
 
     /**
-     * Add gift message to order
+     * Add gift message to items and/or order.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {
         $this->checkoutCart->open();
         $this->checkoutCart->getGiftMessagesItemBlock()->fillGiftMessageItem($this->giftMessage, $this->products);
         $this->checkoutCart->getGiftMessagesOrderBlock()->fillGiftMessageOrder($this->giftMessage, $this->products);
+
+        return ['giftMessage' => $this->giftMessage];
     }
 }

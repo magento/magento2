@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,7 @@
                 <block class="Magento\Cms\Block\Adminhtml\Page\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Page...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Page...</item>
                         </item>
                     </data>
                 </block>
@@ -52,7 +52,7 @@
                 <block class="Magento\Cms\Block\Adminhtml\Block\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Block...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Block...</item>
                         </item>
                     </data>
                 </block>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,14 +31,14 @@ class AssertChildProductsInGrid extends AbstractConstraint
     public function processAssert(CatalogProductIndex $productGrid, ConfigurableProduct $product)
     {
         $configurableAttributesData = $product->getConfigurableAttributesData();
-        $productType = $product->getProductHasWeight() === "Yes" ? 'Simple Product' : 'Virtual Product';
         $errors = [];
 
         $productGrid->open();
         foreach ($configurableAttributesData['matrix'] as $variation) {
             $filter = [
                 'name' => $variation['name'],
-                'type' => $productType,
+                'type' => (isset($variation['weight']) && (int)$variation['weight'] > 0)
+                    ? 'Simple Product' : 'Virtual Product',
                 'sku' => $variation['sku'],
                 'visibility' => self::NOT_VISIBLE_INDIVIDUALLY,
             ];

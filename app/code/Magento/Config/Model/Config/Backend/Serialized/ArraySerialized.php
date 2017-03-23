@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
     /**
      * Unset array element with '__empty' key
      *
-     * @return void
+     * @return $this
      */
     public function beforeSave()
     {
@@ -24,6 +24,6 @@ class ArraySerialized extends \Magento\Config\Model\Config\Backend\Serialized
             unset($value['__empty']);
         }
         $this->setValue($value);
-        parent::beforeSave();
+        return parent::beforeSave();
     }
 }

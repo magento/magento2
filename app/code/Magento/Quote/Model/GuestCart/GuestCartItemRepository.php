@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Quote\Model\Quote\Item\Repository;
+use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
@@ -17,7 +17,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemRepositoryInterface
 {
     /**
-     * @var Repository
+     * @var \Magento\Quote\Api\CartItemRepositoryInterface
      */
     protected $repository;
 
@@ -29,11 +29,11 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
     /**
      * Constructs a read service object.
      *
-     * @param \Magento\Quote\Model\Quote\Item\Repository $repository
+     * @param \Magento\Quote\Api\CartItemRepositoryInterface $repository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Model\Quote\Item\Repository $repository,
+        \Magento\Quote\Api\CartItemRepositoryInterface $repository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -92,7 +92,6 @@ class Mode
      */
     public function enableProductionModeMinimal()
     {
-        $this->filesystem->lockStaticResources();
         $this->setStoreMode(State::MODE_PRODUCTION);
     }
 
@@ -106,8 +105,8 @@ class Mode
         $this->filesystem->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
-                DirectoryList::GENERATION,
-                DirectoryList::DI,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
                 DirectoryList::TMP_MATERIALIZATION_DIR,
                 DirectoryList::STATIC_VIEW,
             ]
@@ -123,7 +122,7 @@ class Mode
      */
     public function getMode()
     {
-        $env = $this->reader->load(ConfigFilePool::APP_ENV);
+        $env = $this->reader->load();
         return isset($env[State::PARAM_MODE]) ? $env[State::PARAM_MODE] : null;
     }
 

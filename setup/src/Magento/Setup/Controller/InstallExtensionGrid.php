@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\ConnectManager;
+use Magento\Setup\Model\PackagesData;
 
 /**
  * Controller for extensions grid tasks
@@ -17,16 +17,17 @@ use Magento\Setup\Model\ConnectManager;
 class InstallExtensionGrid extends AbstractActionController
 {
     /**
-     * @var ConnectManager
+     * @var PackagesData
      */
-    private $connectManager;
+    private $packagesData;
 
     /**
-     * @param ConnectManager $connectManager
+     * @param PackagesData $packagesData
      */
-    public function __construct(ConnectManager $connectManager)
-    {
-        $this->connectManager = $connectManager;
+    public function __construct(
+        PackagesData $packagesData
+    ) {
+        $this->packagesData = $packagesData;
     }
 
     /**
@@ -48,8 +49,10 @@ class InstallExtensionGrid extends AbstractActionController
      */
     public function extensionsAction()
     {
-        $extensions = $this->getConnectManager()->getPackagesForInstall();
+        $extensions = $this->packagesData->getPackagesForInstall();
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
+        $packages = $this->formatPackageList($packages);
+
         return new JsonModel(
             [
                 'success' => true,
@@ -60,11 +63,17 @@ class InstallExtensionGrid extends AbstractActionController
     }
 
     /**
-     * @return ConnectManager
+     * Format package list
+     *
+     * @param array $packages
+     * @return array
      */
-
-    public function getConnectManager()
+    private function formatPackageList(array $packages)
     {
-        return $this->connectManager;
+        array_walk($packages, function (&$package) {
+            $package['vendor'] = ucfirst($package['vendor']);
+        });
+
+        return $packages;
     }
 }

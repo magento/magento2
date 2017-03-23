@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -114,8 +114,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        parent::_prepareCollection();
-
         $store = $this->_getStore();
         $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
             'sku'
@@ -184,6 +182,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setCollection($collection);
 
         $this->getCollection()->addWebsiteNamesToResult();
+
+        parent::_prepareCollection();
+
         return $this;
     }
 
@@ -263,7 +264,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'set_name',
             [
-                'header' => __('Product Template'),
+                'header' => __('Attribute Set'),
                 'index' => 'attribute_set_id',
                 'type' => 'options',
                 'options' => $sets,

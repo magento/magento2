@@ -1,0 +1,159 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Resizable Block
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@resizable-block-angle-handle__default__height: 12px;
+@resizable-block-angle-handle__default__width: 12px;
+
+@resizable-block-side-handle__default__size: 7px;
+
+@resizable-block-side-handle__custom__background-color: @color-gray89;
+@resizable-block-side-handle__custom__border-color: @color-gray-light2;
+@resizable-block-side-handle__custom__color: @color-gray40;
+@resizable-block-side-handle__custom__font-size: 1.6rem;
+
+//
+//  Extends
+//  _____________________________________________
+
+.abs-block-resizable {
+    height: 15rem;
+    min-height: 15rem;
+}
+
+//  Resizable Block Content
+.abs-block-resizable-content {
+    height: 100%;
+    margin-bottom: @indent__base;
+    min-height: 15rem;
+    overflow: auto;
+    position: relative;
+    z-index: 1;
+}
+
+//  Bottom handle
+.abs-block-resizable-handle-bottom {
+    background: @resizable-block-side-handle__custom__background-color;
+    border: 1px solid @resizable-block-side-handle__custom__border-color;
+    bottom: auto;
+    color: @resizable-block-side-handle__custom__color;
+    font-size: @resizable-block-side-handle__custom__font-size;
+    font-weight: @font-weight__bold;
+    height: auto;
+    left: -1px;
+    letter-spacing: .1rem;
+    line-height: @resizable-block-side-handle__custom__font-size;
+    padding-bottom: .3rem;
+    right: -1px;
+    text-align: center;
+    top: 100%;
+    width: auto;
+
+    &:before {
+        content: ':::::';
+    }
+}
+
+//
+//  Default Resizable Styles
+//  ---------------------------------------------
+
+.ui-resizable {
+    position: relative;
+}
+
+.ui-resizable-handle {
+    display: block;
+    font-size: .1px;
+    position: absolute;
+    touch-action: none;
+}
+
+.ui-resizable-n {
+    cursor: n-resize;
+    height: @resizable-block-side-handle__default__size;
+    left: 0;
+    top: -@resizable-block-side-handle__default__size/2;
+    width: 100%;
+}
+
+.ui-resizable-s {
+    bottom: -@resizable-block-side-handle__default__size/2;
+    cursor: s-resize;
+    height: @resizable-block-side-handle__default__size;
+    left: 0;
+    width: 100%;
+}
+
+.ui-resizable-e {
+    cursor: e-resize;
+    height: 100%;
+    right: -@resizable-block-side-handle__default__size/2;
+    top: 0;
+    width: @resizable-block-side-handle__default__size;
+}
+
+.ui-resizable-w {
+    cursor: w-resize;
+    height: 100%;
+    left: -@resizable-block-side-handle__default__size/2;
+    top: 0;
+    width: @resizable-block-side-handle__default__size;
+}
+
+.ui-resizable-se {
+    bottom: -@resizable-block-angle-handle__default__height/2;
+    cursor: se-resize;
+    height: @resizable-block-angle-handle__default__height;
+    right: -@resizable-block-angle-handle__default__width/2;
+    width: @resizable-block-angle-handle__default__width;
+}
+
+.ui-resizable-sw {
+    bottom: -@resizable-block-angle-handle__default__height/2;
+    cursor: sw-resize;
+    height: @resizable-block-angle-handle__default__height;
+    left: -@resizable-block-angle-handle__default__width/2;
+    width: @resizable-block-angle-handle__default__width;
+}
+
+.ui-resizable-nw {
+    cursor: nw-resize;
+    height: @resizable-block-angle-handle__default__height;
+    left: -@resizable-block-angle-handle__default__width/2;
+    top: -@resizable-block-angle-handle__default__height/2;
+    width: @resizable-block-angle-handle__default__width;
+}
+
+.ui-resizable-ne {
+    cursor: ne-resize;
+    height: @resizable-block-angle-handle__default__height;
+    right: -@resizable-block-angle-handle__default__width/2;
+    top: -@resizable-block-angle-handle__default__height/2;
+    width: @resizable-block-angle-handle__default__width;
+}
+
+//
+//  Container
+//  ---------------------------------------------
+
+.block-resizable {
+    &:extend(.abs-block-resizable all);
+
+    .block-content {
+        &:extend(.abs-block-resizable-content all);
+    }
+
+    .ui-resizable-s {
+        &:extend(.abs-block-resizable-handle-bottom all);
+    }
+}

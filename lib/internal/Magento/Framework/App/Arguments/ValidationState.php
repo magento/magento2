@@ -2,7 +2,7 @@
 /**
  * Application config file resolver
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Arguments;
@@ -27,7 +27,7 @@ class ValidationState implements \Magento\Framework\Config\ValidationStateInterf
      *
      * @return boolean
      */
-    public function isValidated()
+    public function isValidationRequired()
     {
         return $this->_appMode == \Magento\Framework\App\State::MODE_DEVELOPER;
     }

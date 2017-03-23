@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,7 +47,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'e.entity_id = r.entity_pk_value',
             [
                 'review_cnt' => new \Zend_Db_Expr(sprintf('(%s)', $subSelect)),
-                'last_created' => 'MAX(r.created_at)'
+                'created_at' => 'MAX(r.created_at)'
             ]
         )->group(
             'e.entity_id'
@@ -58,8 +58,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->getConnection()->quoteInto('table_rating.store_id > ?', 0),
         ];
 
-        $percentField = $this->getConnection()->quoteIdentifier('table_rating.percent');
-        $sumPercentField = new \Zend_Db_Expr("SUM({$percentField})");
+        $sumPercentField = new \Zend_Db_Expr("SUM(table_rating.percent)");
         $sumPercentApproved = new \Zend_Db_Expr('SUM(table_rating.percent_approved)');
         $countRatingId = new \Zend_Db_Expr('COUNT(table_rating.rating_id)');
 
@@ -67,8 +66,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             ['table_rating' => $this->getTable('rating_option_vote_aggregated')],
             implode(' AND ', $joinCondition),
             [
-                'avg_rating' => sprintf('%s/%s', $sumPercentField, $countRatingId),
-                'avg_rating_approved' => sprintf('%s/%s', $sumPercentApproved, $countRatingId)
+                'avg_rating' => new \Zend_Db_Expr(sprintf('%s/%s', $sumPercentField, $countRatingId)),
+                'avg_rating_approved' => new \Zend_Db_Expr(sprintf('%s/%s', $sumPercentApproved, $countRatingId))
             ]
         );
 
@@ -84,7 +83,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
-        if (in_array($attribute, ['review_cnt', 'last_created', 'avg_rating', 'avg_rating_approved'])) {
+        if (in_array($attribute, ['review_cnt', 'created_at', 'avg_rating', 'avg_rating_approved'])) {
             $this->getSelect()->order($attribute . ' ' . $dir);
             return $this;
         }

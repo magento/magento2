@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Data\Order;
 
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Class OrderAdapter
@@ -15,7 +15,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 class OrderAdapter implements OrderAdapterInterface
 {
     /**
-     * @var OrderInterface
+     * @var Order
      */
     private $order;
 
@@ -25,11 +25,11 @@ class OrderAdapter implements OrderAdapterInterface
     private $addressAdapterFactory;
 
     /**
-     * @param OrderInterface $order
+     * @param Order $order
      * @param AddressAdapterFactory $addressAdapterFactory
      */
     public function __construct(
-        OrderInterface $order,
+        Order $order,
         AddressAdapterFactory $addressAdapterFactory
     ) {
         $this->order = $order;

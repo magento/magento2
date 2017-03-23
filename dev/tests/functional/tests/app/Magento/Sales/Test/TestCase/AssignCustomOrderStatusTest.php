@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,14 +29,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Create Order.
  * 8. Perform all assertions from dataset.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29382
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssignCustomOrderStatusTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -141,6 +141,12 @@ class AssignCustomOrderStatusTest extends Injectable
         $this->orderStatusAssign->getPageActionsBlock()->save();
         $assertion->processAssert($this->orderStatusIndex);
 
+        // Prepare data for constraints
+        $config = $this->fixtureFactory->createByCode('configData', [
+            'dataset' => 'checkmo_custom_new_order_status',
+            'data' => ['payment/checkmo/order_status' => ['value' => $orderStatus->getStatus()]]
+        ]);
+        $config->persist();
         $order->persist();
         $this->order = $order;
 
@@ -152,7 +158,7 @@ class AssignCustomOrderStatusTest extends Injectable
     }
 
     /**
-     * Change created order status and unassign custom order status
+     * Change created order status and unassign custom order status.
      *
      * @return void
      */
@@ -164,6 +170,11 @@ class AssignCustomOrderStatusTest extends Injectable
         if ($this->orderStatus) {
             $filter = ['label' => $this->orderStatus->getLabel()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
+            $this->orderStatusIndex->getMessagesBlock()->waitSuccessMessage();
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => 'checkmo_custom_new_order_status_rollback']
+            )->run();
         }
     }
 }

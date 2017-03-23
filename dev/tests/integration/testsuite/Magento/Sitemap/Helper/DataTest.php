@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Helper;
@@ -14,17 +14,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        // TODO: Remove provided check after PHPMD will support PHP version 7
-        $isSupported = version_compare(
-            '7.0.0',
-            preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION),
-            '>'
-        );
-        if (!$isSupported) {
-            $this->markTestSkipped('MAGETWO-40822: PHP7 incompatible');
-        }
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Sitemap\Helper\Data'
+            \Magento\Sitemap\Helper\Data::class
         );
     }
 

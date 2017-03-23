@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -86,7 +86,7 @@ class InstallData implements InstallDataInterface
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => true,
                 'required' => true,
                 'user_defined' => false,
@@ -112,7 +112,7 @@ class InstallData implements InstallDataInterface
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => false,
                 'required' => true,
                 'user_defined' => false,
@@ -137,7 +137,7 @@ class InstallData implements InstallDataInterface
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => false,
                 'required' => true,
                 'user_defined' => false,
@@ -163,8 +163,8 @@ class InstallData implements InstallDataInterface
                 'label' => 'Price View',
                 'input' => 'select',
                 'class' => '',
-                'source' => 'Magento\Bundle\Model\Product\Attribute\Source\Price\View',
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
+                'source' => \Magento\Bundle\Model\Product\Attribute\Source\Price\View::class,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => true,
                 'required' => true,
                 'user_defined' => false,
@@ -190,7 +190,7 @@ class InstallData implements InstallDataInterface
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_GLOBAL,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => false,
                 'required' => true,
                 'user_defined' => false,

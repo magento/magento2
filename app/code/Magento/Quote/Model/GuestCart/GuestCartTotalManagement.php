@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\GuestCart;
@@ -14,7 +14,7 @@ use Magento\Quote\Api\GuestCartTotalManagementInterface;
 class GuestCartTotalManagement implements GuestCartTotalManagementInterface
 {
     /**
-     * @var \Magento\Quote\Model\Cart\CartTotalManagement
+     * @var \Magento\Quote\Api\CartTotalManagementInterface
      */
     protected $cartTotalManagement;
 
@@ -24,11 +24,11 @@ class GuestCartTotalManagement implements GuestCartTotalManagementInterface
     protected $quoteIdMaskFactory;
 
     /**
-     * @param \Magento\Quote\Model\Cart\CartTotalManagement $cartTotalManagement
+     * @param \Magento\Quote\Api\CartTotalManagementInterface $cartTotalManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Model\Cart\CartTotalManagement $cartTotalManagement,
+        \Magento\Quote\Api\CartTotalManagementInterface $cartTotalManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->cartTotalManagement = $cartTotalManagement;

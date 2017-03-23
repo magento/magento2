@@ -4,7 +4,7 @@
  *
  * Format: array(<namespace>[, <replacement>])
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -75,7 +75,6 @@ return [
     ['Magento\Core\Model\Resource\Config', 'Magento\Config\Model\ResourceModel\Config'],
     ['Magento\Backend\Block\System\Config', 'Magento\Config\Block\System\Config'],
     ['Magento\Backend\Controller\Adminhtml\System\Config', 'Magento\Config\Controller\Adminhtml\System\Config'],
-    ['Magento\Backend\Model\Config', 'Magento\Config\Model\Config'],
     ['Magento\Core\Model\Variable', 'Magento\Variable\Model\Variable'],
     ['Magento\Catalog\Service'],
     ['Magento\CheckoutAgreements\Service'],
@@ -194,4 +193,9 @@ return [
     ['Magento\Framework\Model\ModelResource', 'Magento\Framework\Model\ResourceModel'],
     ['Magento\Framework\Model\Test\Unit\Resource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
     ['Magento\Framework\Model\Test\Unit\ModelResource', 'Magento\Framework\Model\Test\Unit\ResourceModel'],
+    [
+        'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super',
+        'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations',
+    ],
+    ['Magento\BraintreeTwo', 'Magento\Braintree']
 ];

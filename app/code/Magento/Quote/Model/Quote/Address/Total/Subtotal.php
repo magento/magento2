@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
@@ -40,11 +40,10 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
         parent::collect($quote, $shippingAssignment, $total);
-        $total->setTotalQty(0);
-
         $baseVirtualAmount = $virtualAmount = 0;
 
         $address = $shippingAssignment->getShipping()->getAddress();
+        $address->setTotalQty(0);
         /**
          * Process address items
          */
@@ -71,6 +70,8 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
          */
         $this->quoteValidator->validateQuoteAmount($quote, $total->getSubtotal());
         $this->quoteValidator->validateQuoteAmount($quote, $total->getBaseSubtotal());
+        $address->setSubtotal($total->getSubtotal());
+        $address->setBaseSubtotal($total->getBaseSubtotal());
         return $this;
     }
 
@@ -104,6 +105,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
+        $quoteItem->setConvertedPrice(null);
         $originalPrice = $product->getPrice();
         if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
             $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
@@ -170,6 +172,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

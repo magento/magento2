@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
-
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;

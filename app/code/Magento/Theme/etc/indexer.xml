@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="design_config_grid" view_id="design_config_dummy" class="Magento\Theme\Model\Indexer\Design\Config" primary="design_config">
+        <title translate="true">Design Config Grid</title>
+        <description translate="true">Rebuild design config grid index</description>
+
+        <fieldset name="design_config" source="Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection"
+                  provider="Magento\Theme\Model\Indexer\Design\Config\FieldsProvider">
+            <field name="store_website_id" xsi:type="filterable" dataType="int"/>
+            <field name="store_group_id" xsi:type="filterable" dataType="int"/>
+            <field name="store_id" xsi:type="filterable" dataType="int"/>
+        </fieldset>
+        <saveHandler class="Magento\Framework\Indexer\SaveHandler\Grid"/>
+        <structure class="Magento\Framework\Indexer\GridStructure"/>
+    </indexer>
+</config>

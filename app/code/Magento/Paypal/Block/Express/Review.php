@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * Paypal Express Onepage checkout block
@@ -35,7 +36,7 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Currently selected shipping rate
      *
-     * @var \Magento\Quote\Model\Quote\Address\Rate
+     * @var Rate
      */
     protected $_currentShippingRate = null;
 
@@ -183,11 +184,21 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Getter for current shipping rate
      *
-     * @return \Magento\Quote\Model\Quote\Address\Rate
+     * @return Rate
      */
     public function getCurrentShippingRate()
     {
         return $this->_currentShippingRate;
+    }
+
+    /**
+     * Whether can edit shipping method
+     *
+     * @return bool
+     */
+    public function canEditShippingMethod()
+    {
+        return $this->getData('can_edit_shipping_method') || !$this->getCurrentShippingRate();
     }
 
     /**
@@ -275,7 +286,7 @@ class Review extends \Magento\Framework\View\Element\Template
                 ->getAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_BUTTON) == 1;
             // misc shipping parameters
             $this->setShippingMethodSubmitUrl(
-                $this->getUrl("{$this->_controllerPath}/saveShippingMethod")
+                $this->getUrl("{$this->_controllerPath}/saveShippingMethod", ['_secure' => true])
             )->setCanEditShippingAddress(
                 $canEditShippingAddress
             )->setCanEditShippingMethod(
@@ -286,7 +297,7 @@ class Review extends \Magento\Framework\View\Element\Template
         $this->setEditUrl(
             $this->getUrl("{$this->_controllerPath}/edit")
         )->setPlaceOrderUrl(
-            $this->getUrl("{$this->_controllerPath}/placeOrder")
+            $this->getUrl("{$this->_controllerPath}/placeOrder", ['_secure' => true])
         );
 
         return parent::_beforeToHtml();

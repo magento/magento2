@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider;
@@ -76,6 +76,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         return $this->collection;
     }
+
     /**
      * Get Data Provider name
      *
@@ -131,7 +132,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+        return isset($this->meta[$fieldSetName]['children']) ? $this->meta[$fieldSetName]['children'] : [];
     }
 
     /**
@@ -141,8 +142,8 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+        return isset($this->meta[$fieldSetName]['children'][$fieldName])
+            ? $this->meta[$fieldSetName]['children'][$fieldName]
             : [];
     }
 
@@ -156,6 +157,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
             [$filter->getConditionType() => $filter->getValue()]
         );
     }
+
     /**
      * Returns search criteria
      *

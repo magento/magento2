@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -35,6 +35,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected $_rowData;
 
+    /*
+     * @var string|null
+     */
+    protected $invalidAttribute;
+
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param RowValidatorInterface[] $validators
@@ -67,6 +72,32 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Check if value is valid attribute option
+     *
+     * @param string $attrCode
+     * @param array $possibleOptions
+     * @param string $value
+     * @return bool
+     */
+    private function validateOption($attrCode, $possibleOptions, $value)
+    {
+        if (!isset($possibleOptions[strtolower($value)])) {
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(
+                            RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
+                        ),
+                        $attrCode
+                    )
+                ]
+            );
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -95,6 +126,28 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @param string $attrCode
+     * @param array $attributeParams
+     * @param array $rowData
+     * @return bool
+     */
+    public function isRequiredAttributeValid($attrCode, array $attributeParams, array $rowData)
+    {
+        $doCheck = false;
+        if ($attrCode == Product::COL_SKU) {
+            $doCheck = true;
+        } elseif ($attrCode == 'price') {
+            $doCheck = false;
+        } elseif ($attributeParams['is_required'] && $this->getRowScope($rowData) == Product::SCOPE_DEFAULT
+            && $this->context->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
+        ) {
+            $doCheck = true;
+        }
+
+        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
+    }
+
+    /**
+     * @param string $attrCode
      * @param array $attrParams
      * @param array $rowData
      * @return bool
@@ -104,28 +157,25 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
         $this->_rowData = $rowData;
-        if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
+        if (isset($rowData['product_type']) && !empty($attrParams['apply_to'])
+            && !in_array($rowData['product_type'], $attrParams['apply_to'])
+        ) {
             return true;
         }
-        if ($attrCode == Product::COL_SKU || $attrParams['is_required']
-            && ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
-                || ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-                    && !isset($this->context->getOldSku()[$rowData[$attrCode]])))
-        ) {
-            if (!isset($rowData[$attrCode]) || !strlen(trim($rowData[$attrCode]))) {
-                $valid = false;
-                $this->_addMessages(
-                    [
-                        sprintf(
-                            $this->context->retrieveMessageTemplate(
-                                RowValidatorInterface::ERROR_VALUE_IS_REQUIRED
-                            ),
-                            $attrCode
-                        )
-                    ]
-                );
-                return $valid;
-            }
+
+        if (!$this->isRequiredAttributeValid($attrCode, $attrParams, $rowData)) {
+            $valid = false;
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(
+                            RowValidatorInterface::ERROR_VALUE_IS_REQUIRED
+                        ),
+                        $attrCode
+                    )
+                ]
+            );
+            return $valid;
         }
 
         if (!strlen(trim($rowData[$attrCode]))) {
@@ -142,23 +192,15 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 break;
             case 'select':
             case 'boolean':
+                $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
+                break;
             case 'multiselect':
-                $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
-                $valid = true;
+                $values = $this->context->parseMultiselectValues($rowData[$attrCode]);
                 foreach ($values as $value) {
-                    $valid = $valid || isset($attrParams['options'][strtolower($value)]);
-                }
-                if (!$valid) {
-                    $this->_addMessages(
-                        [
-                            sprintf(
-                                $this->context->retrieveMessageTemplate(
-                                    RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
-                                ),
-                                $attrCode
-                            )
-                        ]
-                    );
+                    $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
+                    if (!$valid) {
+                        break;
+                    }
                 }
                 break;
             case 'datetime':
@@ -181,8 +223,29 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
-        return (bool)$valid;
+        
+        if (!$valid) {
+            $this->setInvalidAttribute($attrCode);
+        }
 
+        return (bool)$valid;
+    }
+
+    /**
+     * @param string|null $attribute
+     * @return void
+     */
+    protected function setInvalidAttribute($attribute)
+    {
+        $this->invalidAttribute = $attribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvalidAttribute()
+    {
+        return $this->invalidAttribute;
     }
 
     /**
@@ -192,6 +255,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected function isValidAttributes()
     {
         $this->_clearMessages();
+        $this->setInvalidAttribute(null);
         if (!isset($this->_rowData['product_type'])) {
             return false;
         }
@@ -225,6 +289,20 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
         }
         return $returnValue;
+    }
+
+    /**
+     * Obtain scope of the row from row data.
+     *
+     * @param array $rowData
+     * @return int
+     */
+    public function getRowScope(array $rowData)
+    {
+        if (empty($rowData[Product::COL_STORE])) {
+            return Product::SCOPE_DEFAULT;
+        }
+        return Product::SCOPE_STORE;
     }
 
     /**

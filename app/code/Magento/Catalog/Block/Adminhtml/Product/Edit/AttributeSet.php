@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
     public function getSelectorOptions()
     {
         return [
-            'source' => $this->getUrl('catalog/product/suggestProductTemplates'),
+            'source' => $this->getUrl('catalog/product/suggestAttributeSets'),
             'className' => 'category-select',
             'showRecent' => true,
             'storageKey' => 'product-template-key',

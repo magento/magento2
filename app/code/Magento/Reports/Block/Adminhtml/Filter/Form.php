@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -159,7 +159,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'date_format' => $dateFormat,
                 'label' => __('From'),
                 'title' => __('From'),
-                'required' => true
+                'required' => true,
+                'css_class' => 'admin__field-small',
+                'class' => 'admin__control-text'
             ]
         );
 
@@ -171,7 +173,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'date_format' => $dateFormat,
                 'label' => __('To'),
                 'title' => __('To'),
-                'required' => true
+                'required' => true,
+                'css_class' => 'admin__field-small',
+                'class' => 'admin__control-text'
             ]
         );
 

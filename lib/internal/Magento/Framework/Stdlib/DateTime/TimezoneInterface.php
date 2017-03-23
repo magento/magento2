@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 namespace Magento\Framework\Stdlib\DateTime;
 
 /**
+ * Timezone Interface
  * @api
  */
 interface TimezoneInterface
@@ -104,9 +105,11 @@ interface TimezoneInterface
     /**
      * Gets the scope config timezone
      *
+     * @param string $scopeType
+     * @param string $scopeCode
      * @return string
      */
-    public function getConfigTimezone();
+    public function getConfigTimezone($scopeType = null, $scopeCode = null);
 
     /**
      * Checks if current date of the given scope (in the scope timezone) is within the range
@@ -119,7 +122,7 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -128,11 +131,18 @@ interface TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
         $timezone = null,
         $pattern = null
     );
+
+    /**
+     * @param string|\DateTimeInterface $date
+     * @param string $format
+     * @return string
+     */
+    public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');
 }

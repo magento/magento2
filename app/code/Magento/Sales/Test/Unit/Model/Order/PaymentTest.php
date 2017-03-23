@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
@@ -17,7 +17,18 @@ use Magento\Sales\Model\Order\Payment\Transaction;
  */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
+    const TRANSACTION_ID = 'ewr34fM49V0';
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $mockContext;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderStateResolverMock;
+
     /**
      * @var Payment
      */
@@ -56,6 +67,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Invoice | \PHPUnit_Framework_MockObject_MockObject $orderMock */
     private $invoiceMock;
 
+    /**
+     * @var string
+     */
     private $transactionId;
 
     /**
@@ -106,11 +120,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mockContext = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->mockContext = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -118,26 +132,32 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
 
-        $this->helperMock = $this->getMockBuilder('Magento\Payment\Helper\Data')
+        $this->helperMock = $this->getMockBuilder(\Magento\Payment\Helper\Data::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethodInstance'])
             ->getMock();
 
-        $this->priceCurrencyMock = $this->getMockBuilder('Magento\Directory\Model\PriceCurrency')
+        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Directory\Model\PriceCurrency::class)
             ->disableOriginalConstructor()
             ->setMethods(['format'])
             ->getMock();
-        $this->currencyMock = $this->getMockBuilder('Magento\Directory\Model\Currency')
+        $this->currencyMock = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
             ->disableOriginalConstructor()
             ->setMethods(['formatTxt'])
             ->getMock();
-        $transaction = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transaction = \Magento\Sales\Model\Order\Payment\Transaction\Repository::class;
         $this->transactionRepositoryMock = $this->getMockBuilder($transaction)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'getByTransactionType', 'getByTransactionId'])
             ->getMock();
-        $this->paymentProcessor = $this->getMock('Magento\Sales\Model\Order\Payment\Processor', [], [], '', false);
-        $this->orderRepository = $this->getMock('Magento\Sales\Model\OrderRepository', ['get'], [], '', false);
+        $this->paymentProcessor = $this->getMock(
+            \Magento\Sales\Model\Order\Payment\Processor::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->orderRepository = $this->getMock(\Magento\Sales\Model\OrderRepository::class, ['get'], [], '', false);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
@@ -147,7 +167,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $this->paymentMethodMock = $this->getMockBuilder('Magento\Payment\Model\Method\AbstractMethod')
+        $this->paymentMethodMock = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -166,11 +186,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'order',
                     'isInitializeNeeded',
                     'initialize',
+                    'refund'
                 ]
             )
             ->getMock();
 
-        $this->invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -194,7 +215,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->helperMock->method('getMethodInstance')
             ->will($this->returnValue($this->paymentMethodMock));
 
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -221,35 +242,35 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->transactionCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->creditmemoFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\CreditmemoFactory',
+            \Magento\Sales\Model\Order\CreditmemoFactory::class,
             [],
             [],
             '',
             false
         );
         $this->transactionManagerMock = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction\Manager',
+            \Magento\Sales\Model\Order\Payment\Transaction\Manager::class,
             [],
             [],
             '',
             false
         );
         $this->transactionBuilderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction\Builder',
+            \Magento\Sales\Model\Order\Payment\Transaction\Builder::class,
             [],
             [],
             '',
             false
         );
         $this->creditMemoMock = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo',
+            \Magento\Sales\Model\Order\Creditmemo::class,
             [
                 'setPaymentRefundDisallowed',
                 'getItemsCollection',
@@ -258,17 +279,25 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'register',
                 'addComment',
                 'save',
-                'getGrandTotal'
+                'getGrandTotal',
+                'getBaseGrandTotal',
+                'getDoTransaction',
+                'getInvoice',
+                'getOrder'
             ],
             [],
             '',
             false
         );
-
+        $this->orderStateResolverMock = $this->getMockBuilder(Order\OrderStateResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->payment = $this->initPayment();
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper->setBackwardCompatibleProperty($this->payment, 'orderStateResolver', $this->orderStateResolverMock);
         $this->payment->setMethod('any');
         $this->payment->setOrder($this->orderMock);
-        $this->transactionId = 100;
+        $this->transactionId = self::TRANSACTION_ID;
     }
 
     protected function tearDown()
@@ -348,7 +377,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->mockPlaceEvents();
         $statusHistory = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
         );
         $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->orderMock->expects($this->any())
@@ -408,7 +437,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->mockPlaceEvents();
         $statusHistory = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
         );
         $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->orderMock->expects($this->any())
@@ -444,7 +473,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with('order_status', null)
             ->willReturn($newOrderStatus);
         $statusHistory = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
         );
         $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->orderMock->expects($this->any())
@@ -490,7 +519,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with('order_status', null)
             ->willReturn($newOrderStatus);
         $statusHistory = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
         );
         $this->orderMock->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->orderMock->expects($this->any())
@@ -825,13 +854,13 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockInvoice($transactionId, $countCall = 1)
     {
-        $this->invoiceMock->expects($this->once())
+        $this->invoiceMock->expects(static::any())
             ->method('getTransactionId')
             ->willReturn($transactionId);
-        $this->invoiceMock->expects($this->once())
+        $this->invoiceMock->expects(static::any())
             ->method('load')
             ->with($transactionId);
-        $this->invoiceMock->expects($this->once())
+        $this->invoiceMock->expects(static::any())
             ->method('getId')
             ->willReturn($transactionId);
         $this->orderMock->expects($this->exactly($countCall))
@@ -851,7 +880,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->mockInvoice($this->transactionId);
         $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
-
 
         $this->orderMock->expects($this->once())
             ->method('getStoreId')
@@ -1149,7 +1177,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setId($paymentId);
         $this->payment->setParentTransactionId($parentTransactionId);
 
-        $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
+        $transaction = $this->getMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [], [], '', false);
         $transaction->expects($this->once())
             ->method('getIsClosed')
             ->willReturn(false);
@@ -1170,7 +1198,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->paymentMethodMock->expects($this->once())
             ->method('canCapture')
             ->willReturn(true);
-        $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
+        $transaction = $this->getMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [], [], '', false);
         $this->transactionManagerMock->expects($this->once())
             ->method('getAuthorizationTransaction')
             ->with($parentTransactionId, $paymentId)
@@ -1284,7 +1312,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setId($paymentId);
         $this->orderMock->setId($orderId);
         $transaction = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction',
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class,
             [],
             [],
             '',
@@ -1314,7 +1342,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterRefundNotification()
     {
-        $message = 'Registered notification about refunded amount of . Transaction ID: "100-refund"';
+        $message = 'Registered notification about refunded amount of . Transaction ID: "' .
+            self::TRANSACTION_ID . '-refund"';
         $amount = 50;
         $grandTotalCreditMemo = 50;
         $invoiceBaseGrandTotal = 50;
@@ -1332,13 +1361,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->creditMemoMock);
         $this->creditMemoMock->expects($this->once())->method('setPaymentRefundDisallowed')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('setAutomaticallyCreated')->willReturnSelf();
-        $this->creditMemoMock->expects($this->once())->method('register')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('addComment')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('save')->willReturnSelf();
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
 
         $parentTransaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
             ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'],
             [],
             '',
@@ -1393,7 +1421,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->mockInvoice($this->transactionId, 1);
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
         $parentTransaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
             ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
             [],
             '',
@@ -1429,6 +1457,79 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($canRefund, $this->payment->canRefund());
     }
 
+    /**
+     * @covers \Magento\Sales\Model\Order\Payment::refund()
+     */
+    public function testRefund()
+    {
+        $amount = 204.04;
+        $this->creditMemoMock->expects(static::once())
+            ->method('getBaseGrandTotal')
+            ->willReturn($amount);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getGrandTotal')
+            ->willReturn($amount);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getDoTransaction')
+            ->willReturn(true);
+
+        $this->paymentMethodMock->expects(static::once())
+            ->method('canRefund')
+            ->willReturn(true);
+
+        $this->mockInvoice(self::TRANSACTION_ID, 0);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getInvoice')
+            ->willReturn($this->invoiceMock);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $captureTranId = self::TRANSACTION_ID . '-' . Transaction::TYPE_CAPTURE;
+        $captureTransaction = $this->getMockBuilder(Transaction::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTxnId'])
+            ->getMock();
+
+        $refundTranId = $captureTranId . '-' . Transaction::TYPE_REFUND;
+        $this->transactionManagerMock->expects(static::once())
+            ->method('generateTransactionId')
+            ->willReturn($refundTranId);
+        $captureTransaction->expects(static::once())
+            ->method('getTxnId')
+            ->willReturn($captureTranId);
+        $this->transactionRepositoryMock->expects(static::once())
+            ->method('getByTransactionId')
+            ->willReturn($captureTransaction);
+
+        $this->paymentMethodMock->expects(static::once())
+            ->method('refund')
+            ->with($this->payment, $amount);
+
+        $isOnline = true;
+        $this->getTransactionBuilderMock([], $isOnline, Transaction::TYPE_REFUND, $refundTranId);
+
+        $this->currencyMock->expects(static::once())
+            ->method('formatTxt')
+            ->willReturn($amount);
+        $this->orderMock->expects(static::once())
+            ->method('getBaseCurrency')
+            ->willReturn($this->currencyMock);
+
+        $status = 'status';
+        $message = 'We refunded ' . $amount . ' online. Transaction ID: "' . $refundTranId . '"';
+        $this->orderStateResolverMock->expects($this->once())->method('getStateForOrder')
+            ->with($this->orderMock)
+            ->willReturn(Order::STATE_CLOSED);
+        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status);
+        $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
+
+        static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
+        static::assertEquals($amount, $this->payment->getData('amount_refunded'));
+        static::assertEquals($amount, $this->payment->getData('base_amount_refunded_online'));
+        static::assertEquals($amount, $this->payment->getData('base_amount_refunded'));
+    }
+
     public function boolProvider()
     {
         return [
@@ -1437,10 +1538,40 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @covers \Magento\Sales\Model\Order\Payment::isCaptureFinal()
+     * @return void
+     */
+    public function testIsCaptureFinal()
+    {
+        $amount = 23.02;
+        $partialAmount = 12.00;
+
+        $this->orderMock->expects(static::exactly(2))
+            ->method('getBaseTotalDue')
+            ->willReturn($amount);
+
+        static::assertFalse($this->payment->isCaptureFinal($partialAmount));
+        static::assertTrue($this->payment->isCaptureFinal($amount));
+    }
+
+    /**
+     * @covers \Magento\Sales\Model\Order\Payment::getShouldCloseParentTransaction()
+     * @return void
+     */
+    public function testGetShouldCloseParentTransaction()
+    {
+        $this->payment->setShouldCloseParentTransaction(1);
+        static::assertTrue($this->payment->getShouldCloseParentTransaction());
+
+        $this->payment->setShouldCloseParentTransaction(0);
+        static::assertFalse($this->payment->getShouldCloseParentTransaction());
+    }
+
     protected function initPayment()
     {
         return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Model\Order\Payment',
+            \Magento\Sales\Model\Order\Payment::class,
             [
                 'context' => $this->mockContext,
                 'creditmemoFactory' => $this->creditmemoFactoryMock,
@@ -1471,7 +1602,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $statusHistory = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\Data\OrderStatusHistoryInterface'
+            \Magento\Sales\Api\Data\OrderStatusHistoryInterface::class
         );
         $this->orderMock->expects($this->any())
             ->method('addStatusHistoryComment')
@@ -1486,7 +1617,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected function mockGetDefaultStatus($state, $status, $allStatuses = [])
     {
         /** @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject $orderConfigMock */
-        $orderConfigMock = $this->getMockBuilder('Magento\Sales\Model\Order\Config')
+        $orderConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStateStatuses', 'getStateDefaultStatus'])
             ->getMock();
@@ -1511,7 +1642,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected function getTransactionMock($transactionId)
     {
         $transaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
             [
                 'getId',
                 'setOrderId',
