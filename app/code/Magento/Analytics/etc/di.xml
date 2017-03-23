@@ -164,6 +164,7 @@
         <arguments>
             <argument name="responseHandlers" xsi:type="array">
                 <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\Update</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
             </argument>
         </arguments>
     </virtualType>
@@ -171,6 +172,7 @@
         <arguments>
             <argument name="responseHandlers" xsi:type="array">
                 <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\OTP</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
             </argument>
         </arguments>
     </virtualType>
