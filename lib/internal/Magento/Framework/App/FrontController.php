@@ -24,7 +24,7 @@ class FrontController implements FrontControllerInterface
      * @param \Magento\Framework\App\Response\Http $response
      */
     public function __construct(
-        RouterList $routerList,
+        RouterListInterface $routerList,
         \Magento\Framework\App\Response\Http $response
     ) {
         $this->_routerList = $routerList;
