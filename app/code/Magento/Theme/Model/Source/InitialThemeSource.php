@@ -66,7 +66,7 @@ class InitialThemeSource implements ConfigSourceInterface
      * Example:
      *
      *  ```php
-     *  ['Magento/backend' =>
+     *  ['adminhtml/Magento/backend' =>
      *      [
      *          'parent_id' => NULL,
      *          'theme_path' => 'Magento/backend',
@@ -94,11 +94,11 @@ class InitialThemeSource implements ConfigSourceInterface
 
             foreach ($rawThemes as $themeRow) {
                 unset($themeRow['theme_id'], $themeRow['preview_image']);
-
-                $themes[$themeRow['code']] = $themeRow;
+                $themePath = $themeRow['area'] . '/' . $themeRow['theme_path'];
+                $themes[$themePath] = $themeRow;
 
                 if (isset($rawThemes[$themeRow['parent_id']]['code'])) {
-                    $themes[$themeRow['code']]['parent_id'] = $rawThemes[$themeRow['parent_id']]['code'];
+                    $themes[$themePath]['parent_id'] = $rawThemes[$themeRow['parent_id']]['code'];
                 }
             }
 
