@@ -43,6 +43,7 @@ class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
+            ->setMethods(['getLocaleDate'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->formMock = $this->getMockBuilder(Form::class)
@@ -51,8 +52,10 @@ class CollectionTimeLabelTest extends \PHPUnit_Framework_TestCase
         $this->timeZoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->collectionTimeLabel = new CollectionTimeLabel($this->contextMock, $this->timeZoneMock);
+        $this->contextMock->expects($this->any())
+            ->method('getLocaleDate')
+            ->willReturn($this->timeZoneMock);
+        $this->collectionTimeLabel = new CollectionTimeLabel($this->contextMock);
     }
 
     /**
