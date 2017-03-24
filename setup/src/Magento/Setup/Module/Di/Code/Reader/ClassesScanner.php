@@ -22,19 +22,11 @@ class ClassesScanner implements ClassesScannerInterface
     protected $fileResults = [];
 
     /**
-     * @var DirectoryList
-     */
-
-    protected $directoryList;
-
-    /**
-     * @param DirectoryList $directoryList
      * @param array $excludePatterns
      */
-    public function __construct(DirectoryList $directoryList, array $excludePatterns = [])
+    public function __construct(array $excludePatterns = [])
     {
         $this->excludePatterns = $excludePatterns;
-        $this->directoryList = $directoryList;
     }
 
     /**
@@ -57,9 +49,9 @@ class ClassesScanner implements ClassesScannerInterface
      */
     public function getList($path)
     {
-        $generation = $this->directoryList->getPath(DirectoryList::GENERATION);
+
         $realPath = realpath($path);
-        $isGeneration = strpos($realPath, $generation) !== false;
+        $isGeneration = strpos($realPath, DIRECTORY_SEPARATOR . 'generation' . DIRECTORY_SEPARATOR) !== false;
         if (!$isGeneration) {
             if (isset($this->fileResults[$realPath])) {
                 return $this->fileResults[$realPath];

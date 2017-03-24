@@ -2,4 +2,7 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
-class InvalidFileException extends \InvalidArgumentException {}
+class InvalidFileException extends \InvalidArgumentException
+{
+
+}

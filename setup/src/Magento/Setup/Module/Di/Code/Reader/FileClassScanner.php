@@ -9,10 +9,26 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 
 class FileClassScanner
 {
+    /**
+     * The filename of the file to introspect
+     *
+     * @var string
+     */
 
     protected $filename;
+
+    /**
+     * The list of classes found in the file.
+     *
+     * @var bool
+     */
+
     protected $classNames = false;
-    protected $tokens;
+
+    /**
+     * Constructor for the file class scanner.  Requires the filename
+     * @param $filename
+     */
 
     public function __construct( $filename )
     {
@@ -28,10 +44,23 @@ class FileClassScanner
         $this->filename = $filename;
     }
 
+    /**
+     * Retrieves the contents of a file.  Mostly here for Mock injection
+     *
+     * @return string
+     */
+
     public function getFileContents()
     {
         return file_get_contents($this->filename);
     }
+
+    /**
+     * Extracts the fully qualified class name from a file.  It only searches for the first match and stops looking
+     * as soon as it enters the class definition itself.
+     *
+     * @return array
+     */
 
     protected function extract()
     {
@@ -41,39 +70,48 @@ class FileClassScanner
         $class = '';
         $triggerClass = false;
         $triggerNamespace = false;
-        $paramNestingLevel = $currentParamNestingLevel = 0;
         foreach ($tokens as $key => $token) {
-            if ($token == '{') {
-                return $classes;
-            }
+
+            // The namespace keyword was found in the last loop
             if ($triggerNamespace) {
                 if (is_array($token)) {
                     $namespace .= $token[1];
                 } else {
-                    $currentParamNestingLevel = $paramNestingLevel;
                     $triggerNamespace = false;
                     $namespace .= '\\';
                     continue;
                 }
+            // The class keyword was found in the last loop
             } else if ($triggerClass && $token[0] == T_STRING) {
                 $triggerClass = false;
                 $class = $token[1];
             }
+
+            // Current loop contains the namespace keyword.  Between this and the semicolon is the namespace
             if ($token[0] == T_NAMESPACE) {
                 $triggerNamespace = true;
-            } else if ($token[0] == T_CLASS && $currentParamNestingLevel == $paramNestingLevel) {
+            // Current loop contains the class keyword.  Next loop will have the class name itself.
+            } else if ($token[0] == T_CLASS ) {
                 $triggerClass = true;
             }
-            if ($class != '' && $currentParamNestingLevel == $paramNestingLevel) {
+
+            // We have a class name, let's concatenate and store it!
+            if ($class != '' ) {
                 $namespace = trim($namespace);
                 $fqClassName = $namespace . trim($class);
                 $classes[] = $fqClassName;
-                $class = '';
-                continue;
+                return $classes;
             }
         }
-        return $classes;
+        return [];
     }
+
+    /**
+     * Retrieves the first class found in a class file.  The return value is in an array format so it retains the
+     * same usage as the FileScanner.
+     *
+     * @return array
+     */
 
     public function getClassNames()
     {
