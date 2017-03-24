@@ -6,7 +6,6 @@
 namespace Magento\Framework\ObjectManager\Config;
 
 use Magento\Framework\ObjectManager\ConfigInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
@@ -29,11 +28,6 @@ class Compiled implements ConfigInterface
      * @var array
      */
     private $preferences;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * Constructor

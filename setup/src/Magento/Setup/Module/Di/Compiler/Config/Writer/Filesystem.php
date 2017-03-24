@@ -9,8 +9,6 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Filesystem implements WriterInterface
 {
@@ -18,11 +16,6 @@ class Filesystem implements WriterInterface
      * @var DirectoryList
      */
     private $directoryList;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * Constructor
@@ -61,20 +54,5 @@ class Filesystem implements WriterInterface
         if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
             mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
         }
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }

@@ -21,11 +21,6 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * {inheritdoc}
      */
     public function load($area)
