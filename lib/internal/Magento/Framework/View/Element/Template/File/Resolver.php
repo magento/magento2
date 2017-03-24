@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Template\File;
+
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
