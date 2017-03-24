@@ -8,37 +8,35 @@ namespace Magento\Analytics\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
  * Assert sending data to the Analytics is restored.
  */
-class AssertConfigAnalyticsRestored extends AbstractConstraint
+class AssertConfigAnalyticsSendingTimeAndZone extends AbstractConstraint
 {
     /**
-     * Assert sending data to the Analytics is restored.
-     *
      * @param ConfigAnalytics $configAnalytics
      * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
-     * @param SystemConfigEdit $systemConfigPage
-     * @param string $vertical
+     * @param string $hh
+     * @param string $mm
      * @return void
      */
     public function processAssert(
         ConfigAnalytics $configAnalytics,
         OpenAnalyticsConfigStep $openAnalyticsConfigStep,
-        SystemConfigEdit $systemConfigPage,
-        $vertical
+        $hh,
+        $mm
     ) {
         $openAnalyticsConfigStep->run();
 
-        $configAnalytics->getAnalyticsForm()->analyticsToggle();
-        $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($vertical);
-        $configAnalytics->getAnalyticsForm()->saveConfig();
+        \PHPUnit_Framework_Assert::assertEquals(
+            'Eastern European Standard Time (Europe/Kiev)',
+            $configAnalytics->getAnalyticsForm()->getTimeZone()
+        );
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $systemConfigPage->getMessagesBlock()->assertSuccessMessage(),
-            'Sending data to the Analytics is not saved.'
+        \PHPUnit_Framework_Assert::assertEquals(
+            sprintf('%s, %s, 00', $hh, $mm),
+            $configAnalytics->getAnalyticsForm()->getTimeOfDayToSendDate()
         );
     }
 
@@ -49,6 +47,6 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Sending data to the Analytics is saved.';
+        return 'Time and TimeZone are correct!';
     }
 }
