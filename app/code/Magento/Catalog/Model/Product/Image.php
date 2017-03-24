@@ -292,7 +292,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setKeepAspectRatio($keep)
     {
-        $this->_keepAspectRatio = (bool)$keep;
+        $this->_keepAspectRatio = $keep && $keep !== 'false';
         return $this;
     }
 
@@ -302,7 +302,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setKeepFrame($keep)
     {
-        $this->_keepFrame = (bool)$keep;
+        $this->_keepFrame = $keep && $keep !== 'false';
         return $this;
     }
 
@@ -312,7 +312,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setKeepTransparency($keep)
     {
-        $this->_keepTransparency = (bool)$keep;
+        $this->_keepTransparency = $keep && $keep !== 'false';
         return $this;
     }
 
@@ -322,7 +322,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setConstrainOnly($flag)
     {
-        $this->_constrainOnly = (bool)$flag;
+        $this->_constrainOnly = $flag && $flag !== 'false';
         return $this;
     }
 
