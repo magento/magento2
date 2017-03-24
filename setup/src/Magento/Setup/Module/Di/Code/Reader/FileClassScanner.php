@@ -124,5 +124,4 @@ class FileClassScanner
         }
         return $this->classNames;
     }
-
 }
