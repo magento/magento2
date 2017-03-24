@@ -154,17 +154,9 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="systemConfigSnapshotSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+    <virtualType name="systemConfigSnapshotSourceAggregated" type="systemConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
-                <item name="modular" xsi:type="array">
-                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</item>
-                    <item name="sortOrder" xsi:type="string">10</item>
-                </item>
-                <item name="dynamic" xsi:type="array">
-                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\RuntimeConfigSource</item>
-                    <item name="sortOrder" xsi:type="string">100</item>
-                </item>
                 <item name="initial" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\InitialSnapshotConfigSource</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
