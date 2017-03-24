@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Test\Unit\Block\Adminhtml\System\Config;
+namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
 
 use Magento\Framework\Data\Form;
 use Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel;
