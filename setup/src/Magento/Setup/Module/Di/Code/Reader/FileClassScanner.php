@@ -66,6 +66,7 @@ class FileClassScanner
      * Extracts the fully qualified class name from a file.  It only searches for the first match and stops looking
      * as soon as it enters the class definition itself.
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return array
      */
 
