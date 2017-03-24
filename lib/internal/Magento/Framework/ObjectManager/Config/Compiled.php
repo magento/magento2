@@ -7,7 +7,6 @@ namespace Magento\Framework\ObjectManager\Config;
 
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
@@ -170,20 +169,5 @@ class Compiled implements ConfigInterface
     public function getPreferences()
     {
         return $this->preferences;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }
