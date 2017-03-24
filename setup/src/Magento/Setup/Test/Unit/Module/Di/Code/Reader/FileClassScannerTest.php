@@ -9,7 +9,6 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 use Magento\Setup\Module\Di\Code\Reader\InvalidFileException;
-use Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain\PreferencesResolvingTest;
 
 class FileClassScannerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +24,8 @@ class FileClassScannerTest extends \PHPUnit_Framework_TestCase
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<PHP
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+<<<PHP
 <?php
 
 echo 'hello world';
@@ -46,7 +46,8 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<PHP
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+<<<PHP
 <?php
 
 class ThisIsATest {
@@ -67,7 +68,8 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<PHP
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+<<<PHP
 <?php
 
 namespace NS;
@@ -90,7 +92,8 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<PHP
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+<<<PHP
 <?php
 
 namespace This\Is\My\Namespace;
@@ -106,7 +109,6 @@ class ThisIsMyTest {
     {
         
     }
-
 }
 PHP
         );
