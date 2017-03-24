@@ -7,9 +7,34 @@
 namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Used for argument's array serialization and store to the DI configuration.
+ *
+ * @deprecated We don't need anymore serialize arguments, this class will be removed in the next
+ *             backward incompatible release.
+ */
 class ArgumentsSerialization implements ModificationInterface
 {
+    /**
+     * Used for serialize/unserialize data.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor.
+     *
+     * @param SerializerInterface|null $serializer
+     */
+    public function __construct(SerializerInterface $serializer = null)
+    {
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+    }
+
     /**
      * Modifies input config
      *
@@ -24,7 +49,7 @@ class ArgumentsSerialization implements ModificationInterface
 
         foreach ($config['arguments'] as $key => $value) {
             if ($value !== null) {
-                $config['arguments'][$key] = serialize($value);
+                $config['arguments'][$key] = $this->serializer->serialize($value);
             }
         }
 

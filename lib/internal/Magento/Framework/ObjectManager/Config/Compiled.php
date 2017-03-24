@@ -83,9 +83,7 @@ class Compiled implements ConfigInterface
     public function getArguments($type)
     {
         if (array_key_exists($type, $this->arguments)) {
-            if (is_string($this->arguments[$type])) {
-                $this->arguments[$type] = $this->getSerializer()->unserialize($this->arguments[$type]);
-            } elseif ($this->arguments[$type] === null) {
+            if ($this->arguments[$type] === null) {
                 $this->arguments[$type] = [];
             }
             return $this->arguments[$type];

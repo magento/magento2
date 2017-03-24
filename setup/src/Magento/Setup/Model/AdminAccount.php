@@ -11,6 +11,8 @@ use Magento\Authorization\Model\Acl\Role\User;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Setup\Module\Setup;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 class AdminAccount
 {
@@ -44,20 +46,30 @@ class AdminAccount
     private $encryptor;
 
     /**
+     * Used for serialize/unserialize data.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * Default Constructor
      *
      * @param Setup $setup
      * @param EncryptorInterface $encryptor
      * @param array $data
+     * @param Json|null $serializer
      */
     public function __construct(
         Setup $setup,
         EncryptorInterface $encryptor,
-        array $data
+        array $data,
+        Json $serializer = null
     ) {
         $this->setup  = $setup;
         $this->encryptor = $encryptor;
         $this->data = $data;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -119,7 +131,7 @@ class AdminAccount
             // User does not exist, create it
             $adminData['username'] = $this->data[self::KEY_USER];
             $adminData['email'] = $this->data[self::KEY_EMAIL];
-            $adminData['extra'] = serialize(null);
+            $adminData['extra'] = $this->serializer->serialize(null);
             $this->setup->getConnection()->insert(
                 $this->setup->getTable('admin_user'),
                 $adminData

@@ -33,7 +33,8 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $this->configCache[$area] = $this->getSerializer()->unserialize(\file_get_contents(self::getFilePath($area)));
+        $diConfiguration = include_once(self::getFilePath($area));
+        $this->configCache[$area] = $diConfiguration;
         return $this->configCache[$area];
     }
 
@@ -46,7 +47,7 @@ class Compiled implements ConfigLoaderInterface
     public static function getFilePath($area)
     {
         $diPath = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_METADATA][DirectoryList::PATH];
-        return BP . '/' . $diPath . '/' . $area . '.ser';
+        return BP . '/' . $diPath . '/' . $area . '.php';
     }
 
     /**

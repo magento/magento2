@@ -284,9 +284,6 @@ class DiCompileCommand extends Command
                             'InterceptionPreferencesResolving' =>
                                 ['instance' =>
                                     \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
-                            'ArgumentsSerialization' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization::class],
                         ]
                     ]
                 ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [

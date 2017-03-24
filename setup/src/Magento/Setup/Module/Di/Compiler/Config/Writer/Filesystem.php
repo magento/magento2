@@ -44,10 +44,10 @@ class Filesystem implements WriterInterface
     public function write($key, array $config)
     {
         $this->initialize();
-
+        $configuration = sprintf('<?php return %s;', var_export($config, true));
         file_put_contents(
-            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.ser',
-            $this->getSerializer()->serialize($config)
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.php',
+            $configuration
         );
     }
 
