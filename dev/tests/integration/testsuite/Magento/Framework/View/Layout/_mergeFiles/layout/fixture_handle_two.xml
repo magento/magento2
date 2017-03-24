@@ -7,6 +7,6 @@
 -->
 <page>
     <body>
-        <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
     </body>
 </page>
