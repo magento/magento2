@@ -10,7 +10,7 @@ namespace Magento\Framework\App;
 class FrontController implements FrontControllerInterface
 {
     /**
-     * @var RouterList
+     * @var RouterListInterface
      */
     protected $_routerList;
 
