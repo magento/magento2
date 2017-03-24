@@ -51,7 +51,7 @@ class QuoteValidator
             }
             $method = $quote->getShippingAddress()->getShippingMethod();
             $rate = $quote->getShippingAddress()->getShippingRateByCode($method);
-            if (!$quote->isVirtual() && (!$method || !$rate)) {
+            if (!$method || !$rate) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a shipping method.'));
             }
         }

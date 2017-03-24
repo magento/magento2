@@ -1042,10 +1042,18 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
-     * Order payment either online
-     * Updates transactions hierarchy, if required
-     * Prevents transaction double processing
-     * Updates payment totals, updates order status and adds proper comments
+     * Triggers order payment command.
+     *
+     * This method can be used to support multi warehouse functionality
+     * and notifies payment provider about the fact that order has been created.
+     * 1. Updates order state and status to one of the following:
+     *  - processing, in case is_pending_payment flag is not set to a payment object
+     *  - payment_review, when is_pending_payment flag is set for payment object
+     *  - fraud, when is_fraud_detected flag is set to a payment object
+     * 2. Sets corresponding comment for order and payment objects depending on order state value.
+     * 3. Creates payment "order" transaction with corresponding comments
+     *
+     * For skipping 1,2,3 operations the skip_order_processing flag should be set in a payment object
      *
      * @param float $amount
      * @return $this
