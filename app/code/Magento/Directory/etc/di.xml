@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- @api Use item keys to create necessary service instance or add new services by extending the list -->
     <type name="Magento\Directory\Model\Currency\Import\Config">
         <arguments>
             <argument name="servicesConfig" xsi:type="array">

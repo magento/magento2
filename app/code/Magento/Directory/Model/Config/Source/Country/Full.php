@@ -6,6 +6,10 @@
 namespace Magento\Directory\Model\Config\Source\Country;
 
 /**
+ * Options provider for full countries list
+ *
+ * @api
+ *
  * @codeCoverageIgnore
  */
 class Full extends \Magento\Directory\Model\Config\Source\Country implements \Magento\Framework\Option\ArrayInterface

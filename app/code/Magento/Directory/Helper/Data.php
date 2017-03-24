@@ -4,13 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Directory data helper
- */
 namespace Magento\Directory\Helper;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Directory data helper
+ *
+ * @api
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
