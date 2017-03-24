@@ -9,4 +9,11 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="default_store_setter" type="Magento\Store\App\FrontController\Plugin\DefaultStore" />
     </type>
+    <type name="Magento\Framework\Notification\MessageList">
+        <arguments>
+            <argument name="messages" xsi:type="array">
+                <item name="empty_assigned_group_category" xsi:type="string">Magento\Store\Model\Message\EmptyGroupCategory</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

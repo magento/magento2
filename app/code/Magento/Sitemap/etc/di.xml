@@ -18,4 +18,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="sitemap/generate/error_email" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
