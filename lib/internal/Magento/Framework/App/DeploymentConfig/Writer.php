@@ -49,7 +49,7 @@ class Writer
     private $deploymentConfig;
 
     /**
-     * Parses and retrieves comments from configuration files.
+     * The parser of comments from configuration files.
      *
      * @var CommentParser
      */

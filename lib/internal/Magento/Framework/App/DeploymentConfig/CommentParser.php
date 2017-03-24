@@ -101,9 +101,7 @@ class CommentParser implements CommentParserInterface
             if (preg_match('/^(?=\s+?\*[^\/])(.+)/', $commentLine, $matches)
                 && false === strpos($commentLine, 'For the section')
             ) {
-                $line = $matches[1];
-                $line = trim($line);
-                $commentsLine[] = preg_replace('/^(\*\s?)/', '', $line);
+                $commentsLine[] = preg_replace('/^(\*\s?)/', '', trim($matches[1]));
             }
         }
 
