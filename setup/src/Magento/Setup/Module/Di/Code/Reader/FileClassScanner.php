@@ -71,7 +71,7 @@ class FileClassScanner
         $class = '';
         $triggerClass = false;
         $triggerNamespace = false;
-        foreach ($tokens as $key => $token) {
+        foreach ($tokens as $token) {
 
             // The namespace keyword was found in the last loop
             if ($triggerNamespace) {
@@ -88,12 +88,15 @@ class FileClassScanner
                 $class = $token[1];
             }
 
-            // Current loop contains the namespace keyword.  Between this and the semicolon is the namespace
-            if ($token[0] == T_NAMESPACE) {
-                $triggerNamespace = true;
-            // Current loop contains the class keyword.  Next loop will have the class name itself.
-            } else if ($token[0] == T_CLASS) {
-                $triggerClass = true;
+            switch ($token[0]) {
+                case T_NAMESPACE:
+                    // Current loop contains the namespace keyword.  Between this and the semicolon is the namespace
+                    $triggerNamespace = true;
+                    break;
+                case T_CLASS:
+                    // Current loop contains the class keyword.  Next loop will have the class name itself.
+                    $triggerClass = true;
+                    break;
             }
 
             // We have a class name, let's concatenate and store it!
