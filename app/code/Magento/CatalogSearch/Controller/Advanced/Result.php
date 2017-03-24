@@ -9,9 +9,17 @@ namespace Magento\CatalogSearch\Controller\Advanced;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\UrlFactory;
 
 class Result extends \Magento\Framework\App\Action\Action
 {
+
+    /**
+     * Url factory
+     *
+     * @var UrlFactory
+     */
+    protected $_urlFactory;
 
     /**
      * Catalog search advanced
@@ -25,14 +33,16 @@ class Result extends \Magento\Framework\App\Action\Action
      *
      * @param Context $context
      * @param ModelAdvanced $catalogSearchAdvanced
+     * @param UrlFactory $urlFactory
      */
     public function __construct(
         Context $context,
-        ModelAdvanced $catalogSearchAdvanced
-
+        ModelAdvanced $catalogSearchAdvanced,
+        UrlFactory $urlFactory
     ) {
         parent::__construct($context);
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
+        $this->_urlFactory = $urlFactory;
     }
 
     /**
@@ -51,7 +61,7 @@ class Result extends \Magento\Framework\App\Action\Action
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
-
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->getConfig()->getTitle()->set(__('Catalog Advanced Search'));
         return $resultPage;
