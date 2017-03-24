@@ -67,6 +67,7 @@ class FileClassScanner
      * as soon as it enters the class definition itself.
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return array
      */
 
