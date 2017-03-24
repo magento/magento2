@@ -36,9 +36,9 @@ class Compiled implements ConfigInterface
      */
     public function __construct($data)
     {
-        $this->arguments = $data['arguments'];
-        $this->virtualTypes = $data['instanceTypes'];
-        $this->preferences = $data['preferences'];
+        $this->arguments = $data['arguments'] ?: [];
+        $this->virtualTypes = $data['instanceTypes'] ?: [];
+        $this->preferences = $data['preferences'] ?: [];
     }
 
     /**
