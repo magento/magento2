@@ -223,12 +223,14 @@ class CategoryProcessor
     }
 
     /**
-     * Standardize a string by lowercase-ing it
+     * Standardize a string.
+     * For now it performs only a lowercase action, this method is here to include more complex checks in the future
+     * if needed.
      *
      * @param string $string
      * @return string
      */
-    protected function standardizeString($string)
+    private function standardizeString($string)
     {
         return mb_strtolower($string);
     }
