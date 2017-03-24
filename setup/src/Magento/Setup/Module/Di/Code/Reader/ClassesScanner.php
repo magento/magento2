@@ -30,8 +30,10 @@ class ClassesScanner implements ClassesScannerInterface
 
     /**
      * @param array $excludePatterns
+     * @param string $generationDirectory
      */
-    public function __construct(array $excludePatterns = [], $generationDirectory = false)
+
+    public function __construct(array $excludePatterns = [], $generationDirectory = null)
     {
         $this->excludePatterns = $excludePatterns;
         $this->generationDirectory = $generationDirectory;
@@ -39,7 +41,7 @@ class ClassesScanner implements ClassesScannerInterface
 
     public function getGenerationDirectory()
     {
-        if ($this->generationDirectory === false) {
+        if ($this->generationDirectory === null) {
             $directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
             /* @var $directoryList DirectoryList */
             $this->generationDirectory = $directoryList->getPath(DirectoryList::GENERATION);
@@ -61,7 +63,7 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Determines if the path provided is in the var/generation folder
      *
-     * @param $path
+     * @param string $path
      * @return bool
      */
 
