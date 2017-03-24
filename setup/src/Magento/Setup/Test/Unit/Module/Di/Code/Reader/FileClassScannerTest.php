@@ -122,13 +122,14 @@ PHP
 
     public function testTheWeirdExceptionCaseThatHappens()
     {
-        $filename = __DIR__ . '/../../../../../../../../../../app/code/Magento/Catalog/Model/ResourceModel/Product/Indexer/Eav/AbstractEav.php';
+        $filename = __DIR__
+            . '/../../../../../../../../../..'
+            . '/app/code/Magento/Catalog/Model/ResourceModel/Product/Indexer/Eav/AbstractEav.php';
         $filename = realpath($filename);
         $scanner = new FileClassScanner($filename);
         $result = $scanner->getClassNames();
 
         self::assertCount(1, $result);
     }
-
 
 }
