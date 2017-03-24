@@ -4,9 +4,7 @@
  */
 /*browser:true*/
 /*global define*/
-/**
- * @api
- */
+/* @api */
 define([
     'underscore',
     'uiComponent',
