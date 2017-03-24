@@ -137,7 +137,7 @@ class Collect
         $disabledCount = $enabledCount = $uninstalledCount = 0;
 
         foreach ($stateValues as $state) {
-            switch($state){
+            switch ($state) {
                 case Config::ENABLED:
                     $enabledCount++;
                     break;

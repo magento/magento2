@@ -95,7 +95,6 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
             $expectedVirtualTypesDependencies,
             $mapper->loadMap($diFilesPath)
         );
-
     }
 
     /**
@@ -116,7 +115,6 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
                 self::assertEquals($baseType, $mapper->getType($virtualType, $scope));
             }
         }
-
     }
 
     /**

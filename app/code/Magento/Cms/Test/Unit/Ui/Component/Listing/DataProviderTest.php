@@ -5,7 +5,6 @@
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing;
 
-
 use Magento\Cms\Ui\Component\DataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Authorization;
@@ -130,6 +129,5 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $metadata,
             $this->dataProvider->prepareMetadata()
         );
-
     }
 }

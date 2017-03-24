@@ -305,7 +305,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
         $attributeMock->expects($this->any())->method('getOptions')->willReturn([]);
 
-
         $existingModelMock = $this->getMock(Attribute::class, [], [], '', false);
         $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
         $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);

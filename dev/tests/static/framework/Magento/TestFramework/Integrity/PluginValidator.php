@@ -44,7 +44,8 @@ class PluginValidator
      */
     private function validateClassNameMatchesCase($className)
     {
-        $declarationName = (new \ReflectionClass($className))->getName();;
+        $declarationName = (new \ReflectionClass($className))->getName();
+        ;
         if (ltrim($className, '\\') != ltrim($declarationName)) {
             throw new ValidatorException(
                 new Phrase(

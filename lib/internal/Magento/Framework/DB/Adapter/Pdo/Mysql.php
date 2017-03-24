@@ -540,7 +540,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } while ($retry);
     }
 
-
     /**
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
@@ -2374,6 +2373,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     }
                 }
                 $cType .= sprintf('(%d,%d)', $precision, $scale);
+                if (!empty($options['UNSIGNED'])) {
+                    $cUnsigned = true;
+                }
                 break;
             case Table::TYPE_TEXT:
             case Table::TYPE_BLOB:
@@ -2500,7 +2502,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function truncateTable($tableName, $schemaName = null)
     {
         if (!$this->isTableExists($tableName, $schemaName)) {
-            throw new \Zend_Db_Exception(sprintf('Table "%s" is not exists', $tableName));
+            throw new \Zend_Db_Exception(sprintf('Table "%s" does not exist', $tableName));
         }
 
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
@@ -2534,7 +2536,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function renameTable($oldTableName, $newTableName, $schemaName = null)
     {
         if (!$this->isTableExists($oldTableName, $schemaName)) {
-            throw new \Zend_Db_Exception(sprintf('Table "%s" is not exists', $oldTableName));
+            throw new \Zend_Db_Exception(sprintf('Table "%s" does not exist', $oldTableName));
         }
         if ($this->isTableExists($newTableName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Table "%s" already exists', $newTableName));
@@ -3248,7 +3250,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return string
      * @codeCoverageIgnore
      */
-
     public function getTriggerName($tableName, $time, $event)
     {
         $triggerName = 'trg_' . $tableName . '_' . $time . '_' . $event;

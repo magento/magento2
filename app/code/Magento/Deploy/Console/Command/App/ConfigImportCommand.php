@@ -5,9 +5,10 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
@@ -27,12 +28,14 @@ class ConfigImportCommand extends Command
     const COMMAND_NAME = 'app:config:import';
 
     /**
+     * Configuration importer.
+     *
      * @var Importer
      */
     private $importer;
 
     /**
-     * @param Importer $importer
+     * @param Importer $importer the configuration importer
      */
     public function __construct(Importer $importer)
     {
@@ -59,8 +62,8 @@ class ConfigImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->importer->import($output);
-        } catch (LocalizedException $e) {
+            $this->importer->import($input, $output);
+        } catch (RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;

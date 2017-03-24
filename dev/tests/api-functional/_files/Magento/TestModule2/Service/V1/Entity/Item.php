@@ -24,7 +24,6 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
         return $this->setData('id', $id);
     }
 
-
     /**
      * @return string
      */
@@ -32,6 +31,7 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
     {
         return $this->_data['name'];
     }
+
     /**
      * @param string $name
      * @return $this
