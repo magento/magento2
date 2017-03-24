@@ -167,14 +167,14 @@ class Addresses extends Tab
         $addresses = is_array($address) ? $address : [1 => $address];
 
         foreach ($addresses as $addressNumber => $address) {
-            $isHasData = (null === $address) || $address->hasData();
+            $hasData = (null !== $address) && $address->hasData();
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
-            if ($isHasData && !$isVisibleCustomerAddress) {
+            if ($hasData && !$isVisibleCustomerAddress) {
                 throw new \Exception("Invalid argument: can't get data from customer address #{$addressNumber}");
             }
 
-            if (!$isHasData && !$isVisibleCustomerAddress) {
+            if (!$hasData && !$isVisibleCustomerAddress) {
                 $data[$addressNumber] = [];
             } else {
                 $this->openCustomerAddress($addressNumber);
