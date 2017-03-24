@@ -18,7 +18,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about authorized amount in order.
      */
-    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
+    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of .+?%s. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about authorized amount exists in Comments History section on order page in Admin.

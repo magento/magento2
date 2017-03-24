@@ -744,7 +744,7 @@ class Category extends AbstractResource
         )->setOrder(
             'position',
             \Magento\Framework\DB\Select::SQL_ASC
-        )->joinUrlRewrite()->load();
+        )->joinUrlRewrite();
 
         return $collection;
     }
@@ -1022,7 +1022,7 @@ class Category extends AbstractResource
         $this->getEntityManager()->delete($object);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
-            ['product' => $object]
+            ['product' => $object, 'category' => $object]
         );
         return $this;
     }
