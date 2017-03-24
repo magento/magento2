@@ -85,9 +85,8 @@ class UpgradeData implements UpgradeDataInterface
     private function upgradeVersionTwoZeroTwo(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Cms\Setup\BlockContentConverter::class
+            \Magento\Cms\Setup\ContentConverter::class
         );
-        $metadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\BlockInterface::class);
 
         $queryModifier = $this->queryModifierFactory->create(
             'like',
@@ -98,10 +97,20 @@ class UpgradeData implements UpgradeDataInterface
             ]
         );
 
+        $blockMetadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\BlockInterface::class);
         $fieldDataConverter->convert(
             $setup->getConnection(),
             $setup->getTable('cms_block'),
-            $metadata->getIdentifierField(),
+            $blockMetadata->getIdentifierField(),
+            'content',
+            $queryModifier
+        );
+
+        $pageMetadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\PageInterface::class);
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('cms_page'),
+            $pageMetadata->getIdentifierField(),
             'content',
             $queryModifier
         );

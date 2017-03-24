@@ -14,7 +14,7 @@ use Magento\Widget\Helper\Conditions;
 /**
  * Convert conditions_encoded part of cms block content data from serialized to JSON format
  */
-class BlockContentConverter extends SerializedToJson
+class ContentConverter extends SerializedToJson
 {
     /**
      * @var \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory
@@ -101,7 +101,7 @@ class BlockContentConverter extends SerializedToJson
             );
             $matchSegments[3] = '';
             foreach ($widgetParameters as $key => $parameter) {
-                $matchSegments[3] = $matchSegments[3] . ' ' . $key . '="' . $parameter . '"';
+                $matchSegments[3] .= ' ' . $key . '="' . $parameter . '"';
             }
             return $matchSegments[1] . '{{' . $matchSegments[2] . $matchSegments[3] . '}}' . $matchSegments[4];
         } else {
