@@ -49,18 +49,4 @@ class Compiled implements ConfigLoaderInterface
         $diPath = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_METADATA][DirectoryList::PATH];
         return BP . '/' . $diPath . '/' . $area . '.php';
     }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = new Serialize();
-        }
-        return $this->serializer;
-    }
 }
