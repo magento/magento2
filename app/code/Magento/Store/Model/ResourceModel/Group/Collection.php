@@ -64,6 +64,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Filter to discard default group and groups with assigned category
+     *
+     * @return $this
+     */
+    public function setWithoutAssignedCategoryFilter()
+    {
+        return $this->addFieldToFilter('main_table.root_category_id', ['eq' => 0])
+            ->addFieldToFilter('main_table.group_id', ['neq' => 0]);
+    }
+
+    /**
      * Load collection data
      *
      * @return $this
