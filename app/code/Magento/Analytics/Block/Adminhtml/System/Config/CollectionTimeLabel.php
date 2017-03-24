@@ -5,33 +5,11 @@
  */
 namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
-use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-
 /**
  * Provides label with default Time Zone
  */
 class CollectionTimeLabel extends \Magento\Config\Block\System\Config\Form\Field
 {
-    /**
-     * @var TimezoneInterface
-     */
-    private $timeZone;
-
-    /**
-     * @param Context $context
-     * @param TimezoneInterface $timeZone
-     * @param array $data
-     */
-    public function __construct(
-        Context $context,
-        TimezoneInterface $timeZone,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->timeZone = $timeZone;
-    }
-
     /**
      * Add default time zone to comment
      *
@@ -40,7 +18,7 @@ class CollectionTimeLabel extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $timeZoneCode = $this->timeZone->getConfigTimezone();
+        $timeZoneCode = $this->_localeDate->getConfigTimezone();
         $getLongTimeZoneName = \IntlTimeZone::createTimeZone($timeZoneCode)->getDisplayName();
         $element->setData(
             'comment',
