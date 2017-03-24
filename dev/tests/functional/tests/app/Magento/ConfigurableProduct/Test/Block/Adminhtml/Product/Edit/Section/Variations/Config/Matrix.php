@@ -46,6 +46,13 @@ class Matrix extends Form
     ];
 
     /**
+     * Selector for product attribute.
+     *
+     * @var string
+     */
+    protected $attribute = 'div[data-index="attributes"] span[data-index="attributes"]';
+
+    /**
      * Selector for variation row by number.
      *
      * @var string
@@ -155,6 +162,16 @@ class Matrix extends Form
         }
 
         return $data;
+    }
+
+    /**
+     * Get product attribute.
+     *
+     * @return string
+     */
+    public function getProductAttribute()
+    {
+        return $this->_rootElement->find($this->attribute)->getText();
     }
 
     /**

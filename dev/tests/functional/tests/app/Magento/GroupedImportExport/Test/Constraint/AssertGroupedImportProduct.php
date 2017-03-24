@@ -22,23 +22,22 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertGroupedImportProduct extends AssertImportProduct
 {
     /**
+     * Product type.
+     *
+     * @var string
+     */
+    protected $productType = 'grouped';
+    /**
      * Array keys mapping for csv file.
      *
      * @var array
      */
-    protected $mappingKeys = [
-        'sku' => 'sku',
-        'name' => 'name',
-        'associated_skus' => 'associated_skus',
-        'url_key' => 'url_key',
+    protected $neededKeys = [
+        'sku',
+        'name',
+        'associated_skus',
+        'url_key',
     ];
-
-    /**
-     * Attribute sku selector.
-     *
-     * @var string
-     */
-    private $attributeSku = 'span[data-index="sku"]';
 
     /**
      * Assert imported products are correct.
@@ -50,7 +49,6 @@ class AssertGroupedImportProduct extends AssertImportProduct
      * @param CatalogProductEdit $catalogProductEdit
      * @param WebapiDecorator $webApi
      * @param ImportData $import
-     * @param string $productType
      * @return void
      */
     public function processAssert(
@@ -60,8 +58,7 @@ class AssertGroupedImportProduct extends AssertImportProduct
         AssertProductInGrid $assertProductInGrid,
         CatalogProductEdit $catalogProductEdit,
         WebapiDecorator $webApi,
-        ImportData $import,
-        $productType = 'grouped'
+        ImportData $import
     ) {
         parent::processAssert(
             $browser,
@@ -70,8 +67,7 @@ class AssertGroupedImportProduct extends AssertImportProduct
             $assertProductInGrid,
             $catalogProductEdit,
             $webApi,
-            $import,
-            $productType
+            $import
         );
     }
 
@@ -88,7 +84,10 @@ class AssertGroupedImportProduct extends AssertImportProduct
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
         $assignedProduct = $productData['associated']['assigned_products'][0];
-        $assignedProductSku = $this->browser->find($this->attributeSku)->getText();
+        $form = $this->catalogProductEdit->getProductForm();
+        $form->openSection('grouped');
+        $container = $form->getSection('grouped');
+        $assignedProductSku = $container->getListAssociatedProductsBlock()->getAssociatedProductSku();
         $productData['associated_skus'] = $assignedProductSku . '=' . $assignedProduct['qty'];
         unset($productData['associated']);
 

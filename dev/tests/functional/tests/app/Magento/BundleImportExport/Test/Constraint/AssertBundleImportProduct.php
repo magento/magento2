@@ -22,24 +22,24 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertBundleImportProduct extends AssertImportProduct
 {
     /**
+     * Product type.
+     *
+     * @var string
+     */
+    protected $productType = 'bundle';
+
+    /**
      * Array keys mapping for csv file.
      *
      * @var array
      */
-    protected $mappingKeys = [
-        'sku' => 'sku',
-        'name' => 'name',
-        'associated_skus' => 'associated_skus',
-        'bundle_values' => 'bundle_values',
-        'url_key' => 'url_key',
+    protected $neededKeys = [
+        'sku',
+        'name',
+        'associated_skus',
+        'bundle_values',
+        'url_key',
     ];
-
-    /**
-     * Attribute sku selector.
-     *
-     * @var string
-     */
-    private $attributeSku = 'span[data-index="sku"]';
 
     /**
      * Assert imported products are correct.
@@ -51,7 +51,6 @@ class AssertBundleImportProduct extends AssertImportProduct
      * @param CatalogProductEdit $catalogProductEdit
      * @param WebapiDecorator $webApi
      * @param ImportData $import
-     * @param string $productType
      * @return void
      */
     public function processAssert(
@@ -61,8 +60,7 @@ class AssertBundleImportProduct extends AssertImportProduct
         AssertProductInGrid $assertProductInGrid,
         CatalogProductEdit $catalogProductEdit,
         WebapiDecorator $webApi,
-        ImportData $import,
-        $productType = 'bundle'
+        ImportData $import
     ) {
         parent::processAssert(
             $browser,
@@ -71,8 +69,7 @@ class AssertBundleImportProduct extends AssertImportProduct
             $assertProductInGrid,
             $catalogProductEdit,
             $webApi,
-            $import,
-            $productType
+            $import
         );
     }
 
@@ -91,7 +88,12 @@ class AssertBundleImportProduct extends AssertImportProduct
 
         $bundleSelection = $productData['bundle_selections'][0];
         $assignedProduct = $bundleSelection['assigned_products'][0];
-        $attributeSku = $this->browser->find($this->attributeSku)->getText();
+
+        $form = $this->catalogProductEdit->getProductForm();
+        $form->openSection('bundle');
+        $container = $form->getSection('bundle');
+        $attributeSku = $container->getAttributeSku();
+
         $productData['associated_skus'] = $attributeSku;
         $productData['bundle_values'] = 'name=' .  $bundleSelection['title'] . ',type=select,required=1,sku='
             . $attributeSku . ',price=0.0000,default=0,default_qty='

@@ -22,16 +22,23 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertImportProduct extends AbstractConstraint
 {
     /**
+     * Product type.
+     *
+     * @var string
+     */
+    protected $productType = 'simple';
+
+    /**
      * Array keys mapping for csv file.
      *
      * @var array
      */
-    protected $mappingKeys = [
-        'sku' => 'sku',
-        'name' => 'name',
-        'price' => 'price',
-        'qty' => 'qty',
-        'url_key' => 'url_key',
+    protected $neededKeys = [
+        'sku',
+        'name',
+        'price',
+        'qty',
+        'url_key',
     ];
 
     /**
@@ -72,7 +79,6 @@ class AssertImportProduct extends AbstractConstraint
      * @param CatalogProductEdit $catalogProductEdit
      * @param WebapiDecorator $webApi
      * @param ImportData $import
-     * @param string $productType
      * @return void
      */
     public function processAssert(
@@ -82,19 +88,21 @@ class AssertImportProduct extends AbstractConstraint
         AssertProductInGrid $assertProductInGrid,
         CatalogProductEdit $catalogProductEdit,
         WebapiDecorator $webApi,
-        ImportData $import,
-        $productType = 'simple'
+        ImportData $import
     ) {
         $this->import = $import;
         $this->catalogProductEdit = $catalogProductEdit;
         $this->webApi = $webApi;
         $this->browser = $browser;
+        $this->neededKeys = array_flip($this->neededKeys);
 
         $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
         foreach ($products as $product) {
-            if ($product->getDataConfig()['type_id'] === $productType) {
+            if ($product->getDataConfig()['type_id'] === $this->productType) {
+                // assert product in data grid
                 $assertProductInGrid->processAssert($product, $catalogProductIndex);
 
+                // assert product in store front
                 $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
                 \PHPUnit_Framework_Assert::assertEquals(
                     $catalogProductView->getViewBlock()->getProductName(),
@@ -102,13 +110,14 @@ class AssertImportProduct extends AbstractConstraint
                     "Can't find product in store front"
                 );
 
+                // assert product data from page and csv.
                 $resultCsvData = $this->getResultCsv($product->getSku());
                 $productsData = $this->getPrepareProductsData($product);
-                $resultProductsData = $this->mappingKeys;
+                $resultProductsData = [];
                 array_walk_recursive(
                     $productsData,
                     function ($value, $key) use (&$resultProductsData) {
-                        if (isset($resultProductsData[$key])) {
+                        if (isset($this->neededKeys[$key])) {
                             $resultProductsData[$key] = $value;
                         }
                     }
@@ -166,7 +175,7 @@ class AssertImportProduct extends AbstractConstraint
      */
     private function deleteUnusedData(array $csvData)
     {
-        $wasteKeys = array_keys(array_diff_key($csvData, $this->mappingKeys));
+        $wasteKeys = array_keys(array_diff_key($csvData, $this->neededKeys));
         foreach ($wasteKeys as $key) {
             unset($csvData[$key]);
         };
@@ -196,6 +205,6 @@ class AssertImportProduct extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Imported products data are correct.';
+        return 'Imported products are presents in Admin Data Grid and StoreFront';
     }
 }

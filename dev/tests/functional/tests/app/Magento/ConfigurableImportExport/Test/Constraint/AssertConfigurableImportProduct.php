@@ -22,24 +22,24 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertConfigurableImportProduct extends AssertImportProduct
 {
     /**
+     * Product type.
+     *
+     * @var string
+     */
+    protected $productType = 'configurable';
+
+    /**
      * Array keys mapping for csv file.
      *
      * @var array
      */
-    protected $mappingKeys = [
-        'sku' => 'sku',
-        'name' => 'name',
-        'additional_attributes' => 'additional_attributes',
-        'configurable_variations' => 'configurable_variations',
-        'url_key' => 'url_key',
+    protected $neededKeys = [
+        'sku',
+        'name',
+        'additional_attributes',
+        'configurable_variations',
+        'url_key',
     ];
-
-    /**
-     * Attribute selector.
-     *
-     * @var string
-     */
-    private $attribute = 'div[data-index="attributes"] span[data-index="attributes"';
 
     /**
      * Assert imported products are correct.
@@ -51,7 +51,6 @@ class AssertConfigurableImportProduct extends AssertImportProduct
      * @param CatalogProductEdit $catalogProductEdit
      * @param WebapiDecorator $webApi
      * @param ImportData $import
-     * @param string $productType
      * @return void
      */
     public function processAssert(
@@ -61,8 +60,7 @@ class AssertConfigurableImportProduct extends AssertImportProduct
         AssertProductInGrid $assertProductInGrid,
         CatalogProductEdit $catalogProductEdit,
         WebapiDecorator $webApi,
-        ImportData $import,
-        $productType = 'configurable'
+        ImportData $import
     ) {
         parent::processAssert(
             $browser,
@@ -71,8 +69,7 @@ class AssertConfigurableImportProduct extends AssertImportProduct
             $assertProductInGrid,
             $catalogProductEdit,
             $webApi,
-            $import,
-            $productType
+            $import
         );
     }
 
@@ -89,9 +86,13 @@ class AssertConfigurableImportProduct extends AssertImportProduct
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
         $attributesData = $productData['configurable_attributes_data']['matrix']['0'];
-        $attribute = str_replace(': ', '=', $this->browser->find($this->attribute)->getText());
-        $productData['additional_attributes'] = str_replace(': ', '=', $attribute);
-        $productData['configurable_variations'] = 'sku=' . $attributesData['sku'] . ',' . $attribute;
+        $productBlockForm = $this->catalogProductEdit->getProductForm();
+        $productBlockForm->openSection('variations');
+        $variationsSection = $productBlockForm->getSection('variations');
+        $productAttribute = $variationsSection->getVariationsBlock()->getProductAttribute();
+        $productAttribute = str_replace(': ', '=', $productAttribute);
+        $productData['additional_attributes'] = $productAttribute;
+        $productData['configurable_variations'] = 'sku=' . $attributesData['sku'] . ',' . $productAttribute;
         unset($productData['configurable_attributes_data']);
 
         return $productData;

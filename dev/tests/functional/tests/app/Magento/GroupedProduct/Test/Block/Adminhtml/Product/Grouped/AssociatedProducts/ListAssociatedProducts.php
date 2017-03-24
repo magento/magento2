@@ -60,4 +60,14 @@ class ListAssociatedProducts extends Form
     {
         return $this->getProductBlock($index)->getOption($data);
     }
+
+    /**
+     * Get product sku.
+     *
+     * @return string
+     */
+    public function getAssociatedProductSku()
+    {
+        return $this->getProductBlock(1)->getProductSku();
+    }
 }

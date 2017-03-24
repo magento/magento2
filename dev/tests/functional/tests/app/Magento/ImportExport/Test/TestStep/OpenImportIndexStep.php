@@ -7,7 +7,6 @@ namespace Magento\ImportExport\Test\TestStep;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Mtf\ObjectManager;
 
 /**
  * Open import index page.

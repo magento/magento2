@@ -264,69 +264,6 @@ class File extends DataSource
     }
 
     /**
-     * Prepare bundle product data.
-     *
-     * @param FixtureInterface $product
-     * @return array
-     */
-    private function getBundleProductData(FixtureInterface $product)
-    {
-        $newProduct = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
-        $newProduct->persist();
-        $newProductData = $newProduct->getData();
-        $productData = $product->getData();
-
-        $productData['bundle_attribute_sku'] = $newProductData['sku'];
-        $productData['bundle_attribute_name'] = $newProductData['name'];
-        $productData['bundle_attribute_url_key'] = $newProductData['url_key'];
-
-        return $productData;
-    }
-    /**
-     * Prepare grouped product data.
-     *
-     * @param FixtureInterface $product
-     * @return array
-     */
-    private function getGroupedProductData(FixtureInterface $product)
-    {
-        $newProduct = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => 'default']);
-        $newProduct->persist();
-        $newProductData = $newProduct->getData();
-        $productData = $product->getData();
-
-        $productData['grouped_associated_skus'] = $newProductData['sku'];
-        $productData['grouped_attribute_sku'] = $newProductData['sku'];
-        $productData['grouped_attribute_name'] = $newProductData['name'];
-        $productData['grouped_attribute_url_key'] = $newProductData['url_key'];
-        return $productData;
-    }
-
-    /**
-     * Prepare configurable product data.
-     *
-     * @param FixtureInterface $product
-     * @return array
-     */
-    private function getConfigurableProductData(FixtureInterface $product)
-    {
-        $newProduct = $this->fixtureFactory->createByCode('configurableProduct', ['dataset' => 'with_one_attribute']);
-        $newProduct->persist();
-        $newProductData = $newProduct->getData();
-        $newAttributeData = $newProductData['configurable_attributes_data']['matrix']['attribute_key_0:option_key_0'];
-        $productData = $product->getData();
-
-        $productData['configurable_attribute_sku'] = $newAttributeData['sku'];
-        $productData['configurable_attribute_name'] = $newAttributeData['name'];
-        $productData['configurable_attribute_url_key'] = str_replace('_', '-', $newAttributeData['sku']);
-        $productData['configurable_additional_attributes'] =
-            $newProductData['configurable_attributes_data']['attributes_data']['attribute_key_0']['frontend_label'];
-
-        return $productData;
-    }
-
-
-    /**
      * Convert csv to array.
      *
      * @param string $csvContent
