@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Http;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Context data for requests
@@ -28,13 +30,20 @@ class Context
     protected $default = [];
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param array $data
      * @param array $default
+     * @param Json|null $serializer
      */
-    public function __construct(array $data = [], array $default = [])
+    public function __construct(array $data = [], array $default = [], Json $serializer = null)
     {
         $this->data = $data;
         $this->default = $default;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -105,7 +114,7 @@ class Context
         $data = $this->getData();
         if (!empty($data)) {
             ksort($data);
-            return sha1(json_encode($data));
+            return sha1($this->serializer->serialize($data));
         }
         return null;
     }

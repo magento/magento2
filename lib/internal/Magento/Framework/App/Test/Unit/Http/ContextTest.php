@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Test\Unit\Http;
 
 use \Magento\Framework\App\Http\Context;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,10 +21,33 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->object = $this->objectManager->getObject(\Magento\Framework\App\Http\Context::class);
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->setMethods(['serialize'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+        $this->object = $this->objectManager->getObject(
+            \Magento\Framework\App\Http\Context::class,
+            [
+                'serializer' => $this->serializerMock
+            ]
+        );
     }
 
     public function testGetValue()
@@ -67,7 +91,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     public function testToArray()
     {
-        $newObject = new \Magento\Framework\App\Http\Context(['key' => 'value']);
+        $newObject = new \Magento\Framework\App\Http\Context(['key' => 'value'], [], $this->serializerMock);
 
         $newObject->setValue('key1', 'value1', 'default1');
         $newObject->setValue('key2', 'value2', 'default2');

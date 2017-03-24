@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\App\Utility;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
 
@@ -70,6 +72,11 @@ class Files
     private $themePackageList;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * Setter for an instance of self
      *
      * Also can unset the current instance, if no arguments are specified
@@ -117,15 +124,18 @@ class Files
      * @param ComponentRegistrar $componentRegistrar
      * @param DirSearch $dirSearch
      * @param ThemePackageList $themePackageList
+     * @param Json|null $serializer
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
         DirSearch $dirSearch,
-        ThemePackageList $themePackageList
+        ThemePackageList $themePackageList,
+        Json $serializer = null
     ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->dirSearch = $dirSearch;
         $this->themePackageList = $themePackageList;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -375,7 +385,7 @@ class Files
         $excludedFileNames = ['wsdl.xml', 'wsdl2.xml', 'wsi.xml'],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . json_encode([$fileNamePattern, $excludedFileNames, $asDataSet]);
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
@@ -407,7 +417,7 @@ class Files
         $excludedFileNames = [],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . json_encode([$fileNamePattern, $excludedFileNames, $asDataSet]);
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->getFilesSubset(
                 $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
