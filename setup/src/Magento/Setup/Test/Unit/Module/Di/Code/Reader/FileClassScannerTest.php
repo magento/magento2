@@ -131,5 +131,4 @@ PHP
 
         self::assertCount(1, $result);
     }
-
 }
