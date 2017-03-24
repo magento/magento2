@@ -610,7 +610,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 22;
         $addressId = 11;
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -875,7 +875,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndValidationException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -1018,7 +1018,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndLocalizedException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -1161,7 +1161,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
