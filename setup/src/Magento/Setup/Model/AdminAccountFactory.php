@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Setup\Module\Setup;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class AdminAccountFactory
 {
@@ -34,7 +35,8 @@ class AdminAccountFactory
         return new AdminAccount(
             $setup,
             $this->serviceLocator->get(\Magento\Framework\Encryption\Encryptor::class),
-            $data
+            $data,
+            new Json()
         );
     }
 }
