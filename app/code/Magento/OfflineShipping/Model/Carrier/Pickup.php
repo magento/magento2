@@ -59,7 +59,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     /**
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collectRates(RateRequest $request)
     {
