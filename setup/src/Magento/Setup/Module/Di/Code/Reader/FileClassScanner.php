@@ -27,10 +27,11 @@ class FileClassScanner
 
     /**
      * Constructor for the file class scanner.  Requires the filename
-     * @param $filename
+     *
+     * @param string $filename
      */
 
-    public function __construct( $filename )
+    public function __construct($filename)
     {
         $filename = realpath($filename);
         if (!file_exists($filename) || !\is_file($filename)) {
@@ -91,12 +92,12 @@ class FileClassScanner
             if ($token[0] == T_NAMESPACE) {
                 $triggerNamespace = true;
             // Current loop contains the class keyword.  Next loop will have the class name itself.
-            } else if ($token[0] == T_CLASS ) {
+            } else if ($token[0] == T_CLASS) {
                 $triggerClass = true;
             }
 
             // We have a class name, let's concatenate and store it!
-            if ($class != '' ) {
+            if ($class != '') {
                 $namespace = trim($namespace);
                 $fqClassName = $namespace . trim($class);
                 $classes[] = $fqClassName;
