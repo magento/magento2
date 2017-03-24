@@ -60,7 +60,6 @@ class SetTimeToSendDataTest extends Injectable
         $configAnalytics->getAnalyticsForm()->saveConfig();
     }
 
-
     /**
      * Clean data after running test.
      *
