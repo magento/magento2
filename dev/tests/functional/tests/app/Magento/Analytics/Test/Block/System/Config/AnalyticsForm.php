@@ -72,7 +72,7 @@ class AnalyticsForm extends Form
      * @param string $state
      * @return array|string
      */
-    public function analyticsToggle($state = 'Enabled')
+    public function analyticsToggle($state = 'Enable')
     {
         return $this->_rootElement->find($this->analyticsStatus, Locator::SELECTOR_CSS, 'select')->setValue($state);
     }
