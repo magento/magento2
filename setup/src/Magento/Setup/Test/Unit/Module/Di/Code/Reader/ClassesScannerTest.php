@@ -43,5 +43,4 @@ class ClassesScannerTest extends \PHPUnit_Framework_TestCase
     {
         self::assertTrue($this->model->isGeneration($this->generation));
     }
-
 }

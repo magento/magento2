@@ -82,7 +82,7 @@ class FileClassScanner
 
         $this->tokens = token_get_all($this->getFileContents());
         foreach ($this->tokens as $index => $token) {
-            // Is either a literal brace or an interpolated brace
+            // Is either a literal brace or an interpolated brace with a variable
             if ($token == '{' || (is_array($token) && in_array($token[0], $allowedOpenBraces))) {
                 $braceLevel++;
             } else if ($token == '}') {
@@ -127,13 +127,13 @@ class FileClassScanner
                 $class = '';
             }
         }
-        return $classes;;
+        return $classes;
     }
 
     /**
      * Looks forward from the current index to determine if the namespace is nested in {} or terminated with ;
      *
-     * @param $index
+     * @param integer $index
      * @return bool
      */
 

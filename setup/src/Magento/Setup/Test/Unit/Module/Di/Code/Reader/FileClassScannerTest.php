@@ -120,7 +120,6 @@ PHP
         self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
     }
 
-
     public function testGetMultiClassNameAndMultiNamespace()
     {
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
