@@ -55,7 +55,7 @@ class ClassesScanner implements ClassesScannerInterface
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
-            if ($fileItem->isDir() || $fileItem->getExtension() !== 'php') {
+            if ($fileItem->isDir() || $fileItem->getExtension() !== 'php' || $fileItem->getBasename()[0] == '.') {
                 continue;
             }
             foreach ($this->excludePatterns as $excludePatterns) {
@@ -87,10 +87,6 @@ class ClassesScanner implements ClassesScannerInterface
      */
     private function isExclude(\SplFileInfo $fileItem, $patterns)
     {
-        if($fileItem->getBasename()[0] == '.') {
-            return true;
-        } 
-
         if (!is_array($patterns)) {
             $patterns = (array)$patterns;
         }
