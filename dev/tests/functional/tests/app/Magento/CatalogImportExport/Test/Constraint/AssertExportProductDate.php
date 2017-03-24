@@ -23,7 +23,6 @@ class AssertExportProductDate extends AbstractConstraint
     public function processAssert(ExportInterface $export, $datePattern)
     {
         $date = new \DateTime();
-        $date->setTimezone(new \DateTimeZone($_ENV['magento_timezone']));
         $date = $date->format($datePattern);
         $exportData = $export->getLatest();
 

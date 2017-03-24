@@ -297,10 +297,16 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     protected function prepareSpecialPrice()
     {
         if (isset($this->fields['product']['special_from_date'])) {
-            $this->fields['product']['special_from_date'] = date('n/j/Y', strtotime($this->fields['product']['special_from_date']));
+            $this->fields['product']['special_from_date'] = date(
+                'n/j/Y',
+                strtotime($this->fields['product']['special_from_date'])
+            );
         }
         if (isset($this->fields['product']['special_to_date'])) {
-            $this->fields['product']['special_to_date'] = date('n/j/Y', strtotime($this->fields['product']['special_to_date']));
+            $this->fields['product']['special_to_date'] = date(
+                'n/j/Y',
+                strtotime($this->fields['product']['special_to_date'])
+            );
         }
     }
 
@@ -333,39 +339,37 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     /**
      * Create test image file.
      *
-     * @param string $filename
      * @return void
      */
-    protected function prepareMediaGallery($filename = 'test1.jpg')
+    protected function prepareMediaGallery()
     {
         if (isset($this->fields['product']['media_gallery'])) {
-            if (!file_exists($filename)) {
+            foreach ($this->fields['product']['media_gallery']['images'] as $galleryItem) {
+                $filename = $galleryItem['file'];
+                if (!file_exists($filename)) {
+                    // Create an image with the specified dimensions
+                    $image = imageCreate(300, 200);
 
-                // Create an image with the specified dimensions
-                $image = imageCreate(300, 200);
+                    // Create a color (this first call to imageColorAllocate
+                    // also automatically sets the image background color)
+                    $colorYellow = imageColorAllocate($image, 255, 255, 0);
 
-                // Create a color (this first call to imageColorAllocate
-                // also automatically sets the image background color)
-                $colorYellow = imageColorAllocate($image, 255, 255, 0);
+                    // Draw a rectangle
+                    imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
 
-                // Draw a rectangle
-                imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
+                    $directory = dirname($filename);
+                    if (!file_exists($directory)) {
+                        mkdir($directory, 0777, true);
+                    }
 
-                $directory = dirname($filename);
-                if (!file_exists($directory)) {
-                    mkdir($directory, 0777, true);
+                    imageJpeg($image, $filename);
+
+                    // Release memory
+                    imageDestroy($image);
                 }
 
-                imageJpeg($image, $filename);
-
-                // Release memory
-                imageDestroy($image);
+                $this->fields['product']['media_gallery_entries'][] = $this->getImageData($filename);
             }
-
-            $encodedImage = base64_encode(file_get_contents($filename));
-
-            //create a product with media gallery
-            $this->fields['product']['media_gallery_entries'] = $this->getImageData($filename, $encodedImage);
             unset($this->fields['product']['media_gallery']);
         }
     }
@@ -374,12 +378,11 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
      * Get media gallery data.
      *
      * @param $filename
-     * @param $encodedImage
      * @return array
      */
-    private function getImageData($filename, $encodedImage)
+    private function getImageData($filename)
     {
-        return [
+        return
             [
                 'position' => 1,
                 'media_type' => 'image',
@@ -389,9 +392,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 'content' => [
                     'type' => 'image/jpeg',
                     'name' => $filename,
-                    'base64_encoded_data' => $encodedImage,
+                    'base64_encoded_data' => base64_encode(file_get_contents($filename)),
                 ]
-            ]
-        ];
+            ];
     }
 }

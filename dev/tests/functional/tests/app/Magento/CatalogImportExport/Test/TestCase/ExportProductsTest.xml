@@ -13,17 +13,7 @@
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">default</item>
                 <item name="data" xsi:type="array">
-                    <item name="media_gallery" xsi:type="string">Yes</item>
-                </item>
-            </data>
-            <data name="products/1" xsi:type="array">
-                <item name="fixture" xsi:type="string">configurableProduct</item>
-                <item name="dataset" xsi:type="string">product_with_size</item>
-                <item name="data" xsi:type="array">
-                    <item name="media_gallery" xsi:type="string">Yes</item>
-                    <item name="configurable_attributes_data" xsi:type="array">
-                        <item name="media_gallery" xsi:type="string">Yes</item>
-                    </item>
+                    <item name="media_gallery" xsi:type="string">simple_image.jpeg</item>
                 </item>
             </data>
             <data name="advancedPricingAttributes" xsi:type="array">
@@ -44,10 +34,6 @@
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">with_one_custom_option</item>
-            </data>
-            <data name="products/1" xsi:type="array">
-                <item name="fixture" xsi:type="string">configurableProduct</item>
-                <item name="dataset" xsi:type="string">first_product_with_custom_options_and_option_key_1</item>
             </data>
             <data name="datePattern" xsi:type="string">n/j/y, g</data>
             <data name="advancedPricingAttributes" xsi:type="array">
@@ -81,43 +67,12 @@
                 <item name="5" xsi:type="string">url_key</item>
             </data>
         </variation>
-        <variation name="ExportProductsTestVariation4" summary="Export bundle products" ticketId="MAGETWO-30602">
-            <data name="exportData" xsi:type="string">default</data>
-            <data name="products/0" xsi:type="array">
-                <item name="fixture" xsi:type="string">bundleProduct</item>
-                <item name="dataset" xsi:type="string">bundle_dynamic_product</item>
-            </data>
-            <data name="products/1" xsi:type="array">
-                <item name="fixture" xsi:type="string">bundleProduct</item>
-                <item name="dataset" xsi:type="string">bundle_fixed_product</item>
-            </data>
-            <data name="products/2" xsi:type="array">
-                <item name="fixture" xsi:type="string">bundleProduct</item>
-                <item name="dataset" xsi:type="string">fixed_with_required_options_and_qty_and_textarea_attribute</item>
-            </data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-            </data>
-            <data name="exportedFields" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-                <item name="1" xsi:type="string">name</item>
-                <item name="2" xsi:type="string">weight</item>
-                <item name="3" xsi:type="string">visibility</item>
-                <item name="4" xsi:type="string">price</item>
-                <item name="5" xsi:type="string">url_key</item>
-            </data>
-        </variation>
         <variation name="ExportProductsTestVariation5" summary="Export simple product assigned to Main Website and configurable product assigned to Custom Website" ticketId="MAGETWO-46114">
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">default</item>
             </data>
-            <data name="products/1" xsi:type="array">
-                <item name="fixture" xsi:type="string">configurableProduct</item>
-                <item name="dataset" xsi:type="string">default</item>
-                <item name="store" xsi:type="string">custom_store</item>
-            </data>
             <data name="advancedPricingAttributes" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>
             </data>
@@ -128,27 +83,6 @@
                 <item name="3" xsi:type="string">visibility</item>
                 <item name="4" xsi:type="string">price</item>
                 <item name="5" xsi:type="string">url_key</item>
-            </data>
-        </variation>
-        <variation name="ExportProductsTestVariation6" summary="Export grouped product with special price" ticketId="MAGETWO-46116">
-            <data name="exportData" xsi:type="string">default</data>
-            <data name="products/0" xsi:type="array">
-                <item name="fixture" xsi:type="string">groupedProduct</item>
-                <item name="dataset" xsi:type="string">grouped_product_with_special_price_with_from_and_to_dates</item>
-            </data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-            </data>
-            <data name="exportedFields" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-                <item name="1" xsi:type="string">name</item>
-                <item name="2" xsi:type="string">weight</item>
-                <item name="3" xsi:type="string">visibility</item>
-                <item name="4" xsi:type="string">price</item>
-                <item name="5" xsi:type="string">special_price</item>
-                <item name="6" xsi:type="string">special_price_from_date</item>
-                <item name="7" xsi:type="string">special_price_to_date</item>
-                <item name="8" xsi:type="string">url_key</item>
             </data>
         </variation>
     </testCase>

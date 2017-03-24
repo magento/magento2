@@ -7,9 +7,8 @@ namespace Magento\CatalogImportExport\Test\TestCase;
 
 use Magento\CatalogImportExport\Test\Constraint\AssertExportProductDate;
 use Magento\CatalogImportExport\Test\Constraint\AssertExportProduct;
-use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
-use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
+use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Command\File\Export;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -104,7 +103,7 @@ class ExportProductsTest extends Injectable
         $this->adminExportIndex->open();
 
         foreach ($products as $product) {
-            if ($product instanceof GroupedProduct) {
+            if ($product->hasData('associated')) {
                 $associatedProducts = $product->getAssociated()['products'];
                 foreach ($associatedProducts as $associatedProduct) {
                     $this->adminExportIndex->getExportForm()->fill(
