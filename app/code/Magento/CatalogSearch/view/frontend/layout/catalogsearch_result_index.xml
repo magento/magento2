@@ -10,7 +10,7 @@
         <attribute name="class" value="page-products"/>
         <referenceContainer name="content">
             <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="Magento_CatalogSearch::result.phtml" cacheable="false">
-                <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="Magento_CatalogSearch::product/list.phtml" cacheable="false">
+                <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="Magento_Catalog::product/list.phtml" cacheable="false">
                     <arguments>
                         <!-- If argument's position depends on image size changeable in VDE:
                         positions:list-secondary,grid-secondary,list-actions,grid-actions,list-primary,grid-primary

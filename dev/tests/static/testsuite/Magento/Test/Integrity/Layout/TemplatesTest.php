@@ -17,17 +17,23 @@ class TemplatesTest extends \PHPUnit_Framework_TestCase
     protected static $templates = [];
 
     /**
+     * @var array
+     */
+    protected static $blockVirtualTypes = [];
+
+    /**
      * Collect declarations of containers per layout file that have aliases
      */
     public static function setUpBeforeClass()
     {
         $count = 0;
+        self::getBlockVirtualTypesWithDifferentModule();
         foreach (Files::init()->getLayoutFiles([], false) as $file) {
             $xml = simplexml_load_file($file);
-            $templateElements = $xml->xpath('//block[@template]') ?: [];
+            $blocks = $xml->xpath('//block[@template]') ?: [];
             $fileTemplates = [];
-            foreach ($templateElements as $node) {
-                $fileTemplates[] = (string)$node['template'];
+            foreach ($blocks as $block) {
+                $fileTemplates[] = ['class' => (string)$block['class'], 'file' => (string)$block['template']];
             }
             if (!empty($fileTemplates)) {
                 self::$templates[$file] = $fileTemplates;
@@ -45,13 +51,18 @@ class TemplatesTest extends \PHPUnit_Framework_TestCase
     public function testTemplateFollowsCanonicalName()
     {
         $errors = [];
+        $warnings = [];
         foreach (self::$templates as $file => $templates) {
-            foreach ($templates as $template) {
-                if (!preg_match('/[A-Za-z0-9]_[A-Za-z0-9]+\:\:[A-Za-z0-9\\_\.]+/', $template)) {
+            foreach ($templates as $templatePair) {
+                if (!preg_match('/[A-Za-z0-9]_[A-Za-z0-9]+\:\:[A-Za-z0-9\\_\-\.]+/', $templatePair['file'])) {
                     if (!isset($errors[$file])) {
                         $errors[$file] = [];
                     }
-                    $errors[$file][] = $template;
+                    $errors[$file][] = $templatePair['file'];
+                } else {
+                    if (isset(self::$blockVirtualTypes[$templatePair['class']])) {
+                        $warnings[$file][] = $templatePair;
+                    }
                 }
             }
         }
@@ -64,6 +75,34 @@ class TemplatesTest extends \PHPUnit_Framework_TestCase
                 $message .= '- ' . implode(PHP_EOL . '- ', $wrongTemplates) . PHP_EOL;
             }
             $this->fail($message);
+        }
+    }
+
+    /**
+     * Initialize array with the Virtual types for blocks
+     *
+     * Contains just those occurrences where base type and virtual type are located in different modules
+     */
+    private static function getBlockVirtualTypesWithDifferentModule()
+    {
+        $virtual = \Magento\Framework\App\Utility\Classes::getVirtualClasses();
+        foreach ($virtual as $className => $resolvedName) {
+            if (strpos($resolvedName, 'Block') !== false) {
+                $matches = [];
+                preg_match('/([A-Za-z0-9]+\\\\[A-Za-z0-9]+).*/', $className, $matches);
+                if (count($matches) > 1) {
+                    $oldModule = $matches[1];
+                } else {
+                    $oldModule = $className;
+                }
+
+                $matches = [];
+                preg_match('/([A-Za-z0-9]+\\\\[A-Za-z0-9]+).*/', $resolvedName, $matches);
+                $newModule = $matches[1];
+                if ($oldModule != $newModule) {
+                    self::$blockVirtualTypes[$className] = $resolvedName;
+                }
+            }
         }
     }
 }
