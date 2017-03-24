@@ -3,9 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
+/* @api */
 define([
     'Magento_Checkout/js/view/payment/default'
 ], function (Component) {

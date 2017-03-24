@@ -3,9 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
+/* @api */
 define([
     'ko',
     'Magento_Checkout/js/view/payment/default'
