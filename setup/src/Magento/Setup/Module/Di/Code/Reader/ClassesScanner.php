@@ -95,20 +95,24 @@ class ClassesScanner implements ClassesScannerInterface
             }
             $fileScanner = new FileClassScanner($fileItemPath);
             $classNames = $fileScanner->getClassNames();
-            $classExists = false;
-            if ($classNames) {
-                foreach ($classNames as $className) {
-                    if (class_exists($className)) {
-                        $classExists = true;
-                    }
-                }
-                $classes = array_merge($classes, $classNames);
-            }
-            if (!$classExists) {
-                require_once $fileItemPath;
-            }
+            $this->includeClasses($classNames, $fileItemPath);
+            $classes = array_merge($classes, $classNames);
+
         }
         return $classes;
+    }
+
+    protected function includeClasses(array $classNames, $fileItemPath)
+    {
+        $classExists = false;
+        foreach ($classNames as $className) {
+            if (class_exists($className)) {
+                $classExists = true;
+            }
+        }
+        if (!$classExists) {
+            require_once $fileItemPath;
+        }
     }
 
     /**

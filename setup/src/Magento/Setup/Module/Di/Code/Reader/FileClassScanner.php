@@ -75,14 +75,14 @@ class FileClassScanner
 
             // The namespace keyword was found in the last loop
             if ($triggerNamespace) {
-                if (is_array($token)) {
-                    $namespace .= $token[1];
-                } else {
+                if (!is_array($token)) {
                     $triggerNamespace = false;
                     $namespace .= '\\';
                     continue;
                 }
-            // The class keyword was found in the last loop
+                $namespace .= $token[1];
+
+                // The class keyword was found in the last loop
             } else if ($triggerClass && $token[0] == T_STRING) {
                 $triggerClass = false;
                 $class = $token[1];
