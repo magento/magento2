@@ -3,9 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
+/* @api */
 define([
     'mageUtils',
     'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/parse-date',

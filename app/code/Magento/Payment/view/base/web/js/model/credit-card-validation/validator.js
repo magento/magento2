@@ -3,9 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @api
- */
+/* @api */
 (function (factory) {
     'use strict';
 

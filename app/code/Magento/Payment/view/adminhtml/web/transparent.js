@@ -4,9 +4,7 @@
  */
 
 /* global FORM_KEY */
-/**
- * @api
- */
+/* @api */
 define([
     'jquery',
     'mage/template',
