@@ -279,9 +279,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\ValueInterface">
+    <virtualType name="snapshotValue" type="Magento\Framework\App\Config\Value">
         <arguments>
             <argument name="config" xsi:type="object">configSnapshot</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\Model\Config\Importer">
+        <arguments>
+            <argument name="scopeConfig" xsi:type="object">snapshotValue</argument>
         </arguments>
     </type>
 </config>
