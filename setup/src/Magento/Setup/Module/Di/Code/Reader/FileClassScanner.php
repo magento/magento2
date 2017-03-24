@@ -26,6 +26,12 @@ class FileClassScanner
     protected $classNames = false;
 
     /**
+     * @var array
+     */
+
+    protected $tokens;
+
+    /**
      * Constructor for the file class scanner.  Requires the filename
      *
      * @param string $filename
@@ -65,17 +71,27 @@ class FileClassScanner
 
     protected function extract()
     {
+        $allowedOpenBraces = [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES, T_STRING_VARNAME];
         $classes = [];
-        $tokens = token_get_all($this->getFileContents());
         $namespace = '';
         $class = '';
         $triggerClass = false;
         $triggerNamespace = false;
-        foreach ($tokens as $token) {
+        $braceLevel = 0;
+        $bracedNamespace = false;
 
+        $this->tokens = token_get_all($this->getFileContents());
+        foreach ($this->tokens as $index => $token) {
+            // Is either a literal brace or an interpolated brace
+            if ($token == '{' || (is_array($token) && in_array($token[0], $allowedOpenBraces))) {
+                $braceLevel++;
+            } else if ($token == '}') {
+                $braceLevel--;
+            }
             // The namespace keyword was found in the last loop
             if ($triggerNamespace) {
-                if (!is_array($token)) {
+                // A string ; or a discovered namespace that looks like "namespace name { }"
+                if (!is_array($token) || ($namespace && $token[0] == T_WHITESPACE)) {
                     $triggerNamespace = false;
                     $namespace .= '\\';
                     continue;
@@ -92,10 +108,14 @@ class FileClassScanner
                 case T_NAMESPACE:
                     // Current loop contains the namespace keyword.  Between this and the semicolon is the namespace
                     $triggerNamespace = true;
+                    $namespace = '';
+                    $bracedNamespace = $this->isBracedNamespace($index);
                     break;
                 case T_CLASS:
                     // Current loop contains the class keyword.  Next loop will have the class name itself.
-                    $triggerClass = true;
+                    if ($braceLevel == 0 || ($bracedNamespace && $braceLevel == 1)) {
+                        $triggerClass = true;
+                    }
                     break;
             }
 
@@ -104,10 +124,37 @@ class FileClassScanner
                 $namespace = trim($namespace);
                 $fqClassName = $namespace . trim($class);
                 $classes[] = $fqClassName;
-                return $classes;
+                $class = '';
             }
         }
-        return [];
+        return $classes;;
+    }
+
+    /**
+     * Looks forward from the current index to determine if the namespace is nested in {} or terminated with ;
+     *
+     * @param $index
+     * @return bool
+     */
+
+    protected function isBracedNamespace($index)
+    {
+        $len = count($this->tokens);
+        while ($index++ < $len) {
+            if (!is_array($this->tokens[$index])) {
+                if ($this->tokens[$index] == ';') {
+                    return false;
+                } else if ($this->tokens[$index] == '{') {
+                    return true;
+                }
+                continue;
+            }
+
+            if (!in_array($this->tokens[$index][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) {
+                throw new InvalidFileException('Namespace not defined properly');
+            }
+        }
+        throw new InvalidFileException('Could not find namespace termination');
     }
 
     /**

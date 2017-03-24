@@ -6,6 +6,7 @@
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 
 class ClassesScanner implements ClassesScannerInterface
@@ -22,11 +23,28 @@ class ClassesScanner implements ClassesScannerInterface
     protected $fileResults = [];
 
     /**
+     * @var string
+     */
+
+    protected $generationDirectory;
+
+    /**
      * @param array $excludePatterns
      */
-    public function __construct(array $excludePatterns = [])
+    public function __construct(array $excludePatterns = [], $generationDirectory = false)
     {
         $this->excludePatterns = $excludePatterns;
+        $this->generationDirectory = $generationDirectory;
+    }
+
+    public function getGenerationDirectory()
+    {
+        if ($this->generationDirectory === false) {
+            $directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+            /* @var $directoryList DirectoryList */
+            $this->generationDirectory = $directoryList->getPath(DirectoryList::GENERATION);
+        }
+        return $this->generationDirectory;
     }
 
     /**
@@ -41,6 +59,19 @@ class ClassesScanner implements ClassesScannerInterface
     }
 
     /**
+     * Determines if the path provided is in the var/generation folder
+     *
+     * @param $path
+     * @return bool
+     */
+
+    public function isGeneration($path)
+    {
+        $generation = $this->getGenerationDirectory();
+        return strpos($path, $generation) === 0;
+    }
+
+    /**
      * Retrieves list of classes for given path
      *
      * @param string $path
@@ -51,7 +82,9 @@ class ClassesScanner implements ClassesScannerInterface
     {
 
         $realPath = realpath($path);
-        $isGeneration = strpos($realPath, DIRECTORY_SEPARATOR . 'generation' . DIRECTORY_SEPARATOR) !== false;
+        $isGeneration = $this->isGeneration($realPath);
+
+        // Generation folders should not have their results cached since they may actually change during compile
         if (!$isGeneration) {
             if (isset($this->fileResults[$realPath])) {
                 return $this->fileResults[$realPath];
@@ -97,21 +130,17 @@ class ClassesScanner implements ClassesScannerInterface
             $classNames = $fileScanner->getClassNames();
             $this->includeClasses($classNames, $fileItemPath);
             $classes = array_merge($classes, $classNames);
-
         }
         return $classes;
     }
 
     protected function includeClasses(array $classNames, $fileItemPath)
     {
-        $classExists = false;
         foreach ($classNames as $className) {
-            if (class_exists($className)) {
-                $classExists = true;
+            if (!class_exists($className)) {
+                require_once $fileItemPath;
+                return;
             }
-        }
-        if (!$classExists) {
-            require_once $fileItemPath;
         }
     }
 

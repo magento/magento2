@@ -12,9 +12,18 @@ class ClassesScannerTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * the /var/generation directory realpath
+     *
+     * @var string
+     */
+
+    private $generation;
+
     protected function setUp()
     {
-        $this->model = new \Magento\Setup\Module\Di\Code\Reader\ClassesScanner();
+        $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
+        $this->model = new \Magento\Setup\Module\Di\Code\Reader\ClassesScanner([], $this->generation);
     }
 
     public function testGetList()
@@ -24,4 +33,15 @@ class ClassesScannerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($actual));
         $this->assertCount(5, $actual);
     }
+
+    public function testIsGenerationIgnoresRegularPath()
+    {
+        self::assertFalse($this->model->isGeneration(__DIR__));
+    }
+
+    public function testIsGenerationNotesGenerationPath()
+    {
+        self::assertTrue($this->model->isGeneration($this->generation));
+    }
+
 }

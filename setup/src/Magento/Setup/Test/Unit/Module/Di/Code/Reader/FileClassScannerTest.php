@@ -96,13 +96,13 @@ PHP
 <<<PHP
 <?php
 
-namespace This\Is\My\Namespace;
+namespace This\Is\My\Ns;
 
 class ThisIsMyTest {
 
     public function __construct()
     {
-        \This\Is\Another\Namespace::class;
+        \This\Is\Another\Ns::class;
     }
     
     public function test()
@@ -117,10 +117,97 @@ PHP
         $result = $scanner->getClassNames();
 
         self::assertCount(1, $result);
-        self::assertContains('This\Is\My\Namespace\ThisIsMyTest', $result);
+        self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
     }
 
-    public function testTheWeirdExceptionCaseThatHappens()
+
+    public function testGetMultiClassNameAndMultiNamespace()
+    {
+        $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
+            'getFileContents'
+        ])->getMock();
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+<<<PHP
+<?php
+
+namespace This\Is\My\Ns;
+
+class ThisIsMyTest {
+
+    public function __construct()
+    {
+        \$this->get(\This\Is\Another\Ns::class)->method();
+        self:: class;
+    }
+    
+    public function test()
+    {
+        
+    }
+}
+
+class ThisIsForBreaking {
+
+}
+
+PHP
+        );
+        /* @var $scanner FileClassScanner */
+
+        $result = $scanner->getClassNames();
+
+        self::assertCount(2, $result);
+        self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
+        self::assertContains('This\Is\My\Ns\ThisIsForBreaking', $result);
+    }
+
+    public function testBracketedNamespacesAndClasses()
+    {
+        $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
+            'getFileContents'
+        ])->getMock();
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+<<<PHP
+<?php
+
+namespace This\Is\My\Ns {
+
+    class ThisIsMyTest
+    {
+    
+        public function __construct()
+        {
+            \This\Is\Another\Ns::class;
+            self:: class;
+        }
+    
+    }
+    
+    class ThisIsForBreaking
+    {
+    }
+}
+
+namespace This\Is\Not\My\Ns {
+
+    class ThisIsNotMyTest
+    {
+    }   
+}
+
+PHP
+        );
+        /* @var $scanner FileClassScanner */
+
+        $result = $scanner->getClassNames();
+
+        self::assertCount(3, $result);
+        self::assertContains('This\Is\My\Ns\ThisIsMyTest', $result);
+        self::assertContains('This\Is\My\Ns\ThisIsForBreaking', $result);
+        self::assertContains('This\Is\Not\My\Ns\ThisIsNotMyTest', $result);
+    }
+
+    public function testClassKeywordInMiddleOfFile()
     {
         $filename = __DIR__
             . '/../../../../../../../../../..'
@@ -130,5 +217,28 @@ PHP
         $result = $scanner->getClassNames();
 
         self::assertCount(1, $result);
+    }
+
+    public function testInvalidPHPCodeThrowsExceptionWhenCannotDetermineBraceOrSemiColon()
+    {
+        $this->setExpectedException(InvalidFileException::class);
+        $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
+            'getFileContents'
+        ])->getMock();
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+            <<<PHP
+            <?php
+
+namespace This\Is\My\Ns 
+
+class ThisIsMyTest
+{
+}
+
+PHP
+        );
+        /* @var $scanner FileClassScanner */
+
+        $scanner->getClassNames();
     }
 }
