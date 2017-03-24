@@ -119,6 +119,6 @@ class CommentParser implements CommentParserInterface
         $pattern = '/\s+\* For the section: (.+)\s/';
         preg_match_all($pattern, $comment, $matches);
 
-        return empty($matches[1]) ? null : array_shift($matches[1]);
+        return empty($matches[1]) ? null : trim(array_shift($matches[1]));
     }
 }
