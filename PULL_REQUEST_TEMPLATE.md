@@ -4,8 +4,8 @@
 <!--- Provide a description of the changes proposed in the pull request -->
 
 ### Fixed Issues (if relevant)
-<!--- Provide a list of fixed issues in the format magento/magetno2#<issue_number>, if relevant  -->
-1. magento/magetno2#<issue_number>: Issue title
+<!--- Provide a list of fixed issues in the format magento/magento2#<issue_number>, if relevant  -->
+1. magento/magento2#<issue_number>: Issue title
 2. ...
 
 ### Manual testing scenarios

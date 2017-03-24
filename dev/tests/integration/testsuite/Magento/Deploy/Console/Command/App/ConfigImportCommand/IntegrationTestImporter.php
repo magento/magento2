@@ -20,4 +20,9 @@ class IntegrationTestImporter implements ImporterInterface
 
         return $messages;
     }
+
+    public function getWarningMessages(array $data)
+    {
+        return [];
+    }
 }
