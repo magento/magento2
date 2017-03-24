@@ -85,10 +85,8 @@ class ClassesScanner implements ClassesScannerInterface
         $isGeneration = $this->isGeneration($realPath);
 
         // Generation folders should not have their results cached since they may actually change during compile
-        if (!$isGeneration) {
-            if (isset($this->fileResults[$realPath])) {
-                return $this->fileResults[$realPath];
-            }
+        if (!$isGeneration && isset($this->fileResults[$realPath])) {
+            return $this->fileResults[$realPath];
         }
         if (!(bool)$realPath) {
             throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', [$path]));
