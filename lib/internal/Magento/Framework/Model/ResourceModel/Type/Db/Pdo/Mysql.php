@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
+// @codingStandardsIgnoreFile
+
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
 use Magento\Framework\App\ObjectManager;
