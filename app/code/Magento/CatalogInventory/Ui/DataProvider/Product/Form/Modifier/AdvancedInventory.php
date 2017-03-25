@@ -9,6 +9,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -46,21 +47,29 @@ class AdvancedInventory extends AbstractModifier
     private $meta = [];
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param LocatorInterface $locator
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      * @param StockConfigurationInterface $stockConfiguration
+     * @param Json|null $serializer
      */
     public function __construct(
         LocatorInterface $locator,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager,
-        StockConfigurationInterface $stockConfiguration
+        StockConfigurationInterface $stockConfiguration,
+        Json $serializer = null
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
         $this->arrayManager = $arrayManager;
         $this->stockConfiguration = $stockConfiguration;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -89,21 +98,19 @@ class AdvancedInventory extends AbstractModifier
         }
 
         if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
-            $minSaleQtyData = null;
-            $defaultConfigValue = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
+            $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
 
-            if (strpos($defaultConfigValue, 'a:') === 0) {
+            if (is_string($minSaleQtyData)) {
                 // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-                $minSaleQtyValue = unserialize($defaultConfigValue);
-
-                foreach ($minSaleQtyValue as $group => $qty) {
-                    $minSaleQtyData[] = [
-                        StockItemInterface::CUSTOMER_GROUP_ID => $group,
-                        StockItemInterface::MIN_SALE_QTY => $qty
-                    ];
+                $unserializedMinSaleQty = $this->serializer->unserialize($minSaleQtyData);
+                if (is_array($unserializedMinSaleQty) && json_last_error() === JSON_ERROR_NONE) {
+                    $minSaleQtyData = array_map(function ($group, $qty) {
+                        return [
+                            StockItemInterface::CUSTOMER_GROUP_ID => $group,
+                            StockItemInterface::MIN_SALE_QTY => $qty
+                        ];
+                    }, array_keys($unserializedMinSaleQty), array_values($unserializedMinSaleQty));
                 }
-            } else {
-                $minSaleQtyData = $defaultConfigValue;
             }
 
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
