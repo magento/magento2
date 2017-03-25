@@ -40,6 +40,7 @@ class ClassesScanner implements ClassesScannerInterface
      * @param string $path
      * @return array
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getList($path)
     {
