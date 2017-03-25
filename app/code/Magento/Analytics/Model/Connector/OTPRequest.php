@@ -6,13 +6,11 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Analytics\Model\Connector\Http\ConverterInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
-use Zend_Http_Response as HttpResponse;
 
 /**
  * Representation of an 'OTP' request.
@@ -35,11 +33,6 @@ class OTPRequest
      * @var Http\ClientInterface
      */
     private $httpClient;
-
-    /**
-     * @var ConverterInterface
-     */
-    private $converter;
 
     /**
      * @var LoggerInterface
@@ -67,7 +60,6 @@ class OTPRequest
     /**
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
-     * @param ConverterInterface $converter
      * @param ScopeConfigInterface $config
      * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
@@ -75,14 +67,12 @@ class OTPRequest
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
-        ConverterInterface $converter,
         ScopeConfigInterface $config,
         ResponseResolver $responseResolver,
         LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->httpClient = $httpClient;
-        $this->converter = $converter;
         $this->config = $config;
         $this->responseResolver = $responseResolver;
         $this->logger = $logger;

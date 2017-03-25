@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector\Http\Client;
 
+use Magento\Analytics\Model\Connector\Http\ConverterInterface;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 
 /**
@@ -28,11 +29,6 @@ class CurlTest extends \PHPUnit_Framework_TestCase
     private $loggerMock;
 
     /**
-     * @var \Zend_Http_Response|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $responseMock;
-
-    /**
      * @var CurlFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $curlFactoryMock;
@@ -41,6 +37,11 @@ class CurlTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Analytics\Model\Connector\Http\ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $responseFactoryMock;
+
+    /**
+     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $converterMock;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -63,13 +64,6 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         )
         ->disableOriginalConstructor()
         ->getMock();
-
-        $this->responseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
-        )
-        ->disableOriginalConstructor()
-        ->getMock();
-
         $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -83,6 +77,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         )
         ->disableOriginalConstructor()
         ->getMock();
+        $this->converterMock = $this->createJsonConverter();
 
         $this->objectManagerHelper =
             new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -92,7 +87,8 @@ class CurlTest extends \PHPUnit_Framework_TestCase
             [
                 'curlFactory' => $this->curlFactoryMock,
                 'responseFactory' => $this->responseFactoryMock,
-                'logger' => $this->loggerMock
+                'converter' => $this->converterMock,
+                'logger' => $this->loggerMock,
             ]
         );
     }
@@ -108,7 +104,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
             [
                 'data' => [
                     'version' => '1.1',
-                    'body'=> '{"name": "value"}',
+                    'body'=> ['name' => 'value'],
                     'url' => 'http://www.mystore.com',
                     'headers' => ['Content-Type: application/json'],
                     'method' => \Magento\Framework\HTTP\ZendClient::POST,
@@ -124,7 +120,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
     public function testRequestSuccess(array $data)
     {
         $responseString = 'This is response.';
-
+        $response = new  \Zend_Http_Response(201, [], $responseString);
         $this->curlMock->expects($this->once())
             ->method('write')
             ->with(
@@ -132,7 +128,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
                 $data['url'],
                 $data['version'],
                 $data['headers'],
-                $data['version']
+                json_encode($data['body'])
             );
         $this->curlMock->expects($this->once())
             ->method('read')
@@ -144,14 +140,14 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         $this->responseFactoryMock->expects($this->any())
             ->method('create')
             ->with($responseString)
-            ->willReturn($this->responseMock);
+            ->willReturn($response);
 
         $this->assertEquals(
-            $this->responseMock,
+            $response,
             $this->subject->request(
                 $data['method'],
                 $data['url'],
-                $data['version'],
+                $data['body'],
                 $data['headers'],
                 $data['version']
             )
@@ -171,7 +167,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
                 $data['url'],
                 $data['version'],
                 $data['headers'],
-                $data['version']
+                json_encode($data['body'])
             );
         $this->curlMock->expects($this->once())
             ->method('read');
@@ -194,10 +190,26 @@ class CurlTest extends \PHPUnit_Framework_TestCase
             $this->subject->request(
                 $data['method'],
                 $data['url'],
-                $data['version'],
+                $data['body'],
                 $data['headers'],
                 $data['version']
             )
         );
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createJsonConverter()
+    {
+        $converterMock = $this->getMockBuilder(ConverterInterface::class)
+            ->getMockForAbstractClass();
+        $converterMock->expects($this->any())->method('toBody')->willReturnCallback(function ($value) {
+            return json_encode($value);
+        });
+        $converterMock->expects($this->any())
+            ->method('getContentTypeHeader')
+            ->willReturn('Content-Type: application/json');
+        return $converterMock;
     }
 }

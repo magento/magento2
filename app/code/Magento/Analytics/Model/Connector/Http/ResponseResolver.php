@@ -21,8 +21,6 @@ class ResponseResolver
     private $responseHandlers;
 
     /**
-     * ResponseResolver constructor.
-     *
      * @param ConverterInterface $converter
      * @param ResponseHandlerInterface[] $responseHandlers
      */

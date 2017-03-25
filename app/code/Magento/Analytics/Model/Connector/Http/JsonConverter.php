@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Model\Connector\Http;
 
 /**
- * Class JsonConverter
+ * Represents JSON converter for http request and response body.
  */
 class JsonConverter implements ConverterInterface
 {

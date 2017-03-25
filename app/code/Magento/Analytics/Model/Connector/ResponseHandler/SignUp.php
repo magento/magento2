@@ -8,10 +8,9 @@ namespace Magento\Analytics\Model\Connector\ResponseHandler;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ConverterInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
- * Class StoreTokenHandler
+ * Stores access token to MBI that received in body.
  */
 class SignUp implements ResponseHandlerInterface
 {
@@ -21,29 +20,19 @@ class SignUp implements ResponseHandlerInterface
     private $analyticsToken;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var ConverterInterface
      */
     private $converter;
 
     /**
-     * SignUpResponseHandler constructor.
-     *
      * @param AnalyticsToken $analyticsToken
-     * @param LoggerInterface $logger
      * @param ConverterInterface $converter
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
-        LoggerInterface $logger,
         ConverterInterface $converter
     ) {
         $this->analyticsToken = $analyticsToken;
-        $this->logger = $logger;
         $this->converter = $converter;
     }
 

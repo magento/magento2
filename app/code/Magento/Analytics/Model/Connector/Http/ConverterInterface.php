@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Model\Connector\Http;
 
 /**
- * Interface ConverterInterface
+ * Represents converter interface for http request and response body.
  */
 interface ConverterInterface
 {

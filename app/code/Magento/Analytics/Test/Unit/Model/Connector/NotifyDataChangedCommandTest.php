@@ -39,11 +39,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $loggerMock;
 
-    /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $responseMock;
-
     protected function setUp()
     {
         $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
@@ -62,10 +57,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->responseMock =  $this->getMockBuilder(\Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->notifyDataChangedCommand = new NotifyDataChangedCommand(
             $this->analyticsTokenMock,
             $this->httpClientMock,
@@ -78,7 +69,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
     {
         $configVal = "Config val";
         $token = "Secret token!";
-        $requestJson = sprintf('{"access-token":"%s","url":"%s"}', $token, $configVal);
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);
@@ -93,9 +83,8 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ZendClient::POST,
                 $configVal,
-                $requestJson,
-                ['Content-Type: application/json']
-            )->willReturn($this->responseMock);
+                ['access-token' => $token, 'url' => $configVal]
+            )->willReturn(new \Zend_Http_Response(201, []));
         $this->assertTrue($this->notifyDataChangedCommand->execute());
     }
 
@@ -104,6 +93,8 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(false);
-        $this->assertFalse($this->notifyDataChangedCommand->execute());
+        $this->httpClientMock->expects($this->never())
+            ->method('request');
+        $this->assertTrue($this->notifyDataChangedCommand->execute());
     }
 }

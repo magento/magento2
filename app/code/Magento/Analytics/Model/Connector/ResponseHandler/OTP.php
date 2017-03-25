@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model\Connector\ResponseHandler;
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 
 /**
- * Class OTP
+ * Fetches OTP from body.
  */
 class OTP implements ResponseHandlerInterface
 {

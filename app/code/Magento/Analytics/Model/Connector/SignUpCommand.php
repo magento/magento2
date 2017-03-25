@@ -10,6 +10,8 @@ use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Store\Model\Store;
 
 /**
  * Class SignUpCommand
@@ -62,8 +64,6 @@ class SignUpCommand implements CommandInterface
      * @param Http\ClientInterface $httpClient
      * @param LoggerInterface $logger
      * @param ResponseResolver $responseResolver
-     *
-     * @internal param SignUpRequest $signUpRequest
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -103,7 +103,7 @@ class SignUpCommand implements CommandInterface
                 ZendClient::POST,
                 $this->config->getConfigDataValue($this->signUpUrlPath),
                 [
-                    "token" => $integrationToken->getToken(),
+                    "token" => $integrationToken->getData('token'),
                     "url" => $this->config->getConfigDataValue(
                         Store::XML_PATH_SECURE_BASE_URL
                     )

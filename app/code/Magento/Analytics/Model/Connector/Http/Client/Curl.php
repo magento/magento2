@@ -99,7 +99,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
      */
     private function applyContentTypeHeaderFromConverter(array $headers)
     {
-        $contentTypeHeaderKey = array_search('Content-Type', $headers);
+        $contentTypeHeaderKey = array_search($this->converter->getContentTypeHeader(), $headers);
         if ($contentTypeHeaderKey === false) {
             $headers[] = $this->converter->getContentTypeHeader();
         }

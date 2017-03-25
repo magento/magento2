@@ -10,7 +10,7 @@ use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 use Magento\Analytics\Model\Subscription;
 
 /**
- * Class ReSignUp
+ * Removes stored token and triggers subscription process.
  */
 class ReSignUp implements ResponseHandlerInterface
 {
@@ -18,6 +18,7 @@ class ReSignUp implements ResponseHandlerInterface
      * @var AnalyticsToken
      */
     private $analyticsToken;
+    
     /**
      * @var Subscription
      */

@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model\Connector\ResponseHandler;
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 
 /**
- * Class Update
+ * Return positive answer that request was finished successfully.
  */
 class Update implements ResponseHandlerInterface
 {
