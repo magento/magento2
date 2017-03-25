@@ -88,8 +88,10 @@ case $TEST_SUITE in
         # npm install -g yarn
         # yarn global add grunt-cli
         # yarn
+
         cp dev/travis/js/config.local.php app/etc
-        php bin/magento config:sensitive:set -n
-        php bin/magento setup:static-content:deploy -f -n
+        php bin/magento module:enable --all
+        php bin/magento setup:di:compile
+        php bin/magento setup:static-content:deploy -f
         ;;
 esac
