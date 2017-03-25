@@ -1,18 +1,16 @@
 <?php
 /**
- * Connection adapter factory
- *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
-use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class ConnectionFactory
+ * Connection adapter factory
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
@@ -105,13 +103,12 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $resourceInstance = new Mysql(
-            new Stdlib\StringUtils(),
-            new Stdlib\DateTime(),
-            $selectFactory,
-            $connectionConfig
+        $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $mysqlFactory = new \Magento\Framework\DB\Adapter\Pdo\MysqlFactory($objectManagerProvider->get());
+        $resourceInstance = new Mysql($connectionConfig, $mysqlFactory);
+        return $resourceInstance->getConnection(
+            $this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class),
+            $selectFactory
         );
-
-        return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
 }
