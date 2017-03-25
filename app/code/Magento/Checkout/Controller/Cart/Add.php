@@ -152,7 +152,6 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
 
             return $this->goBack($url);
-
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

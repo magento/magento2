@@ -55,7 +55,6 @@ class Filters extends AbstractComponent implements ObserverInterface
         $this->uiComponentFactory = $uiComponentFactory;
     }
 
-
     /**
      * Get component name
      *

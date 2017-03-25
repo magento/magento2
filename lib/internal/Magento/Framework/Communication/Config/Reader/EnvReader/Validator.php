@@ -178,8 +178,7 @@ class Validator extends ConfigValidator
                 )
             );
         }
-        if (
-            $this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]) &&
+        if ($this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]) &&
             count($configDataItem[ConfigInterface::TOPIC_HANDLERS]) != 1
         ) {
             throw new \LogicException(

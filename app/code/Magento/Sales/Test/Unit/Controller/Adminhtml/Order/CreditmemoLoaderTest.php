@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-
 /**
  * Class CreditmemoLoaderTest
  *

@@ -95,7 +95,6 @@ class ShowTest extends \PHPUnit_Framework_TestCase
                 'uploaderFactory' => $this->uploaderFactoryMock,
             ]
         );
-
     }
 
     public function testExecuteException()

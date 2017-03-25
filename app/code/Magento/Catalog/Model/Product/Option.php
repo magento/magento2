@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
@@ -912,5 +911,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
         return $this->metadataPool;
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -90,6 +90,7 @@ class Toolbar
     {
         return $this->request->getParam(self::LIMIT_PARAM_NAME);
     }
+
     /**
      * Return current page from request
      *

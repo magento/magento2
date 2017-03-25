@@ -187,7 +187,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Add fields to filter
-     * 
+     *
      * @dataProvider addToFilterDataProvider
      */
     public function testAddToFilter($field, $condition, $filterMapperCall, $expectedCondition)
@@ -211,7 +211,7 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * addToFilter DataProvider
-     * 
+     *
      * @return array
      */
     public function addToFilterDataProvider()

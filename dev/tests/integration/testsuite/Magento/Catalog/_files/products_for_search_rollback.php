@@ -26,7 +26,6 @@ foreach ($productSkus as $sku) {
         $product = $productRepository->get($sku, false, null, true);
         $productRepository->delete($product);
     } catch (NoSuchEntityException $e) {
-
     }
 }
 

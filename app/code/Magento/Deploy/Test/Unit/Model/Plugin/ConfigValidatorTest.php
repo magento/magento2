@@ -7,7 +7,7 @@ namespace Magento\Deploy\Test\Unit\Model\Plugin;
 
 use Magento\Deploy\Model\Plugin\ConfigValidator;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
-use Magento\Framework\App\FrontController;
+use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 
 class ConfigValidatorTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +23,7 @@ class ConfigValidatorTest extends \PHPUnit_Framework_TestCase
     private $configValidatorMock;
 
     /**
-     * @var FrontController|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontControllerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $frontControllerMock;
 
@@ -40,9 +40,8 @@ class ConfigValidatorTest extends \PHPUnit_Framework_TestCase
         $this->configValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->frontControllerMock = $this->getMockBuilder(FrontController::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
 

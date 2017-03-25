@@ -119,6 +119,11 @@ return [
                 'path' => 'Test/Unit/Setup/SerializedDataConverterTest.php'
             ],
             [
+                'type' => 'module',
+                'name' => 'Magento_Sales',
+                'path' => 'Test/Unit/Setup/SalesOrderPaymentDataConverterTest.php'
+            ],
+            [
                 'type' => 'library',
                 'name' => 'magento/framework',
                 'path' => 'Flag.php'

@@ -47,6 +47,7 @@ class EventSaver
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
     }
+
     /**
      * Save event
      *

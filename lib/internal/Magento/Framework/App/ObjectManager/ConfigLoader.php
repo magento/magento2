@@ -30,7 +30,7 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * Cache
      *
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @var \Magento\Framework\Config\CacheInterface
      */
     protected $_cache;
 

@@ -17,7 +17,7 @@ class Synonyms implements PreprocessorInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param SynonymAnalyzerInterface $synonymsAnalyzer
      */
     public function __construct(SynonymAnalyzerInterface $synonymsAnalyzer)

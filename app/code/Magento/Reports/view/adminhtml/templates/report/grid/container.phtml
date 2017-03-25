@@ -33,7 +33,9 @@ require([
         }
 
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
+            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl();?>filter/'+
+                Base64.encode(Form.serializeElements(elements))+'/'
+            );
         }
     }
 //]]>

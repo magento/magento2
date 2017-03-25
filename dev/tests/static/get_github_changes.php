@@ -176,7 +176,6 @@ function validateInput(array $options, array $requiredOptions)
     return true;
 }
 
-
 class GitRepo
 {
     /**
