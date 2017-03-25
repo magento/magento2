@@ -77,17 +77,17 @@ case $TEST_SUITE in
         cd ../../..
         ;;
     js)
-        # curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-        # export NVM_DIR="$HOME/.nvm"
-        # [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-        # nvm install --lts
-        # nvm use --lts
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+        nvm install --lts
+        nvm use --lts
 
-        # cp package.json.sample package.json
-        # cp Gruntfile.js.sample Gruntfile.js
-        # npm install -g yarn
-        # yarn global add grunt-cli
-        # yarn
+        cp package.json.sample package.json
+        cp Gruntfile.js.sample Gruntfile.js
+        npm install -g yarn
+        yarn global add grunt-cli
+        yarn
 
         cp dev/travis/js/config.php app/etc
         php bin/magento setup:static-content:deploy -f
