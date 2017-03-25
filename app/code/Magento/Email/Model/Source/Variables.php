@@ -61,7 +61,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray($withGroup = false)
     {
         $optionArray = [];
-        foreach ($this->_configVariables as $variable) {
+        foreach ($this->getData() as $variable) {
             $optionArray[] = [
                 'value' => '{{config path="' . $variable['value'] . '"}}',
                 'label' => $variable['label'],
@@ -81,6 +81,6 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      */
     public function getData()
     {
-        return  $this->_configVariables;
+        return $this->_configVariables;
     }
 }
