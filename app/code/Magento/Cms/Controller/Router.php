@@ -6,9 +6,7 @@
 namespace Magento\Cms\Controller;
 
 /**
- * Cms Controller Router
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
