@@ -247,7 +247,7 @@ class Edit extends \Magento\Backend\Block\Widget
     {
         return $this->getUrl('catalog/*/duplicate', ['_current' => true]);
     }
-    
+
     /**
      * @deprecated
      * @return string
