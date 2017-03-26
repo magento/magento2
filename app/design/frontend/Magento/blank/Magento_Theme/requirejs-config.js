@@ -5,7 +5,7 @@
 
 var config = {
     deps: [
-        "js/responsive",
-        "js/theme"
+        "Magento_Theme/js/responsive",
+        "Magento_Theme/js/theme"
     ]
 };
