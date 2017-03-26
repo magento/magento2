@@ -40,7 +40,7 @@ class ResponseResolver
         $result = false;
         $responseBody = $this->converter->fromBody($response->getBody());
         if (array_key_exists($response->getStatus(), $this->responseHandlers)) {
-            $result = $this->responseHandlers[$response->getStatus()]->handle($responseBody);
+            $result = $this->responseHandlers[$response->getStatus()]->handleResponse($responseBody);
         }
 
         return $result;
