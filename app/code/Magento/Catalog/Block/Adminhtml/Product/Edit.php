@@ -247,6 +247,20 @@ class Edit extends \Magento\Backend\Block\Widget
     {
         return $this->getUrl('catalog/*/duplicate', ['_current' => true]);
     }
+    
+    /**
+     * @deprecated
+     * @return string
+     */
+    public function getHeader()
+    {
+        if ($this->getProduct()->getId()) {
+            $header = $this->escapeHtml($this->getProduct()->getName());
+        } else {
+            $header = __('New Product');
+        }
+        return $header;
+    }
 
     /**
      * @return string
