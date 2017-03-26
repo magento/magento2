@@ -18,13 +18,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_itemIds;
 
     /**
-     * True when selections appended
-     *
-     * @var bool
-     */
-    protected $_selectionsAppended = false;
-
-    /**
      * Init model and resource model
      *
      * @return void
@@ -132,10 +125,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
     {
         if ($stripBefore) {
-            $this->_stripSelections();
+            $this->_stripSelections($selectionsCollection);
         }
 
-        if (!$this->_selectionsAppended) {
+        if (!$selectionsCollection->getFlag('has_options_appended')) {
             foreach ($selectionsCollection->getItems() as $key => $selection) {
                 $option = $this->getItemById($selection->getOptionId());
                 if ($option) {
@@ -147,7 +140,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     }
                 }
             }
-            $this->_selectionsAppended = true;
+            $selectionsCollection->setFlag('has_options_appended', true);
         }
 
         return $this->getItems();
@@ -156,14 +149,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Removes appended selections before
      *
+     * @param \Magento\Framework\Data\Collection $selectionsCollection
      * @return $this
      */
-    protected function _stripSelections()
+    protected function _stripSelections(\Magento\Framework\Data\Collection $selectionsCollection)
     {
         foreach ($this->getItems() as $option) {
             $option->setSelections([]);
         }
-        $this->_selectionsAppended = false;
+
+        foreach ($selectionsCollection->getItems() as $selection) {
+            $selection->setOption(null);
+        }
+
+        $selectionsCollection->setFlag('has_options_appended', false);
+
         return $this;
     }
 
