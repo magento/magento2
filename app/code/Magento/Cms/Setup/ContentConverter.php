@@ -53,6 +53,11 @@ class ContentConverter extends SerializedToJson
         foreach ($matches as $match) {
             $convertedValue .= $this->convertMatchString($match);
         }
+        preg_match_all('/(.*?{{widget.*?}})*(?<ending>.*?)$/si', $value, $matchesTwo, PREG_SET_ORDER);
+        if(isset($matchesTwo[0])) {
+            $convertedValue .= $matchesTwo[0]['ending'];
+        }
+
         return $convertedValue;
     }
 
