@@ -81,7 +81,7 @@ class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
                     )
                 );
 
-                return false;
+                return $response;
             }
 
             $response = $this->responseFactory->create($result);

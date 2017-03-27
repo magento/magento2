@@ -24,7 +24,7 @@ class ResponseResolver
      * @param ConverterInterface $converter
      * @param ResponseHandlerInterface[] $responseHandlers
      */
-    public function __construct(ConverterInterface $converter, $responseHandlers = [])
+    public function __construct(ConverterInterface $converter, array $responseHandlers = [])
     {
         $this->converter = $converter;
         $this->responseHandlers = $responseHandlers;

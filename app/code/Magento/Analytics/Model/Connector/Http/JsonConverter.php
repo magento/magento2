@@ -16,8 +16,6 @@ class JsonConverter implements ConverterInterface
     private $contentTypeHeader;
 
     /**
-     * JsonConverter constructor.
-     *
      * @param string $contentTypeHeader
      */
     public function __construct($contentTypeHeader)
