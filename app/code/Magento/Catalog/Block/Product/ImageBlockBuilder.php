@@ -106,6 +106,7 @@ class ImageBlockBuilder
 
         $type = isset($imageArguments['type']) ? $imageArguments['type'] : null;
         $baseFilePath = $product->getData($type);
+        $baseFilePath = $baseFilePath === 'no_selection' ? null : $baseFilePath;
 
         $imageAsset = $this->viewAssetImageFactory->create(
             [
