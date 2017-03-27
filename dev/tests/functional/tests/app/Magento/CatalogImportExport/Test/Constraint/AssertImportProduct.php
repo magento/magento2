@@ -100,7 +100,6 @@ class AssertImportProduct extends AbstractConstraint
             if ($product->getDataConfig()['type_id'] === $this->productType) {
                 // assert product in data grid
                 $assertProductInGrid->processAssert($product, $catalogProductIndex);
-
                 // assert product in store front
                 $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
                 \PHPUnit_Framework_Assert::assertEquals(
@@ -110,8 +109,7 @@ class AssertImportProduct extends AbstractConstraint
                 );
 
                 // assert product data from page and csv.
-                $productsData = $this->getPrepareProductsData($product);
-                $resultProductsData = $this->getResultProductsData($productsData);
+                $resultProductsData = $this->getPrepareProductsData($product);
                 $resultCsvData = $this->getResultCsv($product->getSku());
                 \PHPUnit_Framework_Assert::assertEquals(
                     $resultProductsData,
@@ -134,7 +132,7 @@ class AssertImportProduct extends AbstractConstraint
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
 
-        return $productData;
+        return $this->getResultProductsData($productData);
     }
 
     /**
@@ -163,7 +161,7 @@ class AssertImportProduct extends AbstractConstraint
      * @param array $productsData
      * @return array
      */
-    private function getResultProductsData(array $productsData)
+    protected function getResultProductsData(array $productsData)
     {
         $resultProductsData = [];
         array_walk_recursive(

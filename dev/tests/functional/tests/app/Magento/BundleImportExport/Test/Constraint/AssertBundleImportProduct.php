@@ -97,7 +97,7 @@ class AssertBundleImportProduct extends AssertImportProduct
             . $attributeSku . ',price=0.0000,default=0,default_qty='
             . $assignedProduct['selection_qty'] .'.0000,price_type=fixed';
 
-        return $productData;
+        return $this->getResultProductsData($productData);
     }
 
     /**

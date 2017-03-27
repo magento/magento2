@@ -89,7 +89,7 @@ class AssertGroupedImportProduct extends AssertImportProduct
         $productData['associated_skus'] = $assignedProductSku . '=' . $assignedProduct['qty'];
         unset($productData['associated']);
 
-        return $productData;
+        return $this->getResultProductsData($productData);
     }
 
     /**

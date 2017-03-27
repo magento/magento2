@@ -93,7 +93,7 @@ class AssertConfigurableImportProduct extends AssertImportProduct
         $productData['configurable_variations'] = 'sku=' . $attributesData['sku'] . ',' . $productAttribute;
         unset($productData['configurable_attributes_data']);
 
-        return $productData;
+        return $this->getResultProductsData($productData);
     }
 
     /**

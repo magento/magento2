@@ -304,21 +304,22 @@ class File extends DataSource
      */
     private function prepareCsv($csvContent)
     {
-        $this->csv = array_map(
-            function ($value) {
-                $explodedArray = explode(",", $value);
-                $count = count($explodedArray);
-                for ($i = 0; $i < $count; $i++) {
-                    if (preg_match('/^\".*[^"]$/U', $explodedArray[$i])) {
-                        $this->compileToOneString($i, $explodedArray);
-                    } else {
-                        $explodedArray[$i] = str_replace('"', '', $explodedArray[$i]);
-                    };
-                }
-                return array_diff($explodedArray, ['%to_delete%']);
-            },
-            str_getcsv($csvContent, "\n")
-        );
+        $this->csv = [];
+        foreach (str_getcsv($csvContent, "\n") as $value) {
+            $explodedArray = explode(",", $value);
+            $count = count($explodedArray);
+            for ($i = 0; $i < $count; $i++) {
+                if (preg_match('/^\".*[^"]$/U', $explodedArray[$i])) {
+                    $compiledData = $this->compileToOneString($i, $explodedArray);
+                    $i = $compiledData['index'];
+                    $explodedArray = $compiledData['explodedArray'];
+                } else {
+                    $explodedArray[$i] = str_replace('"', '', $explodedArray[$i]);
+                };
+            }
+            $data = array_diff($explodedArray, ['%to_delete%']);
+            $this->csv[] = $data;
+        }
     }
 
     /**
@@ -328,7 +329,7 @@ class File extends DataSource
      * @param array $explodedArray
      * @return string
      */
-    private function compileToOneString(&$index, array &$explodedArray)
+    private function compileToOneString($index, array $explodedArray)
     {
         $count = count($explodedArray);
         $implodedKey = $index;
@@ -339,6 +340,7 @@ class File extends DataSource
         $explodedArray[$implodedKey] .= ',' . $explodedArray[$index];
         $explodedArray[$index] = '%to_delete%';
         $explodedArray[$implodedKey] = str_replace('"', '', $explodedArray[$implodedKey]);
+        return ['index' => $index, 'explodedArray' => $explodedArray];
     }
 
     /**
