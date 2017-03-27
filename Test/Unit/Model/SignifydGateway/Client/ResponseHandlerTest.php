@@ -70,7 +70,6 @@ class ResponseHandlerTest extends \PHPUnit_Framework_TestCase
         $this->responseHandler = $this->objectManager->getObject(ResponseHandler::class, [
             'dataDecoder' => $this->dataDecoder
         ]);
-
     }
 
     /**
