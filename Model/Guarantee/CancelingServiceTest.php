@@ -66,6 +66,31 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Checks a test case, when Signifyd guarantee was canceled.
+     *
+     * @covers \Magento\Signifyd\Model\Guarantee\CancelingService::cancelForOrder
+     * @magentoDataFixture Magento/Signifyd/_files/case.php
+     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
+     */
+    public function testCancelForOrderWithCanceledGuarantee()
+    {
+        /** @var CaseRepositoryInterface $caseRepository */
+        $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
+        $caseEntity = $caseRepository->getByCaseId(self::$caseId);
+        $caseEntity->setGuaranteeDisposition(CaseInterface::GUARANTEE_CANCELED);
+        $caseRepository->save($caseEntity);
+
+        $this->gateway->expects(self::never())
+            ->method('cancelGuarantee');
+
+        $this->logger->expects(self::never())
+            ->method('error');
+
+        $result = $this->service->cancelForOrder($caseEntity->getOrderId());
+        self::assertFalse($result);
+    }
+
+    /**
      * Checks a test case, when Signifyd gateway throws an exception.
      *
      * @covers \Magento\Signifyd\Model\Guarantee\CancelingService::cancelForOrder
