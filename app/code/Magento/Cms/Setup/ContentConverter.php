@@ -46,6 +46,9 @@ class ContentConverter extends SerializedToJson
     public function convert($value)
     {
         preg_match_all('/(.*?){{(widget)(.*?)}}(.*?)/si', $value, $matches, PREG_SET_ORDER);
+        if (empty($matches)) {
+            return $value;
+        }
         $convertedValue = '';
         foreach ($matches as $match) {
             $convertedValue .= $this->convertMatchString($match);
