@@ -29,7 +29,7 @@ class AssertConfigurableImportProduct extends AssertImportProduct
     protected $productType = 'configurable';
 
     /**
-     * Array keys mapping for csv file.
+     * Needed configurable product data.
      *
      * @var array
      */
@@ -81,15 +81,13 @@ class AssertConfigurableImportProduct extends AssertImportProduct
      */
     protected function getPrepareProductsData(FixtureInterface $product)
     {
-        $productSku = $product->getSku();
-        $productId = $this->retrieveProductBySku($productSku)['id'];
+        $productId = $this->retrieveProductBySku($product)['id'];
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
         $attributesData = $productData['configurable_attributes_data']['matrix']['0'];
-        $productBlockForm = $this->catalogProductEdit->getProductForm();
-        $productBlockForm->openSection('variations');
-        $variationsSection = $productBlockForm->getSection('variations');
-        $productAttribute = $variationsSection->getVariationsBlock()->getProductAttribute();
+        $form = $this->catalogProductEdit->getProductForm();
+        $form->openSection('variations');
+        $productAttribute = $form->getSection('variations')->getVariationsBlock()->getProductAttribute();
         $productAttribute = str_replace(': ', '=', $productAttribute);
         $productData['additional_attributes'] = $productAttribute;
         $productData['configurable_variations'] = 'sku=' . $attributesData['sku'] . ',' . $productAttribute;

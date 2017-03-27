@@ -29,7 +29,7 @@ class AssertImportProduct extends AbstractConstraint
     protected $productType = 'simple';
 
     /**
-     * Array keys mapping for csv file.
+     * Needed product data.
      *
      * @var array
      */
@@ -94,7 +94,6 @@ class AssertImportProduct extends AbstractConstraint
         $this->catalogProductEdit = $catalogProductEdit;
         $this->webApi = $webApi;
         $this->browser = $browser;
-        $this->neededKeys = array_flip($this->neededKeys);
 
         $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
         foreach ($products as $product) {
@@ -111,17 +110,9 @@ class AssertImportProduct extends AbstractConstraint
                 );
 
                 // assert product data from page and csv.
-                $resultCsvData = $this->getResultCsv($product->getSku());
                 $productsData = $this->getPrepareProductsData($product);
-                $resultProductsData = [];
-                array_walk_recursive(
-                    $productsData,
-                    function ($value, $key) use (&$resultProductsData) {
-                        if (isset($this->neededKeys[$key])) {
-                            $resultProductsData[$key] = $value;
-                        }
-                    }
-                );
+                $resultProductsData = $this->getResultProductsData($productsData);
+                $resultCsvData = $this->getResultCsv($product->getSku());
                 \PHPUnit_Framework_Assert::assertEquals(
                     $resultProductsData,
                     $resultCsvData,
@@ -139,8 +130,7 @@ class AssertImportProduct extends AbstractConstraint
      */
     protected function getPrepareProductsData(FixtureInterface $product)
     {
-        $productSku = $product->getSku();
-        $productId = $this->retrieveProductBySku($productSku)['id'];
+        $productId = $this->retrieveProductBySku($product)['id'];
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
 
@@ -168,6 +158,26 @@ class AssertImportProduct extends AbstractConstraint
     }
 
     /**
+     * Return prepared products data.
+     *
+     * @param array $productsData
+     * @return array
+     */
+    private function getResultProductsData(array $productsData)
+    {
+        $resultProductsData = [];
+        array_walk_recursive(
+            $productsData,
+            function ($value, $key) use (&$resultProductsData) {
+                if (array_search($key, $this->neededKeys)) {
+                    $resultProductsData[$key] = $value;
+                }
+            }
+        );
+        return $resultProductsData;
+    }
+
+    /**
      * Delete waste data from array.
      *
      * @param array $csvData
@@ -175,23 +185,25 @@ class AssertImportProduct extends AbstractConstraint
      */
     private function deleteUnusedData(array $csvData)
     {
-        $wasteKeys = array_keys(array_diff_key($csvData, $this->neededKeys));
-        foreach ($wasteKeys as $key) {
-            unset($csvData[$key]);
-        };
+        $data = [];
+        foreach ($csvData as $key => $value) {
+            if (array_search($key, $this->neededKeys)) {
+                $data[$key] = $value;
+            }
+        }
 
-        return $csvData;
+        return $data;
     }
 
     /**
      * Retrieve product by sku.
      *
-     * @param string $sku
+     * @param FixtureInterface $product
      * @return mixed
      */
-    public function retrieveProductBySku($sku)
+    public function retrieveProductBySku(FixtureInterface $product)
     {
-        $url = $_ENV['app_frontend_url'] . 'rest/all/V1/products/' . $sku;
+        $url = $_ENV['app_frontend_url'] . 'rest/all/V1/products/' . $product->getSku();
         $this->webApi->write($url, [], WebapiDecorator::GET);
         $response = json_decode($this->webApi->read(), true);
         $this->webApi->close();

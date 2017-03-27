@@ -29,7 +29,7 @@ class AssertBundleImportProduct extends AssertImportProduct
     protected $productType = 'bundle';
 
     /**
-     * Array keys mapping for csv file.
+     * Needed bundle product data.
      *
      * @var array
      */
@@ -81,8 +81,7 @@ class AssertBundleImportProduct extends AssertImportProduct
      */
     protected function getPrepareProductsData(FixtureInterface $product)
     {
-        $productSku = $product->getSku();
-        $productId = $this->retrieveProductBySku($productSku)['id'];
+        $productId = $this->retrieveProductBySku($product)['id'];
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
 
@@ -91,8 +90,7 @@ class AssertBundleImportProduct extends AssertImportProduct
 
         $form = $this->catalogProductEdit->getProductForm();
         $form->openSection('bundle');
-        $container = $form->getSection('bundle');
-        $attributeSku = $container->getAttributeSku();
+        $attributeSku = $form->getSection('bundle')->getAttributeSku();
 
         $productData['associated_skus'] = $attributeSku;
         $productData['bundle_values'] = 'name=' .  $bundleSelection['title'] . ',type=select,required=1,sku='

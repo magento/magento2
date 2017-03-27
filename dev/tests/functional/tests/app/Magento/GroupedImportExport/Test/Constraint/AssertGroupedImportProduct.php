@@ -28,7 +28,7 @@ class AssertGroupedImportProduct extends AssertImportProduct
      */
     protected $productType = 'grouped';
     /**
-     * Array keys mapping for csv file.
+     * Needed grouped product data.
      *
      * @var array
      */
@@ -79,15 +79,13 @@ class AssertGroupedImportProduct extends AssertImportProduct
      */
     protected function getPrepareProductsData(FixtureInterface $product)
     {
-        $productSku = $product->getSku();
-        $productId = $this->retrieveProductBySku($productSku)['id'];
+        $productId = $this->retrieveProductBySku($product)['id'];
         $this->catalogProductEdit->open(['id' => $productId]);
         $productData = $this->catalogProductEdit->getProductForm()->getData($product);
         $assignedProduct = $productData['associated']['assigned_products'][0];
         $form = $this->catalogProductEdit->getProductForm();
         $form->openSection('grouped');
-        $container = $form->getSection('grouped');
-        $assignedProductSku = $container->getListAssociatedProductsBlock()->getAssociatedProductSku();
+        $assignedProductSku = $form->getSection('grouped')->getListAssociatedProductsBlock()->getAssociatedProductSku();
         $productData['associated_skus'] = $assignedProductSku . '=' . $assignedProduct['qty'];
         unset($productData['associated']);
 

@@ -234,31 +234,45 @@ class File extends DataSource
      */
     public function prepareEntityData(FixtureInterface $entity)
     {
-        $currency = (isset($this->value['template']['websiteCurrency']))
-            ? "[{$this->value['template']['websiteCurrency']}]"
-            : '[USD]';
         $entityData = $entity->getData();
         if (isset($entityData['quantity_and_stock_status'])) {
             $entityData = array_merge($entityData, $entityData['quantity_and_stock_status']);
         }
         if (isset($entityData['website_ids'])) {
-            $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
-            foreach ($websites as $website) {
-                if ($website->getCode() === 'base') {
-                    $currency = isset($this->value['template']['mainWebsiteCurrency'])
-                        ? $this->value['template']['mainWebsiteCurrency']
-                        : '[USD]';
-                    $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
-                    break;
-                }
-                $entityData['code'] = $website->getCode();
-                $entityData[$website->getCode()] = $website->getName() . $currency;
-            }
+            $entityData = array_merge($entityData, $this->getWebsitesData($entity));
         }
         if ($entity->getDataConfig() && ('simple' !== $entity->getDataConfig()['type_id'])) {
             $class = ucfirst($entity->getDataConfig()['type_id']);
             $file = ObjectManager::getInstance()->create("\\Magento\\{$class}ImportExport\\Test\\Fixture\\Import\\File");
             $entityData = $file->getData($entity, $this->fixtureFactory);
+        }
+        return $entityData;
+    }
+
+    /**
+     * Add websites data to array.
+     *
+     * @param FixtureInterface $entity
+     * @return array
+     */
+    private function getWebsitesData(FixtureInterface $entity)
+    {
+        $entityData = [];
+        $currency = (isset($this->value['template']['websiteCurrency']))
+            ? "[{$this->value['template']['websiteCurrency']}]"
+            : '[USD]';
+
+        $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
+        foreach ($websites as $website) {
+            if ($website->getCode() === 'base') {
+                $currency = isset($this->value['template']['mainWebsiteCurrency'])
+                    ? $this->value['template']['mainWebsiteCurrency']
+                    : '[USD]';
+                $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
+                break;
+            }
+            $entityData['code'] = $website->getCode();
+            $entityData[$website->getCode()] = $website->getName() . $currency;
         }
         return $entityData;
     }
@@ -279,28 +293,52 @@ class File extends DataSource
         if (is_array($this->mainWebsiteMapping)) {
             $csvContent = strtr($csvContent, $this->mainWebsiteMapping);
         }
+        $this->prepareCsv($csvContent);
+    }
+
+    /**
+     * Prepare csv data for converting to array.
+     *
+     * @param string $csvContent
+     * @return void
+     */
+    private function prepareCsv($csvContent)
+    {
         $this->csv = array_map(
             function ($value) {
                 $explodedArray = explode(",", $value);
                 $count = count($explodedArray);
                 for ($i = 0; $i < $count; $i++) {
                     if (preg_match('/^\".*[^"]$/U', $explodedArray[$i])) {
-                        $implodedKey = $i;
-                        while ((++$i <= $count) && !preg_match('/^[^"].*\"$/U', $explodedArray[$i])) {
-                            $explodedArray[$implodedKey] .= ',' . $explodedArray[$i];
-                            $explodedArray[$i] = '%%deleted%%';
-                        }
-                        $explodedArray[$implodedKey] .= ',' . $explodedArray[$i];
-                        $explodedArray[$i] = '%%deleted%%';
-                        $explodedArray[$implodedKey] = str_replace('"', '', $explodedArray[$implodedKey]);
+                        $this->compileToOneString($i, $explodedArray);
                     } else {
                         $explodedArray[$i] = str_replace('"', '', $explodedArray[$i]);
                     };
                 }
-                return array_diff($explodedArray, ['%%deleted%%']);
+                return array_diff($explodedArray, ['%to_delete%']);
             },
             str_getcsv($csvContent, "\n")
         );
+    }
+
+    /**
+     * Compile exploded data from "quotes" to one string.
+     *
+     * @param int $index
+     * @param array $explodedArray
+     * @return string
+     */
+    private function compileToOneString(&$index, array &$explodedArray)
+    {
+        $count = count($explodedArray);
+        $implodedKey = $index;
+        while ((++$index <= $count) && !preg_match('/^[^"].*\"$/U', $explodedArray[$index])) {
+            $explodedArray[$implodedKey] .= ',' . $explodedArray[$index];
+            $explodedArray[$index] = '%to_delete%';
+        }
+        $explodedArray[$implodedKey] .= ',' . $explodedArray[$index];
+        $explodedArray[$index] = '%to_delete%';
+        $explodedArray[$implodedKey] = str_replace('"', '', $explodedArray[$implodedKey]);
     }
 
     /**

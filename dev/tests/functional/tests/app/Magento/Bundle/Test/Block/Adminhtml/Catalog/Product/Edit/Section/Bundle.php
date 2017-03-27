@@ -176,6 +176,7 @@ class Bundle extends Section
 
     /**
      * Get attribute sku.
+     *
      * @return string
      */
     public function getAttributeSku()
