@@ -96,6 +96,13 @@ class Actions extends Block
     protected $orderCreditMemo = '#order_creditmemo';
 
     /**
+     * 'Get Payment Update' button on the order page.
+     *
+     * @var string
+     */
+    private $getPaymentUpdate = '#get_review_payment_update';
+
+    /**
      * 'Credit Memo' button on the order invoice page.
      *
      * @var string
@@ -148,6 +155,16 @@ class Actions extends Block
     public function invoice()
     {
         $this->_rootElement->find($this->invoice)->click();
+    }
+
+    /**
+     * Click 'Get Payment Update' button to fetch updates from 3rd party payment solution.
+     *
+     * @return void
+     */
+    public function paymentUpdate()
+    {
+        $this->_rootElement->find($this->getPaymentUpdate)->click();
     }
 
     /**

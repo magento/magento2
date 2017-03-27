@@ -306,7 +306,6 @@ class ServiceMetadata
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_METHOD] = $methodName;
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_PARAMS]
                     = $data[Converter::KEY_DATA_PARAMETERS];
-
             }
         }
         return $routes;

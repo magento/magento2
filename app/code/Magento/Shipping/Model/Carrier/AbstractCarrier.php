@@ -120,7 +120,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * Retrieve information from carrier configuration
      *
      * @param   string $field
-     * @return  void|false|string
+     * @return  false|string
      */
     public function getConfigData($field)
     {

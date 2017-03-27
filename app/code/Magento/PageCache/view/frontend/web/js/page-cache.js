@@ -41,9 +41,17 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            $(element).contents().each(function (index, el) {
-                var hostName, iFrameHostName;
+            // prevent cross origin iframe content reading
+            if ($(element).prop('tagName') === 'IFRAME') {
+                var iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                                             .prop('hostname');
 
+                if (window.location.hostname !== iframeHostName) {
+                    return [];
+                }
+            }
+
+            $(element).contents().each(function (index, el) {
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
                         lookup(el);
@@ -54,14 +62,7 @@ define([
                         break;
 
                     case 9: // DOCUMENT_NODE
-                        hostName = window.location.hostname;
-                        iFrameHostName = $('<a>')
-                            .prop('href', $(element).prop('src'))
-                            .prop('hostname');
-
-                        if (hostName === iFrameHostName) {
-                            lookup($(el).find('body'));
-                        }
+                        lookup($(el).find('body'));
                         break;
                 }
             });

@@ -4343,5 +4343,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         return $this->setData('shipping_method', $shippingMethod);
     }
+
     //@codeCoverageIgnoreEnd
 }

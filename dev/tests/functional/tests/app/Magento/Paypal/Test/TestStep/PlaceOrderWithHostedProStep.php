@@ -60,12 +60,20 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
     private $checkoutOnepageSuccess;
 
     /**
+     * Fixture OrderInjectable.
+     *
+     * @var OrderInjectable
+     */
+    private $order;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param FixtureFactory $fixtureFactory
      * @param CreditCard $creditCard
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param array $payment
      * @param array $products
+     * @param OrderInjectable|null $order
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
@@ -73,7 +81,8 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         CreditCard $creditCard,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         array $payment,
-        array $products
+        array $products,
+        OrderInjectable $order = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->fixtureFactory = $fixtureFactory;
@@ -81,6 +90,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         $this->payment = $payment;
         $this->products = $products;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
+        $this->order = $order;
     }
 
     /**
@@ -102,18 +112,16 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
 
         $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         /** @var OrderInjectable $order */
+        $data = [
+            'id' => $orderId,
+            'entity_id' => ['products' => $this->products]
+        ];
+        $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            [
-                'data' => [
-                    'id' => $orderId,
-                    'entity_id' => ['products' => $this->products]
-                ]
-            ]
+            ['data' => array_merge($data, $orderData)]
         );
-        return [
-            'orderId' => $orderId,
-            'order' => $order
-        ];
+
+        return ['order' => $order];
     }
 }

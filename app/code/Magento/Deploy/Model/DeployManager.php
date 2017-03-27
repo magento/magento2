@@ -182,7 +182,6 @@ class DeployManager
                 } else {
                     $dependentStrategy[] = $deploymentFunc;
                 }
-
             }
             $processQueueManager->addTaskToQueue($baseStrategy, $dependentStrategy);
         }

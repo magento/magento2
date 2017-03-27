@@ -134,7 +134,10 @@ class GridSortingTest extends Injectable
             $steps = [];
         }
         foreach ($steps as $step) {
-            $processStep = $this->objectManager->create($step, ['order' => $item]);
+            $products = $item->getEntityId()['products'];
+            $cart['data']['items'] = ['products' => $products];
+            $cart = $this->fixtureFactory->createByCode('cart', $cart);
+            $processStep = $this->objectManager->create($step, ['order' => $item, 'cart' => $cart]);
             $processStep->run();
         }
     }

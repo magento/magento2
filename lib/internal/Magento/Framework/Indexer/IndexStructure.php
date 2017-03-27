@@ -19,10 +19,12 @@ class IndexStructure implements IndexStructureInterface
      * @var Resource
      */
     private $resource;
+
     /**
      * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
+
     /**
      * @var FlatScopeResolver
      */

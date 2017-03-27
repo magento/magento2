@@ -135,7 +135,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Retrieve scope data
-     * 
+     *
      * @param array $websiteScope
      * @param array $groupScope
      * @param array $storeScope

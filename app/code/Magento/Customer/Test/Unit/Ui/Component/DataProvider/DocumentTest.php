@@ -20,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class DocumentTest
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DocumentTest extends \PHPUnit_Framework_TestCase

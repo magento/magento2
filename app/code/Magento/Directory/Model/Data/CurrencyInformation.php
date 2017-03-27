@@ -118,7 +118,6 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
         return $this->setData(self::KEY_EXCHANGE_RATES, $exchangeRates);
     }
 
-
     /**
      * @inheritDoc
      */

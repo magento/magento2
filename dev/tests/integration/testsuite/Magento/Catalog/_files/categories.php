@@ -35,7 +35,6 @@ foreach ($properties as $key => $value) {
     }
 }
 
-
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
  */

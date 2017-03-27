@@ -14,11 +14,6 @@ use Magento\Mtf\Client\BrowserInterface;
 class AssertBasicTierLink extends AbstractConstraint
 {
     /**
-     * Basic Tier Sign Up page url
-     */
-    const BASIC_TIER_LINK = 'https://dashboard.rjmetrics.com/v2/magento/signup';
-
-    /**
      * Browser instance.
      *
      * @var BrowserInterface
@@ -29,14 +24,15 @@ class AssertBasicTierLink extends AbstractConstraint
      * Assert Basic Tier Sign Up page is opened by link
      *
      * @param BrowserInterface $browser
+     * @param string $businessIntelligenceLink
      * @return void
      */
-    public function processAssert(BrowserInterface $browser)
+    public function processAssert(BrowserInterface $browser, $businessIntelligenceLink)
     {
         $this->browser = $browser;
         $this->browser->selectWindow();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::BASIC_TIER_LINK,
+            $businessIntelligenceLink,
             $this->browser->getUrl(),
             'Basic Tier Sign Up page was not opened by link.'
         );
