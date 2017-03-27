@@ -9,7 +9,7 @@ use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,11 +23,11 @@ use Magento\Framework\Console\QuestionPerformer\YesNo;
 class Processor
 {
     /**
-     * The configuration data validator.
+     * Configuration data changes detector.
      *
-     * @var Validator
+     * @var ChangeDetector
      */
-    private $configValidator;
+    private $changeDetector;
 
     /**
      * Pool of all deployment configuration importers.
@@ -72,7 +72,7 @@ class Processor
     private $questionPerformer;
 
     /**
-     * @param Validator $configValidator the manager of deployment configuration hash
+     * @param ChangeDetector $changeDetector configuration data changes detector
      * @param ImporterPool $configImporterPool the pool of all deployment configuration importers
      * @param ImporterFactory $importerFactory the factory for creation of importer instance
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
@@ -81,7 +81,7 @@ class Processor
      * @param YesNo $questionPerformer The question performer for cli command
      */
     public function __construct(
-        Validator $configValidator,
+        ChangeDetector $changeDetector,
         ImporterPool $configImporterPool,
         ImporterFactory $importerFactory,
         DeploymentConfig $deploymentConfig,
@@ -89,7 +89,7 @@ class Processor
         Logger $logger,
         YesNo $questionPerformer
     ) {
-        $this->configValidator = $configValidator;
+        $this->changeDetector = $changeDetector;
         $this->configImporterPool = $configImporterPool;
         $this->importerFactory = $importerFactory;
         $this->deploymentConfig = $deploymentConfig;
@@ -110,7 +110,7 @@ class Processor
     {
         try {
             $importers = $this->configImporterPool->getImporters();
-            if (!$importers || $this->configValidator->isValid()) {
+            if (!$importers || !$this->changeDetector->hasChanges()) {
                 $output->writeln('<info>Nothing to import.</info>');
                 return;
             } else {
@@ -122,7 +122,7 @@ class Processor
              * @var string $importerClassName
              */
             foreach ($importers as $section => $importerClassName) {
-                if ($this->configValidator->isValid($section)) {
+                if (!$this->changeDetector->hasChanges($section)) {
                     continue;
                 }
 

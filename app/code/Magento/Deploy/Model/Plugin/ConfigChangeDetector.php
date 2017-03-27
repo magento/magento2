@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Model\Plugin;
 
-use Magento\Deploy\Model\DeploymentConfig\Validator as DeploymentConfigValidator;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -13,29 +13,29 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * This is plugin for Magento\Framework\App\FrontController class.
  *
- * Checks that config data form deployment configuration files was not changed.
+ * Detects that the configuration data from the deployment configuration files has been changed.
  * If config data was changed throws LocalizedException because we should stop work of Magento and then import
  * config data from shared configuration files into appropriate application sources.
  */
-class ConfigValidator
+class ConfigChangeDetector
 {
     /**
-     * Configuration data validator.
+     * Configuration data changes detector.
      *
-     * @var DeploymentConfigValidator
+     * @var ChangeDetector
      */
-    private $configValidator;
+    private $changeDetector;
 
     /**
-     * @param DeploymentConfigValidator $configValidator the configuration data validator
+     * @param ChangeDetector $changeDetector configuration data changes detector
      */
-    public function __construct(DeploymentConfigValidator $configValidator)
+    public function __construct(ChangeDetector $changeDetector)
     {
-        $this->configValidator = $configValidator;
+        $this->changeDetector = $changeDetector;
     }
 
     /**
-     * Performs check that config data from deployment configuration files is valid.
+     * Performs detects that config data from deployment configuration files been changed.
      *
      * @param FrontControllerInterface $subject the interface of frontend controller is wrapped by this plugin
      * @param RequestInterface $request the object that contains request params
@@ -45,10 +45,10 @@ class ConfigValidator
      */
     public function beforeDispatch(FrontControllerInterface $subject, RequestInterface $request)
     {
-        if (!$this->configValidator->isValid()) {
+        if ($this->changeDetector->hasChanges()) {
             throw new LocalizedException(
                 __(
-                    'A change in configuration has been detected.'
+                    'The configuration file has changed.'
                     . ' Run app:config:import or setup:upgrade command to synchronize configuration.'
                 )
             );
