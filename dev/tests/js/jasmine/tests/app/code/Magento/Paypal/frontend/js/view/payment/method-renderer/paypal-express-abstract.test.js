@@ -1,0 +1,94 @@
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+define([
+    'jquery',
+    'squire',
+    'ko',
+    'mage/translate',
+    'Magento_Ui/js/lib/knockout/bootstrap'
+], function ($, Squire, ko, $t) {
+    'use strict';
+
+    window.$t = $t;
+
+    describe('paypal/js/view/payment/method-renderer/paypal-express-abstract', function () {
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Checkout/js/model/quote': {
+                    billingAddress: ko.observable(),
+                    shippingAddress: ko.observable(),
+                    paymentMethod: ko.observable()
+                }
+            },
+            paypalExpressAbstract,
+            templateElement = $('<div data-bind="template: getTemplate()"></div>')[0];
+
+        /**
+         * Click on PayPal help link and call expectation
+         * @param {Function} expectation
+         */
+        function clickOnHelpLink(expectation) {
+            var anchorElement = document.querySelector('div.payment-method-title.field.choice > label > a');
+
+            $(anchorElement).add('span').find('span').trigger('click');
+            expectation();
+        }
+
+        beforeAll(function (done) {
+            window.checkoutConfig = {
+                quoteData: {}
+            };
+            injector.mock(mocks);
+            injector.require(
+                ['Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract'],
+                function (Constr) {
+                    paypalExpressAbstract = new Constr({
+                        provider: 'provName',
+                        name: 'test',
+                        index: 'test',
+                        item: {
+                            method: 'paypal_express_bml'
+                        }
+                    });
+
+                    $(document.body).append(templateElement);
+                    ko.applyBindings(paypalExpressAbstract, templateElement);
+
+                    done();
+                });
+        });
+
+        it('showAcceptanceWindow is invoked when the anchor element of help link is clicked', function (done) {
+            spyOn(paypalExpressAbstract, 'showAcceptanceWindow');
+            setTimeout(function () {
+                clickOnHelpLink(function () {
+                    expect(paypalExpressAbstract.showAcceptanceWindow).toHaveBeenCalled();
+                });
+                done();
+            }, 500);
+        });
+
+        it('Help link should be available in showAcceptanceWindow function', function (done) {
+            spyOn(window, 'open');
+            setTimeout(function () {
+                clickOnHelpLink(function () {
+                    expect(window.open).toHaveBeenCalledWith(
+                        jasmine.stringMatching('http'),
+                        jasmine.anything(),
+                        jasmine.anything()
+                    );
+                });
+                done();
+            }, 500);
+        });
+
+        afterAll(function (done) {
+            templateElement.remove();
+
+            done();
+        });
+    });
+});
