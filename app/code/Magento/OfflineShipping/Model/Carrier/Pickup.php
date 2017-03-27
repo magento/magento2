@@ -65,7 +65,7 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
         /** @var \Magento\Shipping\Model\Rate\Result $result */
         $result = $this->_rateResultFactory->create();
 
-        if (!empty($rate)) {
+        if (!empty($result)) {
             /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_rateMethodFactory->create();
 
