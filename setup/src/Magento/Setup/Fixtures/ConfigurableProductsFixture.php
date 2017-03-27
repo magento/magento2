@@ -388,26 +388,32 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @throws ValidatorException
      */
     public function printInfo(OutputInterface $output)
     {
-        if (!$this->fixtureModel->getValue('configurable_products', [])) {
+        $config = $this->fixtureModel->getValue('configurable_products', []);
+        if (!$config) {
             return ;
         }
-        $configurableProductConfig = $this->getConfigurableProductConfig();
-        $generalAmount = array_sum(array_map(
-            function ($item) {
-                return $item['products'];
-            },
-            $configurableProductConfig
-        ));
+
+        $generalAmount = is_numeric($config) ? $config : array_sum(array_column($config, 'products'));
         $output->writeln(sprintf('<info> |- Configurable products: %s</info>', $generalAmount));
+
+        $configurableProductConfig = $this->prepareConfigurableConfig(
+            $this->getDefaultAttributeSetsWithAttributes()
+        );
+
         foreach ($configurableProductConfig as $config) {
+            $attributeSetName = isset($config['attributeSet'])
+                ? $config['attributeSet']
+                : 'Dynamic Attribute Set ' . $config['attributes'] . '-' . $config['options'];
+
             $output->writeln(
                 sprintf(
                     '<info> |--- %s products for attribute set "%s"</info>',
                     $config['products'],
-                    $config['attributeSet']['name']
+                    $attributeSetName
                 )
             );
         }
