@@ -148,6 +148,9 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testRun()
     {
         $data = $this->getData();

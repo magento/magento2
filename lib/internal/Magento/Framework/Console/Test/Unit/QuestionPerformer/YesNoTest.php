@@ -86,6 +86,9 @@ class YesNoTest extends \PHPUnit_Framework_TestCase
             ->method('ask')
             ->with($this->inputMock, $this->outputMock, $questionMock)
             ->willReturn($answer);
+        $this->inputMock->expects($this->once())
+            ->method('isInteractive')
+            ->willReturn(true);
 
         $this->assertSame(
             $expectedResult,
