@@ -7,7 +7,16 @@
 namespace Magento\Setup\Fixtures;
 
 /**
- * Class CartPriceRulesFixture
+ * Fixture for generating cart price rules
+ *
+ * Support the following format:
+ * <!-- Number of cart price rules -->
+ * <cart_price_rules>{int}</cart_price_rules>
+ *
+ * <!-- Number of conditions per rule -->
+ * <cart_price_rules_floor>{int}</cart_price_rules_floor>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  */
 class CartPriceRulesFixture extends Fixture
 {
