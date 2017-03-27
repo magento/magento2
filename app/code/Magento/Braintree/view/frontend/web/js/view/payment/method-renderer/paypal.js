@@ -296,21 +296,20 @@ define([
         getShippingAddress: function () {
             var address = quote.shippingAddress();
 
-            if (_.isNull(address.postcode) || _.isUndefined(address.postcode)) {
-
+            try {
+                return {
+                    recipientName: address.firstname + ' ' + address.lastname,
+                    streetAddress: address.street[0],
+                    locality: address.city,
+                    countryCodeAlpha2: address.countryId,
+                    postalCode: address.postcode,
+                    region: address.regionCode,
+                    phone: address.telephone,
+                    editable: this.isAllowOverrideShippingAddress()
+                };
+            } catch (e) {
                 return {};
             }
-
-            return {
-                recipientName: address.firstname + ' ' + address.lastname,
-                streetAddress: address.street[0],
-                locality: address.city,
-                countryCodeAlpha2: address.countryId,
-                postalCode: address.postcode,
-                region: address.regionCode,
-                phone: address.telephone,
-                editable: this.isAllowOverrideShippingAddress()
-            };
         },
 
         /**
