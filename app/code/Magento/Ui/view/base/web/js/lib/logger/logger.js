@@ -3,91 +3,96 @@
  * See COPYING.txt for license details.
  */
 define([
-    './levels'
-], function (levels) {
+    './levels-poll'
+], function (logLevels) {
     'use strict';
 
+    var levels = logLevels.getLevels();
+
     /**
-     *
-     * @param {LogEntryHandler} entryHandler
+     * @param {LogOutputHandler} outputHandler
      * @param {LogEntryFactory} entryFactory
-     * @param {LogCriteriaFactory} criteriaFactory
      */
-    function Logger(entryHandler, entryFactory) {
+    function Logger(outputHandler, entryFactory) {
         /**
+         * An array of log entries.
          *
-         * @protected {Array<LogEntry>}
+         * @protected
+         * @type {Array<LogEntry>}
          */
         this.entries_ = [];
 
         /**
+         * Current display level.
          *
-         * @protected {number}
+         * @protected
+         * @type {Number}
          */
         this.displayLevel_ = levels.ALL;
 
         /**
+         * An array of display criteria.
          *
-         * @protected {Array<LogCriteria>}
+         * @protected
+         * @type {Array<LogCriteria>}
          */
-        this.displayCriterias_ = [];
+        this.displayCriteria_ = [];
 
         /**
-         *
-         * @protected {LogEntryFactory}
+         * @protected
+         * @type {LogEntryFactory}
          */
         this.entryFactory_ = entryFactory;
 
         /**
-         *
-         * @protected {LogEntryHandler}
+         * @protected
+         * @type {Array<LogOutputHandler>}
          */
-        this.entryHandler_ = entryHandler;
+        this.outputHandlers_ = [outputHandler];
 
-        this.addDisplayMask(this.matchesLevel_.bind(this));
+        this.addDisplayCriteria(this.matchesLevel_);
     }
 
     /**
+     * Swaps current display level with the provided one.
      *
-     * @param {number} level
-     * @returns {void}
+     * @param {Number} level - Level's code.
      */
     Logger.prototype.setDisplayLevel = function (level) {
-        var levels = Object.values(Logger.levels);
+        var levelName = logLevels.getNameByCode(level);
 
-        if (!~levels.indexOf(level)) {
-            throw new TypeError('');
+        if (!levelName) {
+            throw new TypeError('The provided level is not defined in the levels list.');
         }
 
         this.displayLevel_ = level;
     };
 
     /**
+     * Sets up the criteria by which log entries will be filtered out from the output.
      *
      * @param {LogCriteria} criteria
-     * @returns {void}
      */
-    Logger.prototype.addDisplayMask = function (criteria) {
-        this.displayCriterias_.push(criteria);
+    Logger.prototype.addDisplayCriteria = function (criteria) {
+        this.displayCriteria_.push(criteria);
     };
 
     /**
+     * Removes previously defined criteria.
      *
      * @param {LogCriteria} criteria
-     * @returns {void}
      */
-    Logger.prototype.removeDisplayMask = function (criteria) {
-        var index = this.displayCriterias_.indexOf(criteria);
+    Logger.prototype.removeDisplayCriteria = function (criteria) {
+        var index = this.displayCriteria_.indexOf(criteria);
 
         if (~index) {
-            this.displayCriterias_.splice(index, 1);
+            this.displayCriteria_.splice(index, 1);
         }
     };
 
     /**
-     *
-     * @param {string} message
-     * @param {MessageData} messageData
+     * @param {String} message
+     * @param {Object} [messageData]
      * @returns {LogEntry}
      */
     Logger.prototype.error = function (message, messageData) {
@@ -95,9 +100,8 @@ define([
     };
 
     /**
-     *
-     * @param {string} message
-     * @param {MessageData} messageData
+     * @param {String} message
+     * @param {Object} [messageData]
      * @returns {LogEntry}
      */
     Logger.prototype.warn = function (message, messageData) {
@@ -105,9 +109,8 @@ define([
     };
 
     /**
-     *
-     * @param {string} message
-     * @param {MessageData} messageData
+     * @param {String} message
+     * @param {Object} [messageData]
      * @returns {LogEntry}
      */
     Logger.prototype.info = function (message, messageData) {
@@ -115,7 +118,8 @@ define([
     };
 
     /**
-     *
+     * @param {String} message
+     * @param {Object} [messageData]
      * @returns {LogEntry}
      */
     Logger.prototype.debug = function (message, messageData) {
@@ -123,29 +127,42 @@ define([
     };
 
     /**
-     *
      * @protected
-     * @param {string} message
-     * @param {string} level
+     * @param {String} message
+     * @param {Number} level
+     * @param {Object} [messageData]
+     * @returns {LogEntry}
      */
-    Logger.prototype.log_ = function (message, level, data) {
-        const entry = this.entryFactory_.create(message, level, messageData);
+    Logger.prototype.log_ = function (message, level, messageData) {
+        var entry = this.createEntry_(message, level, messageData);
 
         this.entries_.push(entry);
 
-        if (this.matchesCriterias_(entry)) {
-            this.entryHandler_.process(entry);
+        if (this.matchesCriteria_(entry)) {
+            this.processOutput_(entry);
         }
 
         return entry;
     };
 
     /**
+     * @protected
+     * @param {String} message
+     * @param {Number} level
+     * @param {Object} [messageData]
+     * @returns {LogEntry}
+     */
+    Logger.prototype.createEntry_ = function (message, level, messageData) {
+        return this.entryFactory_.createEntry(message, level, messageData);
+    };
+
+    /**
+     * Returns an array of log entries that have been added to the logger.
      *
-     * @param {LogCriteria} [criteria]
+     * @param {LogCriteria} [criteria] - Optional filter criteria.
      * @returns {Array<LogEntry>}
      */
-    Logger.prototype.dump = function (criteria) {
+    Logger.prototype.getEntries = function (criteria) {
         if (criteria) {
             return this.entries_.filter(criteria);
         }
@@ -154,29 +171,53 @@ define([
     };
 
     /**
-     *
-     * @protected
-     * @param {LogEntry} entry
-     * @returns {boolean}
+     * @param {LogCriteria} [criteria]
      */
-    Logger.prototype.matchesCriterias_ = function (entry) {
-        return this.displayCriterias_.every(criteria => {
-            return criteria.matches(entry);
+    Logger.prototype.dump = function (criteria) {
+        var entries;
+
+        if (!criteria) {
+            criteria = this.matchesCriteria_;
+        }
+
+        entries = this.entries_.filter(criteria, this);
+
+        this.outputHandlers_.forEach(function (handler) {
+            handler.dump(entries);
         });
     };
 
     /**
-     *
      * @protected
      * @param {LogEntry} entry
-     * @returns {boolean}
+     */
+    Logger.prototype.processOutput_ = function (entry) {
+        this.outputHandlers_.forEach(function (handler) {
+            handler.show(entry);
+        });
+    };
+
+    /**
+     * @protected
+     * @param {LogEntry} entry
+     * @returns {Boolean}
+     */
+    Logger.prototype.matchesCriteria_ = function (entry) {
+        return this.displayCriteria_.every(function (criteria) {
+            return criteria.call(this, entry);
+        }, this);
+    };
+
+    /**
+     * Checks that the level of provided entry passes the "displayLevel_" threshold.
+     *
+     * @protected
+     * @param {LogEntry} entry - Entry to be checked.
+     * @returns {Boolean}
      */
     Logger.prototype.matchesLevel_ = function (entry) {
         return entry.level >= this.displayLevel_;
     };
 
-    Logger.levels = levels;
-
     return Logger;
 });
-

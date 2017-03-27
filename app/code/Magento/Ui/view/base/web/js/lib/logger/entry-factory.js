@@ -3,23 +3,19 @@
  * See COPYING.txt for license details.
  */
 define([
-    './log-entry'
+    './entry'
 ], function (LogEntry) {
     'use strict';
 
-    /**
-     *
-     */
-    function LogEntryFactory() {}
-
-    /**
-     *
-     * @param {string} message
-     * @param {number} level
-     * @param {Object} [messageData]
-     * @returns {LogEntry}
-     */
-    LogEntryFactory.prototype.create = function (message, level, messageData) {
-        return new LogEntry(message, level, messageData);
+    return {
+        /**
+         * @param {String} message
+         * @param {Number} level
+         * @param {Object} [messageData]
+         * @returns {LogEntry}
+         */
+        createEntry: function (message, level, messageData) {
+            return new LogEntry(message, level, messageData);
+        }
     };
 });

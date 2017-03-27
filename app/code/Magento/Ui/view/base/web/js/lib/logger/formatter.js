@@ -5,26 +5,25 @@
 define([
     'moment',
     'mage/utils/template'
-], function (moment, template) {
+], function (moment, mageTemplate) {
     'use strict';
 
     /**
-     *
-     * @param {string} dateFormat
-     * @param {string} template
+     * @param {String} dateFormat
+     * @param {String} template
      */
     function LogFormatter(dateFormat, template) {
         /**
-         *
-         * @protected {string}
+         * @protected
+         * @type {String}
          */
         this.dateFormat_ = 'YYYY-MM-DD hh:mm:ss';
 
         /**
-         *
-         * @protected {string}
+         * @protected
+         * @type {String}
          */
-        this.template_ = '[${ $.date }] [${ $.levelName }] ${ $.message }';
+        this.template_ = '[${ $.date }] [${ $.entry.levelName }] ${ $.message }';
 
         if (dateFormat) {
             this.dateFormat_ = dateFormat;
@@ -37,18 +36,18 @@ define([
 
     /**
      * @param {LogEntry} entry
-     * @returns {string}
+     * @returns {String}
      */
     LogFormatter.prototype.process = function (entry) {
-        var message = template(entry.message, entry.data),
+        var message = mageTemplate.template(entry.message, entry.data),
             date = moment(entry.timestamp).format(this.dateFormat_);
 
-        return template(this.template_, {
+        return mageTemplate.template(this.template_, {
             date: date,
             entry: entry,
             message: message
         });
-    }
+    };
 
     return LogFormatter;
 });
