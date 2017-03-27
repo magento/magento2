@@ -7,7 +7,6 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 
 /**
  * Combination of product conditions
- * @api
  */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {

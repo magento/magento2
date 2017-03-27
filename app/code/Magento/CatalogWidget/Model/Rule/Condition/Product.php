@@ -7,7 +7,6 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 
 /**
  * Product condition
- * @api
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {

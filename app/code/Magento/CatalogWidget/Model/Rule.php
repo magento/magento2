@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Rule for catalog widget
+ *
  * @api
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
