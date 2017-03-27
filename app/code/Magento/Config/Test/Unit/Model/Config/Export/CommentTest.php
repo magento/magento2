@@ -177,15 +177,19 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                 'expectedMessage' => ''
             ],
             [
-                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2'],
+                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2', 'some/sensitiveAndEnv/field1'],
                 'notSensitive' => ['some/notSensitive/field1', 'some/notSensitive/field2'],
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => $this->exactly(4),
+                            'expects' => $this->exactly(8),
                             'returnMap' => [
                                 ['some/sensitive/field1', TypePool::TYPE_SENSITIVE, true],
+                                ['some/sensitive/field1', TypePool::TYPE_ENVIRONMENT, false],
                                 ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, false],
+                                ['some/sensitive/field2', TypePool::TYPE_ENVIRONMENT, false],
+                                ['some/sensitiveAndEnv/field1', TypePool::TYPE_SENSITIVE, true],
+                                ['some/sensitiveAndEnv/field1', TypePool::TYPE_ENVIRONMENT, true],
                                 ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
                                 ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
                             ]

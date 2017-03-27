@@ -5,6 +5,8 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
+use Magento\Config\Model\Config\Export\ExcludeList;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -48,6 +50,11 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
+    private $envConfig;
+
+    /**
+     * @var array
+     */
     private $config;
 
     /**
@@ -71,6 +78,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         // Snapshot of configuration.
         $this->config = $this->loadConfig();
+        $this->envConfig = $this->loadEnvConfig();
     }
 
     /**
@@ -82,13 +90,21 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return array
+     */
+    private function loadEnvConfig()
+    {
+        return $this->reader->load(ConfigFilePool::APP_ENV);
+    }
+
+    /**
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Deploy/_files/config_data.php
      */
     public function testExecute()
     {
         $this->objectManager->configure([
-            \Magento\Config\Model\Config\Export\ExcludeList::class => [
+            ExcludeList::class => [
                 'arguments' => [
                     'configs' => [
                         'web/test/test_value_1' => '',
@@ -97,7 +113,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            \Magento\Config\Model\Config\TypePool::class => [
+            TypePool::class => [
                 'arguments' => [
                     'sensitive' => [
                         'web/test/test_sensitive1' => '',
@@ -123,7 +139,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             . 'Sensitive data can be stored in the following environment variables:'
             . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive"
             . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE3 for web/test/test_sensitive3"
-            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT4 for web/test/test_sensitive_environment4"
             . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5";
         $outputMock = $this->getMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
@@ -141,6 +156,10 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
+
+        $configEnv = $this->loadEnvConfig();
+        $this->validateSystemEnvSection($configEnv);
+
         $this->assertNotEmpty($this->hash->get());
     }
 
@@ -164,6 +183,28 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('test_sensitive_environment5', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_sensitive_environment6', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_environment9', $config['system']['default']['web']['test']);
+    }
+
+    /**
+     * Validates 'system' section in environment configuration data.
+     *
+     * @param array $config The configuration array
+     * @return void
+     */
+    private function validateSystemEnvSection(array $config)
+    {
+        $envTestKeys = [
+            'test_sensitive',
+            'test_sensitive3',
+            'test_sensitive_environment4',
+            'test_sensitive_environment5',
+            'test_sensitive_environment6',
+            'test_environment9'
+        ];
+
+        $this->assertEmpty(
+            array_diff($envTestKeys, array_keys($config['system']['default']['web']['test']))
+        );
     }
 
     /**
@@ -221,9 +262,18 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             "<?php\n return array();\n"
         );
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            "<?php\n return array();\n"
+        );
+
         /** @var DeploymentConfig\Writer $writer */
         $writer = $this->objectManager->get(DeploymentConfig\Writer::class);
         $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+
+        /** @var DeploymentConfig\Writer $writer */
+        $writer = $this->objectManager->get(DeploymentConfig\Writer::class);
+        $writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
 
         /** @var DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
