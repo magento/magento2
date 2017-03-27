@@ -39,6 +39,12 @@ class ClassesScanner implements ClassesScannerInterface
         $this->generationDirectory = $generationDirectory;
     }
 
+    /**
+     * Retrieves the fully qualified path for var/generation.
+     *
+     * @return string
+     */
+
     public function getGenerationDirectory()
     {
         if ($this->generationDirectory === null) {
