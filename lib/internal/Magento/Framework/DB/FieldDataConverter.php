@@ -42,11 +42,11 @@ class FieldDataConverter
     public function __construct(
         Generator $queryGenerator,
         DataConverterInterface $dataConverter,
-        SelectFactory $selectFactory = null
+        SelectFactory $selectFactory
     ) {
         $this->queryGenerator = $queryGenerator;
         $this->dataConverter = $dataConverter;
-        $this->selectFactory = $selectFactory ?: ObjectManager::getInstance()->get(SelectFactory::class);
+        $this->selectFactory = $selectFactory;
     }
 
     /**
