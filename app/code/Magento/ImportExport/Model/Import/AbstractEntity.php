@@ -8,6 +8,8 @@ namespace Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Import entity abstract model
@@ -272,6 +274,13 @@ abstract class AbstractEntity
     protected $countItemsDeleted = 0;
 
     /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -447,7 +456,7 @@ abstract class AbstractEntity
                         foreach ($entityGroup as $key => $value) {
                             $bunchRows[$key] = $value;
                         }
-                        $productDataSize = strlen(serialize($bunchRows));
+                        $productDataSize = strlen($this->getSerializer()->serialize($bunchRows));
 
                         /* Check if the new bunch should be started */
                         $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);
@@ -471,6 +480,22 @@ abstract class AbstractEntity
             }
         }
         return $this;
+    }
+
+    /**
+     * Get Serializer instance
+     *
+     * Workaround. Only way to implement dependency and not to break inherited child classes
+     *
+     * @return Json
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 
     /**
