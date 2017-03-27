@@ -39,14 +39,4 @@ class ClassesScannerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($actual));
         $this->assertCount(5, $actual);
     }
-
-    public function testIsGenerationIgnoresRegularPath()
-    {
-        self::assertFalse($this->model->isGeneration(__DIR__));
-    }
-
-    public function testIsGenerationNotesGenerationPath()
-    {
-        self::assertTrue($this->model->isGeneration($this->generation));
-    }
 }

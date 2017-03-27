@@ -15,7 +15,7 @@ class FileClassScanner
      * @var string
      */
 
-    protected $filename;
+    private $filename;
 
     /**
      * The list of classes found in the file.
@@ -23,13 +23,13 @@ class FileClassScanner
      * @var bool
      */
 
-    protected $classNames = false;
+    private $classNames = false;
 
     /**
      * @var array
      */
 
-    protected $tokens;
+    private $tokens;
 
     /**
      * Constructor for the file class scanner.  Requires the filename
