@@ -90,47 +90,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks label according to Signifyd status.
-     *
-     * @param string $status
-     * @param string $expectedLabel
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseStatus()
-     * @dataProvider getStatusLabelDataProvider
-     */
-    public function testGetCaseStatus($status, $expectedLabel)
-    {
-        $this->caseManagement->expects(self::once())
-            ->method('getByOrderId')
-            ->willReturn($this->caseEntity);
-
-        $this->caseEntity->expects(self::atLeastOnce())
-            ->method('getStatus')
-            ->willReturn($status);
-
-        self::assertEquals(
-            $expectedLabel,
-            $this->caseInfo->getCaseStatus()
-        );
-    }
-
-    /**
-     * Case status and corresponding label data provider.
-     *
-     * @return array
-     */
-    public function getStatusLabelDataProvider()
-    {
-        return [
-            [CaseInterface::STATUS_OPEN, __('Open')],
-            [CaseInterface::STATUS_PENDING, __('Pending')],
-            [CaseInterface::STATUS_PROCESSING, __('Processing')],
-            [CaseInterface::STATUS_FLAGGED, __('Flagged')],
-            [CaseInterface::STATUS_DISMISSED, __('Dismissed')],
-            ['Unregistered', '']
-        ];
-    }
-
-    /**
      * Checks label according to Signifyd Guarantee Disposition.
      *
      * @param string $guaranteeDisposition
@@ -168,45 +127,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
             [CaseInterface::GUARANTEE_CANCELED, __('Canceled')],
             [CaseInterface::GUARANTEE_IN_REVIEW, __('In Review')],
             [CaseInterface::GUARANTEE_UNREQUESTED, __('Unrequested')],
-            ['Unregistered', '']
-        ];
-    }
-
-    /**
-     * Checks label according to Signifyd Review Disposition.
-     *
-     * @param string $reviewDisposition
-     * @param string $expectedLabel
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseReviewDisposition()
-     * @dataProvider getReviewLabelDataProvider
-     */
-    public function testGetReviewDisposition($reviewDisposition, $expectedLabel)
-    {
-        $this->caseManagement->expects(self::once())
-            ->method('getByOrderId')
-            ->willReturn($this->caseEntity);
-
-        $this->caseEntity->expects(self::atLeastOnce())
-            ->method('getReviewDisposition')
-            ->willReturn($reviewDisposition);
-
-        self::assertEquals(
-            $expectedLabel,
-            $this->caseInfo->getCaseReviewDisposition()
-        );
-    }
-
-    /**
-     * Case Review Disposition and corresponding label data provider.
-     *
-     * @return array
-     */
-    public function getReviewLabelDataProvider()
-    {
-        return [
-            [CaseInterface::DISPOSITION_GOOD, __('Good')],
-            [CaseInterface::DISPOSITION_FRAUDULENT, __('Fraudulent')],
-            [CaseInterface::DISPOSITION_UNSET, __('Unset')],
             ['Unregistered', '']
         ];
     }
