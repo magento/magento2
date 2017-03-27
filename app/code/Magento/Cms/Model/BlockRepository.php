@@ -110,8 +110,10 @@ class BlockRepository implements BlockRepositoryInterface
      */
     public function save(Data\BlockInterface $block)
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        $block->setStoreId($storeId);
+        if (empty($block->getStoreId())) {
+            $block->setStoreId($this->storeManager->getStore()->getId());
+        }
+        
         try {
             $this->resource->save($block);
         } catch (\Exception $exception) {

@@ -1,13 +1,8 @@
 <?php
 /**
- * Mysql PDO DB adapter
- *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\Cache\FrontendInterface;
@@ -28,12 +23,17 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
+ * MySQL database adapter
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
@@ -207,23 +207,33 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $queryGenerator;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param SelectFactory $selectFactory
      * @param array $config
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         StringUtils $string,
         DateTime $dateTime,
         LoggerInterface $logger,
         SelectFactory $selectFactory,
-        array $config = []
+        array $config = [],
+        SerializerInterface $serializer = null
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
         $this->selectFactory = $selectFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->exceptionMap = [
             // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2006 => ConnectionException::class,
@@ -1462,7 +1472,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $cacheId = $this->_getCacheId($tableCacheKey, $ddlType);
             $data = $this->_cacheAdapter->load($cacheId);
             if ($data !== false) {
-                $data = unserialize($data);
+                $data = $this->serializer->unserialize($data);
                 $this->_ddlCache[$ddlType][$tableCacheKey] = $data;
             }
             return $data;
@@ -1488,7 +1498,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if ($this->_cacheAdapter) {
             $cacheId = $this->_getCacheId($tableCacheKey, $ddlType);
-            $data = serialize($data);
+            $data = $this->serializer->serialize($data);
             $this->_cacheAdapter->save($data, $cacheId, [self::DDL_CACHE_TAG]);
         }
 
@@ -2502,7 +2512,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function truncateTable($tableName, $schemaName = null)
     {
         if (!$this->isTableExists($tableName, $schemaName)) {
-            throw new \Zend_Db_Exception(sprintf('Table "%s" is not exists', $tableName));
+            throw new \Zend_Db_Exception(sprintf('Table "%s" does not exist', $tableName));
         }
 
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
@@ -2536,7 +2546,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function renameTable($oldTableName, $newTableName, $schemaName = null)
     {
         if (!$this->isTableExists($oldTableName, $schemaName)) {
-            throw new \Zend_Db_Exception(sprintf('Table "%s" is not exists', $oldTableName));
+            throw new \Zend_Db_Exception(sprintf('Table "%s" does not exist', $oldTableName));
         }
         if ($this->isTableExists($newTableName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Table "%s" already exists', $newTableName));

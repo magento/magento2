@@ -26,11 +26,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\App\Router">
-        <arguments>
-            <argument name="routerId" xsi:type="string">admin</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Model\Menu\Config">
         <arguments>
             <argument name="menuDirector" xsi:type="object">Magento\Backend\Model\Menu\Director\Director</argument>
@@ -191,6 +186,24 @@
                 <item name="trans_email/ident_custom2/email" xsi:type="string">1</item>
                 <item name="admin/url/custom" xsi:type="string">1</item>
                 <item name="admin/url/custom_path" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="admin/url/custom" xsi:type="string">1</item>
+                <item name="admin/url/custom_path" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom1/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom1/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom2/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom2/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_general/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_general/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_sales/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_sales/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_support/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_support/name" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

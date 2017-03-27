@@ -11,7 +11,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Container;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Modal;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;

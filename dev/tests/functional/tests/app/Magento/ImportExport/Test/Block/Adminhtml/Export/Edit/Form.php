@@ -6,9 +6,9 @@
 
 namespace Magento\ImportExport\Test\Block\Adminhtml\Export\Edit;
 
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Block\Form as AbstractForm;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Form
@@ -30,7 +30,7 @@ class Form extends AbstractForm
         $fields = isset($data['fields']) ? $data['fields'] : $data;
         if (!empty($attributes)) {
             foreach ($attributes as $attribute) {
-                $fields['product'] = [$attribute => $fixture->getDataExport()->getData($attribute)];
+                $fields['product'] = [$attribute => $fixture->getDataExport()[$attribute]];
             }
         }
         unset($fields['data_export']);

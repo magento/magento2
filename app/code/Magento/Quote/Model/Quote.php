@@ -10,7 +10,6 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\ResourceModel;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -1626,10 +1625,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
-                $message = $item->getMessage();
-                if (!in_array($message, $errors)) {
-                    // filter duplicate messages
-                    $errors[] = $message;
+                foreach ($item->getMessage(false) as $message) {
+                    if (!in_array($message, $errors)) {
+                        // filter duplicate messages
+                        $errors[] = $message;
+                    }
                 }
             }
         }

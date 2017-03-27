@@ -7,7 +7,13 @@
 namespace Magento\Setup\Fixtures;
 
 /**
- * Class CatalogPriceRulesFixture
+ * Fixture for generating catalog price rules
+ *
+ * Support the following format:
+ * <!-- Number of catalog price rules -->
+ * <catalog_price_rules>{int}</catalog_price_rules>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  */
 class CatalogPriceRulesFixture extends Fixture
 {
