@@ -486,7 +486,6 @@ class ProcessCronQueueObserver implements ObserverInterface
             if ($schedule->trySchedule()) {
                 // time matches cron expression
                 $schedule->save();
-                return;
             }
         }
     }
