@@ -54,6 +54,10 @@ class YesNo
      */
     public function execute(array $messages, InputInterface $input, OutputInterface $output)
     {
+        if (!$input->isInteractive()) {
+            return true;
+        }
+
         $question = $this->getConfirmationQuestion($messages);
         $answer = $this->questionHelper->ask($input, $output, $question);
 

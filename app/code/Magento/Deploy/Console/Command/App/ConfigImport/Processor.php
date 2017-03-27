@@ -136,11 +136,7 @@ class Processor
                  * The importer return some warning questions which are contained in variable $warnings.
                  * A user should confirm import continuing if $warnings is not empty.
                  */
-                if (
-                    !$input->getOption('no-interaction')
-                    && !empty($warnings)
-                    && !$this->questionPerformer->execute($questions, $input, $output)
-                ) {
+                if (!empty($warnings) && !$this->questionPerformer->execute($questions, $input, $output)) {
                     continue;
                 }
 
