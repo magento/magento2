@@ -57,6 +57,7 @@ class SignifydCreateCustomerStep implements TestStepInterface
      */
     public function cleanup()
     {
+        $this->getStepInstance(CreateCustomerStep::class)->cleanup();
         $this->getStepInstance(DeleteCustomerStep::class)->run();
     }
 
