@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model;
 
-use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
@@ -92,7 +92,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setData(
             Import::FIELD_NAME_VALIDATION_STRATEGY,
-            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+            ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
         );
         $this->_model->importSource();
 
@@ -105,7 +105,12 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateSource()
     {
+        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
+
         $this->_model->setEntity('catalog_product');
+        $this->_model->setData(\Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
+        $this->_model->setData(\Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
+
         /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Import\AbstractSource::class,
