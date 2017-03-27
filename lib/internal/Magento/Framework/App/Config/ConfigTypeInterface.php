@@ -16,7 +16,7 @@ interface ConfigTypeInterface
      * Retrieve configuration raw data array.
      *
      * @param string $path
-     * @return array
+     * @return mixed
      */
     public function get($path = '');
 
