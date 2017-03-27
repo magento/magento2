@@ -45,6 +45,40 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     protected $_pager;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * NewWidget constructor.
+     *
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
+     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
+    public function __construct(
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
+        \Magento\Framework\App\Http\Context $httpContext,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
+        parent::__construct(
+            $context,
+            $productCollectionFactory,
+            $catalogProductVisibility,
+            $httpContext,
+            $data
+        );
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+    }
+
+    /**
      * Product collection initialize process
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
@@ -106,7 +140,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
                 $this->getDisplayType(),
                 $this->getProductsPerPage(),
                 intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
-                serialize($this->getRequest()->getParams())
+                $this->serializer->serialize($this->getRequest()->getParams())
             ]
         );
     }
