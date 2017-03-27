@@ -20,13 +20,13 @@ class ClassesScanner implements ClassesScannerInterface
      * @var array
      */
 
-    protected $fileResults = [];
+    private $fileResults = [];
 
     /**
      * @var string
      */
 
-    protected $generationDirectory;
+    private $generationDirectory;
 
     /**
      * @param array $excludePatterns
@@ -55,18 +55,6 @@ class ClassesScanner implements ClassesScannerInterface
     }
 
     /**
-     * Determines if the path provided is in the var/generation folder
-     *
-     * @param string $path
-     * @return bool
-     */
-
-    public function isGeneration($path)
-    {
-        return strpos($path, $this->generationDirectory) === 0;
-    }
-
-    /**
      * Retrieves list of classes for given path
      *
      * @param string $path
@@ -77,7 +65,7 @@ class ClassesScanner implements ClassesScannerInterface
     {
 
         $realPath = realpath($path);
-        $isGeneration = $this->isGeneration($realPath);
+        $isGeneration = strpos($realPath, $this->generationDirectory) === 0;
 
         // Generation folders should not have their results cached since they may actually change during compile
         if (!$isGeneration && isset($this->fileResults[$realPath])) {

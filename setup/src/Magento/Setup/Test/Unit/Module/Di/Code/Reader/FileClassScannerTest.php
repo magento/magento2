@@ -35,7 +35,7 @@ if (class_exists('some_class')) {
 }
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
         self::assertCount(0, $result);
@@ -55,7 +55,7 @@ class ThisIsATest {
 }
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
 
@@ -79,7 +79,7 @@ class ThisIsMyTest {
 }
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
 
@@ -112,7 +112,7 @@ class ThisIsMyTest {
 }
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
 
@@ -151,7 +151,7 @@ class ThisIsForBreaking {
 
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
 
@@ -196,7 +196,7 @@ namespace This\Is\Not\My\Ns {
 
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassNames();
 
@@ -236,7 +236,7 @@ class ThisIsMyTest
 
 PHP
         );
-        /* @var $scanner FileClassScanner */
+        /** @var $scanner FileClassScanner */
 
         $scanner->getClassNames();
     }
