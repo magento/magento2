@@ -7,6 +7,8 @@ namespace Magento\Persistent\Helper;
 
 /**
  * Persistent Shopping Cart Data Helper
+ *
+ * @api
  */
 class Session extends \Magento\Framework\App\Helper\AbstractHelper
 {
