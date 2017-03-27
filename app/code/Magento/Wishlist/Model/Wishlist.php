@@ -25,6 +25,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getUpdatedAt()
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -121,13 +122,13 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     protected $productRepository;
 
     /**
-     * Json Serializer Instance
-     *
      * @var Json
      */
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -415,7 +416,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
-            $_buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest));
+            $buyRequestData = $this->serializer->unserialize($buyRequest);
+            if (!is_array($buyRequestData)) {
+                throw new \InvalidArgumentException('Invalid wishlist item configuration.');
+            }
+            $_buyRequest = new \Magento\Framework\DataObject($buyRequestData);
         } elseif (is_array($buyRequest)) {
             $_buyRequest = new \Magento\Framework\DataObject($buyRequest);
         } else {
