@@ -161,6 +161,21 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="appDumpEnvSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="dynamic" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\RuntimeConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+            </argument>
+            <argument name="invertExcludes" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
         <arguments>
             <argument name="sources" xsi:type="array">
@@ -168,6 +183,11 @@
                     <item name="source" xsi:type="object">appDumpSystemSource</item>
                     <item name="namespace" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</item>
                     <item name="comment" xsi:type="object">Magento\Config\Model\Config\Export\Comment</item>
+                </item>
+                <item name="system_env" xsi:type="array">
+                    <item name="source" xsi:type="object">appDumpEnvSystemSource</item>
+                    <item name="namespace" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</item>
+                    <item name="pool" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_ENV</item>
                 </item>
             </argument>
         </arguments>

@@ -44,15 +44,26 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $data;
 
     /**
+     * @var bool
+     */
+    private $invertExcludes;
+
+    /**
      * @param ExcludeList $excludeList
      * @param array $sources
      * @param TypePool|null $typePool
+     * @param bool $invertExcludes
      */
-    public function __construct(ExcludeList $excludeList, array $sources = [], TypePool $typePool = null)
-    {
+    public function __construct(
+        ExcludeList $excludeList,
+        array $sources = [],
+        TypePool $typePool = null,
+        $invertExcludes = false
+    ) {
         $this->excludeList = $excludeList;
         $this->sources = $sources;
         $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
+        $this->invertExcludes = $invertExcludes;
     }
 
     /**
@@ -107,6 +118,10 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             } elseif (is_array($subData)) {
                 $this->filterChain($newPath, $subData);
             }
+
+            if (empty($subData) && isset($data[$subKey]) && is_array($data[$subKey])) {
+                unset($data[$subKey]);
+            }
         }
     }
 
@@ -118,9 +133,11 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      */
     private function isExcludePath($path)
     {
-        return $this->excludeList->isPresent($path)
+        $exclude = $this->excludeList->isPresent($path)
             || $this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT)
             || $this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE);
+
+        return $this->invertExcludes ? !$exclude : $exclude;
     }
 
     /**

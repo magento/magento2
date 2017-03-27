@@ -72,7 +72,9 @@ class Comment implements CommentInterface
         $comment = '';
         $fields = $this->source->getExcludedFields();
         foreach ($fields as $path) {
-            if ($this->isSensitive($path)) {
+            if ($this->isSensitive($path)
+                && !$this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT)
+            ) {
                 $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
             }
         }

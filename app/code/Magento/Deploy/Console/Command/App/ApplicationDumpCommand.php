@@ -73,27 +73,31 @@ class ApplicationDumpCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dump = [];
-        $comments = [];
-        foreach ($this->sources as $sourceData) {
-            /** @var ConfigSourceInterface $source */
-            $source = $sourceData['source'];
-            $namespace = $sourceData['namespace'];
-            $dump[$namespace] = $source->get();
-            if (!empty($sourceData['comment'])) {
-                $comments[$namespace] = is_string($sourceData['comment'])
-                    ? $sourceData['comment']
-                    : $sourceData['comment']->get();
+        $this->groupSourcesByPool();
+
+        foreach ($this->sources as $pool => $sources) {
+            $dump = [];
+            $comments = [];
+            foreach ($sources as $sourceData) {
+                /** @var ConfigSourceInterface $source */
+                $source = $sourceData['source'];
+                $namespace = $sourceData['namespace'];
+                $dump[$namespace] = $source->get();
+                if (!empty($sourceData['comment'])) {
+                    $comments[$namespace] = is_string($sourceData['comment'])
+                        ? $sourceData['comment']
+                        : $sourceData['comment']->get();
+                }
             }
-        }
-        $this->writer->saveConfig(
-            [ConfigFilePool::APP_CONFIG => $dump],
-            true,
-            null,
-            $comments
-        );
-        if (!empty($comments)) {
-            $output->writeln($comments);
+            $this->writer->saveConfig(
+                [$pool => $dump],
+                true,
+                null,
+                $comments
+            );
+            if (!empty($comments)) {
+                $output->writeln($comments);
+            }
         }
 
         // Generate and save new hash of deployment configuration.
@@ -101,5 +105,26 @@ class ApplicationDumpCommand extends Command
 
         $output->writeln('<info>Done.</info>');
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Groups sources by theirs pool.
+     *
+     * If source doesn't have pool option puts him into APP_CONFIG pool.
+     *
+     * @return void
+     */
+    private function groupSourcesByPool()
+    {
+        $sources = [];
+        foreach ($this->sources as $sourceData) {
+            if (!isset($sourceData['pool'])) {
+                $sourceData['pool'] = ConfigFilePool::APP_CONFIG;
+            }
+
+            $sources[$sourceData['pool']][] = $sourceData;
+        }
+
+        $this->sources = $sources;
     }
 }
