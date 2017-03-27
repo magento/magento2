@@ -7,6 +7,9 @@ namespace Magento\CmsUrlRewrite\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
 
+/**
+ * @api
+ */
 class CmsPageUrlPathGenerator
 {
     /** @var \Magento\Framework\Filter\FilterManager */
