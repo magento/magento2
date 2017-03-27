@@ -3,9 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cms\Setup;
-
-use Magento\Widget\Setup\LayoutUpdateConverter;
+namespace Magento\Widget\Setup;
 
 class LayoutUpdateConverterTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -15,7 +13,8 @@ class LayoutUpdateConverterTest extends \Magento\TestFramework\TestCase\Abstract
     protected function setUp()
     {
         $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            LayoutUpdateConverter::class);
+            LayoutUpdateConverter::class
+        );
     }
 
     /**

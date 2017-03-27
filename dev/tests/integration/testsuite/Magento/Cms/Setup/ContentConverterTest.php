@@ -13,7 +13,8 @@ class ContentConverterTest extends \Magento\TestFramework\TestCase\AbstractContr
     protected function setUp()
     {
         $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Cms\Setup\ContentConverter::class);
+            \Magento\Cms\Setup\ContentConverter::class
+        );
     }
 
     /**

@@ -130,6 +130,7 @@ class UpgradeData implements UpgradeDataInterface
      * Upgrade data to version 2.0.1,
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function upgradeVersionTwoZeroOne()
     {

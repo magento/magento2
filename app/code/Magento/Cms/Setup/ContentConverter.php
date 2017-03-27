@@ -22,10 +22,11 @@ class ContentConverter extends SerializedToJson
     private $parameterFactory;
 
     /**
-     * Constructor
+     * ContentConverter constructor
      *
      * @param Serialize $serialize
      * @param Json $json
+     * @param \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory
      */
     public function __construct(
         Serialize $serialize,
