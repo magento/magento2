@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e7529d0bcf985db3dd3c5168983ca26f",
-    "content-hash": "64c35ecc0bf6506d5ebce0b1b10facb6",
+    "hash": "29310854780ce1de7a1cb081587a270a",
+    "content-hash": "17639726ba5868a139ab66574ff7234a",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1771,16 +1771,16 @@
         },
         {
             "name": "tubalmartin/cssmin",
-            "version": "v2.4.8-p6",
+            "version": "v2.4.8-p8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git",
-                "reference": "47c481b6309361845e88b580ab25e791169d9e9b"
+                "reference": "89ef348df77c42fe4056a6e66552d995e77d2afd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/47c481b6309361845e88b580ab25e791169d9e9b",
-                "reference": "47c481b6309361845e88b580ab25e791169d9e9b",
+                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/89ef348df77c42fe4056a6e66552d995e77d2afd",
+                "reference": "89ef348df77c42fe4056a6e66552d995e77d2afd",
                 "shasum": ""
             },
             "require": {
@@ -1811,7 +1811,7 @@
                 "minify",
                 "yui"
             ],
-            "time": "2017-03-21 11:08:23"
+            "time": "2017-03-27 10:34:54"
         },
         {
             "name": "zendframework/zend-captcha",
