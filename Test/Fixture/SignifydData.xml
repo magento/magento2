@@ -12,9 +12,7 @@
              repository_class="Magento\Signifyd\Test\Repository\SignifydData"
              class="Magento\Signifyd\Test\Fixture\SignifydData">
         <field name="team" />
-        <field name="caseStatus" />
         <field name="caseFlag" />
-        <field name="reviewDisposition" />
         <field name="guaranteeDisposition" />
         <field name="cvvResponse" />
         <field name="avsResponse" />

@@ -58,25 +58,8 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
         $this->signifydData = $signifydData;
         $this->orderId = $orderId;
 
-        $this->checkCaseStatus();
         $this->checkCaseGuaranteeDisposition();
-        $this->checkCaseReviewDisposition();
     }
-
-    /**
-     * Checks case status is correct.
-     *
-     * @return void
-     */
-    private function checkCaseStatus()
-    {
-        \PHPUnit_Framework_Assert::assertEquals(
-            $this->signifydData->getCaseStatus(),
-            $this->orderView->getFraudProtectionBlock()->getCaseStatus(),
-            'Case status is wrong for order #' . $this->orderId
-        );
-    }
-
     /**
      * Checks case guarantee disposition is correct.
      *
@@ -88,20 +71,6 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
             $this->signifydData->getGuaranteeDisposition(),
             $this->orderView->getFraudProtectionBlock()->getCaseGuaranteeDisposition(),
             'Case Guarantee Disposition status is wrong for order #' . $this->orderId
-        );
-    }
-
-    /**
-     * Checks case review disposition is correct.
-     *
-     * @return void
-     */
-    private function checkCaseReviewDisposition()
-    {
-        \PHPUnit_Framework_Assert::assertEquals(
-            $this->signifydData->getReviewDisposition(),
-            $this->orderView->getFraudProtectionBlock()->getCaseReviewDisposition(),
-            'Case Review Disposition status is wrong for order #' . $this->orderId
         );
     }
 

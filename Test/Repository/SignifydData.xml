@@ -9,9 +9,7 @@
     <repository class="Magento\Signifyd\Test\Repository\SignifydData">
         <dataset name="signifyd_guarantee_approve">
             <field name="team" xsi:type="string">autotest</field>
-            <field name="caseStatus" xsi:type="string">Open</field>
             <field name="caseFlag" xsi:type="string">Good</field>
-            <field name="reviewDisposition" xsi:type="string">Good</field>
             <field name="guaranteeDisposition" xsi:type="string">Approved</field>
             <field name="cvvResponse" xsi:type="string">CVV2 Match (M)</field>
             <field name="avsResponse" xsi:type="string">Full match (Y)</field>
@@ -19,9 +17,7 @@
         </dataset>
         <dataset name="signifyd_guarantee_decline">
             <field name="team" xsi:type="string">autotest</field>
-            <field name="caseStatus" xsi:type="string">Open</field>
             <field name="caseFlag" xsi:type="string">Bad</field>
-            <field name="reviewDisposition" xsi:type="string">Fraudulent</field>
             <field name="guaranteeDisposition" xsi:type="string">Declined</field>
             <field name="cvvResponse" xsi:type="string">CVV2 Match (M)</field>
             <field name="avsResponse" xsi:type="string">Full match (Y)</field>
@@ -29,9 +25,7 @@
         </dataset>
         <dataset name="signifyd_guarantee_fraudulent">
             <field name="team" xsi:type="string">autotest</field>
-            <field name="caseStatus" xsi:type="string">Open</field>
             <field name="caseFlag" xsi:type="string">Bad</field>
-            <field name="reviewDisposition" xsi:type="string">Fraudulent</field>
             <field name="guaranteeDisposition" xsi:type="string">Declined</field>
             <field name="avsResponse" xsi:type="string">Unavailable (U)</field>
             <field name="shippingPrice" xsi:type="string">GBP 10.00</field>
