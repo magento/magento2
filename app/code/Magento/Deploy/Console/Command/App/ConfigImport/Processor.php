@@ -15,11 +15,12 @@ use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
+use Magento\Framework\Console\QuestionPerformer\YesNo;
 
 /**
- * Runs importing of config data from deployment configuration files.
+ * Runs process of importing config data from deployment configuration files.
  */
-class Importer
+class Processor
 {
     /**
      * The configuration data validator.
@@ -66,7 +67,7 @@ class Importer
     /**
      * Asks questions in interactive mode of cli commands.
      *
-     * @var QuestionPerformer
+     * @var YesNo
      */
     private $questionPerformer;
 
@@ -77,7 +78,7 @@ class Importer
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
      * @param Hash $configHash the hash updater of config data
      * @param Logger $logger the logger
-     * @param QuestionPerformer $questionPerformer The question performer for cli command
+     * @param YesNo $questionPerformer The question performer for cli command
      */
     public function __construct(
         Validator $configValidator,
@@ -86,7 +87,7 @@ class Importer
         DeploymentConfig $deploymentConfig,
         Hash $configHash,
         Logger $logger,
-        QuestionPerformer $questionPerformer
+        YesNo $questionPerformer
     ) {
         $this->configValidator = $configValidator;
         $this->configImporterPool = $configImporterPool;
@@ -105,7 +106,7 @@ class Importer
      * @return void
      * @throws RuntimeException is thrown when import has failed
      */
-    public function import(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             $importers = $this->configImporterPool->getImporters();
@@ -129,6 +130,7 @@ class Importer
                 $importer = $this->importerFactory->create($importerClassName);
                 $data = (array)$this->deploymentConfig->getConfigData($section);
                 $warnings = $importer->getWarningMessages($data);
+                $questions = array_merge($warnings, ['Do you want to continue [yes/no]?']);
 
                 /**
                  * The importer return some warning questions which are contained in variable $warnings.
@@ -137,7 +139,7 @@ class Importer
                 if (
                     !$input->getOption('no-interaction')
                     && !empty($warnings)
-                    && !$this->questionPerformer->execute($warnings, $input, $output)
+                    && !$this->questionPerformer->execute($questions, $input, $output)
                 ) {
                     continue;
                 }
@@ -148,7 +150,7 @@ class Importer
             }
         } catch (\Exception $exception) {
             $this->logger->error($exception);
-            throw new RuntimeException(__('Import is failed: %1', $exception->getMessage()), $exception);
+            throw new RuntimeException(__('Import failed: %1', $exception->getMessage()), $exception);
         }
     }
 }
