@@ -80,8 +80,8 @@ case $TEST_SUITE in
         curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-        bash -c "nvm install $NODE_JS_VERSION" || true
-        bash -c "nvm use $NODE_JS_VERSION" || true
+        nvm install $NODE_JS_VERSION
+        nvm use $NODE_JS_VERSION
         node --version
 
         cp package.json.sample package.json
