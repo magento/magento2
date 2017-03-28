@@ -9,9 +9,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
 
 /**
- * Assert Basic Tier Sign Up page is opened by admin menu link
+ * Assert BI Essentials Sign Up page is opened by admin menu link
  */
-class AssertBasicTierLink extends AbstractConstraint
+class AssertBIEssentialsLink extends AbstractConstraint
 {
     /**
      * Browser instance.
@@ -21,7 +21,7 @@ class AssertBasicTierLink extends AbstractConstraint
     protected $browser;
 
     /**
-     * Assert Basic Tier Sign Up page is opened by link
+     * Assert BI Essentials Sign Up page is opened by link
      *
      * @param BrowserInterface $browser
      * @param string $businessIntelligenceLink
@@ -31,10 +31,13 @@ class AssertBasicTierLink extends AbstractConstraint
     {
         $this->browser = $browser;
         $this->browser->selectWindow();
-        \PHPUnit_Framework_Assert::assertEquals(
-            $businessIntelligenceLink,
-            $this->browser->getUrl(),
-            'Basic Tier Sign Up page was not opened by link.'
+        \PHPUnit_Framework_Assert::assertTrue(
+            $this->browser->waitUntil(
+                function () use ($businessIntelligenceLink) {
+                    return ($this->browser->getUrl() === $businessIntelligenceLink) ?: null;
+                }
+            ),
+            'BI Essentials Sign Up page was not opened by link.'
         );
     }
 
@@ -45,6 +48,6 @@ class AssertBasicTierLink extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Basic Tier Sign Up page is opened by link';
+        return 'BI Essentials Sign Up page is opened by link';
     }
 }
