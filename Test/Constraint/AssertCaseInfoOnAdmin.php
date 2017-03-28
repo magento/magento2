@@ -60,6 +60,7 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
 
         $this->checkCaseGuaranteeDisposition();
     }
+
     /**
      * Checks case guarantee disposition is correct.
      *

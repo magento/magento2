@@ -17,6 +17,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="prices/grandTotal" xsi:type="string">15.00</data>
             <data name="prices/grandTotalCurrency" xsi:type="string">USD</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
@@ -44,6 +45,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="prices/grandTotal" xsi:type="string">15.00</data>
             <data name="prices/grandTotalCurrency" xsi:type="string">USD</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
