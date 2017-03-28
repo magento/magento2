@@ -1529,6 +1529,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $existingImages = $this->getExistingImages($bunch);
 
             foreach ($bunch as $rowNum => $rowData) {
+                // reset category processor's failed categories array
+                $this->categoryProcessor->clearFailedCategories();
+
                 if (!$this->validateRow($rowData, $rowNum)) {
                     continue;
                 }
