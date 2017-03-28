@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="swatchesProductAttribute"
+             module="Magento_Swatches"
+             handler_interface="Magento\Swatches\Test\Handler\SwatchProductAttribute\SwatchProductAttributeInterface"
+             repository_class="Magento\Swatches\Test\Repository\SwatchProductAttribute"
+             class="Magento\Swatches\Test\Fixture\SwatchesProductAttribute"
+             extends="\Magento\Catalog\Test\Fixture\CatalogProductAttribute">
+    </fixture>
+</config>

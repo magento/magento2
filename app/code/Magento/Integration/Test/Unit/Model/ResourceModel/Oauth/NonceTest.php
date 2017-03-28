@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
@@ -27,12 +27,12 @@ class NonceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
 
-        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->nonceResource = new \Magento\Integration\Model\ResourceModel\Oauth\Nonce($contextMock);
@@ -47,7 +47,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectByCompositeKey()
     {
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $selectMock->expects($this->once())->method('from')->will($this->returnValue($selectMock));
         $selectMock->expects($this->exactly(2))->method('where')->will($this->returnValue($selectMock));
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

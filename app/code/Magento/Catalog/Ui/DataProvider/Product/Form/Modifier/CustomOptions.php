@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -22,6 +22,7 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -67,6 +68,7 @@ class CustomOptions extends AbstractModifier
     const FIELD_ENABLE = 'affect_product_custom_options';
     const FIELD_OPTION_ID = 'option_id';
     const FIELD_TITLE_NAME = 'title';
+    const FIELD_STORE_TITLE_NAME = 'store_title';
     const FIELD_TYPE_NAME = 'type';
     const FIELD_IS_REQUIRE_NAME = 'is_require';
     const FIELD_SORT_ORDER_NAME = 'sort_order';
@@ -78,6 +80,7 @@ class CustomOptions extends AbstractModifier
     const FIELD_IMAGE_SIZE_X_NAME = 'image_size_x';
     const FIELD_IMAGE_SIZE_Y_NAME = 'image_size_y';
     const FIELD_IS_DELETE = 'is_delete';
+    const FIELD_IS_USE_DEFAULT = 'is_use_default';
     /**#@-*/
 
     /**#@+
@@ -123,6 +126,11 @@ class CustomOptions extends AbstractModifier
     protected $meta = [];
 
     /**
+     * @var CurrencyInterface
+     */
+    private $localeCurrency;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param ConfigInterface $productOptionsConfig
@@ -156,12 +164,17 @@ class CustomOptions extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Product\Option $option */
         foreach ($productOptions as $index => $option) {
-            $options[$index] = $this->formatFloat(static::FIELD_PRICE_NAME, $option->getData());
+            $optionData = $option->getData();
+            $optionData[static::FIELD_IS_USE_DEFAULT] = !$option->getData(static::FIELD_STORE_TITLE_NAME);
+            $options[$index] = $this->formatPriceByPath(static::FIELD_PRICE_NAME, $optionData);
             $values = $option->getValues() ?: [];
 
+            foreach ($values as $value) {
+                $value->setData(static::FIELD_IS_USE_DEFAULT, !$value->getData(static::FIELD_STORE_TITLE_NAME));
+            }
             /** @var \Magento\Catalog\Model\Product\Option $value */
             foreach ($values as $value) {
-                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatFloat(
+                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatPriceByPath(
                     static::FIELD_PRICE_NAME,
                     $value->getData()
                 );
@@ -188,12 +201,12 @@ class CustomOptions extends AbstractModifier
      * @param array $data
      * @return array
      */
-    protected function formatFloat($path, array $data)
+    protected function formatPriceByPath($path, array $data)
     {
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, number_format($value, 2, '.', ''));
+            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value));
         }
 
         return $data;
@@ -356,7 +369,7 @@ class CustomOptions extends AbstractModifier
                         'collapsibleHeader' => true,
                         'sortOrder' => $sortOrder,
                         'dataProvider' => static::CUSTOM_OPTIONS_LISTING,
-                        'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                        'imports' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                     ],
                 ],
             ],
@@ -380,6 +393,7 @@ class CustomOptions extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Fieldset::NAME,
+                                        'collapsible' => true,
                                         'label' => null,
                                         'sortOrder' => 10,
                                         'opened' => true,
@@ -471,8 +485,7 @@ class CustomOptions extends AbstractModifier
                                 'ns' => static::CUSTOM_OPTIONS_LISTING,
                                 'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'realTimeLink' => true,
-                                'behaviourType' => 'edit',
-                                'externalFilterMode' => true,
+                                'externalFilterMode' => false,
                                 'currentProductId' => $this->locator->getProduct()->getId(),
                                 'dataLinks' => [
                                     'imports' => false,
@@ -497,7 +510,7 @@ class CustomOptions extends AbstractModifier
      */
     protected function getCommonContainerConfig($sortOrder)
     {
-        return [
+        $commonContainer = [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -522,6 +535,10 @@ class CustomOptions extends AbstractModifier
                                     'label' => __('Option Title'),
                                     'component' => 'Magento_Catalog/component/static-type-input',
                                     'valueUpdate' => 'input',
+                                    'imports' => [
+                                        'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
+                                        'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default'
+                                    ]
                                 ],
                             ],
                         ],
@@ -531,6 +548,19 @@ class CustomOptions extends AbstractModifier
                 static::FIELD_IS_REQUIRE_NAME => $this->getIsRequireFieldConfig(40)
             ]
         ];
+
+        if ($this->locator->getProduct()->getStoreId()) {
+            $useDefaultConfig = [
+                'service' => [
+                    'template' => 'Magento_Catalog/form/element/helper/custom-option-service',
+                ]
+            ];
+            $titlePath = $this->arrayManager->findPath(static::FIELD_TITLE_NAME, $commonContainer, null)
+                . static::META_CONFIG_PATH;
+            $commonContainer = $this->arrayManager->merge($titlePath, $commonContainer, $useDefaultConfig);
+        }
+
+        return $commonContainer;
     }
 
     /**
@@ -575,6 +605,23 @@ class CustomOptions extends AbstractModifier
      */
     protected function getSelectTypeGridConfig($sortOrder)
     {
+        $options = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'imports' => [
+                            'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
+                            'optionTypeId' => '${ $.provider }:${ $.parentScope }.option_type_id',
+                            'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default'
+                        ],
+                        'service' => [
+                            'template' => 'Magento_Catalog/form/element/helper/custom-option-type-service',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         return [
             'arguments' => [
                 'data' => [
@@ -604,7 +651,10 @@ class CustomOptions extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::FIELD_TITLE_NAME => $this->getTitleFieldConfig(10),
+                        static::FIELD_TITLE_NAME => $this->getTitleFieldConfig(
+                            10,
+                            $this->locator->getProduct()->getStoreId() ? $options : []
+                        ),
                         static::FIELD_PRICE_NAME => $this->getPriceFieldConfig(20),
                         static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(30, ['fit' => true]),
                         static::FIELD_SKU_NAME => $this->getSkuFieldConfig(40),
@@ -812,7 +862,7 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'componentType' => ActionDelete::NAME,
                         'fit' => true,
-                        'sortOrder' => $sortOrder,
+                        'sortOrder' => $sortOrder
                     ],
                 ],
             ],
@@ -1052,5 +1102,39 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }

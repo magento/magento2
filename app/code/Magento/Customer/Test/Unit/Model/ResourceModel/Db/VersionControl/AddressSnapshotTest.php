@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Db\VersionControl;
@@ -21,9 +21,9 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataMock = $this->getMockBuilder(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->model = new AddressSnapshot(
             $this->metadataMock
@@ -45,7 +45,7 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
     ) {
         $entityId = 1;
 
-        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getId',
@@ -102,7 +102,7 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
 
     public function testIsModifiedBypass()
     {
-        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getId',

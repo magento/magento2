@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -35,7 +35,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\DataObject';
+    protected $_itemObjectClass = \Magento\Framework\DataObject::class;
 
     /**
      * Order configuration
@@ -593,7 +593,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function setItemObjectClass($className)
     {
-        if (!is_a($className, 'Magento\Framework\DataObject', true)) {
+        if (!is_a($className, \Magento\Framework\DataObject::class, true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
         $this->_itemObjectClass = $className;

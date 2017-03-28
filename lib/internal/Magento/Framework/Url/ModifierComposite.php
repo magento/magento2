@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url;
@@ -26,10 +26,10 @@ class ModifierComposite implements ModifierInterface
     /**
      * {@inheritdoc}
      */
-    public function execute($url, $params = null, $mode = ModifierInterface::MODE_ENTIRE)
+    public function execute($url, $mode = ModifierInterface::MODE_ENTIRE)
     {
         foreach ($this->modifiers as $modifier) {
-            $url = $modifier->execute($url, $params, $mode);
+            $url = $modifier->execute($url, $mode);
         }
 
         return $url;

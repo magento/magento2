@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,7 +50,8 @@ abstract class Attribute extends Action
         $productIds = $this->attributeHelper->getProductIds();
         if (!is_array($productIds)) {
             $error = __('Please select products for attributes update.');
-        } elseif (!$this->_objectManager->create('Magento\Catalog\Model\Product')->isProductsHasSku($productIds)) {
+        } elseif (!$this->_objectManager->create(
+            \Magento\Catalog\Model\Product::class)->isProductsHasSku($productIds)) {
             $error = __('Please make sure to define SKU values for all processed products.');
         }
 

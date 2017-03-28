@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
@@ -47,7 +47,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->cartTotalRepository = $this->getMockBuilder('Magento\Quote\Api\CartTotalRepositoryInterface')
+        $this->cartTotalRepository = $this->getMockBuilder(\Magento\Quote\Api\CartTotalRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -61,7 +61,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Quote\Model\GuestCart\GuestCartTotalRepository',
+            \Magento\Quote\Model\GuestCart\GuestCartTotalRepository::class,
             [
                 'cartTotalRepository' => $this->cartTotalRepository,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,

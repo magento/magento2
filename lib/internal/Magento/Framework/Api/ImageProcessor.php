@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,7 +93,7 @@ class ImageProcessor implements ImageProcessorInterface
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
             $dataObjectWithCustomAttributes->getCustomAttributes(),
-            '\Magento\Framework\Api\Data\ImageContentInterface'
+            \Magento\Framework\Api\Data\ImageContentInterface::class
         );
 
         // Return if no images to process
@@ -123,7 +123,7 @@ class ImageProcessor implements ImageProcessorInterface
                 );
                 if ($previousImageAttribute) {
                     $previousImagePath = $previousImageAttribute->getValue();
-                    if (!empty($previousImagePath)) {
+                    if (!empty($previousImagePath) && ($previousImagePath != $filename)) {
                         @unlink($this->mediaDirectory->getAbsolutePath() . $entityType . $previousImagePath);
                     }
                 }

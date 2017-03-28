@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -42,22 +42,34 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerFactory = $this->getMock(
+            \Magento\Framework\App\ObjectManagerFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->configLoaderMock = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
+        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->configLoaderMock = $this->getMock(
+            \Magento\Framework\App\ObjectManager\ConfigLoader::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($this->getObjectManagerReturnValueMap()));
 
-        $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')
+        $this->collectionFactory = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->indexerFactory = $this->getMockBuilder('Magento\Indexer\Model\IndexerFactory')
+        $this->indexerFactory = $this->getMockBuilder(\Magento\Indexer\Model\IndexerFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -66,8 +78,8 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Indexer\Model\Indexer\CollectionFactory', [], $this->collectionFactory],
-                ['Magento\Indexer\Model\IndexerFactory', [], $this->indexerFactory],
+                [\Magento\Indexer\Model\Indexer\CollectionFactory::class, [], $this->collectionFactory],
+                [\Magento\Indexer\Model\IndexerFactory::class, [], $this->indexerFactory],
             ]));
     }
 
@@ -79,8 +91,8 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
     protected function getObjectManagerReturnValueMap()
     {
         return [
-            ['Magento\Framework\App\State', $this->stateMock],
-            ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $this->configLoaderMock]
+            [\Magento\Framework\App\State::class, $this->stateMock],
+            [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $this->configLoaderMock]
         ];
     }
 

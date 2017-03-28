@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // refresh report statistics
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Tax\Model\ResourceModel\Report\Tax $reportResource */
-$reportResource = $objectManager->create('Magento\Tax\Model\ResourceModel\Report\Tax');
+$reportResource = $objectManager->create(\Magento\Tax\Model\ResourceModel\Report\Tax::class);
 $reportResource->beginTransaction();
 // prevent table truncation by incrementing the transaction nesting level counter
 try {

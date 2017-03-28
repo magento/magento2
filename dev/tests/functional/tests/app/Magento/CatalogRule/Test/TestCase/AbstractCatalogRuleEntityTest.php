@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Test\TestCase;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -73,6 +73,6 @@ abstract class AbstractCatalogRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep')->run();
+        $this->objectManager->create(\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep::class)->run();
     }
 }

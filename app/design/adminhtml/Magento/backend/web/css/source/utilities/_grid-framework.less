@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -26,16 +26,16 @@
     .col(@index, @list) when (@index > @grid-columns) {
         //  Terminal
         @{list} {
-            position: relative;
             //  Prevent columns from collapsing when empty
             min-height: 1px;
             //  Inner gutter via padding
             padding-left: (@grid-gutter-width / 2);
             padding-right: (@grid-gutter-width / 2);
+            position: relative;
         }
     }
 
-    .col(1); //  Kickstart it
+    .col(1); // Start it
 }
 
 .float-grid-columns(@class) {
@@ -59,7 +59,7 @@
         }
     }
 
-    .col(1); // Kickstart it
+    .col(1); // Start it
 }
 
 .calc-grid-column(@index, @class, @type) when (@type = width) and (@index > 0) {

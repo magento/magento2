@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save the Product.
  * 6. Perform all assertions.
  *
- * @group Grouped_Product_(MX)
+ * @group Grouped_Product
  * @ZephyrId MAGETWO-26462
  */
 class UpdateGroupedProductEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

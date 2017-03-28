@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf\Total;
@@ -17,7 +17,7 @@ class Factory
      *
      * @var string
      */
-    protected $_defaultTotalModel = 'Magento\Sales\Model\Order\Pdf\Total\DefaultTotal';
+    protected $_defaultTotalModel = \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -38,7 +38,7 @@ class Factory
     public function create($class = null, $arguments = [])
     {
         $class = $class ?: $this->_defaultTotalModel;
-        if (!is_a($class, 'Magento\Sales\Model\Order\Pdf\Total\DefaultTotal', true)) {
+        if (!is_a($class, \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal::class, true)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The PDF total model %1 must be or extend \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal.',

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Resolver;
@@ -26,7 +26,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             [],
             '',
@@ -44,7 +44,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false, false);
+        $scopeMock = $this->getMock(\Magento\Framework\App\ScopeInterface::class, [], [], '', false, false);
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getWebsite')

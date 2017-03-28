@@ -2,7 +2,7 @@
 /**
  * Compiler test. Check compilation of DI definitions and code generation
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Di;
@@ -11,12 +11,14 @@ use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Interception\Code\InterfaceValidator;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
 use Magento\Framework\App\Utility\Files;
+use Magento\TestFramework\Integrity\PluginValidator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -56,7 +58,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     /**
      * Class arguments reader
      *
-     * @var \Magento\Framework\Interception\Code\InterfaceValidator
+     * @var PluginValidator
      */
     protected $pluginValidator;
 
@@ -67,8 +69,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = str_replace('\\', '/', $basePath);
 
         $directoryList = new DirectoryList($basePath);
-        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATION);
-        $this->_compilationDir = $directoryList->getPath(DirectoryList::DI);
+        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATED_CODE);
+        $this->_compilationDir = $directoryList->getPath(DirectoryList::GENERATED_METADATA);
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile';
 
@@ -103,7 +105,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Framework\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
-        $this->pluginValidator = new \Magento\Framework\Interception\Code\InterfaceValidator();
+        $this->pluginValidator = new PluginValidator(new InterfaceValidator());
     }
 
     /**
@@ -299,15 +301,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generator = new \Magento\Framework\Code\Generator(
             $generatorIo,
             [
-                Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
-                Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
-                Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-                Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+                Factory::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
+                Repository::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Repository::class,
+                Converter::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Converter::class,
+                Mapper::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\Mapper::class,
+                SearchResults::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\SearchResults::class,
                 ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
+                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
                 ExtensionAttributesGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
+                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator::class
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
@@ -393,6 +395,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompiler()
     {
+        $this->markTestSkipped('MAGETWO-52570');
         try {
             $this->_shell->execute($this->_command);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {

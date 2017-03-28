@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -33,6 +33,12 @@
 //      * nth-child (div:nth-child(3n+1))
 //      * universal (*)
 //      * pseudo (a:hover, a:active, a:focus, span:before, span:after, etc)
+
+//
+//  Variables
+//  _____________________________________________
+
+@font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
 
 //
 //  Resets
@@ -92,7 +98,6 @@ table {
 
 //  See email-fonts.less for @font-face declarations
 
-@font-size-unit-convert: false; // Prevents font-related measurements from being converted to the incompatible rem unit
 .lib-typography-all();
 
 body {

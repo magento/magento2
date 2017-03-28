@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@
 ?>
 
 <?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php $_productId = $block->getProduct()->getId() ?>
 <?php if (count($_options)):?>
 <script type="text/x-magento-init">
     {
@@ -17,7 +18,7 @@
             "priceOptions": {
                 "optionConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig()?>,
                 "controlContainer": ".field",
-                "priceHolderSelector": "[data-role=priceBox]"
+                "priceHolderSelector": "[data-product-id='<?php echo $block->escapeHtml($_productId)?>'][data-role=priceBox]"
             }
         }
     }

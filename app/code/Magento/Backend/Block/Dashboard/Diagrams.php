@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -36,7 +36,9 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
             'orders',
             [
                 'label' => __('Orders'),
-                'content' => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Orders')->toHtml(),
+                'content' => $this->getLayout()->createBlock(
+                    \Magento\Backend\Block\Dashboard\Tab\Orders::class
+                )->toHtml(),
                 'active' => true
             ]
         );
@@ -45,7 +47,9 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
             'amounts',
             [
                 'label' => __('Amounts'),
-                'content' => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Amounts')->toHtml()
+                'content' => $this->getLayout()->createBlock(
+                    \Magento\Backend\Block\Dashboard\Tab\Amounts::class
+                )->toHtml()
             ]
         );
         return parent::_prepareLayout();

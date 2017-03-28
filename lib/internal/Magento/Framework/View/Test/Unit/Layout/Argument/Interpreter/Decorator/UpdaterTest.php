@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\Decorator;
@@ -26,8 +26,10 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_interpreter = $this->getMockForAbstractClass('Magento\Framework\Data\Argument\InterpreterInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_interpreter = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Argument\InterpreterInterface::class
+        );
         $this->_model = new Updater($this->_objectManager, $this->_interpreter);
     }
 
@@ -35,7 +37,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     {
         $input = [
             'value' => 'some text',
-            'updater' => ['Magento\Framework\View\Layout\Argument\UpdaterInterface'],
+            'updater' => [\Magento\Framework\View\Layout\Argument\UpdaterInterface::class],
         ];
         $evaluatedValue = 'some text (new)';
         $updatedValue = 'some text (updated)';
@@ -50,7 +52,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($evaluatedValue)
         );
 
-        $updater = $this->getMockForAbstractClass('Magento\Framework\View\Layout\Argument\UpdaterInterface');
+        $updater = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\Argument\UpdaterInterface::class);
         $updater->expects(
             $this->once()
         )->method(
@@ -66,7 +68,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            'Magento\Framework\View\Layout\Argument\UpdaterInterface'
+            \Magento\Framework\View\Layout\Argument\UpdaterInterface::class
         )->will(
             $this->returnValue($updater)
         );
@@ -114,8 +116,8 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $input = [
             'value' => 'some text',
             'updater' => [
-                'Magento\Framework\View\Layout\Argument\UpdaterInterface',
-                'Magento\Framework\ObjectManagerInterface',
+                \Magento\Framework\View\Layout\Argument\UpdaterInterface::class,
+                \Magento\Framework\ObjectManagerInterface::class,
             ],
         ];
         $self = $this;

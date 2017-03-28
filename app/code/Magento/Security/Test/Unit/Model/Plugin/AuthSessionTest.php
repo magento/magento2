@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model\Plugin;
@@ -46,14 +46,14 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->requestMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             ['getParam', 'getModuleName', 'getActionName'],
             '',
             false
         );
 
         $this->messageManagerMock = $this->getMock(
-            '\Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             [],
             [],
             '',
@@ -61,7 +61,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adminSessionsManagerMock = $this->getMock(
-            '\Magento\Security\Model\AdminSessionsManager',
+            \Magento\Security\Model\AdminSessionsManager::class,
             ['getCurrentSession', 'processProlong', 'getLogoutReasonMessage'],
             [],
             '',
@@ -77,7 +77,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->authSessionMock = $this->getMock(
-            '\Magento\Backend\Model\Auth\Session',
+            \Magento\Backend\Model\Auth\Session::class,
             ['destroy'],
             [],
             '',
@@ -85,7 +85,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->currentSessionMock = $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfo',
+            \Magento\Security\Model\AdminSessionInfo::class,
             ['isLoggedInStatus', 'getStatus'],
             [],
             '',
@@ -93,7 +93,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Security\Model\Plugin\AuthSession',
+            \Magento\Security\Model\Plugin\AuthSession::class,
             [
                 'request' => $this->requestMock,
                 'messageManager' => $this->messageManagerMock,

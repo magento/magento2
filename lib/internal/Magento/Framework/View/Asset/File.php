@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,6 +47,11 @@ class File implements MergeableInterface
      * @var Minification
      */
     private $minification;
+
+    /**
+     * @var string
+     */
+    private $sourceContentType;
 
     /**
      * @param Source $source
@@ -153,6 +158,19 @@ class File implements MergeableInterface
             }
         }
         return $this->resolvedFile;
+    }
+
+    /**
+     * Get source content type
+     *
+     * @return string
+     */
+    public function getSourceContentType()
+    {
+        if ($this->sourceContentType === null) {
+            $this->sourceContentType = $this->source->getSourceContentType($this);
+        }
+        return $this->sourceContentType;
     }
 
     /**

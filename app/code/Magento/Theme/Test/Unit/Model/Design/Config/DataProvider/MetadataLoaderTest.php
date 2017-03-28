@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
@@ -53,23 +53,26 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeFallbackResolver = $this->getMockBuilder('Magento\Framework\App\ScopeFallbackResolverInterface')
-            ->getMockForAbstractClass();
+        $this->scopeFallbackResolver = $this->getMockBuilder(
+            \Magento\Framework\App\ScopeFallbackResolverInterface::class
+        )->getMockForAbstractClass();
 
-        $this->designConfigRepository = $this->getMockBuilder('Magento\Theme\Api\DesignConfigRepositoryInterface')
+        $this->designConfigRepository = $this->getMockBuilder(\Magento\Theme\Api\DesignConfigRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfig = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $this->designConfig = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfigData = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigDataInterface')
+        $this->designConfigData = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigDataInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfigExtension = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+        $this->designConfigExtension = $this->getMockBuilder(
+            \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
+        )
             ->setMethods(['getDesignConfigData'])
             ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new MetadataLoader(

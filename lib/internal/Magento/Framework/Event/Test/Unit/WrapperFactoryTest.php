@@ -2,7 +2,7 @@
 /**
  * @category   Magento
  * @package    Magento_Event
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,8 +19,8 @@ class WrapperFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $expectedInstance = 'Magento\Framework\Event\Observer';
-        $objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
+        $expectedInstance = \Magento\Framework\Event\Observer::class;
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $wrapperFactory = new WrapperFactory($objectManagerMock);
         $arguments = ['argument' => 'value', 'data' => 'data'];

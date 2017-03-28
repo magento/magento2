@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,7 +43,7 @@
                 type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
     </type>
 
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="info" xsi:type="object">Magento\Indexer\Console\Command\IndexerInfoCommand</item>

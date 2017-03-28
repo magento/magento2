@@ -1,17 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Rma\Block\Adminhtml\Rma\Edit\Tab\General\Shipping\Packaging">
-        <arguments>
-            <argument name="sourceSizeModel" xsi:type="object">Magento\Usps\Model\Source\Size</argument>
-        </arguments>
-        <plugin name="usps" type="Magento\Usps\Block\Rma\Adminhtml\Rma\Edit\Tab\General\Shipping\Packaging\Plugin"/>
-    </type>
     <type name="Magento\Shipping\Block\Adminhtml\Order\Packaging">
         <arguments>
             <argument name="sourceSizeModel" xsi:type="object">Magento\Usps\Model\Source\Size</argument>

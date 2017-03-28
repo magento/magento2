@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
@@ -186,7 +186,7 @@ class Indexer
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

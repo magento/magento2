@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -177,6 +177,7 @@ class Attribute extends Form
 
         //select attributes
         $this->getAttributesGrid()->resetFilter();
+        $this->getTemplateBlock()->waitLoader();
         $attributesList = $this->browser->find($this->selectedAttributes)->getText();
         if ($attributesList != '--') {
             $this->getAttributesGrid()->deselectAttributes();
@@ -206,7 +207,7 @@ class Attribute extends Form
     public function getAttributesGrid()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid::class,
             ['element' => $this->browser->find('#variation-steps-wizard_step1 .admin__data-grid-outer-wrap')]
         );
     }
@@ -220,7 +221,7 @@ class Attribute extends Form
     protected function createNewVariationSet(array $attribute)
     {
         $attributeFixture = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\Fixture\CatalogProductAttribute',
+            \Magento\Catalog\Test\Fixture\CatalogProductAttribute::class,
             ['data' => $attribute]
         );
 
@@ -341,7 +342,7 @@ class Attribute extends Form
     protected function getNewAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\NewConfigurableAttributeForm',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\NewConfigurableAttributeForm::class,
             ['element' => $this->browser->find($this->newAttribute)]
         );
     }
@@ -356,7 +357,7 @@ class Attribute extends Form
         return $this->_rootElement->find(
             $this->variationSearchBlock,
             Locator::SELECTOR_CSS,
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute'
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute::class
             . '\AttributeSelector'
         );
     }
@@ -464,7 +465,7 @@ class Attribute extends Form
     protected function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
     }

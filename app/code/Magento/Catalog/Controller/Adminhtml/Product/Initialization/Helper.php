@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
@@ -131,12 +131,7 @@ class Helper
                 $productData[$field] = [];
             }
         }
-
-        foreach ($productData['website_ids'] as $websiteId => $checkboxValue) {
-            if (!$checkboxValue) {
-                unset($productData['website_ids'][$websiteId]);
-            }
-        }
+        $productData['website_ids'] = $this->filterWebsiteIds($productData['website_ids']);
 
         $wasLockedMedia = false;
         if ($product->isLockedAttribute('media')) {
@@ -163,14 +158,11 @@ class Helper
         } else {
             $productOptions = [];
         }
+
         $product->addData($productData);
 
         if ($wasLockedMedia) {
             $product->lockAttribute('media');
-        }
-
-        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
-            $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
         /**
@@ -181,6 +173,10 @@ class Helper
         foreach ($useDefaults as $attributeCode => $useDefaultState) {
             if ($useDefaultState) {
                 $product->setData($attributeCode, null);
+                // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
+                if ($product->hasData('use_config_' . $attributeCode)) {
+                    $product->setData('use_config_' . $attributeCode, false);
+                }
             }
         }
 
@@ -198,6 +194,9 @@ class Helper
             $customOptions = [];
             foreach ($options as $customOptionData) {
                 if (empty($customOptionData['is_delete'])) {
+                    if (empty($customOptionData['option_id'])) {
+                        $customOptionData['option_id'] = null;
+                    }
                     if (isset($customOptionData['values'])) {
                         $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
                             return empty($valueData['is_delete']);
@@ -205,7 +204,6 @@ class Helper
                     }
                     $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
-                    $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
                 }
             }
@@ -218,7 +216,7 @@ class Helper
 
         return $product;
     }
-    
+
     /**
      * Initialize product before saving
      *
@@ -254,7 +252,7 @@ class Helper
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array) $links[$linkType] as $linkData) {
+                foreach ((array)$links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
                     }
@@ -307,20 +305,55 @@ class Helper
     public function mergeProductOptions($productOptions, $overwriteOptions)
     {
         if (!is_array($productOptions)) {
-            $productOptions = [];
-        }
-        if (is_array($overwriteOptions)) {
-            $options = array_replace_recursive($productOptions, $overwriteOptions);
-            array_walk_recursive($options, function (&$item) {
-                if ($item === "") {
-                    $item = null;
-                }
-            });
-        } else {
-            $options = $productOptions;
+            return [];
         }
 
-        return $options;
+        if (!is_array($overwriteOptions)) {
+            return $productOptions;
+        }
+
+        foreach ($productOptions as $optionIndex => $option) {
+            $optionId = $option['option_id'];
+            $option = $this->overwriteValue($optionId, $option, $overwriteOptions);
+
+            if (isset($option['values']) && isset($overwriteOptions[$optionId]['values'])) {
+                foreach ($option['values'] as $valueIndex => $value) {
+                    if (isset($value['option_type_id'])) {
+                        $valueId = $value['option_type_id'];
+                        $value = $this->overwriteValue($valueId, $value, $overwriteOptions[$optionId]['values']);
+                        $option['values'][$valueIndex] = $value;
+                    }
+                }
+            }
+
+            $productOptions[$optionIndex] = $option;
+        }
+
+        return $productOptions;
+    }
+
+    /**
+     * Overwrite values of fields to default, if there are option id and field name in array overwriteOptions
+     *
+     * @param int $optionId
+     * @param array $option
+     * @param array $overwriteOptions
+     * @return array
+     */
+    private function overwriteValue($optionId, $option, $overwriteOptions)
+    {
+        if (isset($overwriteOptions[$optionId])) {
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $option[$fieldName] = $option['default_' . $fieldName];
+                    if ('title' == $fieldName) {
+                        $option['is_delete_store_title'] = 1;
+                    }
+                }
+            }
+        }
+
+        return $option;
     }
 
     /**
@@ -330,7 +363,7 @@ class Helper
     {
         if (null === $this->customOptionFactory) {
             $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+                ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
         }
         return $this->customOptionFactory;
     }
@@ -342,7 +375,7 @@ class Helper
     {
         if (null === $this->productLinkFactory) {
             $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
         }
         return $this->productLinkFactory;
     }
@@ -354,7 +387,7 @@ class Helper
     {
         if (null === $this->productRepository) {
             $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+                ->get(\Magento\Catalog\Api\ProductRepositoryInterface\Proxy::class);
         }
         return $this->productRepository;
     }
@@ -383,5 +416,24 @@ class Helper
                 ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
         }
         return $this->dateTimeFilter;
+    }
+
+    /**
+     * Remove ids of non selected websites from $websiteIds array and return filtered data
+     * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
+     * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
+     *
+     * @param array $websiteIds
+     * @return array
+     */
+    private function filterWebsiteIds($websiteIds)
+    {
+        if (!$this->storeManager->isSingleStoreMode()) {
+            $websiteIds = array_filter((array)$websiteIds);
+        } else {
+            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+        }
+
+        return $websiteIds;
     }
 }

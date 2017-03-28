@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Config;
@@ -23,7 +23,7 @@ class ConfigValueHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Payment\Gateway\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Payment\Gateway\ConfigInterface::class)
             ->getMockForAbstractClass();
         $this->model = new ConfigValueHandler($this->configMock);
     }

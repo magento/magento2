@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
@@ -24,12 +24,12 @@ class CalendarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->localeDate = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->localeDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
 
         /** @var  \Magento\Framework\View\Element\Template\Context $context */
         $this->context = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             [
                 'localeDate' => $this->localeDate,
             ]
@@ -37,7 +37,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Html\Links $block */
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\Html\Calendar',
+            \Magento\Framework\View\Element\Html\Calendar::class,
             ['context' => $this->context]
         );
     }

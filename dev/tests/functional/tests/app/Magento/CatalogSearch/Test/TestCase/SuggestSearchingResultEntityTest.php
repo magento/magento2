@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Input in "Search" field test data.
  * 3. Perform asserts.
  *
- * @group Search_Frontend_(CS)
+ * @group Search_Frontend
  * @ZephyrId MAGETWO-24671
  */
 class SuggestSearchingResultEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

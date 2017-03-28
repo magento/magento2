@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
@@ -17,7 +17,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     {
         $themeId = (int)$this->getRequest()->getParam('id');
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-        $theme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         try {
             $theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
             if ($themeId && (!$theme->load($themeId)->getId() || !$theme->isVisible())) {
@@ -30,7 +30,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $tab = $this->_view->getLayout()->getBlock('theme_edit_tabs_tab_css_tab');
             if ($tab && $tab->canShowTab()) {
                 /** @var $helper \Magento\Theme\Helper\Theme */
-                $helper = $this->_objectManager->get('Magento\Theme\Helper\Theme');
+                $helper = $this->_objectManager->get(\Magento\Theme\Helper\Theme::class);
                 $files = $helper->getCssAssets($theme);
                 $tab->setFiles($files);
             }
@@ -41,7 +41,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot find the theme.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->_redirect('adminhtml/*/');
         }
     }

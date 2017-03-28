@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,11 +47,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock('\Magento\Framework\View\Element\Context', [], [], '', false);
-        $this->config = $this->getMock('\Magento\Framework\RequireJs\Config', [], [], '', false);
-        $this->fileManager = $this->getMock('\Magento\RequireJs\Model\FileManager', [], [], '', false);
-        $this->pageConfig = $this->getMock('\Magento\Framework\View\Page\Config', [], [], '', false);
-        $this->bundleConfig = $this->getMock('Magento\Framework\View\Asset\ConfigInterface', [], [], '', false);
+        $this->context = $this->getMock(\Magento\Framework\View\Element\Context::class, [], [], '', false);
+        $this->config = $this->getMock(\Magento\Framework\RequireJs\Config::class, [], [], '', false);
+        $this->fileManager = $this->getMock(\Magento\RequireJs\Model\FileManager::class, [], [], '', false);
+        $this->pageConfig = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
+        $this->bundleConfig = $this->getMock(\Magento\Framework\View\Asset\ConfigInterface::class, [], [], '', false);
     }
 
     public function testSetLayout()
@@ -61,16 +61,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('isBundlingJsFiles')
             ->willReturn(true);
         $filePath = 'require_js_fie_path';
-        $asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn($filePath);
-        $requireJsAsset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $requireJsAsset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $requireJsAsset
             ->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('/path/to/require/require.js');
-        $minResolverAsset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $minResolverAsset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $minResolverAsset
             ->expects($this->atLeastOnce())
             ->method('getFilePath')
@@ -97,9 +97,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('createMinResolverAsset')
             ->will($this->returnValue($minResolverAsset));
 
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
 
-        $assetCollection = $this->getMockBuilder('Magento\Framework\View\Asset\GroupedCollection')
+        $assetCollection = $this->getMockBuilder(\Magento\Framework\View\Asset\GroupedCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfig->expects($this->atLeastOnce())
@@ -111,7 +111,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('insert')
             ->willReturn(true);
 
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->minificationMock
@@ -119,7 +119,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with('js')
             ->willReturn(true);
-
 
         $object = new Config(
             $this->context,

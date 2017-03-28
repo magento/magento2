@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block\Widget;
@@ -46,7 +46,7 @@ class Chooser extends \Magento\Backend\App\Action
 
         $uniqId = $this->getRequest()->getParam('uniq_id');
         $pagesGrid = $layout->createBlock(
-            'Magento\Cms\Block\Adminhtml\Block\Widget\Chooser',
+            \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::class,
             '',
             ['data' => ['id' => $uniqId]]
         );

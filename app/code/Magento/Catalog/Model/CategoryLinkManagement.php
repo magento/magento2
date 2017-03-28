@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -120,7 +120,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     {
         if (null === $this->productRepository) {
             $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductRepositoryInterface');
+                ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         }
         return $this->productRepository;
     }
@@ -134,7 +134,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     {
         if (null === $this->productResource) {
             $this->productResource = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\ResourceModel\Product');
+                ->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         }
         return $this->productResource;
     }
@@ -148,7 +148,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     {
         if (null === $this->categoryLinkRepository) {
             $this->categoryLinkRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\CategoryLinkRepositoryInterface');
+                ->get(\Magento\Catalog\Api\CategoryLinkRepositoryInterface::class);
         }
         return $this->categoryLinkRepository;
     }
@@ -162,7 +162,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     {
         if (null === $this->indexerRegistry) {
             $this->indexerRegistry = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Indexer\IndexerRegistry');
+                ->get(\Magento\Framework\Indexer\IndexerRegistry::class);
         }
         return $this->indexerRegistry;
     }

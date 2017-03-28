@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -69,12 +69,15 @@
                             <item name="fit" xsi:type="boolean">false</item>
                             <item name="label" xsi:type="string">Search String</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="required-entry" xsi:type="boolean">true</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
                 <field name="theme">
                     <argument name="data" xsi:type="array">
-                        <item name="options" xsi:type="object">Magento\Framework\View\Design\Theme\Label</item>
+                        <item name="options" xsi:type="object">Magento\Theme\Model\Design\Theme\Label</item>
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataType" xsi:type="string">text</item>
@@ -82,6 +85,9 @@
                             <item name="fit" xsi:type="boolean">false</item>
                             <item name="label" xsi:type="string">Theme Name</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="required-entry" xsi:type="boolean">true</item>
+                            </item>
                         </item>
                     </argument>
                 </field>

@@ -1,15 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
-use Magento\SalesRule\Api\Data\RuleInterface;
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule
      */
@@ -57,29 +62,29 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->rule = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ruleResource = $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule')
+        $this->ruleResource = $this->getMockBuilder(\Magento\SalesRule\Model\ResourceModel\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
+        $context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connectionName = 'test';
-        $this->resourcesMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resourcesMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->relationProcessorMock =
-            $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
+            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->transactionManagerMock =
-            $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface')
+            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,12 +92,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getResources')
             ->willReturn($this->resourcesMock);
 
-        $this->entityManager = $this->getMockBuilder('Magento\Framework\EntityManager\EntityManager')
+        $this->entityManager = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityManager::class)
             ->setMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourcesMock->expects($this->any())
@@ -110,30 +115,41 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getTransactionManager')
             ->willReturn($this->transactionManagerMock);
 
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = [
-            'customer_group' => [
-                'associations_table' => 'salesrule_customer_group',
-                'rule_id_field' => 'rule_id',
-                'entity_id_field' => 'customer_group_id'
-            ],
-            'website' => [
-                'associations_table' => 'salesrule_website',
-                'rule_id_field' => 'rule_id',
-                'entity_id_field' => 'website_id'
-            ],
-        ];
+        $associatedEntitiesMap = $this->getMock(
+            \Magento\Framework\DataObject::class,
+            ['getData'],
+            [],
+            '',
+            false
+        );
+        $associatedEntitiesMap->expects($this->once())
+            ->method('getData')
+            ->willReturn(
+                [
+                    'customer_group' => [
+                        'associations_table' => 'salesrule_customer_group',
+                        'rule_id_field' => 'rule_id',
+                        'entity_id_field' => 'customer_group_id'
+                    ],
+                    'website' => [
+                        'associations_table' => 'salesrule_website',
+                        'rule_id_field' => 'rule_id',
+                        'entity_id_field' => 'website_id'
+                    ],
+                ]
+            );
 
-        $this->model = $objectManager->getObject(
-            'Magento\SalesRule\Model\ResourceModel\Rule',
+        $this->model = $this->objectManager->getObject(
+            \Magento\SalesRule\Model\ResourceModel\Rule::class,
             [
                 'context' => $context,
                 'connectionName' => $connectionName,
-                'associatedEntitiesMap' => $associatedEntitiesMap,
                 'entityManager' => $this->entityManager,
+                'associatedEntityMapInstance' => $associatedEntitiesMap
             ]
         );
     }
@@ -145,12 +161,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $ruleId = 1;
         /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $abstractModel */
-        $abstractModel = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $abstractModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->entityManager->expects($this->once())
             ->method('load')
-            ->with($abstractModel, $ruleId, RuleInterface::class);
+            ->with($abstractModel, $ruleId);
         $result = $this->model->load($abstractModel, $ruleId);
         $this->assertSame($this->model, $result);
     }
@@ -159,7 +175,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager->expects($this->once())
             ->method('save')
-            ->with($this->rule, RuleInterface::class);
+            ->with($this->rule);
         $this->assertEquals($this->model->save($this->rule), $this->model);
     }
 
@@ -167,7 +183,65 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager->expects($this->once())
             ->method('delete')
-            ->with($this->rule, RuleInterface::class);
+            ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
+    }
+
+    /**
+     * Check that can parse JSON string correctly.
+     *
+     * @param string $testString
+     * @param array $expects
+     * @dataProvider dataProviderForProductAttributes
+     */
+    public function testGetProductAttributes($testString, $expects)
+    {
+        $result = $this->model->getProductAttributes($testString);
+        $this->assertEquals($expects, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForProductAttributes()
+    {
+        return [
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                [
+                    'some_attribute',
+                ]
+            ],
+            [
+                json_encode([
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute',
+                    ],
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute2',
+                    ],
+                ]),
+                [
+                    'some_attribute',
+                    'some_attribute2',
+                ]
+            ],
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                []
+            ],
+            [
+                json_encode([]),
+                []
+            ],
+        ];
     }
 }

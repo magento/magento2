@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Logger;
@@ -28,13 +28,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stream = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\File\WriteInterface');
-        $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
+        $this->dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->dir->expects($this->any())
             ->method('openFile')
             ->with(self::DEBUG_FILE, 'a')
             ->will($this->returnValue($this->stream));
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->dir));
@@ -107,7 +107,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function testLogStatsWithResult()
     {
-        $result = $this->getMock('\Zend_Db_Statement_Pdo', [], [], '', false);
+        $result = $this->getMock(\Zend_Db_Statement_Pdo::class, [], [], '', false);
         $result->expects($this->once())
             ->method('rowCount')
             ->will($this->returnValue(10));

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -129,7 +129,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeCode = $this->getRequest()->getParam('attribute_code')
                 ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
             if (strlen($attributeCode) > 0) {
-                $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,30}$/']);
+                $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']);
                 if (!$validatorAttrCode->isValid($attributeCode)) {
                     $this->messageManager->addError(
                         __(

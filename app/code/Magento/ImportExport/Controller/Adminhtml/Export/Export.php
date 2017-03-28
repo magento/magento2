@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
@@ -42,7 +42,7 @@ class Export extends ExportController
         if ($this->getRequest()->getPost(ExportModel::FILTER_ELEMENT_GROUP)) {
             try {
                 /** @var $model \Magento\ImportExport\Model\Export */
-                $model = $this->_objectManager->create('Magento\ImportExport\Model\Export');
+                $model = $this->_objectManager->create(\Magento\ImportExport\Model\Export::class);
                 $model->setData($this->getRequest()->getParams());
 
                 return $this->fileFactory->create(
@@ -54,7 +54,7 @@ class Export extends ExportController
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addError(__('Please correct the data sent value.'));
             }
         } else {

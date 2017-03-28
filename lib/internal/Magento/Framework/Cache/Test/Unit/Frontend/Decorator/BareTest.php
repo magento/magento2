@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
@@ -15,7 +15,7 @@ class BareTest extends \PHPUnit_Framework_TestCase
      */
     public function testProxyMethod($method, $params, $expectedResult)
     {
-        $frontendMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
+        $frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
 
         $object = new \Magento\Framework\Cache\Frontend\Decorator\Bare($frontendMock);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting();
@@ -34,8 +34,8 @@ class BareTest extends \PHPUnit_Framework_TestCase
             ['save', ['record_value', 'record_id', ['tag'], 555], true],
             ['remove', ['record_id'], true],
             ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true],
-            ['getBackend', [], $this->getMock('Zend_Cache_Backend')],
-            ['getLowLevelFrontend', [], $this->getMock('Zend_Cache_Core')],
+            ['getBackend', [], $this->getMock(\Zend_Cache_Backend::class)],
+            ['getLowLevelFrontend', [], $this->getMock(\Zend_Cache_Core::class)],
         ];
     }
 }

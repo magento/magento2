@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
     {
         if (!$this->_groupRenderer) {
             $this->_groupRenderer = $this->getLayout()->createBlock(
-                'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup',
+                \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup::class,
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );

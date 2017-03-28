@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -10,7 +10,6 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\ResourceModel;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -487,7 +486,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote::class);
     }
 
     /**
@@ -719,6 +718,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         return $this->setData(self::KEY_CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -841,6 +841,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
+     * @deprecated
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -962,7 +963,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             )
         );
         $customer->setAddresses($origAddresses);
@@ -1024,6 +1025,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
+        $this->updateCustomerData($this->customerRepository->save($this->getCustomer()));
         return $this;
     }
 
@@ -1570,6 +1572,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             );
         }
 
+        if (!$product->isSalable()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Product that you are trying to add is not available.')
+            );
+        }
+
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
 
         /**
@@ -1617,10 +1625,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
-                $message = $item->getMessage();
-                if (!in_array($message, $errors)) {
-                    // filter duplicate messages
-                    $errors[] = $message;
+                foreach ($item->getMessage(false) as $message) {
+                    if (!in_array($message, $errors)) {
+                        // filter duplicate messages
+                        $errors[] = $message;
+                    }
                 }
             }
         }
@@ -2155,6 +2164,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         if (!$this->getReservedOrderId()) {
             $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+        } else {
+            //checking if reserved order id was already used for some order
+            //if yes reserving new one if not using old one
+            if ($this->_getResource()->isOrderIncrementIdUsed($this->getReservedOrderId())) {
+                $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+            }
         }
         return $this;
     }

@@ -1,14 +1,14 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
+
     $.widget('mage.captcha', {
         options: {
             refreshClass: 'refreshing',
@@ -21,15 +21,14 @@ define([
          * Method binds click event to reload image
          * @private
          */
-        _create: function() {
+        _create: function () {
             this.element.on('click', this.options.reloadSelector, $.proxy(this.refresh, this));
         },
 
         /**
          * Method triggeres an AJAX request to refresh the CAPTCHA image
-         * @param e - Event
          */
-        refresh: function(e) {
+        refresh: function () {
             var imageLoader = this.options.imageLoader;
 
             if (imageLoader) {
@@ -46,12 +45,18 @@ define([
                 data: {
                     'formId': this.options.type
                 },
+
+                /**
+                 * @param {Object} response
+                 */
                 success: function (response) {
                     if (response.imgSrc) {
                         this.element.find(this.options.imageSelector).attr('src', response.imgSrc);
                     }
                 },
-                complete: function() {
+
+                /** Complete callback. */
+                complete: function () {
                     this.element.removeClass(this.options.refreshClass);
                 }
             });

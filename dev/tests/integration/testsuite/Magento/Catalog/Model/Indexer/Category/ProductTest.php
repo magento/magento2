@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category;
@@ -30,17 +30,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalog_category_product');
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\ResourceModel\Product'
+            \Magento\Catalog\Model\ResourceModel\Product::class
         );
     }
 
     /**
+     * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @magentoDbIsolation enabled
      */
@@ -173,7 +174,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categorySixth */
         $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $categorySixth->setName(
             'Category 6'
@@ -211,10 +212,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
 
-        $result = $category->getCollection()->getItems();
+        $result = $category->getCollection()->addAttributeToSelect('name')->getItems();
         $result = array_slice($result, 2);
 
         return array_slice($result, 0, $count);
@@ -228,7 +229,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
         $result[] = $product->load(1);

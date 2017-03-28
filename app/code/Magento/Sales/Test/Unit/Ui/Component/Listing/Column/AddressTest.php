@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -27,15 +27,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
-        $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\Address',
+            \Magento\Sales\Ui\Component\Listing\Column\Address::class,
             [
                 'context' => $contextMock,
                 'escaper' => $this->escaper,

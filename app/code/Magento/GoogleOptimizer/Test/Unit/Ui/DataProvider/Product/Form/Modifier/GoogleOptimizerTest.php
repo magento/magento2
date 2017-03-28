@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -59,13 +59,13 @@ class GoogleOptimizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false, false);
-        $this->locatorMock = $this->getMock('Magento\Catalog\Model\Locator\LocatorInterface', [], []);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false, false);
+        $this->locatorMock = $this->getMock(\Magento\Catalog\Model\Locator\LocatorInterface::class, [], []);
         $this->locatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->dataHelperMock = $this->getMock('Magento\GoogleOptimizer\Helper\Data', [], [], '', false, false);
-        $this->codeHelperMock = $this->getMock('Magento\GoogleOptimizer\Helper\Code', [], [], '', false, false);
+        $this->dataHelperMock = $this->getMock(\Magento\GoogleOptimizer\Helper\Data::class, [], [], '', false, false);
+        $this->codeHelperMock = $this->getMock(\Magento\GoogleOptimizer\Helper\Code::class, [], [], '', false, false);
 
         $this->googleOptimizer = $this->objectManagerHelper->getObject(
             GoogleOptimizer::class,
@@ -121,7 +121,7 @@ class GoogleOptimizerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\GoogleOptimizer\Model\Code|MockObject $codeModelMock */
         $codeModelMock = $this->getMock(
-            'Magento\GoogleOptimizer\Model\Code',
+            \Magento\GoogleOptimizer\Model\Code::class,
             ['getExperimentScript', 'getCodeId'],
             [],
             '',

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
@@ -25,7 +25,7 @@ class MassUnlock extends \Magento\User\Controller\Adminhtml\Locks
             $userIds = $this->getRequest()->getPost('unlock');
             if ($userIds && is_array($userIds)) {
                 $affectedUsers = $this->_objectManager
-                    ->get('Magento\User\Model\ResourceModel\User')
+                    ->get(\Magento\User\Model\ResourceModel\User::class)
                     ->unlock($userIds);
                 $this->getMessageManager()->addSuccess(__('Unlocked %1 user(s).', $affectedUsers));
             }

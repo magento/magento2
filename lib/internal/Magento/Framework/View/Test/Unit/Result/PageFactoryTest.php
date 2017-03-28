@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,22 +24,24 @@ class PageFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->pageFactory = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Result\PageFactory',
+            \Magento\Framework\View\Result\PageFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
         );
-        $this->page = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->page = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     public function testCreate()
     {
-        $this->objectManagerMock->expects($this->once())->method('create')->with('Magento\Framework\View\Result\Page')
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with(\Magento\Framework\View\Result\Page::class)
             ->will($this->returnValue($this->page));
         $this->assertSame($this->page, $this->pageFactory->create());
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -23,12 +23,12 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\Framework\Message\CollectionFactory');
+        $this->model = $this->objectManager->create(\Magento\Framework\Message\CollectionFactory::class);
     }
 
     public function testCreate()
     {
         $message = $this->model->create();
-        $this->assertInstanceOf('\Magento\Framework\Message\Collection', $message);
+        $this->assertInstanceOf(\Magento\Framework\Message\Collection::class, $message);
     }
 }

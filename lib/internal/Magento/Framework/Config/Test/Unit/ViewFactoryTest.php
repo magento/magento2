@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit;
@@ -31,17 +31,17 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\Config\ViewFactory($this->objectManager);
-        $this->theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface');
-        $this->view = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
+        $this->theme = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $this->view = $this->getMock(\Magento\Framework\Config\View::class, [], [], '', false);
     }
 
     public function testCreate()
     {
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Config\View', [])
+            ->with(\Magento\Framework\Config\View::class, [])
             ->willReturn($this->view);
         $this->assertEquals($this->view, $this->model->create());
     }
@@ -49,18 +49,18 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithArguments()
     {
         /** @var \Magento\Theme\Model\View\Design|\PHPUnit_Framework_MockObject_MockObject $design */
-        $design = $this->getMock('Magento\Theme\Model\View\Design', [], [], '', false);
+        $design = $this->getMock(\Magento\Theme\Model\View\Design::class, [], [], '', false);
         $design->expects($this->once())
             ->method('setDesignTheme')
             ->with($this->theme, self::AREA);
 
         /** @var \Magento\Framework\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject $fileResolver */
-        $fileResolver = $this->getMock('Magento\Framework\Config\FileResolver', [], [], '', false);
+        $fileResolver = $this->getMock(\Magento\Framework\Config\FileResolver::class, [], [], '', false);
 
         $valueMap = [
-            ['Magento\Theme\Model\View\Design', [], $design],
-            ['Magento\Framework\Config\FileResolver', ['designInterface' => $design], $fileResolver],
-            ['Magento\Framework\Config\View', ['fileResolver' => $fileResolver], $this->view],
+            [\Magento\Theme\Model\View\Design::class, [], $design],
+            [\Magento\Framework\Config\FileResolver::class, ['designInterface' => $design], $fileResolver],
+            [\Magento\Framework\Config\View::class, ['fileResolver' => $fileResolver], $this->view],
         ];
         $this->objectManager->expects($this->exactly(3))
             ->method('create')
@@ -75,10 +75,12 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateException()
     {
-        $this->model->create([
-            'themeModel' => 'wrong theme',
-            'area' => self::AREA
-        ]);
+        $this->model->create(
+            [
+                'themeModel' => 'wrong theme',
+                'area' => self::AREA
+            ]
+        );
     }
 
     /**

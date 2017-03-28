@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Test\Unit\Observer;
@@ -39,21 +39,24 @@ class CustomerLogoutObserverTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->productIndexFactoryMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\ViewedFactory')
-            ->setMethods(['create'])
+        $this->productIndexFactoryMock = $this->getMockBuilder(
+            \Magento\Reports\Model\Product\Index\ViewedFactory::class
+        )->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->productIndexMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\Viewed')
+        $this->productIndexMock = $this->getMockBuilder(\Magento\Reports\Model\Product\Index\Viewed::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->productIndexFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->productIndexMock);
 
-        $this->productCompModelMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\Compared')
+        $this->productCompModelMock = $this->getMockBuilder(\Magento\Reports\Model\Product\Index\Compared::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productCompFactoryMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\ComparedFactory')
+        $this->productCompFactoryMock = $this->getMockBuilder(
+            \Magento\Reports\Model\Product\Index\ComparedFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -62,7 +65,7 @@ class CustomerLogoutObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->productCompModelMock);
 
         $this->observer = $objectManager->getObject(
-            'Magento\Reports\Observer\CustomerLogoutObserver',
+            \Magento\Reports\Observer\CustomerLogoutObserver::class,
             [
                 'productIndxFactory' => $this->productIndexFactoryMock,
                 'productCompFactory' => $this->productCompFactoryMock,
@@ -92,13 +95,13 @@ class CustomerLogoutObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function getObserverMock($productId)
     {
-        $eventObserverMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $eventMock = $this->getMockBuilder('Magento\Framework\Event')
+        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])->getMock();
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 

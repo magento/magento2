@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('bundle')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -41,18 +41,21 @@ $product->setTypeId('bundle')
                'cust_group' => \Magento\Customer\Model\GroupManagement::CUST_GROUP_ALL,
                'price_qty'  => 2,
                'price'      => 8,
+               'percentage_value' => 8
            ],
             [
                 'website_id' => 0,
                 'cust_group' => \Magento\Customer\Model\GroupManagement::CUST_GROUP_ALL,
                 'price_qty'  => 5,
                 'price'      => 30,
+                'percentage_value' => 30
             ],
            [
                'website_id' => 0,
                'cust_group' => \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
                'price_qty'  => 3,
                'price'      => 20,
+               'percentage_value' => 20
            ],
         ]
     )

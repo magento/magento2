@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageRewriteEntityTest" summary="Create CMS Page URL Rewrites" ticketId="MAGETWO-24847">
         <variation name="CreateCmsPageRewriteEntityTestVariation1">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1</data>
             <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%</data>
@@ -19,6 +19,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
         </variation>
         <variation name="CreateCmsPageRewriteEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.html</data>
@@ -29,6 +30,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
         </variation>
         <variation name="CreateCmsPageRewriteEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.htm</data>
@@ -39,6 +41,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertUrlRewriteCmsPageRedirect" />
         </variation>
         <variation name="CreateCmsPageRewriteEntityTestVariation4">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="urlRewrite/data/entity_type" xsi:type="string">For CMS page</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">request_path%isolation%.aspx</data>

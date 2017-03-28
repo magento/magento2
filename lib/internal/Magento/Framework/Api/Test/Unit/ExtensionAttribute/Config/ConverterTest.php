@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
@@ -45,38 +45,34 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert()
     {
-        $expected = [
-            'Magento\Tax\Api\Data\TaxRateInterface' => [
-            ],
-            'Magento\Catalog\Api\Data\ProductInterface' => [
+        $expected = [\Magento\Tax\Api\Data\TaxRateInterface::class => [
+            ], \Magento\Catalog\Api\Data\ProductInterface::class => [
                 'stock_item' => [
-                    Converter::DATA_TYPE => 'Magento\CatalogInventory\Api\Data\StockItemInterface',
+                    Converter::DATA_TYPE => \Magento\CatalogInventory\Api\Data\StockItemInterface::class,
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => null,
                 ],
-            ],
-            'Magento\Customer\Api\Data\CustomerInterface' => [
+            ], \Magento\Customer\Api\Data\CustomerInterface::class => [
                 'custom_1' => [
-                    Converter::DATA_TYPE => 'Magento\Customer\Api\Data\CustomerCustom',
+                    Converter::DATA_TYPE => \Magento\Customer\Api\Data\CustomerCustom::class,
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => null,
                 ],
                 'custom_2' => [
-                    Converter::DATA_TYPE => 'Magento\CustomerExtra\Api\Data\CustomerCustom2',
+                    Converter::DATA_TYPE => \Magento\CustomerExtra\Api\Data\CustomerCustom2::class,
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => null,
                 ],
-            ],
-            'Magento\Customer\Api\Data\CustomerInterface2' => [
+            ], \Magento\Customer\Api\Data\CustomerInterface2::class => [
                 'custom_with_permission' => [
-                    Converter::DATA_TYPE => 'Magento\Customer\Api\Data\CustomerCustom',
+                    Converter::DATA_TYPE => \Magento\Customer\Api\Data\CustomerCustom::class,
                     Converter::RESOURCE_PERMISSIONS => [
                         'Magento_Customer::manage',
                     ],
                     Converter::JOIN_DIRECTIVE => null,
                 ],
                 'custom_with_multiple_permissions' => [
-                    Converter::DATA_TYPE => 'Magento\CustomerExtra\Api\Data\CustomerCustom2',
+                    Converter::DATA_TYPE => \Magento\CustomerExtra\Api\Data\CustomerCustom2::class,
                     Converter::RESOURCE_PERMISSIONS => [
                         'Magento_Customer::manage',
                         'Magento_Customer::manage2',
@@ -98,8 +94,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertWithJoinDirectives()
     {
-        $expected = [
-            'Magento\Customer\Api\Data\CustomerInterface' => [
+        $expected = [\Magento\Customer\Api\Data\CustomerInterface::class => [
                 'library_card_id' => [
                     Converter::DATA_TYPE => 'string',
                     Converter::RESOURCE_PERMISSIONS => [],

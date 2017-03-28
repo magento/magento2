@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
@@ -71,7 +71,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         } elseif (isset($productHelpers['default'])) {
             $helperName = $productHelpers['default'];
         } else {
-            $helperName = 'Magento\Catalog\Helper\Product\Configuration';
+            $helperName = \Magento\Catalog\Helper\Product\Configuration::class;
         }
 
         return $this->_productConfigPool->get($helperName);

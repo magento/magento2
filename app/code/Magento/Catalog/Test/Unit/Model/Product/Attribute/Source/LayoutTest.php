@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,12 +23,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->pageLayoutBuilder = $this->getMockBuilder(
-            'Magento\Framework\View\Model\PageLayout\Config\BuilderInterface'
+            \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutModel = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product\Attribute\Source\Layout',
+            \Magento\Catalog\Model\Product\Attribute\Source\Layout::class,
             [
                 'pageLayoutBuilder' => $this->pageLayoutBuilder
             ]
@@ -41,7 +41,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             '0' => ['value' => '', 'label' => 'No layout updates'],
             '1' => ['value' => 'option_value', 'label' => 'option_label'],
         ];
-        $mockPageLayoutConfig = $this->getMockBuilder('Magento\Framework\View\PageLayout\Config')
+        $mockPageLayoutConfig = $this->getMockBuilder(\Magento\Framework\View\PageLayout\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mockPageLayoutConfig->expects($this->any())

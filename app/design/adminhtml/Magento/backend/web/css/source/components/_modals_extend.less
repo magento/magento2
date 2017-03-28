@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -69,7 +69,7 @@
 .modal-popup {
     &.prompt {
         .prompt-message {
-            padding: @modal-prompt-message__padding 0;
+            padding-bottom: @modal-prompt-message__padding;
 
             input {
                 width: 100%;
@@ -124,7 +124,7 @@
     .action-close {
         padding: @modal-popup__padding @modal-popup__padding;
 
-        &:active{
+        &:active {
             padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
             padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
         }
@@ -187,13 +187,13 @@
         margin-top: @modal-slide-header__padding-vertical;
     }
 
-    .magento_message {
+    .magento-message {
         padding: 0 @popup__padding__horizontal @popup__padding__vertical;
         position: relative;
     }
 
     .main-col,
-    .magento_message {
+    .magento-message {
         .insert-title-inner {
             &:extend(.abs-clearfix all);
             border-bottom: 1px solid @color-gray68;

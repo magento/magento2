@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $options = [
-            'concrete_backend' => $this->getMock('Zend_Cache_Backend_File'),
+            'concrete_backend' => $this->getMock(\Zend_Cache_Backend_File::class),
             'compression_threshold' => strlen($this->_testString),
         ];
         $this->_decorator = new \Magento\Framework\Cache\Backend\Decorator\Compression($options);
@@ -43,7 +43,10 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
 
     public function testCompressData()
     {
-        $method = new \ReflectionMethod('Magento\Framework\Cache\Backend\Decorator\Compression', '_compressData');
+        $method = new \ReflectionMethod(
+            \Magento\Framework\Cache\Backend\Decorator\Compression::class,
+            '_compressData'
+        );
         $method->setAccessible(true);
 
         $this->assertStringStartsWith('CACHE_COMPRESSION', $method->invoke($this->_decorator, $this->_testString));
@@ -52,13 +55,13 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
     public function testDecompressData()
     {
         $methodCompress = new \ReflectionMethod(
-            'Magento\Framework\Cache\Backend\Decorator\Compression',
+            \Magento\Framework\Cache\Backend\Decorator\Compression::class,
             '_compressData'
         );
         $methodCompress->setAccessible(true);
 
         $methodDecompress = new \ReflectionMethod(
-            'Magento\Framework\Cache\Backend\Decorator\Compression',
+            \Magento\Framework\Cache\Backend\Decorator\Compression::class,
             '_decompressData'
         );
         $methodDecompress->setAccessible(true);
@@ -75,7 +78,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
     public function testIsCompressionNeeded()
     {
         $method = new \ReflectionMethod(
-            'Magento\Framework\Cache\Backend\Decorator\Compression',
+            \Magento\Framework\Cache\Backend\Decorator\Compression::class,
             '_isCompressionNeeded'
         );
         $method->setAccessible(true);
@@ -90,7 +93,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
         $prefix = 'CACHE_COMPRESSION';
 
         $method = new \ReflectionMethod(
-            'Magento\Framework\Cache\Backend\Decorator\Compression',
+            \Magento\Framework\Cache\Backend\Decorator\Compression::class,
             '_isDecompressionNeeded'
         );
         $method->setAccessible(true);
@@ -104,7 +107,7 @@ class CompressionTest extends \PHPUnit_Framework_TestCase
     {
         $cacheId = 'cacheId' . rand(1, 100);
 
-        $backend = $this->getMock('Zend_Cache_Backend_File', ['save', 'load']);
+        $backend = $this->getMock(\Zend_Cache_Backend_File::class, ['save', 'load']);
         $backend->expects($this->once())->method('save')->will($this->returnCallback([__CLASS__, 'mockSave']));
 
         $backend->expects($this->once())->method('load')->will($this->returnCallback([__CLASS__, 'mockLoad']));

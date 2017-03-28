@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Block\Paypal;
@@ -40,22 +40,15 @@ class PopupWindow extends Block
     /**
      * Process PayPal auth flow
      *
-     * @return void
+     * @param null|string $parentWindow
+     *
      */
-    public function process()
+    public function process($parentWindow = null)
     {
         $this->browser->selectWindow();
         $this->waitForFormLoaded();
         $this->browser->find($this->submitButton)->click();
-        /**
-         * This try/catch is intended as workaround in case if popup window is closed instantly and #login-preview
-         * selector cannot be found.
-         */
-        try {
-            $this->waitForElementNotVisible($this->selector);
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
-        }
-        $this->browser->selectWindow();
+        $this->browser->selectWindow($parentWindow);
         $this->waitForElementNotVisible($this->loader);
     }
 }

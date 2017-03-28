@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Helper;
@@ -82,8 +82,8 @@ class Stock
     public function assignStatusToProduct(Product $product, $status = null)
     {
         if ($status === null) {
-            $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
+            $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $scopeId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -93,14 +93,15 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
+     * @deprecated Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
     {
-        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
+        $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
@@ -153,7 +154,10 @@ class Stock
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $resource = $this->getStockStatusResource();
-            $resource->addStockDataToCollection($collection, !$isShowOutOfStock);
+            $resource->addStockDataToCollection(
+                $collection,
+                !$isShowOutOfStock || $collection->getFlag('require_stock_items')
+            );
             $collection->setFlag($stockFlag, true);
         }
     }
@@ -178,7 +182,7 @@ class Stock
     {
         if ($this->stockConfiguration === null) {
             $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
         }
         return $this->stockConfiguration;
     }

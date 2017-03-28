@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
-$price = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\ProductAlert\Model\Price');
+$price = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\ProductAlert\Model\Price::class);
 $price->setCustomerId(
     $customer->getId()
 )->setProductId(
@@ -19,7 +19,7 @@ $price->setCustomerId(
 );
 $price->save();
 
-$stock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\ProductAlert\Model\Stock');
+$stock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\ProductAlert\Model\Stock::class);
 $stock->setCustomerId(
     $customer->getId()
 )->setProductId(

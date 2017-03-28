@@ -1,19 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogWidget\Block\Product;
+
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Widget\Block\BlockInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Catalog Products List widget block
  * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Widget\Block\BlockInterface
+class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
     /**
      * Default value for products count that will be shown
@@ -79,6 +83,18 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     protected $conditionsHelper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -87,6 +103,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\CatalogWidget\Model\Rule $rule
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
+     * @param Json|null $json
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -96,7 +113,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
-        array $data = []
+        array $data = [],
+        Json $json = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -104,6 +122,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->sqlBuilder = $sqlBuilder;
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $data
@@ -125,7 +144,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->addData([
             'cache_lifetime' => 86400,
             'cache_tags' => [\Magento\Catalog\Model\Product::CACHE_TAG,
-        ], ]);
+            ], ]);
     }
 
     /**
@@ -141,13 +160,14 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         return [
             'CATALOG_PRODUCTS_LIST_WIDGET',
+            $this->getPriceCurrency()->getCurrencySymbol(),
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
             intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
             $this->getProductsPerPage(),
             $conditions,
-            serialize($this->getRequest()->getParams())
+            $this->json->serialize($this->getRequest()->getParams())
         ];
     }
 
@@ -301,7 +321,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         if ($this->showPager() && $this->getProductCollection()->getSize() > $this->getProductsPerPage()) {
             if (!$this->pager) {
                 $this->pager = $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Product\Widget\Html\Pager',
+                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
                     'widget.products.list.pager'
                 );
 
@@ -327,7 +347,16 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function getIdentities()
     {
-        return [\Magento\Catalog\Model\Product::CACHE_TAG];
+        $identities = [];
+        if ($this->getProductCollection()) {
+            foreach ($this->getProductCollection() as $product) {
+                if ($product instanceof IdentityInterface) {
+                    $identities = array_merge($identities, $product->getIdentities());
+                }
+            }
+        }
+
+        return $identities ?: [\Magento\Catalog\Model\Product::CACHE_TAG];
     }
 
     /**
@@ -338,5 +367,19 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     public function getTitle()
     {
         return $this->getData('title');
+    }
+
+    /**
+     * @return PriceCurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getPriceCurrency()
+    {
+        if ($this->priceCurrency === null) {
+            $this->priceCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(PriceCurrencyInterface::class);
+        }
+        return $this->priceCurrency;
     }
 }

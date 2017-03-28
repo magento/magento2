@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +34,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->dateTimeMock = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime',
+            \Magento\Framework\Stdlib\DateTime::class,
             [],
             [],
             '',
@@ -42,7 +42,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceMock = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -50,7 +50,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->dbAdapterMock = $this->getMock(
-            '\Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             [],
             '',
@@ -58,7 +58,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent',
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class,
             [
                 'resource' => $this->resourceMock,
                 'dateTime' => $this->dateTimeMock

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page;
@@ -150,7 +150,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Action'),
                 'sortable' => false,
                 'filter' => false,
-                'renderer' => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action',
+                'renderer' => \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action::class,
                 'header_css_class' => 'col-action',
                 'column_css_class' => 'col-action'
             ]

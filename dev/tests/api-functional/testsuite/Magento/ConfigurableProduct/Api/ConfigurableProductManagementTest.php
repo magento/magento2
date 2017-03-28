@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Api;
@@ -32,7 +32,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
         ];
         /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository */
         $attributeRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Api\ProductAttributeRepositoryInterface'
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
         );
         $attribute = $attributeRepository->get('test_configurable');
         $attributeOptionValue = $attribute->getOptions()[1]->getValue();

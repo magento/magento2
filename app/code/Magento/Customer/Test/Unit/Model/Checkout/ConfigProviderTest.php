@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Checkout;
@@ -44,25 +44,25 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storeManager = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false
         );
         $this->urlBuilder = $this->getMockForAbstractClass(
-            'Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             '',
             false
         );
         $this->scopeConfig = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             '',
             false
         );
         $this->store = $this->getMockForAbstractClass(
-            'Magento\Store\Api\Data\StoreInterface',
+            \Magento\Store\Api\Data\StoreInterface::class,
             [],
             '',
             false,

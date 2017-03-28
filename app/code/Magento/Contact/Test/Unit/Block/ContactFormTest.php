@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,12 +30,12 @@ class ContactFormTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUrlBuilder'])
             ->getMock();
 
-        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

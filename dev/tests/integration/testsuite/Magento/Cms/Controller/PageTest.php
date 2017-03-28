@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->dispatch('/enable-cookies/');
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         $breadcrumbsBlock = $layout->getBlock('breadcrumbs');
         $this->assertContains($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
@@ -43,7 +43,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     public static function cmsPageWithSystemRouteFixture()
     {
         /** @var $page \Magento\Cms\Model\Page */
-        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Page');
+        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
         $page->setTitle('Test title')
             ->setIdentifier('shipping')
             ->setStores([0])

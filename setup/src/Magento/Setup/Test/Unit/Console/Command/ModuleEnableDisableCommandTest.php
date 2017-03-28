@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -9,6 +9,9 @@ use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,31 +44,37 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generatedFiles;
+
     protected function setUp()
     {
         $this->objectManagerProviderMock = $this->getMock(
-            'Magento\Setup\Model\ObjectManagerProvider',
+            \Magento\Setup\Model\ObjectManagerProvider::class,
             [],
             [],
             '',
             false
         );
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerProviderMock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
-        $this->statusMock = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
-        $this->cacheMock = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
-        $this->cleanupFilesMock = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $this->fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $this->statusMock = $this->getMock(\Magento\Framework\Module\Status::class, [], [], '', false);
+        $this->cacheMock = $this->getMock(\Magento\Framework\App\Cache::class, [], [], '', false);
+        $this->cleanupFilesMock = $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, [], [], '', false);
+        $this->fullModuleListMock = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
         $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->generatedFiles = $this->getMock(\Magento\Framework\Code\GeneratedFiles::class, [], [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
-                ['Magento\Framework\Module\Status', $this->statusMock],
-                ['Magento\Framework\App\Cache', $this->cacheMock],
-                ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFilesMock],
-                ['Magento\Framework\Module\FullModuleList', $this->fullModuleListMock],
+                [\Magento\Framework\Module\Status::class, $this->statusMock],
+                [\Magento\Framework\App\Cache::class, $this->cacheMock],
+                [\Magento\Framework\App\State\CleanupFiles::class, $this->cleanupFilesMock],
+                [\Magento\Framework\Module\FullModuleList::class, $this->fullModuleListMock],
             ]));
     }
 
@@ -164,7 +173,6 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $isEnable
      * @param string $expectedMessage
-     * @param bool $isInstalled
      *
      * @dataProvider executeAllDataProvider
      */
@@ -318,6 +326,9 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
         $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
+        $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
+        $deploymentConfigProperty->setAccessible(true);
+        $deploymentConfigProperty->setValue($command, $this->generatedFiles);
         return new CommandTester($command);
     }
 }

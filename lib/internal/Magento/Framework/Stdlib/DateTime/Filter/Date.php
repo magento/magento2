@@ -2,13 +2,12 @@
 /**
  * Date filter. Converts date from localized to internal format.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 class Date implements \Zend_Filter_Interface
@@ -56,10 +55,10 @@ class Date implements \Zend_Filter_Interface
 
     /**
      * Convert date from localized to internal format
-     * 
+     *
      * @param string $value
      * @return string
-     * @throws LocalizedException
+     * @throws \Exception
      */
     public function filter($value)
     {
@@ -67,7 +66,7 @@ class Date implements \Zend_Filter_Interface
             $value = new \DateTime($value);
             return $value->format('Y-m-d');
         } catch (\Exception $e) {
-            throw new \Exception('Invalid input date format');
+            throw new \Exception("Invalid input date format '$value'");
         }
     }
 }

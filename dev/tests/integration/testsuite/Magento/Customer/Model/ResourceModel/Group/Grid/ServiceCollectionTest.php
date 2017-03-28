@@ -2,7 +2,7 @@
 /**
  * \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
@@ -15,7 +15,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection'
+            \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class
         );
     }
 

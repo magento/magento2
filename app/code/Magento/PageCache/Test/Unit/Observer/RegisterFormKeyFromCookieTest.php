@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Observer;
@@ -47,30 +47,30 @@ class RegisterFormKeyFromCookieTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->cookieFormKey = $this->getMockBuilder(
-            'Magento\Framework\App\PageCache\FormKey'
+            \Magento\Framework\App\PageCache\FormKey::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaper = $this->getMockBuilder(
-            'Magento\Framework\Escaper'
+            \Magento\Framework\Escaper::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionFormKey = $this->getMockBuilder(
-            'Magento\Framework\Data\Form\FormKey'
+            \Magento\Framework\Data\Form\FormKey::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->cookieMetadataFactory = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionConfig = $this->getMock(
-            'Magento\Framework\Session\Config\ConfigInterface'
+            \Magento\Framework\Session\Config\ConfigInterface::class
         );
 
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer');
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
 
         $this->observer = new RegisterFormKeyFromCookie(
             $this->cookieFormKey,
@@ -103,7 +103,7 @@ class RegisterFormKeyFromCookieTest extends \PHPUnit_Framework_TestCase
         $cookieLifetime = 3600;
 
         $cookieMetadata = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();

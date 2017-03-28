@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model\Directpost\Request;
@@ -20,7 +20,7 @@ class Factory extends AuthorizenetRequestFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Authorizenet\Model\Directpost\Request'
+        $instanceName = \Magento\Authorizenet\Model\Directpost\Request::class
     ) {
         parent::__construct($objectManager, $instanceName);
     }

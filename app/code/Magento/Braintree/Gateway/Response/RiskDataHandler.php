@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Response;
@@ -23,6 +23,11 @@ class RiskDataHandler implements HandlerInterface
      * The possible values of the risk decision are Not Evaluated, Approve, Review, and Decline
      */
     const RISK_DATA_DECISION = 'riskDataDecision';
+
+    /**
+     * Risk data Review status
+     */
+    private static $statusReview = 'Review';
 
     /**
      * @var SubjectReader
@@ -62,5 +67,10 @@ class RiskDataHandler implements HandlerInterface
 
         $payment->setAdditionalInformation(self::RISK_DATA_ID, $transaction->riskData->id);
         $payment->setAdditionalInformation(self::RISK_DATA_DECISION, $transaction->riskData->decision);
+
+        // mark payment as fraud
+        if ($transaction->riskData->decision === self::$statusReview) {
+            $payment->setIsFraudDetected(true);
+        }
     }
 }

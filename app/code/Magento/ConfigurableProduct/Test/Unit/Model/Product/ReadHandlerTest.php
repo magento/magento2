@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
@@ -56,7 +56,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('getExtensionAttributes');
 
-        $entity = $this->readHandler->execute('Entity', $product);
+        $entity = $this->readHandler->execute($product);
         static::assertSame($product, $entity);
     }
 
@@ -118,7 +118,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
-        $entity = $this->readHandler->execute('Entity', $product);
+        $entity = $this->readHandler->execute($product);
         static::assertSame($product, $entity);
     }
 }

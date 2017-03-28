@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
@@ -21,12 +21,18 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $paymentDataMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
 
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $this->_scopeConfig = $this->getMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->_object = $helper->getObject(
-            'Magento\OfflinePayments\Model\Cashondelivery',
+            \Magento\OfflinePayments\Model\Cashondelivery::class,
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
@@ -37,6 +43,6 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetInfoBlockType()
     {
-        $this->assertEquals('Magento\Payment\Block\Info\Instructions', $this->_object->getInfoBlockType());
+        $this->assertEquals(\Magento\Payment\Block\Info\Instructions::class, $this->_object->getInfoBlockType());
     }
 }

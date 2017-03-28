@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
@@ -16,7 +16,7 @@ $registry->register('isSecureArea', true);
 $productSkuList = ['simple_product_1', 'simple_product_2'];
 foreach ($productSkuList as $sku) {
     /** @var $product \Magento\Catalog\Model\Product */
-    $product = $objectManager->create('Magento\Catalog\Model\Product');
+    $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
     $product->loadByAttribute('sku', $sku);
     if ($product->getId()) {
         $product->delete();

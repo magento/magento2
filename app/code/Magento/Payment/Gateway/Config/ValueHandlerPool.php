@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Config;
@@ -48,7 +48,7 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
      */
     public function get($field)
     {
-        return isset ($this->handlers[$field])
+        return isset($this->handlers[$field])
             ? $this->handlers[$field]
             : $this->handlers[self::DEFAULT_HANDLER];
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication()->getDbInstance();
         $config = [
             'profiler' => [
-                'class' => '\Magento\Framework\DB\Profiler',
+                'class' => \Magento\Framework\DB\Profiler::class,
                 'enabled' => true,
             ],
             'type' => 'pdo_mysql',
@@ -25,15 +25,17 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql $object */
         $object = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql',
+            \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql::class,
             ['config' => $config]
         );
 
         $connection = $object->getConnection(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\DB\LoggerInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                \Magento\Framework\DB\LoggerInterface::class
+            )
         );
-        $this->assertInstanceOf('\Magento\Framework\DB\Adapter\Pdo\Mysql', $connection);
+        $this->assertInstanceOf(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, $connection);
         $profiler = $connection->getProfiler();
-        $this->assertInstanceOf('\Magento\Framework\DB\Profiler', $profiler);
+        $this->assertInstanceOf(\Magento\Framework\DB\Profiler::class, $profiler);
     }
 }

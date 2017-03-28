@@ -1,16 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
+/**
+ * Class Authentication
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Authentication implements AuthenticationInterface
 {
     /**
@@ -51,6 +57,11 @@ class Authentication implements AuthenticationInterface
     protected $customerRepository;
 
     /**
+     * @var CustomerAuthUpdate
+     */
+    private $customerAuthUpdate;
+
+    /**
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
@@ -82,7 +93,7 @@ class Authentication implements AuthenticationInterface
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
 
         if (!($lockThreshold && $maxFailures)) {
-            return false;
+            return;
         }
         $failuresNum = (int)$customerSecure->getFailuresNum() + 1;
 
@@ -92,17 +103,20 @@ class Authentication implements AuthenticationInterface
         }
 
         $lockThreshInterval = new \DateInterval('PT' . $lockThreshold . 'S');
-        // set first failure date when this is first failure or last first failure expired
-        if (1 === $failuresNum || !$firstFailureDate || $now->diff($firstFailureDate) > $lockThreshInterval) {
+        $lockExpires = $customerSecure->getLockExpires();
+        $lockExpired = ($lockExpires !== null) && ($now > new \DateTime($lockExpires));
+        // set first failure date when this is the first failure or the lock is expired
+        if (1 === $failuresNum || !$firstFailureDate || $lockExpired) {
             $customerSecure->setFirstFailure($this->dateTime->formatDate($now));
             $failuresNum = 1;
+            $customerSecure->setLockExpires(null);
             // otherwise lock customer
         } elseif ($failuresNum >= $maxFailures) {
             $customerSecure->setLockExpires($this->dateTime->formatDate($now->add($lockThreshInterval)));
         }
 
         $customerSecure->setFailuresNum($failuresNum);
-        $this->customerRepository->save($this->customerRepository->getById($customerId));
+        $this->getCustomerAuthUpdate()->saveAuth($customerId);
     }
 
     /**
@@ -114,7 +128,7 @@ class Authentication implements AuthenticationInterface
         $customerSecure->setFailuresNum(0);
         $customerSecure->setFirstFailure(null);
         $customerSecure->setLockExpires(null);
-        $this->customerRepository->save($this->customerRepository->getById($customerId));
+        $this->getCustomerAuthUpdate()->saveAuth($customerId);
     }
 
     /**
@@ -161,5 +175,20 @@ class Authentication implements AuthenticationInterface
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
         return true;
+    }
+
+    /**
+     * Get customer authentication update model
+     *
+     * @return \Magento\Customer\Model\CustomerAuthUpdate
+     * @deprecated
+     */
+    private function getCustomerAuthUpdate()
+    {
+        if ($this->customerAuthUpdate === null) {
+            $this->customerAuthUpdate =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerAuthUpdate::class);
+        }
+        return $this->customerAuthUpdate;
     }
 }

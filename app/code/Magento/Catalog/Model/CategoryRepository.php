@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -76,7 +76,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     {
         $storeId = (int)$this->storeManager->getStore()->getId();
         $existingData = $this->getExtensibleDataObjectConverter()
-            ->toNestedArray($category, [], 'Magento\Catalog\Api\Data\CategoryInterface');
+            ->toNestedArray($category, [], \Magento\Catalog\Api\Data\CategoryInterface::class);
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
 
@@ -91,8 +91,15 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             );
 
             if (isset($existingData['image']) && is_array($existingData['image'])) {
-                $existingData['image_additional_data'] = $existingData['image'];
-                unset($existingData['image']);
+                if (!empty($existingData['image']['delete'])) {
+                    $existingData['image'] = null;
+                } else {
+                    if (isset($existingData['image'][0]['name']) && isset($existingData['image'][0]['tmp_name'])) {
+                        $existingData['image'] = $existingData['image'][0]['name'];
+                    } else {
+                        unset($existingData['image']);
+                    }
+                }
             }
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
@@ -209,7 +216,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     {
         if ($this->extensibleDataObjectConverter === null) {
             $this->extensibleDataObjectConverter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Api\ExtensibleDataObjectConverter');
+                ->get(\Magento\Framework\Api\ExtensibleDataObjectConverter::class);
         }
         return $this->extensibleDataObjectConverter;
     }
@@ -221,7 +228,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\Design\Config;
@@ -74,7 +74,11 @@ class Save extends Action
 
             $this->dataPersistor->clear('theme_design_config');
 
+            $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             $resultRedirect->setPath('theme/design_config/');
+            if ($returnToEdit) {
+                $resultRedirect->setPath('theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]);
+            }
             return $resultRedirect;
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());

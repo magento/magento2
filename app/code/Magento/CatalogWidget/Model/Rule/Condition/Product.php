@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * CatalogWidget Rule Product Condition data model
@@ -112,6 +111,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function addToCollection($collection)
     {
         $attribute = $this->getAttributeObject();
+
+        if ($collection->isEnabledFlat()) {
+            $alias = array_keys($collection->getSelect()->getPart('from'))[0];
+            $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
+            return $this;
+        }
+
         if ('category_ids' == $attribute->getAttributeCode() || $attribute->isStatic()) {
             return $this;
         }
@@ -157,7 +163,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 );
         }
 
-        $this->joinedAttributes[$attribute->getAttributeCode()] = $alias;
+        $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.value';
 
         return $this;
     }
@@ -206,18 +212,22 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $result = '';
         if ($this->getAttribute() == 'category_ids') {
             $result = parent::getMappedSqlField();
+        } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
+            $result = $this->joinedAttributes[$this->getAttribute()];
         } elseif ($this->getAttributeObject()->isStatic()) {
             $result = $this->getAttributeObject()->getAttributeCode();
-        } elseif ($this->getAttributeObject()->isScopeGlobal()) {
-            if (isset($this->joinedAttributes[$this->getAttribute()])) {
-                $result = $this->joinedAttributes[$this->getAttribute()] . '.value';
-            } else {
-                $result = parent::getMappedSqlField();
-            }
         } elseif ($this->getValueParsed()) {
             $result = 'e.entity_id';
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collectValidatedAttributes($productCollection)
+    {
+        return $this->addToCollection($productCollection);
     }
 }

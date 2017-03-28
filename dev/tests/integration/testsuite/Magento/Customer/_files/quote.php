@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 );
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     'virtual'
 )->setId(
@@ -34,12 +34,12 @@ $product->setTypeId(
 $product->load(1);
 
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quoteItem = $quote->setCustomerId(
     1
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        \Magento\Store\Model\StoreManagerInterface::class
     )->getStore()->getId()
 )->setReservedOrderId(
     'test01'

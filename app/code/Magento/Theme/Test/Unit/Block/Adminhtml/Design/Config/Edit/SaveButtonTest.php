@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
@@ -32,18 +32,18 @@ class SaveButtonTest extends \PHPUnit_Framework_TestCase
         $result = $this->block->getButtonData();
 
         $this->assertArrayHasKey('label', $result);
-        $this->assertEquals($result['label'], __('Save'));
+        $this->assertEquals($result['label'], __('Save Configuration'));
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertTrue(is_array($result['data_attribute']));
     }
 
     protected function initContext()
     {
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\Block\Widget\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Widget\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

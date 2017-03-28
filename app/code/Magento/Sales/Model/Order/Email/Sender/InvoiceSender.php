@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -126,6 +126,9 @@ class InvoiceSender extends Sender
                 $this->invoiceResource->saveAttribute($invoice, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $invoice->setEmailSent(null);
+            $this->invoiceResource->saveAttribute($invoice, 'email_sent');
         }
 
         $this->invoiceResource->saveAttribute($invoice, 'send_email');

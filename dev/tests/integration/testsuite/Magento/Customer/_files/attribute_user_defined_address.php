@@ -1,10 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 $model->setName(
     'address_user_attribute'
 )->setEntityTypeId(
@@ -24,7 +24,7 @@ $model->save();
 
 /** @var \Magento\Customer\Setup\CustomerSetup $setupResource */
 $setupResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Setup\CustomerSetup'
+    \Magento\Customer\Setup\CustomerSetup::class
 );
 $data = [['form_code' => 'customer_address_edit', 'attribute_id' => $model->getAttributeId()]];
 $setupResource->getSetup()->getConnection()->insertMultiple(

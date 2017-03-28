@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
 
 use Magento\Theme\Controller\Adminhtml\Design\Config\Edit;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -49,10 +52,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->initContext();
         $resultPageFactory = $this->initResultPage();
 
-        $this->scopeValidator = $this->getMockBuilder('Magento\Framework\App\ScopeValidatorInterface')
+        $this->scopeValidator = $this->getMockBuilder(\Magento\Framework\App\ScopeValidatorInterface::class)
             ->getMockForAbstractClass();
 
-        $this->scopeResolverPool = $this->getMockBuilder('Magento\Framework\App\ScopeResolverPool')
+        $this->scopeResolverPool = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -66,22 +69,22 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function initContext()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultRedirectFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+        $resultRedirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -98,11 +101,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     protected function initResultPage()
     {
-        $this->resultPage = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
+        $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultPageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $resultPageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultPageFactory->expects($this->any())
@@ -129,7 +132,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with($scope, $scopeId)
             ->willReturn(true);
 
-        $pageTitle = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $pageTitle = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageTitle->expects($this->once())
@@ -137,20 +140,20 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with(__('%1', $scopeName))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageConfig->expects($this->once())
             ->method('getTitle')
             ->willReturn($pageTitle);
 
-        $scopeObject = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
+        $scopeObject = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
             ->getMockForAbstractClass();
         $scopeObject->expects($this->once())
             ->method('getName')
             ->willReturn($scopeName);
 
-        $scopeResolver = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
+        $scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
             ->getMockForAbstractClass();
         $scopeResolver->expects($this->once())
             ->method('getScope')
@@ -191,7 +194,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with($scope, $scopeId)
             ->willReturn(true);
 
-        $pageTitle = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $pageTitle = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageTitle->expects($this->once())
@@ -199,7 +202,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with(__('%1', $scopeName))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageConfig->expects($this->once())

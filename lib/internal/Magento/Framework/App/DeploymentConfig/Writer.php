@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Phrase;
 
 /**
- * Deployment configuration writer
+ * Deployment configuration writer to files: env.php, config.php.
  */
 class Writer
 {
@@ -48,8 +49,6 @@ class Writer
     private $deploymentConfig;
 
     /**
-     * Constructor
-     *
      * @param Reader $reader
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
@@ -65,9 +64,9 @@ class Writer
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
-        $this->formatter = $formatter ?: new Writer\PhpFormatter();
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
+        $this->formatter = $formatter ?: new Writer\PhpFormatter();
     }
 
     /**
@@ -87,21 +86,37 @@ class Writer
     }
 
     /**
-     * Saves config
+     * Saves config in specified file.
+     * $pool option is deprecated since version 2.2.0.
      *
-     * @param array $data
-     * @param bool $override
+     * Usage:
+     * ```php
+     * saveConfig(
+     *      [
+     *          ConfigFilePool::APP_ENV => ['some' => 'value'],
+     *      ],
+     *      true,
+     *      null,
+     *      []
+     * )
+     * ```
+     *
+     * @param array $data The data to be saved
+     * @param bool $override Whether values should be overridden
+     * @param string $pool The file pool (deprecated)
+     * @param array $comments The array of comments
      * @return void
+     * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function saveConfig(array $data, $override = false)
+    public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {
-        $paths = $this->configFilePool->getPaths();
-
         foreach ($data as $fileKey => $config) {
-            if (isset($paths[$fileKey])) {
+            $paths = $this->configFilePool->getPaths();
 
-                if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
-                    $currentData = $this->reader->load($fileKey);
+            if (isset($paths[$fileKey])) {
+                $currentData = $this->reader->load($fileKey);
+                if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);
                     } else {
@@ -109,8 +124,15 @@ class Writer
                     }
                 }
 
-                $contents = $this->formatter->format($config);
-                $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                $contents = $this->formatter->format($config, $comments);
+                try {
+                    $writeFilePath = $paths[$fileKey];
+                    $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($writeFilePath, $contents);
+                } catch (FileSystemException $e) {
+                    throw new FileSystemException(
+                        new Phrase('Deployment config file %1 is not writable.', [$paths[$fileKey]])
+                    );
+                }
                 if (function_exists('opcache_invalidate')) {
                     opcache_invalidate(
                         $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])

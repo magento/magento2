@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,24 +42,24 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Customer\Model\Config\Share')
+        $this->configMock = $this->getMockBuilder(\Magento\Customer\Model\Config\Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventMock = $this->getMockBuilder('Magento\Framework\Event')
+        $this->eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerDataObject'])
             ->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerQuote = $objectManager->getObject(
-            'Magento\Quote\Observer\Backend\CustomerQuoteObserver',
+            \Magento\Quote\Observer\Backend\CustomerQuoteObserver::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'config' => $this->configMock,
@@ -70,13 +70,13 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchNoCustomerGroupChange()
     {
-        $customerDataObjectMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $customerDataObjectMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
             ->will($this->returnValue(1));
-        $origCustomerDataObjectMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $origCustomerDataObjectMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $origCustomerDataObjectMock->expects($this->any())
@@ -105,7 +105,7 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->once())
             ->method('isWebsiteScope')
             ->will($this->returnValue($isWebsiteScope));
-        $customerDataObjectMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $customerDataObjectMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerDataObjectMock->expects($this->any())
@@ -130,7 +130,7 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($customerDataObjectMock));
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
-            'Magento\Quote\Model\Quote'
+            \Magento\Quote\Model\Quote::class
         )->setMethods(
                 [
                     'setWebsite',

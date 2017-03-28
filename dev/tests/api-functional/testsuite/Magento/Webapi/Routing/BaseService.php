@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Routing;
@@ -44,7 +44,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\Exception $e) {
             $this->assertContains(
-                '{"message":"' . AuthorizationException::NOT_AUTHORIZED . '"',
+                '{"message":"Consumer is not authorized to access %resources"',
                 $e->getMessage(),
                 sprintf(
                     'REST routing did not fail as expected for the method "%s" of service "%s"',

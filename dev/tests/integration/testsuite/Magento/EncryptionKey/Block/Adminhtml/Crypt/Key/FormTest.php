@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
@@ -19,15 +19,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Framework\View\DesignInterface')
+        $objectManager->get(\Magento\Framework\View\DesignInterface::class)
             ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->setDefaultDesignTheme();
 
-        $block = $objectManager->get('Magento\Framework\View\LayoutInterface')
-            ->createBlock('Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form');
+        $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
+            ->createBlock(\Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form::class);
 
         $prepareFormMethod = new \ReflectionMethod(
-            'Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form',
+            \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form::class,
             '_prepareForm'
         );
         $prepareFormMethod->setAccessible(true);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeleteTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Category\Delete */
@@ -27,16 +30,16 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
         $resultRedirectFactory = $this->getMock(
-            'Magento\Backend\Model\View\Result\RedirectFactory',
+            \Magento\Backend\Model\View\Result\RedirectFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -45,21 +48,21 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ['getParam', 'getPost']
         );
         $auth = $this->getMock(
-            'Magento\Backend\Model\Auth',
+            \Magento\Backend\Model\Auth::class,
             ['getAuthStorage'],
             [],
             '',
             false
         );
         $this->authStorage = $this->getMock(
-            'Magento\Backend\Model\Auth\StorageInterface',
+            \Magento\Backend\Model\Auth\StorageInterface::class,
             ['processLogin', 'processLogout', 'isLoggedIn', 'prolong', 'setDeletedPath'],
             [],
             '',
             false
         );
         $eventManager = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -68,13 +71,13 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ['dispatch']
         );
         $response = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [],
             '',
             false
         );
         $messageManager = $this->getMockForAbstractClass(
-            'Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             [],
             '',
             false,
@@ -82,7 +85,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             true,
             ['addSuccess']
         );
-        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
@@ -103,11 +106,11 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getAuthStorage')
             ->will($this->returnValue($this->authStorage));
 
-        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+        $this->resultRedirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
         $this->unit = (new ObjectManagerHelper($this))->getObject(
-            'Magento\Catalog\Controller\Adminhtml\Category\Delete',
+            \Magento\Catalog\Controller\Adminhtml\Category\Delete::class,
             [
                 'context' => $context,
                 'categoryRepository' => $this->categoryRepository
@@ -130,7 +133,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $categoryId = 5;
         $parentId = 7;
         $this->request->expects($this->any())->method('getParam')->with('id')->willReturn($categoryId);
-        $category = $this->getMock('Magento\Catalog\Model\Category', ['getParentId', 'getPath'], [], '', false);
+        $category = $this->getMock(\Magento\Catalog\Model\Category::class, ['getParentId', 'getPath'], [], '', false);
         $category->expects($this->once())->method('getParentId')->willReturn($parentId);
         $category->expects($this->once())->method('getPath')->willReturn('category-path');
         $this->categoryRepository->expects($this->once())->method('get')->with($categoryId)->willReturn($category);

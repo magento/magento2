@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Entity\Product\Attribute\Group\AttributeMapper;
@@ -39,32 +39,32 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->setMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeFactory = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory'
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attribute = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute'
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
         )
             ->setMethods(['getUsedAttributes', 'getAttributeId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->magentoObject = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->magentoObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $helper->getObject(
-            'Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin',
+            \Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin::class,
             ['registry' => $this->registry, 'attributeFactory' => $this->attributeFactory]
         );
     }
@@ -76,13 +76,13 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $attributeMapper */
         $attributeMapper = $this->getMockBuilder(
-            'Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface'
+            \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 

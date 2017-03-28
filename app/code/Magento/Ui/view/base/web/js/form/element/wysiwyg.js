@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,7 @@ define([
         defaults: {
             elementSelector: 'textarea',
             value: '',
+            $wysiwygEditorButton: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
             },
@@ -23,7 +24,10 @@ define([
             elementTmpl: 'ui/form/element/wysiwyg',
             content:        '',
             showSpinner:    false,
-            loading:        false
+            loading:        false,
+            listens: {
+                disabled: 'setDisabled'
+            }
         },
 
         /**
@@ -33,6 +37,13 @@ define([
         initialize: function () {
             this._super()
                 .initNodeListener();
+
+            $.async({
+                component: this,
+                selector: 'button'
+            }, function (element) {
+                this.$wysiwygEditorButton = $(element);
+            }.bind(this));
 
             return this;
         },
@@ -69,6 +80,26 @@ define([
             $(node).bindings({
                 value: this.value
             });
+        },
+
+        /**
+         * Set disabled property to wysiwyg component
+         *
+         * @param {Boolean} status
+         */
+        setDisabled: function (status) {
+            this.$wysiwygEditorButton.attr('disabled', status);
+
+            /* eslint-disable no-undef */
+            if (tinyMCE) {
+                _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
+                    controls[property.id].setDisabled(status);
+                });
+
+                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', !status);
+            }
+
+            /* eslint-enable  no-undef*/
         }
     });
 });

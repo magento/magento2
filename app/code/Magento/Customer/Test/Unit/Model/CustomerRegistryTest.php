@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,16 +38,16 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerFactory = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
+        $this->customerFactory = $this->getMockBuilder(\Magento\Customer\Model\CustomerFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->customerRegistry = $objectManager->getObject(
-            'Magento\Customer\Model\CustomerRegistry',
+            \Magento\Customer\Model\CustomerRegistry::class,
             ['customerFactory' => $this->customerFactory]
         );
-        $this->customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $this->customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

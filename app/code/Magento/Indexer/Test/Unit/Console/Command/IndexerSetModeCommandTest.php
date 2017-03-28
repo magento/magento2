@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -58,8 +58,8 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteAll()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
 
         $indexerOne->expects($this->at(0))->method('isScheduled')->willReturn(true);
         $indexerOne->expects($this->at(2))->method('isScheduled')->willReturn(false);
@@ -92,7 +92,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithIndex($isScheduled, $previous, $current, $mode, $expectedValue)
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne->expects($this->once())->method('load')->with('id_indexerOne')->willReturn($indexerOne);
         $indexerOne->expects($this->once())->method('setScheduled')->with($isScheduled);
@@ -153,7 +153,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithLocalizedException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
         $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($localizedException));
         $this->collectionFactory->expects($this->never())->method('create');
@@ -168,7 +168,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithException()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('setScheduled')->will($this->throwException($exception));
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');

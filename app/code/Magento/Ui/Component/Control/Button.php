@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Control;
@@ -134,7 +134,7 @@ class Button extends Template implements ControlInterface
             if ($attributeValue === null || $attributeValue == '') {
                 continue;
             }
-            $html .= $attributeKey . '="' . $this->escapeHtml($attributeValue) . '" ';
+            $html .= $attributeKey . '="' . $this->escapeHtmlAttr($attributeValue, false) . '" ';
         }
 
         return $html;

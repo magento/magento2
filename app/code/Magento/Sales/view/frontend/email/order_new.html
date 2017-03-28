@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Your {{var store.getFrontendName()}} order confirmation @-->
+<!--@subject {{trans "Your %store_name order confirmation" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var order.getEmailCustomerNote()":"Email Order Note",
@@ -12,7 +12,7 @@
 "layout handle=\"sales_email_order_items\" order=$order area=\"frontend\"":"Order Items Grid",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description"
+"var order.getShippingDescription()":"Shipping Description",
 "var shipping_msg":"Shipping message"
 } @-->
 

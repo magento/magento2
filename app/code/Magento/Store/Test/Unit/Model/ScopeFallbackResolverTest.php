@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -22,7 +22,7 @@ class ScopeFallbackResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new ScopeFallbackResolver($this->storeManagerMock);
@@ -41,14 +41,14 @@ class ScopeFallbackResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetFallbackScope($scope, $scopeId, $forConfig, $websiteId, $groupId, $result)
     {
         /** @var GroupInterface|\PHPUnit_Framework_MockObject_MockObject $groupMock */
-        $groupMock = $this->getMockBuilder('Magento\Store\Api\Data\GroupInterface')
+        $groupMock = $this->getMockBuilder(\Magento\Store\Api\Data\GroupInterface::class)
             ->getMockForAbstractClass();
         $groupMock->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
 
         /** @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject $storeMock */
-        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getWebsiteId')

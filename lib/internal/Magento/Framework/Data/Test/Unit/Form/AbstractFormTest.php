@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,9 +29,6 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $allElementsMock;
-    /**
-     * @var \Magento\Framework\Data\Form
-     */
 
     /**
      * @var \Magento\Framework\Data\Form\AbstractForm
@@ -41,23 +38,23 @@ class AbstractFormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->factoryElementMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Factory',
+            \Magento\Framework\Data\Form\Element\Factory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->factoryCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->allElementsMock =
-            $this->getMock('Magento\Framework\Data\Form\Element\Collection', [], [], '', false);
+            $this->getMock(\Magento\Framework\Data\Form\Element\Collection::class, [], [], '', false);
         $this->elementMock =
-            $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', [], [], '', false);
+            $this->getMock(\Magento\Framework\Data\Form\Element\AbstractElement::class, [], [], '', false);
 
         $this->abstractForm = new AbstractForm($this->factoryElementMock, $this->factoryCollectionMock, []);
     }

@@ -1,12 +1,13 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 define([
     'jquery',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/translate'
 ], function ($, alert) {
         'use strict';
 
@@ -446,7 +447,7 @@ define([
                             $.unique(errorsMessage).join(', ');
                     };
 
-                    if (data.error && data.error.code === 400) {
+                    if (data.error && [400, 402, 403].indexOf(data.error.code) !== -1) {
                         this._onRequestError(createErrorMessage());
 
                         return;

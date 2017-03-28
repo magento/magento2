@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Helper;
@@ -12,6 +12,9 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface as DirReadInterface;
 use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DownloadTest extends \PHPUnit_Framework_TestCase
 {
     /** @var DownloadHelper */
@@ -56,27 +59,35 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         self::$functionExists = true;
         self::$mimeContentType = self::MIME_TYPE;
 
-        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->_filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->_handleMock = $this->getMock(
-            'Magento\Framework\Filesystem\File\ReadInterface',
+            \Magento\Framework\Filesystem\File\ReadInterface::class,
             [],
             [],
             '',
             false
         );
         $this->_workingDirectoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\ReadInterface',
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->_downloadableFileMock = $this->getMock('Magento\Downloadable\Helper\File', [], [], '', false);
-        $this->sessionManager = $this->getMockForAbstractClass('Magento\Framework\Session\SessionManagerInterface');
-        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->_downloadableFileMock = $this->getMock(\Magento\Downloadable\Helper\File::class, [], [], '', false);
+        $this->sessionManager = $this->getMockForAbstractClass(
+            \Magento\Framework\Session\SessionManagerInterface::class
+        );
+        $this->fileReadFactory = $this->getMock(
+            \Magento\Framework\Filesystem\File\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->_helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Downloadable\Helper\Download',
+            \Magento\Downloadable\Helper\Download::class,
             [
                 'downloadableFile' => $this->_downloadableFileMock,
                 'filesystem'       => $this->_filesystemMock,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
     public function get($filename, $scope)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $fileReadFactory = $objectManager->create('Magento\Framework\Filesystem\File\ReadFactory');
+        $fileReadFactory = $objectManager->create(\Magento\Framework\Filesystem\File\ReadFactory::class);
         $paths = [realpath(__DIR__ . '/../_files/etc/') . '/extension_attributes.xml'];
         return new \Magento\Framework\Config\FileIterator($fileReadFactory, $paths);
     }

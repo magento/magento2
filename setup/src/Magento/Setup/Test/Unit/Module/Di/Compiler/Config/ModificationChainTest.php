@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,10 +13,12 @@ class ModificationChainTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $modificationsList = [];
-        $modificationsList[] = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Config\ModificationInterface')
-            ->getMock();
-        $modificationsList[] = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Config\ModificationInterface')
-            ->getMock();
+        $modificationsList[] = $this->getMockBuilder(
+            \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class
+        )->getMock();
+        $modificationsList[] = $this->getMockBuilder(
+            \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class
+        )->getMock();
 
         new ModificationChain($modificationsList);
     }
@@ -25,10 +27,12 @@ class ModificationChainTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('InvalidArgumentException', 'Wrong modifier provided');
         $modificationsList = [];
-        $modificationsList[] = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Config\ModificationInterface')
-            ->getMock();
-        $modificationsList[] = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Config\ModificationInterface')
-            ->getMock();
+        $modificationsList[] = $this->getMockBuilder(
+            \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class
+        )->getMock();
+        $modificationsList[] = $this->getMockBuilder(
+            \Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class
+        )->getMock();
         $modificationsList[] = 'banana';
 
         new ModificationChain($modificationsList);
@@ -48,9 +52,9 @@ class ModificationChainTest extends \PHPUnit_Framework_TestCase
             'data' => [1, 2, 3, 1, 1]
         ];
 
-        $modifier1 = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Config\ModificationInterface')
+        $modifier1 = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class)
             ->getMock();
-        $modifier2 = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Config\ModificationInterface')
+        $modifier2 = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Config\ModificationInterface::class)
             ->getMock();
 
         $modificationsList = [$modifier1, $modifier2];

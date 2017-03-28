@@ -1,30 +1,30 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class AttributeLoader
+ * Attribute loader
  */
 class AttributeLoader implements AttributeLoaderInterface
 {
     /**
-     * Default Attributes that are static
+     * Default attributes
      *
      * @var array
      */
     private $defaultAttributes = [];
 
     /**
-     * @var \Magento\Framework\Validator\UniversalFactory
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -34,7 +34,7 @@ class AttributeLoader implements AttributeLoaderInterface
     private $config;
 
     /**
-     * AttributeLoader constructor.
+     * Constructor
      *
      * @param Config $config
      * @param ObjectManagerInterface $objectManager
@@ -53,7 +53,7 @@ class AttributeLoader implements AttributeLoaderInterface
      * @param AbstractEntity $resource
      * @param DataObject|null $object
      * @return AbstractEntity
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
@@ -80,7 +80,7 @@ class AttributeLoader implements AttributeLoaderInterface
     /**
      * Return default static virtual attribute that doesn't exists in EAV attributes
      *
-     * @param \Magento\Eav\Model\Entity\AbstractEntity $resource
+     * @param AbstractEntity $resource
      * @param string $attributeCode
      * @return Attribute
      */
@@ -88,19 +88,12 @@ class AttributeLoader implements AttributeLoaderInterface
     {
         $entityTypeId = $resource->getEntityType()->getId();
         if (!isset($this->defaultAttributes[$entityTypeId][$attributeCode])) {
-            $attribute = $this->objectManager->create(
-                $resource->getEntityType()->getAttributeModel()
-            )->setAttributeCode(
-                $attributeCode
-            )->setBackendType(
-                AbstractAttribute::TYPE_STATIC
-            )->setIsGlobal(
-                1
-            )->setEntityType(
-                $resource->getEntityType()
-            )->setEntityTypeId(
-                $resource->getEntityType()->getId()
-            );
+            $attribute = $this->objectManager->create($resource->getEntityType()->getAttributeModel())
+                ->setAttributeCode($attributeCode)
+                ->setBackendType(AbstractAttribute::TYPE_STATIC)
+                ->setIsGlobal(1)
+                ->setEntityType($resource->getEntityType())
+                ->setEntityTypeId($resource->getEntityType()->getId());
             $this->defaultAttributes[$entityTypeId][$attributeCode] = $attribute;
         }
         return $this->defaultAttributes[$entityTypeId][$attributeCode];

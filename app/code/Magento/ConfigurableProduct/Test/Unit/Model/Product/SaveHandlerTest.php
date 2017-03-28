@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
@@ -78,7 +78,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('getExtensionAttributes');
 
-        $entity = $this->saveHandler->execute('Entity', $product);
+        $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
     }
 
@@ -123,7 +123,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->optionRepository->expects(static::never())
             ->method('deleteById');
 
-        $entity = $this->saveHandler->execute('Entity', $product);
+        $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
     }
 
@@ -191,7 +191,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('saveProducts')
             ->with($product, $configurableProductLinks);
 
-        $entity = $this->saveHandler->execute('Entity', $product);
+        $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
     }
 

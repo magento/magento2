@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,15 +35,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->redirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->redirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->setMethods(['setPath'])
             ->disableOriginalConstructor()
             ->getMock();
-        $redirectFactory = $this->getMockBuilder('\Magento\Framework\Controller\ResultFactory')
+        $redirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,7 +57,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($redirectFactory);
 
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPostValue', 'isPost', 'getPost'])
             ->getMockForAbstractClass();
@@ -65,7 +65,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $objectManager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMockForAbstractClass();
@@ -73,7 +73,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->willReturn($objectManager);
 
-        $this->messageManager = $this->getMockBuilder('\Magento\Framework\Message\ManagerInterface')
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['addSuccess', 'addError', 'addException'])
             ->getMockForAbstractClass();
@@ -81,7 +81,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
 
-        $this->session = $this->getMockBuilder('\Magento\Backend\Model\Session')
+        $this->session = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['setPageData'])
             ->getMock();
@@ -89,11 +89,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getSession')
             ->willReturn($this->session);
 
-        $this->query = $this->getMockBuilder('Magento\Search\Model\Query')
+        $this->query = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'load', 'addData', 'setIsProcessed', 'save', 'loadByQueryText', 'setStoreId'])
             ->getMock();
-        $queryFactory = $this->getMockBuilder('Magento\Search\Model\QueryFactory')
+        $queryFactory = $this->getMockBuilder(\Magento\Search\Model\QueryFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -102,7 +102,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->query));
 
         $this->controller = $objectManagerHelper->getObject(
-            'Magento\Search\Controller\Adminhtml\Term\Save',
+            \Magento\Search\Controller\Adminhtml\Term\Save::class,
             [
                 'context' => $this->context,
                 'queryFactory' => $queryFactory,

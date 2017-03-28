@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -340,15 +340,43 @@
     }
 
     .weight-switcher {
+        margin-bottom: 18px;
+
         .addafter {
             margin-top: 30px;
+            position: absolute;
+        }
+
+        .mage-error {
+            + .addafter {
+                + .admin__addon-suffix,
+                + .admin__addon-suffix:hover {
+                    &:before {
+                        border-color: #e22626 !important;
+                    }
+                }
+            }
+
+            &[disabled] {
+                border-color: #eb8d8d !important;
+            }
+        }
+    }
+
+    .field-weight {
+        .addon {
+            + .mage-error {
+                margin-top: 14px;
+            }
         }
     }
 }
 
-.field .control input[type='text'][disabled] ~ .addafter strong,
-.field .control select[disabled] ~ .addafter strong {
-    background-color: #e9e9e9;
+.field .control input[type='text'][disabled],
+.field .control select[disabled] {
+    ~ .addafter strong {
+        background-color: #e9e9e9;
+    }
 }
 
 .field-price.addon {

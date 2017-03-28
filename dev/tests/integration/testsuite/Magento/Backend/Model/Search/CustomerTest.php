@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Backend\Model\Search\Customer $customerSearch */
-        $customerSearch = $objectManager->create('Magento\Backend\Model\Search\Customer');
+        $customerSearch = $objectManager->create(\Magento\Backend\Model\Search\Customer::class);
         $customerSearch->setQuery($query);
         $customerSearch->setLimit($limit);
         $customerSearch->setStart($start);

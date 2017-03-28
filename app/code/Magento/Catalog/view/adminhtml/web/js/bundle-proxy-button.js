@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,6 +50,19 @@ define([
                     'value',
                     'listingData'
                 ]);
+
+            return this;
+        },
+
+        /**
+         * Calls 'destroy' of parent and
+         * clear listing provider source
+         *
+         * @returns {Object} Chainable.
+         */
+        destroy: function () {
+            this._super();
+            this.source.set(this.listingDataProvider, []);
 
             return this;
         },

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model;
@@ -39,25 +39,23 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-
-        $this->configMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
-            ->setMethods([
-                'isCronEnabled'
-            ])
+        $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
+            ->setMethods(['isCronEnabled'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->reportModulesInfoMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Cron\ReportModulesInfo')
+        $this->reportModulesInfoMock = $this->getMockBuilder(
+            \Magento\NewRelicReporting\Model\Cron\ReportModulesInfo::class
+        )->disableOriginalConstructor()
+            ->getMock();
+
+        $this->reportCountsMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Cron\ReportCounts::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->reportCountsMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Cron\ReportCounts')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->reportNewRelicCronMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron')
-            ->disableOriginalConstructor()
+        $this->reportNewRelicCronMock = $this->getMockBuilder(
+            \Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron::class
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new Cron(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer;
@@ -280,9 +280,6 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
                 break;
             case 'price-original':
                 $html = $this->displayPriceAttribute('original_price');
-                break;
-            case 'price':
-                $html = $this->displayPriceAttribute('price');
                 break;
             case 'tax-amount':
                 $html = $this->displayPriceAttribute('tax_amount');

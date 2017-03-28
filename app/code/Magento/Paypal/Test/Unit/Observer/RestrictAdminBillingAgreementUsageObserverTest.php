@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->_authorization = $this->getMockForAbstractClass('Magento\Framework\AuthorizationInterface');
+        $this->_authorization = $this->getMockForAbstractClass(\Magento\Framework\AuthorizationInterface::class);
 
         $this->_model = new \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver($this->_authorization);
     }
@@ -54,7 +54,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
             [new \stdClass(), false, true],
             [
                 $this->getMockForAbstractClass(
-                    'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
+                    \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement::class,
                     [],
                     '',
                     false
@@ -64,7 +64,7 @@ class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_
             ],
             [
                 $this->getMockForAbstractClass(
-                    'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
+                    \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement::class,
                     [],
                     '',
                     false

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Dependency\Data;
@@ -27,14 +27,14 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->dependencyFirst = $this->getMock(
-            'Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency',
+            \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class,
             [],
             [],
             '',
             false
         );
         $this->dependencySecond = $this->getMock(
-            'Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency',
+            \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class,
             [],
             [],
             '',
@@ -43,7 +43,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManager($this);
         $this->module = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Dependency\Data\Module',
+            \Magento\Setup\Module\Dependency\Report\Dependency\Data\Module::class,
             ['name' => 'name', 'dependencies' => [$this->dependencyFirst, $this->dependencySecond]]
         );
     }

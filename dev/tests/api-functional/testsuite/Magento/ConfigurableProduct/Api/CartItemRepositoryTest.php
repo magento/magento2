@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Api;
@@ -31,7 +31,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testAddProduct()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -76,7 +76,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testAddProductWithIncorrectOptions()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -111,7 +111,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     {
         $qty = 1;
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -143,7 +143,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $this->updateStockForItem(20, 100);
 
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -198,7 +198,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     protected function updateStockForItem($itemId, $qty)
     {
         /** @var \Magento\CatalogInventory\Model\Stock\Status $stockStatus */
-        $stockStatus = $this->objectManager->create('Magento\CatalogInventory\Model\Stock\Status');
+        $stockStatus = $this->objectManager->create(\Magento\CatalogInventory\Model\Stock\Status::class);
         $stockStatus->load($itemId, 'product_id');
         if (!$stockStatus->getProductId()) {
             $stockStatus->setProductId($itemId);
@@ -208,7 +208,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $stockStatus->save();
 
         /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-        $stockItem = $this->objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
+        $stockItem = $this->objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
         $stockItem->load($itemId, 'product_id');
 
         if (!$stockItem->getProductId()) {
@@ -228,7 +228,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     {
         $qty = 1;
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -281,7 +281,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -325,7 +325,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     protected function getRequestData($cartId, $selectedOption = null)
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get(self::CONFIGURABLE_PRODUCT_SKU);
 
         $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();

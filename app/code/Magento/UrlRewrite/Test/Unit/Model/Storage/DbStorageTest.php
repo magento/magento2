@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,15 +48,17 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlRewriteFactory = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory')
+        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '',
+        $this->dataObjectHelper = $this->getMock(
+            \Magento\Framework\Api\DataObjectHelper::class, [], [], '',
             false);
-        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where', 'deleteFromSelect'], [], '',
+        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->select = $this->getMock(
+            \Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect'], [], '',
             false);
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
 
         $this->resource->expects($this->any())
             ->method('getConnection')
@@ -65,8 +67,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(
-            'Magento\UrlRewrite\Model\Storage\DbStorage',
+        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
@@ -98,7 +99,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with(['urlRewrite1'], ['row1'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
@@ -107,7 +108,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with(['urlRewrite2'], ['row2'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with(['urlRewrite2'], ['row2'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(1))
@@ -140,7 +141,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with(['urlRewrite1'], ['row1'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
@@ -152,8 +153,8 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
     public function testReplace()
     {
-        $urlFirst = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewrite', [], [], '', false);
-        $urlSecond = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewrite', [], [], '', false);
+        $urlFirst = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $urlSecond = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
 
         // delete
 
@@ -247,7 +248,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceIfThrewDuplicateEntryException()
     {
-        $url = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewrite', [], [], '', false);
+        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
 
         $url->expects($this->any())
             ->method('toArray')
@@ -269,7 +270,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceIfThrewCustomException()
     {
-        $url = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewrite', [], [], '', false);
+        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
 
         $url->expects($this->any())
             ->method('toArray')

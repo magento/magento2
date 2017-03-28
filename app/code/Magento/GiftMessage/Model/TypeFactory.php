@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
@@ -16,13 +16,13 @@ class TypeFactory
      * @var array
      */
     protected $_allowedEntityTypes = [
-        'order' => 'Magento\Sales\Model\Order',
-        'order_item' => 'Magento\Sales\Model\Order\Item',
-        'order_address' => 'Magento\Sales\Model\Order\Address',
-        'quote' => 'Magento\Quote\Model\Quote',
-        'quote_item' => 'Magento\Quote\Model\Quote\Item',
-        'quote_address' => 'Magento\Quote\Model\Quote\Address',
-        'quote_address_item' => 'Magento\Quote\Model\Quote\Address\Item',
+        'order' => \Magento\Sales\Model\Order::class,
+        'order_item' => \Magento\Sales\Model\Order\Item::class,
+        'order_address' => \Magento\Sales\Model\Order\Address::class,
+        'quote' => \Magento\Quote\Model\Quote::class,
+        'quote_item' => \Magento\Quote\Model\Quote\Item::class,
+        'quote_address' => \Magento\Quote\Model\Quote\Address::class,
+        'quote_address_item' => \Magento\Quote\Model\Quote\Address\Item::class,
     ];
 
     /**

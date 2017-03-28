@@ -1,9 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
     [
+        'rjsResolver',
         'uiRegistry',
         'uiComponent',
         'underscore',
@@ -13,6 +14,7 @@ define(
         'domReady!'
     ],
     function (
+        resolver,
         registry,
         Component,
         _,
@@ -47,8 +49,10 @@ define(
                      * @param {Object} integration
                      */
                     onReady: function (integration) {
-                        registry.set(this.integrationName, integration);
-                        $('#' + this.id).removeAttr('disabled');
+                        resolver(function () {
+                            registry.set(this.integrationName, integration);
+                            $('#' + this.id).removeAttr('disabled');
+                        }, this);
                     },
 
                     /**

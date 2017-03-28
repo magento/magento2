@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model;
@@ -103,8 +103,6 @@ class ProductTest extends AbstractProductExportImportTestCase
                     'simple',
                 ]
             ],
-            // @todo uncomment after resolving MAGETWO-49676
-            /*
             'simple-product-crosssell' => [
                 [
                     'Magento/Catalog/_files/products_crosssell.php'
@@ -129,7 +127,6 @@ class ProductTest extends AbstractProductExportImportTestCase
                     'simple',
                 ]
             ],
-            */
         ];
     }
 

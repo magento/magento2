@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Report;
@@ -14,9 +14,9 @@ class SettlementTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $model \Magento\Paypal\Model\Report\Settlement; */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Report\Settlement'
+            \Magento\Paypal\Model\Report\Settlement::class
         );
-        $connection = $this->getMock('Magento\Framework\Filesystem\Io\Sftp', ['rawls', 'read'], [], '', false);
+        $connection = $this->getMock(\Magento\Framework\Filesystem\Io\Sftp::class, ['rawls', 'read'], [], '', false);
         $filename = 'STL-00000000.00.abc.CSV';
         $connection->expects($this->once())->method('rawls')->will($this->returnValue([$filename => []]));
         $connection->expects($this->once())->method('read')->with($filename, $this->anything());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
      * @var \Magento\Customer\Model\Session
      */
     protected $customerSession;
+
     /**
      * @var \Magento\Framework\Session\Generic
      */
@@ -24,9 +25,9 @@ class ManageTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->customerSession = $objectManager->get('Magento\Customer\Model\Session');
+        $this->customerSession = $objectManager->get(\Magento\Customer\Model\Session::class);
         $this->customerSession->setCustomerId(1);
-        $this->coreSession = $objectManager->get('Magento\Framework\Session\Generic');
+        $this->coreSession = $objectManager->get(\Magento\Framework\Session\Generic::class);
         $this->coreSession->setData('_form_key', 'formKey');
     }
 

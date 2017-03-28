@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
@@ -9,6 +9,9 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
     /**
@@ -52,21 +55,19 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             return;
         }
         $model->setData($this->_getAdminUserData($data));
-        $uRoles = $this->getRequest()->getParam('roles', []);
-        if (count($uRoles)) {
-            $model->setRoleId($uRoles[0]);
+        $userRoles = $this->getRequest()->getParam('roles', []);
+        if (count($userRoles)) {
+            $model->setRoleId($userRoles[0]);
         }
 
         /** @var $currentUser \Magento\User\Model\User */
-        $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
-        if ($userId == $currentUser->getId() && $this->_objectManager->get(
-            'Magento\Framework\Validator\Locale'
-        )->isValid(
-            $data['interface_locale']
-        )
+        $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
+        if ($userId == $currentUser->getId()
+            && $this->_objectManager->get(\Magento\Framework\Validator\Locale::class)
+                ->isValid($data['interface_locale'])
         ) {
             $this->_objectManager->get(
-                'Magento\Backend\Model\Locale\Manager'
+                \Magento\Backend\Model\Locale\Manager::class
             )->switchBackendInterfaceLocale(
                 $data['interface_locale']
             );

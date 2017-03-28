@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit;
@@ -48,35 +48,35 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Widget\Context',
+            \Magento\Backend\Block\Widget\Context::class,
             [],
             [],
             '',
             false
         );
         $this->customerRegistryMock = $this->getMock(
-            'Magento\Customer\Model\CustomerRegistry',
+            \Magento\Customer\Model\CustomerRegistry::class,
             ['retrieve'],
             [],
             '',
             false
         );
         $this->customerModelMock = $this->getMock(
-            'Magento\Customer\Model\Customer',
+            \Magento\Customer\Model\Customer::class,
             [],
             [],
             '',
             false
         );
         $this->registryMock = $this->getMock(
-            'Magento\Framework\Registry',
+            \Magento\Framework\Registry::class,
             ['registry'],
             [],
             '',
             false
         );
 
-        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->setMethods(['getUrl'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -84,7 +84,7 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Customer\Block\Adminhtml\Edit\UnlockButton',
+            \Magento\Customer\Block\Adminhtml\Edit\UnlockButton::class,
             [
                 'context' => $this->contextMock,
                 'customerRegistry' => $this->customerRegistryMock,

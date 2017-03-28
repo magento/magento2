@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
@@ -46,7 +46,7 @@ class Customer extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreat
                 'onclick' => 'order.setCustomerId(false)',
                 'class' => 'primary',
             ];
-            return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
+            return $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)
                 ->setData($addButtonData)
                 ->toHtml();
         }

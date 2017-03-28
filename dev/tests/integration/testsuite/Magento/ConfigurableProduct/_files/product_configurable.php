@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,7 +55,7 @@ foreach ($options as $option) {
     $product = $productRepository->save($product);
 
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-    $stockItem = Bootstrap::getObjectManager()->create('Magento\CatalogInventory\Model\Stock\Item');
+    $stockItem = Bootstrap::getObjectManager()->create(\Magento\CatalogInventory\Model\Stock\Item::class);
     $stockItem->load($productId, 'product_id');
 
     if (!$stockItem->getProductId()) {
@@ -101,12 +101,19 @@ $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 // Remove any previously created product with the same id.
 /** @var \Magento\Framework\Registry $registry */
-$registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 try {
     $productToDelete = $productRepository->getById(1);
     $productRepository->delete($productToDelete);
+
+    /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $itemResource */
+    $itemResource = Bootstrap::getObjectManager()->get(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
+    $itemResource->getConnection()->delete(
+        $itemResource->getMainTable(),
+        'product_id = ' . $productToDelete->getId()
+    );
 } catch (\Exception $e) {
     // Nothing to remove
 }

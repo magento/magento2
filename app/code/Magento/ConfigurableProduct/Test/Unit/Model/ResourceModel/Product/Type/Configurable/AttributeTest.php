@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $connection;
+
     /**
      * @var Attribute
      */
@@ -37,9 +38,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
 
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 

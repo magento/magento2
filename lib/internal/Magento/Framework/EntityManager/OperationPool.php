@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\EntityManager;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
+use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Class OperationPool
@@ -41,7 +42,7 @@ class OperationPool
      *
      * @param string $entityType
      * @param string $operationName
-     * @return object
+     * @return OperationInterface
      */
     public function getOperation($entityType, $operationName)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -225,7 +225,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the base discount tax compensation amount for the invoice.
      *
-     * @return float Base discount tax compensation amount.
+     * @return float|null Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -239,7 +239,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the base shipping discount tax compensation amount for the invoice.
      *
-     * @return float Base shipping discount tax compensation amount.
+     * @return float|null Base shipping discount tax compensation amount.
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -381,7 +381,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the discount tax compensation amount for the invoice.
      *
-     * @return float Discount tax compensation amount.
+     * @return float|null Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -430,7 +430,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the shipping discount tax compensation amount for the invoice.
      *
-     * @return float Shipping discount tax compensation amount.
+     * @return float|null Shipping discount tax compensation amount.
      */
     public function getShippingDiscountTaxCompensationAmount();
 

@@ -2,7 +2,7 @@
 /**
  * Inline Translations Library
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -207,7 +207,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     protected function getInlineScript()
     {
         /** @var $block \Magento\Framework\View\Element\Template */
-        $block = $this->layout->createBlock('Magento\Framework\View\Element\Template');
+        $block = $this->layout->createBlock(\Magento\Framework\View\Element\Template::class);
 
         $block->setAjaxUrl($this->getAjaxUrl());
         $block->setTemplate($this->templateFileName);

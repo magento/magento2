@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\View\Type;
@@ -38,9 +38,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'getTypeId',
             '__wakeup',
         ];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methodsProduct, [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methodsProduct, [], '', false);
         $this->typeInstanceMock = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped',
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
             [],
             [],
             '',
@@ -54,15 +54,15 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->typeInstanceMock)
         );
         $this->configuredValueMock = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['getSuperGroup'],
             [],
             '',
             false
         );
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $this->groupedView = $helper->getObject(
-            'Magento\GroupedProduct\Block\Product\View\Type\Grouped',
+            \Magento\GroupedProduct\Block\Product\View\Type\Grouped::class,
             [
                 'data' => ['product' => $this->productMock],
                 'layout' => $layout

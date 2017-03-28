@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,6 +105,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'radio' => true,
         'checkbox' => true,
         'multiple' => true,
+        'file' => ['sku', 'file_extension', 'image_size_x', 'image_size_y'],
     ];
 
     /**
@@ -1134,6 +1135,28 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         if (isset($optionRow['max_characters'])) {
             $result[$this->columnMaxCharacters] = $optionRow['max_characters'];
+        }
+
+        $result = $this->addFileOptions($result, $optionRow);
+
+        return $result;
+    }
+
+    /**
+     * Add file options
+     *
+     * @param array $result
+     * @param array $optionRow
+     * @return array
+     */
+    private function addFileOptions($result, $optionRow)
+    {
+        foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+            if (!isset($optionRow[$fileOptionKey])) {
+                continue;
+            }
+
+            $result[self::COLUMN_PREFIX . $fileOptionKey] = $optionRow[$fileOptionKey];
         }
 
         return $result;

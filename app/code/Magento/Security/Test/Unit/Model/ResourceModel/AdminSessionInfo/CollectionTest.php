@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,44 +35,44 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $entityFactory = $this->getMock(
-            '\Magento\Framework\Data\Collection\EntityFactoryInterface',
+            \Magento\Framework\Data\Collection\EntityFactoryInterface::class,
             [],
             [],
             '',
             false
         );
         $logger = $this->getMock(
-            '\Psr\Log\LoggerInterface',
+            \Psr\Log\LoggerInterface::class,
             [],
             [],
             '',
             false
         );
         $fetchStrategy = $this->getMock(
-            '\Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             [],
             [],
             '',
             false
         );
         $eventManager = $this->getMock(
-            '\Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             [],
             '',
             false
         );
 
-        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connection->expects($this->any())->method('select')->willReturn($select);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 ['getConnection', 'getMainTable', 'getTable', 'deleteSessionsOlderThen', 'updateStatusByUserId']
@@ -87,7 +87,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
 
         $this->collectionMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
             ['addFieldToFilter'],
             [$entityFactory, $logger, $fetchStrategy, $eventManager,
                 $this->dateTimeMock,

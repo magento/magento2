@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -27,7 +27,7 @@ class Pending extends ProductController
         $resultPage->getConfig()->getTitle()->prepend(__('Customer Reviews'));
         $resultPage->getConfig()->getTitle()->prepend(__('Pending Reviews'));
         $this->coreRegistry->register('usePendingFilter', true);
-        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
+        $resultPage->addContent($resultPage->getLayout()->createBlock(\Magento\Review\Block\Adminhtml\Main::class));
         return $resultPage;
     }
 }

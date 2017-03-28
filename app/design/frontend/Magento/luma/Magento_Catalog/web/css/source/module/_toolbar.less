@@ -1,7 +1,11 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
+
+//
+//  Variables
+//  _____________________________________________
 
 @toolbar-mode-icon-font-size: 16px;
 @toolbar-background: transparent;
@@ -36,7 +40,7 @@
 
         &-amount {
             left: 0;
-            line-height: @toolbar-mode-icon-font-size+2;
+            line-height: @toolbar-mode-icon-font-size + 2;
             margin: 0;
             padding: 7px 0;
             position: absolute;
@@ -111,8 +115,6 @@
     }
 
     .limiter {
-        display: none;
-
         &-options {
             margin: 0 5px 0 7px;
             width: auto;
@@ -133,7 +135,7 @@
 }
 
 //
-//  Desctop
+//  Desktop
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {

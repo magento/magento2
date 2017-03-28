@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         ValidationStateInterface $validationState,
         $fileName,
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global',
         $xpath = []
     ) {

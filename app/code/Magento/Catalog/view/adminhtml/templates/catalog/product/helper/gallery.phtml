@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ $formName = $block->getFormName();
 <div id="<?php echo $block->getHtmlId() ?>"
      class="gallery"
      data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
+     data-parent-component="<?php echo $block->escapeHtml($block->getData('config/parentComponent')) ?>"
      data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
      data-types="<?php echo $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())

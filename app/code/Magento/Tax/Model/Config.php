@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,8 @@ class Config
     const XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT = 'tax/notification/ignore_discount';
 
     const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
+
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT = 'tax/notification/ignore_apply_discount';
 
     const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
 
@@ -68,6 +70,7 @@ class Config
 
     const XML_PATH_DISPLAY_CART_SHIPPING = 'tax/cart_display/shipping';
 
+    /** @deprecated */
     const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
 
     const XML_PATH_DISPLAY_CART_GRANDTOTAL = 'tax/cart_display/grandtotal';
@@ -85,6 +88,7 @@ class Config
 
     const XML_PATH_DISPLAY_SALES_SHIPPING = 'tax/sales_display/shipping';
 
+    /** @deprecated */
     const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
 
     const XML_PATH_DISPLAY_SALES_GRANDTOTAL = 'tax/sales_display/grandtotal';
@@ -468,6 +472,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -481,6 +486,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -494,6 +500,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -663,6 +670,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -676,6 +684,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -689,6 +698,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displaySalesDiscountBoth($store = null)
     {
@@ -748,6 +758,25 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if admin notification related to misconfiguration of "Apply Discount On Prices" should be ignored.
+     *
+     * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
+     * AND "Apply Discount On Prices" = "Including Tax"
+     * AND "Apply Customer Tax" = "After Discount"
+     *
+     * @param null|string|Store $store
+     * @return bool
+     */
+    public function isWrongApplyDiscountSettingIgnored($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

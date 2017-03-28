@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,7 +71,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->sessionsInfoCollection =  $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -79,7 +79,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->sessionsManager =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionsManager',
+            \Magento\Security\Model\AdminSessionsManager::class,
             ['getSessionsForCurrentUser'],
             [],
             '',
@@ -91,7 +91,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->sessionMock =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfo',
+            \Magento\Security\Model\AdminSessionInfo::class,
             [],
             [],
             '',
@@ -99,14 +99,14 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->localeDate = $this->getMockForAbstractClass(
-            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface',
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
             ['formatDateTime'],
             '',
             false
         );
 
         $this->collectionMock =  $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
             ['count', 'is_null'],
             [],
             '',
@@ -137,7 +137,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
             ->method('getSessionsForCurrentUser')
             ->willReturn($this->collectionMock);
         $this->assertInstanceOf(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
             $this->block->getSessionInfoCollection()
         );
     }

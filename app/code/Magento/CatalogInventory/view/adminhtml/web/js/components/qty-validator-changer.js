@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,8 +19,8 @@ define([
         handleChanges: function (value) {
             var isDigits = value !== 1;
 
-            this.validation['validate-number'] = !isDigits;
-            this.validation['validate-digits'] = isDigits;
+            this.validation['validate-integer'] = isDigits;
+            this.validation['less-than-equals-to'] = isDigits ? 99999999 : 99999999.9999;
             this.validate();
         }
     });

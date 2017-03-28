@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -138,11 +138,8 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
         if (!$order) {
             throw new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                    [
-                        'fieldName' => 'orderId',
-                        'fieldValue' => $orderId,
-                    ]
+                    'No such entity with %fieldName = %fieldValue',
+                    ['fieldName' => 'orderId', 'fieldValue' => $orderId]
                 )
             );
         }

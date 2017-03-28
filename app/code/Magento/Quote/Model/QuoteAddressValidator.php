@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -81,7 +81,7 @@ class QuoteAddressValidator
             }, $this->customerRepository->getById($addressData->getCustomerId())->getAddresses());
             if (!in_array($addressData->getCustomerAddressId(), $applicableAddressIds)) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
-                    __('Invalid address id %1', $addressData->getCustomerAddressId())
+                    __('Invalid customer address id %1', $addressData->getCustomerAddressId())
                 );
             }
         }

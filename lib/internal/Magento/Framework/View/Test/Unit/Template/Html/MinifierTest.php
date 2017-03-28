@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Template\Html;
@@ -104,6 +104,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     }
 
     // @codingStandardsIgnoreStart
+
     /**
      * Covered method minify and test regular expressions
      * @test
@@ -115,7 +116,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $baseContent = <<<TEXT
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -124,6 +125,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     <head>
         <title>Test title</title>
     </head>
+    <link rel="stylesheet" href='https://www.example.com/2' type="text/css" />
+    <link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" />
     <body>
         <a href="http://somelink.com/text.html">Text Link</a>
         <img src="test.png" alt="some text" />
@@ -149,6 +152,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             //]]>
         </script>
         <?php echo "http://some.link.com/" ?>
+        <?php echo "//some.link.com/" ?>
+        <?php echo '//some.link.com/' ?>
         <em>inline text</em>
         <a href="http://www.<?php echo 'hi' ?>"></a>
     </body>
@@ -156,7 +161,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 TEXT;
 
         $expectedContent = <<<TEXT
-<?php /** * Copyright © 2016 Magento. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+<?php /** * Copyright © 2013-2017 Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
             var i = 1;
             var j = 1;
 
@@ -174,7 +179,7 @@ TEXT;
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a></body></html>
+</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a></body></html>
 TEXT;
 
         $this->appDirectoryMock->expects($this->once())
@@ -193,6 +198,7 @@ TEXT;
 
         $this->object->minify($file);
     }
+
     // @codingStandardsIgnoreEnd
 
     /**
@@ -204,7 +210,7 @@ TEXT;
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
 
-        $htmlDriver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false);
+        $htmlDriver = $this->getMock(\Magento\Framework\Filesystem\DriverInterface::class, [], [], '', false);
         $htmlDriver
             ->expects($this->once())
             ->method('getRealPathSafety')

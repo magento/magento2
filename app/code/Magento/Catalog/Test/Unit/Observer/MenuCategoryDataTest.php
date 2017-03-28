@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,28 +40,27 @@ class MenuCategoryDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_catalogCategory = $this->getMock(
-            '\Magento\Catalog\Helper\Category',
+            \Magento\Catalog\Helper\Category::class,
             ['getStoreCategories', 'getCategoryUrl'],
             [],
             '',
             false
         );
 
-        $layerResolver = $this->getMock('Magento\Catalog\Model\Layer\Resolver', [], [], '', false);
+        $layerResolver = $this->getMock(\Magento\Catalog\Model\Layer\Resolver::class, [], [], '', false);
         $layerResolver->expects($this->once())->method('get')->willReturn(null);
-        $this->_observer = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Observer\MenuCategoryData',
+        $this->_observer = (new ObjectManager($this))->getObject(\Magento\Catalog\Observer\MenuCategoryData::class,
             [
                 'layerResolver' => $layerResolver,
                 'catalogCategory' => $this->_catalogCategory,
-                'catalogData' => $this->getMock('\Magento\Catalog\Helper\Data', [], [], '', false),
+                'catalogData' => $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false),
             ]
         );
     }
 
     public function testGetMenuCategoryData()
     {
-        $category = $this->getMock('Magento\Catalog\Model\Category', ['getId', 'getName'], [], '', false);
+        $category = $this->getMock(\Magento\Catalog\Model\Category::class, ['getId', 'getName'], [], '', false);
         $category->expects($this->once())->method('getId')->willReturn('id');
         $category->expects($this->once())->method('getName')->willReturn('name');
         $this->_catalogCategory->expects($this->once())->method('getCategoryUrl')->willReturn('url');

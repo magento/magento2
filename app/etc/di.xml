@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
     <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
-    <preference for="Magento\Framework\EntityManager\EntityHydratorInterface" type="Magento\Framework\Model\Entity\Hydrator" />
+    <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
@@ -16,7 +16,10 @@
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
+    <preference for="Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface" type="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver"/>
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
+    <preference for="Magento\Framework\App\PlainTextRequestInterface" type="Magento\Framework\App\Request\Http" />
+    <preference for="Magento\Framework\App\RequestContentInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
     <preference for="Magento\Framework\App\RouterListInterface" type="Magento\Framework\App\RouterList" />
@@ -29,13 +32,16 @@
     <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
-    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="\Magento\Framework\View\Asset\Bundle\Config" />
+    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config" />
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
+    <preference for="Magento\Framework\Locale\AvailableLocalesInterface" type="Magento\Framework\Locale\Deployed\Codes" />
+    <preference for="Magento\Framework\Locale\OptionInterface" type="Magento\Framework\Locale\Deployed\Options" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
     <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria"/>
     <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document" />
     <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation" />
+    <preference for="Magento\Framework\App\RequestSafetyInterface" type="Magento\Framework\App\Request\Http" />
     <type name="Magento\Store\Model\Store">
         <arguments>
             <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
@@ -80,7 +86,7 @@
     <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path" />
     <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config" />
     <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy" />
-    <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="\Magento\Framework\Stdlib\Cookie\CookieScope" />
+    <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="Magento\Framework\Stdlib\Cookie\CookieScope" />
     <preference for="Magento\Framework\Stdlib\Cookie\CookieReaderInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieReader" />
     <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
@@ -100,7 +106,7 @@
     <preference for="Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface" type="Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
-    <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
+    <preference for="Magento\Framework\Acl\Data\CacheInterface" type="Magento\Framework\Acl\Data\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
     <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
@@ -149,7 +155,17 @@
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
     <preference for="Cm\RedisSession\Handler\ConfigInterface" type="Magento\Framework\Session\SaveHandler\Redis\Config"/>
     <preference for="Cm\RedisSession\Handler\LoggerInterface" type="Magento\Framework\Session\SaveHandler\Redis\Logger"/>
+    <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
+    <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
+    <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
+    <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
+    <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Framework\App\Scope\Validator"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
+    <type name="Magento\Framework\Acl\Data\Cache">
+        <arguments>
+            <argument name="aclBuilder" xsi:type="object">Magento\Framework\Acl\Builder\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
@@ -308,11 +324,6 @@
             <argument name="cacheFrontend" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Cache\Config\Reader">
-        <arguments>
-            <argument name="fileName" xsi:type="string">cache.xml</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Cache\Config\Data">
         <arguments>
             <argument name="cacheId" xsi:type="string">config_cache</argument>
@@ -427,7 +438,7 @@
     </virtualType>
     <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\DataObject">
         <arguments>
-            <argument name="expectedClass" xsi:type="string">Magento\Framework\Data\CollectionDataSourceInterface</argument>
+            <argument name="expectedClass" xsi:type="string">Magento\Framework\View\Element\Block\ArgumentInterface</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Layout\Argument\Interpreter\NamedParams">
@@ -950,11 +961,6 @@
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\ScopePool">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Config\Initial">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\Config\Initial\Reader\Proxy</argument>
@@ -1176,11 +1182,11 @@
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="checkIsExists" xsi:type="string">Magento\Framework\EntityManager\Operation\Read\CheckIsExists</item>
+                    <item name="checkIfExists" xsi:type="string">Magento\Framework\EntityManager\Operation\CheckIfExists</item>
                     <item name="read" xsi:type="string">Magento\Framework\EntityManager\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
+                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Delete</item>
                 </item>
             </argument>
         </arguments>
@@ -1189,10 +1195,48 @@
         <arguments>
             <argument name="cacheList" xsi:type="array">
                 <item name="block_html" xsi:type="const">Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER</item>
+                <item name="collections" xsi:type="const">Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
         <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
+    </type>
+    <type name="Magento\Framework\EntityManager\CompositeMapper">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="mapper" xsi:type="object">Magento\Framework\EntityManager\Mapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor" />
+    <type name="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Select\QueryModifierFactory">
+        <arguments>
+            <argument name="queryModifiers" xsi:type="array">
+                <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\TemporaryTableService">
+        <arguments>
+            <argument name="allowedIndexMethods" xsi:type="array">
+                <item name="HASH" xsi:type="string">HASH</item>
+                <item name="BTREE" xsi:type="string">BTREE</item>
+            </argument>
+            <argument name="allowedEngines" xsi:type="array">
+                <item name="INNODB" xsi:type="string">INNODB</item>
+                <item name="MEMORY" xsi:type="string">MEMORY</item>
+                <item name="MYISAM" xsi:type="string">MYISAM</item>
+            </argument>
+        </arguments>
     </type>
 </config>

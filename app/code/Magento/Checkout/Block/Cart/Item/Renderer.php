@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item;
@@ -268,7 +268,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
-     * Get list of all otions for product
+     * Get list of all options for product
      *
      * @return array
      * @codeCoverageIgnore

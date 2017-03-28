@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -79,7 +79,7 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $deleteVariation = '[data-bind*="deleteRecord"]';
+    protected $deleteVariation = '[data-bind*="Remove Product"]';
 
     /**
      * Choose a different Product button selector.
@@ -186,15 +186,21 @@ class Matrix extends Form
     public function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
         );
     }
 
     public function deleteVariations()
     {
-        $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
-        foreach (array_reverse($variations) as $variation) {
+        $rowLocator = sprintf($this->variationRowByNumber, 1);
+        $variationText = '';
+        while ($this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH)->isVisible()) {
+            $variation = $this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH);
+            if ($variationText == $variation->getText()) {
+                throw new \Exception("Failed to delete configurable product variation");
+            }
+            $variationText = $variation->getText();
             $variation->find($this->actionMenu)->hover();
             $variation->find($this->actionMenu)->click();
             $variation->find($this->deleteVariation)->click();
@@ -207,7 +213,7 @@ class Matrix extends Form
     public function getAssociatedProductGrid()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid::class,
             ['element' => $this->browser->find($this->associatedProductGrid)]
         );
     }

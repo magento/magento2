@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Css\PreProcessor\FileGenerator;
 
-use Magento\Framework\Filesystem;
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\Css\PreProcessor\File\Temporary;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Developer\Model\Config\Source\WorkflowType;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\Repository;
 
 /**
  * Class PublicationDecorator
@@ -35,6 +37,11 @@ class PublicationDecorator extends RelatedGenerator
      * @var bool
      */
     private $hasRelatedPublishing;
+
+    /**
+     * @var State
+     */
+    private $state;
 
     /**
      * Constructor
@@ -66,12 +73,27 @@ class PublicationDecorator extends RelatedGenerator
     protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
     {
         $relatedAsset = parent::generateRelatedFile($relatedFileId, $asset);
-        if ($this->hasRelatedPublishing
-            || WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)
-        ) {
+        $isClientSideCompilation =
+            $this->getState()->getMode() !== State::MODE_PRODUCTION
+            && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
+
+        if ($this->hasRelatedPublishing || $isClientSideCompilation) {
             $this->assetPublisher->publish($relatedAsset);
         }
 
         return $relatedAsset;
+    }
+
+    /**
+     * @return State
+     * @deprecated
+     */
+    private function getState()
+    {
+        if (null === $this->state) {
+            $this->state = ObjectManager::getInstance()->get(State::class);
+        }
+
+        return $this->state;
     }
 }

@@ -1,27 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Method;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\ConfigFactoryInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Block\Form;
-use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
@@ -30,9 +28,22 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class Vault implements VaultPaymentInterface
+class Vault implements VaultPaymentInterface
 {
+    /**
+     * @deprecated
+     */
     const TOKEN_METADATA_KEY = 'token_metadata';
+
+    /**
+     * @var string
+     */
+    private static $activeKey = 'active';
+
+    /**
+     * @var string
+     */
+    private static $titleKey = 'title';
 
     /**
      * @var ConfigFactoryInterface
@@ -85,6 +96,11 @@ final class Vault implements VaultPaymentInterface
     private $paymentExtensionFactory;
 
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * Constructor
      *
      * @param ConfigInterface $config
@@ -96,6 +112,9 @@ final class Vault implements VaultPaymentInterface
      * @param Command\CommandManagerPoolInterface $commandManagerPool
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
+     * @param string $code
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $config,
@@ -106,7 +125,8 @@ final class Vault implements VaultPaymentInterface
         ValueHandlerPoolInterface $valueHandlerPool,
         Command\CommandManagerPoolInterface $commandManagerPool,
         PaymentTokenManagementInterface $tokenManagement,
-        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
+        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
+        $code
     ) {
         $this->config = $config;
         $this->configFactory = $configFactory;
@@ -117,6 +137,7 @@ final class Vault implements VaultPaymentInterface
         $this->commandManagerPool = $commandManagerPool;
         $this->tokenManagement = $tokenManagement;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
+        $this->code = $code;
     }
 
     /**
@@ -124,23 +145,6 @@ final class Vault implements VaultPaymentInterface
      */
     private function getVaultProvider()
     {
-        if ($this->vaultProvider instanceof NullPaymentProvider) {
-            $providerCode = $this->config->getValue(VaultProvidersMap::VALUE_CODE, $this->getStore());
-
-            if ($providerCode !== null) {
-                $providerConfig = $this->configFactory->create($providerCode);
-
-                /** @var MethodInterface $vaultProvider */
-                $vaultProvider = $this->objectManager->get($providerConfig->getValue('model'));
-
-                if (
-                    $vaultProvider
-                    && $vaultProvider->isActive($this->getStore())
-                ) {
-                    $this->vaultProvider = $vaultProvider;
-                }
-            }
-        }
         return $this->vaultProvider;
     }
 
@@ -164,7 +168,7 @@ final class Vault implements VaultPaymentInterface
      */
     public function getCode()
     {
-        return static::CODE;
+        return $this->code;
     }
 
     /**
@@ -180,7 +184,7 @@ final class Vault implements VaultPaymentInterface
      */
     public function getTitle()
     {
-        return 'Stored Cards';
+        return $this->getConfiguredValue(self::$titleKey);
     }
 
     /**
@@ -270,7 +274,12 @@ final class Vault implements VaultPaymentInterface
      */
     public function canUseInternal()
     {
-        return $this->getVaultProvider()->canUseInternal();
+        $isInternalAllowed = $this->getConfiguredValue('can_use_internal');
+        // if config has't been specified for Vault, need to check payment provider option
+        if ($isInternalAllowed === null) {
+            return $this->getVaultProvider()->canUseInternal();
+        }
+        return (bool) $isInternalAllowed;
     }
 
     /**
@@ -452,17 +461,14 @@ final class Vault implements VaultPaymentInterface
     private function attachTokenExtensionAttribute(OrderPaymentInterface $orderPayment)
     {
         $additionalInformation = $orderPayment->getAdditionalInformation();
-
-        $tokenData = isset($additionalInformation[self::TOKEN_METADATA_KEY])
-            ? $additionalInformation[self::TOKEN_METADATA_KEY]
-            : null;
-
-        if ($tokenData === null) {
-            throw new \LogicException("Token metadata should be defined");
+        if (empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])) {
+            throw new \LogicException('Public hash should be defined');
         }
 
-        $customerId = $tokenData[PaymentTokenInterface::CUSTOMER_ID];
-        $publicHash = $tokenData[PaymentTokenInterface::PUBLIC_HASH];
+        $customerId = isset($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ?
+            $additionalInformation[PaymentTokenInterface::CUSTOMER_ID] : null;
+
+        $publicHash = $additionalInformation[PaymentTokenInterface::PUBLIC_HASH];
 
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
 
@@ -576,7 +582,8 @@ final class Vault implements VaultPaymentInterface
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        return $this->getVaultProvider()->isAvailable($quote);
+        return $this->getVaultProvider()->isAvailable($quote)
+            && $this->config->getValue(self::$activeKey, $this->getStore() ?: ($quote ? $quote->getStoreId() : null));
     }
 
     /**
@@ -584,7 +591,8 @@ final class Vault implements VaultPaymentInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getVaultProvider()->isActive($storeId);
+        return $this->getVaultProvider()->isActive($storeId)
+            && $this->config->getValue(self::$activeKey, $this->getStore() ?: $storeId);
     }
 
     /**
@@ -604,23 +612,10 @@ final class Vault implements VaultPaymentInterface
     }
 
     /**
-     * @param null $storeId
-     * @return string|null
+     * @inheritdoc
      */
-    public function getProviderCode($storeId = null)
+    public function getProviderCode()
     {
-        return $this->config->getValue(VaultProvidersMap::VALUE_CODE, $this->getStore() ?: $storeId);
-    }
-
-    /**
-     * @param string $paymentCode
-     * @param null $storeId
-     *
-     * @return bool
-     */
-    public function isActiveForPayment($paymentCode, $storeId = null)
-    {
-        return $this->getProviderCode($this->getStore() ?: $storeId) === $paymentCode
-        && $this->isActive($this->getStore() ?: $storeId);
+        return $this->getVaultProvider()->getCode();
     }
 }

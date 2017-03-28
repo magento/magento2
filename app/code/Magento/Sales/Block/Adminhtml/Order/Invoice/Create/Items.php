@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
@@ -54,7 +54,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         $onclick = "submitAndReloadArea($('invoice_item_container'),'" . $this->getUpdateUrl() . "')";
         $this->addChild(
             'update_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['class' => 'update-button', 'label' => __('Update Qty\'s'), 'onclick' => $onclick]
         );
         $this->_disableSubmitButton = true;
@@ -76,7 +76,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         }
         $this->addChild(
             'submit_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => $_submitLabel,
                 'class' => 'save submit-button primary' . $submitButtonClass,

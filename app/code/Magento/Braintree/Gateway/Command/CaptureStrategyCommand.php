@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Command;
@@ -166,16 +166,25 @@ class CaptureStrategyCommand implements CommandInterface
      */
     private function isExistsCaptureTransaction(OrderPaymentInterface $payment)
     {
-        $filters[] = $this->filterBuilder->setField('payment_id')
-            ->setValue($payment->getId())
-            ->create();
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder
+                    ->setField('payment_id')
+                    ->setValue($payment->getId())
+                    ->create(),
+            ]
+        );
 
-        $filters[] = $this->filterBuilder->setField('txn_type')
-            ->setValue(TransactionInterface::TYPE_CAPTURE)
-            ->create();
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder
+                    ->setField('txn_type')
+                    ->setValue(TransactionInterface::TYPE_CAPTURE)
+                    ->create(),
+            ]
+        );
 
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
-            ->create();
+        $searchCriteria = $this->searchCriteriaBuilder->create();
 
         $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
         return (boolean) $count;

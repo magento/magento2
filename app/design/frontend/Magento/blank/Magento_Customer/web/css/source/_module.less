@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -15,13 +15,15 @@
 @account-nav-current-color: false;
 @account-nav-current-font-weight: @font-weight__semibold;
 
+@account-nav-delimiter__border-color: @color-gray82;
+
 @account-nav-item-hover: @color-gray91;
 
-@password-strength-color__default: @color-gray-light01;
-@password-strength-color__weak: #ffafae;
-@password-strength-color__medium: #ffd6b3;
-@password-strength-color__strong: #c5eeac;
-@password-strength-color__very-strong: #81b562;
+@_password-default: @color-gray-light01;
+@_password-weak: #ffafae;
+@_password-medium: #ffd6b3;
+@_password-strong: #c5eeac;
+@_password-very-strong: #81b562;
 
 //
 //  Common
@@ -41,7 +43,7 @@
                 .lib-font-size(18);
             }
         }
-    
+
         .fieldset {
             .lib-form-hasrequired(bottom);
             &:after {
@@ -49,41 +51,60 @@
             }
         }
     }
-    
+
     .block-addresses-list {
         .items.addresses {
             > .item {
                 margin-bottom: @indent__base;
-    
+
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
         }
     }
-    
+
     .form-address-edit {
         #region_id {
             display: none;
         }
-    
+
         .actions-toolbar .action.primary {
             &:extend(.abs-button-l all);
         }
     }
-    
+
     .form-edit-account {
         .fieldset.password {
             display: none;
         }
     }
-    
+
     .box-billing-address,
     .box-shipping-address,
     .box-information,
     .box-newsletter {
         .box-content {
             line-height: 26px;
+        }
+    }
+
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            &.field {
+                > .label {
+                    &:extend(.abs-visually-hidden all);
+
+                    + .control {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .field {
+                &:extend(.abs-add-clearfix all);
+            }
         }
     }
 
@@ -96,43 +117,43 @@
             h2 {
                 margin-top: 0;
             }
-    
+
             .toolbar {
                 text-align: center;
                 .limiter-options {
                     width: auto;
                 }
             }
-    
+
             .limiter {
                 >.label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
-    
+
             .block:not(.widget) {
                 &:extend(.abs-account-blocks all);
             }
         }
-    
+
         .sidebar-additional {
             margin-top: 40px;
         }
-    
+
         .table-wrapper {
             &:last-child {
                 margin-bottom: 0;
             }
-    
+
             .action {
                 margin-right: 15px;
-    
+
                 &:last-child {
                     margin-right: 0;
                 }
             }
         }
-    
+
         .table-return-items {
             .qty {
                 .input-text {
@@ -141,7 +162,7 @@
             }
         }
     }
-    
+
     //  Checkout address (create shipping address)
     .field.street {
         .field.additional {
@@ -200,6 +221,12 @@
                     .lib-css(border-color, @account-nav-current-border-color);
                 }
             }
+
+            .delimiter {
+                border-top: 1px solid @account-nav-delimiter__border-color;
+                display: block;
+                margin: @indent__s 1.8rem;
+            }
         }
     }
 
@@ -214,10 +241,10 @@
                 margin-bottom: 0;
             }
         }
-    
+
         .title {
             margin-bottom: @indent__s;
-    
+
             strong {
                 .lib-heading(h4);
                 .column.main & {
@@ -250,12 +277,13 @@
 
             .input-text {
                 .lib-vendor-prefix-order(0);
+                z-index: 2;
             }
         }
     }
 
     .password-strength-meter {
-        background-color: @password-strength-color__default;
+        background-color: @_password-default;
         height: @form-element-input__height;
         line-height: @form-element-input__height;
         padding: @form-element-input__padding;
@@ -271,35 +299,42 @@
             z-index: -1;
         }
 
-        .password-strength-meter-1 & {
+        .password-none & {
             &:before {
-                background-color: @password-strength-color__weak;
+                background-color: @_password-default;
+                width: 100%;
+            }
+        }
+
+        .password-weak & {
+            &:before {
+                background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
-                background-color: @password-strength-color__medium;
+                background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
-                background-color: @password-strength-color__strong;
+                background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
-                background-color: @password-strength-color__very-strong;
+                background-color: @_password-very-strong;
                 width: 100%;
             }
         }
     }
-    
+
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
 
@@ -392,18 +427,23 @@
         }
     }
 
-    .form-create-account {
-        .fieldset-fullname {
-            .fields {
-                .field {
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            .field {
+                .label {
+                    .lib-css(margin, @form-field-type-label-inline__margin);
+                    .lib-css(padding, @form-field-type-label-inline__padding);
+                    .lib-css(text-align, @form-field-type-label-inline__align);
+                    .lib-css(width, @form-field-type-label-inline__width);
+                    box-sizing: border-box;
                     float: left;
-                    margin: 0 @indent__s @indent__s 0;
                 }
-            }
 
-            .field-name-prefix,
-            .field-name-suffix {
-                width: 50px;
+                .control {
+                    .lib-css(width, @form-field-type-control-inline__width);
+                    float: left;
+                }
             }
         }
     }
@@ -452,14 +492,22 @@
     .block-addresses-list {
         .items.addresses {
             &:extend(.abs-add-clearfix-desktop all);
+            font-size: 0;
 
             > .item {
-                &:extend(.abs-blocks-2columns all);
+                display: inline-block;
+                font-size: @font-size__base;
                 margin-bottom: @indent__base;
+                vertical-align: top;
+                width: 48.8%;
 
                 &:nth-last-child(1),
                 &:nth-last-child(2) {
                     margin-bottom: 0;
+                }
+
+                &:nth-child(even) {
+                    margin-left: 2.4%;
                 }
             }
         }

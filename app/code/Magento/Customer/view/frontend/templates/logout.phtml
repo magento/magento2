@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<p><?php /* @escapeNotVerified */ echo __('You have signed out and will go to our homepage in 5 seconds.') ?></p>
+<p><?php echo $block->escapeHtml(__('You have signed out and will go to our homepage in 5 seconds.')) ?></p>
 <script>
 require([
     "jquery",
     "mage/mage"
 ], function($){
 
-    $($.mage.redirect("<?php /* @escapeNotVerified */ echo $block->getUrl() ?>", "assign", 5000));
+    $($.mage.redirect("<?php echo $block->escapeJs($block->escapeUrl($block->getUrl())) ?>", "assign", 5000));
 
 });
 </script>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -49,7 +49,7 @@ class Grids extends \Magento\Backend\Block\Widget\Tabs
             [
                 'label' => __('Bestsellers'),
                 'content' => $this->getLayout()->createBlock(
-                    'Magento\Backend\Block\Dashboard\Tab\Products\Ordered'
+                    \Magento\Backend\Block\Dashboard\Tab\Products\Ordered::class
                 )->toHtml(),
                 'active' => true
             ]

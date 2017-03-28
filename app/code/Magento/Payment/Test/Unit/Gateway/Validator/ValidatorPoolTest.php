@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
@@ -12,12 +12,12 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
 {
     public function testGet()
     {
-        $commandI = $this->getMockBuilder('Magento\Payment\Gateway\Validator\ValidatorInterface')
+        $commandI = $this->getMockBuilder(\Magento\Payment\Gateway\Validator\ValidatorInterface::class)
             ->getMockForAbstractClass();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -26,7 +26,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 [
-                    'array' => ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'],
+                    'array' => ['validator' => \Magento\Payment\Gateway\Validator\ValidatorInterface::class],
                     'type' => ValidatorInterface::class
                 ]
             )
@@ -42,7 +42,7 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
 
         $pool = new ValidatorPool(
             $tMapFactory,
-            ['validator' => 'Magento\Payment\Gateway\Validator\ValidatorInterface']
+            ['validator' => \Magento\Payment\Gateway\Validator\ValidatorInterface::class]
         );
 
         static::assertSame($commandI, $pool->get('validator'));
@@ -50,13 +50,13 @@ class ValidatorPoolTest extends \PHPUnit_Framework_TestCase
 
     public function testGetException()
     {
-        $this->setExpectedException('Magento\Framework\Exception\NotFoundException');
+        $this->setExpectedException(\Magento\Framework\Exception\NotFoundException::class);
 
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 

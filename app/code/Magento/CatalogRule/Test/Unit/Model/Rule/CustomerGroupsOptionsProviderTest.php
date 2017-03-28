@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
@@ -29,15 +29,15 @@ class CustomerGroupsOptionsProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->groupRepositoryMock = $this->getMock('\Magento\Customer\Api\GroupRepositoryInterface');
+        $this->groupRepositoryMock = $this->getMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             [],
             [],
             '',
             false
         );
-        $this->objectConverterMock = $this->getMock('\Magento\Framework\Convert\DataObject', [], [], '', false);
+        $this->objectConverterMock = $this->getMock(\Magento\Framework\Convert\DataObject::class, [], [], '', false);
         $this->model = new \Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider(
             $this->groupRepositoryMock,
             $this->searchCriteriaBuilderMock,
@@ -53,8 +53,8 @@ class CustomerGroupsOptionsProviderTest extends \PHPUnit_Framework_TestCase
             ['label' => 'label', 'value' => 'value']
         ];
 
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $searchResultMock = $this->getMock('\Magento\Customer\Api\Data\GroupSearchResultsInterface');
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
+        $searchResultMock = $this->getMock(\Magento\Customer\Api\Data\GroupSearchResultsInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
 
         $this->groupRepositoryMock->expects($this->once())

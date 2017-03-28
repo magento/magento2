@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper;
@@ -22,7 +22,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_productHelper = $objectManager->getObject('Magento\Catalog\Helper\Product', $arguments);
+        $this->_productHelper = $objectManager->getObject(\Magento\Catalog\Helper\Product::class, $arguments);
     }
 
     /**
@@ -41,9 +41,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function getData()
     {
-        $product1 = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $product1 = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product::class
+        )->disableOriginalConstructor()->getMock();
 
-        $product2 = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $product2 = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product::class
+        )->disableOriginalConstructor()->getMock();
+
         $product2->expects(
             $this->once()
         )->method(
@@ -54,7 +59,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(true)
         );
 
-        $product3 = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $product3 = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product::class
+        )->disableOriginalConstructor()->getMock();
         $product3->expects(
             $this->once()
         )->method(

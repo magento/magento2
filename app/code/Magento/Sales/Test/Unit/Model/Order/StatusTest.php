@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
@@ -39,21 +39,21 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resourceMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status',
+            \Magento\Sales\Model\ResourceModel\Order\Status::class,
             [],
             [],
             '',
             false
         );
         $this->eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\Manager',
+            \Magento\Framework\Event\Manager::class,
             [],
             [],
             '',
             false
         );
         $this->contextMock = $this->getMock(
-            'Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             [],
             [],
             '',
@@ -64,7 +64,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->eventManagerMock));
 
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Status',
+            \Magento\Sales\Model\Order\Status::class,
             [
                 'context' => $this->contextMock,
                 'resource' => $this->resourceMock,
@@ -152,14 +152,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     protected function _getPreparedModel($resource = null, $eventDispatcher = null)
     {
         if (!$resource) {
-            $resource = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status', [], [], '', false);
+            $resource = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Status::class, [], [], '', false);
         }
         if (!$eventDispatcher) {
-            $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+            $eventDispatcher = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
         }
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $helper->getObject(
-            'Magento\Sales\Model\Order\Status',
+            \Magento\Sales\Model\Order\Status::class,
             ['resource' => $resource, 'eventDispatcher' => $eventDispatcher]
         );
         return $model;
@@ -174,7 +174,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $status = 'test_status';
         $visibleOnFront = true;
 
-        $resource = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status', [], [], '', false);
+        $resource = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Status::class, [], [], '', false);
         $resource->expects($this->once())
             ->method('beginTransaction');
         $resource->expects($this->once())
@@ -185,10 +185,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             );
         $resource->expects($this->once())->method('commit');
 
-        $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $eventDispatcher = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
 
         $model = $this->_getPreparedModel($resource, $eventDispatcher);
         $model->setStatus($status);
-        $this->assertInstanceOf('Magento\Sales\Model\Order\Status', $model->assignState($state), $visibleOnFront);
+        $this->assertInstanceOf(
+            \Magento\Sales\Model\Order\Status::class,
+            $model->assignState($state),
+            $visibleOnFront
+        );
     }
 }

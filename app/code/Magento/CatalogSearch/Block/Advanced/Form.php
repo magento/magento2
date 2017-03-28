@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -296,7 +296,7 @@ class Form extends Template
     {
         $block = $this->getData('_select_block');
         if ($block === null) {
-            $block = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select');
+            $block = $this->getLayout()->createBlock(\Magento\Framework\View\Element\Html\Select::class);
             $this->setData('_select_block', $block);
         }
         return $block;
@@ -309,7 +309,7 @@ class Form extends Template
     {
         $block = $this->getData('_date_block');
         if ($block === null) {
-            $block = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Date');
+            $block = $this->getLayout()->createBlock(\Magento\Framework\View\Element\Html\Date::class);
             $this->setData('_date_block', $block);
         }
         return $block;

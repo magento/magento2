@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Factory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
@@ -54,7 +54,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $driver = $this->_factory->create($configData);
         $this->assertInstanceOf($expectedClass, $driver);
-        $this->assertInstanceOf('Magento\Framework\Profiler\Driver\Standard\OutputInterface', $driver);
+        $this->assertInstanceOf(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class, $driver);
     }
 
     /**
@@ -63,13 +63,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createDataProvider()
     {
         $defaultOutputClass = $this->getMockClass(
-            'Magento\Framework\Profiler\Driver\Standard\OutputInterface',
+            \Magento\Framework\Profiler\Driver\Standard\OutputInterface::class,
             [],
             [],
             'Magento_Framework_Profiler_Driver_Standard_Output_Test_Default'
         );
         $testOutputClass = $this->getMockClass(
-            'Magento\Framework\Profiler\Driver\Standard\OutputInterface',
+            \Magento\Framework\Profiler\Driver\Standard\OutputInterface::class,
             [],
             [],
             'Magento_Framework_Profiler_Driver_Standard_Output_Test_Test'

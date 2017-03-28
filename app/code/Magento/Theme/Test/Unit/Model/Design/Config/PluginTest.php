@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
@@ -33,32 +33,32 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->eventManager = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false
         );
         $this->storeManager = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false
         );
-        $this->repository = $this->getMock('Magento\Theme\Model\DesignConfigRepository', [], [], '', false);
+        $this->repository = $this->getMock(\Magento\Theme\Model\DesignConfigRepository::class, [], [], '', false);
         $this->designConfig = $this->getMockForAbstractClass(
-            'Magento\Theme\Api\Data\DesignConfigInterface',
+            \Magento\Theme\Api\Data\DesignConfigInterface::class,
             [],
             '',
             false
         );
         $this->website = $this->getMockForAbstractClass(
-            'Magento\Store\Api\Data\WebsiteInterface',
+            \Magento\Store\Api\Data\WebsiteInterface::class,
             [],
             '',
             false
         );
         $this->store = $this->getMockForAbstractClass(
-            'Magento\Store\Api\Data\StoreInterface',
+            \Magento\Store\Api\Data\StoreInterface::class,
             [],
             '',
             false

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Locale;
@@ -36,23 +36,28 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_session = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
+        $this->_session = $this->getMock(\Magento\Backend\Model\Session::class, [], [], '', false);
 
         $this->_authSession = $this->getMock(
-            'Magento\Backend\Model\Auth\Session',
+            \Magento\Backend\Model\Auth\Session::class,
             ['getUser'],
             [],
             '',
             false
         );
         
-        $this->_backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface', [], '', false);
+        $this->_backendConfig = $this->getMockForAbstractClass(
+            \Magento\Backend\App\ConfigInterface::class,
+            [],
+            '',
+            false
+        );
         
         $userMock = new \Magento\Framework\DataObject();
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
 
-        $this->_translator = $this->getMock('Magento\Framework\TranslateInterface', [], [], '', false);
+        $this->_translator = $this->getMock(\Magento\Framework\TranslateInterface::class, [], [], '', false);
 
         $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
 

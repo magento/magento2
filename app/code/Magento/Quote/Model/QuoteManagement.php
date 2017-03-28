@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -263,7 +263,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 __('Cannot assign customer to the given cart. Customer already has active cart.')
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
         }
 
         $quote->setCustomer($customer);
@@ -276,7 +275,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
         $this->quoteRepository->save($quote);
         return true;
-
     }
 
     /**
@@ -349,7 +347,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order = $this->submit($quote);
 
         if (null == $order) {
-            throw new LocalizedException(__('Unable to place order. Please try again later.'));
+            throw new LocalizedException(
+                __('An error occurred on the server. Please try to place the order again.')
+            );
         }
 
         $this->checkoutSession->setLastQuoteId($quote->getId());
@@ -433,13 +433,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $quote->reserveOrderId();
         if ($quote->isVirtual()) {
             $this->dataObjectHelper->mergeDataObjects(
-                '\Magento\Sales\Api\Data\OrderInterface',
+                \Magento\Sales\Api\Data\OrderInterface::class,
                 $order,
                 $this->quoteAddressToOrder->convert($quote->getBillingAddress(), $orderData)
             );
         } else {
             $this->dataObjectHelper->mergeDataObjects(
-                '\Magento\Sales\Api\Data\OrderInterface',
+                \Magento\Sales\Api\Data\OrderInterface::class,
                 $order,
                 $this->quoteAddressToOrder->convert($quote->getShippingAddress(), $orderData)
             );
@@ -536,6 +536,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($shippingAddress);
             $shipping->setCustomerAddressData($shippingAddress);
+            $shipping->setCustomerAddressId($shippingAddress->getId());
         }
 
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
@@ -550,6 +551,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($billingAddress);
             $billing->setCustomerAddressData($billingAddress);
+            $billing->setCustomerAddressId($billingAddress->getId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);

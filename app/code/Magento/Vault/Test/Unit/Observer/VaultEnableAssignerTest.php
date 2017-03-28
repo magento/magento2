@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Observer;
@@ -79,6 +79,30 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
             ['0', false],
             ['off', false]
         ];
+    }
+
+    public function testExecuteNever()
+    {
+        $dataObject = new DataObject(
+            [
+                PaymentInterface::KEY_ADDITIONAL_DATA => []
+            ]
+        );
+        $paymentModel = $this->getMock(InfoInterface::class);
+
+        $paymentModel->expects(static::never())
+            ->method('setAdditionalInformation');
+
+        $observer = $this->getPreparedObserverWithMap(
+            [
+                [AbstractDataAssignObserver::DATA_CODE, $dataObject],
+                [AbstractDataAssignObserver::MODEL_CODE, $paymentModel]
+            ]
+        );
+
+        $vaultEnableAssigner = new VaultEnableAssigner();
+
+        $vaultEnableAssigner->execute($observer);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class ExcludeFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(!in_array(BP . '/var/session/', $result), 'Filtered path should not be in array');
     }
 
-    private function getFilesIterator ()
+    private function getFilesIterator()
     {
         $files = [
             BP . '/var/',
@@ -48,7 +48,9 @@ class ExcludeFilterTest extends \PHPUnit_Framework_TestCase
         ];
 
         foreach ($files as $file) {
-            $item = $this->getMockBuilder('SplFileInfoClass')->setMethods(['__toString', 'getFilename'])->getMock();
+            $item = $this->getMockBuilder(
+                \SplFileInfoClass::class
+            )->setMethods(['__toString', 'getFilename'])->getMock();
             $item->expects($this->any())->method('__toString')->willReturn($file);
             $item->expects($this->any())->method('getFilename')->willReturn('notDots');
             yield $item;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model;
@@ -20,11 +20,11 @@ class NamespaceResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->moduleListMock = $this->getMockBuilder('Magento\Framework\Module\ModuleListInterface')
+        $this->moduleListMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleListInterface::class)
             ->getMockForAbstractClass();
 
         $this->namespaceResolver = $objectManager->getObject(
-            'Magento\Widget\Model\NamespaceResolver',
+            \Magento\Widget\Model\NamespaceResolver::class,
             [
                 'moduleList' => $this->moduleListMock
             ]
@@ -58,13 +58,13 @@ class NamespaceResolverTest extends \PHPUnit_Framework_TestCase
     {
         return[
             [
-                'namespace' => 'Magento\Widget\Test\Unit\Model\NamespaceResolverTest',
+                'namespace' => \Magento\Widget\Test\Unit\Model\NamespaceResolverTest::class,
                 'modules' => ['Magento_Cms', 'Magento_Catalog', 'Magento_Sales', 'Magento_Widget'],
                 'expected' => 'Magento_Widget',
                 'asFullModuleName' => true
             ],
             [
-                'namespace' => 'Magento\Widget\Test\Unit\Model\NamespaceResolverTest',
+                'namespace' => \Magento\Widget\Test\Unit\Model\NamespaceResolverTest::class,
                 'modules' => ['Magento_Cms', 'Magento_Catalog', 'Magento_Sales', 'Magento_Widget'],
                 'expected' => 'magento_widget',
                 'asFullModuleName' => false

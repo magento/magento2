@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -313,6 +313,11 @@ class Store extends AbstractExtensibleModel implements
     private $_storeManager;
 
     /**
+     * @var \Magento\Framework\Url\ModifierInterface
+     */
+    private $urlModifier;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -413,8 +418,10 @@ class Store extends AbstractExtensibleModel implements
     {
         parent::__wakeup();
         $this->_coreFileStorageDatabase = ObjectManager::getInstance()
-            ->get('Magento\MediaStorage\Helper\File\Storage\Database');
-        $this->_config = ObjectManager::getInstance()->get('Magento\Framework\App\Config\ReinitableConfigInterface');
+            ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $this->_config = ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Config\ReinitableConfigInterface::class
+        );
     }
 
     /**
@@ -424,7 +431,7 @@ class Store extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\ResourceModel\Store');
+        $this->_init(\Magento\Store\Model\ResourceModel\Store::class);
     }
 
     /**
@@ -640,7 +647,10 @@ class Store extends AbstractExtensibleModel implements
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
-            $this->_baseUrlCache[$cacheKey] = rtrim($url, '/') . '/';
+            $this->_baseUrlCache[$cacheKey] = $this->getUrlModifier()->execute(
+                rtrim($url, '/') . '/',
+                \Magento\Framework\Url\ModifierInterface::MODE_BASE
+            );
         }
 
         return $this->_baseUrlCache[$cacheKey];
@@ -1027,6 +1037,18 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Reinit Stores on after save
+     *
+     * @deprecated
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $this->_storeManager->reinitStores();
+        return parent::afterSave();
+    }
+
+    /**
      * @inheritdoc
      */
     public function setWebsiteId($websiteId)
@@ -1262,7 +1284,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**
@@ -1305,5 +1327,22 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Gets URL modifier.
+     *
+     * @return \Magento\Framework\Url\ModifierInterface
+     * @deprecated
+     */
+    private function getUrlModifier()
+    {
+        if ($this->urlModifier === null) {
+            $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Url\ModifierInterface::class
+            );
+        }
+
+        return $this->urlModifier;
     }
 }

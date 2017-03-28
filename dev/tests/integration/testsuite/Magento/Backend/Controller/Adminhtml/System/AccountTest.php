@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
@@ -21,7 +21,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $userId = $this->_session->getUser()->getId();
         /** @var $user \Magento\User\Model\User */
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\User\Model\User'
+            \Magento\User\Model\User::class
         )->load(
             $userId
         );
@@ -54,7 +54,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 
         /** @var $user \Magento\User\Model\User */
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\User\Model\User'
+            \Magento\User\Model\User::class
         )->load(
             $userId
         );
@@ -63,7 +63,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             $this->assertNotEquals($oldPassword, $user->getPassword());
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-            $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+            $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($password, $user->getPassword()));
         } else {
             $this->assertEquals($oldPassword, $user->getPassword());

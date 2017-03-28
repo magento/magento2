@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
@@ -33,7 +33,7 @@ class WsdlFactory
     public function create($wsdlName, $endpointUrl)
     {
         return $this->_objectManager->create(
-            'Magento\Webapi\Model\Soap\Wsdl',
+            \Magento\Webapi\Model\Soap\Wsdl::class,
             ['name' => $wsdlName, 'uri' => $endpointUrl]
         );
     }

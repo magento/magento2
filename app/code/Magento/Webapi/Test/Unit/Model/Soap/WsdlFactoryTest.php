@@ -2,7 +2,7 @@
 /**
  * Test \Magento\Webapi\Model\Soap\WsdlFactory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap;
@@ -17,7 +17,7 @@ class WsdlFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_soapWsdlFactory = new \Magento\Webapi\Model\Soap\WsdlFactory($this->_objectManagerMock);
         parent::setUp();
     }
@@ -38,7 +38,7 @@ class WsdlFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Webapi\Model\Soap\Wsdl',
+            \Magento\Webapi\Model\Soap\Wsdl::class,
             ['name' => $wsdlName, 'uri' => $endpointUrl]
         );
         $this->_soapWsdlFactory->create($wsdlName, $endpointUrl);

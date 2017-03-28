@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,7 +29,7 @@
         <move element="page.title" before="-" destination="header.inner.left" />
         <move element="user" before="-" destination="header.inner.right" />
         <move element="notification.messages" after="user" destination="header.inner.right" />
-        <move element="global.search" after="notification.messages" destination="header.inner.right" />
+        <move element="global.search" destination="header.inner.right" />
 
     </body>
 </page>

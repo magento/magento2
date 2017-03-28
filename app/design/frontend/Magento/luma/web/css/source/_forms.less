@@ -1,7 +1,11 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
+
+//
+//  Variables
+//  _____________________________________________
 
 @legend-border-bottom: 1px solid @color-gray-light6;
 @form-field__vertical-indent__desktop: 29px;
@@ -12,7 +16,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .fieldset {
         .lib-form-fieldset();
 
@@ -88,16 +91,16 @@
     .select-styling() {
         .lib-css(appearance, none, 1);
         appearance: none;
-        background-size: 30px 60px;
         background: @select__background url('../images/select-bg.svg') no-repeat 100% 45%;
+        background-size: 30px 60px;
         border: 1px solid @border-color__base;
         height: 32px;
         padding-right: 25px;
         text-indent: .01em;
         text-overflow: '';
 
-        &::-ms-expand{
-            display:none;
+        &::-ms-expand {
+            display: none;
         }
 
         .lt-ie10 & {
@@ -110,8 +113,13 @@
         .select-styling();
     }
 
+    .field-error,
     div.mage-error[generated] {
         margin-top: 7px;
+    }
+
+    .field-error {
+        .lib-form-validation-note();
     }
 
     //  TEMP
@@ -129,7 +137,7 @@
         display: block;
     }
 
-    .hasDatepicker {
+    ._has-datepicker {
         ~ .ui-datepicker-trigger {
             .lib-button-reset();
             .lib-icon-font(
@@ -153,7 +161,7 @@
 
     .field.date,
     .field-dob {
-        .hasDatepicker {
+        ._has-datepicker {
             &:extend(.abs-field-date-input all);
         }
     }
@@ -188,7 +196,7 @@
 }
 
 //
-//    Desktop
+//  Desktop
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,10 +68,10 @@ class Installer
     /**#@+
      * Instance types for schema and data handler
      */
-    const SCHEMA_INSTALL = 'Magento\Framework\Setup\InstallSchemaInterface';
-    const SCHEMA_UPGRADE = 'Magento\Framework\Setup\UpgradeSchemaInterface';
-    const DATA_INSTALL = 'Magento\Framework\Setup\InstallDataInterface';
-    const DATA_UPGRADE = 'Magento\Framework\Setup\UpgradeDataInterface';
+    const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
+    const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
+    const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
+    const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
     /**#@- */
 
     const INFO_MESSAGE = 'message';
@@ -859,7 +859,7 @@ class Installer
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
-        } else if ($type === 'data') {
+        } elseif ($type === 'data') {
             $this->log->log('Data post-updates:');
             $handlerType = 'data-recurring';
         }
@@ -898,15 +898,15 @@ class Installer
     {
         $userConfig = new StoreConfigurationDataMapper();
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManagerProvider->get()->get('Magento\Framework\App\State');
-        $appState->setAreaCode('setup');
+        $appState = $this->objectManagerProvider->get()->get(\Magento\Framework\App\State::class);
+        $appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
         $configData = $userConfig->getConfigData($data);
         if (count($configData) === 0) {
             return;
         }
 
         /** @var \Magento\Config\Model\Config\Factory $configFactory */
-        $configFactory = $this->objectManagerProvider->get()->create('Magento\Config\Model\Config\Factory');
+        $configFactory = $this->objectManagerProvider->get()->create(\Magento\Config\Model\Config\Factory::class);
         foreach ($configData as $key => $val) {
             $configModel = $configFactory->create();
             $configModel->setDataByPath($key, $val);
@@ -1024,7 +1024,16 @@ class Installer
     {
         $this->log->log('Starting Magento uninstallation:');
 
-        $this->cleanCaches();
+        try {
+            $this->cleanCaches();
+        } catch (\Exception $e) {
+            $this->log->log(
+                'Can\'t clear cache due to the following error: '
+                . $e->getMessage() . PHP_EOL
+                . 'To fully clean up your uninstallation, you must manually clear your cache.'
+            );
+        }
+        
         $this->cleanupDb();
 
         $this->log->log('File system cleanup:');
@@ -1048,7 +1057,7 @@ class Installer
     private function enableCaches()
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache\Manager');
+        $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
         $types = $cacheManager->getAvailableTypes();
         $enabledTypes = $cacheManager->setEnabled($types, true);
         $cacheManager->clean($enabledTypes);
@@ -1067,7 +1076,7 @@ class Installer
     private function cleanCaches()
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->get('Magento\Framework\App\Cache\Manager');
+        $cacheManager = $this->objectManagerProvider->get()->get(\Magento\Framework\App\Cache\Manager::class);
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
         $this->log->log('Cache cleared successfully');
@@ -1253,7 +1262,7 @@ class Installer
     }
 
     /**
-     * Clear var/generation and reset object manager
+     * Clear generated/code and reset object manager
      *
      * @return void
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,7 @@ class Gallery extends AbstractElement
         $html .= '<thead id="gallery_thead" class="gallery"><tr class="gallery"><td class="gallery" valign="middle" align="center">Big Image</td><td class="gallery" valign="middle" align="center">Thumbnail</td><td class="gallery" valign="middle" align="center">Small Thumb</td><td class="gallery" valign="middle" align="center">Sort Order</td><td class="gallery" valign="middle" align="center">Delete</td></tr></thead>';
         $widgetButton = $this->getForm()->getParent()->getLayout();
         $buttonHtml = $widgetButton->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+             \Magento\Backend\Block\Widget\Button::class
         )->setData(
             ['label' => 'Add New Image', 'onclick' => 'addNewImg()', 'class' => 'add']
         )->toHtml();

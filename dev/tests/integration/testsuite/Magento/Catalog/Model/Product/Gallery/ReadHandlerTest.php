@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -31,7 +31,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->readHandler = $this->objectManager->create(
-            'Magento\Catalog\Model\Product\Gallery\ReadHandler'
+            \Magento\Catalog\Model\Product\Gallery\ReadHandler::class
         );
     }
 
@@ -42,7 +42,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
         /**
@@ -55,20 +55,23 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $linkFieldId = $productRepository->get('simple')->getData($entityMetadata->getLinkField());
 
         $product->setData($entityMetadata->getLinkField(), $linkFieldId);
-        $this->readHandler->execute(
-            'Magento\Catalog\Api\Data\ProductInterface',
-            $product
-        );
+        $this->readHandler->execute($product);
 
         $data = $product->getData();
 
         $this->assertArrayHasKey('media_gallery', $data);
         $this->assertArrayHasKey('images', $data['media_gallery']);
-        $image = array_shift($data['media_gallery']['images']);
 
-        $this->assertEquals(
-            'Image Alt Text',
-            $image['label']
-        );
+        $this->assertCount(1, $data['media_gallery']['images']);
+        foreach ($data['media_gallery']['images'] as $valueId => $imageData) {
+            $this->assertEquals(
+                'Image Alt Text',
+                $imageData['label']
+            );
+            $this->assertEquals(
+                $imageData['value_id'],
+                $valueId
+            );
+        }
     }
 }

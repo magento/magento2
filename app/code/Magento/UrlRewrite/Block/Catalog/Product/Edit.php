@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Product;
@@ -120,7 +120,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'product_link',
-            'Magento\UrlRewrite\Block\Link',
+            \Magento\UrlRewrite\Block\Link::class,
             [
                 'item_url' => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'product',
                 'item_name' => $this->_getProduct()->getName(),
@@ -138,7 +138,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'category_link',
-            'Magento\UrlRewrite\Block\Link',
+            \Magento\UrlRewrite\Block\Link::class,
             [
                 'item_url' => $this->_adminhtmlData->getUrl(
                     'adminhtml/*/*',
@@ -157,7 +157,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addProductsGridBlock()
     {
-        $this->addChild('products_grid', 'Magento\UrlRewrite\Block\Catalog\Product\Grid');
+        $this->addChild('products_grid', \Magento\UrlRewrite\Block\Catalog\Product\Grid::class);
     }
 
     /**
@@ -167,7 +167,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addCategoriesTreeBlock()
     {
-        $this->addChild('categories_tree', 'Magento\UrlRewrite\Block\Catalog\Category\Tree');
+        $this->addChild('categories_tree', \Magento\UrlRewrite\Block\Catalog\Category\Tree::class);
     }
 
     /**
@@ -179,7 +179,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'skip_categories',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Skip Category Selection'),
                 'onclick' => 'window.location = \'' . $this->_adminhtmlData->getUrl(
@@ -200,7 +200,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Catalog\Edit\Form',
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             '',
             [
                 'data' => [

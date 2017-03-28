@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Paypal\Test\Page\OrderReviewExpress;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Place order on Magento side after redirecting from PayPal.
@@ -71,7 +72,13 @@ class ExpressCheckoutOrderPlaceStep implements TestStepInterface
     private $products;
 
     /**
-     * @constructor
+     * Fixture OrderInjectable.
+     *
+     * @var OrderInjectable
+     */
+    private $order;
+
+    /**
      * @param ObjectManager $objectManager
      * @param OrderReviewExpress $orderReviewExpress
      * @param CheckoutOnepage $checkoutOnepage
@@ -80,6 +87,7 @@ class ExpressCheckoutOrderPlaceStep implements TestStepInterface
      * @param array $products
      * @param array $shipping
      * @param array $prices
+     * @param OrderInjectable|null $order
      */
     public function __construct(
         ObjectManager $objectManager,
@@ -87,9 +95,10 @@ class ExpressCheckoutOrderPlaceStep implements TestStepInterface
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
-        array $products,
+        array $products = [],
         array $shipping = [],
-        array $prices = []
+        array $prices = [],
+        OrderInjectable $order = null
     ) {
         $this->objectManager = $objectManager;
         $this->orderReviewExpress = $orderReviewExpress;
@@ -99,6 +108,7 @@ class ExpressCheckoutOrderPlaceStep implements TestStepInterface
         $this->prices = $prices;
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
+        $this->order = $order;
     }
 
     /**
@@ -115,13 +125,13 @@ class ExpressCheckoutOrderPlaceStep implements TestStepInterface
             $assert->processAssert($this->checkoutOnepage, $value);
         }
         $this->orderReviewExpress->getReviewBlock()->placeOrder();
+        $data = [
+            'entity_id' => ['products' => $this->products]
+        ];
+        $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            [
-                'data' => [
-                    'entity_id' => ['products' => $this->products]
-                ]
-            ]
+            ['data' => array_merge($data, $orderData)]
         );
         return [
             'orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId(),

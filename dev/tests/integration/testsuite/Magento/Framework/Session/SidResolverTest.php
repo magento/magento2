@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -54,24 +54,24 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Session\Generic _model */
-        $this->session = $objectManager->get('Magento\Framework\Session\Generic');
+        $this->session = $objectManager->get(\Magento\Framework\Session\Generic::class);
 
         $this->scopeConfig = $this->getMockBuilder(
-            'Magento\Framework\App\Config\ScopeConfigInterface'
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
         )->setMethods(
             ['getValue']
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->urlBuilder = $this->getMockBuilder(
-            'Magento\Framework\Url'
+            \Magento\Framework\Url::class
         )->setMethods(
             ['isOwnOriginUrl']
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $this->request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
 
         $this->model = $objectManager->create(
-            'Magento\Framework\Session\SidResolver',
+            \Magento\Framework\Session\SidResolver::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'urlBuilder' => $this->urlBuilder,

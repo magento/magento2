@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mockBackend = $this->getMock('Zend_Cache_Backend_File');
+        $this->_mockBackend = $this->getMock(\Zend_Cache_Backend_File::class);
     }
 
     protected function tearDown()
@@ -31,18 +31,18 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         $options = ['concrete_backend' => $this->_mockBackend, 'testOption' => 'testOption'];
 
         $decorator = $this->getMockForAbstractClass(
-            'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
+            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
             [$options]
         );
 
         $backendProperty = new \ReflectionProperty(
-            'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
+            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
             '_backend'
         );
         $backendProperty->setAccessible(true);
 
         $optionsProperty = new \ReflectionProperty(
-            'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
+            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
             '_decoratorOptions'
         );
         $optionsProperty->setAccessible(true);
@@ -60,14 +60,14 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException($options)
     {
-        $this->getMockForAbstractClass('Magento\Framework\Cache\Backend\Decorator\AbstractDecorator', [$options]);
+        $this->getMockForAbstractClass(\Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class, [$options]);
     }
 
     public function constructorExceptionDataProvider()
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => $this->getMock('Test_Class')]]
+            'wrong_class' => [['concrete_backend' => $this->getMock(\Test_Class::class)]]
         ];
     }
 
@@ -79,7 +79,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_mockBackend->expects($this->once())->method($methodName);
 
         $decorator = $this->getMockForAbstractClass(
-            'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
+            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
             [['concrete_backend' => $this->_mockBackend]]
         );
 

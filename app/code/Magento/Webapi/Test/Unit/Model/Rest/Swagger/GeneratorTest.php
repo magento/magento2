@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
 
 /**
  * Tests for \Magento\Webapi\Model\Rest\Swagger\Generator
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,29 +39,34 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\ServiceMetadata'
+            \Magento\Webapi\Model\ServiceMetadata::class
         )->disableOriginalConstructor()->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $swagger = $this->objectManager->getObject('Magento\Webapi\Model\Rest\Swagger');
+        $swagger = $this->objectManager->getObject(\Magento\Webapi\Model\Rest\Swagger::class);
         $this->swaggerFactoryMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Rest\SwaggerFactory'
+            \Magento\Webapi\Model\Rest\SwaggerFactory::class
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
         $this->swaggerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($swagger));
 
-        $this->cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type\Webapi')
+        $this->cacheMock = $this->getMockBuilder(\Magento\Webapi\Model\Cache\Type\Webapi::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
-        $this->typeProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
+        $this->typeProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeProcessorMock->expects($this->any())
@@ -67,7 +74,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::OPERATION_NAME));
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            'Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface'
+            \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->customAttributeTypeLocatorMock->expects($this->any())
@@ -75,7 +82,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['$customAttributeClass']);
 
         $storeMock = $this->getMockBuilder(
-            'Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();
 
         $storeMock->expects($this->any())
@@ -83,25 +90,38 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('store_code'));
 
         /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
-        $authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
+        $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
         $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
         $this->generator = $this->objectManager->getObject(
-            'Magento\Webapi\Model\Rest\Swagger\Generator',
+            \Magento\Webapi\Model\Rest\Swagger\Generator::class,
             [
                 'swaggerFactory' => $this->swaggerFactoryMock,
                 'cache' => $this->cacheMock,
                 'typeProcessor' => $this->typeProcessorMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
-                'authorization' => $authorizationMock
+                'authorization' => $authorizationMock,
+                'serializer' => $this->serializer
             ]
         );
     }
 
     /**
+     * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @param string[] $serviceMetadata
      * @param string[] $typeData
      * @param string $schema
@@ -176,12 +196,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                                             'required' => true,
                                         ],
                                     ],
-                                    'throws' => ['\Magento\Framework\Exception\LocalizedException'],
+                                    'throws' => [\Magento\Framework\Exception\LocalizedException::class],
                                 ],
                             ],
                         ],
                     ],
-                    'class' => 'Magento\TestModule5\Service\V2\AllSoapAndRestInterface',
+                    'class' => \Magento\TestModule5\Service\V2\AllSoapAndRestInterface::class,
                     'description' => 'AllSoapAndRestInterface',
                     'routes' => [
                         '/V1/testModule5' => [
@@ -224,12 +244,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                                             'required' => true,
                                         ],
                                     ],
-                                    'throws' => ['\Magento\Framework\Exception\LocalizedException'],
+                                    'throws' => [\Magento\Framework\Exception\LocalizedException::class],
                                 ],
                             ],
                         ],
                     ],
-                    'class' => 'Magento\TestModule5\Service\V2\AllSoapAndRestInterface',
+                    'class' => \Magento\TestModule5\Service\V2\AllSoapAndRestInterface::class,
                     'description' => 'AllSoapAndRestInterface',
                     'routes' => [
                         '/V1/testModule5' => [

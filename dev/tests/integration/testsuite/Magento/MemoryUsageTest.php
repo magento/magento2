@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento;
@@ -20,7 +20,7 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped("For HHVM it's not relevant while MAGETWO-33679 is not resolved");
+            $this->markTestSkipped("Test not relevant because no gc in HHVM.");
         }
         $this->_helper = new \Magento\TestFramework\Helper\Memory(
             new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer())
@@ -32,7 +32,7 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
      */
     public function testAppReinitializationNoMemoryLeak()
     {
-        $this->markTestSkipped('Test fails at Travis. Skipped in scope of MAGETWO-48538');
+        $this->markTestSkipped('Test fails at Travis. Skipped until MAGETWO-47111');
 
         $this->_deallocateUnusedMemory();
         $actualMemoryUsage = $this->_helper->getRealMemoryUsage();

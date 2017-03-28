@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
@@ -20,7 +20,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
     {
         $file = $this->getRequest()->getParam('file');
         /** @var $helper \Magento\Theme\Helper\Storage */
-        $helper = $this->_objectManager->get('Magento\Theme\Helper\Storage');
+        $helper = $this->_objectManager->get(\Magento\Theme\Helper\Storage::class);
         try {
             return $this->_fileFactory->create(
                 $file,
@@ -28,7 +28,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
                 DirectoryList::MEDIA
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->_redirect('core/index/notFound');
         }
     }

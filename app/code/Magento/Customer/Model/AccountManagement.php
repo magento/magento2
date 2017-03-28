@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -516,7 +516,7 @@ class AccountManagement implements AccountManagementInterface
                 default:
                     throw new InputException(
                         __(
-                            InputException::INVALID_FIELD_VALUE,
+                            'Invalid value of "%value" provided for the %fieldName field.',
                             ['value' => $template, 'fieldName' => 'email type']
                         )
                     );
@@ -717,9 +717,17 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
-                $address->setCustomerId($customer->getId());
-                $this->addressRepository->save($address);
+                if ($address->getId()) {
+                    $newAddress = clone $address;
+                    $newAddress->setId(null);
+                    $newAddress->setCustomerId($customer->getId());
+                    $this->addressRepository->save($newAddress);
+                } else {
+                    $address->setCustomerId($customer->getId());
+                    $this->addressRepository->save($address);
+                }
             }
+            $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -923,12 +931,14 @@ class AccountManagement implements AccountManagementInterface
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if (empty($customerId) || $customerId < 0) {
-            $params = ['value' => $customerId, 'fieldName' => 'customerId'];
-            throw new InputException(__(InputException::INVALID_FIELD_VALUE, $params));
+            throw new InputException(__(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                ['value' => $customerId, 'fieldName' => 'customerId']
+            ));
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
-            throw new InputException(__(InputException::REQUIRED_FIELD, $params));
+            throw new InputException(__('%fieldName is a required field.', $params));
         }
 
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
@@ -1179,7 +1189,7 @@ class AccountManagement implements AccountManagementInterface
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
                 __(
-                    InputException::INVALID_FIELD_VALUE,
+                    'Invalid value of "%value" provided for the %fieldName field.',
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );
@@ -1277,7 +1287,7 @@ class AccountManagement implements AccountManagementInterface
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerData = $this->dataProcessor
-            ->buildOutputDataArray($customer, '\Magento\Customer\Api\Data\CustomerInterface');
+            ->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;

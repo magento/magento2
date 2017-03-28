@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,7 +44,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             . $xml
             . '</' . Block::TYPE_BLOCK . '>';
 
-        $xml = simplexml_load_string($xml, 'Magento\Framework\View\Layout\Element');
+        $xml = simplexml_load_string($xml, \Magento\Framework\View\Layout\Element::class);
         return $xml->{$elementType};
     }
 
@@ -69,7 +69,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     protected function getBlock(array $arguments)
     {
         return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Layout\Reader\Block', $arguments);
+            ->getObject(\Magento\Framework\View\Layout\Reader\Block::class, $arguments);
     }
 
     /**
@@ -79,14 +79,14 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scheduledStructure = $this->getMock(
-            'Magento\Framework\View\Layout\ScheduledStructure',
+            \Magento\Framework\View\Layout\ScheduledStructure::class,
             [],
             [],
             '',
             false
         );
-        $this->context = $this->getMock('Magento\Framework\View\Layout\Reader\Context', [], [], '', false);
-        $this->readerPool = $this->getMock('Magento\Framework\View\Layout\ReaderPool', [], [], '', false);
+        $this->context = $this->getMock(\Magento\Framework\View\Layout\Reader\Context::class, [], [], '', false);
+        $this->readerPool = $this->getMock(\Magento\Framework\View\Layout\ReaderPool::class, [], [], '', false);
     }
 
     /**
@@ -140,7 +140,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $helper = $this->getMock('Magento\Framework\View\Layout\ScheduledStructure\Helper', [], [], '', false);
+        $helper = $this->getMock(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class, [], [], '', false);
         $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
 
         $this->prepareReaderPool(
@@ -188,6 +188,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $setCondition,
         $setRemoveCondition
     ) {
+        if ($literal == 'referenceBlock' && $remove == 'false') {
+            $this->scheduledStructure->expects($this->once())
+                ->method('unsetElementFromListToRemove')
+                ->with($literal);
+        }
+
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
 

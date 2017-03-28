@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,14 +55,16 @@ class ShowModeCommand extends Command
         try {
             /** @var \Magento\Deploy\Model\Mode $mode */
             $mode = $this->objectManager->create(
-                'Magento\Deploy\Model\Mode',
+                \Magento\Deploy\Model\Mode::class,
                 [
                     'input' => $input,
                     'output' => $output,
                 ]
             );
             $currentMode = $mode->getMode() ?: State::MODE_DEFAULT;
-            $output->writeln("Current application mode: $currentMode.");
+            $output->writeln(
+                "Current application mode: $currentMode. (Note: Environment variables may override this value.)"
+            );
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {

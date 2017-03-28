@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework\Data;
@@ -18,7 +18,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency',
+            \Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency::class,
             ['lib' => $lib, 'count' => $count]
         );
     }

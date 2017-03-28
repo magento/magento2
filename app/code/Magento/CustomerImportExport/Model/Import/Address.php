@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -16,7 +16,7 @@ class Address extends AbstractCustomer
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 
@@ -527,7 +527,6 @@ class Address extends AbstractCustomer
                         continue;
                     }
                 } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
-
                 } elseif ('select' == $attributeParams['type']) {
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
@@ -543,7 +542,6 @@ class Address extends AbstractCustomer
                 }
             }
         }
-
 
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
@@ -600,7 +598,6 @@ class Address extends AbstractCustomer
                 $fields = array_diff(array_keys($row), ['entity_id', 'parent_id', 'created_at']);
                 $this->_connection->insertOnDuplicate($this->_entityTable, $row, $fields);
             }
-
         }
         return $this;
     }
@@ -646,7 +643,6 @@ class Address extends AbstractCustomer
                 );
                 $this->_connection->insertOnDuplicate($tableName, $data, array_keys($defaultsData));
             }
-
         }
         return $this;
     }
@@ -754,8 +750,7 @@ class Address extends AbstractCustomer
                         }
                     }
 
-                    if (
-                        isset($rowData[self::COLUMN_POSTCODE])
+                    if (isset($rowData[self::COLUMN_POSTCODE])
                         && isset($rowData[self::COLUMN_COUNTRY_ID])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link;
@@ -27,13 +27,12 @@ class DeleteHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
         if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $entity;

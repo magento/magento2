@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,15 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * 3. Filter grid using provided columns
  * 5. Perform Asserts
  *
- * @group Ui_(CS)
+ * @group Ui
  * @ZephyrId MAGETWO-41329
  */
 class GridFilteringTest extends Injectable
 {
     /* tags */
+    const SEVERITY = 'S2';
+    const STABLE = 'no';
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -167,7 +168,10 @@ class GridFilteringTest extends Injectable
             $steps = [];
         }
         foreach ($steps as $step) {
-            $processStep = $this->objectManager->create($step, ['order' => $item]);
+            $products = $item->getEntityId()['products'];
+            $cart['data']['items'] = ['products' => $products];
+            $cart = $this->fixtureFactory->createByCode('cart', $cart);
+            $processStep = $this->objectManager->create($step, ['order' => $item, 'cart' => $cart]);
             $processStep->run();
         }
     }

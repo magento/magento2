@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Code\Reader;
@@ -40,6 +40,7 @@ class ClassesScanner implements ClassesScannerInterface
      * @param string $path
      * @return array
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getList($path)
     {
@@ -55,7 +56,7 @@ class ClassesScanner implements ClassesScannerInterface
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
-            if ($fileItem->getExtension() !== 'php') {
+            if ($fileItem->isDir() || $fileItem->getExtension() !== 'php' || $fileItem->getBasename()[0] == '.') {
                 continue;
             }
             foreach ($this->excludePatterns as $excludePatterns) {
@@ -66,6 +67,9 @@ class ClassesScanner implements ClassesScannerInterface
             $fileScanner = new FileScanner($fileItem->getRealPath());
             $classNames = $fileScanner->getClassNames();
             foreach ($classNames as $className) {
+                if (empty($className)) {
+                    continue;
+                }
                 if (!class_exists($className)) {
                     require_once $fileItem->getRealPath();
                 }

@@ -2,7 +2,7 @@
 /**
  * Factory class for \Magento\Framework\Authorization
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api;
@@ -14,7 +14,7 @@ class AttributeValueFactory
     /**
      * Entity class name
      */
-    const CLASS_NAME = 'Magento\Framework\Api\AttributeValue';
+    const CLASS_NAME = \Magento\Framework\Api\AttributeValue::class;
 
     /**
      * Object Manager instance

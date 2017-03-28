@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
 use Magento\Theme\Model\Design\Config\Storage;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Storage */
@@ -57,45 +60,44 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->transactionFactoryMock = $this->getMockBuilder('Magento\Framework\DB\TransactionFactory')
+        $this->transactionFactoryMock = $this->getMockBuilder(\Magento\Framework\DB\TransactionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->transactionMock = $this->getMockBuilder('Magento\Framework\DB\Transaction')
+        $this->transactionMock = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModelFactoryMock = $this->getMockBuilder('Magento\Theme\Model\Design\BackendModelFactory')
+        $this->backendModelFactoryMock = $this->getMockBuilder(\Magento\Theme\Model\Design\BackendModelFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModelMock = $this->getMockBuilder('Magento\Framework\App\Config\Value')
+        $this->backendModelMock = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->valueCheckerMock = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueChecker')
+        $this->valueCheckerMock = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\ValueChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designConfigMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $this->designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionAttributes = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getDesignConfigData', 'setDesignConfigData'])
-            ->getMock();
-        $this->designConfigData = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigDataInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configFactory = $this->getMockBuilder('Magento\Theme\Model\Data\Design\ConfigFactory')
+        $this->extensionAttributes = $this->getMockBuilder(
+            \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
+        )->disableOriginalConstructor()->setMethods(['getDesignConfigData', 'setDesignConfigData'])->getMock();
+        $this->designConfigData = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigDataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->configFactory = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\ConfigFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+        $this->valueProcessor = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\ValueProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designConfig = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $this->designConfig = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfigExtension = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
-            ->setMethods(['getDesignConfigData'])
-            ->getMockForAbstractClass();
+        $this->designConfigExtension = $this->getMockBuilder(
+            \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
+        )->setMethods(['getDesignConfigData'])->getMockForAbstractClass();
 
         $this->model = new Storage(
             $this->transactionFactoryMock,
@@ -196,7 +198,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $scope = 'website';
         $scopeId = 1;
-        $backendModel = $this->getMockBuilder('Magento\Framework\App\Config\Value')
+        $backendModel = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
             ->disableOriginalConstructor()
             ->getMock();
 

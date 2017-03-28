@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,19 +37,19 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
-            '\Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'eventManager' => $this->eventManagerMock,
@@ -59,14 +59,14 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->controller = $objectHelper->getObject(
-            'Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles',
+            \Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles::class,
             ['context' => $context,]
         );
     }
 
     public function testExecute()
     {
-        $cleanupFilesMock = $this->getMockBuilder('Magento\Framework\App\State\CleanupFiles')
+        $cleanupFilesMock = $this->getMockBuilder(\Magento\Framework\App\State\CleanupFiles::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cleanupFilesMock->expects($this->once())
@@ -81,7 +81,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with('The static files cache has been cleaned.');
 
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactoryMock->expects($this->atLeastOnce())

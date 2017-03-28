@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -62,6 +62,7 @@ class CcConfig
      * Solo/switch card start years
      *
      * @return array
+     * @deprecated unused
      */
     public function getSsStartYears()
     {
@@ -119,6 +120,7 @@ class CcConfig
      * Whether switch/solo card type available
      *
      * @return bool
+     * @deprecated unused
      */
     public function hasSsCardType()
     {

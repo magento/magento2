@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -160,15 +160,26 @@ class Environment extends AbstractActionController
     public function filePermissionsAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if ($this->permissions->getMissingWritablePathsForInstallation()) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-        }
+        $missingWritePermissionPaths = $this->permissions->getMissingWritablePathsForInstallation(true);
 
+        $currentPaths = [];
+        $requiredPaths = [];
+        if ($missingWritePermissionPaths) {
+            foreach ($missingWritePermissionPaths as $key => $value) {
+                if (is_array($value)) {
+                    $requiredPaths[] = ['path' => $key, 'missing' => $value];
+                    $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+                } else {
+                    $requiredPaths[] = ['path' => $key];
+                    $currentPaths[] = $key;
+                }
+            }
+        }
         $data = [
             'responseType' => $responseType,
             'data' => [
-                'required' => $this->permissions->getInstallationWritableDirectories(),
-                'current' => $this->permissions->getInstallationCurrentWritableDirectories(),
+                'required' => $requiredPaths,
+                'current' => $currentPaths,
             ],
         ];
 
@@ -212,7 +223,6 @@ class Environment extends AbstractActionController
         if (!$updaterCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['updaterErrorMessage'] = 'Error from Updater Application Cron Script:<br/>' . $updaterCheck['error'];
-
         }
         if (isset($setupCheck['notice'])) {
             $data['setupNoticeMessage'] = 'Notice from Setup Application Cron Script:<br/>' . $setupCheck['notice'];

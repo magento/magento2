@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,20 +45,21 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockEventManager = $this
-            ->getMockBuilder('\Magento\Framework\Event\Manager')
+            ->getMockBuilder(\Magento\Framework\Event\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockLocaleResolver = $this
-            ->getMockBuilder('\Magento\Framework\Locale\Resolver')
+            ->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockCurrencyFactory = $this
-            ->getMockBuilder('\Magento\Framework\CurrencyFactory')
+            ->getMockBuilder(\Magento\Framework\CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->testCurrencyObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Locale\Currency',
+            ->getObject(
+                \Magento\Framework\Locale\Currency::class,
                 [
                     'eventManager'     => $this->mockEventManager,
                     'localeResolver'   => $this->mockLocaleResolver,

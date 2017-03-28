@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Console\Command;
@@ -44,6 +44,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indexers = $this->getIndexers($input);
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         foreach ($indexers as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
@@ -64,11 +65,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 );
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage());
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
                 $output->writeln($e->getMessage());
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
         }
+        return $returnValue;
     }
 
     /**
@@ -123,7 +129,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         if (empty($indexerIds)) {
             return $this;
         }
-        $indexerFactory = $this->getObjectManager()->create('Magento\Indexer\Model\IndexerFactory');
+        $indexerFactory = $this->getObjectManager()->create(\Magento\Indexer\Model\IndexerFactory::class);
         foreach ($indexerIds as $indexerId) {
             /** @var \Magento\Indexer\Model\Indexer $indexer */
             $indexer = $indexerFactory->create();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -21,27 +21,27 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var VariationHandler|MockObject
+     * @var Magento\ConfigurableProduct\Model\Product\VariationHandler|MockObject
      */
     private $variationHandler;
 
     /**
-     * @var Http|MockObject
+     * @var Magento\Framework\App\Request\Http|MockObject
      */
     private $request;
 
     /**
-     * @var Factory|MockObject
+     * @var Magento\ConfigurableProduct\Helper\Product\Options\Factory|MockObject
      */
     private $optionFactory;
 
     /**
-     * @var Product|MockObject
+     * @var Magento\Catalog\Model\Product|MockObject
      */
     private $product;
 
     /**
-     * @var Helper|MockObject
+     * @var Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper|MockObject
      */
     private $subject;
 
@@ -101,7 +101,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids', [], []],
+            ['associated_product_ids_serialized', '[]', []],
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $simpleProductsIds = [1, 2, 3];
@@ -150,7 +150,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $paramValueMap = [
-            ['configurable-matrix', [], $simpleProducts],
+            ['configurable-matrix-serialized', '[]', json_encode($simpleProducts)],
             ['attributes', null, $attributes],
         ];
 
@@ -203,9 +203,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
-    /**
-     * @covers Configurable::afterInitialize
-     */
     public function testAfterInitializeWithAttributesAndWithoutVariations()
     {
         $attributes = [
@@ -215,11 +212,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids', [], []],
+            ['associated_product_ids_serialized', '[]', []],
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $paramValueMap = [
-            ['configurable-matrix', [], []],
+            ['configurable-matrix-serialized', '[]', []],
             ['attributes', null, $attributes],
         ];
 
@@ -268,9 +265,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
-    /**
-     * @covers Configurable::afterInitialize
-     */
     public function testAfterInitializeIfAttributesEmpty()
     {
         $this->product->expects(static::once())
@@ -291,9 +285,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
-    /**
-     * @covers Configurable::afterInitialize
-     */
     public function testAfterInitializeForNotConfigurableProduct()
     {
         $this->product->expects(static::once())

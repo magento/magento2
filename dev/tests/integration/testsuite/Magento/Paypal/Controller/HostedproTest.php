@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller;
@@ -17,10 +17,10 @@ class HostedproTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCancelAction()
     {
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order');
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
+        $session = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
 
-        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('100000002', 'reserved_order_id');
         $session->setQuoteId($quote->getId());
         $session->setPaypalStandardQuoteId($quote->getId())->setLastRealOrderId('100000002');

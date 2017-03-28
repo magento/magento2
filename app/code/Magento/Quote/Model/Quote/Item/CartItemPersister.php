@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -71,7 +71,16 @@ class CartItemPersister
                     /** Update item product options */
                     $item = $quote->updateItem($itemId, $buyRequestData);
                 } else {
-                    $currentItem->setQty($qty);
+                    if ($item->getQty() !== $currentItem->getQty()) {
+                        $currentItem->setQty($qty);
+                        /**
+                         * Qty validation errors are stored as items message
+                         * @see \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator::validate
+                         */
+                        if (!empty($currentItem->getMessage())) {
+                            throw new LocalizedException(__($currentItem->getMessage()));
+                        }
+                    }
                 }
             } else {
                 /** add new item to shopping cart */

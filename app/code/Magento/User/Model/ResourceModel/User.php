@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,11 +18,6 @@ use Magento\User\Model\User as ModelUser;
 class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Acl\CacheInterface
-     */
-    protected $_aclCache;
-
-    /**
      * Role model
      *
      * @var \Magento\Authorization\Model\RoleFactory
@@ -35,33 +30,32 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * Users table
-     *
-     * @var string
+     * @var \Magento\Framework\Acl\Data\CacheInterface
      */
-    protected $_usersTable;
+    private $aclDataCache;
 
     /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Acl\CacheInterface $aclCache
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Acl\CacheInterface $aclCache,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
-        $this->_usersTable = $this->getTable('admin_user');
+        $this->aclDataCache = $aclDataCache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Acl\Data\CacheInterface::class
+        );
     }
 
     /**
@@ -170,7 +164,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $user)
     {
-        $user->setExtra(unserialize($user->getExtra()));
+        $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         if ($user->hasRoleId()) {
             $this->_clearUserRoles($user);
             $this->_createUserRole($user->getRoleId(), $user);
@@ -186,7 +180,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function _clearUserRoles(ModelUser $user)
     {
-        $conditions = ['user_id = ?' => (int)$user->getId()];
+        $conditions = ['user_id = ?' => (int)$user->getId(), 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN];
         $this->getConnection()->delete($this->getTable('authorization_role'), $conditions);
     }
 
@@ -222,7 +216,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
             $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
-            $this->_aclCache->clean();
+            $this->aclDataCache->clean();
         }
     }
 
@@ -235,7 +229,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $user)
     {
         if (is_string($user->getExtra())) {
-            $user->setExtra(unserialize($user->getExtra()));
+            $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         }
         return parent::_afterLoad($user);
     }
@@ -255,13 +249,13 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $uid = $user->getId();
         $connection->beginTransaction();
         try {
-            $conditions = ['user_id = ?' => $uid];
-
-            $connection->delete($this->getMainTable(), $conditions);
-            $connection->delete($this->getTable('authorization_role'), $conditions);
+            $connection->delete($this->getMainTable(), ['user_id = ?' => $uid]);
+            $connection->delete(
+                $this->getTable('authorization_role'),
+                ['user_id = ?' => $uid, 'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN]
+            );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             throw $e;
-            return false;
         } catch (\Exception $e) {
             $connection->rollBack();
             return false;
@@ -329,7 +323,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $dbh = $this->getConnection();
 
-        $condition = ['user_id = ?' => (int)$user->getId(), 'parent_id = ?' => (int)$user->getRoleId()];
+        $condition = [
+            'user_id = ?' => (int)$user->getId(),
+            'parent_id = ?' => (int)$user->getRoleId(),
+            'user_type = ?' => UserContextInterface::USER_TYPE_ADMIN
+        ];
 
         $dbh->delete($this->getTable('authorization_role'), $condition);
         return $this;
@@ -348,9 +346,16 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $dbh = $this->getConnection();
 
-            $binds = ['parent_id' => $user->getRoleId(), 'user_id' => $user->getUserId()];
+            $binds = [
+                'parent_id' => $user->getRoleId(),
+                'user_id' => $user->getUserId(),
+                'user_type' => UserContextInterface::USER_TYPE_ADMIN
+            ];
 
-            $select = $dbh->select()->from($roleTable)->where('parent_id = :parent_id')->where('user_id = :user_id');
+            $select = $dbh->select()->from($roleTable)
+                ->where('parent_id = :parent_id')
+                ->where('user_type = :user_type')
+                ->where('user_id = :user_id');
 
             return $dbh->fetchCol($select, $binds);
         } else {
@@ -462,7 +467,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (sizeof($users) > 0) {
             $bind = ['reload_acl_flag' => 1];
             $where = ['user_id IN(?)' => $users];
-            $rowsCount = $connection->update($this->_usersTable, $bind, $where);
+            $rowsCount = $connection->update($this->getTable('admin_user'), $bind, $where);
         }
 
         return $rowsCount > 0;

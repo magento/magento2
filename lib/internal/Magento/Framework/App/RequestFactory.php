@@ -2,7 +2,7 @@
 /**
  * Application request factory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -30,6 +30,6 @@ class RequestFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->objectManager->create('Magento\Framework\App\RequestInterface', $arguments);
+        return $this->objectManager->create(\Magento\Framework\App\RequestInterface::class, $arguments);
     }
 }
