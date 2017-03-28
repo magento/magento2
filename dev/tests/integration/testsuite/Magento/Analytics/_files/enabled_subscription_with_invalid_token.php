@@ -19,7 +19,7 @@ $configWriter->save('default/analytics/subscription/enabled', 1);
  * @var $analyticsToken \Magento\Analytics\Model\AnalyticsToken
  */
 $analyticsToken = $objectManager->get(\Magento\Analytics\Model\AnalyticsToken::class);
-$analyticsToken->storeToken(null);
+$analyticsToken->storeToken('42');
 
 /**
  * @var $flagManager \Magento\Analytics\Model\FlagManager

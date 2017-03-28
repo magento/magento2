@@ -45,7 +45,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Analytics/_files/create_failed_subscription.php
+     * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
      */
     public function testReSignUpOnOtp()
     {
@@ -56,7 +56,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Analytics/_files/create_failed_subscription.php
+     * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
      */
     public function testReSignOnOtpWasNotCalled()
     {
@@ -67,7 +67,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Analytics/_files/create_failed_subscription.php
+     * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
      */
     public function testReSignUpOnUpdateWasCalled()
     {
@@ -78,7 +78,7 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Analytics/_files/create_failed_subscription.php
+     * @magentoDataFixture Magento/Analytics/_files/enabled_subscription_with_invalid_token.php
      */
     public function testReSignUpOnUpdateWasnotCalled()
     {
