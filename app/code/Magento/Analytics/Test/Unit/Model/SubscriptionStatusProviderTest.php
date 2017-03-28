@@ -9,7 +9,7 @@ use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
-use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -18,9 +18,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var System|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $systemConfigMock;
+    private $scopeConfigMock;
 
     /**
      * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
@@ -47,9 +47,8 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->systemConfigMock = $this->getMockBuilder(System::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
 
         $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
             ->disableOriginalConstructor()
@@ -64,7 +63,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->statusProvider = $this->objectManagerHelper->getObject(
             SubscriptionStatusProvider::class,
             [
-                'systemConfig' => $this->systemConfigMock,
+                'scopeConfig' => $this->scopeConfigMock,
                 'analyticsToken' => $this->analyticsTokenMock,
                 'flagManager' => $this->flagManagerMock,
             ]
@@ -76,8 +75,8 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(false);
-        $this->systemConfigMock->expects($this->once())
-            ->method('get')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
             ->with('default/analytics/subscription/enabled')
             ->willReturn(true);
 
@@ -90,8 +89,8 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(false);
-        $this->systemConfigMock->expects($this->once())
-            ->method('get')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
             ->with('default/analytics/subscription/enabled')
             ->willReturn(true);
 
@@ -104,8 +103,8 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);
-        $this->systemConfigMock->expects($this->once())
-            ->method('get')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
             ->with('default/analytics/subscription/enabled')
             ->willReturn(true);
         $this->assertEquals(SubscriptionStatusProvider::ENABLED, $this->statusProvider->getStatus());
@@ -113,8 +112,8 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatusShouldBeDisabled()
     {
-        $this->systemConfigMock->expects($this->once())
-            ->method('get')
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
             ->with('default/analytics/subscription/enabled')
             ->willReturn(false);
         $this->assertEquals(SubscriptionStatusProvider::DISABLED, $this->statusProvider->getStatus());
