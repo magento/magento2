@@ -28,7 +28,7 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $diConfiguration = include_once(self::getFilePath($area));
+        $diConfiguration = include(self::getFilePath($area));
         $this->configCache[$area] = $diConfiguration;
         return $this->configCache[$area];
     }
