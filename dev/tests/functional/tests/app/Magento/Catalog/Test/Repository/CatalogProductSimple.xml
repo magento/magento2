@@ -678,12 +678,6 @@
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
         </dataset>
 
-        <dataset name="product_with_image">
-            <field name="image" xsi:type="array">
-                <item name="file" xsi:type="string">Magento/Catalog/Test/_files/test1.png</item>
-            </field>
-        </dataset>
-
         <dataset name="product_with_special_price">
             <field name="sku" xsi:type="string">simple_product_with_special_price_and_category%isolation%</field>
             <field name="name" xsi:type="string">Simple with Special Price 1$ off %isolation%</field>
