@@ -122,6 +122,9 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             ['data' => array_merge($data, $orderData)]
         );
 
-        return ['order' => $order];
+        return [
+            'orderId' => $orderId,
+            'order' => $order,
+        ];
     }
 }
