@@ -27,6 +27,8 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.nvm
+    - $HOME/node_modules
+    - $HOME/yarn.lock
 matrix:
   exclude:
     - php: 5.6.29
