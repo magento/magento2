@@ -154,7 +154,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                     [System::CACHE_TAG]
                 ],
                 [
-                    '1',
+                    'system_CACHE_EXISTS',
                     'system_CACHE_EXISTS',
                     [System::CACHE_TAG]
                 ]

@@ -200,7 +200,7 @@ class System implements ConfigTypeInterface
                 );
             }
         }
-        $this->cache->save('1', $this->cacheExistenceKey, [self::CACHE_TAG]);
+        $this->cache->save($this->cacheExistenceKey, $this->cacheExistenceKey, [self::CACHE_TAG]);
     }
 
     /**
