@@ -78,9 +78,8 @@ class AssertExportProduct extends AbstractConstraint
             }
         }
         $regexp .= '/U';
-        $r = (bool) preg_match($regexp, $exportData->getContent());
 
-        return $r;
+        return (bool) preg_match($regexp, $exportData->getContent());
     }
 
     /**

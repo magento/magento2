@@ -11,7 +11,7 @@
             <data name="exportData" xsi:type="string">default</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">groupedProduct</item>
-                <item name="dataset" xsi:type="string">simple_product_with_special_price</item>
+                <item name="dataset" xsi:type="string">grouped_product_with_special_price</item>
             </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>

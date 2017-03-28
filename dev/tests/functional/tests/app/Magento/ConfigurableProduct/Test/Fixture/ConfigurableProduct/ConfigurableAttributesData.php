@@ -393,7 +393,6 @@ class ConfigurableAttributesData extends DataSource
     {
         $filePath = $this->getFullPath($filename);
         if (!file_exists($filePath)) {
-
             $optionImage = imagecreate(300, 200);
             $colorYellow = imagecolorallocate($optionImage, 255, 255, 0);
             imagefilledrectangle($optionImage, 50, 50, 250, 150, $colorYellow);
