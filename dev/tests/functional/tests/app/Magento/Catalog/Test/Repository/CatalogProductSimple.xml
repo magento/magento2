@@ -859,7 +859,7 @@
             <field name="special_price" xsi:type="string">9</field>
         </dataset>
 
-        <dataset name="withSpecialPriceFromToDates">
+        <dataset name="with_special_price_from_to_dates">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>

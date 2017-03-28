@@ -5,10 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Test\TestCase;
 
-use Magento\CatalogImportExport\Test\Constraint\AssertExportProductDate;
 use Magento\CatalogImportExport\Test\Constraint\AssertExportProduct;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
-use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Command\File\Export;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -27,7 +25,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Perform all assertions.
  *
  * @group ImportExport
- * @ZephyrId MAGETWO-46112
+ * @ZephyrId MAGETWO-46112, MAGETWO-46113, MAGETWO-46121, MAGETWO-30602, MAGETWO-46114, MAGETWO-46116, MAGETWO-46109
  */
 class ExportProductsTest extends Injectable
 {
@@ -53,31 +51,21 @@ class ExportProductsTest extends Injectable
     private $assertExportProduct;
 
     /**
-     * Assert export product date.
-     *
-     * @var AssertExportProductDate
-     */
-    private $assertExportProductDate;
-
-    /**
      * Inject data.
      *
      * @param FixtureFactory $fixtureFactory
      * @param AdminExportIndex $adminExportIndex
      * @param AssertExportProduct $assertExportProduct
-     * @param AssertExportProductDate $assertExportProductDate
      * @return void
      */
     public function __inject(
         FixtureFactory $fixtureFactory,
         AdminExportIndex $adminExportIndex,
-        AssertExportProduct $assertExportProduct,
-        AssertExportProductDate $assertExportProductDate
+        AssertExportProduct $assertExportProduct
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->adminExportIndex = $adminExportIndex;
         $this->assertExportProduct = $assertExportProduct;
-        $this->assertExportProductDate = $assertExportProductDate;
     }
 
     /**
@@ -87,46 +75,23 @@ class ExportProductsTest extends Injectable
      * @param string $exportData
      * @param array $exportedFields
      * @param array $products
-     * @param array $advancedPricingAttributes
-     * @param string|null $datePattern
      * @return void
      */
     public function test(
         Export $export,
         $exportData,
         array $exportedFields,
-        array $products,
-        array $advancedPricingAttributes = [],
-        $datePattern = null
+        array $products
     ) {
         $products = $this->prepareProducts($products);
         $this->adminExportIndex->open();
 
-        foreach ($products as $product) {
-            if ($product->hasData('associated')) {
-                $associatedProducts = $product->getAssociated()['products'];
-                foreach ($associatedProducts as $associatedProduct) {
-                    $this->adminExportIndex->getExportForm()->fill(
-                        $this->prepareExportDataFixture($exportData, $associatedProduct),
-                        null,
-                        $advancedPricingAttributes
-                    );
-                    $this->adminExportIndex->getFilterExport()->clickContinue();
-                    $this->assertExportProduct->processAssert($export, $exportedFields, $associatedProduct);
-                }
-            } else {
-                $this->adminExportIndex->getExportForm()->fill(
-                    $this->prepareExportDataFixture($exportData, $product),
-                    null,
-                    $advancedPricingAttributes
-                );
-                $this->adminExportIndex->getFilterExport()->clickContinue();
-                $this->assertExportProduct->processAssert($export, $exportedFields, $product);
-            }
-            if ($datePattern) {
-                $this->assertExportProductDate->processAssert($export, $datePattern);
-            }
-        }
+        $exportData = $this->fixtureFactory->createByCode('exportData', ['dataset' => $exportData]);
+        $exportData->persist();
+        $this->adminExportIndex->getExportForm()->fill($exportData);
+        $this->adminExportIndex->getFilterExport()->clickContinue();
+
+        $this->assertExportProduct->processAssert($export, $exportedFields, $products);
     }
 
     /**
@@ -135,11 +100,8 @@ class ExportProductsTest extends Injectable
      * @param array $products
      * @return array|null
      */
-    public function prepareProducts(array $products)
+    private function prepareProducts(array $products)
     {
-        if (empty($products)) {
-            return null;
-        }
         $createdProducts = [];
         foreach ($products as $product) {
             $data = (isset($product['data'])) ? $product['data'] : [];
@@ -160,28 +122,5 @@ class ExportProductsTest extends Injectable
         }
 
         return $createdProducts;
-    }
-
-    /**
-     * Prepare Export Data fixture.
-     *
-     * @param string $dataset
-     * @param InjectableFixture|null $product
-     * @return ExportData
-     */
-    private function prepareExportDataFixture($dataset, InjectableFixture $product = null)
-    {
-        $exportData = $this->fixtureFactory->createByCode(
-            'exportData',
-            [
-                'dataset' => $dataset,
-                'data' => [
-                    'data_export' => $product
-                ]
-            ]
-        );
-        $exportData->persist();
-
-        return $exportData;
     }
 }

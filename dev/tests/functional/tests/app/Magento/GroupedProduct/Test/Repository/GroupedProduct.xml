@@ -272,7 +272,7 @@
             </field>
         </dataset>
 
-        <dataset name="grouped_product_with_special_price_with_from_and_to_dates">
+        <dataset name="grouped_product_with_special_price">
             <field name="name" xsi:type="string">Test grouped product with special price %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_grouped_product_with_special_price_%isolation%</field>
             <field name="category_ids" xsi:type="array">

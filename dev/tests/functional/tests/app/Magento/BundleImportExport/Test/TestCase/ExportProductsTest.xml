@@ -21,9 +21,6 @@
                 <item name="fixture" xsi:type="string">bundleProduct</item>
                 <item name="dataset" xsi:type="string">fixed_with_required_options_and_qty_and_textarea_attribute</item>
             </data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-            </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>
                 <item name="1" xsi:type="string">name</item>

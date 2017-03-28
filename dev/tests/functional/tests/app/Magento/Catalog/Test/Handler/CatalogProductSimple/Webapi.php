@@ -65,6 +65,13 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     ];
 
     /**
+     * Temporary media path.
+     *
+     * @var string
+     */
+    private $mediaPathTmp = '/pub/media/tmp/catalog/product/';
+
+    /**
      * @constructor
      * @param DataInterface $configuration
      * @param EventManagerInterface $eventManager
@@ -346,28 +353,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         if (isset($this->fields['product']['media_gallery'])) {
             foreach ($this->fields['product']['media_gallery']['images'] as $galleryItem) {
                 $filename = $galleryItem['file'];
-                if (!file_exists($filename)) {
-                    // Create an image with the specified dimensions
-                    $image = imageCreate(300, 200);
-
-                    // Create a color (this first call to imageColorAllocate
-                    // also automatically sets the image background color)
-                    $colorYellow = imageColorAllocate($image, 255, 255, 0);
-
-                    // Draw a rectangle
-                    imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
-
-                    $directory = dirname($filename);
-                    if (!file_exists($directory)) {
-                        mkdir($directory, 0777, true);
-                    }
-
-                    imageJpeg($image, $filename);
-
-                    // Release memory
-                    imageDestroy($image);
-                }
-
                 $this->fields['product']['media_gallery_entries'][] = $this->getImageData($filename);
             }
             unset($this->fields['product']['media_gallery']);
@@ -392,7 +377,7 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 'content' => [
                     'type' => 'image/jpeg',
                     'name' => $filename,
-                    'base64_encoded_data' => base64_encode(file_get_contents($filename)),
+                    'base64_encoded_data' => base64_encode(file_get_contents(BP . $this->mediaPathTmp . $filename)),
                 ]
             ];
     }

@@ -387,32 +387,22 @@ class ConfigurableAttributesData extends DataSource
      * Create test image file.
      *
      * @param string $filename
-     * @return void
+     * @return array
      */
     protected function prepareMediaGallery($filename = 'option_image.jpg')
     {
         $filePath = $this->getFullPath($filename);
         if (!file_exists($filePath)) {
 
-            // Create an image with the specified dimensions
-            $image = imageCreate(300, 200);
-
-            // Create a color (this first call to imageColorAllocate
-            // also automatically sets the image background color)
-            $colorYellow = imageColorAllocate($image, 255, 255, 0);
-
-            // Draw a rectangle
-            imageFilledRectangle($image, 50, 50, 250, 150, $colorYellow);
-
+            $optionImage = imagecreate(300, 200);
+            $colorYellow = imagecolorallocate($optionImage, 255, 255, 0);
+            imagefilledrectangle($optionImage, 50, 50, 250, 150, $colorYellow);
             $directory = dirname($filePath);
             if (!file_exists($directory)) {
                 mkdir($directory, 0777, true);
             }
-
-            imageJpeg($image, $filePath);
-
-            // Release memory
-            imageDestroy($image);
+            imagejpeg($optionImage, $filePath);
+            imagedestroy($optionImage);
         }
 
         return [

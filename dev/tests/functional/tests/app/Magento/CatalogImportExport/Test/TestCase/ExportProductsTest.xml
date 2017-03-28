@@ -16,9 +16,6 @@
                     <item name="media_gallery" xsi:type="string">simple_image.jpeg</item>
                 </item>
             </data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-            </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>
                 <item name="1" xsi:type="string">name</item>
@@ -34,10 +31,6 @@
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">with_one_custom_option</item>
-            </data>
-            <data name="datePattern" xsi:type="string">n/j/y, g</data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
             </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>
@@ -55,9 +48,6 @@
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">product_with_custom_color_attribute</item>
             </data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
-            </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>
                 <item name="1" xsi:type="string">name</item>
@@ -72,9 +62,6 @@
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">default</item>
-            </data>
-            <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="0" xsi:type="string">sku</item>
             </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>

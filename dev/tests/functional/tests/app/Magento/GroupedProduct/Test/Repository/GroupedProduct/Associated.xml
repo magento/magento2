@@ -84,7 +84,7 @@
             </field>
         </dataset>
 
-        <dataset name="defaultSimpleProduct_with_specialPrice_with_from_and_to_dates">
+        <dataset name="simple_product_with_special_price">
             <field name="assigned_products" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="id" xsi:type="string">%id%</item>
@@ -100,8 +100,8 @@
                 </item>
             </field>
             <field name="products" xsi:type="array">
-                <item name="0" xsi:type="string">catalogProductSimple::withSpecialPriceFromToDates</item>
-                <item name="1" xsi:type="string">catalogProductSimple::withSpecialPriceFromToDates</item>
+                <item name="0" xsi:type="string">catalogProductSimple::with_special_price_from_to_dates</item>
+                <item name="1" xsi:type="string">catalogProductSimple::with_special_price_from_to_dates</item>
             </field>
         </dataset>
 

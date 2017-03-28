@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\File\ExportInterface;
+use \DateTime;
 
 /**
  * Assert that date fields in exported file are shown in global configuration time zone.
@@ -17,17 +18,15 @@ class AssertExportProductDate extends AbstractConstraint
      * Assert that date fields in exported file are shown in global configuration time zone.
      *
      * @param ExportInterface $export
-     * @param string $datePattern
+     * @param DateTime $dateTime
      * @return void
      */
-    public function processAssert(ExportInterface $export, $datePattern)
+    public function processAssert(ExportInterface $export, DateTime $dateTime)
     {
-        $date = new \DateTime();
-        $date = $date->format($datePattern);
         $exportData = $export->getLatest();
 
         \PHPUnit_Framework_Assert::assertTrue(
-            (bool) strpos($exportData->getContent(), $date),
+            (bool) strpos($exportData->getContent(), $dateTime->format('n/j/y, g')),
             'Date fields in exported file are shown in not global configuration time zone.'
         );
     }

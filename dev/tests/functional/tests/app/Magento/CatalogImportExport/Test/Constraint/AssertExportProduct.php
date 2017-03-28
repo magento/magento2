@@ -20,24 +20,26 @@ class AssertExportProduct extends AbstractConstraint
      *
      * @param ExportInterface $export
      * @param array $exportedFields
-     * @param InjectableFixture $product
+     * @param array $products
      * @return void
      */
     public function processAssert(
         ExportInterface $export,
         array $exportedFields,
-        InjectableFixture $product
+        array $products
     ) {
         $exportData = $export->getLatest();
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $this->isProductDataInFile(
-                $exportedFields,
-                $product,
-                $exportData
-            ),
-            'Product data was not found in exported file.'
-        );
+        foreach ($products as $product) {
+            \PHPUnit_Framework_Assert::assertTrue(
+                $this->isProductDataInFile(
+                    $exportedFields,
+                    $product,
+                    $exportData
+                ),
+                'Product data was not found in exported file.'
+            );
+        }
     }
 
     /**
@@ -67,17 +69,18 @@ class AssertExportProduct extends AbstractConstraint
         foreach ($fields as $field) {
             if ($field == 'additional_images' && $product->hasData('media_gallery')) {
                 $regexp .= '.*(\/?.*(jpg|jpeg|png))';
-            } elseif ($field == 'special_price_from_date') {
-                $regexp .= $this->prepareSpecialPriceDateRegexp($product, 'special_from_date');
-            } elseif ($field == 'special_price_to_date') {
-                $regexp .= $this->prepareSpecialPriceDateRegexp($product, 'special_to_date');
+            } elseif ($field == 'special_price_from_date' && $product->getData('special_price_from_date')) {
+                $regexp .= $this->prepareSpecialPriceDateRegexp($product, 'special_price_from_date');
+            } elseif ($field == 'special_price_to_date' && $product->getData('special_price_to_date')) {
+                $regexp .= $this->prepareSpecialPriceDateRegexp($product, 'special_price_to_date');
             } else {
                 $regexp .= '.*(' . $product->getData($field) . ')';
             }
         }
         $regexp .= '/U';
+        $r = (bool) preg_match($regexp, $exportData->getContent());
 
-        return (bool) preg_match($regexp, $exportData->getContent());
+        return $r;
     }
 
     /**
