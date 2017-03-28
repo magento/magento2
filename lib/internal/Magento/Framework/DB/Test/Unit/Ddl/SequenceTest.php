@@ -35,7 +35,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'DROP TABLE someTable',
-            $this->model->dropSequence('someTable')
+            (new Sequence())->dropSequence('someTable')
         );
     }
 
