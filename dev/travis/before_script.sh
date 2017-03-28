@@ -90,7 +90,11 @@ case $TEST_SUITE in
         yarn global add grunt-cli
         yarn
 
-        cp dev/travis/js/config.php app/etc
-        php bin/magento setup:static-content:deploy -f
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q --admin-user="admin" --admin-password="123123q" --admin-email="admin@example.com" --admin-firstname="John" --admin-lastname="Doe"
+
+        echo "Deploying Static Content"
+        php bin/magento setup:static-content:deploy -f -q -j=2 --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
         ;;
 esac
