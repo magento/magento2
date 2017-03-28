@@ -7,12 +7,10 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -44,21 +42,6 @@ class PageRepository implements PageRepositoryInterface
     protected $searchResultsFactory;
 
     /**
-     * @var DataObjectHelper
-     */
-    protected $dataObjectHelper;
-
-    /**
-     * @var DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-
-    /**
-     * @var \Magento\Cms\Api\Data\PageInterfaceFactory
-     */
-    protected $dataPageFactory;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
@@ -71,22 +54,16 @@ class PageRepository implements PageRepositoryInterface
     /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
-     * @param Data\PageInterfaceFactory $dataPageFactory
      * @param PageCollectionFactory $pageCollectionFactory
      * @param Data\PageSearchResultsInterfaceFactory $searchResultsFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         ResourcePage $resource,
         PageFactory $pageFactory,
-        Data\PageInterfaceFactory $dataPageFactory,
         PageCollectionFactory $pageCollectionFactory,
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
-        DataObjectHelper $dataObjectHelper,
-        DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
         CollectionProcessorInterface $collectionProcessor = null
     ) {
@@ -94,9 +71,6 @@ class PageRepository implements PageRepositoryInterface
         $this->pageFactory = $pageFactory;
         $this->pageCollectionFactory = $pageCollectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->dataPageFactory = $dataPageFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
@@ -175,7 +149,7 @@ class PageRepository implements PageRepositoryInterface
         /** @var Data\PageSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
-        $searchResults->setItems($pages);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
