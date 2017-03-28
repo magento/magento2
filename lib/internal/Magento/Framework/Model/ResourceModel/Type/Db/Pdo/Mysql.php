@@ -5,15 +5,15 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
-// @codingStandardsIgnoreFile
-
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 use Magento\Framework\DB\SelectFactory;
 
+// @codingStandardsIgnoreStart
 class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
+// @codingStandardsIgnoreEnd
 {
     /**
      * @var array

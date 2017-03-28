@@ -3,11 +3,11 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\BasicTier;
+namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\BIEssentials;
 
-use Magento\Analytics\Controller\Adminhtml\BasicTier\SignUp;
-use Magento\Config\Model\Config;
+use Magento\Analytics\Controller\Adminhtml\BIEssentials\SignUp;
 use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -22,7 +22,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configMock;
 
@@ -46,7 +46,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
@@ -72,10 +72,10 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $basicTierUrlPath = 'analytics/url/basic_tier';
+        $urlBIEssentialsConfigPath = 'analytics/url/bi_essentials';
         $this->configMock->expects($this->once())
-            ->method('getConfigDataValue')
-            ->with($basicTierUrlPath)
+            ->method('getValue')
+            ->with($urlBIEssentialsConfigPath)
             ->willReturn('value');
         $this->resultRedirectFactoryMock->expects($this->once())->method('create')->willReturn($this->redirectMock);
         $this->redirectMock->expects($this->once())->method('setUrl')->with('value')->willReturnSelf();

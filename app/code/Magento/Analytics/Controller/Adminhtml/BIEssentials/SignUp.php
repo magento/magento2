@@ -3,36 +3,38 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Controller\Adminhtml\BasicTier;
+namespace Magento\Analytics\Controller\Adminhtml\BIEssentials;
 
 use Magento\Backend\App\Action;
-use Magento\Config\Model\Config;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class SignUp
  *
- * Provides link to Basic Tier signup
+ * Provides link to BI Essentials signup
  */
 class SignUp extends Action
 {
     /**
+     * Path to config value with URL to BI Essentials sign-up page.
+     *
      * @var string
      */
-    private $basicTierUrlPath = 'analytics/url/basic_tier';
+    private $urlBIEssentialsConfigPath = 'analytics/url/bi_essentials';
 
     /**
-     * @var Config
+     * @var ScopeConfigInterface
      */
     private $config;
 
     /**
      * @param Context $context
-     * @param Config $config
+     * @param ScopeConfigInterface $config
      */
     public function __construct(
         Context $context,
-        Config $config
+        ScopeConfigInterface $config
     ) {
         $this->config = $config;
         parent::__construct($context);
@@ -45,18 +47,18 @@ class SignUp extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Analytics::report_basic_tier');
+        return $this->_authorization->isAllowed('Magento_Analytics::bi_essentials');
     }
 
     /**
-     * Provides link to Basic Tier signup
+     * Provides link to BI Essentials signup
      *
      * @return \Magento\Framework\Controller\AbstractResult
      */
     public function execute()
     {
         return $this->resultRedirectFactory->create()->setUrl(
-            $this->config->getConfigDataValue($this->basicTierUrlPath)
+            $this->config->getValue($this->urlBIEssentialsConfigPath)
         );
     }
 }

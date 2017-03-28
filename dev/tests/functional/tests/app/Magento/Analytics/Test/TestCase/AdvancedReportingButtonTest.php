@@ -31,6 +31,6 @@ class AdvancedReportingButtonTest extends Injectable
     public function test(Dashboard $dashboard)
     {
         $dashboard->open();
-        $dashboard->getAdvancedReportingBlock()->click();
+        $dashboard->getReportsSectionBlock()->click();
     }
 }
