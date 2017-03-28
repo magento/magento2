@@ -583,7 +583,7 @@
                 </item>
             </field>
             <field name="attributes" xsi:type="array">
-                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::color_3_values</item>
+                <item name="attribute_key_0" xsi:type="string">catalogProductAttribute::color_for_promo_rules</item>
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">

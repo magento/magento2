@@ -55,8 +55,8 @@
             </data>
             <data name="productUpdate/optionNumber" xsi:type="string">2</data>
             <data name="productUpdate/newPrice" xsi:type="string">5</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation5" summary="Add special price to child product" ticketId="MAGETWO-60297">
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
@@ -67,8 +67,8 @@
             </data>
             <data name="productUpdate/optionNumber" xsi:type="string">2</data>
             <data name="productUpdate/newPrice" xsi:type="string">5</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation6" summary="Change price on scope level for child product" ticketId="MAGETWO-60325">
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
@@ -80,8 +80,8 @@
             <data name="productUpdate/switchScope" xsi:type="boolean">true</data>
             <data name="productUpdate/optionNumber" xsi:type="string">2</data>
             <data name="productUpdate/newPrice" xsi:type="string">0.07</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation7" summary="Add special price to child product" ticketId="MAGETWO-60328">
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>
@@ -89,8 +89,8 @@
             <data name="productUpdate/childProductUpdate" xsi:type="array">
                 <item name="unassignFromWebsite" xsi:type="string">Main Website</item>
             </data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory"/>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="VerifyConfigurableProductEntityPriceTestVariation8" summary="Set child product Out of stock" ticketId="MAGETWO-60329">
             <data name="product" xsi:type="string">configurableProduct::product_with_color</data>

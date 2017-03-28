@@ -106,6 +106,7 @@ class UpdateChildProductStep implements TestStepInterface
      *
      * @param string $matrixIndex
      * @param string $optionKey
+     * @return void
      */
     private function prepareResultProduct($matrixIndex, $optionKey)
     {
@@ -134,6 +135,7 @@ class UpdateChildProductStep implements TestStepInterface
      * Fill data of child product.
      *
      * @param string $sku
+     * @return void
      */
     private function fillChildProductData($sku)
     {
