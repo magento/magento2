@@ -107,10 +107,13 @@ class YesNoTest extends \PHPUnit_Framework_TestCase
             ['YES', true],
             ['y', true],
             ['Y', true],
+            ['ya', false],
             ['no', false],
             ['NO', false],
             ['n', false],
             ['N', false],
+            ['Not', false],
+            ['anykey', false]
         ];
     }
 }

@@ -56,6 +56,8 @@ class CommentParser implements CommentParserInterface
      * The keys of this array are section names to which the comments relate.
      * The values of this array are comments for these sections.
      *
+     * If file with provided name does not exist - empty array will be returned.
+     *
      * @param string $fileName The name of config file
      * @return array
      */

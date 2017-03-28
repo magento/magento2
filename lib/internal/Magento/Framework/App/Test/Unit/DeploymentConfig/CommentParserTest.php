@@ -104,12 +104,22 @@ return array (
    *     second line
    * For the section: ns4
    */
-  'ns4' => 'just text'
+  'ns4' => 'just text',
+  /**
+   * For the section: ns5
+   * *comment for namespace *5*
+   */
+  'ns5' => 'just text',
+  # This comment will be ignored
+  'ns6' => 'just text',
 );
 
 TEXT;
 
-        $expectedResult = ['ns4' => "comment for namespace 4\n    second line"];
+        $expectedResult = [
+            'ns4' => "comment for namespace 4\n    second line",
+            'ns5' => '*comment for namespace *5*',
+        ];
 
         $this->readDirectoryMock->expects($this->once())
             ->method('isExist')
