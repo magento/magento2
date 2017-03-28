@@ -3,17 +3,17 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics;
+namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting;
 
 use Magento\Mtf\Block\Block;
 
 /**
- * Advanced Reporting section
+ * Advanced Reporting section on dashboard.
  */
-class AdvancedReportingBlock extends Block
+class ReportsSectionBlock extends Block
 {
     /**
-     * Advanced Reporting Button.
+     * Advanced Reporting button on dashboard.
      *
      * @var string
      */
