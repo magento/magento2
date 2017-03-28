@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Model\Connector\ResponseHandler;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
-use Magento\Analytics\Model\Subscription;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 
 /**
@@ -21,9 +21,9 @@ class ReSignUp implements ResponseHandlerInterface
     private $analyticsToken;
     
     /**
-     * @var Subscription
+     * @var SubscriptionHandler
      */
-    private $subscription;
+    private $subscriptionHandler;
 
     /**
      * @var SubscriptionStatusProvider
@@ -32,16 +32,16 @@ class ReSignUp implements ResponseHandlerInterface
 
     /**
      * @param AnalyticsToken $analyticsToken
-     * @param Subscription $subscription
+     * @param SubscriptionHandler $subscriptionHandler
      * @param SubscriptionStatusProvider $subscriptionStatusProvider
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
-        Subscription $subscription,
+        SubscriptionHandler $subscriptionHandler,
         SubscriptionStatusProvider $subscriptionStatusProvider
     ) {
         $this->analyticsToken = $analyticsToken;
-        $this->subscription = $subscription;
+        $this->subscriptionHandler = $subscriptionHandler;
         $this->subscriptionStatusProvider = $subscriptionStatusProvider;
     }
 
@@ -52,7 +52,7 @@ class ReSignUp implements ResponseHandlerInterface
     {
         if ($this->subscriptionStatusProvider->getStatus() === SubscriptionStatusProvider::ENABLED) {
             $this->analyticsToken->storeToken(null);
-            $this->subscription->retry();
+            $this->subscriptionHandler->processEnabled();
         }
         return false;
     }
