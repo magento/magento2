@@ -157,7 +157,7 @@ return [
                     'configurable_variations' => "",
                     'associated_skus' => '%bundle_attribute_sku%',
                     'bundle_shipment_type' => 'together',
-                    'bundle_values' => "name=Drop-down Option,type=select,required=1,sku=%bundle_attribute_sku%,price=0.0000,default=0,default_qty=1.0000,price_type=fixed",
+                    'bundle_values' => "name=Drop-down Option,type=select,required=1,sku=%bundle_attribute_sku%,price=0.0000,default=0,default_qty=1.0000,price_type=dynamic",
                     'bundle_price_type' => 'dynamic',
                     'bundle_price_view' => 'Price range',
                     'bundle_sku_type' => 'dynamic',

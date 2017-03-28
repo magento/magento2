@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductTest" summary="Import configurable products">
-        <variation name="ImportProductVariation2" ticketId="MAGETWO-47719" summary="Replace Products">
+    <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductTest" summary="Import Configurable Products with Replace Behavior">
+        <variation name="ImportProductVariation2" ticketId="MAGETWO-47719" summary="Import Configurable Products with Replace Behavior">
             <data name="import/data/import_file/entities/2" xsi:type="string">configurableProduct::with_one_attribute</data>
             <constraint name="Magento\ConfigurableImportExport\Test\Constraint\AssertConfigurableImportProduct" />
         </variation>
-        <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Replace Products">
+        <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Configurable Products with Replace Behavior">
             <data name="import/data/import_file/entities/1" xsi:type="string">configurableProduct::with_one_attribute</data>
             <constraint name="Magento\ConfigurableImportExport\Test\Constraint\AssertConfigurableImportProduct" />
         </variation>

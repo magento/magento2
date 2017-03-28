@@ -22,6 +22,13 @@ class ListAssociatedProducts extends Form
     protected $itemProduct = '//table[contains(@data-role,"grid")]/tbody/tr[%d]';
 
     /**
+     * Selector with item products.
+     *
+     * @var string
+     */
+    protected $itemProducts = '[data-index="associated"] tbody tr';
+
+    /**
      * Getting block products
      *
      * @param string $index
@@ -68,6 +75,11 @@ class ListAssociatedProducts extends Form
      */
     public function getAssociatedProductSku()
     {
-        return $this->getProductBlock(1)->getProductSku();
+        $productsSku = [];
+        $productsQty = count($this->_rootElement->getElements($this->itemProducts));
+        for ($i = 1; $i <= $productsQty; $i++) {
+            $productsSku[] = $this->getProductBlock($i)->getProductSku();
+        }
+        return $productsSku;
     }
 }

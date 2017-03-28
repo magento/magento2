@@ -8,9 +8,6 @@ namespace Magento\CatalogImportExport\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\ImportExport\Test\Fixture\ImportData;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Constraint\AssertProductInGrid;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
@@ -73,9 +70,6 @@ class AssertImportProduct extends AbstractConstraint
      * Assert imported products are correct.
      *
      * @param BrowserInterface $browser
-     * @param CatalogProductIndex $catalogProductIndex
-     * @param CatalogProductView $catalogProductView
-     * @param AssertProductInGrid $assertProductInGrid
      * @param CatalogProductEdit $catalogProductEdit
      * @param WebapiDecorator $webApi
      * @param ImportData $import
@@ -83,9 +77,6 @@ class AssertImportProduct extends AbstractConstraint
      */
     public function processAssert(
         BrowserInterface $browser,
-        CatalogProductIndex $catalogProductIndex,
-        CatalogProductView $catalogProductView,
-        AssertProductInGrid $assertProductInGrid,
         CatalogProductEdit $catalogProductEdit,
         WebapiDecorator $webApi,
         ImportData $import
@@ -98,17 +89,6 @@ class AssertImportProduct extends AbstractConstraint
         $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
         foreach ($products as $product) {
             if ($product->getDataConfig()['type_id'] === $this->productType) {
-                // assert product in data grid
-                $assertProductInGrid->processAssert($product, $catalogProductIndex);
-                // assert product in store front
-                $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-                \PHPUnit_Framework_Assert::assertEquals(
-                    $catalogProductView->getViewBlock()->getProductName(),
-                    $product->getName(),
-                    "Can't find product in store front"
-                );
-
-                // assert product data from page and csv.
                 $resultProductsData = $this->getPrepareProductsData($product);
                 $resultCsvData = $this->getResultCsv($product->getSku());
                 \PHPUnit_Framework_Assert::assertEquals(
@@ -121,7 +101,7 @@ class AssertImportProduct extends AbstractConstraint
     }
 
     /**
-     * Prepare configurable product data.
+     * Prepare product data.
      *
      * @param FixtureInterface $product
      * @return array
@@ -156,7 +136,9 @@ class AssertImportProduct extends AbstractConstraint
     }
 
     /**
-     * Return prepared products data.
+     * Return prepared products data. Returned array has needed keys only(according with $this-neededKeys).
+     * Input array: ['sku' => 'simple', 'type' => 'simple', 'qty' => '100', 'weight' => '30', 'url_key' => 'simple_url']
+     * Output array: ['type' => 'simple', 'qty' => '100']
      *
      * @param array $productsData
      * @return array

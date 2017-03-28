@@ -243,7 +243,8 @@ class File extends DataSource
         }
         if ($entity->getDataConfig() && ('simple' !== $entity->getDataConfig()['type_id'])) {
             $class = ucfirst($entity->getDataConfig()['type_id']);
-            $file = ObjectManager::getInstance()->create("\\Magento\\{$class}ImportExport\\Test\\Fixture\\Import\\File");
+            $file = ObjectManager::getInstance()
+                ->create("\\Magento\\{$class}ImportExport\\Test\\Fixture\\Import\\File");
             $entityData = $file->getData($entity, $this->fixtureFactory);
         }
         return $entityData;
@@ -258,7 +259,7 @@ class File extends DataSource
     private function getWebsitesData(FixtureInterface $entity)
     {
         $entityData = [];
-        $currency = (isset($this->value['template']['websiteCurrency']))
+        $currency = isset($this->value['template']['websiteCurrency'])
             ? "[{$this->value['template']['websiteCurrency']}]"
             : '[USD]';
 
