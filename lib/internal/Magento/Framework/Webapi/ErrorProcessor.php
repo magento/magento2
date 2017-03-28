@@ -14,6 +14,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Helper for errors processing.
@@ -67,22 +69,32 @@ class ErrorProcessor
     protected $directoryWrite;
 
     /**
+     * Instance of serializer.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Json\Encoder $encoder
      * @param \Magento\Framework\App\State $appState
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Json\Encoder $encoder,
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        Json $serializer = null
     ) {
         $this->encoder = $encoder;
         $this->_appState = $appState;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->registerShutdownFunction();
     }
 
@@ -307,7 +319,7 @@ class ErrorProcessor
     {
         $this->directoryWrite->create('report/api');
         $reportId = abs(intval(microtime(true) * rand(100, 1000)));
-        $this->directoryWrite->writeFile('report/api/' . $reportId, serialize($reportData));
+        $this->directoryWrite->writeFile('report/api/' . $reportId, $this->serializer->serialize($reportData));
         return $reportId;
     }
 }

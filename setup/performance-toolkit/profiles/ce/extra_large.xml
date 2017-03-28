@@ -20,6 +20,10 @@
                 <products>16000</products>
             </config>
         </configurable_products>
+        <product-images>
+            <images-count>2000</images-count>
+            <images-per-product>3</images-per-product>
+        </product-images>
         <categories>6000</categories> <!-- Number of categories to generate -->
         <categories_nesting_level>5</categories_nesting_level> <!-- Nesting level for categories -->
         <customers>10000</customers> <!-- Number of customers to generate -->
