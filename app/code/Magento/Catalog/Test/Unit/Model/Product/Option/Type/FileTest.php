@@ -77,6 +77,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
+            ->setMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $this->urlBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\UrlBuilder::class)
@@ -99,6 +100,26 @@ class FileTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
     }
 
     /**
@@ -237,9 +258,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testGetFormattedOptionValueInvalid()
     {
         $optionValue = 'invalid json option value...';
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->willThrowException(new SerializationException(__('Invalid JSON value.')));
         $this->assertEquals($optionValue, $this->getFileObject()->getFormattedOptionValue($optionValue));
     }
 
@@ -361,25 +379,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->with($optionValue)
-            ->willThrowException(new SerializationException(__('Invalid JSON value.')));
-
         $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
     }
 
     public function testPrepareOptionValueForRequest()
     {
-        $optionValue = 'string';
         $resultValue = ['result'];
+        $optionValue = json_encode($resultValue);
         $fileObject = $this->getFileObject();
-
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->with($optionValue)
-            ->willReturn($resultValue);
-
         $this->assertEquals($resultValue, $fileObject->prepareOptionValueForRequest($optionValue));
     }
 }
