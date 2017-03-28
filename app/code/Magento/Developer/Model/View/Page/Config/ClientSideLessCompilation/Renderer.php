@@ -9,8 +9,6 @@ use Magento\Framework\View\Page\Config;
 
 /**
  * Page config Renderer model
- *
- * @api
  */
 class Renderer extends Config\Renderer
 {
