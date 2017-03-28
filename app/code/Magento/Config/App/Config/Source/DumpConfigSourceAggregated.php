@@ -44,6 +44,12 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $data;
 
     /**
+     * Option that inverts exclude list.
+     *
+     * If this option is:
+     *    false - removes from configuration data all items that exist in exclude list;
+     *    true - removes from configuration data all items that not exist in exclude list.
+     *
      * @var bool
      */
     private $invertExcludes;
@@ -52,7 +58,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param ExcludeList $excludeList
      * @param array $sources
      * @param TypePool|null $typePool
-     * @param bool $invertExcludes
+     * @param bool $invertExcludes The option that inverts exclude list
      */
     public function __construct(
         ExcludeList $excludeList,
