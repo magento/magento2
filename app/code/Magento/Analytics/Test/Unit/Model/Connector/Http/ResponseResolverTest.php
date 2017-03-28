@@ -26,12 +26,9 @@ class ResponseResolverTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $notFoundResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
-        $notFoundResponseHandlerMock->expects($this->never())
-            ->method('handleResponse')
-            ->with($expectedBody)
-            ->willReturn(false);
+        $notFoundResponseHandlerMock->expects($this->never())->method('handleResponse');
         $responseResolver = new ResponseResolver(
-            new JsonConverter('Content-Type: application/json'),
+            new JsonConverter(),
             [
                 201 => $responseHandlerMock,
                 404 => $notFoundResponseHandlerMock,

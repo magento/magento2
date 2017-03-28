@@ -11,17 +11,9 @@ namespace Magento\Analytics\Model\Connector\Http;
 class JsonConverter implements ConverterInterface
 {
     /**
-     * @var string
+     * Content-Type HTTP header for json.
      */
-    private $contentTypeHeader;
-
-    /**
-     * @param string $contentTypeHeader
-     */
-    public function __construct($contentTypeHeader)
-    {
-        $this->contentTypeHeader = $contentTypeHeader;
-    }
+    const CONTENT_TYPE_HEADER = 'Content-Type: application/json';
 
     /**
      * @param string $body
@@ -30,7 +22,8 @@ class JsonConverter implements ConverterInterface
      */
     public function fromBody($body)
     {
-        return json_decode($body, 1);
+        $decodedBody = json_decode($body, 1);
+        return $decodedBody === null ? [$body] : $decodedBody;
     }
 
     /**
@@ -48,6 +41,6 @@ class JsonConverter implements ConverterInterface
      */
     public function getContentTypeHeader()
     {
-        return $this->contentTypeHeader;
+        return self::CONTENT_TYPE_HEADER;
     }
 }

@@ -8,6 +8,7 @@ namespace Magento\Analytics\Test\Unit\Model\Connector\ResponseHandler;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp;
 use Magento\Analytics\Model\Subscription;
+use Magento\Analytics\Model\SubscriptionStatusProvider;
 
 /**
  * Class ReSignUpTest
@@ -25,7 +26,11 @@ class ReSignUpTest extends \PHPUnit_Framework_TestCase
         $subscription = $this->getMockBuilder(Subscription::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $reSignUpHandler = new ReSignUp($analyticsToken, $subscription);
+        $subscriptionStatusProvider = $this->getMockBuilder(SubscriptionStatusProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $subscriptionStatusProvider->method('getStatus')->willReturn(SubscriptionStatusProvider::ENABLED);
+        $reSignUpHandler = new ReSignUp($analyticsToken, $subscription, $subscriptionStatusProvider);
         $this->assertFalse($reSignUpHandler->handleResponse([]));
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
+use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\SignUpCommand;
 use Magento\Analytics\Model\AnalyticsToken;
@@ -106,7 +107,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->any())
             ->method('getConfigDataValue')
             ->willReturn($data['url']);
-        $this->integrationToken->expects($this->once())
+        $this->integrationToken->expects($this->any())
             ->method('getData')
             ->with('token')
             ->willReturn($data['integration-token']);
@@ -119,7 +120,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
                 $data['body']
             )
             ->willReturn($httpResponse);
-        $this->responseResolverMock->expects($this->once())
+        $this->responseResolverMock->expects($this->any())
             ->method('getResult')
             ->with($httpResponse)
             ->willReturn(true);
@@ -148,7 +149,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->httpClientMock->expects($this->once())
             ->method('request')
             ->willReturn($httpResponse);
-        $this->responseResolverMock->expects($this->once())
+        $this->responseResolverMock->expects($this->any())
             ->method('getResult')
             ->willReturn(false);
         $this->assertFalse($this->signUpCommand->execute());
@@ -165,7 +166,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             'url' => 'http://www.mystore.com',
             'access-token' => 'thisisaccesstoken',
             'integration-token' => 'thisisintegrationtoken',
-            'headers' => ['Content-Type: application/json'],
+            'headers' => [JsonConverter::CONTENT_TYPE_HEADER],
             'method' => \Magento\Framework\HTTP\ZendClient::POST,
             'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
         ];

@@ -12,25 +12,23 @@ use Magento\Analytics\Model\Connector\Http\JsonConverter;
  */
 class JsonConverterTest extends \PHPUnit_Framework_TestCase
 {
-    private $jsonApplicationHeader = 'Content-Type: application/json';
-
     public function testConverterContainsHeader()
     {
-        $converter = new JsonConverter($this->jsonApplicationHeader);
-        $this->assertEquals($this->jsonApplicationHeader, $converter->getContentTypeHeader());
+        $converter = new JsonConverter();
+        $this->assertEquals(JsonConverter::CONTENT_TYPE_HEADER, $converter->getContentTypeHeader());
     }
 
     public function testConvertBody()
     {
         $body = '{"token": "secret-token"}';
-        $converter = new JsonConverter($this->jsonApplicationHeader);
+        $converter = new JsonConverter();
         $this->assertEquals(json_decode($body, 1), $converter->fromBody($body));
     }
 
     public function testConvertData()
     {
         $data = ["token" => "secret-token"];
-        $converter = new JsonConverter($this->jsonApplicationHeader);
+        $converter = new JsonConverter();
         $this->assertEquals(json_encode($data), $converter->toBody($data));
     }
 }

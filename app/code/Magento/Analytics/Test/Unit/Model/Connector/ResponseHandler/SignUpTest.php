@@ -23,7 +23,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $analyticsToken->expects($this->once())
             ->method('storeToken')
             ->with($accessToken);
-        $signUpHandler = new SignUp($analyticsToken, new JsonConverter('Content-Type: application/json'));
+        $signUpHandler = new SignUp($analyticsToken, new JsonConverter());
         $this->assertFalse($signUpHandler->handleResponse([]));
         $this->assertEquals($accessToken, $signUpHandler->handleResponse(['access-token' => $accessToken]));
     }

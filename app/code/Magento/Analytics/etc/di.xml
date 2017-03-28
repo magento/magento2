@@ -148,11 +148,6 @@
     <type name="Magento\Config\Model\Config\Backend\Baseurl">
         <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
     </type>
-    <type name="Magento\Analytics\Model\Connector\Http\JsonConverter">
-        <arguments>
-            <argument name="contentTypeHeader" xsi:type="string">Content-Type: application/json</argument>
-        </arguments>
-    </type>
     <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
         <arguments>
             <argument name="responseHandlers" xsi:type="array">
@@ -186,9 +181,9 @@
             <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
         </arguments>
     </type>
-    <type name="Magento\Analytics\Model\Connector\UpdateCommand">
+    <type name="Magento\Analytics\Model\Connector\OTPRequest">
         <arguments>
-            <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
+            <argument name="responseResolver" xsi:type="object">OtpResponseResolver</argument>
         </arguments>
     </type>
 </config>

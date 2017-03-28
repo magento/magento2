@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector\Http\Client;
 
 use Magento\Analytics\Model\Connector\Http\ConverterInterface;
+use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 
 /**
@@ -106,7 +107,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
                     'version' => '1.1',
                     'body'=> ['name' => 'value'],
                     'url' => 'http://www.mystore.com',
-                    'headers' => ['Content-Type: application/json'],
+                    'headers' => [JsonConverter::CONTENT_TYPE_HEADER],
                     'method' => \Magento\Framework\HTTP\ZendClient::POST,
                 ]
             ]
@@ -160,6 +161,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
      */
     public function testRequestError(array $data)
     {
+        $response = new  \Zend_Http_Response(0, []);
         $this->curlMock->expects($this->once())
             ->method('write')
             ->with(
@@ -186,7 +188,8 @@ class CurlTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->assertFalse(
+        $this->assertEquals(
+            $response,
             $this->subject->request(
                 $data['method'],
                 $data['url'],
@@ -209,7 +212,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         });
         $converterMock->expects($this->any())
             ->method('getContentTypeHeader')
-            ->willReturn('Content-Type: application/json');
+            ->willReturn(JsonConverter::CONTENT_TYPE_HEADER);
         return $converterMock;
     }
 }
