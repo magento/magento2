@@ -9,8 +9,6 @@ use Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\AdminNotification\Model\InboxFactory;
-use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Cron\SignUp;
 use Magento\AdminNotification\Model\Inbox;
@@ -29,21 +27,6 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
      * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configWriterMock;
-
-    /**
-     * @var InboxFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inboxFactoryMock;
-
-    /**
-     * @var Inbox|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inboxMock;
-
-    /**
-     * @var InboxResource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inboxResourceMock;
 
     /**
      * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
@@ -68,17 +51,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->inboxFactoryMock =  $this->getMockBuilder(InboxFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inboxResourceMock =  $this->getMockBuilder(InboxResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inboxMock =  $this->getMockBuilder(Inbox::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
@@ -88,8 +61,6 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->signUp = new SignUp(
             $this->connectorMock,
             $this->configWriterMock,
-            $this->inboxFactoryMock,
-            $this->inboxResourceMock,
             $this->flagManagerMock,
             $this->reinitableConfigMock
         );
@@ -140,14 +111,6 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->flagManagerMock->expects($this->once())
             ->method('deleteFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
-        $this->inboxFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->inboxMock);
-        $this->inboxMock->expects($this->once())
-            ->method('addNotice');
-        $this->inboxResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->inboxMock);
         $this->assertFalse($this->signUp->execute());
     }
 
