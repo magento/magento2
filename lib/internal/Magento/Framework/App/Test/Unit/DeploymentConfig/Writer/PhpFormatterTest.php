@@ -70,8 +70,8 @@ return array (
     ),
   ),
   /**
-   * comment for namespace 2
    * For the section: ns2
+   * comment for namespace 2
    */
   'ns2' => 
   array (
@@ -89,8 +89,8 @@ TEXT;
 <?php
 return array (
   /**
-   * comment for' namespace 1
    * For the section: ns1
+   * comment for' namespace 1
    */
   'ns1' => 
   array (
@@ -106,9 +106,9 @@ return array (
     ),
   ),
   /**
+   * For the section: ns2
    * comment for namespace 2.
    * Next comment for' namespace 2
-   * For the section: ns2
    */
   'ns2' => 
   array (
@@ -118,13 +118,13 @@ return array (
     ),
   ),
   /**
-   * comment for" namespace 3
    * For the section: ns3
+   * comment for" namespace 3
    */
   'ns3' => 'just text',
   /**
-   * comment for namespace 4
    * For the section: ns4
+   * comment for namespace 4
    */
   'ns4' => 'just text'
 );
