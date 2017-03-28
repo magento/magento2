@@ -316,22 +316,24 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            try {
-                $value = $this->unserializeJsonValue($optionValue);
+            if ($optionValue !== 'null') {
+                $value = $this->serializer->unserialize($optionValue);
+                if ($value !== null) {
+                    $customOptionUrlParams = $this->getCustomOptionUrlParams()
+                        ? $this->getCustomOptionUrlParams()
+                        : [
+                            'id' => $this->getConfigurationItemOption()->getId(),
+                            'key' => $value['secret_key']
+                        ];
 
-                $customOptionUrlParams = $this->getCustomOptionUrlParams() ? $this->getCustomOptionUrlParams() : [
-                    'id' => $this->getConfigurationItemOption()->getId(),
-                    'key' => $value['secret_key']
-                ];
+                    $value['url'] = ['route' => $this->_customOptionDownloadUrl, 'params' => $customOptionUrlParams];
 
-                $value['url'] = ['route' => $this->_customOptionDownloadUrl, 'params' => $customOptionUrlParams];
-
-                $this->_formattedOptionValue = $this->_getOptionHtml($value);
-                $this->getConfigurationItemOption()->setValue($this->serializer->serialize($value));
-                return $this->_formattedOptionValue;
-            } catch (\Exception $e) {
-                return $optionValue;
+                    $this->_formattedOptionValue = $this->_getOptionHtml($value);
+                    $this->getConfigurationItemOption()->setValue($this->serializer->serialize($value));
+                    return $this->_formattedOptionValue;
+                }
             }
+            return $optionValue;
         }
         return $this->_formattedOptionValue;
     }
@@ -402,16 +404,17 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getEditableOptionValue($optionValue)
     {
-        try {
-            $value = $this->unserializeJsonValue($optionValue);
-            return sprintf(
-                '%s [%d]',
-                $this->_escaper->escapeHtml($value['title']),
-                $this->getConfigurationItemOption()->getId()
-            );
-        } catch (\Exception $e) {
-            return $optionValue;
+        if ($optionValue !== 'null') {
+            $unserializedValue = $this->serializer->unserialize($optionValue);
+            if ($unserializedValue !== null) {
+                return sprintf(
+                    '%s [%d]',
+                    $this->_escaper->escapeHtml($unserializedValue['title']),
+                    $this->getConfigurationItemOption()->getId()
+                );
+            }
         }
+        return $optionValue;
     }
 
     /**
@@ -431,15 +434,14 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if (preg_match('/\[([0-9]+)\]/', $optionValue, $matches)) {
             $confItemOptionId = $matches[1];
             $option = $this->_itemOptionFactory->create()->load($confItemOptionId);
-            try {
-                $this->unserializeJsonValue($option->getValue());
-                return $option->getValue();
-            } catch (\Exception $e) {
-                return null;
+            if ($option->getValue() !== 'null') {
+                $unserializedValue = $this->serializer->unserialize($option->getValue());
+                if ($unserializedValue !== null) {
+                    return $option->getValue();
+                }
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -467,11 +469,13 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function prepareOptionValueForRequest($optionValue)
     {
-        try {
-            return $this->unserializeJsonValue($optionValue);
-        } catch (\Exception $e) {
-            return null;
+        if ($optionValue !== 'null') {
+            $unserializedValue = $this->serializer->unserialize($optionValue);
+            if ($unserializedValue !== null) {
+                return $unserializedValue;
+            }
         }
+        return null;
     }
 
     /**

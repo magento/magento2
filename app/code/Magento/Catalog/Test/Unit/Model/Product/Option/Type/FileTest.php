@@ -288,12 +288,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testGetEditableOptionValueInvalid()
     {
         $fileObject = $this->getFileObject();
-        $optionTitle = 'Option Title';
-        $optionValue = json_encode(['title' => $optionTitle]);
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->with($optionValue)
-            ->willThrowException(new SerializationException(__('Invalid JSON value.')));
+        $optionValue = '#invalid jSoN*(&@#^$(*&';
         $this->escaper->expects($this->never())
             ->method('escapeHtml');
 
