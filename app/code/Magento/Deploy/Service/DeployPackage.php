@@ -201,23 +201,15 @@ class DeployPackage
      */
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
-        return !$this->checkIfFileBelongsToPackage($file, $package)
-        && $parentPackage && $parentPackage !== $package
-        && ($parentFile = $parentPackage->getFile($file->getFileId()))
-        && !$this->checkIfFileBelongsToPackage($parentFile, $parentPackage)
+        return $parentPackage
+        && $file->getOrigPackage() !== $package
+        && (
+            $file->getArea() !== $package->getArea()
+            || $file->getTheme() !== $package->getTheme()
+            || $file->getLocale() !== $package->getLocale()
+        )
+        && $file->getOrigPackage() == $parentPackage
         && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
-    }
-
-    /**
-     * @param PackageFile $file
-     * @param Package $package
-     * @return bool
-     */
-    private function checkIfFileBelongsToPackage(PackageFile $file, Package $package)
-    {
-        return $package->getArea() === $file->getArea()
-        && $package->getTheme() === $file->getTheme()
-        && $package->getLocale() === $file->getLocale();
     }
 
     /**

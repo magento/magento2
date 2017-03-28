@@ -91,7 +91,7 @@ class Less implements ProcessorInterface
             $files = $package->getParentFiles('less');
             foreach ($files as $file) {
                 $packageFile = $package->getFile($file->getFileId());
-                if ($packageFile && $packageFile->getPackage() === $package) {
+                if ($packageFile && $packageFile->getOrigPackage() === $package) {
                     continue;
                 }
                 $deployFileName = $this->fileNameResolver->resolve($file->getFileName());

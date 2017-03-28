@@ -21,6 +21,11 @@ class PackageFile extends Asset
     private $package;
 
     /**
+     * @var Package
+     */
+    private $origPackage;
+
+    /**
      * @var string
      */
     private $deployedFileName;
@@ -42,6 +47,9 @@ class PackageFile extends Asset
     public function setPackage(Package $package)
     {
         $this->package = $package;
+        if ($this->origPackage === null) {
+            $this->origPackage = $package;
+        }
 
         $package->addFile($this);
         $package->addFileToMap($this);
@@ -55,6 +63,14 @@ class PackageFile extends Asset
     public function getPackage()
     {
         return $this->package;
+    }
+
+    /**
+     * @return Package
+     */
+    public function getOrigPackage()
+    {
+        return $this->origPackage;
     }
 
     /**
