@@ -11,26 +11,15 @@ use Magento\Framework\DB\Ddl\Table;
 class SequenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Sequence
-     */
-    private $model;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        $this->model = new Sequence();
-    }
-
-    /**
      * @param array $params
+     * @param string $engine
      * @param string $expectedQuery
      * @dataProvider createSequenceDdlDataProvider
      */
-    public function testGetCreateSequenceDdl(array $params, $expectedQuery)
+    public function testGetCreateSequenceDdl(array $params, $engine, $expectedQuery)
     {
-        $actualQuery = call_user_func_array([$this->model, 'getCreateSequenceDdl'], $params);
+        $model = new Sequence($engine);
+        $actualQuery = call_user_func_array([$model, 'getCreateSequenceDdl'], $params);
 
         $cleanString = function ($string) {
             return trim(preg_replace('/\s+/', ' ', $string));
@@ -57,6 +46,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
                 [
                     'name' => 'someName'
                 ],
+                null,
                 'CREATE TABLE someName (
                      sequence_value integer UNSIGNED NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
@@ -67,9 +57,9 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
                     'name' => 'someName',
                     'startNumber' => 123,
                     'columnType' => Table::TYPE_BIGINT,
-                    'unsigned' => false,
-                    'dbEngine' => 'someEngine'
+                    'unsigned' => false
                 ],
+                'someEngine',
                 'CREATE TABLE someName (
                      sequence_value bigint NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
