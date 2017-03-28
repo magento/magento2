@@ -55,6 +55,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\SimpleProductsAssert::class);
         $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\ConfigurableProductsAssert::class);
         $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\BundleProductsAssert::class);
+        $this->entityAsserts[] = $this->objectManager->get(FixturesAsserts\ImagesAssert::class);
 
         foreach ($this->objectManager->get(Config::class)->getIndexers() as $indexerId) {
             $indexer = $this->indexerRegistry->get($indexerId['indexer_id']);
