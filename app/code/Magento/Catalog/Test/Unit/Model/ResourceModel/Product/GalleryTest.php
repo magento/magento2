@@ -317,7 +317,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $attributeId = 6;
         $getTableReturnValue = 'table';
         $quoteInfoReturnValue =
-            'main.value_id = value.value_id AND value.store_id = ' . $storeId;
+            'main.value_id = value.value_id AND value.store_id = ' . $storeId
+            . ' AND value.entity_id = entity.entity_id';
+        $quoteDefaultInfoReturnValue =
+            'main.value_id = default_value.value_id AND default_value.store_id = 0'
+            . ' AND default_value.entity_id = entity.entity_id';
+
         $positionCheckSql = 'testchecksql';
         $resultRow = [
             [
@@ -373,7 +378,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->select->expects($this->at(3))->method('joinLeft')->with(
             ['default_value' => $getTableReturnValue],
-            'main.value_id = default_value.value_id AND default_value.store_id = 0',
+            $quoteDefaultInfoReturnValue,
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->willReturnSelf();
         $this->select->expects($this->at(4))->method('where')->with(
