@@ -7,8 +7,6 @@ namespace Magento\Framework\MessageQueue\Bulk;
 
 /**
  * Factory class for @see \Magento\Framework\MessageQueue\Bulk\ExchangeInterface
- *
- * @api
  */
 interface ExchangeFactoryInterface
 {
