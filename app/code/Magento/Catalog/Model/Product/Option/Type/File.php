@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Exception as ProductException;
@@ -316,7 +317,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         if ($this->_formattedOptionValue === null) {
             try {
-                $value = $this->serializer->unserialize($optionValue);
+                $value = $this->unserializeJsonValue($optionValue);
 
                 $customOptionUrlParams = $this->getCustomOptionUrlParams() ? $this->getCustomOptionUrlParams() : [
                     'id' => $this->getConfigurationItemOption()->getId(),
@@ -402,7 +403,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getEditableOptionValue($optionValue)
     {
         try {
-            $value = $this->serializer->unserialize($optionValue);
+            $value = $this->unserializeJsonValue($optionValue);
             return sprintf(
                 '%s [%d]',
                 $this->_escaper->escapeHtml($value['title']),
@@ -431,13 +432,30 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $confItemOptionId = $matches[1];
             $option = $this->_itemOptionFactory->create()->load($confItemOptionId);
             try {
-                $this->serializer->unserialize($option->getValue());
+                $this->unserializeJsonValue($option->getValue());
                 return $option->getValue();
             } catch (\Exception $e) {
                 return null;
             }
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Validate Json serialized value
+     *
+     * @param string $jsonValue - JSON serialized value
+     * @return mixed
+     * @throws SerializationException
+     */
+    private function unserializeJsonValue($jsonValue)
+    {
+        $value = $this->serializer->unserialize($jsonValue);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $value;
+        } else {
+            throw new SerializationException(__('Invalid JSON value.'));
         }
     }
 
@@ -450,8 +468,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function prepareOptionValueForRequest($optionValue)
     {
         try {
-            $result = $this->serializer->unserialize($optionValue);
-            return $result;
+            return $this->unserializeJsonValue($optionValue);
         } catch (\Exception $e) {
             return null;
         }
