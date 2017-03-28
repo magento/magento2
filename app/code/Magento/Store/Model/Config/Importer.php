@@ -7,12 +7,12 @@ namespace Magento\Store\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\ResourceModel\Website;
 
 /**
  * Imports stores, websites and groups from transmitted data.
@@ -43,7 +43,7 @@ class Importer implements ImporterInterface
     /**
      * The resource of transaction.
      *
-     * @var ResourceConnection
+     * @var Website
      */
     private $resource;
 
@@ -59,14 +59,14 @@ class Importer implements ImporterInterface
      * @param ProcessorFactory $processFactory The factory for processes
      * @param StoreManagerInterface $storeManager The manager for operations with store
      * @param CacheInterface $cacheManager The application cache manager
-     * @param ResourceConnection $resource The resource of transaction
+     * @param Website $resource The resource of transaction
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
         ProcessorFactory $processFactory,
         StoreManagerInterface $storeManager,
         CacheInterface $cacheManager,
-        ResourceConnection $resource
+        Website $resource
     ) {
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->processFactory = $processFactory;
@@ -100,23 +100,33 @@ class Importer implements ImporterInterface
                 );
             }
 
-            $this->resource->getConnection()->beginTransaction();
+            $this->resource->beginTransaction();
 
             foreach ($actions as $action) {
                 $this->processFactory->create($action)->run($data);
             }
-
-            $this->resource->getConnection()->commit();
         } catch (\Exception $exception) {
-            $this->resource->getConnection()->rollBack();
+            $this->resource->rollBack();
+            $this->reinitStores();
 
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);
-        } finally {
-            $this->storeManager->reinitStores();
-            $this->cacheManager->clean();
         }
 
+        $this->resource->commit();
+        $this->reinitStores();
+
         return $messages;
+    }
+
+    /**
+     * Reinitialize store list.
+     *
+     * @return void
+     */
+    private function reinitStores()
+    {
+        $this->storeManager->reinitStores();
+        $this->cacheManager->clean();
     }
 
     /**
