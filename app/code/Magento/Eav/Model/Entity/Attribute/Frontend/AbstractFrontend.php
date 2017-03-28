@@ -120,8 +120,6 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
         } elseif ($this->getConfigField('input') == 'multiselect') {
             if (is_array($value)) {
                 $value = implode(', ', array_map([$this, 'getOption'], $value));
-            } else {
-                $value = $this->getOption($value);
             }
         }
 
