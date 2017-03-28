@@ -76,7 +76,7 @@ class SubscriptionStatusProvider
      */
     public function getStatus()
     {
-        $isSubscriptionEnabledInConfig = $this->scopeConfig->getValue('default/analytics/subscription/enabled');
+        $isSubscriptionEnabledInConfig = $this->scopeConfig->getValue('analytics/subscription/enabled');
         if ($isSubscriptionEnabledInConfig) {
             return $this->getStatusForEnabledSubscription();
         }

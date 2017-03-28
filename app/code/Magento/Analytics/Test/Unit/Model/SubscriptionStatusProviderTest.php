@@ -77,7 +77,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('default/analytics/subscription/enabled')
+            ->with('analytics/subscription/enabled')
             ->willReturn(true);
 
         $this->expectFlagCounterReturn(null);
@@ -91,7 +91,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('default/analytics/subscription/enabled')
+            ->with('analytics/subscription/enabled')
             ->willReturn(true);
 
         $this->expectFlagCounterReturn(45);
@@ -105,7 +105,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('default/analytics/subscription/enabled')
+            ->with('analytics/subscription/enabled')
             ->willReturn(true);
         $this->assertEquals(SubscriptionStatusProvider::ENABLED, $this->statusProvider->getStatus());
     }
@@ -114,7 +114,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('default/analytics/subscription/enabled')
+            ->with('analytics/subscription/enabled')
             ->willReturn(false);
         $this->assertEquals(SubscriptionStatusProvider::DISABLED, $this->statusProvider->getStatus());
     }
