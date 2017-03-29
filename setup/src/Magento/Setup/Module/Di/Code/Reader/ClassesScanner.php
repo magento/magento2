@@ -42,7 +42,6 @@ class ClassesScanner implements ClassesScannerInterface
         $this->generationDirectory = $directoryList->getPath(DirectoryList::GENERATION);
     }
 
-
     /**
      * Adds exclude patterns
      *
