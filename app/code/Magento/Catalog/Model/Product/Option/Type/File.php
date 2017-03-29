@@ -445,23 +445,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     }
 
     /**
-     * Validate Json serialized value
-     *
-     * @param string $jsonValue - JSON serialized value
-     * @return mixed
-     * @throws SerializationException
-     */
-    private function unserializeJsonValue($jsonValue)
-    {
-        $value = $this->serializer->unserialize($jsonValue);
-        if (json_last_error() === JSON_ERROR_NONE) {
-            return $value;
-        } else {
-            throw new SerializationException(__('Invalid JSON value.'));
-        }
-    }
-
-    /**
      * Prepare option value for info buy request
      *
      * @param string $optionValue
