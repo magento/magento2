@@ -5,7 +5,7 @@
  */
 namespace Magento\Signifyd\Plugin;
 
-use Magento\Framework\Registry;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
 
@@ -22,40 +22,29 @@ class PaymentPlugin
     private $guaranteeCancelingService;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @param GuaranteeCancelingServiceInterface $guaranteeCancelingService
-     * @param Registry $registry
      */
     public function __construct(
-        GuaranteeCancelingServiceInterface $guaranteeCancelingService,
-        Registry $registry
+        GuaranteeCancelingServiceInterface $guaranteeCancelingService
     ) {
         $this->guaranteeCancelingService = $guaranteeCancelingService;
-        $this->registry = $registry;
     }
 
     /**
      * Performs Signifyd guarantee cancel operation after payment denying.
      *
      * @see MethodInterface::denyPayment
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param MethodInterface $subject
      * @param MethodInterface|bool $result
-     * @return MethodInterface|bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param InfoInterface $payment
+     * @return bool|MethodInterface
      */
-    public function afterDenyPayment(MethodInterface $subject, $result)
+    public function afterDenyPayment(MethodInterface $subject, $result, InfoInterface $payment)
     {
-        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
-        $order = $this->registry->registry('current_order');
-
-        if ($this->isPaymentDenied($order->getPayment(), $result)) {
-            $this->guaranteeCancelingService->cancelForOrder(
-                $order->getEntityId()
-            );
+        if ($this->isPaymentDenied($payment, $result)) {
+            $this->guaranteeCancelingService->cancelForOrder($payment->getParentId());
         }
 
         return $result;
@@ -67,7 +56,7 @@ class PaymentPlugin
      * Result not false check for payment methods using AbstractMethod.
      * Transaction is closed check for payment methods using Gateway.
      *
-     * @param \Magento\Sales\Api\Data\OrderPaymentInterface $payment
+     * @param InfoInterface $payment
      * @param MethodInterface $result
      * @return bool
      */
