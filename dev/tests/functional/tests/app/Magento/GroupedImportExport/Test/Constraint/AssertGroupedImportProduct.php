@@ -20,6 +20,7 @@ class AssertGroupedImportProduct extends AssertImportProduct
      * @var string
      */
     protected $productType = 'grouped';
+
     /**
      * Needed grouped product data.
      *
