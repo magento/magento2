@@ -14,7 +14,7 @@ class System extends Base
     /**
      * @var string
      */
-    protected $fileName = '/var/log/system.log';
+    protected $fileName = 'system.log';
 
     /**
      * @var int
@@ -30,14 +30,16 @@ class System extends Base
      * @param DriverInterface $filesystem
      * @param Exception $exceptionHandler
      * @param string $filePath
+     * @param string $fileDirectory
      */
     public function __construct(
         DriverInterface $filesystem,
         Exception $exceptionHandler,
-        $filePath = null
+        $filePath = null,
+        $fileDirectory = null
     ) {
         $this->exceptionHandler = $exceptionHandler;
-        parent::__construct($filesystem, $filePath);
+        parent::__construct($filesystem, $filePath, $fileDirectory);
     }
 
     /**

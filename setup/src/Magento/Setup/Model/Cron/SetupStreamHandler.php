@@ -26,11 +26,13 @@ class SetupStreamHandler extends \Magento\Framework\Logger\Handler\Base
     /**
      * @param DriverInterface $filesystem
      * @param string $filePath
+     * @param string $fileDirectory
      */
     public function __construct(
         DriverInterface $filesystem,
-        $filePath = null
+        $filePath = null,
+        $fileDirectory = null
     ) {
-        parent::__construct($filesystem, $filePath);
+        parent::__construct($filesystem, $filePath, $fileDirectory);
     }
 }

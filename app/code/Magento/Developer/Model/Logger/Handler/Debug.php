@@ -37,15 +37,17 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
      * @param ScopeConfigInterface $scopeConfig
      * @param DeploymentConfig $deploymentConfig
      * @param string $filePath
+     * @param string $fileDirectory
      */
     public function __construct(
         DriverInterface $filesystem,
         State $state,
         ScopeConfigInterface $scopeConfig,
         DeploymentConfig $deploymentConfig,
-        $filePath = null
+        $filePath = null,
+        $fileDirectory = null
     ) {
-        parent::__construct($filesystem, $filePath);
+        parent::__construct($filesystem, $filePath, $fileDirectory);
 
         $this->state = $state;
         $this->scopeConfig = $scopeConfig;

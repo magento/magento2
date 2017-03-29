@@ -13,7 +13,7 @@ class Debug extends Base
     /**
      * @var string
      */
-    protected $fileName = '/var/log/debug.log';
+    protected $fileName = 'debug.log';
 
     /**
      * @var int

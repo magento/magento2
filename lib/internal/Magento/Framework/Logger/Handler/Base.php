@@ -13,6 +13,13 @@ use Monolog\Logger;
 
 class Base extends StreamHandler
 {
+    const DEFAULT_LOG_DIRECTORY = '/var/log';
+
+    /**
+     * @var string
+     */
+    protected $fileDirectory;
+
     /**
      * @var string
      */
@@ -30,15 +37,18 @@ class Base extends StreamHandler
 
     /**
      * @param DriverInterface $filesystem
-     * @param string $filePath
+     * @param string $filePath Full path to the log file
+     * @param string $fileDirectory Directory relative to the Magento root directory
      */
     public function __construct(
         DriverInterface $filesystem,
-        $filePath = null
+        $filePath = null,
+        $fileDirectory = null
     ) {
         $this->filesystem = $filesystem;
+        $this->fileDirectory = $fileDirectory;
         parent::__construct(
-            $filePath ? $filePath . $this->fileName : BP . $this->fileName,
+            $filePath ? $filePath : BP . self::DEFAULT_LOG_DIRECTORY . $this->fileDirectory . DIRECTORY_SEPARATOR . $this->fileName,
             $this->loggerType
         );
         $this->setFormatter(new LineFormatter(null, null, true));
