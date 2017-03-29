@@ -10,6 +10,7 @@ use Magento\Analytics\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -96,7 +97,7 @@ class Activate extends Action
             if ($this->getRequest()->getParam($this->subscriptionApprovedField)) {
                 $configValue = $this->preparedValueFactory->create(
                     Enabled::XML_ENABLED_CONFIG_STRUCTURE_PATH,
-                    Enabled::YES_VALUE,
+                    Enabledisable::ENABLE_VALUE,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null
                 );

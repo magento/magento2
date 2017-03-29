@@ -26,11 +26,6 @@ class Enabled extends Value
     const XML_ENABLED_CONFIG_STRUCTURE_PATH = 'analytics/general/enabled';
 
     /**
-     * Value which equal Yes for Yesno dropdown.
-     */
-    const YES_VALUE = 1;
-
-    /**
      * Service for processing of activation/deactivation MBI subscription.
      *
      * @var SubscriptionHandler
