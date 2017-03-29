@@ -71,14 +71,16 @@ class PreparedValueFactory
     {
         /** @var Structure $structure */
         $structure = $this->structureFactory->create();
-        /** @var Structure\ElementInterface $field */
-        $field = $this->deploymentConfig->isAvailable()
-            ? $structure->getElement($path)
-            : null;
-        /** @var ValueInterface $backendModel */
-        $backendModel = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-            ? $field->getBackendModel()
-            : $this->valueFactory->create();
+        $field = null;
+        $backendModel = $this->valueFactory->create();
+        if ($this->deploymentConfig->isAvailable()) {
+            /** @var Structure\ElementInterface $field */
+            $field = $structure->getElement($path);
+            if ($field instanceof Structure\Element\Field && $field->hasBackendModel()) {
+                $backendModel = $field->getBackendModel();
+                $path = $field->getConfigPath() ?: $path;
+            }
+        }
 
         if ($backendModel instanceof Value) {
             $backendModel->setPath($path);

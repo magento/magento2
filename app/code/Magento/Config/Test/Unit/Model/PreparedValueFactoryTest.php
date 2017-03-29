@@ -123,6 +123,9 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($field['getBackendModel']['expects'])
             ->method('getBackendModel')
             ->willReturn($this->valueMock);
+        $this->fieldMock->expects($this->any())
+            ->method('getConfigPath')
+            ->willReturn(false);
         $this->valueFactoryMock->expects($valueFactory['expects'])
             ->method('create')
             ->willReturn($this->valueMock);
@@ -174,7 +177,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                     ],
                     'getBackendModel' => ['expects' => $this->once()]
                 ],
-                'valueFactory' => ['expects' => $this->never()]
+                'valueFactory' => ['expects' => $this->once()]
             ],
             [
                 'deploymentConfigIsAvailable' => ['return' => true],
