@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Bulk;
@@ -31,7 +31,7 @@ interface OperationInterface
     const STATUS_TYPE_NOT_RETRIABLY_FAILED = 3;
     const STATUS_TYPE_OPEN = 4;
     /**#@-*/
-    
+
     /**
      * Operation id
      *
