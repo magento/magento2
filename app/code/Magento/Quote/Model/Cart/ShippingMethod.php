@@ -227,7 +227,6 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
         return $this->setData(self::KEY_PRICE_EXCL_TAX, $priceExclTax);
     }
 
-
     /**
      * {@inheritdoc}
      *

@@ -68,6 +68,22 @@ interface GroupInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setName($name);
 
     /**
+     * Retrieves group code.
+     * Group code is a unique field.
+     *
+     * @return string
+     */
+    public function getCode();
+
+    /**
+     * Sets group code.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code);
+
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Store\Api\Data\GroupExtensionInterface|null

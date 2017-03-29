@@ -61,7 +61,6 @@ class UpdateProductOptionsObserver implements ObserverInterface
 
         // if the Weee module is enabled, then only do processing on bundle products
         if ($this->weeeData->isEnabled() && $product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-
             if ($this->taxData->priceIncludesTax() && $this->taxData->displayPriceExcludingTax()) {
                 // the Tax module might have set up a default, but we will re-decide which calcPrice field to use
                 unset($options['optionTemplate']);

@@ -19,7 +19,7 @@ namespace Magento\Backend\Model\View\Layout;
  *         </argument>
  *     </arguments>
  * </type>
- * 
+ *
  * Registered condition can be used by ui component declaration in layout
  *
  * <uiComponent name="form" condition="condition::identifier" />

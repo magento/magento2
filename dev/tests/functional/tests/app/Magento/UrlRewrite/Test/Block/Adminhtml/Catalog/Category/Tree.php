@@ -6,10 +6,9 @@
 
 namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
 
-
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Categories tree block.

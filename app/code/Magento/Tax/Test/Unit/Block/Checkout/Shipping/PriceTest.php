@@ -5,7 +5,6 @@
  */
 namespace Magento\Tax\Test\Unit\Block\Checkout\Shipping;
 
-
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**

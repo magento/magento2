@@ -206,10 +206,10 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\');
+        return ltrim(parent::getNamespaceName(), '\\') ?: null;
     }
 }

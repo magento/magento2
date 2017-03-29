@@ -5,11 +5,11 @@
  */
 namespace Magento\Review\Controller\Customer;
 
-use Magento\Review\Controller\Customer as CustomerController;
-use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Review\Model\ReviewFactory;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Controller\Customer as CustomerController;
+use Magento\Review\Model\ReviewFactory;
 
 class View extends CustomerController
 {
@@ -31,6 +31,7 @@ class View extends CustomerController
         $this->reviewFactory = $reviewFactory;
         parent::__construct($context, $customerSession);
     }
+
     /**
      * Render review details
      *

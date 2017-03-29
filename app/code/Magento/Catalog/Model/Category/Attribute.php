@@ -324,6 +324,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     {
         return $this->setData(self::IS_VISIBLE, $isVisible);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that customer login error message is displayed.
@@ -17,7 +17,7 @@ class AssertCustomerLoginErrorMessage extends AbstractConstraint
     /**
      * Customer login error message.
      */
-    const ERROR_MESSAGE = 'Invalid login or password.';
+    const ERROR_MESSAGE = 'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Assert that customer login error message is displayed.

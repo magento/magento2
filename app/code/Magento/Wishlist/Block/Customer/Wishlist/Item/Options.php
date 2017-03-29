@@ -111,11 +111,9 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
                         foreach ($option['value'] as $key => $value) {
                             $option['value'][$key] = $this->escapeHtml($value);
                         }
-
                     } else {
                         $option['value'] = $this->escapeHtml($option['value']);
                     }
-
                 }
                 $options[$index]['value'] = $option['value'];
             }

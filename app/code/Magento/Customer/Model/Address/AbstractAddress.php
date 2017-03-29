@@ -7,10 +7,10 @@
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
@@ -25,6 +25,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method int getCountryId()
  * @method string getCity()
  * @method string getTelephone()
+ * @method string getCompany()
+ * @method string getFax()
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -579,9 +581,22 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'city']);
         }
 
-        if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
+        if ($this->isTelephoneRequired()) {
+            if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
+            }
+        }
 
+        if ($this->isFaxRequired()) {
+            if (!\Zend_Validate::is($this->getFax(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'fax']);
+            }
+        }
+
+        if ($this->isCompanyRequired()) {
+            if (!\Zend_Validate::is($this->getCompany(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'company']);
+            }
         }
 
         $_havingOptionalZip = $this->_directoryData->getCountriesWithOptionalZip();
@@ -639,5 +654,29 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function unsRegion()
     {
         return $this->unsetData("region");
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isCompanyRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'company')->getIsRequired());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTelephoneRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isFaxRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'fax')->getIsRequired());
     }
 }

@@ -30,7 +30,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     const KEY_SECURE_BASE_STATIC_URL = 'secure_base_static_url';
     const KEY_SECURE_BASE_MEDIA_URL = 'secure_base_media_url';
 
-
     /**
      * Get store id
      *

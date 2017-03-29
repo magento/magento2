@@ -121,7 +121,6 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 } else {
                     $object->setData($attributeCode, $data);
                 }
-
             }
         }
         return $this;

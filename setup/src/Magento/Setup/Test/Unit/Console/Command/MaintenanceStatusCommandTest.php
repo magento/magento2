@@ -39,7 +39,6 @@ class MaintenanceStatusCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertEquals($expectedMessage, $tester->getDisplay());
-
     }
 
     /**

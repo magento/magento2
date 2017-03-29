@@ -5,7 +5,6 @@
  */
 namespace Magento\ProductAlert\Block\Email;
 
-
 /**
  * ProductAlert email back in stock grid
  *

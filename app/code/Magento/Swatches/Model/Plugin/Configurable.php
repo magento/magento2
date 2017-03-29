@@ -5,7 +5,6 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 
@@ -56,8 +55,7 @@ class Configurable
             $entityType = $result->getEntity()->getType();
             foreach ($this->eavConfig->getEntityAttributeCodes($entityType) as $code) {
                 $attribute = $this->eavConfig->getAttribute($entityType, $code);
-                if (
-                    $attribute->getData('additional_data')
+                if ($attribute->getData('additional_data')
                     && (
                         $this->swatchHelper->isVisualSwatch($attribute) || $this->swatchHelper->isTextSwatch($attribute)
                     )

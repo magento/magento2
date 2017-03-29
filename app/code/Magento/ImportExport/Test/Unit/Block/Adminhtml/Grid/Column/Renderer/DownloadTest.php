@@ -22,7 +22,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download
      */
-     protected $download;
+    protected $download;
 
     /**
      * Set up

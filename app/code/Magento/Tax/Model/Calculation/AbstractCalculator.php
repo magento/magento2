@@ -9,8 +9,8 @@ use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
 use Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
-use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
+use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation;
 
@@ -205,6 +205,7 @@ abstract class AbstractCalculator
     {
         $this->customerId = $customerId;
     }
+
     // @codeCoverageIgnoreEnd
 
     /**

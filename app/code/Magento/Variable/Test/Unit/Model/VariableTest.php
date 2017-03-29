@@ -81,7 +81,6 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setCode($code)->setName($name);
         $this->assertEquals($this->validationFailedPhrase, $this->model->validate());
-
     }
 
     /**
@@ -102,7 +101,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL',]
+            ['value' => 'VAL', 'label' => 'LBL']
         ];
 
         $transformedOptions = [
@@ -129,7 +128,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testGetVariablesOptionArrayWithGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL',]
+            ['value' => 'VAL', 'label' => 'LBL']
         ];
 
         $transformedOptions = [

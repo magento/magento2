@@ -7,8 +7,8 @@
 namespace Magento\CatalogRule\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
+use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\Calculator;
@@ -99,9 +99,9 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                         $this->product->getId()
                     );
                 $this->value = $this->value ? floatval($this->value) : false;
-                if ($this->value) {
-                    $this->value = $this->priceCurrency->convertAndRound($this->value);
-                }
+            }
+            if ($this->value) {
+                $this->value = $this->priceCurrency->convertAndRound($this->value);
             }
         }
 

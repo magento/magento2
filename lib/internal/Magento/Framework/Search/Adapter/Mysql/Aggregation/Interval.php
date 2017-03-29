@@ -14,6 +14,7 @@ class Interval implements IntervalInterface
      * Minimal possible value
      */
     const DELTA = 0.005;
+
     /**
      * @var Select
      */

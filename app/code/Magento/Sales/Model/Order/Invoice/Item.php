@@ -694,5 +694,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

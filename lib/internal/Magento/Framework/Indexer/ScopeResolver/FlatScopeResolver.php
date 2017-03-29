@@ -12,6 +12,7 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 class FlatScopeResolver implements IndexScopeResolverInterface
 {
     const SUFFIX_FLAT = '_flat';
+
     /**
      * @var IndexScopeResolver
      */

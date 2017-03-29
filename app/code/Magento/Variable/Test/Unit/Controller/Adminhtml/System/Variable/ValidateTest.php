@@ -121,7 +121,6 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         $this->validateMock->expects($this->any())
             ->method('_initVariable')
             ->willReturn($this->variableMock);
-
     }
 
     /**

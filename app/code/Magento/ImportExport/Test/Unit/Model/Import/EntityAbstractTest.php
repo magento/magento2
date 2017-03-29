@@ -76,7 +76,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
                 'max_data_size' => 1,
                 'bunch_size' => 1,
                 'collection_by_pages_iterator' => 'not_used',
-            ],
+            ]
         ];
 
         return $data;

@@ -61,7 +61,6 @@ class MenuBuilder
         if (!$this->searchFeatureConfig
             ->isFeatureSupported(ConfigInterface::SEARCH_ENGINE_FEATURE_SYNONYMS, $searchEngine)
         ) {
-
             // "Search Synonyms" feature is not supported by the current configured search engine.
             // Menu will be updated to remove it from the list
             $menu->remove(self::SEARCH_SYNONYMS_MENU_ITEM_ID);

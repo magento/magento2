@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

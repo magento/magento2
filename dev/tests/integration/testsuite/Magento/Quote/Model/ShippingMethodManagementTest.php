@@ -11,7 +11,6 @@ namespace Magento\Quote\Model;
  */
 class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
@@ -77,8 +76,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $result = $shippingEstimation->estimateByAddress($cartId, $address);
         $this->assertNotEmpty($result);
         $expectedResult = [
-            'tablerate' =>
-                [
+            'tablerate' => [
                     'method_code' => 'bestway',
                     'amount' => $tableRateAmount
                 ],

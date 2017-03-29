@@ -5,12 +5,12 @@
  */
 namespace Magento\Eav\Plugin\Model\ResourceModel\Entity;
 
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Cache\StateInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Attribute
 {
@@ -82,7 +82,7 @@ class Attribute
 
     /**
      * Check if cache is enabled
-     * 
+     *
      * @return bool
      */
     private function isCacheEnabled()

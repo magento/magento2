@@ -6,9 +6,9 @@
 namespace Magento\Weee\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
-use Magento\Store\Model\StoreManagerInterface;
 
 class WeeeConfigProvider implements ConfigProviderInterface
 {
@@ -85,7 +85,6 @@ class WeeeConfigProvider implements ConfigProviderInterface
         }
         return true;
     }
-
 
     /**
      * Whether to display final price that include Weee amounts

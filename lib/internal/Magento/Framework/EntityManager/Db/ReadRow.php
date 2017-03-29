@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\EntityManager\Db;
 
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class DeleteRow
@@ -49,7 +49,6 @@ class ReadRow
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-        $metadata = $this->metadataPool->getMetadata($entityType);
         $select = $connection->select()
             ->from(['t' => $metadata->getEntityTable()])
             ->where($metadata->getIdentifierField() . ' = ?', $identifier);

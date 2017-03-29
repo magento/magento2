@@ -115,7 +115,6 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                 && $this->getAttribute()->getAttributeCode() === 'price'
             )
             || $this->getElement()->getReadonly();
-
     }
 
     /**

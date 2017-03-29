@@ -13,6 +13,7 @@ class Resolver implements ResolverInterface
      * Default locale
      */
     const DEFAULT_LOCALE = 'en_US';
+
     /**
      * Default locale code
      *

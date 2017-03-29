@@ -53,7 +53,7 @@ class CartItemOptionsProcessor
             }
             if ($params instanceof \Magento\Framework\DataObject) {
                 $buyRequestUpdate->addData($params->getData());
-            } else if (is_numeric($params)) {
+            } elseif (is_numeric($params)) {
                 $buyRequestUpdate->setData('qty', $params);
             }
             return $buyRequestUpdate;

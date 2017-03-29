@@ -117,8 +117,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isRequired($login = null)
     {
-        if (
-            $this->isUserAuth()
+        if ($this->isUserAuth()
             && !$this->isShownToLoggedInUser()
             || !$this->isEnabled()
             || !in_array(
@@ -425,8 +424,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
             return true;
         }
 
-        if (
-            (string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
+        if ((string)$this->captchaData->getConfig('mode') == \Magento\Captcha\Helper\Data::MODE_AFTER_FAIL
             && $this->getAllowedAttemptsForSameLogin() == 0
         ) {
             return true;

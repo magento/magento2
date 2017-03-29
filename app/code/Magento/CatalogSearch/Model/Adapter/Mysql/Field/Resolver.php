@@ -16,6 +16,7 @@ class Resolver implements ResolverInterface
      * @var AttributeCollection
      */
     private $attributeCollection;
+
     /**
      * @var FieldFactory
      */

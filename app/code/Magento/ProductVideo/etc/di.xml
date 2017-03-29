@@ -53,4 +53,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="catalog/product_video/youtube_api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

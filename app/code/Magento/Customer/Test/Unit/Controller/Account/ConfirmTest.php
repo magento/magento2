@@ -314,8 +314,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
-
-
         $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()
             ->getMock();

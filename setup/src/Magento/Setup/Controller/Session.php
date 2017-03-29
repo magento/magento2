@@ -31,12 +31,12 @@ class Session extends \Zend\Mvc\Controller\AbstractActionController
 
     /**
      * No index action, return 404 error page
-     * 
+     *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new \Zend\View\Model\ViewModel();
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;

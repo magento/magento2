@@ -5,8 +5,8 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 
 class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
@@ -94,6 +94,5 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         ) || $this->_authorization->isAllowed(
             'Magento_TaxImportExport::import_export'
         );
-
     }
 }

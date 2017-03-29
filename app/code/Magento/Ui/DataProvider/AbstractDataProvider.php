@@ -5,8 +5,8 @@
  */
 namespace Magento\Ui\DataProvider;
 
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 abstract class AbstractDataProvider implements DataProviderInterface
 {
@@ -76,6 +76,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         return $this->collection;
     }
+
     /**
      * Get Data Provider name
      *
@@ -156,6 +157,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
             [$filter->getConditionType() => $filter->getValue()]
         );
     }
+
     /**
      * Returns search criteria
      *

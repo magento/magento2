@@ -7,10 +7,8 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\OrderRepository;
-use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Framework\Api\SortOrder;
+use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
  * Class OrderRepositoryTest

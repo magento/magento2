@@ -6,9 +6,9 @@
 
 namespace Magento\Ui\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Page\PageFactory;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
@@ -161,7 +161,10 @@ class GridFullTextSearchTest extends Injectable
             $steps = [];
         }
         foreach ($steps as $step) {
-            $processStep = $this->objectManager->create($step, ['order' => $item]);
+            $products = $item->getEntityId()['products'];
+            $cart['data']['items'] = ['products' => $products];
+            $cart = $this->fixtureFactory->createByCode('cart', $cart);
+            $processStep = $this->objectManager->create($step, ['order' => $item, 'cart' => $cart]);
             $processStep->run();
         }
     }

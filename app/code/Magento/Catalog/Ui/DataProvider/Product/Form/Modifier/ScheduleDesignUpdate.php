@@ -57,8 +57,7 @@ class ScheduleDesignUpdate extends AbstractModifier
      */
     protected function customizeDateRangeField(array $meta)
     {
-        if (
-            $this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_FROM)
+        if ($this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_FROM)
             !== $this->getGroupCodeByField($meta, self::CODE_CUSTOM_DESIGN_TO)
         ) {
             return $meta;

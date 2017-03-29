@@ -97,8 +97,7 @@ class SystemPackage
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
 
-        if (
-            in_array(static::EDITION_ENTERPRISE, $systemPackages)
+        if (in_array(static::EDITION_ENTERPRISE, $systemPackages)
             && !in_array(static::EDITION_B2B, $systemPackages)
         ) {
             $result = array_merge($this->getAllowedB2BVersions($currentEE), $result);

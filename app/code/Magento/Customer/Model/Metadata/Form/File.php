@@ -9,12 +9,12 @@ namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Api\ArrayObjectSearch;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -127,7 +127,7 @@ class File extends AbstractData
                         $value[$fileKey] = $scopeData[$attrCode];
                     }
                 }
-            } else if (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
+            } elseif (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
                 /**
                  * This case is required by file uploader UI component
                  *

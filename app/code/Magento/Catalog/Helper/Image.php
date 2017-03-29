@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
@@ -432,7 +431,7 @@ class Image extends AbstractHelper
      *
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
@@ -543,7 +542,7 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */

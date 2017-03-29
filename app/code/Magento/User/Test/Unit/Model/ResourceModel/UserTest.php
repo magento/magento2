@@ -21,9 +21,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Model\User|\PHPUnit_framework_MockObject_MockObject */
     protected $userMock;
 
-    /** @var \Magento\Framework\Acl\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $aclCacheMock;
-
     /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
@@ -58,11 +55,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->aclCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -102,7 +94,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             \Magento\User\Model\ResourceModel\User::class,
             [
                 'resource' => $this->resourceMock,
-                'aclCache' => $this->aclCacheMock,
                 'roleFactory' => $this->roleFactoryMock,
                 'dateTime' => $this->dateTimeMock,
                 'aclDataCache' => $this->aclDataCacheMock,

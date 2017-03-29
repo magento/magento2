@@ -106,6 +106,5 @@ class InstallData implements InstallDataInterface
                 $conn->update($configDataTable, ['value' => $mapNew], $whereConfigId);
             }
         }
-
     }
 }

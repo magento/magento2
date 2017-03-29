@@ -146,13 +146,11 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-        } elseif (
-            $filter->getType() === FilterInterface::TYPE_TERM &&
+        } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
             in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
             $resultQuery = $this->processTermSelect($filter, $isNegation);
-        } elseif (
-            $filter->getType() === FilterInterface::TYPE_RANGE &&
+        } elseif ($filter->getType() === FilterInterface::TYPE_RANGE &&
             in_array($attribute->getBackendType(), ['decimal', 'int'], true)
         ) {
             $resultQuery = $this->processRangeNumeric($filter, $query, $attribute);

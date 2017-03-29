@@ -82,7 +82,7 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         $anonymizeIp = "";
         if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
-          $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
+            $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }
 
         return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
@@ -112,12 +112,6 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result[] = "ga('require', 'ec', 'ec.js');";
 
         foreach ($collection as $order) {
-            if ($order->getIsVirtual()) {
-                $address = $order->getBillingAddress();
-            } else {
-                $address = $order->getShippingAddress();
-            }
-
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
                     "ga('ec:addProduct', {

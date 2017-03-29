@@ -6,17 +6,18 @@
 
 namespace Magento\Contact\Helper;
 
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
-use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Contact base helper
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED = 'contact/contact/enabled';
+    const XML_PATH_ENABLED = ConfigInterface::XML_PATH_ENABLED;
 
     /**
      * Customer session
@@ -59,6 +60,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if enabled
      *
      * @return string|null
+     * @deprecated use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
      */
     public function isEnabled()
     {

@@ -230,6 +230,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
     }
+
     public function testCronScriptActionUpdaterFailed()
     {
         $this->cronScriptReadinessCheck->expects($this->once())->method('checkSetup')->willReturn(['success' => true]);

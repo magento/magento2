@@ -47,7 +47,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * Register affected products
-     * 
+     *
      * @param array $entityIds
      * @return void
      */

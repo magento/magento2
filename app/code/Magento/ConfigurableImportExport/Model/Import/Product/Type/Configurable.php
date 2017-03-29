@@ -16,7 +16,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Importing configurable products
- * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -770,7 +770,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $scope = $this->_entityModel->getRowScope($rowData);
                 if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) &&
                     !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
-
                     $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]])
                                         ? $newSku[$rowData[ImportProduct::COL_SKU]]
                                         : $oldSku[$rowData[ImportProduct::COL_SKU]];

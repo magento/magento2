@@ -1106,6 +1106,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::IS_REQUIRED, $isRequired);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1264,6 +1265,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::SOURCE_MODEL, $sourceModel);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

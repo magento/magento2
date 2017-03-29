@@ -7,7 +7,6 @@ namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Sales Quote Item Model
@@ -615,8 +614,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
-        } elseif (
-            $option instanceof \Magento\Framework\DataObject &&
+        } elseif ($option instanceof \Magento\Framework\DataObject &&
             !$option instanceof \Magento\Quote\Model\Quote\Item\Option
         ) {
             $option = $this->_itemOptionFactory->create()->setData(
@@ -1045,6 +1043,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

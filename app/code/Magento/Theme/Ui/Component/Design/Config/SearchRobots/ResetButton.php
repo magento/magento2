@@ -5,10 +5,10 @@
  */
 namespace Magento\Theme\Ui\Component\Design\Config\SearchRobots;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Form\Field;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ResetButton extends Field
 {
@@ -47,13 +47,15 @@ class ResetButton extends Field
     private function getRobotsDefaultCustomInstructions()
     {
         return trim((string)$this->scopeConfig->getValue(
-            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         ));
     }
 
     /**
      * Add js listener to reset button
      *
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function prepare()

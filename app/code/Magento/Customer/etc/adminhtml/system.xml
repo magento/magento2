@@ -232,6 +232,21 @@
                     <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Customer</backend_model>
                 </field>
+                <field id="telephone_show" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Telephone</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
+                <field id="company_show" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Company</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
+                <field id="fax_show" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Fax</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
             </group>
             <group id="startup" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Login Options</label>

@@ -3,18 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Phrase;
 
 /**
- * Deployment configuration writer to files: env.php, config.php (config.local.php, config.dist.php)
+ * Deployment configuration writer to files: env.php, config.php.
  */
 class Writer
 {
@@ -50,8 +49,6 @@ class Writer
     private $deploymentConfig;
 
     /**
-     * Constructor
-     *
      * @param Reader $reader
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
@@ -67,9 +64,9 @@ class Writer
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
-        $this->formatter = $formatter ?: new Writer\PhpFormatter();
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
+        $this->formatter = $formatter ?: new Writer\PhpFormatter();
     }
 
     /**
@@ -89,22 +86,36 @@ class Writer
     }
 
     /**
-     * Saves config
+     * Saves config in specified file.
+     * $pool option is deprecated since version 2.2.0.
      *
-     * @param array $data
-     * @param bool $override
-     * @param string $pool
-     * @param array $comments
+     * Usage:
+     * ```php
+     * saveConfig(
+     *      [
+     *          ConfigFilePool::APP_ENV => ['some' => 'value'],
+     *      ],
+     *      true,
+     *      null,
+     *      []
+     * )
+     * ```
+     *
+     * @param array $data The data to be saved
+     * @param bool $override Whether values should be overridden
+     * @param string $pool The file pool (deprecated)
+     * @param array $comments The array of comments
      * @return void
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {
         foreach ($data as $fileKey => $config) {
-            $paths = $pool ? $this->configFilePool->getPathsByPool($pool) : $this->configFilePool->getPaths();
+            $paths = $this->configFilePool->getPaths();
 
             if (isset($paths[$fileKey])) {
-                $currentData = $this->reader->loadConfigFile($fileKey, $paths[$fileKey], true);
+                $currentData = $this->reader->load($fileKey);
                 if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);

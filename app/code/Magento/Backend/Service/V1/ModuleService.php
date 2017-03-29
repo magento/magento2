@@ -15,6 +15,7 @@ class ModuleService implements ModuleServiceInterface
      * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $moduleList;
+
     /**
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      */

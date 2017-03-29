@@ -139,8 +139,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 /** @var \Magento\Backend\Model\Auth $auth */
                 $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
 
-                if (
-                    !$authentication->isLoggedIn() ||
+                if (!$authentication->isLoggedIn() ||
                     !$adminSession->isAllowed('Magento_Backend::setup_wizard')
                 ) {
                     $adminSession->destroy();

@@ -30,8 +30,7 @@ class CategoryLink
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct
-    (
+    public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         ResourceConnection $resourceConnection
     ) {
@@ -218,8 +217,8 @@ class CategoryLink
      */
     private function analyseUpdatedLinks($deleteUpdate, $insertUpdate)
     {
-        $delete = $deleteUpdate['changed'] ? : [];
-        $insert = $insertUpdate['changed'] ? : [];
+        $delete = $deleteUpdate['changed'] ?: [];
+        $insert = $insertUpdate['changed'] ?: [];
         $insert = array_merge_recursive($insert, $deleteUpdate['updated']);
         $insert = array_merge_recursive($insert, $insertUpdate['updated']);
 

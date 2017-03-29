@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-use Magento\Framework\Code\Reader\ClassReaderInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -98,8 +97,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
             $this->configInterface->getPreference($instanceName)
         );
 
-        if (
-        !in_array(
+        if (!in_array(
             $this->type,
             array_unique(array_merge(class_parents($realType), class_implements($realType))),
             true

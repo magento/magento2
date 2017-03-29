@@ -61,6 +61,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 'select' => $this->selectMock,
                 'connectionName' => $this->connectionName,
                 'selectHydrator' => $this->selectHydratorMock,
+                'config' => []
             ]
         );
     }
@@ -81,6 +82,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'connectionName' => $this->connectionName,
             'select_parts' => $selectParts,
+            'config' => []
         ];
 
         $this->assertSame($expectedResult, $this->query->jsonSerialize());

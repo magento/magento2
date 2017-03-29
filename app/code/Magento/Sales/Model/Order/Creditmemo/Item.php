@@ -876,5 +876,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

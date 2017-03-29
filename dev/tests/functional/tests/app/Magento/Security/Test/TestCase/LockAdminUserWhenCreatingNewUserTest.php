@@ -6,12 +6,11 @@
 
 namespace Magento\Security\Test\TestCase;
 
-
-use Magento\User\Test\Page\Adminhtml\UserEdit;
-use Magento\User\Test\Page\Adminhtml\UserIndex;
+use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\User\Test\Fixture\User;
-use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\User\Test\Page\Adminhtml\UserEdit;
+use Magento\User\Test\Page\Adminhtml\UserIndex;
 
 /**
  * Preconditions:

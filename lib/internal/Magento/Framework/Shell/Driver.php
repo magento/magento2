@@ -31,7 +31,6 @@ class Driver
      * @return Response
      * @throws LocalizedException
      */
-
     public function execute($command, $arguments)
     {
         $disabled = explode(',', str_replace(' ', ',', ini_get('disable_functions')));

@@ -65,8 +65,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetSectionData()
     {
-        $input = ['items' =>
-            [
+        $input = ['items' => [
                 [
                     'item_id' => 1,
                     'product_price' => ''
@@ -122,6 +121,5 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result['items']));
         $this->assertEquals(1, count($result['items'][0]['product_price']));
         $this->assertEquals(1, count($result['items'][1]['product_price']));
-
     }
 }

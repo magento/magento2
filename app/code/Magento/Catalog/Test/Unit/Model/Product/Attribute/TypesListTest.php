@@ -9,7 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
-use \Magento\Catalog\Model\Product\Attribute\TypesList;
+use Magento\Catalog\Model\Product\Attribute\TypesList;
 
 class TypesListTest extends \PHPUnit_Framework_TestCase
 {

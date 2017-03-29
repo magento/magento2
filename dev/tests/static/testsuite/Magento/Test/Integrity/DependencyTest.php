@@ -8,12 +8,13 @@
  */
 namespace Magento\Test\Integrity;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
+use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 /**
@@ -151,7 +152,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $root = BP;
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
         if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
-
             // The Dependency test is skipped for vendor/magento build
             self::markTestSkipped(
                 'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
@@ -223,7 +223,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 self::$_mapLayoutBlocks,
                 self::$_mapLayoutHandles
             ),
-            new DiRule(new VirtualTypeMapper())
+            new DiRule(new VirtualTypeMapper()),
+            new ReportsConfigRule($dbRuleTables),
         ];
     }
 

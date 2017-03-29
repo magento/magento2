@@ -6,11 +6,11 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Block\Product;
 
-use \Magento\CatalogWidget\Block\Product\ProductsList;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;
+
+use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ProductsListTest
@@ -116,7 +116,8 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'rule' => $this->rule,
                 'conditionsHelper' => $this->widgetConditionsHelper,
                 'storeManager' => $this->storeManager,
-                'design' => $this->design
+                'design' => $this->design,
+                'json' => $this->serializer
             ]
         );
         $this->request = $arguments['context']->getRequest();
@@ -150,6 +151,12 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('getParams')->willReturn('request_params');
         $this->priceCurrency->expects($this->once())->method('getCurrencySymbol')->willReturn('$');
 
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(function ($value) {
+                return json_encode($value);
+            });
+
         $cacheKey = [
             'CATALOG_PRODUCTS_LIST_WIDGET',
             '$',
@@ -159,7 +166,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             1,
             5,
             'some_serialized_conditions',
-            serialize('request_params')
+            json_encode('request_params')
         ];
         $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
     }

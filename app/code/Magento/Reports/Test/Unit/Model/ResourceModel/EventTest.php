@@ -105,7 +105,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('update');
 
         $this->event->updateCustomerType($eventMock, 1, 1);
-
     }
 
     /**
@@ -121,7 +120,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('update');
 
         $this->event->updateCustomerType($eventMock, 1, 1, ['type']);
-
     }
 
     /**

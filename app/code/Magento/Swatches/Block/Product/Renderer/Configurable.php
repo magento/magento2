@@ -7,12 +7,12 @@ namespace Magento\Swatches\Block\Product\Renderer;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
+use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Swatches\Helper\Data as SwatchData;
@@ -244,8 +244,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function addAdditionalMediaData(array $swatch, $optionId, array $attributeDataArray)
     {
-        if (
-            isset($attributeDataArray['use_product_image_for_swatch'])
+        if (isset($attributeDataArray['use_product_image_for_swatch'])
             && $attributeDataArray['use_product_image_for_swatch']
         ) {
             $variationMedia = $this->getVariationMedia($attributeDataArray['attribute_code'], $optionId);

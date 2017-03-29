@@ -1219,6 +1219,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->getData(self::KEY_CHILDREN_DATA);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1411,5 +1412,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

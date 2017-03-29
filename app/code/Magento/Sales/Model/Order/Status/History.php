@@ -328,5 +328,6 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -40,7 +40,7 @@ class ModuleGridTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -72,7 +72,7 @@ class ModuleGridTest extends \PHPUnit_Framework_TestCase
             ->willReturn($moduleList);
 
         $jsonModel = $this->controller->modulesAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);

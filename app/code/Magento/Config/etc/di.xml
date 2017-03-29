@@ -145,7 +145,6 @@
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
             <argument name="configType" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</argument>
-            <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
         </arguments>
     </virtualType>
     <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
@@ -201,7 +200,7 @@
                     <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
-                <item name="env" xsi:type="array">
+                <item name="envVariable" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</item>
                     <item name="sortOrder" xsi:type="string">2000</item>
                 </item>
@@ -226,6 +225,26 @@
             <argument name="processors" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
                 <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
+        <arguments>
+            <argument name="importers" xsi:type="array">
+                <item name="system" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Config\Model\Config\Importer</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="environment" xsi:type="array">
+                <item name="web/cookie/cookie_domain" xsi:type="string">1</item>
+                <item name="web/cookie/cookie_path" xsi:type="string">1</item>
+                <item name="web/secure/base_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_link_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_url" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

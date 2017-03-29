@@ -11,7 +11,7 @@
 <?php
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $block */
-$productId = $block->getSaleableItem()->getId();
+
 /** @var \Magento\Bundle\Pricing\Price\FinalPrice $finalPriceModel */
 $finalPriceModel = $block->getPrice();
 $minimalPrice = $finalPriceModel->getMinimalPrice();

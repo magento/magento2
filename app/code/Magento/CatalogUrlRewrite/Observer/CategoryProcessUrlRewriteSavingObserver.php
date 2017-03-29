@@ -7,11 +7,11 @@ namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
+use Magento\Framework\Event\ObserverInterface;
 
 class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 {
@@ -93,6 +93,5 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         foreach ($this->dataUrlRewriteClassNames as $className) {
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
-
     }
 }

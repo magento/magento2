@@ -47,6 +47,5 @@ class FactoryStub implements \Magento\Framework\ObjectManager\FactoryInterface
      */
     public function setObjectManager(ObjectManagerInterface $objectManager)
     {
-
     }
 }

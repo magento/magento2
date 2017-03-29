@@ -14,7 +14,7 @@ define([
     'use strict';
 
     /**
-     * Check wether the incoming string is not empty or if doesn't consist of spaces.
+     * Check whether the incoming string is not empty or if doesn't consist of spaces.
      *
      * @param {String} value - Value to check.
      * @returns {Boolean}
@@ -122,6 +122,7 @@ define([
          * @param {Boolean} isActive
          */
         setActiveState: function (isActive) {
+            this.searchForm.toggleClass('active', isActive);
             this.searchLabel.toggleClass('active', isActive);
 
             if (this.isExpandable) {

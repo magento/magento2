@@ -6,6 +6,7 @@
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ApplicationDumpCommand;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -39,12 +40,20 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     private $source;
 
     /**
+     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configHashMock;
+
+    /**
      * @var ApplicationDumpCommand
      */
     private $command;
 
     public function setUp()
     {
+        $this->configHashMock = $this->getMockBuilder(Hash::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->input = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
         $this->output = $this->getMockBuilder(OutputInterface::class)
@@ -56,10 +65,11 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->command = new ApplicationDumpCommand($this->writer, [[
-            'namespace' => 'system',
-            'source' => $this->source
-        ]]);
+        $this->command = new ApplicationDumpCommand(
+            $this->writer,
+            [['namespace' => 'system', 'source' => $this->source]],
+            $this->configHashMock
+        );
     }
 
     public function testExport()
@@ -68,6 +78,8 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'system' => ['systemDATA']
         ];
         $data = [ConfigFilePool::APP_CONFIG => $dump];
+        $this->configHashMock->expects($this->once())
+            ->method('regenerate');
         $this->source
             ->expects($this->once())
             ->method('get')

@@ -23,7 +23,9 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $data = $object->getData($attributeCode);
         if (is_array($data)) {
-            $data = array_filter($data);
+            $data = array_filter($data, function ($value) {
+                return $value === '0' || !empty($value);
+            });
             $object->setData($attributeCode, implode(',', $data));
         }
 

@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model;
 
 /**
  * Product ID locator provides all product IDs by SKU.
+ * @api
  */
 interface ProductIdLocatorInterface
 {

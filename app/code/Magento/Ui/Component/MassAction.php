@@ -21,7 +21,7 @@ class MassAction extends AbstractComponent
 
         foreach ($this->getChildComponents() as $actionComponent) {
             $config['actions'][] = $actionComponent->getConfiguration();
-        };
+        }
 
         $origConfig = $this->getConfiguration();
         if ($origConfig !== $config) {
@@ -33,7 +33,6 @@ class MassAction extends AbstractComponent
 
         parent::prepare();
     }
-
 
     /**
      * Get component name

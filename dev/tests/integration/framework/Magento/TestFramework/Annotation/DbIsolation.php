@@ -11,6 +11,7 @@ namespace Magento\TestFramework\Annotation;
 class DbIsolation
 {
     const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
+
     /**
      * @var bool
      */

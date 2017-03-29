@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class TopmenuTest
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TopmenuTest extends \PHPUnit_Framework_TestCase

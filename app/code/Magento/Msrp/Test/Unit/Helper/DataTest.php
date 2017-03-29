@@ -8,7 +8,6 @@
 
 namespace Magento\Msrp\Test\Unit\Helper;
 
-
 /**
  * Class DataTest
  */

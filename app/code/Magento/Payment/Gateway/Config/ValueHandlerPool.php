@@ -48,7 +48,7 @@ class ValueHandlerPool implements \Magento\Payment\Gateway\Config\ValueHandlerPo
      */
     public function get($field)
     {
-        return isset ($this->handlers[$field])
+        return isset($this->handlers[$field])
             ? $this->handlers[$field]
             : $this->handlers[self::DEFAULT_HANDLER];
     }

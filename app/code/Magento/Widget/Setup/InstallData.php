@@ -22,7 +22,7 @@ class InstallData implements InstallDataInterface
     {
         $installer = $setup->createMigrationSetup();
         $setup->startSetup();
-        
+
         $installer->appendClassAliasReplace(
             'widget_instance',
             'instance_type',
@@ -42,6 +42,5 @@ class InstallData implements InstallDataInterface
         $installer->doUpdateClassAliases();
 
         $setup->endSetup();
-        
     }
 }

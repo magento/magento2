@@ -5,22 +5,8 @@
  */
 namespace Magento\Framework\Locale;
 
-interface ListsInterface
+interface ListsInterface extends OptionInterface
 {
-    /**
-     * Get options array for locale dropdown in current locale
-     *
-     * @return array
-     */
-    public function getOptionLocales();
-
-    /**
-     * Get translated to original locale options array for locale dropdown
-     *
-     * @return array
-     */
-    public function getTranslatedOptionLocales();
-
     /**
      * Retrieve timezone option list
      *

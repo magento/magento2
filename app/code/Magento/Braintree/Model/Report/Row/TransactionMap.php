@@ -119,7 +119,7 @@ class TransactionMap implements DocumentInterface
         $output = [];
         foreach ($this->getMappedValues() as $key => $value) {
             $attribute = $this->attributeValueFactory->create();
-            if(in_array($key, $shouldBeLocalized)) {
+            if (in_array($key, $shouldBeLocalized)) {
                 $value = __($value);
             }
             $output[] = $attribute->setAttributeCode($key)->setValue($value);

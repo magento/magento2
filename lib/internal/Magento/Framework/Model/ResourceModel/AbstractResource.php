@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\CallbackPool;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Abstract resource model
@@ -43,7 +43,7 @@ abstract class AbstractResource
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    abstract protected function getConnection();
+    abstract public function getConnection();
 
     /**
      * Start resource transaction

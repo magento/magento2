@@ -72,7 +72,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
             'order' => [
                 'new_option' => 'optionSortOrder',
             ],
-        ];
+            ];
 
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);

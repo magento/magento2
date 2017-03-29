@@ -5,7 +5,6 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Shipping;
 
-
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     const SUBTOTAL = 10;

@@ -7,7 +7,6 @@ namespace Magento\CacheInvalidate\Model;
 
 class SocketFactory
 {
-
     /**
      * @return \Zend\Http\Client\Adapter\Socket
      */

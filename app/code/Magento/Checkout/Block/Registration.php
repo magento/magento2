@@ -96,8 +96,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      */
     public function toHtml()
     {
-        if (
-            $this->customerSession->isLoggedIn()
+        if ($this->customerSession->isLoggedIn()
             || !$this->registration->isAllowed()
             || !$this->accountManagement->isEmailAvailable($this->getEmailAddress())
             || !$this->validateAddresses()

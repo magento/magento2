@@ -666,6 +666,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns discount_description
      *
@@ -1523,5 +1524,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -9,8 +9,6 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Composer\Package;
-
 class Theme
 {
     /**

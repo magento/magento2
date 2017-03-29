@@ -6,14 +6,14 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
-use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Store\Model\WebSite|\PHPUnit_Framework_MockObject_MockObject
      */
-     protected $webSiteModel;
+    protected $webSiteModel;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject

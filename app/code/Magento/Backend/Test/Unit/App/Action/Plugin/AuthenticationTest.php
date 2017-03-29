@@ -5,8 +5,8 @@
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\Action\Plugin\Authentication;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class AuthenticationTest
@@ -120,7 +120,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             if ($isIFrameParam) {
                 $getParamCalls = 1;
                 $actionName = 'deniedIframe';
-            } else if ($isAjaxParam) {
+            } elseif ($isAjaxParam) {
                 $getParamCalls = 2;
                 $actionName = 'deniedJson';
             } else {

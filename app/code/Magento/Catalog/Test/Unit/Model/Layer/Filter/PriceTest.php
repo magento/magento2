@@ -219,6 +219,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
     private $attribute;
+
     public function testApply()
     {
         $priceId = '15-50';

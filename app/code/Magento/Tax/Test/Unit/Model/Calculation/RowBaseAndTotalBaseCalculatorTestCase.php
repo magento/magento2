@@ -8,9 +8,9 @@
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Calculation\RowbaseCalculator;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -205,7 +205,6 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param boolean $isTaxIncluded
      */
-
     protected function initMockCalculationTool($isTaxIncluded)
     {
         $mockValues = [

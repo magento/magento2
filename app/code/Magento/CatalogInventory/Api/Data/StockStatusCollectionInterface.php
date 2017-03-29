@@ -20,7 +20,6 @@ interface StockStatusCollectionInterface extends SearchResultsInterface
      */
     public function getItems();
 
-
     /**
      * Sets items
      *

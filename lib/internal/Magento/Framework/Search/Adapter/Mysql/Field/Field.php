@@ -12,10 +12,12 @@ class Field implements FieldInterface
      * @var string
      */
     private $column;
+
     /**
      * @var int|null
      */
     private $attributeId;
+
     /**
      * @var int
      */

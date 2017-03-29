@@ -43,7 +43,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 {{depend street4}}{{var street4}}{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
 {{var country}}
-T: {{var telephone}}
+{{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}F: {{var fax}}{{/depend}}
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}
 TEMPLATE;

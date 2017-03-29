@@ -8,6 +8,9 @@
         "magento/framework": "100.2.*",
         "magento/module-cookie": "100.2.*"
     },
+    "suggest": {
+        "magento/module-config": "100.2.*"
+    },
     "type": "magento2-module",
     "version": "100.2.0-dev",
     "license": [

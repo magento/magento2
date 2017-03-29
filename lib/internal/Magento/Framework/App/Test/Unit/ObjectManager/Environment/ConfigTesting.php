@@ -11,7 +11,6 @@ use Magento\Framework\ObjectManager\RelationsInterface;
 
 class ConfigTesting implements ConfigInterface
 {
-
     /**
      * Set class relations
      *

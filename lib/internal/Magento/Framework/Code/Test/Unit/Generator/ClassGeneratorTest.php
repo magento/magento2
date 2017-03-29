@@ -299,4 +299,32 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $invalidProperty = new \Zend\Code\Generator\PropertyGenerator();
         $this->_model->addPropertyFromGenerator($invalidProperty);
     }
+
+    /**
+     * @dataProvider providerNamespaces
+     * @param string $actualNamespace
+     * @param string $expectedNamespace
+     */
+    public function testNamespaceName($actualNamespace, $expectedNamespace)
+    {
+        $this->assertEquals(
+            $expectedNamespace,
+            $this->_model->setNamespaceName($actualNamespace)
+                ->getNamespaceName()
+        );
+    }
+
+    /**
+     * DataProvider for testNamespaceName
+     * @return array
+     */
+    public function providerNamespaces()
+    {
+        return [
+            ['Zend', 'Zend'],
+            ['\Zend', 'Zend'],
+            ['\Zend\SomeClass', 'Zend\SomeClass'],
+            ['', null],
+        ];
+    }
 }

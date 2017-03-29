@@ -5,11 +5,11 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
-use Magento\Setup\Model\Cron\JobFactory;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Magento\Backend\Console\Command\CacheEnableCommand;
 use Magento\Setup\Console\Command\MaintenanceDisableCommand;
 use Magento\Setup\Console\Command\MaintenanceEnableCommand;
+use Magento\Setup\Model\Cron\JobFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -202,7 +202,6 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-
 
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;

@@ -7,7 +7,6 @@ namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
@@ -4343,5 +4342,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         return $this->setData('shipping_method', $shippingMethod);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -50,6 +50,26 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlHelperMock;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $catCollectionMock;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $prodCollectionMock;
+
+    /**
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutMock;
+
+    /**
+     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $toolbarMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -92,6 +112,34 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->catCollectionMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->prodCollectionMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->layoutMock = $this->getMock(
+            \Magento\Framework\View\LayoutInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->toolbarMock = $this->getMock(
+            \Magento\Catalog\Block\Product\ProductList\Toolbar::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->urlHelperMock = $this->getMockBuilder(\Magento\Framework\Url\Helper\Data::class)
             ->disableOriginalConstructor()->getMock();
@@ -105,6 +153,8 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
                 'urlHelper' => $this->urlHelperMock,
             ]
         );
+        $this->block->setToolbarBlockName('mock');
+        $this->block->setLayout($this->layoutMock);
     }
 
     protected function tearDown()
@@ -121,25 +171,58 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->method('getIdentities')
             ->will($this->returnValue([$productTag]));
 
-        $itemsCollection = new \ReflectionProperty(
-            \Magento\Catalog\Block\Product\ListProduct::class,
-            '_productCollection'
-        );
-        $itemsCollection->setAccessible(true);
-        $itemsCollection->setValue($this->block, [$this->productMock]);
+        $this->productMock->expects($this->once())
+            ->method('getCategoryCollection')
+            ->will($this->returnValue($this->catCollectionMock));
+
+        $this->catCollectionMock->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($this->catCollectionMock));
+
+        $this->catCollectionMock->expects($this->once())
+            ->method('setPage')
+            ->will($this->returnValue($this->catCollectionMock));
+
+        $this->catCollectionMock->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(1));
+
+        $this->registryMock->expects($this->any())
+            ->method('registry')
+            ->will($this->returnValue($this->productMock));
 
         $currentCategory = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
-        $currentCategory->expects($this->once())
+        $currentCategory->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('1'));
 
-        $this->layerMock->expects($this->once())
+        $this->catCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->will($this->returnValue([$currentCategory]));
+
+        $this->prodCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue(new \ArrayIterator([$this->productMock])));
+
+        $this->layerMock->expects($this->any())
             ->method('getCurrentCategory')
             ->will($this->returnValue($currentCategory));
 
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->will($this->returnValue($this->prodCollectionMock));
+
+        $this->layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->will($this->returnValue($this->toolbarMock));
+
         $this->assertEquals(
-            [$productTag, $categoryTag ],
+            [$productTag, $categoryTag],
             $this->block->getIdentities()
+        );
+        $this->assertEquals(
+            '1',
+            $this->block->getCategoryId()
         );
     }
 

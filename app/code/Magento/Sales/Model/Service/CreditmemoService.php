@@ -53,9 +53,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     private $resource;
 
     /**
-     * @var \Magento\Sales\Model\Order\PaymentAdapterInterface
+     * @var \Magento\Sales\Model\Order\RefundAdapterInterface
      */
-    private $paymentAdapter;
+    private $refundAdapter;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
@@ -163,7 +163,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         $connection = $this->getResource()->getConnection('sales');
         $connection->beginTransaction();
         try {
-            $order = $this->getPaymentAdapter()->refund(
+            $order = $this->getRefundAdapter()->refund(
                 $creditmemo,
                 $creditmemo->getOrder(),
                 !$offlineRequested
@@ -219,17 +219,17 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\PaymentAdapterInterface
+     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      *
      * @deprecated
      */
-    private function getPaymentAdapter()
+    private function getRefundAdapter()
     {
-        if ($this->paymentAdapter === null) {
-            $this->paymentAdapter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Sales\Model\Order\PaymentAdapterInterface::class);
+        if ($this->refundAdapter === null) {
+            $this->refundAdapter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Model\Order\RefundAdapterInterface::class);
         }
-        return $this->paymentAdapter;
+        return $this->refundAdapter;
     }
 
     /**

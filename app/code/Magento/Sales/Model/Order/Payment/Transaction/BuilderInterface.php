@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Model\Order\Payment\Transaction;
 
-
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\TransactionInterface;

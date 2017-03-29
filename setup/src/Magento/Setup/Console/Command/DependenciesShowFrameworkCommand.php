@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
@@ -24,7 +23,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 
     /**
      * Constructor
-     * 
+     *
      * @param ComponentRegistrarInterface $registrar
      * @param ObjectManagerProvider $objectManagerProvider
      */

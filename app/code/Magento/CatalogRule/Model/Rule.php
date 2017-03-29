@@ -395,13 +395,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             case 'to_percent':
                 if ($discount < 0 || $discount > 100) {
                     $result[] = __('Percentage discount should be between 0 and 100.');
-                };
+                }
                 break;
             case 'by_fixed':
             case 'to_fixed':
                 if ($discount < 0) {
                     $result[] = __('Discount value should be 0 or greater.');
-                };
+                }
                 break;
             default:
                 $result[] = __('Unknown action.');
@@ -787,6 +787,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         }
         return $this->ruleConditionConverter;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

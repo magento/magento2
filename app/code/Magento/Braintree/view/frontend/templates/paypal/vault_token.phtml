@@ -39,7 +39,8 @@ $payerEmail = $block->escapeHtml($block->getPayerEmail());
                                         "modalClass": "my-credit-cards-popup",
                                         "toggleEvent": "click",
                                         "title": "<?php echo $block->escapeHtml(__('Delete')); ?>",
-                                        "content": "Are you sure you want to delete this PayPal account: <?php /* @noEscape */ echo $payerEmail; ?>?"
+                                        "content": "Are you sure you want to delete this PayPal account:
+                                            <?php /* @noEscape */ echo $payerEmail; ?>?"
                                     }
                                 }'>
                 <span><?php echo $block->escapeHtml(__('Delete')); ?></span>

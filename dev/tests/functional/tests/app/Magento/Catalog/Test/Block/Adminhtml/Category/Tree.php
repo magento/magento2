@@ -6,12 +6,11 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
+use Magento\Backend\Test\Block\Template;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Backend\Test\Block\Template;
 
 /**
  * Categories tree block.
@@ -65,7 +64,7 @@ class Tree extends Block
      *
      * @var string
      */
-    protected $categoryInTree = '//*[@class="x-tree-node-ct"]/li/div/a/span[contains(text(), "%s")]/..';
+    private $categoryInTree = '//ul//li//span[contains(text(), "%s")]';
 
     /**
      * Get backend abstract block.

@@ -7,7 +7,6 @@ namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Class SubscriptionStatusLabel.
@@ -39,16 +38,15 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
     }
 
     /**
-     * Unset some non-related element parameters
+     * Add Subscription status to comment
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         $element->setData(
-            'value',
+            'comment',
             $this->prepareLabelValue()
         );
         return parent::render($element);

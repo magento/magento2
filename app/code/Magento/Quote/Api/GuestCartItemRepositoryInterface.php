@@ -21,7 +21,7 @@ interface GuestCartItemRepositoryInterface
     public function getList($cartId);
 
     /**
-     * Add the specified item to the specified cart.
+     * Add/update the specified cart item.
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem The item.
      * @return \Magento\Quote\Api\Data\CartItemInterface Item.

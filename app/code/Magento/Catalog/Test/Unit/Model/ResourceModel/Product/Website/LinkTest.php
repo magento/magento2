@@ -93,7 +93,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('insertMultiple')
             ->with('catalog_product_website', [
                 ['product_id' => $productId, 'website_id' => 3]
-        ]);
+            ]);
 
         $this->connection->expects($this->once())
             ->method('delete')

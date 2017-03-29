@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Assert that comment about refunded amount exists in Comments History section on order page in Admin.
@@ -19,7 +19,7 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about refunded amount in order.
      */
-    const REFUNDED_AMOUNT_PATTERN = '/^We refunded \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
+    const REFUNDED_AMOUNT_PATTERN = '/^We refunded .+?%s online. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about refunded amount exists in Comments History section on order page in Admin.

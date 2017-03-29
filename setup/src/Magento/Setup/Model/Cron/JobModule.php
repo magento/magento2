@@ -90,7 +90,6 @@ class JobModule extends AbstractJob
 
             //perform the generated file cleanup
             $this->performCleanup();
-
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(

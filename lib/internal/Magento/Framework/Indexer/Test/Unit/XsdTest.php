@@ -17,6 +17,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Config\Dom\UrnResolver
      */
     protected $urnResolver;
+
     /**
      * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */

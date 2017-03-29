@@ -6,11 +6,11 @@
 namespace Magento\Framework\View\Test\Unit\Template\Html;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Template\Html\Minifier;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem;
 
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,6 +104,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     }
 
     // @codingStandardsIgnoreStart
+
     /**
      * Covered method minify and test regular expressions
      * @test
@@ -197,6 +198,7 @@ TEXT;
 
         $this->object->minify($file);
     }
+
     // @codingStandardsIgnoreEnd
 
     /**

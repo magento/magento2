@@ -41,7 +41,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Quote\Model\Quote\ProductOption|\PHPUnit_Framework_MockObject_MockObject */
     protected $productOption;
-    
+
     /** @var \Magento\Catalog\Model\CustomOptions\CustomOption|\PHPUnit_Framework_MockObject_MockObject */
     protected $customOption;
 
@@ -104,7 +104,6 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             $this->customOptionFactory,
             $this->serializer
         );
-
     }
 
     public function testConvertToBuyRequest()

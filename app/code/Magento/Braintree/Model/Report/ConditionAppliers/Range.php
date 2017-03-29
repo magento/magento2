@@ -24,7 +24,7 @@ class Range implements ApplierInterface
     {
         $result = false;
 
-        switch($condition) {
+        switch ($condition) {
             case ApplierInterface::QTEQ:
                 $field->greaterThanOrEqualTo($value);
                 $result = true;

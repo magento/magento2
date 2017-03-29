@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\Layer;
 
-
 class FilterList
 {
     const CATEGORY_FILTER   = 'category';

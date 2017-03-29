@@ -79,6 +79,5 @@ class AuthorizationCommand implements CommandInterface
         $this->payflowFacade->setTransStatus($payment, $response);
 
         return $this;
-
     }
 }

@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
-use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\Validator\AbstractValidator;
 
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
@@ -223,13 +223,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
-        
+
         if (!$valid) {
             $this->setInvalidAttribute($attrCode);
         }
 
         return (bool)$valid;
-
     }
 
     /**

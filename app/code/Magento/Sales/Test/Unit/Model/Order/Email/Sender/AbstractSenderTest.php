@@ -172,7 +172,6 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
                 ->method('getShippingAddress')
                 ->will($this->returnValue($billingAddress));
         }
-
     }
 
     public function stepSendWithoutSendCopy()

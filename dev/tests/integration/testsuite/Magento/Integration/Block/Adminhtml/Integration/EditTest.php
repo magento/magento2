@@ -7,9 +7,9 @@
 
 namespace Magento\Integration\Block\Adminhtml\Integration;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Integration\Block\Adminhtml\Integration\Edit
@@ -118,6 +118,5 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $baseUrl = Bootstrap::getObjectManager()->get(\Magento\Framework\Url::class)->getBaseUrl();
         $this->assertContains($baseUrl, $this->editBlock->getFormActionUrl());
-
     }
 }

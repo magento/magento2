@@ -33,6 +33,7 @@ interface MinifierInterface
      * Minify template file
      *
      * @param string $file
+     * @return void
      */
     public function minify($file);
 }

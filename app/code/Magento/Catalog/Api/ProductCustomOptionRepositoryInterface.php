@@ -29,7 +29,6 @@ interface ProductCustomOptionRepositoryInterface
         $requiredOnly = false
     );
 
-
     /**
      * Get custom option for a specific product
      *

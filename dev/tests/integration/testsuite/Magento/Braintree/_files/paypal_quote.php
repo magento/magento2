@@ -22,4 +22,3 @@ $quote->setStoreId($storeManager->getStore()->getId())
 /** @var CartRepositoryInterface $quoteRepository */
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
 $quoteRepository->save($quote);
-

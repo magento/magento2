@@ -78,6 +78,10 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function isValueChanged()
     {
+        if ($this->getData('force_changed_value')) {
+            return true;
+        }
+
         return $this->getValue() != $this->getOldValue();
     }
 

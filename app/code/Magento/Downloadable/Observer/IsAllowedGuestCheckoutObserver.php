@@ -31,7 +31,6 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
         $this->_scopeConfig = $scopeConfig;
     }
 
-
     /**
      * Check is allowed guest checkout if quote contain downloadable product(s)
      *

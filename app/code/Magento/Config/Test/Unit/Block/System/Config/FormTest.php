@@ -9,9 +9,9 @@
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
 /**
  * Test System config form block
@@ -268,7 +268,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
             $object->expects($this->never())
                 ->method('_initGroup');
         }
-
 
         $object->initForm();
         $this->assertEquals($this->_formMock, $object->getForm());

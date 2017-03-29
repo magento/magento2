@@ -163,7 +163,7 @@ class SensitiveConfigSetCommand extends Command
         $output->writeln(sprintf(
             '<info>Configuration value%s saved in app/etc/%s</info>',
             $isInteractive ? 's' : '',
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG)
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV)
         ));
     }
 
@@ -175,7 +175,7 @@ class SensitiveConfigSetCommand extends Command
      */
     private function getConfigPaths()
     {
-        $configFilePath = $this->configFilePool->getPathsByPool(ConfigFilePool::LOCAL)[ConfigFilePool::APP_CONFIG];
+        $configFilePath = $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG);
         try {
             $configPaths = $this->commentParser->execute($configFilePath);
         } catch (FileSystemException $e) {

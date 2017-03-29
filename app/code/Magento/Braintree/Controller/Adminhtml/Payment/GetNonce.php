@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Controller\Adminhtml\Payment;
 
-
 /**
  * Class GetNonce
  */

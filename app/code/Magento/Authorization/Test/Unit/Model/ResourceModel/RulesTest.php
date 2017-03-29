@@ -47,11 +47,6 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     private $rootResourceMock;
 
     /**
-     * @var \Magento\Framework\Acl\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $aclCacheMock;
-
-    /**
      * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $aclDataCacheMock;
@@ -117,11 +112,6 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->aclCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
         $this->aclDataCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -145,7 +135,6 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             $this->aclBuilderMock,
             $this->loggerMock,
             $this->rootResourceMock,
-            $this->aclCacheMock,
             'connection',
             $this->aclDataCacheMock
         );

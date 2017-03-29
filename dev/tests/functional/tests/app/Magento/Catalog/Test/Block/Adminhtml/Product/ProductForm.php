@@ -6,15 +6,15 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Product form on backend product page.
@@ -131,7 +131,7 @@ class ProductForm extends FormSections
         $sectionElement = $this->getContainerElement($sectionName);
         if ($sectionElement->getAttribute('type') == 'button') {
             $sectionElement->click();
-            sleep(1); // according to animation timeout in JS
+            sleep(2); // according to animation timeout in JS
         } else {
             parent::openSection($sectionName);
         }

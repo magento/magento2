@@ -14,7 +14,7 @@ class NewRelicWrapper
 {
     /**
      * Wrapper for 'newrelic_add_custom_parameter' function
-     * 
+     *
      * @param string $param
      * @param string|int $value
      * @return bool
@@ -29,8 +29,8 @@ class NewRelicWrapper
     }
 
     /**
-     * Checks whether newrelic-php5 agent is installed 
-     * 
+     * Checks whether newrelic-php5 agent is installed
+     *
      * @return bool
      */
     public function isExtensionInstalled()

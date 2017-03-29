@@ -43,6 +43,7 @@ class PaymentType implements OptionSourceInterface
      */
     private function getAvailablePaymentTypes()
     {
+        // @codingStandardsIgnoreStart
         return [
             PaymentInstrumentType::PAYPAL_ACCOUNT => __(PaymentInstrumentType::PAYPAL_ACCOUNT),
             PaymentInstrumentType::COINBASE_ACCOUNT => __(PaymentInstrumentType::COINBASE_ACCOUNT),
@@ -51,5 +52,6 @@ class PaymentType implements OptionSourceInterface
             PaymentInstrumentType::APPLE_PAY_CARD => __(PaymentInstrumentType::APPLE_PAY_CARD),
             PaymentInstrumentType::ANDROID_PAY_CARD => __(PaymentInstrumentType::ANDROID_PAY_CARD)
         ];
+        // @codingStandardsIgnoreEnd
     }
 }

@@ -7,9 +7,9 @@
  */
 namespace Magento\Framework\App\ObjectManager;
 
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
 {
@@ -30,7 +30,7 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * Cache
      *
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @var \Magento\Framework\Config\CacheInterface
      */
     protected $_cache;
 

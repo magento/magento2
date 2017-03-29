@@ -72,7 +72,7 @@
         <field name="name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Rule Name</item>
+                    <item name="label" xsi:type="string" translate="true">Rule Name</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
@@ -87,7 +87,7 @@
         <field name="description">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Description</item>
+                    <item name="label" xsi:type="string" translate="true">Description</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">textarea</item>
@@ -99,7 +99,7 @@
         <field name="is_active">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Status</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
@@ -121,7 +121,7 @@
         <field name="website_ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Websites</item>
+                    <item name="label" xsi:type="string" translate="true">Websites</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">multiselect</item>
                     <item name="validation" xsi:type="array">
@@ -140,7 +140,7 @@
         <field name="customer_group_ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Customer Groups</item>
+                    <item name="label" xsi:type="string" translate="true">Customer Groups</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">multiselect</item>
                     <item name="validation" xsi:type="array">
@@ -149,13 +149,13 @@
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">customer_group_ids</item>
                 </item>
-                <item name="options" xsi:type="object">\Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
+                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
             </argument>
         </field>
         <field name="from_date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">From</item>
+                    <item name="label" xsi:type="string" translate="true">From</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
@@ -170,7 +170,7 @@
         <field name="to_date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">To</item>
+                    <item name="label" xsi:type="string" translate="true">To</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
@@ -185,7 +185,7 @@
         <field name="sort_order">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Priority</item>
+                    <item name="label" xsi:type="string" translate="true">Priority</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
@@ -205,7 +205,7 @@
         <field name="simple_action">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Apply</item>
+                    <item name="label" xsi:type="string"  translate="true">Apply</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
@@ -274,7 +274,7 @@
         <field name="discount_amount">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discount Amount</item>
+                    <item name="label" xsi:type="string" translate="true">Discount Amount</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
@@ -288,7 +288,7 @@
         <field name="stop_rules_processing">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Discard subsequent rules</item>
+                    <item name="label" xsi:type="string" translate="true">Discard subsequent rules</item>
                     <item name="fieldGroup" xsi:type="string">bool</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>

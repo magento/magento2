@@ -34,7 +34,7 @@ class PayloadValidator
     {
         $jobType = $postPayload[UpdaterTaskCreator::KEY_POST_JOB_TYPE];
         $errorMessage = '';
-        switch($jobType) {
+        switch ($jobType) {
             case 'uninstall':
                 $errorMessage = $this->validateUninstallPayload($postPayload);
                 break;

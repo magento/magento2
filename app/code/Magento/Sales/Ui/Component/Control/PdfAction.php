@@ -14,7 +14,7 @@ class PdfAction extends Action
 {
     /**
      * Prepare
-     * 
+     *
      * @return void
      */
     public function prepare()

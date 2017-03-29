@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Unit\Model;
 
-use Magento\Analytics\Model\AnalyticsConnector\OTPRequest;
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\OTPRequest;
 use Magento\Analytics\Model\ReportUrlProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

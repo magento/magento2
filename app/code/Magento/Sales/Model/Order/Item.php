@@ -6,8 +6,8 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * Order Item Model
@@ -2389,5 +2389,6 @@ class Item extends AbstractModel implements OrderItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

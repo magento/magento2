@@ -162,7 +162,6 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
                 'reportHelper' => $this->reportHelper
             ]
         );
-
     }
 
     /**

@@ -110,7 +110,7 @@ switch ($type = $block->getType()) {
 
     case 'crosssell':
         /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
-        if ($exist = $block->getItemCount()) {
+        if ($exist = count($block->getItems())) {
             $type = 'crosssell';
             $class = $type;
 
