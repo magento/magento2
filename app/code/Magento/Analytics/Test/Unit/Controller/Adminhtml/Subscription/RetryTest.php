@@ -8,7 +8,6 @@ namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Controller\Adminhtml\Subscription\Retry;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Analytics\Model\Subscription;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -32,7 +31,7 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     private $resultRedirectMock;
 
     /**
-     * @var Subscription|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subscriptionHandlerMock;
 

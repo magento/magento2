@@ -8,7 +8,6 @@ namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\NotificationTime;
-use Magento\Analytics\Model\Subscription;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Config\Model\PreparedValueFactory;
@@ -24,13 +23,6 @@ use Psr\Log\LoggerInterface;
  */
 class Activate extends Action
 {
-    /**
-     * Resource for managing subscription to Magento BI.
-     *
-     * @var Subscription
-     */
-    private $subscription;
-
     /**
      * @var LoggerInterface
      */
@@ -64,7 +56,6 @@ class Activate extends Action
      * Activate constructor.
      *
      * @param Context $context
-     * @param Subscription $subscription
      * @param LoggerInterface $logger
      * @param NotificationTime $notificationTime
      * @param AbstractDb $configValueResource
@@ -72,13 +63,11 @@ class Activate extends Action
      */
     public function __construct(
         Context $context,
-        Subscription $subscription,
         LoggerInterface $logger,
         NotificationTime $notificationTime,
         AbstractDb $configValueResource,
         PreparedValueFactory $preparedValueFactory
     ) {
-        $this->subscription = $subscription;
         $this->logger = $logger;
         $this->notificationTime = $notificationTime;
         $this->configValueResource = $configValueResource;
