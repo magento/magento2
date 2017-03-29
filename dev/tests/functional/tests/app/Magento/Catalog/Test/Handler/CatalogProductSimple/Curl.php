@@ -363,11 +363,24 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareAttributeSet()
     {
-        $attributeSet = $this->fixture
-            ->getDataFieldConfig('attribute_set_id')['source']
-            ->getAttributeSet();
-        if ($this->fixture->hasData('attribute_set_id') && $attributeSet) {
-            $this->fields['product']['attribute_set_id'] = $attributeSet->getAttributeSetId();
+        if (
+            $this->fixture->hasData('attribute_set_id')
+            && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
+            && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
+        ) {
+            $this->fields['product']['attribute_set_id'] = $this->fixture
+                ->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()
+                ->getAttributeSetId();
+        } else if (
+            $this->fixture->hasData('attribute_set_id')
+            && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
+            && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
+        ) {
+            $this->fields['product']['attribute_set_id'] = $this->fixture
+                ->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()
+                ->getAttributeSetId();
         } else {
             $this->fields['product']['attribute_set_id'] = 'Default';
         }
