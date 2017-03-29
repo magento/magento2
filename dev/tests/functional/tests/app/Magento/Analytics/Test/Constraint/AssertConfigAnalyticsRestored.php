@@ -32,7 +32,7 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
     ) {
         $openAnalyticsConfigStep->run();
 
-        $configAnalytics->getAnalyticsForm()->enableAnalytics();
+        $configAnalytics->getAnalyticsForm()->analyticsToggle();
         $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($vertical);
         $configAnalytics->getAnalyticsForm()->saveConfig();
 
