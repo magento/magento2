@@ -1,8 +1,7 @@
 {
-    "name": "Magento2",
+    "name": "magento2",
     "author": "Magento Commerce Inc.",
     "description": "Magento2 node modules dependencies for local development",
-    "version": "2.0.0",
     "license": "(OSL-3.0 OR AFL-3.0)",
     "repository": {
         "type": "git",
@@ -38,8 +37,5 @@
         "time-grunt": "^1.0.0",
         "underscore": "^1.7.0",
         "squirejs": "0.2.1"
-    },
-    "engines": {
-        "node": ">=0.10.0"
     }
 }
