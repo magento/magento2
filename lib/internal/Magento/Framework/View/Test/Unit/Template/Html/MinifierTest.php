@@ -64,7 +64,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::TEMPLATE_MINIFICATION_DIR)
+            ->with(DirectoryList::TMP_MATERIALIZATION_DIR)
             ->willReturn($this->htmlDirectoryMock);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
