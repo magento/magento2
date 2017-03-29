@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Deploy class for js dictionary
+ *
+ * @deprecated since 2.2.0
  */
 class JsDictionaryDeploy implements DeployInterface
 {
@@ -74,7 +76,7 @@ class JsDictionaryDeploy implements DeployInterface
 
         $asset = $this->assetRepo->createAsset(
             $this->translationJsConfig->getDictionaryFileName(),
-            ['area' => $area, 'theme' => $themePath, 'locale' => $locale]
+            ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'publish' => true]
         );
         if ($this->output->isVeryVerbose()) {
             $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");

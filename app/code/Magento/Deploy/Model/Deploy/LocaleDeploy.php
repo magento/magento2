@@ -6,6 +6,7 @@
 
 namespace Magento\Deploy\Model\Deploy;
 
+use Magento\Deploy\Package\Package;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
@@ -15,17 +16,19 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Config\Theme;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Magento\Framework\View\Asset\Minification;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Deploy\Console\InputValidator;
 
 /**
  * Class which allows deploy by locales
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @deprecated since 2.2.0
  */
 class LocaleDeploy implements DeployInterface
 {
@@ -123,37 +126,6 @@ class LocaleDeploy implements DeployInterface
      * @var ListInterface
      */
     private $themeList;
-
-    /**
-     * @var array
-     */
-    private static $fileExtensionOptionMap = [
-        'js' => Options::NO_JAVASCRIPT,
-        'map' => Options::NO_JAVASCRIPT,
-        'css' => Options::NO_CSS,
-        'less' => Options::NO_LESS,
-        'html' => Options::NO_HTML,
-        'htm' => Options::NO_HTML,
-        'jpg' => Options::NO_IMAGES,
-        'jpeg' => Options::NO_IMAGES,
-        'gif' => Options::NO_IMAGES,
-        'png' => Options::NO_IMAGES,
-        'ico' => Options::NO_IMAGES,
-        'svg' => Options::NO_IMAGES,
-        'eot' => Options::NO_FONTS,
-        'ttf' => Options::NO_FONTS,
-        'woff' => Options::NO_FONTS,
-        'woff2' => Options::NO_FONTS,
-        'md' => Options::NO_MISC,
-        'jbf' => Options::NO_MISC,
-        'csv' => Options::NO_MISC,
-        'json' => Options::NO_MISC,
-        'txt' => Options::NO_MISC,
-        'htc' => Options::NO_MISC,
-        'swf' => Options::NO_MISC,
-        'LICENSE' => Options::NO_MISC,
-        '' => Options::NO_MISC,
-    ];
 
     /**
      * @param OutputInterface $output
@@ -315,7 +287,7 @@ class LocaleDeploy implements DeployInterface
      */
     private function isCanBeDeployed($fileArea, $fileTheme, $area, $themePath)
     {
-        return ($fileArea == $area || $fileArea == 'base')
+        return ($fileArea == $area || $fileArea == Package::BASE_AREA)
         && ($fileTheme == '' || $fileTheme == $themePath
             || in_array(
                 $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
@@ -384,7 +356,7 @@ class LocaleDeploy implements DeployInterface
         try {
             $asset = $this->assetRepo->createAsset(
                 $filePath,
-                ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
+                ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module, 'publish' => true]
             );
             if ($this->output->isVeryVerbose()) {
                 $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
@@ -437,7 +409,9 @@ class LocaleDeploy implements DeployInterface
     {
         if ($filePath != '.') {
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-            $option = isset(self::$fileExtensionOptionMap[$ext]) ? self::$fileExtensionOptionMap[$ext] : null;
+            $option = isset(InputValidator::$fileExtensionOptionMap[$ext])
+                ? InputValidator::$fileExtensionOptionMap[$ext]
+                : null;
 
             return $option ? $this->getOption($option) : false;
         }
