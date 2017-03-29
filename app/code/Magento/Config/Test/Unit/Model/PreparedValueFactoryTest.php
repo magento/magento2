@@ -87,21 +87,9 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param array $deploymentConfigIsAvailable
-     * @param array $structureGetElement
-     * @param array $field
-     * @param array $valueFactory
-     * @param string $configPath
-     * @dataProvider createDataProvider
-     */
-    public function testCreate(
-        array $deploymentConfigIsAvailable,
-        array $structureGetElement,
-        array $field,
-        array $valueFactory,
-        $configPath
-    ) {
+    public function testCreateWhenDeploymentConfigIsNotAvailable()
+    {
+        $configPath = '/some/path';
         $value = 'someValue';
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
@@ -111,23 +99,8 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock
             ->expects($this->once())
             ->method('isAvailable')
-            ->willReturn($deploymentConfigIsAvailable['return']);
-        $this->structureMock
-            ->expects($structureGetElement['expects'])
-            ->method('getElement')
-            ->willReturn($this->fieldMock);
-        $this->fieldMock
-            ->expects($field['hasBackendModel']['expects'])
-            ->method('hasBackendModel')
-            ->willReturn($field['hasBackendModel']['return']);
-        $this->fieldMock
-            ->expects($field['getBackendModel']['expects'])
-            ->method('getBackendModel')
-            ->willReturn($this->valueMock);
-        $this->fieldMock->expects($field['getConfigPath']['expects'])
-            ->method('getConfigPath')
-            ->willReturn($field['getConfigPath']['return']);
-        $this->valueFactoryMock->expects($valueFactory['expects'])
+            ->willReturn(false);
+        $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
@@ -153,60 +126,131 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @dataProvider createDataProvider
+     *
+     * @param string $structurePath
+     * @param string $customPath
+     * @param string $expectedPath
+     */
+    public function testCreateAndSetDataToBackendModel(
+        $structurePath,
+        $customPath,
+        $expectedPath
+    ) {
+        $value = 'someValue';
+        $scope = 'someScope';
+        $scopeCode = 'someScopeCode';
+        $this->structureFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->structureMock);
+        $this->deploymentConfigMock
+            ->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->structureMock
+            ->expects($this->once())
+            ->method('getElement')
+            ->willReturn($this->fieldMock);
+        $this->fieldMock
+            ->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(true);
+        $this->fieldMock
+            ->expects($this->once())
+            ->method('getBackendModel')
+            ->willReturn($this->valueMock);
+        $this->valueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->valueMock);
+        $this->fieldMock->expects($this->once())
+            ->method('getConfigPath')
+            ->willReturn($customPath);
+        $this->valueMock->expects($this->once())
+            ->method('setPath')
+            ->with($expectedPath)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setScope')
+            ->with($scope)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setScopeId')
+            ->with($scopeCode)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setValue')
+            ->with($value)
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(
+            Value::class,
+            $this->valueBuilder->create($structurePath, $value, $scope, $scopeCode)
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [
-            [
-                'deploymentConfigIsAvailable' => ['return' => false],
-                'structureGetElement' => ['expects' => $this->never()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->never(),
-                        'return' => true
-                    ],
-                    'getBackendModel' => ['expects' => $this->never()],
-                    'getConfigPath' => [
-                        'expects' => $this->never(),
-                        'return' => null
-                    ],
-                ],
-                'valueFactory' => ['expects' => $this->once()],
-                'configPath' => '/some/path',
+            'withCustomConfigPath' => [
+                'structurePath' => '/some/path',
+                'customPath' => 'customPath',
+                'expectedPath' => 'customPath'
             ],
-            [
-                'deploymentConfigIsAvailable' => ['return' => true],
-                'structureGetElement' => ['expects' => $this->once()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->once(),
-                        'return' => true
-                    ],
-                    'getBackendModel' => ['expects' => $this->once()],
-                    'getConfigPath' => [
-                        'expects' => $this->once(),
-                        'return' => 'customPath'
-                    ],
-                ],
-                'valueFactory' => ['expects' => $this->once()],
-                'configPath' => 'customPath',
-            ],
-            [
-                'deploymentConfigIsAvailable' => ['return' => true],
-                'structureGetElement' => ['expects' => $this->once()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->once(),
-                        'return' => false
-                    ],
-                    'getBackendModel' => ['expects' => $this->never()],
-                    'getConfigPath' => [
-                        'expects' => $this->never(),
-                        'return' => null
-                    ],
-                ],
-                'valueFactory' => ['expects' => $this->once()],
-                'configPath' => '/some/path'
+            'withOutCustomConfigPath' => [
+                'structurePath' => '/some/path',
+                'customPath' => null,
+                'expectedPath' => '/some/path'
             ],
         ];
+    }
+
+    public function testCreateAndSetDataWithNewBackendModel()
+    {
+        $structurePath = '/some/path';
+        $value = 'someValue';
+        $scope = 'someScope';
+        $scopeCode = 'someScopeCode';
+        $this->structureFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->structureMock);
+        $this->deploymentConfigMock
+            ->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->structureMock
+            ->expects($this->once())
+            ->method('getElement')
+            ->willReturn($this->fieldMock);
+        $this->fieldMock->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(false);
+        $this->valueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->valueMock);
+        $this->valueMock->expects($this->once())
+            ->method('setPath')
+            ->with($structurePath)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setScope')
+            ->with($scope)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setScopeId')
+            ->with($scopeCode)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setValue')
+            ->with($value)
+            ->willReturnSelf();
+
+        $this->assertSame(
+            $this->valueMock,
+            $this->valueBuilder->create($structurePath, $value, $scope, $scopeCode)
+        );
     }
 }
