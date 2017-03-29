@@ -218,6 +218,11 @@
             </field>
         </dataset>
 
+        <dataset name="attribute_type_textarea">
+            <field name="frontend_label" xsi:type="string">textarea_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Area</field>
+        </dataset>
+
         <dataset name="attribute_type_fpt">
             <field name="frontend_label" xsi:type="string">fpt_%isolation%</field>
             <field name="frontend_input" xsi:type="string">Fixed Product Tax</field>
