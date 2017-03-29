@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AsynchronousOperations\Model;
@@ -49,7 +49,7 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
-    
+
     public function testScheduleBulk()
     {
         // general bulk information
