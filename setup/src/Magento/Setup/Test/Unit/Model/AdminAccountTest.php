@@ -7,7 +7,6 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\AdminAccount;
-use Magento\Framework\Serialize\Serializer\Json;
 
 class AdminAccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,11 +29,6 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
      * @var AdminAccount
      */
     private $adminAccount;
-
-    /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializer;
 
     public function setUp()
     {
@@ -59,12 +53,6 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->getMockForAbstractClass();
 
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->getMock();
-        $this->serializer->expects($this->any())->method('serialize')->willReturnCallback(function ($param) {
-            return json_encode($param);
-        });
-
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',
             AdminAccount::KEY_LAST_NAME => 'Doe',
@@ -76,8 +64,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         $this->adminAccount = new AdminAccount(
             $this->setUpMock,
             $this->encryptor,
-            $data,
-            $this->serializer
+            $data
         );
     }
 
