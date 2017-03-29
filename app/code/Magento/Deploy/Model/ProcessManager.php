@@ -6,6 +6,11 @@
 
 namespace Magento\Deploy\Model;
 
+/**
+ * Class ProcessManager
+ *
+ * @deprecated since 2.2.0
+ */
 class ProcessManager
 {
     /** @var Process[] */

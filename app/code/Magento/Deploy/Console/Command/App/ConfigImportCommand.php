@@ -14,11 +14,11 @@ use Magento\Framework\Console\Cli;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 
 /**
- * Runs the process of importing configuration data from shared source to appropriate application sources.
+ * Runs the process of importing configuration data from shared source to appropriate application sources
  *
  * We have configuration files that are shared between environments, but some of the configurations are read only
  * from DB (e.g., themes, scopes and etc). This command is used to import such configurations from the file to
- * appropriate application sources.
+ * appropriate application sources
  */
 class ConfigImportCommand extends Command
 {
@@ -56,8 +56,7 @@ class ConfigImportCommand extends Command
     }
 
     /**
-     * Imports data from deployment configuration files to the DB.
-     * {@inheritdoc}
+     * Imports data from deployment configuration files to the DB. {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
