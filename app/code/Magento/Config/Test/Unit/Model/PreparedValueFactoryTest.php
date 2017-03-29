@@ -92,15 +92,16 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
      * @param array $structureGetElement
      * @param array $field
      * @param array $valueFactory
+     * @param string $configPath
      * @dataProvider createDataProvider
      */
     public function testCreate(
         array $deploymentConfigIsAvailable,
         array $structureGetElement,
         array $field,
-        array $valueFactory
+        array $valueFactory,
+        $configPath
     ) {
-        $path = '/some/path';
         $value = 'someValue';
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
@@ -123,15 +124,15 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($field['getBackendModel']['expects'])
             ->method('getBackendModel')
             ->willReturn($this->valueMock);
-        $this->fieldMock->expects($this->any())
+        $this->fieldMock->expects($field['getConfigPath']['expects'])
             ->method('getConfigPath')
-            ->willReturn(false);
+            ->willReturn($field['getConfigPath']['return']);
         $this->valueFactoryMock->expects($valueFactory['expects'])
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
             ->method('setPath')
-            ->with($path)
+            ->with($configPath)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScope')
@@ -148,7 +149,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             Value::class,
-            $this->valueBuilder->create($path, $value, $scope, $scopeCode)
+            $this->valueBuilder->create($configPath, $value, $scope, $scopeCode)
         );
     }
 
@@ -163,9 +164,14 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                         'expects' => $this->never(),
                         'return' => true
                     ],
-                    'getBackendModel' => ['expects' => $this->never()]
+                    'getBackendModel' => ['expects' => $this->never()],
+                    'getConfigPath' => [
+                        'expects' => $this->never(),
+                        'return' => null
+                    ],
                 ],
-                'valueFactory' => ['expects' => $this->once()]
+                'valueFactory' => ['expects' => $this->once()],
+                'configPath' => '/some/path',
             ],
             [
                 'deploymentConfigIsAvailable' => ['return' => true],
@@ -175,9 +181,14 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                         'expects' => $this->once(),
                         'return' => true
                     ],
-                    'getBackendModel' => ['expects' => $this->once()]
+                    'getBackendModel' => ['expects' => $this->once()],
+                    'getConfigPath' => [
+                        'expects' => $this->once(),
+                        'return' => 'customPath'
+                    ],
                 ],
-                'valueFactory' => ['expects' => $this->once()]
+                'valueFactory' => ['expects' => $this->once()],
+                'configPath' => 'customPath',
             ],
             [
                 'deploymentConfigIsAvailable' => ['return' => true],
@@ -187,9 +198,14 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                         'expects' => $this->once(),
                         'return' => false
                     ],
-                    'getBackendModel' => ['expects' => $this->never()]
+                    'getBackendModel' => ['expects' => $this->never()],
+                    'getConfigPath' => [
+                        'expects' => $this->never(),
+                        'return' => null
+                    ],
                 ],
-                'valueFactory' => ['expects' => $this->once()]
+                'valueFactory' => ['expects' => $this->once()],
+                'configPath' => '/some/path'
             ],
         ];
     }
