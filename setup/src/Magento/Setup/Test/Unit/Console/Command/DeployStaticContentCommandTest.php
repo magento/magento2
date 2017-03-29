@@ -5,7 +5,11 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Deploy\Console\Command\DeployStaticOptions;
+use Magento\Deploy\Model\DeployManager;
+use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -16,7 +20,7 @@ require 'FunctionExistMock.php';
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Deploy\Model\DeployManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeployManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deployer;
 
@@ -24,11 +28,6 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
-
-    /**
-     * @var \Magento\Framework\App\ObjectManagerFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerFactory;
 
     /**
      * @var \Magento\Framework\App\Utility\Files|\PHPUnit_Framework_MockObject_MockObject
@@ -53,33 +52,37 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->objectManagerFactory = $this->getMock(
-            \Magento\Framework\App\ObjectManagerFactory::class,
+        $this->deployer = $this->getMock(DeployManager::class, [], [], '', false);
+        $this->filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+
+        $objectManagerProviderMock = $this->getMock(
+            ObjectManagerProvider::class,
             [],
             [],
             '',
             false
         );
-        $this->deployer = $this->getMock(\Magento\Deploy\Model\DeployManager::class, [], [], '', false);
-        $this->filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $objectManagerProviderMock->method('get')->willReturn($this->objectManager);
+
+        $this->objectManager->method('get')->with(State::class)->willReturn($this->appState);
 
         $this->validator = $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $this->command = (new ObjectManager($this))->getObject(DeployStaticContentCommand::class, [
-            'objectManagerFactory' => $this->objectManagerFactory,
             'validator' => $this->validator,
-            'objectManager' => $this->objectManager,
-            'appState' => $this->appState,
+            'options' => new DeployStaticOptions(),
+            'objectManagerProvider' => $objectManagerProviderMock
         ]);
     }
 
     public function testExecute()
     {
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->filesUtil);
+        $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->deployer);
+
         $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
         $this->deployer->expects($this->once())->method('deploy');
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->deployer);
 
         $tester = new CommandTester($this->command);
         $tester->execute([]);
@@ -87,11 +90,12 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteValidateLanguages()
     {
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->filesUtil);
+        $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->deployer);
+
         $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
         $this->deployer->expects($this->once())->method('deploy');
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->deployer);
         $this->validator->expects(self::exactly(2))->method('isValid')->willReturnMap([
             ['en_US', true],
             ['uk_UA', true],
@@ -107,9 +111,10 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteIncludedExcludedLanguages()
     {
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->filesUtil);
+
         $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
         $this->validator->expects(self::exactly(2))->method('isValid')->willReturnMap([
             ['en_US', true],
             ['uk_UA', true],
@@ -125,9 +130,10 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteIncludedExcludedAreas()
     {
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->filesUtil);
+
         $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
 
         $tester = new CommandTester($this->command);
         $tester->execute(['--area' => ['a1', 'a2'], '--exclude-area' => 'a3']);
@@ -139,9 +145,10 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteIncludedExcludedThemes()
     {
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->filesUtil);
+
         $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
 
         $tester = new CommandTester($this->command);
         $tester->execute(['--theme' => ['t1', 't2'], '--exclude-theme' => 't3']);
@@ -153,11 +160,10 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidLanguageArgument()
     {
+        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->filesUtil);
+
         $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
         $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->willReturn($this->filesUtil);
         $wrongParam = ['languages' => ['ARG_IS_WRONG']];
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($wrongParam);
