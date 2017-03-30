@@ -5,6 +5,7 @@
  */
 namespace Magento\Widget\Helper;
 
+use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -13,27 +14,25 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class Conditions
 {
-    const WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP = [
-        '{' => '[',
-        '}' => ']',
-        '"' => '`',
-        '\\' => '|',
-    ];
-
     /**
-     * Instance of serializer interface.
-     *
      * @var Json
      */
     private $serializer;
 
     /**
+     * @var Normalizer
+     */
+    private $normalizer;
+
+    /**
      * @param Json $serializer
      */
     public function __construct(
-        Json $serializer = null
+        Json $serializer = null,
+        Normalizer $normalizer = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->normalizer = $normalizer ?: ObjectManager::getInstance()->get(Normalizer::class);
     }
 
     /**
@@ -44,12 +43,7 @@ class Conditions
      */
     public function encode(array $value)
     {
-        $value = str_replace(
-            array_keys(self::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            array_values(self::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            $this->serializer->serialize($value)
-        );
-        return $value;
+        return $this->normalizer->replaceReservedCharaters($this->serializer->serialize($value));
     }
 
     /**
@@ -60,12 +54,8 @@ class Conditions
      */
     public function decode($value)
     {
-        $value = str_replace(
-            array_values(self::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            array_keys(self::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            $value
+        return $this->serializer->unserialize(
+            $this->normalizer->restoreReservedCharaters($value)
         );
-        $value = $this->serializer->unserialize($value);
-        return $value;
     }
 }

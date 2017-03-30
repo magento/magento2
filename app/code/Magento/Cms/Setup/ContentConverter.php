@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Setup;
 
+use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -22,18 +23,26 @@ class ContentConverter extends SerializedToJson
     private $parameterFactory;
 
     /**
+     * @var Normalizer
+     */
+    private $normalizer;
+
+    /**
      * ContentConverter constructor
      *
      * @param Serialize $serialize
      * @param Json $json
      * @param \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory
+     * @param Normalizer $normalizer
      */
     public function __construct(
         Serialize $serialize,
         Json $json,
-        \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory
+        \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory,
+        Normalizer $normalizer
     ) {
         $this->parameterFactory = $parameterFactory;
+        $this->normalizer = $normalizer;
         parent::__construct($serialize, $json);
     }
 
@@ -46,13 +55,13 @@ class ContentConverter extends SerializedToJson
      */
     public function convert($value)
     {
-        preg_match_all('/(.*?){{(widget)(.*?)}}(.*?)/si', $value, $matches, PREG_SET_ORDER);
+        preg_match_all('/(.*?){{widget(.*?)}}/si', $value, $matches, PREG_SET_ORDER);
         if (empty($matches)) {
             return $value;
         }
         $convertedValue = '';
         foreach ($matches as $match) {
-            $convertedValue .= $this->convertMatchString($match);
+            $convertedValue .= $match[1] . '{{widget' . $this->convertWidgetParams($match[2]) . '}}';
         }
         preg_match_all('/(.*?{{widget.*?}})*(?<ending>.*?)$/si', $value, $matchesTwo, PREG_SET_ORDER);
         if (isset($matchesTwo[0])) {
@@ -70,51 +79,37 @@ class ContentConverter extends SerializedToJson
      */
     private function isConvertedConditions($value)
     {
-        // Restore WYSIWYG reserved characters in string
-        $value = str_replace(
-            array_values(Conditions::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            array_keys(Conditions::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            $value
-        );
-        return $this->isValidJsonValue($value);
+        return $this->isValidJsonValue($this->normalizer->restoreReservedCharaters($value));
     }
 
     /**
-     * Convert matching string
+     * Convert widget parameters from serialized format to JSON format
      *
-     * @param array $matchSegments
+     * @param string $paramsString
      * @return string
      */
-    private function convertMatchString(array $matchSegments)
+    private function convertWidgetParams($paramsString)
     {
         /** @var \Magento\Framework\Filter\Template\Tokenizer\Parameter $tokenizer */
         $tokenizer = $this->parameterFactory->create();
-        $tokenizer->setString($matchSegments[3]);
+        $tokenizer->setString($paramsString);
         $widgetParameters = $tokenizer->tokenize();
         if (isset($widgetParameters['conditions_encoded'])) {
             if ($this->isConvertedConditions($widgetParameters['conditions_encoded'])) {
-                return $matchSegments[0];
+                return $paramsString;
             }
             // Restore WYSIWYG reserved characters in string
-            $conditions = str_replace(
-                array_values(Conditions::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-                array_keys(Conditions::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-                $widgetParameters['conditions_encoded']
-            );
+            $conditions = $this->normalizer->restoreReservedCharaters($widgetParameters['conditions_encoded']);
             $conditions = parent::convert($conditions);
             // Replace WYSIWYG reserved characters in string
-            $widgetParameters['conditions_encoded'] = str_replace(
-                array_keys(Conditions::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-                array_values(Conditions::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-                $conditions
-            );
-            $matchSegments[3] = '';
+            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharaters($conditions);
+            $newParamsString = '';
             foreach ($widgetParameters as $key => $parameter) {
-                $matchSegments[3] .= ' ' . $key . '="' . $parameter . '"';
+                $newParamsString .= ' ' . $key . '="' . $parameter . '"';
             }
-            return $matchSegments[1] . '{{' . $matchSegments[2] . $matchSegments[3] . '}}' . $matchSegments[4];
+            return $newParamsString;
         } else {
-            return $matchSegments[0];
+            return $paramsString;
         }
     }
 }

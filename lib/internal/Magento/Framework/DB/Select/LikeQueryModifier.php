@@ -20,7 +20,8 @@ class LikeQueryModifier implements QueryModifierInterface
     /**
      * Constructor
      *
-     * @param array $values
+     * @param array $values array of field and pattern pairs of Like Clause,
+     *                      for example: [<field1> => <pattern1>, <field2> => <pattern2>, ...]
      */
     public function __construct(
         $values = []
@@ -33,8 +34,8 @@ class LikeQueryModifier implements QueryModifierInterface
      */
     public function modify(Select $select)
     {
-        foreach ($this->values as $field => $values) {
-            $select->where($field . ' LIKE (?)', $values);
+        foreach ($this->values as $field => $pattern) {
+            $select->where($field . ' LIKE (?)', $pattern);
         }
     }
 }

@@ -21,18 +21,18 @@ class LikeQueryModifierTest extends \PHPUnit_Framework_TestCase
     public function testModify()
     {
         $values = [
-            'field1' => 'value1',
-            'field2' => 'value2',
+            'field1' => 'pattern1',
+            'field2' => 'pattern2',
         ];
         $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock->expects($this->at(0))
             ->method('where')
-            ->with('field1 LIKE (?)', 'value1');
+            ->with('field1 LIKE (?)', 'pattern1');
         $selectMock->expects($this->at(1))
             ->method('where')
-            ->with('field2 LIKE (?)', 'value2');
+            ->with('field2 LIKE (?)', 'pattern2');
         $likeQueryModifier = $this->objectManager->getObject(
             LikeQueryModifier::class,
             ['values' => $values]

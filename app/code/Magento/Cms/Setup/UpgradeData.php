@@ -72,7 +72,7 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeVersionTwoZeroOne();
         }
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $this->upgradeVersionTwoZeroTwo($setup);
+            $this->convertWidgetConditionsToJson($setup);
         }
     }
 
@@ -82,7 +82,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function upgradeVersionTwoZeroTwo(ModuleDataSetupInterface $setup)
+    private function convertWidgetConditionsToJson(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
             \Magento\Cms\Setup\ContentConverter::class
