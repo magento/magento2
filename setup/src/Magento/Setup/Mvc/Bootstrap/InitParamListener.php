@@ -47,8 +47,8 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @var array
      */
     private $controllersToSkip = [
-        \Magento\Setup\Controller\Session::class,
-        \Magento\Setup\Controller\Success::class
+        \Magento\Setup\Controller\Session::class => ['index', 'unlogin'],
+        \Magento\Setup\Controller\Success::class => ['index']
     ];
 
     /**
@@ -110,8 +110,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /** @var RouteMatch $routeMatch */
         $routeMatch = $event->getRouteMatch();
         $controller = $routeMatch->getParam('controller');
+        $action = $routeMatch->getParam('action');
 
-        if (!in_array($controller, $this->controllersToSkip)) {
+        $skipCheck = array_key_exists($controller, $this->controllersToSkip)
+            && in_array($action, $this->controllersToSkip[$controller]);
+
+        if (!$skipCheck) {
             /** @var Application $application */
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
