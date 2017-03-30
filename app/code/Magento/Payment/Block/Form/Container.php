@@ -13,7 +13,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
  *
  * @method \Magento\Quote\Model\Quote getQuote()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Container extends \Magento\Framework\View\Element\Template
 {

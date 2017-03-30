@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\Template\Context;
 /**
  * Transparent form block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Form extends \Magento\Payment\Block\Form\Cc
 {
