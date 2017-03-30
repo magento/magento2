@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesInventory\Test\Unit\Model\Order;
 
-use Magento\SalesInventory\Model\Order\ReturnValidator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\SalesInventory\Model\Order\ReturnValidator;
 
 /**
  * Class ReturnValidatorTest
@@ -113,7 +113,7 @@ class ReturnValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderItemRepositoryMock->expects($this->once())
             ->method('get')
             ->with($returnToStockItems[0])
-            ->willThrowException(new NoSuchEntityException);
+            ->willThrowException(new NoSuchEntityException());
 
         $this->assertEquals(
             $this->returnValidator->validate($returnToStockItems, $this->creditMemoMock),
