@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Ui\PayPal;
@@ -55,8 +55,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
                     'locale' => strtolower($this->resolver->getLocale()),
-                    'paymentAcceptanceMarkSrc' =>
-                        'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
+                    'paymentAcceptanceMarkSrc' => 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
                     'vaultCode' => self::PAYPAL_VAULT_CODE,
                     'skipOrderReview' => $this->config->isSkipOrderReview(),
                     'paymentIcon' => $this->config->getPayPalIcon(),

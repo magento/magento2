@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Api\Data\LinkInterface;
+use Magento\Analytics\Api\Data\LinkInterfaceFactory;
 use Magento\Analytics\Model\FileInfo;
 use Magento\Analytics\Model\FileInfoManager;
 use Magento\Analytics\Model\LinkProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Analytics\Api\Data\LinkInterfaceFactory;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\UrlInterface;
 
 /**
  * Class LinkProviderTest

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,8 +48,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     public function testAddPhrase($options, $phpFiles, $jsFiles, $phpMap, $jsMap, $phraseFactoryMap, $expectedResult)
     {
         // 1. Create mocks
-        $phpAdapter = new AdapterStub;
-        $jsAdapter = new AdapterStub;
+        $phpAdapter = new AdapterStub();
+        $jsAdapter = new AdapterStub();
 
         // 2. Set mocks
         $this->parser->addAdapter('php', $phpAdapter);

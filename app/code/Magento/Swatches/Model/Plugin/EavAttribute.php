@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Swatches\Model\Swatch;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -334,7 +334,7 @@ class EavAttribute
      */
     protected function isOptionForDelete(Attribute $attribute, $optionId)
     {
-        $isOptionForDelete = $attribute->getData('option/delete/'.$optionId);
+        $isOptionForDelete = $attribute->getData('option/delete/' . $optionId);
         return isset($isOptionForDelete) && $isOptionForDelete;
     }
 
@@ -351,7 +351,7 @@ class EavAttribute
         $collection->addFieldToFilter('option_id', $optionId);
         $collection->addFieldToFilter('store_id', $storeId);
         $collection->setPageSize(1);
-        
+
         $loadedSwatch = $collection->getFirstItem();
         if ($loadedSwatch->getId()) {
             $this->isSwatchExists = true;
