@@ -10,7 +10,6 @@ use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\QueryModifierInterface;
 use Magento\Framework\DB\Select\InQueryModifier;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Query\BatchIterator;
@@ -139,14 +138,9 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testDataConvertErrorReporting()
     {
-        /** @var Serialize $serializer */
-        $serializer = $this->objectManager->create(Serialize::class);
-        $serializedData = $serializer->serialize(['some' => 'data', 'other' => 'other data']);
-        $serializedDataLength = strlen($serializedData);
-        $brokenSerializedData = substr($serializedData, 0, $serializedDataLength - 6);
         $rows = [
             1 => 'N;',
-            2 => $brokenSerializedData,
+            2 => 'a:2:{s:3:"foo";s:3:"bar";s:3:"bar";s:',
         ];
 
         $this->adapterMock->expects($this->any())
@@ -161,8 +155,6 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
         $this->fieldDataConverter->convert($this->adapterMock, 'table', 'id', 'value', $this->queryModifierMock);
     }
 
-    /**
-     */
     public function testAlreadyConvertedDataSkipped()
     {
         $rows = [
