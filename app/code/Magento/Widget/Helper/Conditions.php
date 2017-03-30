@@ -26,6 +26,7 @@ class Conditions
 
     /**
      * @param Json $serializer
+     * @param Normalizer $normalizer
      */
     public function __construct(
         Json $serializer = null,
