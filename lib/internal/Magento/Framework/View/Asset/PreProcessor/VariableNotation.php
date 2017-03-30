@@ -42,7 +42,7 @@ class VariableNotation implements Asset\PreProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(Chain $chain)
     {

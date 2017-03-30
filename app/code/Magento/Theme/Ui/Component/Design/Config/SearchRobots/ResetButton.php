@@ -10,6 +10,11 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Form\Field;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * ResetButton field instance
+ *
+ * @api
+ */
 class ResetButton extends Field
 {
     /**
@@ -17,21 +22,24 @@ class ResetButton extends Field
      */
     const XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS = 'design/search_engine_robots/default_custom_instructions';
 
-    /** @var ScopeConfigInterface  */
+    /**
+     * @var ScopeConfigInterface
+     */
     private $scopeConfig;
 
     /**
-     * ResetButton constructor.
+     * ResetButton constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param array|\Magento\Framework\View\Element\UiComponentInterface[] $components
+     * @param \Magento\Framework\View\Element\UiComponentInterface[] $components
      * @param array $data
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        $components,
+        array $components,
         array $data,
         ScopeConfigInterface $scopeConfig
     ) {

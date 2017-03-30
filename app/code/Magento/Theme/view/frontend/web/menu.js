@@ -8,7 +8,12 @@
  * @param {String} id - id of ul element with navigation lists
  * @param {Object} settings - object with settings
  */
-/* global mainNav */
+/**
+ * global mainNav
+ *
+ * @deprecated
+ * @see lib/web/mage/menu.js
+ */
 define([
     'prototype'
 ], function () {
@@ -87,7 +92,7 @@ define([
             },
 
             /**
-             * @param {Onject} elm
+             * @param {Object} elm
              * @param {*} ev
              */
             fireNavEvent: function (elm, ev) {

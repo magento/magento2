@@ -7,7 +7,7 @@
 /**
  * Custom Variable Edit Form
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 namespace Magento\Variable\Block\System\Variable\Edit;
 

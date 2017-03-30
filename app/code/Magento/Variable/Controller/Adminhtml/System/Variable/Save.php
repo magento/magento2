@@ -6,6 +6,11 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+/**
+ * Save variable POST controller
+ *
+ * @api
+ */
 class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**

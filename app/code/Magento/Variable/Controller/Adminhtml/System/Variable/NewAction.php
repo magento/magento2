@@ -6,6 +6,11 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+/**
+ * Create new variable form
+ *
+ * @api
+ */
 class NewAction extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**

@@ -3,6 +3,11 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * JQuery UI Widget declaration: 'mage.sortable'
+ *
+ * @api
+ */
 define([
     'jquery',
     'jquery/ui'
