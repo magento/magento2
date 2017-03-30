@@ -37,7 +37,7 @@ class TypePoolTest extends \PHPUnit_Framework_TestCase
         array $environment,
         $path,
         $type,
-        $excludeListCallback = null,
+        $excludeListCallback,
         $expectedResult
     ) {
         if (is_callable($excludeListCallback)) {
