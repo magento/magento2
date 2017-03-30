@@ -8,9 +8,6 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * @api
- */
 class StoresConfig
 {
     /**
