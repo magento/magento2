@@ -62,7 +62,7 @@ class RowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
         $storeGroupCounterMock->expects($this->once())
             ->method('group')
-            ->with('category_id')
+            ->with('product_id')
             ->willReturnSelf();
         $this->assertEquals(2500, $this->model->estimateRowSize());
     }

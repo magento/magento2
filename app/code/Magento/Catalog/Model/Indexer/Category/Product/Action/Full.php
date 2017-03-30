@@ -231,6 +231,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->batchSize
         );
         foreach ($batches as $batch) {
+            $this->clearTmpData();
             $resultSelect = clone $basicSelect;
             $select = $this->connection->select();
             $select->distinct(true);
@@ -245,6 +246,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
+            $this->publishData();
         }
     }
 

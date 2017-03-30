@@ -56,18 +56,18 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
             )->where('group_id > 0');
         $storeGroupCount = $connection->fetchOne($storeGroupSelect);
 
-        // get max possible products per category
-        // subselect with products count per category
-        $productCounterSubSelect = $connection->select()
+        // get max possible categories per product
+        // subselect with categories count per product
+        $categoryCounterSubSelect = $connection->select()
             ->from(
                 $this->resourceConnection->getTableName('catalog_category_product'),
                 ['counter' => new \Zend_Db_Expr('count(category_id)')]
-            )->group('category_id');
+            )->group('product_id');
 
         // select maximum value from subselect
         $productCountSelect = $connection->select()
             ->from(
-                ['counters' => $productCounterSubSelect],
+                ['counters' => $categoryCounterSubSelect],
                 [new \Zend_Db_Expr('max(counter)')]
             );
         $maxProducts = $connection->fetchOne($productCountSelect);

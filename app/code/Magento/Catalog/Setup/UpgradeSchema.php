@@ -412,7 +412,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         // Drop catalog_category_product_index_tmp table
         $setup->getConnection()->dropTable($tableName);
 
-        // Create catalog_category_product_index_tmp table with PK and engine=InnoDB
+        // Create catalog_category_product_index_tmp table with PK
         $table = $setup->getConnection()
             ->newTable($tableName)
             ->addColumn(
@@ -456,6 +456,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 null,
                 ['unsigned' => true, 'nullable' => false],
                 'Visibility'
+            )
+            ->setOption(
+                'type',
+                \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
             )
             ->setComment('Catalog Category Product Indexer temporary table');
 
