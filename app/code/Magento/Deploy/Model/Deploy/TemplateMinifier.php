@@ -9,6 +9,11 @@ namespace Magento\Deploy\Model\Deploy;
 use Magento\Framework\View\Template\Html\MinifierInterface;
 use Magento\Framework\App\Utility\Files;
 
+/**
+ * Class TemplateMinifier
+ *
+ * @deprecated since 2.2.0
+ */
 class TemplateMinifier
 {
     /**

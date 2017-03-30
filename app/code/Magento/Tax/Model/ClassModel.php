@@ -186,6 +186,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     {
         return $this->setData(self::KEY_TYPE, $classType);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

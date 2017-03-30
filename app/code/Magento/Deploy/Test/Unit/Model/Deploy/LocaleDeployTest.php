@@ -121,7 +121,7 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
             $designFactoryMock,
             $localeResolverMock,
             [],
-            [\Magento\Deploy\Console\Command\DeployStaticOptionsInterface::NO_JAVASCRIPT => 0]
+            [\Magento\Deploy\Console\Command\DeployStaticOptions::NO_JAVASCRIPT => 0]
         );
         $property = new \ReflectionProperty(get_class($this->model), 'themeList');
         $property->setAccessible(true);

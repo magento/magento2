@@ -27,7 +27,6 @@ class InstallData implements InstallDataInterface
      */
     protected $quoteSetupFactory;
 
-
     /**
      * @param SalesSetupFactory $salesSetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory
@@ -80,6 +79,5 @@ class InstallData implements InstallDataInterface
          * Prepare database after install
          */
         $setup->endSetup();
-
     }
 }

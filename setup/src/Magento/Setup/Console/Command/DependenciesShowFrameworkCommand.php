@@ -24,7 +24,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 
     /**
      * Constructor
-     * 
+     *
      * @param ComponentRegistrarInterface $registrar
      * @param ObjectManagerProvider $objectManagerProvider
      */

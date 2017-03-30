@@ -17,7 +17,6 @@ class DatabaseCheck extends AbstractActionController
      */
     private $dbValidator;
 
-
     /**
      * Constructor
      *

@@ -33,7 +33,7 @@ use \Magento\Store\Api\Data\StoreInterface;
  * <assign_entities_to_all_websites>1<assign_entities_to_all_websites/>
  * means that all stores will have the same root category
  *
- * <assign_entities_to_all_websites>1<assign_entities_to_all_websites/>
+ * <assign_entities_to_all_websites>0<assign_entities_to_all_websites/>
  * means that all stores will have unique root category
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
@@ -185,8 +185,7 @@ class StoresFixture extends Fixture
         $this->storesCount = $this->fixtureModel->getValue('store_views', self::DEFAULT_STORE_VIEW_COUNT);
         $this->singleRootCategory = (bool)$this->fixtureModel->getValue('assign_entities_to_all_websites', false);
 
-        if (
-            $this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
+        if ($this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
             && $this->storeGroupsCount <= self::DEFAULT_STORE_COUNT
             && $this->storesCount <= self::DEFAULT_STORE_VIEW_COUNT
         ) {

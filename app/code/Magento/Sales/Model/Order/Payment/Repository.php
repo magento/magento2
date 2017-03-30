@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Model\Order\Payment;
 
-
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;

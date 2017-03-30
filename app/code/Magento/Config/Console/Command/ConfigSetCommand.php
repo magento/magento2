@@ -5,17 +5,17 @@
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Scope\ValidatorInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 
 /**
  * Command provides possibility to change system configuration.
@@ -33,33 +33,39 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * @var ConfigSetProcessorFactory
-     */
-    private $configSetProcessorFactory;
-
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
-
-    /**
+     * Scope manager.
+     *
      * @var ScopeInterface
      */
     private $scope;
 
     /**
-     * @param ConfigSetProcessorFactory $configSetProcessorFactory
-     * @param ValidatorInterface $validator
-     * @param ScopeInterface $scope
+     * Application state.
+     *
+     * @var State
+     */
+    private $state;
+
+    /**
+     * The processor facade factory
+     *
+     * @var ProcessorFacadeFactory
+     */
+    private $processorFacadeFactory;
+
+    /**
+     * @param ScopeInterface $scope Scope manager
+     * @param State $state Application state
+     * @param ProcessorFacadeFactory $processorFacadeFactory The processor facade factory
      */
     public function __construct(
-        ConfigSetProcessorFactory $configSetProcessorFactory,
-        ValidatorInterface $validator,
-        ScopeInterface $scope
+        ScopeInterface $scope,
+        State $state,
+        ProcessorFacadeFactory $processorFacadeFactory
     ) {
-        $this->configSetProcessorFactory = $configSetProcessorFactory;
-        $this->validator = $validator;
         $this->scope = $scope;
+        $this->state = $state;
+        $this->processorFacadeFactory = $processorFacadeFactory;
 
         parent::__construct();
     }
@@ -110,30 +116,20 @@ class ConfigSetCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->validator->isValid(
-                $input->getOption(static::OPTION_SCOPE),
-                $input->getOption(static::OPTION_SCOPE_CODE)
-            );
-
             // Emulating adminhtml scope to be able to read configs.
-            $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($input, $output) {
+                $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
-            $processor = $input->getOption(static::OPTION_LOCK)
-                ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-            $message = $input->getOption(static::OPTION_LOCK)
-                ? 'Value was saved and locked.'
-                : 'Value was saved.';
+                $message = $this->processorFacadeFactory->create()->process(
+                    $input->getArgument(static::ARG_PATH),
+                    $input->getArgument(static::ARG_VALUE),
+                    $input->getOption(static::OPTION_SCOPE),
+                    $input->getOption(static::OPTION_SCOPE_CODE),
+                    $input->getOption(static::OPTION_LOCK)
+                );
 
-            // The processing flow depends on --lock option.
-            $processor->process(
-                $input->getArgument(ConfigSetCommand::ARG_PATH),
-                $input->getArgument(ConfigSetCommand::ARG_VALUE),
-                $input->getOption(ConfigSetCommand::OPTION_SCOPE),
-                $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE)
-            );
-
-            $output->writeln('<info>' . $message . '</info>');
+                $output->writeln('<info>' . $message . '</info>');
+            });
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {

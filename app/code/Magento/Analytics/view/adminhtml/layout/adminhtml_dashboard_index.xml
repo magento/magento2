@@ -11,11 +11,10 @@
         <referenceContainer name="content">
             <uiComponent name="analytics_subscription_form" aclResource="Magento_Analytics::analytics_settings"
                          visibilityCondition="Magento\Analytics\Model\Condition\CanViewNotification"/>
-        </referenceContainer>
-        <referenceContainer name="refresh_statistics">
-            <block template="Magento_Analytics::dashboard/link.phtml"
+            <block template="Magento_Analytics::dashboard/section.phtml"
                    class="Magento\Backend\Block\Template"
-                   name="analytics_service_external_link"/>
+                   name="analytics_service_external_link"
+                   before="-"/>
         </referenceContainer>
     </body>
 </page>

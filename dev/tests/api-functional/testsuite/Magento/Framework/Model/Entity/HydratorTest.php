@@ -120,12 +120,10 @@ class HydratorTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $actualData['addresses'][0]['id'],
             $actualData['addresses'][1]['region_id'],
             $actualData['addresses'][1]['id'],
-
             $expectedData['addresses'][0]['default_shipping'],
             $expectedData['addresses'][0]['default_billing'],
             $expectedData['addresses'][1]['default_shipping'],
             $expectedData['addresses'][1]['default_billing'],
-
             $expectedData['created_at'],
             $expectedData['updated_at'],
             $actualData['created_at'],

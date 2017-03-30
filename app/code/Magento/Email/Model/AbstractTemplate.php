@@ -672,8 +672,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($storeId !== null && $storeId !== false) {
             // save current design settings
             $this->emulatedDesignConfig = clone $this->getDesignConfig();
-            if (
-                $this->getDesignConfig()->getStore() != $storeId
+            if ($this->getDesignConfig()->getStore() != $storeId
                 || $this->getDesignConfig()->getArea() != $area
             ) {
                 $this->setDesignConfig(['area' => $area, 'store' => $storeId]);

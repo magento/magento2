@@ -73,7 +73,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->generator = ServiceLocator::getDictionaryGenerator();
-
     }
 
     protected function tearDown()

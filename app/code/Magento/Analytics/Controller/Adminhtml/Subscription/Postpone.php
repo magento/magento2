@@ -16,9 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Postpone
- *
- * Postpones notification about Free Tier program
+ * Postpones notification about subscription to Magento BI Advanced Reporting.
  */
 class Postpone extends Action
 {
@@ -38,8 +36,6 @@ class Postpone extends Action
     private $logger;
 
     /**
-     * Postpone constructor.
-     *
      * @param Context $context
      * @param DateTimeFactory $dateTimeFactory
      * @param NotificationTime $notificationTime
@@ -55,7 +51,6 @@ class Postpone extends Action
         $this->notificationTime = $notificationTime;
         $this->logger = $logger;
         parent::__construct($context);
-
     }
 
     /**

@@ -186,7 +186,9 @@ class EavAttribute
     {
         if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
             foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && $optionsArray['delete'][$optionId] == 1) {
+                if (isset($optionsArray['delete']) && isset($optionsArray['delete'][$optionId])
+                    && $optionsArray['delete'][$optionId] == 1
+                ) {
                     unset($optionsArray['value'][$optionId]);
                 }
             }
@@ -372,7 +374,6 @@ class EavAttribute
         if ($this->isSwatchExists) {
             $swatch->setData('type', $type);
             $swatch->setData('value', $value);
-
         } else {
             $swatch->setData('option_id', $optionId);
             $swatch->setData('store_id', $storeId);
@@ -398,8 +399,7 @@ class EavAttribute
             /** @var \Magento\Swatches\Model\Swatch $swatch */
             $swatch = $this->swatchFactory->create();
             // created and removed on frontend option not exists in dependency array
-            if (
-                substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
+            if (substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
                 isset($this->dependencyArray[$defaultValue])
             ) {
                 $defaultValue = $this->dependencyArray[$defaultValue];
@@ -446,7 +446,7 @@ class EavAttribute
             if ($this->isOptionForDelete($attribute, $optionId)) {
                 continue;
             }
-            if (empty($option[0])) {
+            if (!isset($option[0]) || $option[0] === '') {
                 return false;
             }
         }

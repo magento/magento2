@@ -854,6 +854,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(['qty' => 1]))
             ->will($this->returnValue($requestMock));
 
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+
         $typeInstanceMock = $this->getMock(
             \Magento\Catalog\Model\Product\Type\Simple::class,
             [
@@ -935,6 +939,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($collectionMock));
+
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
 
         $typeInstanceMock->expects($this->once())
             ->method('prepareForCartAdvanced')

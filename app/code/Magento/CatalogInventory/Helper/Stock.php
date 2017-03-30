@@ -82,8 +82,8 @@ class Stock
     public function assignStatusToProduct(Product $product, $status = null)
     {
         if ($status === null) {
-            $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
+            $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $scopeId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -98,10 +98,10 @@ class Stock
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
     {
-        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
+        $scopeId = $this->getStockConfiguration()->getDefaultScopeId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
@@ -156,7 +156,7 @@ class Stock
             $resource = $this->getStockStatusResource();
             $resource->addStockDataToCollection(
                 $collection,
-                !$isShowOutOfStock && $collection->getFlag('require_stock_items')
+                !$isShowOutOfStock || $collection->getFlag('require_stock_items')
             );
             $collection->setFlag($stockFlag, true);
         }
