@@ -5,6 +5,9 @@
  */
 namespace Magento\Widget\Model\Widget\Wysiwyg;
 
+/**
+ * Normalize widget content in Wysiwyg editor
+ */
 class Normalizer
 {
 
@@ -31,7 +34,7 @@ class Normalizer
     }
 
     /**
-     * Restore the  reserved characters in the content
+     * Restore the reserved characters in the content
      *
      * @param string $content
      * @return string

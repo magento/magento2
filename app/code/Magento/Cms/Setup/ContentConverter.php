@@ -10,7 +10,6 @@ use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Widget\Helper\Conditions;
 
 /**
  * Convert conditions_encoded part of cms block content data from serialized to JSON format
@@ -72,17 +71,6 @@ class ContentConverter extends SerializedToJson
     }
 
     /**
-     * Check if conditions have been converted to JSON
-     *
-     * @param string $value
-     * @return bool
-     */
-    private function isConvertedConditions($value)
-    {
-        return $this->isValidJsonValue($this->normalizer->restoreReservedCharaters($value));
-    }
-
-    /**
      * Convert widget parameters from serialized format to JSON format
      *
      * @param string $paramsString
@@ -95,14 +83,13 @@ class ContentConverter extends SerializedToJson
         $tokenizer->setString($paramsString);
         $widgetParameters = $tokenizer->tokenize();
         if (isset($widgetParameters['conditions_encoded'])) {
-            if ($this->isConvertedConditions($widgetParameters['conditions_encoded'])) {
+            $conditions = $this->normalizer->restoreReservedCharaters($widgetParameters['conditions_encoded']);
+            if ($this->isValidJsonValue($conditions)) {
                 return $paramsString;
             }
-            // Restore WYSIWYG reserved characters in string
-            $conditions = $this->normalizer->restoreReservedCharaters($widgetParameters['conditions_encoded']);
-            $conditions = parent::convert($conditions);
-            // Replace WYSIWYG reserved characters in string
-            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharaters($conditions);
+            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharaters(
+                parent::convert($conditions)
+            );
             $newParamsString = '';
             foreach ($widgetParameters as $key => $parameter) {
                 $newParamsString .= ' ' . $key . '="' . $parameter . '"';

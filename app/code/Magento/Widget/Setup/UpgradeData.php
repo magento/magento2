@@ -73,7 +73,7 @@ class UpgradeData implements UpgradeDataInterface
             'like',
             [
                 'values' => [
-                    'xml' => ['%conditions_encoded%']
+                    'xml' => '%conditions_encoded%'
                 ]
             ]
         );
