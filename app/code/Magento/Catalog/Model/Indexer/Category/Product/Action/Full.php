@@ -100,11 +100,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     public function execute()
     {
-        $this->clearTmpData();
-
         $this->reindex();
 
-        $this->publishData();
         $this->removeUnnecessaryData();
 
         return $this;
@@ -155,19 +152,16 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $select = $this->connection->select()->from($this->getMainTmpTable());
 
-        $queries = $this->prepareSelectsByRange($select, 'category_id');
         $columns = array_keys($this->connection->describeTable($this->getMainTable()));
 
-        foreach ($queries as $query) {
-            $this->connection->query(
-                $this->connection->insertFromSelect(
-                    $query,
-                    $this->getMainTable(),
-                    $columns,
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
-                )
-            );
-        }
+        $this->connection->query(
+            $this->connection->insertFromSelect(
+                $select,
+                $this->getMainTable(),
+                $columns,
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            )
+        );
     }
 
     /**
