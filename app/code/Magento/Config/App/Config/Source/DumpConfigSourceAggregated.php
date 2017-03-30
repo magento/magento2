@@ -81,6 +81,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param array $sources
      * @param TypePool|null $typePool
      * @param array $rules Rules for filtration the configuration data.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExcludeList $excludeList,

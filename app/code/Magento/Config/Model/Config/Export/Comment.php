@@ -59,7 +59,7 @@ class Comment implements CommentInterface
      */
     public function get()
     {
-        $comment = array_reduce($this->source->getExcludedFields(), function($comment, $path) {
+        $comment = array_reduce($this->source->getExcludedFields(), function ($comment, $path) {
             if ($this->isCommendRequired($path)) {
                 $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
             }

@@ -269,6 +269,7 @@
                 <item name="web/unsecure/base_link_url" xsi:type="string">1</item>
                 <item name="web/unsecure/base_url" xsi:type="string">1</item>
             </argument>
+            <argument name="excludeList" xsi:type="object">Magento\Config\Model\Config\Export\ExcludeList</argument>
         </arguments>
     </type>
 </config>
