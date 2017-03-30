@@ -92,15 +92,6 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                 ]
             ]);
 
-        $this->excludeListMock->expects($this->any())
-            ->method('isPresent')
-            ->willReturnMap([
-                ['web/unsecure/base_url', false],
-                ['web/secure/base_url', true],
-                ['test1/test2/test/3', false],
-                ['web/some_key1/some_key11', true],
-                ['web/some_key1/some_key12', false],
-            ]);
         $this->typePoolMock->expects($this->any())
             ->method('isPresent')
             ->willReturnMap([
@@ -125,7 +116,12 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                 ],
 
             ],
-            $this->typePoolMock
+            $this->typePoolMock,
+            [
+                'default' => 'include',
+                'sensitive' => 'exclude',
+                'environment' => 'exclude',
+            ]
         );
     }
 
@@ -145,6 +141,9 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                         'unsecure' => [
                             'base_url' => 'http://test.local',
                         ],
+                        'some_key1' => [
+                            'some_key11' => 'someValue11',
+                        ],
                     ]
                 ],
             ],
@@ -152,12 +151,16 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetWithInvertExcludes()
+    public function testGetWithExcludeDefault()
     {
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->model,
-            'invertExcludes',
-            true
+            'rules',
+            [
+                'default' => 'exclude',
+                'sensitive' => 'include',
+                'environment' => 'include',
+            ]
         );
 
         $this->assertEquals(
@@ -166,7 +169,6 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                     'web' => [
                         'secure' => ['base_url' => 'https://test.local'],
                         'some_key1' => [
-                            'some_key11' => 'someValue11',
                             'some_key12' => 'someValue12'
                         ],
                         'another_key' => ['key1' => 'value']
@@ -182,7 +184,6 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 'web/secure/base_url',
-                'web/some_key1/some_key11',
                 'web/some_key1/some_key12',
                 'web/another_key/key1'
             ],

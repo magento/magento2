@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Model\Config;
 
+use Magento\Config\Model\Config\Export\ExcludeList;
+
 /**
  * Checker for config type.
  *
@@ -48,17 +50,31 @@ class TypePool
     private $filteredPaths;
 
     /**
+     * Checks if the configuration path is contained in exclude list.
+     *
+     * @var ExcludeList
+     * @deprecated As in Magento since version 2.2.0 there are several
+     *             types for configuration fields that require special processing.
+     */
+    private $excludeList;
+
+    /**
      * @param array $sensitive List of sensitive configuration fields paths
      * @param array $environment List of environment configuration fields paths
+     * @param ExcludeList $excludeList Checks if the configuration path is contained in exclude list
      */
-    public function __construct(array $sensitive = [], array $environment = [])
+    public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList)
     {
         $this->sensitive = $sensitive;
         $this->environment = $environment;
+        $this->excludeList = $excludeList;
     }
 
     /**
      * Verifies that the configuration field path belongs to the specified type.
+     *
+     * For sensitive type, if configuration path was not found in the sensitive type pool
+     * checks if this configuration path present in ExcludeList.
      *
      * @param string $path Configuration field path. For example, 'contact/email/recipient_email'
      * @param string $type Type of configuration fields
@@ -70,7 +86,13 @@ class TypePool
             $this->filteredPaths[$type] = $this->getPathsByType($type);
         }
 
-        return in_array($path, $this->filteredPaths[$type]);
+        $isPresent = in_array($path, $this->filteredPaths[$type]);
+
+        if ($type == self::TYPE_SENSITIVE && !$isPresent) {
+            $isPresent = $this->excludeList->isPresent($path);
+        }
+
+        return $isPresent;
     }
 
     /**
@@ -81,10 +103,10 @@ class TypePool
      * For example, if you pass a sensitive or TypePool::TYPE_SENSITIVE type, we get an array:
      * ```php
      * array(
-     *      'some/path/sensetive/path1'
-     *      'some/path/sensetive/path2'
-     *      'some/path/sensetive/path3'
-     *      'some/path/sensetive/path4'
+     *      'some/path/sensitive/path1'
+     *      'some/path/sensitive/path2'
+     *      'some/path/sensitive/path3'
+     *      'some/path/sensitive/path4'
      * );
      * ```
      *

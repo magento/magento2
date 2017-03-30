@@ -17,7 +17,12 @@ use Magento\Framework\App\ObjectManager;
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
     /**
+     * Checks if the configuration path is contained in exclude list.
+     *
      * @var ExcludeList
+     * @deprecated As in Magento since version 2.2.0 there are several
+     *             types for configuration fields that require special processing.
+     * @see TypePool
      */
     private $excludeList;
 
@@ -44,32 +49,49 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $data;
 
     /**
-     * Option that inverts exclude list.
+     * Array of rules for filtration the configuration data.
      *
-     * If this option is:
-     *    false - removes from configuration data all items that exist in exclude list;
-     *    true - removes from configuration data all items that not exist in exclude list.
+     * For example:
+     * ```php
+     * [
+     *     'default' => 'include',
+     *     'sensitive' => 'exclude',
+     *     'environment' => 'exclude',
+     * ]
+     * ```
+     * It means that all aggregated configuration data will be included in result but configurations
+     * that relates to 'sensitive' or 'environment' will be excluded.
      *
-     * @var bool
+     *
+     * ```php
+     * [
+     *     'default' => 'exclude',
+     *     'sensitive' => 'include',
+     *     'environment' => 'include',
+     * ]
+     * ```
+     * It means that result will contains only 'sensitive' and 'environment' configurations.
+     *
+     * @var array
      */
-    private $invertExcludes;
+    private $rules;
 
     /**
      * @param ExcludeList $excludeList
      * @param array $sources
      * @param TypePool|null $typePool
-     * @param bool $invertExcludes The option that inverts exclude list
+     * @param array $rules Rules for filtration the configuration data.
      */
     public function __construct(
         ExcludeList $excludeList,
         array $sources = [],
         TypePool $typePool = null,
-        $invertExcludes = false
+        array $rules = []
     ) {
         $this->excludeList = $excludeList;
         $this->sources = $sources;
         $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
-        $this->invertExcludes = $invertExcludes;
+        $this->rules = $rules;
     }
 
     /**
@@ -128,7 +150,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     }
 
     /**
-     * Checks if the configuration field belongs to a sensitive type.
+     * Checks if the configuration field needs to be excluded.
      *
      * @param string $path Configuration field path. For example 'contact/email/recipient_email'
      * @return boolean
@@ -139,11 +161,24 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             return false;
         }
 
-        $exclude = $this->excludeList->isPresent($path)
-            || $this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT)
-            || $this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE);
+        $default = isset($this->rules['default']) ?
+            $this->rules['default'] == 'exclude' : false;
 
-        return $this->invertExcludes ? !$exclude : $exclude;
+        $exclude = $default;
+
+        foreach ($this->rules as $type => $rule) {
+            if ($type == 'default') {
+                continue;
+            }
+
+            if (!$default && $rule == 'exclude') {
+                $exclude = $exclude || $this->typePool->isPresent($path, $type);
+            } elseif ($default && $rule == 'include') {
+                $exclude = $exclude && !$this->typePool->isPresent($path, $type);
+            }
+        }
+
+        return $exclude;
     }
 
     /**

@@ -35,28 +35,18 @@ class Comment implements CommentInterface
     private $typePool;
 
     /**
-     * Contains list of config fields which should be excluded from config export file.
-     *
-     * @var ExcludeList
-     */
-    private $excludeList;
-
-    /**
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
-     * @param TypePool|null $typePool
-     * @param ExcludeList|null $excludeList
+     * @param TypePool|null $typePool The checker for config type
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         DumpConfigSourceInterface $source,
-        TypePool $typePool = null,
-        ExcludeList $excludeList = null
+        TypePool $typePool = null
     ) {
         $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;
         $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
-        $this->excludeList = $excludeList ?: ObjectManager::getInstance()->get(ExcludeList::class);
     }
 
     /**
@@ -69,15 +59,13 @@ class Comment implements CommentInterface
      */
     public function get()
     {
-        $comment = '';
-        $fields = $this->source->getExcludedFields();
-        foreach ($fields as $path) {
-            if ($this->isSensitive($path)
-                && !$this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT)
-            ) {
+        $comment = array_reduce($this->source->getExcludedFields(), function($comment, $path) {
+            if ($this->isCommendRequired($path)) {
                 $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
             }
-        }
+            return $comment;
+        });
+
         if ($comment) {
             $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
                 . 'Sensitive data can be stored in the following environment variables:'
@@ -87,14 +75,14 @@ class Comment implements CommentInterface
     }
 
     /**
-     * Checks whether the field path is sensitive.
+     * Checks if comment required for given configuration path.
      *
      * @param string $path Configuration field path
      * @return bool
      */
-    private function isSensitive($path)
+    private function isCommendRequired($path)
     {
         return $this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE)
-            || $this->excludeList->isPresent($path);
+            && !$this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT);
     }
 }
