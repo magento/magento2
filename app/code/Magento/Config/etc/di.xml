@@ -281,9 +281,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Config\Value">
-        <arguments>
-            <argument name="config" xsi:type="object">configSnapshot</argument>
-        </arguments>
-    </type>
 </config>
