@@ -101,6 +101,7 @@ class Modal extends Block
     {
         $this->waitModalAnimationFinished();
         $this->_rootElement->find($this->dismissWarningSelector)->click();
+        $this->waitForElementNotVisible($this->loadingMask);
     }
 
     /**
@@ -168,7 +169,7 @@ class Modal extends Block
      *
      * @return void
      */
-    private function waitModalAnimationFinished()
+    protected function waitModalAnimationFinished()
     {
         usleep(500000);
     }
