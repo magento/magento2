@@ -209,7 +209,7 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
      * @param string|int $batchSize
      * @expectedException \InvalidArgumentException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Invalid value for environment variable DATA_CONVERTER_BATCH_SIZE. Should be integer and be > 25000, < 500000
+     * @expectedExceptionMessage Invalid value for environment variable DATA_CONVERTER_BATCH_SIZE. Should be integer, >= 1 and < value of PHP_INT_MAX
      * @codingStandardsIgnoreEnd
      * @dataProvider convertBatchSizeFromEnvInvalidDataProvider
      */
@@ -258,7 +258,7 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['value'],
-            [500001],
+            [bcadd(PHP_INT_MAX, 1)],
         ];
     }
 }

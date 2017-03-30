@@ -46,7 +46,7 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $initParams = array_merge(['param' => 'value'], $_SERVER);
+        $initParams = ['param' => 'value'];
 
         $this->serviceLocatorMock
             ->expects($this->atLeastOnce())

@@ -27,16 +27,6 @@ class FieldDataConverter
     const DEFAULT_BATCH_SIZE = 50000;
 
     /**
-     * Min batch size
-     */
-    const MIN_BATCH_SIZE = 25000;
-
-    /**
-     * Max batch size
-     */
-    const MAX_BATCH_SIZE = 500000;
-
-    /**
      * @var Generator
      */
     private $queryGenerator;
@@ -141,10 +131,10 @@ class FieldDataConverter
     {
         if (null !== $this->envBatchSize) {
             $batchSize = (int) $this->envBatchSize;
-            if ($batchSize < self::MIN_BATCH_SIZE || $batchSize > self::MAX_BATCH_SIZE) {
+            if (bccomp($this->envBatchSize, PHP_INT_MAX, 0) === 1 || $batchSize < 1) {
                 throw new \InvalidArgumentException(
                     'Invalid value for environment variable ' . self::BATCH_SIZE_VARIABLE_NAME . '. '
-                    . 'Should be integer and be > ' . self::MIN_BATCH_SIZE . ', < ' . self::MAX_BATCH_SIZE
+                    . 'Should be integer, >= 1 and < value of PHP_INT_MAX'
                 );
             }
             return $batchSize;
