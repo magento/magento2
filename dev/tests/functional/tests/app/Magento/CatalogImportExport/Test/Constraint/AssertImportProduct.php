@@ -46,7 +46,7 @@ class AssertImportProduct extends AbstractConstraint
     private $import;
 
     /**
-     * Edit page on backend
+     * Edit page in Admin.
      *
      * @var CatalogProductEdit
      */
@@ -145,16 +145,7 @@ class AssertImportProduct extends AbstractConstraint
      */
     protected function getResultProductsData(array $productsData)
     {
-        $resultProductsData = [];
-        array_walk_recursive(
-            $productsData,
-            function ($value, $key) use (&$resultProductsData) {
-                if (array_search($key, $this->neededKeys)) {
-                    $resultProductsData[$key] = $value;
-                }
-            }
-        );
-        return $resultProductsData;
+        return array_intersect_key($productsData, array_flip($this->neededKeys));
     }
 
     /**

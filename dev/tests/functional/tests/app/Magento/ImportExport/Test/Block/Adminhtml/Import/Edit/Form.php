@@ -23,9 +23,6 @@ class Form extends \Magento\Mtf\Block\Form
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $data = $fixture->getData();
-        $importFile = $data['import_file'];
-        unset($data['import_file']);
-        $data['import_file'] = $importFile;
         $fields = isset($data['fields']) ? $data['fields'] : $data;
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping, $element);
