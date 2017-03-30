@@ -6,12 +6,11 @@
 
 namespace Magento\Deploy\Console\Command;
 
-use Magento\TestFramework\Event\Magento;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\State;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Command to show application mode
@@ -37,7 +36,7 @@ class ShowModeCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -48,7 +47,7 @@ class ShowModeCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

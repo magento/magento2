@@ -13,6 +13,11 @@ use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
+/**
+ * Class Config
+ * @deprecated since 2.2.0
+ * @see \Magento\Deploy\Config\BundleConfig
+ */
 class Config implements Bundle\ConfigInterface
 {
     /**#@+
