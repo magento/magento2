@@ -17,16 +17,6 @@ use Magento\Framework\App\ObjectManager;
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
     /**
-     * Checks if the configuration path is contained in exclude list.
-     *
-     * @var ExcludeList
-     * @deprecated As in Magento since version 2.2.0 there are several
-     *             types for configuration fields that require special processing.
-     * @see TypePool
-     */
-    private $excludeList;
-
-    /**
      * Checker for config type.
      *
      * @var TypePool
@@ -77,7 +67,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $rules;
 
     /**
-     * @param ExcludeList $excludeList
+     * @param ExcludeList $excludeList Is not used anymore as it was deprecated, use TypePool instead.
      * @param array $sources
      * @param TypePool|null $typePool
      * @param array $rules Rules for filtration the configuration data.
@@ -88,7 +78,6 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
         TypePool $typePool = null,
         array $rules = []
     ) {
-        $this->excludeList = $excludeList;
         $this->sources = $sources;
         $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
         $this->rules = $rules;
