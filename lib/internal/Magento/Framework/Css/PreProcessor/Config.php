@@ -12,7 +12,7 @@ class Config
     /**
      * Temporary directory prefix
      */
-    const TMP_DIR = 'css';
+    const TMP_DIR = 'pub/static';
 
     /**
      * Returns relative path to materialization directory

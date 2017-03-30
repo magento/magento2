@@ -6,6 +6,11 @@
 
 namespace Magento\Deploy\Model;
 
+/**
+ * Class ProcessTask
+ *
+ * @deprecated since 2.2.0
+ */
 class ProcessTask
 {
     /**

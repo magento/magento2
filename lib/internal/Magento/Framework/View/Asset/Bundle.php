@@ -13,6 +13,8 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * Bundle model
+ * @deprecated since 2.2.0
+ * @see \Magento\Deploy\Package\Bundle
  */
 class Bundle
 {

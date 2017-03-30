@@ -334,7 +334,7 @@ class Messages extends Template
      */
     public function getCacheKeyInfo()
     {
-        return ['storage_types' => serialize($this->usedStorageTypes)];
+        return ['storage_types' => implode('|', $this->usedStorageTypes)];
     }
 
     /**

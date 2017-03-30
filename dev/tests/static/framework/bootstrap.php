@@ -19,8 +19,9 @@ setCustomErrorHandler();
 $componentRegistrar = new ComponentRegistrar();
 $dirSearch = new DirSearch($componentRegistrar, new ReadFactory(new DriverPool()));
 $themePackageList = new ThemePackageList($componentRegistrar, new ThemePackageFactory());
+$serializer = new \Magento\Framework\Serialize\Serializer\Json();
 \Magento\Framework\App\Utility\Files::setInstance(
-    new Files($componentRegistrar, $dirSearch, $themePackageList)
+    new Files($componentRegistrar, $dirSearch, $themePackageList, $serializer)
 );
 
 /**

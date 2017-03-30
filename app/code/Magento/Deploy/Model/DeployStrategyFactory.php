@@ -10,6 +10,11 @@ use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class DeployStrategyFactory
+ *
+ * @deprecated since 2.2.0
+ */
 class DeployStrategyFactory
 {
     /**

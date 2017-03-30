@@ -729,11 +729,6 @@ return [
         'Magento\Framework\Message\ManagerInterface',
         'Magento\Framework\Message\Manager::DEFAULT_GROUP',
     ],
-    [
-        'SCOPE_DEFAULT',
-        'Magento\Framework\App\ScopeInterface',
-        'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT',
-    ],
     ['CURRENT_CUSTOMER', 'Magento\Customer\Controller\RegistryConstants'],
     ['METHOD_WPS', 'Magento\Paypal\Model\Config'],
     [

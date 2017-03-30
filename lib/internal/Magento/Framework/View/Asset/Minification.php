@@ -8,6 +8,10 @@ namespace Magento\Framework\View\Asset;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 
+/**
+ * Helper class for static files minification related processes.
+ * @api
+ */
 class Minification
 {
     /**

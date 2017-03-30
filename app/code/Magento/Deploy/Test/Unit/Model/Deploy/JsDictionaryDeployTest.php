@@ -92,7 +92,7 @@ class JsDictionaryDeployTest extends \PHPUnit_Framework_TestCase
         $this->assetRepo->expects($this->once())->method('createAsset')
             ->with(
                 $dictionary,
-                ['area' => $area, 'theme' => $themePath, 'locale' => $locale]
+                ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'publish' => true]
             )
             ->willReturn($this->asset);
 

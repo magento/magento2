@@ -14,6 +14,11 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class DeployStrategyProvider
+ *
+ * @deprecated since 2.2.0
+ */
 class DeployStrategyProvider
 {
     /**

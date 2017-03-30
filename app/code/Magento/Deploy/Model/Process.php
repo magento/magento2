@@ -6,6 +6,11 @@
 
 namespace Magento\Deploy\Model;
 
+/**
+ * Class Process
+ *
+ * @deprecated since 2.2.0
+ */
 class Process
 {
     /** @var int */

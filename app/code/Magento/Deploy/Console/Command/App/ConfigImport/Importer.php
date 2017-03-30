@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
-use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\RuntimeException;
-use Psr\Log\LoggerInterface as Logger;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Runs importing of config data from deployment configuration files.
@@ -22,42 +22,42 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Importer
 {
     /**
-     * The configuration data validator.
+     * The configuration data validator
      *
      * @var Validator
      */
     private $configValidator;
 
     /**
-     * Pool of all deployment configuration importers.
+     * Pool of all deployment configuration importers
      *
      * @var ImporterPool
      */
     private $configImporterPool;
 
     /**
-     * Application deployment configuration.
+     * Application deployment configuration
      *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * Hash updater of config data.
+     * Hash updater of config data
      *
      * @var Hash
      */
     private $configHash;
 
     /**
-     * Factory for creation of importer instance.
+     * Factory for creation of importer instance
      *
      * @var ImporterFactory
      */
     private $importerFactory;
 
     /**
-     * Logger.
+     * Logger
      *
      * @var Logger
      */
@@ -98,7 +98,7 @@ class Importer
     }
 
     /**
-     * Runs importing of config data from deployment configuration files.
+     * Runs importing of config data from deployment configuration files
      *
      * @param InputInterface $input The CLI input
      * @param OutputInterface $output The CLI output
