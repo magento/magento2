@@ -53,8 +53,11 @@ class TypePool
      * Checks if the configuration path is contained in exclude list.
      *
      * @var ExcludeList
-     * @deprecated As in Magento since version 2.2.0 there are several
-     *             types for configuration fields that require special processing.
+     * @deprecated We use it only to support backward compatibility if some configurations
+     *             were set to this list before, we need to read them.
+     *             It will be supported for next 2 minor releases or until a major release.
+     *             TypePool should be used to mark configurations with types.
+     * @see TypePool
      */
     private $excludeList;
 
@@ -63,7 +66,7 @@ class TypePool
      * @param array $environment List of environment configuration fields paths
      * @param ExcludeList $excludeList Checks if the configuration path is contained in exclude list
      */
-    public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList)
+    public function __construct(array $sensitive = [], array $environment = [], ExcludeList $excludeList = null)
     {
         $this->sensitive = $sensitive;
         $this->environment = $environment;
@@ -88,7 +91,10 @@ class TypePool
 
         $isPresent = in_array($path, $this->filteredPaths[$type]);
 
-        if ($type == self::TYPE_SENSITIVE && !$isPresent) {
+        if ($type == self::TYPE_SENSITIVE
+            && !$isPresent
+            && $this->excludeList instanceof ExcludeList
+        ) {
             $isPresent = $this->excludeList->isPresent($path);
         }
 
@@ -103,10 +109,8 @@ class TypePool
      * For example, if you pass a sensitive or TypePool::TYPE_SENSITIVE type, we get an array:
      * ```php
      * array(
-     *      'some/path/sensitive/path1'
+     *      'some/path/sensitive/path1',
      *      'some/path/sensitive/path2'
-     *      'some/path/sensitive/path3'
-     *      'some/path/sensitive/path4'
      * );
      * ```
      *

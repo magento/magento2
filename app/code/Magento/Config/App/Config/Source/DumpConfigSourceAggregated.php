@@ -17,6 +17,16 @@ use Magento\Framework\App\ObjectManager;
 class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 {
     /**
+     * Rule name for include configuration data.
+     */
+    const RULE_TYPE_INCLUDE = 'include';
+
+    /**
+     * Rule name for exclude configuration data.
+     */
+    const RULE_TYPE_EXCLUDE = 'exclude';
+
+    /**
      * Checker for config type.
      *
      * @var TypePool
@@ -142,7 +152,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Checks if the configuration field needs to be excluded.
      *
      * @param string $path Configuration field path. For example 'contact/email/recipient_email'
-     * @return boolean
+     * @return boolean Return true if path should be excluded
      */
     private function isExcludedPath($path)
     {
@@ -150,24 +160,20 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             return false;
         }
 
-        $default = isset($this->rules['default']) ?
-            $this->rules['default'] == 'exclude' : false;
-
-        $exclude = $default;
+        $defaultRule = isset($this->rules['default']) ?
+            $this->rules['default'] : self::RULE_TYPE_INCLUDE;
 
         foreach ($this->rules as $type => $rule) {
-            if ($type == 'default') {
+            if ($type === 'default') {
                 continue;
             }
 
-            if (!$default && $rule == 'exclude') {
-                $exclude = $exclude || $this->typePool->isPresent($path, $type);
-            } elseif ($default && $rule == 'include') {
-                $exclude = $exclude && !$this->typePool->isPresent($path, $type);
+            if ($this->typePool->isPresent($path, $type)) {
+                return $rule === self::RULE_TYPE_EXCLUDE;
             }
         }
 
-        return $exclude;
+        return $defaultRule === self::RULE_TYPE_EXCLUDE;
     }
 
     /**

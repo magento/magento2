@@ -64,18 +64,18 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'default' => [
                     'web' => [
-                        'unsecure' => ['base_url' => 'http://test.local'],
-                        'secure' => ['base_url' => 'https://test.local'],
-                        'some_key1' => [
-                            'some_key11' => 'someValue11',
-                            'some_key12' => 'someValue12'
+                        'unsecure' => ['without_type' => 'some_value'],
+                        'secure' => ['environment_type' => 'some_environment_value'],
+                        'some_key' => [
+                            'without_type' => 'some_value',
+                            'sensitive_type' => 'some_sensitive_value'
                         ],
                     ]
                 ],
                 'test' => [
                     'test' => [
                         'test1' => [
-                            'test2' => ['test3' => 5]
+                            'test2' => ['without_type' => 5]
                         ]
                     ]
                 ]
@@ -87,7 +87,7 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'default' => [
                     'web' => [
-                        'another_key' => ['key1' => 'value']
+                        'another_key' => ['sensitive_type' => 'some_sensitive_value']
                     ]
                 ]
             ]);
@@ -95,12 +95,12 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
         $this->typePoolMock->expects($this->any())
             ->method('isPresent')
             ->willReturnMap([
-                ['web/unsecure/base_url', TypePool::TYPE_SENSITIVE, false],
-                ['web/secure/base_url', TypePool::TYPE_ENVIRONMENT, true],
-                ['test1/test2/test/3', TypePool::TYPE_SENSITIVE, false],
-                ['web/some_key1/some_key11', TypePool::TYPE_ENVIRONMENT, false],
-                ['web/some_key1/some_key12', TypePool::TYPE_SENSITIVE, true],
-                ['web/another_key/key1', TypePool::TYPE_SENSITIVE, true],
+                ['web/unsecure/without_type', TypePool::TYPE_SENSITIVE, false],
+                ['web/secure/environment_type', TypePool::TYPE_ENVIRONMENT, true],
+                ['test1/test2/test/without_type', TypePool::TYPE_SENSITIVE, false],
+                ['web/some_key/without_type', TypePool::TYPE_ENVIRONMENT, false],
+                ['web/some_key/sensitive_type', TypePool::TYPE_SENSITIVE, true],
+                ['web/another_key/sensitive_type', TypePool::TYPE_SENSITIVE, true],
             ]);
 
         $this->model = new DumpConfigSourceAggregated(
@@ -132,17 +132,17 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                 'test' => [
                     'test' => [
                         'test1' => [
-                            'test2' => ['test3' => 5]
+                            'test2' => ['without_type' => 5]
                         ]
                     ],
                 ],
                 'default' => [
                     'web' => [
                         'unsecure' => [
-                            'base_url' => 'http://test.local',
+                            'without_type' => 'some_value',
                         ],
-                        'some_key1' => [
-                            'some_key11' => 'someValue11',
+                        'some_key' => [
+                            'without_type' => 'some_value',
                         ],
                     ]
                 ],
@@ -167,11 +167,11 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
             [
                 'default' => [
                     'web' => [
-                        'secure' => ['base_url' => 'https://test.local'],
-                        'some_key1' => [
-                            'some_key12' => 'someValue12'
+                        'secure' => ['environment_type' => 'some_environment_value'],
+                        'some_key' => [
+                            'sensitive_type' => 'some_sensitive_value'
                         ],
-                        'another_key' => ['key1' => 'value']
+                        'another_key' => ['sensitive_type' => 'some_sensitive_value']
                     ]
                 ],
             ],
@@ -183,9 +183,9 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [
-                'web/secure/base_url',
-                'web/some_key1/some_key12',
-                'web/another_key/key1'
+                'web/secure/environment_type',
+                'web/some_key/sensitive_type',
+                'web/another_key/sensitive_type'
             ],
             $this->model->getExcludedFields()
         );
