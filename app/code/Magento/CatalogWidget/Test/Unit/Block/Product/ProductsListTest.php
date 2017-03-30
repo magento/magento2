@@ -93,7 +93,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
         $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
         $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);

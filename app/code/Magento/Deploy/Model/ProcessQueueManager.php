@@ -8,6 +8,11 @@ namespace Magento\Deploy\Model;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Class ProcessQueueManager
+ *
+ * @deprecated since 2.2.0
+ */
 class ProcessQueueManager
 {
     /**
