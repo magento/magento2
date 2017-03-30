@@ -768,7 +768,6 @@ class Category extends AbstractResource
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),
