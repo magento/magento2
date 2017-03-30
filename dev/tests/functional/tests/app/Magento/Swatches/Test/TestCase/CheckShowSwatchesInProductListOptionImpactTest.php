@@ -14,7 +14,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
  * Check 'Show Swatches In Product List' configuration option impact on Category page
  *
  * @group Swatches (MX)
- * @ZephyrId MAGETWO-65485
+ * @ZephyrId MAGETWO-66928
  */
 class CheckShowSwatchesInProductListOptionImpactTest extends Injectable
 {
