@@ -7,27 +7,28 @@
 namespace Magento\Deploy\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Event\Magento;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\State;
 
 /**
  * Command to set application mode
  */
 class SetModeCommand extends Command
 {
-
-    /**#@+
-     * Input arguments for mode setter command
+    /**
+     * Name of "target application mode" input argument
      */
     const MODE_ARGUMENT = 'mode';
+
+    /**
+     * Name of "skip compilation" input option
+     */
     const SKIP_COMPILATION_OPTION = 'skip-compilation';
-    /**#@-*/
 
     /**
      * Object manager factory
@@ -48,7 +49,7 @@ class SetModeCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -74,7 +75,7 @@ class SetModeCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
