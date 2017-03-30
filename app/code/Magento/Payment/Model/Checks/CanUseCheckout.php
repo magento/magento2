@@ -8,6 +8,11 @@ namespace Magento\Payment\Model\Checks;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Checks possibility of payment method to be used in storefront
+ *
+ * @api
+ */
 class CanUseCheckout implements SpecificationInterface
 {
     /**

@@ -7,6 +7,8 @@ namespace Magento\Payment\Block;
 
 /**
  * Base payment iformation block
+ *
+ * @api
  */
 class Info extends \Magento\Framework\View\Element\Template
 {

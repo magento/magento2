@@ -8,6 +8,11 @@ namespace Magento\Payment\Model\Checks;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Checks possibility to use payment method with particular currency
+ *
+ * @api
+ */
 class CanUseForCurrency implements SpecificationInterface
 {
     /**
