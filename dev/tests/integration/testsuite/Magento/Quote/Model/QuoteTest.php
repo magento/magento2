@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
 
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -394,8 +394,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\Data\Customer::EMAIL => 'qa@example.com',
             \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'Joe',
             \Magento\Customer\Model\Data\Customer::GENDER => 'Male',
-            \Magento\Customer\Model\Data\Customer::GROUP_ID =>
-                \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
+            \Magento\Customer\Model\Data\Customer::GROUP_ID => \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             \Magento\Customer\Model\Data\Customer::ID => 1,
             \Magento\Customer\Model\Data\Customer::LASTNAME => 'Dou',
             \Magento\Customer\Model\Data\Customer::MIDDLENAME => 'Ivan',

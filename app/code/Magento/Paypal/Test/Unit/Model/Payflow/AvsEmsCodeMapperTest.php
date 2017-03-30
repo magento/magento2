@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
-use Magento\Paypal\Model\Payflow\AvsEmsCodeMapper;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
+use Magento\Paypal\Model\Payflow\AvsEmsCodeMapper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 

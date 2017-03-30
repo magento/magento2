@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
@@ -98,7 +98,6 @@ class Update implements ProcessorInterface
                         $this->updateGroups($items, $data);
                 }
             }
-
         } catch (\Exception $exception) {
             throw new RuntimeException(__('%1', $exception->getMessage()), $exception);
         }

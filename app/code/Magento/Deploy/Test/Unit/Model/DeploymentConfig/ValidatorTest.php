@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase

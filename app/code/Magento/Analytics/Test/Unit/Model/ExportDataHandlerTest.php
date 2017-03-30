@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
@@ -194,7 +194,7 @@ class ExportDataHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $archiveSource,
                 $archiveAbsolutePath,
-                $isArchiveSourceDirectory ? true: false
+                $isArchiveSourceDirectory ? true : false
             );
 
         $fileContent = 'Some text';
