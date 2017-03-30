@@ -19,7 +19,7 @@ try {
 try {
     $handler = new \Magento\Framework\App\ErrorHandler();
     set_error_handler([$handler, 'handler']);
-    $application = new Magento\Framework\Console\Cli('Magento CLI');
+    $application = new \Magento\Framework\Console\Cli('Magento CLI');
     $application->run();
 } catch (\Exception $e) {
     while ($e) {
@@ -28,5 +28,5 @@ try {
         echo "\n\n";
         $e = $e->getPrevious();
     }
-    exit(Magento\Framework\Console\Cli::RETURN_FAILURE);
+    exit(\Magento\Framework\Console\Cli::RETURN_FAILURE);
 }
