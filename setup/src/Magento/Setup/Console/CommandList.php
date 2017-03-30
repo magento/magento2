@@ -72,7 +72,8 @@ class CommandList
             \Magento\Setup\Console\Command\RollbackCommand::class,
             \Magento\Setup\Console\Command\UpgradeCommand::class,
             \Magento\Setup\Console\Command\UninstallCommand::class,
-            \Magento\Setup\Console\Command\DeployStaticContentCommand::class
+            \Magento\Setup\Console\Command\DeployStaticContentCommand::class,
+            \Magento\Setup\Console\Command\Deploy\StaticContentCommand::class,
         ];
     }
 

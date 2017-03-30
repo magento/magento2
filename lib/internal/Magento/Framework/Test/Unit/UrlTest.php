@@ -290,6 +290,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
+        $this->urlModifier->expects($this->exactly(1))->method('execute');
+
+        $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
         $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
     }
 
