@@ -95,6 +95,7 @@ class Config implements ScopeConfigInterface
 
     /**
      * Invalidate cache by type
+     * Clean scopeCodeResolver
      *
      * @return void
      */
@@ -103,6 +104,7 @@ class Config implements ScopeConfigInterface
         foreach ($this->types as $type) {
             $type->clean();
         }
+        $this->scopeCodeResolver->clean();
     }
 
     /**
