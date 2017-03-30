@@ -99,7 +99,7 @@ class Activate extends Action
                     Enabled::XML_ENABLED_CONFIG_STRUCTURE_PATH,
                     Enabledisable::ENABLE_VALUE,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                    null
+                    0
                 );
 
                 $this->configValueResource
