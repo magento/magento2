@@ -5,9 +5,10 @@
  */
 namespace Magento\Config\Test\Unit\Model;
 
+use Magento\Config\Model\Config\BackendFactory;
 use Magento\Config\Model\PreparedValueFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Config\ValueFactory;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
@@ -29,7 +30,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $structureFactoryMock;
 
     /**
-     * @var ValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $valueFactoryMock;
 
@@ -49,6 +50,11 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $fieldMock;
 
     /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
+
+    /**
      * @var PreparedValueFactory
      */
     private $valueBuilder;
@@ -65,7 +71,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
+        $this->valueFactoryMock = $this->getMockBuilder(BackendFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -79,11 +85,14 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue'])
             ->getMock();
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
 
         $this->valueBuilder = new PreparedValueFactory(
             $this->deploymentConfigMock,
             $this->structureFactoryMock,
-            $this->valueFactoryMock
+            $this->valueFactoryMock,
+            $this->configMock
         );
     }
 

@@ -99,6 +99,16 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="snapshotValueFactory" type="Magento\Config\Model\PreparedValueFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">configSnapshot</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\Model\Config\Importer">
+        <arguments>
+            <argument name="valueBuilder" xsi:type="object">snapshotValueFactory</argument>
+        </arguments>
+    </type>
     <virtualType name="modulesDataProviderProxy" type="Magento\Framework\App\Config\InitialConfigSource\Proxy">
         <arguments>
             <argument name="instanceName" xsi:type="string">modulesDataProvider</argument>
