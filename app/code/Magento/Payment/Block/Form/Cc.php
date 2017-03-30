@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Block\Form;
 
+/**
+ * @api
+ */
 class Cc extends \Magento\Payment\Block\Form
 {
     /**

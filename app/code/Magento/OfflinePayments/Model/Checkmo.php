@@ -9,6 +9,8 @@ namespace Magento\OfflinePayments\Model;
  * Class Checkmo
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * @api
  */
 class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
 {

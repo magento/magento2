@@ -12,6 +12,11 @@ use Magento\Framework\View\Asset\Repository;
 use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Config as PaymentConfig;
 
+/**
+ * Credit card configuration model
+ *
+ * @api
+ */
 class CcConfig
 {
     /** @var PaymentConfig */

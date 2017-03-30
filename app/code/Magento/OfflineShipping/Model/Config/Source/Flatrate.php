@@ -5,6 +5,9 @@
  */
 namespace Magento\OfflineShipping\Model\Config\Source;
 
+/**
+ * @api
+ */
 class Flatrate implements \Magento\Framework\Option\ArrayInterface
 {
     /**

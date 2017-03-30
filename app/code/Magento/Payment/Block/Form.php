@@ -9,6 +9,8 @@ use Magento\Payment\Model\MethodInterface;
 
 /**
  * Payment method form base block
+ *
+ * @api
  */
 class Form extends \Magento\Framework\View\Element\Template
 {
