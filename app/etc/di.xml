@@ -1239,4 +1239,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\DB\FieldDataConverter">
+        <arguments>
+            <argument name="envBatchSize" xsi:type="init_parameter">Magento\Framework\DB\FieldDataConverter::BATCH_SIZE_VARIABLE_NAME</argument>
+        </arguments>
+    </type>
 </config>

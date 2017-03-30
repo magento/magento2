@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\DB;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\Query\Generator;
@@ -17,6 +16,26 @@ use Magento\Framework\DB\Select\QueryModifierInterface;
  */
 class FieldDataConverter
 {
+    /**
+     * Batch size env variable name
+     */
+    const BATCH_SIZE_VARIABLE_NAME = 'DATA_CONVERTER_BATCH_SIZE';
+
+    /**
+     * Default batch size
+     */
+    const DEFAULT_BATCH_SIZE = 50000;
+
+    /**
+     * Min batch size
+     */
+    const MIN_BATCH_SIZE = 25000;
+
+    /**
+     * Max batch size
+     */
+    const MAX_BATCH_SIZE = 500000;
+
     /**
      * @var Generator
      */
@@ -33,24 +52,32 @@ class FieldDataConverter
     private $selectFactory;
 
     /**
+     * @var string|null
+     */
+    private $envBatchSize;
+
+    /**
      * Constructor
      *
      * @param Generator $queryGenerator
      * @param DataConverterInterface $dataConverter
-     * @param SelectFactory $selectFactory
+     * @param SelectFactory|null $selectFactory
+     * @param string $envBatchSize
      */
     public function __construct(
         Generator $queryGenerator,
         DataConverterInterface $dataConverter,
-        SelectFactory $selectFactory = null
+        SelectFactory $selectFactory,
+        $envBatchSize
     ) {
         $this->queryGenerator = $queryGenerator;
         $this->dataConverter = $dataConverter;
-        $this->selectFactory = $selectFactory ?: ObjectManager::getInstance()->get(SelectFactory::class);
+        $this->selectFactory = $selectFactory;
+        $this->envBatchSize = $envBatchSize;
     }
 
     /**
-     * Convert table field data from one representation to another uses DataConverterInterface
+     * Convert table field data from one representation to another
      *
      * @param AdapterInterface $connection
      * @param string $table
@@ -73,18 +100,20 @@ class FieldDataConverter
         if ($queryModifier) {
             $queryModifier->modify($select);
         }
-        $iterator = $this->queryGenerator->generate($identifier, $select);
+        $iterator = $this->queryGenerator->generate($identifier, $select, $this->getBatchSize());
         foreach ($iterator as $selectByRange) {
-            $rows = $connection->fetchAll($selectByRange);
-            foreach ($rows as $row) {
+            $rows = $connection->fetchPairs($selectByRange);
+            $uniqueFieldDataArray = array_unique($rows);
+            foreach ($uniqueFieldDataArray as $uniqueFieldData) {
+                $ids = array_keys($rows, $uniqueFieldData);
                 try {
-                    $convertedValue = $this->dataConverter->convert($row[$field]);
-                    if ($row[$field] === $convertedValue) {
-                        // skip for data rows that have been already converted
+                    $convertedValue = $this->dataConverter->convert($uniqueFieldData);
+                    if ($uniqueFieldData === $convertedValue) {
+                        // Skip for data rows that have been already converted
                         continue;
                     }
                     $bind = [$field => $convertedValue];
-                    $where = [$identifier . ' = ?' => (int) $row[$identifier]];
+                    $where = [$identifier . ' IN (?)' => $ids];
                     $connection->update($table, $bind, $where);
                 } catch (DataConversionException $e) {
                     throw new \Magento\Framework\DB\FieldDataConversionException(
@@ -93,7 +122,7 @@ class FieldDataConverter
                             $field,
                             $table,
                             $identifier,
-                            $row[$identifier],
+                            implode(', ', $ids),
                             get_class($this->dataConverter),
                             $e->getMessage()
                         )
@@ -101,5 +130,25 @@ class FieldDataConverter
                 }
             }
         }
+    }
+
+    /**
+     * Get batch size from environment variable or default
+     *
+     * @return int
+     */
+    private function getBatchSize()
+    {
+        if (null !== $this->envBatchSize) {
+            $batchSize = (int) $this->envBatchSize;
+            if ($batchSize < self::MIN_BATCH_SIZE || $batchSize > self::MAX_BATCH_SIZE) {
+                throw new \InvalidArgumentException(
+                    'Invalid value for environment variable ' . self::BATCH_SIZE_VARIABLE_NAME . '. '
+                    . 'Should be integer and be > ' . self::MIN_BATCH_SIZE . ', < ' . self::MAX_BATCH_SIZE
+                );
+            }
+            return $batchSize;
+        }
+        return self::DEFAULT_BATCH_SIZE;
     }
 }
