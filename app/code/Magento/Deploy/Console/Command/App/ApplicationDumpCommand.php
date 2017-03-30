@@ -36,7 +36,7 @@ class ApplicationDumpCommand extends Command
     private $configHash;
 
     /**
-     * ApplicationDumpCommand constructor.
+     * ApplicationDumpCommand constructor
      *
      * @param Writer $writer
      * @param array $sources
@@ -54,7 +54,7 @@ class ApplicationDumpCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
