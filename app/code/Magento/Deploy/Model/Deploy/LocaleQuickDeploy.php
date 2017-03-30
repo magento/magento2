@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
 use Magento\Framework\App\ObjectManager;
@@ -20,6 +20,8 @@ use Magento\Deploy\Model\DeployStrategyFactory;
 /**
  * To avoid duplication of deploying of all static content per each theme/local, this class uses copying/symlinking
  * of default static files to other locales, separately calls deploy for js dictionary per each locale
+ *
+ * @deprecated since 2.2.0
  */
 class LocaleQuickDeploy implements DeployInterface
 {
@@ -113,22 +115,14 @@ class LocaleQuickDeploy implements DeployInterface
         $baseLocale = $this->options[self::DEPLOY_BASE_LOCALE];
         $newLocalePath = $this->getLocalePath($area, $themePath, $locale);
         $baseLocalePath = $this->getLocalePath($area, $themePath, $baseLocale);
-        $baseRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $baseLocalePath;
-        $newRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $newLocalePath;
 
         $this->deleteLocaleResource($newLocalePath);
-        $this->deleteLocaleResource($newRequireJsPath);
 
         if (!empty($this->options[Options::SYMLINK_LOCALE])) {
             $this->getStaticDirectory()->createSymlink($baseLocalePath, $newLocalePath);
-            $this->getStaticDirectory()->createSymlink($baseRequireJsPath, $newRequireJsPath);
-
             $this->output->writeln("\nSuccessful symlinked\n---\n");
         } else {
-            $localeFiles = array_merge(
-                $this->getStaticDirectory()->readRecursively($baseLocalePath),
-                $this->getStaticDirectory()->readRecursively($baseRequireJsPath)
-            );
+            $localeFiles = $this->getStaticDirectory()->readRecursively($baseLocalePath);
             $jsDictionaryEnabled = $this->translationJsConfig->dictionaryEnabled();
             foreach ($localeFiles as $path) {
                 if ($this->getStaticDirectory()->isFile($path)) {

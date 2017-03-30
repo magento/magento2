@@ -102,7 +102,6 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(PublicationDecorator::class, [
-            'filesystem' => $this->filesystemMock,
             'assetRepository' => $this->assetRepositoryMock,
             'temporaryFile' => $this->temporaryFileMock,
             'assetPublisher' => $this->publisherMock,
