@@ -57,11 +57,10 @@ class ObjectManagerProvider
     public function get()
     {
         if (null === $this->objectManager) {
-            $initParams =
-                array_merge(
-                    $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM),
-                    $_SERVER
-                );
+            $initParams = array_merge(
+                $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM),
+                $_SERVER
+            );
             $factory = $this->getObjectManagerFactory($initParams);
             $this->objectManager = $factory->create($initParams);
             if (PHP_SAPI == 'cli') {

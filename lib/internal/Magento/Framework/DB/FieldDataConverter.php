@@ -62,13 +62,13 @@ class FieldDataConverter
      * @param Generator $queryGenerator
      * @param DataConverterInterface $dataConverter
      * @param SelectFactory|null $selectFactory
-     * @param string $envBatchSize
+     * @param string|null $envBatchSize
      */
     public function __construct(
         Generator $queryGenerator,
         DataConverterInterface $dataConverter,
         SelectFactory $selectFactory,
-        $envBatchSize
+        $envBatchSize = null
     ) {
         $this->queryGenerator = $queryGenerator;
         $this->dataConverter = $dataConverter;
