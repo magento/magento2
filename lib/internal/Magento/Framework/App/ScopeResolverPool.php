@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\App;
 
+/**
+ * Provider of scope resolvers by type
+ */
 class ScopeResolverPool
 {
     /**

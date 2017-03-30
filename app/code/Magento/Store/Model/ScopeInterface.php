@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\Model;
 
+/**
+ * @api
+ */
 interface ScopeInterface
 {
     /**#@+

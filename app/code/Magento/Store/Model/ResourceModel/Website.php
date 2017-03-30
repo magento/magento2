@@ -10,6 +10,8 @@ namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Website Resource Model
+ *
+ * @api
  */
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
