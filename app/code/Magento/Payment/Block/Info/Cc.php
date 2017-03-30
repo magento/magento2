@@ -7,6 +7,8 @@ namespace Magento\Payment\Block\Info;
 
 /**
  * Credit card generic payment info
+ *
+ * @api
  */
 class Cc extends \Magento\Payment\Block\Info
 {

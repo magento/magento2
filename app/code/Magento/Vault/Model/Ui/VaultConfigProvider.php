@@ -11,6 +11,11 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
 
+/**
+ * Provides information about vault payemnt methods availability on storefront
+ *
+ * @api
+ */
 class VaultConfigProvider implements ConfigProviderInterface
 {
     const IS_ACTIVE_CODE = 'is_active_payment_token_enabler';
