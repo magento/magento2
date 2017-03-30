@@ -18,6 +18,12 @@ use Psr\Log\LoggerInterface;
  * Class IframeConfigProvider
  * @package Magento\Payment\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * Default implementation of config provider for iframe integrations.
+ * Use this class for virtual types declaration.
+ * Extends from this class only in case of urgency.
+ *
+ * @api
  */
 class IframeConfigProvider implements ConfigProviderInterface
 {

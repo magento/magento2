@@ -7,6 +7,8 @@ namespace Magento\Payment\Block\Info;
 
 /**
  * Block for Bank Transfer payment generic info
+ *
+ * @api
  */
 class Instructions extends \Magento\Payment\Block\Info
 {

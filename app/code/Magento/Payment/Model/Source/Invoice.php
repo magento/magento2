@@ -8,7 +8,9 @@ namespace Magento\Payment\Model\Source;
 /**
  * Automatic invoice create source model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Inheritance of this class allowed as is a part of legacy implementation.
+ *
+ * @api
  */
 class Invoice implements \Magento\Framework\Option\ArrayInterface
 {

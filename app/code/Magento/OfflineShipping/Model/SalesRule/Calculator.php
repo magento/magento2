@@ -13,6 +13,9 @@ namespace Magento\OfflineShipping\Model\SalesRule;
 
 use Magento\SalesRule\Model\Validator;
 
+/**
+ * @api
+ */
 class Calculator extends Validator
 {
     /**

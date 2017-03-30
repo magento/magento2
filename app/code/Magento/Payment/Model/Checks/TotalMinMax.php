@@ -8,6 +8,11 @@ namespace Magento\Payment\Model\Checks;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Checks is order total in allowed range or not
+ *
+ * @api
+ */
 class TotalMinMax implements SpecificationInterface
 {
     /**

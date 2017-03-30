@@ -7,6 +7,12 @@ namespace Magento\Payment\Gateway\Helper;
 
 use Magento\Payment\Model\InfoInterface;
 
+/**
+ * Shortcut for methods that can be used to verify payment context.
+ * Usage of this class should be avoided. This class introduced for supporting backward compatibility.
+ *
+ * @api
+ */
 class ContextHelper
 {
     /**

@@ -4,6 +4,7 @@
  */
 /*browser:true*/
 /*global define*/
+/* @api */
 define(
     [
         'uiElement'

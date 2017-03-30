@@ -8,6 +8,12 @@ namespace Magento\Payment\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Framework\DataObject;
 
+/**
+ * This class encapsulates implicit interfaces (array structures) used in payments implementation.
+ * This class was introduced for backward compatibility with legacy implementation.
+ *
+ * @api
+ */
 class SubjectReader
 {
     /**

@@ -20,6 +20,8 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFacto
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

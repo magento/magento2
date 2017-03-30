@@ -8,7 +8,7 @@ namespace Magento\Payment\Block\Transparent;
 /**
  * Iframe block for register specific params in layout
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Iframe extends \Magento\Framework\View\Element\Template
 {

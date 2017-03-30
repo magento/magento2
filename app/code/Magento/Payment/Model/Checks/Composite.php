@@ -8,6 +8,12 @@ namespace Magento\Payment\Model\Checks;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 
+/**
+ * Combines several checks with logic "AND" operation.
+ * Use this class to register own specifications.
+ *
+ * @api
+ */
 class Composite implements SpecificationInterface
 {
     /** @var SpecificationInterface[]  */

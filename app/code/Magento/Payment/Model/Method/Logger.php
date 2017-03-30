@@ -11,6 +11,8 @@ use Psr\Log\LoggerInterface;
  * Class Logger for payment related information (request, response, etc.) which is used for debug
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Logger
 {

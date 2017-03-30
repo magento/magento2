@@ -9,6 +9,10 @@ use Magento\Payment\Model\Method\SpecificationInterface;
 
 /**
  * Composite specification
+ *
+ * Use this class for virtual types declaration.
+ *
+ * @api
  */
 class Composite implements SpecificationInterface
 {

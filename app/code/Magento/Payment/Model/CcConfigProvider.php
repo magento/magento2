@@ -10,6 +10,7 @@ use Magento\Framework\View\Asset\Source;
 
 /**
  * Class CcConfigProvider
+ *
  * @api
  */
 class CcConfigProvider implements ConfigProviderInterface
