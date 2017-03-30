@@ -81,11 +81,7 @@ abstract class AbstractSchemaGenerator
      */
     public function getListOfServices()
     {
-        $listOfAllowedServices = [];
-        foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
-            $listOfAllowedServices[] = $serviceName;
-        }
-        return $listOfAllowedServices;
+        return array_keys($this->serviceMetadata->getServicesConfig());
     }
 
     /**
