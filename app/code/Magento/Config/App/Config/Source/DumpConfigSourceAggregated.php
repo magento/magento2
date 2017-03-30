@@ -138,7 +138,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 
             if (is_array($subData)) {
                 $this->filterChain($newPath, $subData);
-            } else if ($this->isExcludePath($filteredPath)) {
+            } elseif ($this->isExcludedPath($filteredPath)) {
                 $this->excludedFields[$newPath] = $filteredPath;
                 unset($data[$subKey]);
             }
@@ -155,7 +155,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @param string $path Configuration field path. For example 'contact/email/recipient_email'
      * @return boolean
      */
-    private function isExcludePath($path)
+    private function isExcludedPath($path)
     {
         if (empty($path)) {
             return false;
