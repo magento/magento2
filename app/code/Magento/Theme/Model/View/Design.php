@@ -6,7 +6,7 @@
 
 namespace Magento\Theme\Model\View;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -74,6 +74,11 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -81,6 +86,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -89,7 +95,8 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
-        array $themes
+        array $themes,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_flyweightFactory = $flyweightFactory;
@@ -98,6 +105,8 @@ class Design implements \Magento\Framework\View\DesignInterface
         $this->_appState = $appState;
         $this->_themes = $themes;
         $this->objectManager = $objectManager;
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Locale\ResolverInterface::class);
     }
 
     /**
@@ -251,7 +260,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     public function getLocale()
     {
         if (null === $this->_locale) {
-            $this->_locale = $this->objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+            $this->_locale = $this->localeResolver;
         }
         return $this->_locale->getLocale();
     }
