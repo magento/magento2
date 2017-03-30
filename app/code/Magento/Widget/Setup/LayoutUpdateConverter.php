@@ -21,6 +21,13 @@ class LayoutUpdateConverter extends SerializedToJson
      */
     private $normalizer;
 
+    /**
+     * LayoutUpdateConverter constructor.
+     *
+     * @param Serialize $serialize
+     * @param Json $json
+     * @param Normalizer $normalizer
+     */
     public function __construct(
         Serialize $serialize,
         Json $json,
