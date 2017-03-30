@@ -569,11 +569,11 @@ class Customer extends AbstractCustomer
      */
     public function getValidColumnNames()
     {
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
+        return array_unique(
+            array_merge(
+                $this->validColumnNames,
+                $this->customerFields
+            )
         );
-
-        return $this->validColumnNames;
     }
 }

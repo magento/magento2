@@ -59,6 +59,7 @@ class ClassesScanner implements ClassesScannerInterface
      * @param string $path
      * @return array
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getList($path)
     {
@@ -97,7 +98,7 @@ class ClassesScanner implements ClassesScannerInterface
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
-            if ($fileItem->isDir() || $fileItem->getExtension() !== 'php') {
+            if ($fileItem->isDir() || $fileItem->getExtension() !== 'php' || $fileItem->getBasename()[0] == '.') {
                 continue;
             }
             $fileItemPath = $fileItem->getRealPath();

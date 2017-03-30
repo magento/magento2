@@ -8,7 +8,7 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 /**
  * Shipping table rates collection
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

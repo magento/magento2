@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* @api */
 define([
     'uiComponent',
     'Magento_Checkout/js/model/payment/renderer-list'

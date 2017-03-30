@@ -86,7 +86,7 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
         $this->linkProvider = $this->objectManagerHelper->getObject(
             LinkProvider::class,
             [
-                'linkInterfaceFactory' => $this->linkInterfaceFactoryMock,
+                'linkFactory' => $this->linkInterfaceFactoryMock,
                 'fileInfoManager' => $this->fileInfoManagerMock,
                 'storeManager' => $this->storeManagerInterfaceMock
             ]
@@ -103,6 +103,12 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fileInfoMock);
         $this->linkInterfaceFactoryMock->expects($this->once())
             ->method('create')
+            ->with(
+                [
+                    'initializationVector' => base64_encode($fileInitializationVector),
+                    'url' => $baseUrl . $fileInfoPath
+                ]
+            )
             ->willReturn($this->linkInterfaceMock);
         $this->storeManagerInterfaceMock->expects($this->once())
             ->method('getStore')->willReturn($this->storeMock);
@@ -118,12 +124,6 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
         $this->fileInfoMock->expects($this->atLeastOnce())
             ->method('getInitializationVector')
             ->willReturn($fileInitializationVector);
-        $this->linkInterfaceMock->expects($this->once())->method('setUrl')->with(
-            $baseUrl . $fileInfoPath
-        );
-        $this->linkInterfaceMock->expects($this->once())
-            ->method('setInitializationVector')
-            ->with(base64_encode($fileInitializationVector));
         $this->assertEquals($this->linkInterfaceMock, $this->linkProvider->get());
     }
 
@@ -132,7 +132,7 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
      * @param string|null $fileInitializationVector
      *
      * @dataProvider fileNotReadyDataProvider
-     * @expectedException \Magento\Framework\Webapi\Exception
+     * @expectedException \Magento\Framework\Exception\NotFoundException
      * @expectedExceptionMessage File is not ready yet.
      */
     public function testFileNotReady($fileInfoPath, $fileInitializationVector)

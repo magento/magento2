@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Block\Adminhtml\Transparent;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Payment\Block\Transparent\Form
 {
     /**

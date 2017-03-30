@@ -8,7 +8,9 @@ namespace Magento\Framework\View\Url;
 use Magento\Framework\View\FileSystem;
 
 /**
- * Helper to work with CSS files
+ * CSS URLs resolver class.
+ * This utility class provides a set of methods to work with CSS files.
+ * @api
  */
 class CssResolver
 {
