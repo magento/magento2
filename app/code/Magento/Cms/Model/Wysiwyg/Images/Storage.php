@@ -489,7 +489,9 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
+        if ($this->isImage($uploader->getUploadedFileName())) {
+            $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
+        }
 
         $result['cookie'] = [
             'name' => $this->getSession()->getName(),
