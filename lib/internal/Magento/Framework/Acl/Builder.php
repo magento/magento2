@@ -26,34 +26,23 @@ class Builder
     protected $_loaderPool;
 
     /**
-     * ACL cache
-     *
-     * @var \Magento\Framework\Acl\CacheInterface
-     * @deprecated
-     */
-    protected $_cache;
-
-    /**
      * @var \Magento\Framework\AclFactory
      */
     protected $_aclFactory;
 
     /**
      * @param \Magento\Framework\AclFactory $aclFactory
-     * @param \Magento\Framework\Acl\CacheInterface $cache
      * @param \Magento\Framework\Acl\LoaderInterface $roleLoader
      * @param \Magento\Framework\Acl\LoaderInterface $resourceLoader
      * @param \Magento\Framework\Acl\LoaderInterface $ruleLoader
      */
     public function __construct(
         \Magento\Framework\AclFactory $aclFactory,
-        \Magento\Framework\Acl\CacheInterface $cache,
         \Magento\Framework\Acl\LoaderInterface $roleLoader,
         \Magento\Framework\Acl\LoaderInterface $resourceLoader,
         \Magento\Framework\Acl\LoaderInterface $ruleLoader
     ) {
         $this->_aclFactory = $aclFactory;
-        $this->_cache = $cache;
         $this->_loaderPool = [$roleLoader, $resourceLoader, $ruleLoader];
     }
 

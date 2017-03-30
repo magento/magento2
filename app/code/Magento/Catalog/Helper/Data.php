@@ -46,7 +46,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Breadcrumb Path cache
      *
-     * @var string
+     * @var array
      */
     protected $_categoryPath;
 
@@ -267,12 +267,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return current category path or get it from current category
      * and creating array of categories|product paths for breadcrumbs
      *
-     * @return string
+     * @return array
      */
     public function getBreadcrumbPath()
     {
         if (!$this->_categoryPath) {
-
             $path = [];
             $category = $this->getCategory();
             if ($category) {

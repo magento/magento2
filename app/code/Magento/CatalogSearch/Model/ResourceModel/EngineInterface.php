@@ -39,7 +39,6 @@ interface EngineInterface
      */
     public function processAttributeValue($attribute, $value);
 
-
     /**
      * Prepare index array as a string glued by separator
      *

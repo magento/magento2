@@ -55,7 +55,7 @@ class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
     protected function prepareExpectedResult(array $expectedOrderData)
     {
         ++$expectedOrderData['orders_count'];
-        $expectedOrderData['refunded'] += $this->order->getPrice()[0]['grand_order_total'];
+        $expectedOrderData['refunded'] += $this->order->getPrice()['invoice'][0]['grand_order_total'];
         return $expectedOrderData;
     }
 

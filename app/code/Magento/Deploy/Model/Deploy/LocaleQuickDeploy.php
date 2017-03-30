@@ -6,16 +6,23 @@
 
 namespace Magento\Deploy\Model\Deploy;
 
-use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use \Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
+use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Deploy\Model\DeployStrategyFactory;
 
+/**
+ * To avoid duplication of deploying of all static content per each theme/local, this class uses copying/symlinking
+ * of default static files to other locales, separately calls deploy for js dictionary per each locale
+ *
+ * @deprecated since 2.2.0
+ */
 class LocaleQuickDeploy implements DeployInterface
 {
     /**
@@ -39,15 +46,41 @@ class LocaleQuickDeploy implements DeployInterface
     private $options = [];
 
     /**
+     * @var TranslationJsConfig
+     */
+    private $translationJsConfig;
+
+    /**
+     * @var DeployStrategyFactory
+     */
+    private $deployStrategyFactory;
+
+    /**
+     * @var DeployInterface[]
+     */
+    private $deploys;
+
+    /**
      * @param Filesystem $filesystem
      * @param OutputInterface $output
      * @param array $options
+     * @param TranslationJsConfig $translationJsConfig
+     * @param DeployStrategyFactory $deployStrategyFactory
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, OutputInterface $output, $options = [])
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        OutputInterface $output,
+        $options = [],
+        TranslationJsConfig $translationJsConfig = null,
+        DeployStrategyFactory $deployStrategyFactory = null
+    ) {
         $this->filesystem = $filesystem;
         $this->output = $output;
         $this->options = $options;
+        $this->translationJsConfig = $translationJsConfig
+            ?: ObjectManager::getInstance()->get(TranslationJsConfig::class);
+        $this->deployStrategyFactory = $deployStrategyFactory
+            ?: ObjectManager::getInstance()->get(DeployStrategyFactory::class);
     }
 
     /**
@@ -67,13 +100,13 @@ class LocaleQuickDeploy implements DeployInterface
      */
     public function deploy($area, $themePath, $locale)
     {
-        if (isset($this->options[Options::DRY_RUN]) && $this->options[Options::DRY_RUN]) {
+        if (!empty($this->options[Options::DRY_RUN])) {
             return Cli::RETURN_SUCCESS;
         }
 
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
-        if (!isset($this->options[self::DEPLOY_BASE_LOCALE])) {
+        if (empty($this->options[self::DEPLOY_BASE_LOCALE])) {
             throw new \InvalidArgumentException('Deploy base locale must be set for Quick Deploy');
         }
         $processedFiles = 0;
@@ -82,34 +115,67 @@ class LocaleQuickDeploy implements DeployInterface
         $baseLocale = $this->options[self::DEPLOY_BASE_LOCALE];
         $newLocalePath = $this->getLocalePath($area, $themePath, $locale);
         $baseLocalePath = $this->getLocalePath($area, $themePath, $baseLocale);
-        $baseRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $baseLocalePath;
-        $newRequireJsPath = RequireJsConfig::DIR_NAME . DIRECTORY_SEPARATOR . $newLocalePath;
 
         $this->deleteLocaleResource($newLocalePath);
-        $this->deleteLocaleResource($newRequireJsPath);
 
-        if (isset($this->options[Options::SYMLINK_LOCALE]) && $this->options[Options::SYMLINK_LOCALE]) {
+        if (!empty($this->options[Options::SYMLINK_LOCALE])) {
             $this->getStaticDirectory()->createSymlink($baseLocalePath, $newLocalePath);
-            $this->getStaticDirectory()->createSymlink($baseRequireJsPath, $newRequireJsPath);
-
             $this->output->writeln("\nSuccessful symlinked\n---\n");
         } else {
-            $localeFiles = array_merge(
-                $this->getStaticDirectory()->readRecursively($baseLocalePath),
-                $this->getStaticDirectory()->readRecursively($baseRequireJsPath)
-            );
+            $localeFiles = $this->getStaticDirectory()->readRecursively($baseLocalePath);
+            $jsDictionaryEnabled = $this->translationJsConfig->dictionaryEnabled();
             foreach ($localeFiles as $path) {
                 if ($this->getStaticDirectory()->isFile($path)) {
-                    $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
-                    $this->getStaticDirectory()->copyFile($path, $destination);
-                    $processedFiles++;
+                    if (!$jsDictionaryEnabled || !$this->isJsDictionary($path)) {
+                        $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
+                        $this->getStaticDirectory()->copyFile($path, $destination);
+                        $processedFiles++;
+                    }
                 }
+            }
+
+            if ($jsDictionaryEnabled) {
+                $this->getDeploy(
+                    DeployStrategyFactory::DEPLOY_STRATEGY_JS_DICTIONARY,
+                    [
+                        'output' => $this->output,
+                        'translationJsConfig' => $this->translationJsConfig
+                    ]
+                )
+                ->deploy($area, $themePath, $locale);
+                $processedFiles++;
             }
 
             $this->output->writeln("\nSuccessful copied: {$processedFiles} files; errors: {$errorAmount}\n---\n");
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Get deploy strategy according to required strategy
+     *
+     * @param string $strategy
+     * @param array $params
+     * @return DeployInterface
+     */
+    private function getDeploy($strategy, $params)
+    {
+        if (empty($this->deploys[$strategy])) {
+            $this->deploys[$strategy] = $this->deployStrategyFactory->create($strategy, $params);
+        }
+        return $this->deploys[$strategy];
+    }
+
+    /**
+     * Define if provided path is js dictionary
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isJsDictionary($path)
+    {
+        return strpos($path, $this->translationJsConfig->getDictionaryFileName()) !== false;
     }
 
     /**

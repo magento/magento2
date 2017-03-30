@@ -10,6 +10,11 @@ use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class DeployStrategyFactory
+ *
+ * @deprecated since 2.2.0
+ */
 class DeployStrategyFactory
 {
     /**
@@ -21,6 +26,11 @@ class DeployStrategyFactory
      * Quick deploy strategy
      */
     const DEPLOY_STRATEGY_QUICK = 'quick';
+
+    /**
+     * Strategy for deploying js dictionary
+     */
+    const DEPLOY_STRATEGY_JS_DICTIONARY = 'js-dictionary';
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -41,6 +51,7 @@ class DeployStrategyFactory
         $strategyMap = [
             self::DEPLOY_STRATEGY_STANDARD => Deploy\LocaleDeploy::class,
             self::DEPLOY_STRATEGY_QUICK => Deploy\LocaleQuickDeploy::class,
+            self::DEPLOY_STRATEGY_JS_DICTIONARY => Deploy\JsDictionaryDeploy::class
         ];
 
         if (!isset($strategyMap[$type])) {

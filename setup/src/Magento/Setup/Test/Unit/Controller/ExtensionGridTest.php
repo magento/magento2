@@ -98,7 +98,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -120,7 +120,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
              );
 
         $jsonModel = $this->controller->extensionsAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -148,7 +148,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             );
 
         $jsonModel = $this->controller->syncAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);

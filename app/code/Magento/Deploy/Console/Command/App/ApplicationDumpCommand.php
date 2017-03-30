@@ -12,6 +12,8 @@ use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Command for dump application state
@@ -29,22 +31,30 @@ class ApplicationDumpCommand extends Command
     private $sources;
 
     /**
-     * ApplicationDumpCommand constructor.
+     * @var Hash
+     */
+    private $configHash;
+
+    /**
+     * ApplicationDumpCommand constructor
      *
      * @param Writer $writer
      * @param array $sources
+     * @param Hash $configHash
      */
     public function __construct(
         Writer $writer,
-        array $sources
+        array $sources,
+        Hash $configHash = null
     ) {
         parent::__construct();
         $this->writer = $writer;
         $this->sources = $sources;
+        $this->configHash = $configHash ?: ObjectManager::getInstance()->get(Hash::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -76,16 +86,19 @@ class ApplicationDumpCommand extends Command
                     : $sourceData['comment']->get();
             }
         }
-        $this->writer
-            ->saveConfig(
-                [ConfigFilePool::APP_CONFIG => $dump],
-                true,
-                ConfigFilePool::LOCAL,
-                $comments
-            );
+        $this->writer->saveConfig(
+            [ConfigFilePool::APP_CONFIG => $dump],
+            true,
+            null,
+            $comments
+        );
         if (!empty($comments)) {
             $output->writeln($comments);
         }
+
+        // Generate and save new hash of deployment configuration.
+        $this->configHash->regenerate();
+
         $output->writeln('<info>Done.</info>');
         return Cli::RETURN_SUCCESS;
     }

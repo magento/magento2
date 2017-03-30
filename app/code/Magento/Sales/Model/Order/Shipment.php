@@ -845,5 +845,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -336,9 +336,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
         $configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()->getMock();
-        $attributeCacheMock = $this->getMockBuilder(
-            \Magento\Eav\Model\Entity\AttributeCache::class
-        )->disableOriginalConstructor()->getMock();
         $arguments = [
             'context' => $contextMock,
             'storeManager' => $storeManager,
@@ -350,11 +347,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $resourceModel,
             'config',
             $configMock
-        );
-        $helper->setBackwardCompatibleProperty(
-            $resourceModel,
-            'attributeCache',
-            $attributeCacheMock
         );
 
         return [$connectionMock, $resourceModel];

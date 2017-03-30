@@ -164,7 +164,6 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertCount(0, $result);
         }
-
     }
 
     public function validateCacheHostsDataProvider()

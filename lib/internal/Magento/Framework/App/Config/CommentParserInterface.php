@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Config;
 use Magento\Framework\Exception\FileSystemException;
 
 /**
- * Interface CommentParserInterface
+ * Interface for parsing comments in the configuration file.
  */
 interface CommentParserInterface
 {

@@ -106,7 +106,7 @@ class InstallData implements InstallDataInterface
 <div class="privacy-policy cms-content">
     <div class="message info">
         <span>
-            Please replace this text with you Privacy Policy.
+            Please replace this text with your Privacy Policy.
             Please add any additional cookies your website uses below (e.g. Google Analytics).
         </span>
     </div>

@@ -15,6 +15,7 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class ProductRepositoryTest
@@ -146,6 +147,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -297,6 +303,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
+        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
         $this->model = $this->objectManager->getObject(
             \Magento\Catalog\Model\ProductRepository::class,
             [
@@ -317,7 +334,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'imageProcessor' => $this->imageProcessorMock,
                 'storeManager' => $this->storeManagerMock,
                 'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
-                'collectionProcessor' => $this->collectionProcessorMock
+                'collectionProcessor' => $this->collectionProcessorMock,
+                'serializer' => $this->serializerMock,
             ]
         );
     }
@@ -436,6 +454,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->productMock));
         $this->productMock->expects($this->exactly(2))->method('load');
         $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($identifier);
+        $this->serializerMock->expects($this->exactly(3))->method('serialize');
+
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
         //second invocation should just return from cache
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
@@ -461,6 +481,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($sku);
         $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')
             ->with($sku)->willReturn($id);
+        $this->serializerMock->expects($this->exactly(3))->method('serialize');
+
         $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
         //second invocation should just return from cache
         $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
@@ -1154,29 +1176,35 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $newEntriesData = [
-            [
-                "label" => "label_text",
-                'position' => 10,
-                'disabled' => false,
-                'types' => ['image', 'small_image'],
-                'content' => [
-                    ImageContentInterface::NAME => 'filename',
-                    ImageContentInterface::TYPE => 'image/jpeg',
-                    ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
-                ],
-                'media_type' => 'media_type',
-            ],
+            'images' =>
+                [
+                    [
+                        'value_id' => null,
+                        'label' => "label_text",
+                        'position' => 10,
+                        'disabled' => false,
+                        'types' => ['image', 'small_image'],
+                        'content' => [
+                            'data' => [
+                                ImageContentInterface::NAME => 'filename',
+                                ImageContentInterface::TYPE => 'image/jpeg',
+                                ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
+                            ],
+                        ],
+                        'media_type' => 'media_type',
+                    ]
+                ]
         ];
 
         $this->setupProductMocksForSave();
         //media gallery data
-        $this->productData['media_gallery_entries'] = $newEntriesData;
+        $this->productData['media_gallery'] = $newEntriesData;
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
 
-        $this->initializedProductMock->setData('media_gallery', []);
+        $this->initializedProductMock->setData('media_gallery', $newEntriesData);
         $this->initializedProductMock->expects($this->any())
             ->method('getMediaAttributes')
             ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
@@ -1277,7 +1305,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         //update one entry, delete one entry
         $newEntries = [
             [
-                'id' => 5,
+                'value_id' => 5,
                 "label" => "new_label_text",
                 'file' => 'filename1',
                 'position' => 10,
@@ -1304,7 +1332,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $expectedResult = [
             [
-                'id' => 5,
+                'value_id' => 5,
                 'value_id' => 5,
                 "label" => "new_label_text",
                 'file' => 'filename1',
@@ -1321,7 +1349,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->setupProductMocksForSave();
         //media gallery data
-        $this->productData['media_gallery_entries'] = $newEntries;
+        $this->productData['media_gallery']['images'] = $newEntries;
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')

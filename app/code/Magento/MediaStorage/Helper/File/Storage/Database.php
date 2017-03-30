@@ -77,7 +77,6 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if we use DB storage
-     * Note: Disabled as not completed feature
      *
      * @return bool
      */

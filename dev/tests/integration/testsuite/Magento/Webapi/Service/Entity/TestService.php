@@ -5,8 +5,6 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-
-
 class TestService
 {
     /**

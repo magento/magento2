@@ -15,7 +15,7 @@ namespace Magento\Framework\Webapi\Rest\Request;
  * invoked could have a signature of "getAddresses($customerId)", but in the webapi.xml, the $customerId parameter
  * would be forced to be the customer id of the current authenticated user.
  *
- * The forced override parameter configuration is in the webapi.xml. 
+ * The forced override parameter configuration is in the webapi.xml.
  *
  * <data>
  *   <parameter name="customer.id" force="true">%customer_id%</parameter>

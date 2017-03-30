@@ -55,10 +55,9 @@ class ConfigWriter
             $config = $this->setConfig($config, $fullConfigPath, $configValue);
         }
 
-        $this->writer
-            ->saveConfig(
-                [ConfigFilePool::APP_CONFIG => $config]
-            );
+        $this->writer->saveConfig(
+            [ConfigFilePool::APP_ENV => $config]
+        );
     }
 
     /**
@@ -97,8 +96,7 @@ class ConfigWriter
     private function getPathPrefix($scope, $scopeCode)
     {
         $pathPrefixes = [System::CONFIG_TYPE, $scope];
-        if (
-            $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             && !empty($scopeCode)
         ) {
             $pathPrefixes[] = $scopeCode;

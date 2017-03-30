@@ -18,7 +18,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
     /**
      * Pattern of message about authorized amount in order.
      */
-    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
+    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of .+?%s. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
@@ -40,11 +40,12 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
+        $orderComments = $infoTab->getCommentsHistoryBlock()->getComments();
+        $commentsMessages = array_column($orderComments, 'comment');
 
         \PHPUnit_Framework_Assert::assertRegExp(
             sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
-            $latestComment['comment'],
+            implode('. ', $commentsMessages),
             'Incorrect authorized amount value for the order #' . $orderId
         );
     }

@@ -86,7 +86,6 @@ class Relation implements RelationInterface
                 $statusHistory->setParentId($object->getId());
                 $statusHistory->setOrder($object);
                 $this->orderStatusHistoryResource->save($statusHistory);
-
             }
         }
         if (null !== $object->getRelatedObjects()) {

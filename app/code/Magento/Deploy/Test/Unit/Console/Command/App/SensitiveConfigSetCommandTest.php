@@ -55,6 +55,9 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)
@@ -83,11 +86,9 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     public function testConfigFileNotExist()
     {
         $this->configFilePoolMock->expects($this->once())
-            ->method('getPathsByPool')
-            ->with(ConfigFilePool::LOCAL)
-            ->willReturn([
-                ConfigFilePool::APP_CONFIG => 'config.local.php'
-            ]);
+            ->method('getPath')
+            ->with(ConfigFilePool::APP_CONFIG)
+            ->willReturn('config.php');
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->with('default', '')
@@ -107,7 +108,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             $tester->getStatusCode()
         );
         $this->assertContains(
-            'File app/etc/config.local.php can\'t be read. '
+            'File app/etc/config.php can\'t be read. '
             . 'Please check if it exists and has read permissions.',
             $tester->getDisplay()
         );

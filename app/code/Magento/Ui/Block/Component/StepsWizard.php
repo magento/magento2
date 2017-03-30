@@ -40,6 +40,7 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     }
 
     // @codeCoverageIgnoreStart
+
     /**
      * @return array
      */
