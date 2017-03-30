@@ -584,8 +584,10 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
+        // @codingStandardsIgnoreStart
         $serializeData = $this->serializer->serialize($entityIdsFilter);
         $entityIdsFilterHash = md5($serializeData);
+        // @codingStandardsIgnoreEnd
 
         if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue])) {
             $linkField = $this->getLinkField();
