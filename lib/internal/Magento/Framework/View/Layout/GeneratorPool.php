@@ -251,7 +251,7 @@ class GeneratorPool
             $structure->setAsChild($element, $destination, $alias);
             $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
         } catch (\OutOfBoundsException $e) {
-            $this->logger->critical('Broken reference: '. $e->getMessage());
+            $this->logger->warning('Broken reference: '. $e->getMessage());
         }
         $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;

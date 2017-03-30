@@ -21,7 +21,7 @@ use Magento\Framework\Registry;
 class Enabled extends Value
 {
     /**
-     * Service for handling after save action.
+     * Service for processing of activation/deactivation MBI subscription.
      *
      * @var SubscriptionHandler
      */
@@ -60,7 +60,15 @@ class Enabled extends Value
     public function afterSave()
     {
         try {
-            $this->subscriptionHandler->process($this);
+            if ($this->isValueChanged()) {
+                $enabled = $this->getData('value');
+
+                if ($enabled) {
+                    $this->subscriptionHandler->processEnabled();
+                } else {
+                    $this->subscriptionHandler->processDisabled();
+                }
+            }
         } catch (\Exception $e) {
             $this->_logger->error($e->getMessage());
             throw new LocalizedException(__('There was an error save new configuration value.'));

@@ -33,7 +33,7 @@ use \Magento\Store\Api\Data\StoreInterface;
  * <assign_entities_to_all_websites>1<assign_entities_to_all_websites/>
  * means that all stores will have the same root category
  *
- * <assign_entities_to_all_websites>1<assign_entities_to_all_websites/>
+ * <assign_entities_to_all_websites>0<assign_entities_to_all_websites/>
  * means that all stores will have unique root category
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml

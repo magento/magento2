@@ -872,6 +872,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Filter Product by Categories
      *
      * @param array $categoriesFilter
+     * @return $this
      */
     public function addCategoriesFilter(array $categoriesFilter)
     {
@@ -885,6 +886,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             ];
             $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
         }
+        return $this;
     }
 
     /**

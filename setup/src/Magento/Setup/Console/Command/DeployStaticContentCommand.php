@@ -5,41 +5,34 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\Utility\Files;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
+use Magento\Deploy\Model\DeployManager;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\State;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Deploy static content command
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated since 2.2.0 @see \Magento\Setup\Console\Command\Deploy\StaticContentCommand
  */
 class DeployStaticContentCommand extends Command
 {
     /**
      * Key for dry-run option
+     *
      * @deprecated
-     * @see \Magento\Deploy\Console\Command\DeployStaticOptionsInterface::DRY_RUN
+     * @see \Magento\Deploy\Console\Command\DeployStaticOptions::DRY_RUN
      */
     const DRY_RUN_OPTION = 'dry-run';
-
-    /**
-     * Key for languages parameter
-     * @deprecated
-     * @see DeployStaticContentCommand::LANGUAGES_ARGUMENT
-     */
-    const LANGUAGE_OPTION = 'languages';
 
     /**
      * Default language value
@@ -52,11 +45,8 @@ class DeployStaticContentCommand extends Command
     const LANGUAGES_ARGUMENT = 'languages';
 
     /**
-     * Default jobs amount
+     * @var InputInterface
      */
-    const DEFAULT_JOBS_AMOUNT = 4;
-
-    /** @var InputInterface */
     private $input;
 
     /**
@@ -65,28 +55,38 @@ class DeployStaticContentCommand extends Command
     private $validator;
 
     /**
-     * object manager to create various objects
+     * @var Options
+     */
+    private $options;
+
+    /**
+     * Object manager to create various objects
      *
      * @var ObjectManagerInterface
      *
      */
     private $objectManager;
 
-    /** @var \Magento\Framework\App\State */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     private $appState;
 
     /**
      * Inject dependencies
      *
-     * @param Locale $validator
+     * @param Locale                $validator
+     * @param Options               $options
      * @param ObjectManagerProvider $objectManagerProvider
      * @throws \LogicException When the command name is empty
      */
     public function __construct(
         Locale $validator,
+        Options $options,
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->validator = $validator;
+        $this->options = $options;
         $this->objectManager = $objectManagerProvider->get();
 
         parent::__construct();
@@ -95,135 +95,12 @@ class DeployStaticContentCommand extends Command
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function configure()
     {
-        $this->setName('setup:static-content:deploy')
+        $this->setName('setup:static-content:deploy:old')
             ->setDescription('Deploys static view files')
-            ->setDefinition([
-                new InputOption(
-                    Options::DRY_RUN,
-                    '-d',
-                    InputOption::VALUE_NONE,
-                    'If specified, then no files will be actually deployed.'
-                ),
-                new InputOption(
-                    Options::FORCE_RUN,
-                    '-f',
-                    InputOption::VALUE_NONE,
-                    'Deploy files in any mode.'
-                ),
-                new InputOption(
-                    Options::NO_JAVASCRIPT,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy JavaScript files'
-                ),
-                new InputOption(
-                    Options::NO_CSS,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy CSS files.'
-                ),
-                new InputOption(
-                    Options::NO_LESS,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy LESS files.'
-                ),
-                new InputOption(
-                    Options::NO_IMAGES,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy images.'
-                ),
-                new InputOption(
-                    Options::NO_FONTS,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy font files.'
-                ),
-                new InputOption(
-                    Options::NO_HTML,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy HTML files.'
-                ),
-                new InputOption(
-                    Options::NO_MISC,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy other types of files (.md, .jbf, .csv, etc...).'
-                ),
-                new InputOption(
-                    Options::NO_HTML_MINIFY,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not minify HTML files.'
-                ),
-                new InputOption(
-                    Options::THEME,
-                    '-t',
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Generate static view files for only the specified themes.',
-                    ['all']
-                ),
-                new InputOption(
-                    Options::EXCLUDE_THEME,
-                    null,
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Do not generate files for the specified themes.',
-                    ['none']
-                ),
-                new InputOption(
-                    Options::LANGUAGE,
-                    '-l',
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Generate files only for the specified languages.',
-                    ['all']
-                ),
-                new InputOption(
-                    Options::EXCLUDE_LANGUAGE,
-                    null,
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Do not generate files for the specified languages.',
-                    ['none']
-                ),
-                new InputOption(
-                    Options::AREA,
-                    '-a',
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Generate files only for the specified areas.',
-                    ['all']
-                ),
-                new InputOption(
-                    Options::EXCLUDE_AREA,
-                    null,
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Do not generate files for the specified areas.',
-                    ['none']
-                ),
-                new InputOption(
-                    Options::JOBS_AMOUNT,
-                    '-j',
-                    InputOption::VALUE_OPTIONAL,
-                    'Enable parallel processing using the specified number of jobs.',
-                    self::DEFAULT_JOBS_AMOUNT
-                ),
-                new InputOption(
-                    Options::SYMLINK_LOCALE,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Create symlinks for the files of those locales, which are passed for deployment, '
-                    . 'but have no customizations'
-                ),
-                new InputArgument(
-                    self::LANGUAGES_ARGUMENT,
-                    InputArgument::IS_ARRAY,
-                    'Space-separated list of ISO-636 language codes for which to output static view files.'
-                ),
-            ]);
+            ->setDefinition($this->options->getOptionsList());
 
         parent::configure();
     }
@@ -344,7 +221,7 @@ class DeployStaticContentCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @param $entities array
+     * @param $entities         array
      * @param $includedEntities array
      * @param $excludedEntities array
      * @return array
@@ -355,9 +232,9 @@ class DeployStaticContentCommand extends Command
         if ($includedEntities[0] === 'all' && $excludedEntities[0] === 'none') {
             $deployableEntities = $entities;
         } elseif ($excludedEntities[0] !== 'none') {
-            $deployableEntities =  array_diff($entities, $excludedEntities);
+            $deployableEntities = array_diff($entities, $excludedEntities);
         } elseif ($includedEntities[0] !== 'all') {
-            $deployableEntities =  array_intersect($entities, $includedEntities);
+            $deployableEntities = array_intersect($entities, $includedEntities);
         }
 
         return $deployableEntities;
