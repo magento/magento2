@@ -181,9 +181,9 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                         'expects' => $this->once(),
                         'return' => true
                     ],
-                    'getBackendModel' => ['expects' => $this->once()]
+                    'getBackendModel' => ['expects' => $this->never()]
                 ],
-                'valueFactory' => ['expects' => $this->never()]
+                'valueFactory' => ['expects' => $this->once()]
             ],
             [
                 'deploymentConfigIsAvailable' => ['return' => true],
