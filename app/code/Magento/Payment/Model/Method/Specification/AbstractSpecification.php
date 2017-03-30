@@ -10,6 +10,8 @@ use Magento\Payment\Model\Method\SpecificationInterface;
 
 /**
  * Abstract specification
+ *
+ * @api
  */
 abstract class AbstractSpecification implements SpecificationInterface
 {
