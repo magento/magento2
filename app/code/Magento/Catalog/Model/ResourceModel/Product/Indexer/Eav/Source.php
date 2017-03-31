@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Source extends AbstractEav
 {
@@ -32,7 +32,9 @@ class Source extends AbstractEav
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param string $connectionName
+     * @param null|string $connectionName
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -40,10 +42,20 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null
     ) {
+        parent::__construct(
+            $context,
+            $tableStrategy,
+            $eavConfig,
+            $eventManager,
+            $connectionName,
+            $stateFactory,
+            $frontendResource
+        );
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $connectionName);
     }
 
     /**
