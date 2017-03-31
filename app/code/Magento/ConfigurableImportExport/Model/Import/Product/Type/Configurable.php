@@ -2,7 +2,7 @@
 /**
  * Import entity configurable product type model
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -770,7 +770,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $scope = $this->_entityModel->getRowScope($rowData);
                 if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $scope) &&
                     !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
-
                     $this->_productData = isset($newSku[$rowData[ImportProduct::COL_SKU]])
                                         ? $newSku[$rowData[ImportProduct::COL_SKU]]
                                         : $oldSku[$rowData[ImportProduct::COL_SKU]];

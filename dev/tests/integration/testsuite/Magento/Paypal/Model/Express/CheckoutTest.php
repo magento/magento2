@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Express;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Checkout\Model\Type\Onepage;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Paypal\Model\Api\Nvp;
+use Magento\Paypal\Model\Api\Type\Factory;
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\Info;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Paypal\Model\Config;
-use Magento\Paypal\Model\Express\Checkout;
-use Magento\Paypal\Model\Api\Type\Factory;
-use Magento\Paypal\Model\Api\Nvp;
-use Magento\Paypal\Model\Info;
 
 /**
  * Class CheckoutTest
@@ -308,7 +307,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $shippingAddress = $quote->getShippingAddress();
 
         $prefix = 'exported';
-        $this->assertEquals([$prefix .$this->getExportedData()['street']], $shippingAddress->getStreet());
+        $this->assertEquals([$prefix . $this->getExportedData()['street']], $shippingAddress->getStreet());
         $this->assertEquals($prefix . $this->getExportedData()['firstname'], $shippingAddress->getFirstname());
         $this->assertEquals($prefix . $this->getExportedData()['city'], $shippingAddress->getCity());
         $this->assertEquals($prefix . $this->getExportedData()['telephone'], $shippingAddress->getTelephone());
@@ -337,7 +336,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
 
         $prefix = 'exported';
 
-        $this->assertNotEquals([$prefix .$this->getExportedData()['street']], $shippingAddress->getStreet());
+        $this->assertNotEquals([$prefix . $this->getExportedData()['street']], $shippingAddress->getStreet());
         $this->assertNotEquals($prefix . $this->getExportedData()['firstname'], $shippingAddress->getFirstname());
         $this->assertNotEquals($prefix . $this->getExportedData()['city'], $shippingAddress->getCity());
         $this->assertNotEquals($prefix . $this->getExportedData()['telephone'], $shippingAddress->getTelephone());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
@@ -8,9 +8,9 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorInterface;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Model\Config\PathValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
-use Magento\Config\Model\Config\PathValidator;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
