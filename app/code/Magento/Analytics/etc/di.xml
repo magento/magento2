@@ -171,6 +171,13 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="NotifyDataChangedResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Analytics\Model\Connector\SignUpCommand">
         <arguments>
             <argument name="responseResolver" xsi:type="object">SignUpResponseResolver</argument>
@@ -184,6 +191,11 @@
     <type name="Magento\Analytics\Model\Connector\OTPRequest">
         <arguments>
             <argument name="responseResolver" xsi:type="object">OtpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\NotifyDataChangedCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">NotifyDataChangedResponseResolver</argument>
         </arguments>
     </type>
 </config>

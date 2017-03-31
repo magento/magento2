@@ -10,6 +10,7 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
 use Magento\Store\Model\Store;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 
 /**
  * Command notifies MBI about that data collection was finished.
@@ -37,6 +38,11 @@ class NotifyDataChangedCommand implements CommandInterface
     private $config;
 
     /**
+     * @var ResponseResolver
+     */
+    private $responseResolver;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -46,17 +52,20 @@ class NotifyDataChangedCommand implements CommandInterface
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
      * @param Config $config
+     * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
         Config $config,
+        ResponseResolver $responseResolver,
         LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->httpClient = $httpClient;
         $this->config = $config;
+        $this->responseResolver = $responseResolver;
         $this->logger = $logger;
     }
 
@@ -67,8 +76,9 @@ class NotifyDataChangedCommand implements CommandInterface
      */
     public function execute()
     {
+        $result = false;
         if ($this->analyticsToken->isTokenExist()) {
-            $this->httpClient->request(
+            $response = $this->httpClient->request(
                 ZendClient::POST,
                 $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
                 [
@@ -78,7 +88,8 @@ class NotifyDataChangedCommand implements CommandInterface
                     ),
                 ]
             );
+            $result = $this->responseResolver->getResult($response);
         }
-        return true;
+        return $result;
     }
 }
