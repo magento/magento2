@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -179,7 +179,7 @@ class ImagesFixture extends Fixture
     {
         $config = $this->fixtureModel->getValue('product-images', []);
         if (!$config) {
-            return ;
+            return;
         }
 
         if (!isset($config['images-count'])) {

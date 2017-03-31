@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Test\Unit\Model;
@@ -101,7 +101,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL',]
+            ['value' => 'VAL', 'label' => 'LBL']
         ];
 
         $transformedOptions = [
@@ -128,7 +128,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testGetVariablesOptionArrayWithGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL',]
+            ['value' => 'VAL', 'label' => 'LBL']
         ];
 
         $transformedOptions = [

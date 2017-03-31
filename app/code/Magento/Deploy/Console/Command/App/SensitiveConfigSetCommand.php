@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App;
@@ -21,21 +21,36 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for set sensitive variable through deploy process.
+ * Command for set sensitive variable through deploy process
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SensitiveConfigSetCommand extends Command
 {
-    /**#@+
-     * Names of input arguments or options.
+    /**
+     * Name of "interactive" input option
      */
     const INPUT_OPTION_INTERACTIVE = 'interactive';
+
+    /**
+     * Name of "configuration scope" input option
+     */
     const INPUT_OPTION_SCOPE = 'scope';
+
+    /**
+     * Name of "configuration scope code" input option
+     */
     const INPUT_OPTION_SCOPE_CODE = 'scope-code';
+
+    /**
+     * Name of "configuration path" input argument
+     */
     const INPUT_ARGUMENT_PATH = 'path';
+
+    /**
+     * Name of "configuration value" input argument
+     */
     const INPUT_ARGUMENT_VALUE = 'value';
-    /**#@-*/
 
     /**
      * @var CommentParserInterface
@@ -63,6 +78,8 @@ class SensitiveConfigSetCommand extends Command
     private $collectorFactory;
 
     /**
+     * SensitiveConfigSetCommand constructor
+     *
      * @param ConfigFilePool $configFilePool
      * @param CommentParserInterface $commentParser
      * @param ConfigWriter $configWriter
@@ -85,7 +102,7 @@ class SensitiveConfigSetCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -125,7 +142,7 @@ class SensitiveConfigSetCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -152,7 +169,7 @@ class SensitiveConfigSetCommand extends Command
     }
 
     /**
-     * Writes success message.
+     * Writes success message
      *
      * @param OutputInterface $output
      * @param boolean $isInteractive
@@ -168,7 +185,7 @@ class SensitiveConfigSetCommand extends Command
     }
 
     /**
-     * Get sensitive configuration paths.
+     * Get sensitive configuration paths
      *
      * @return array
      * @throws LocalizedException if configuration file not exists or sensitive configuration is empty

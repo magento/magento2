@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
@@ -10,6 +10,12 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Free payment method
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * This is an implementation of payment method that allows order for free.
+ * Magento contains special flow for handling this payment method.
+ * Inheritance is allowed to modify it behavior.
+ *
+ * @api
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {

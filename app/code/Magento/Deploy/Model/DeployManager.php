@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,12 +8,13 @@ namespace Magento\Deploy\Model;
 
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
 use Magento\Framework\App\State;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated since 2.2.0
  */
 class DeployManager
 {
