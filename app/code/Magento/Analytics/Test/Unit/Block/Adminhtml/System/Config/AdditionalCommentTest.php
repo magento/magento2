@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
 
-use Magento\Framework\Data\Form;
 use Magento\Analytics\Block\Adminhtml\System\Config\AdditionalComment;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class AdditionalCommentTest extends \PHPUnit_Framework_TestCase
