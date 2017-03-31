@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1529,6 +1529,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $existingImages = $this->getExistingImages($bunch);
 
             foreach ($bunch as $rowNum => $rowData) {
+                // reset category processor's failed categories array
+                $this->categoryProcessor->clearFailedCategories();
+
                 if (!$this->validateRow($rowData, $rowNum)) {
                     continue;
                 }
@@ -1746,7 +1749,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         )
                     ) {
                         $attrValue = $this->dateTime->formatDate($attrValue, false);
-                    } else if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
+                    } elseif ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
                         $attrValue = $this->dateTime->gmDate(
                             'Y-m-d H:i:s',
                             $this->_localeDate->date($attrValue)->getTimestamp()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model;
@@ -8,7 +8,6 @@ namespace Magento\Analytics\Model;
 use Magento\Analytics\Api\Data\LinkInterfaceFactory;
 use Magento\Analytics\Api\LinkProviderInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\Webapi\Exception;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

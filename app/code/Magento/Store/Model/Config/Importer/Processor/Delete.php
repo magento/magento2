@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
@@ -12,8 +12,8 @@ use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\WebsiteRepository;
 use Magento\Store\Model\StoreRepository;
+use Magento\Store\Model\WebsiteRepository;
 
 /**
  * The processor for deleting different entities.

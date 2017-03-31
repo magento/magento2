@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
@@ -49,7 +49,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Url\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlHelperMock;
-    
+
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -203,7 +203,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
         $this->prodCollectionMock->expects($this->any())
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator([$this->productMock])));
- 
+
         $this->layerMock->expects($this->any())
             ->method('getCurrentCategory')
             ->will($this->returnValue($currentCategory));

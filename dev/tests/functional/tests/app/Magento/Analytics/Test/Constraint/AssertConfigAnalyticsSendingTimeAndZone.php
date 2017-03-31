@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert sending data to the Analytics is restored.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -119,7 +119,7 @@ class BundleProductsFixture extends Fixture
         }
         $variationSkuClosure = function ($productId, $entityNumber) use ($bundleOptionSuffix, $variationCount) {
             $productIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
-            $variationIndex = $this->getBundleVariationIndex($entityNumber, $variationCount) ;
+            $variationIndex = $this->getBundleVariationIndex($entityNumber, $variationCount);
 
             return sprintf($this->getBundleOptionItemSkuPattern($bundleOptionSuffix), $productIndex, $variationIndex);
         };

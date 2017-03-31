@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
@@ -8,8 +8,8 @@ namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
 use Magento\Analytics\Block\Adminhtml\System\Config\SubscriptionStatusLabel;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Class SignupTest
