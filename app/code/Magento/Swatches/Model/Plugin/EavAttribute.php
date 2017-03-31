@@ -71,7 +71,7 @@ class EavAttribute
      * @param Attribute $attribute
      * @return void
      */
-    public function beforeSave(Attribute $attribute)
+    public function beforeBeforeSave(Attribute $attribute)
     {
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             $this->setProperOptionsArray($attribute);
@@ -80,6 +80,19 @@ class EavAttribute
         }
         $this->convertSwatchToDropdown($attribute);
     }
+
+    /**
+     * @param Attribute $attribute
+     * @param bool $result
+     * @return bool
+     */
+    public function afterUsesSource(Attribute $attribute, $result)
+     {
+         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
+             return true;
+         }
+        return $result;
+     }
 
     /**
      * Swatch save operations
