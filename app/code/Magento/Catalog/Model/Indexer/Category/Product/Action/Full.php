@@ -116,7 +116,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->getMainTable(),
             []
         )->joinLeft(
-            ['t' => $this->getMainTmpTable()],
+            ['t' => $this->getMainTable()],
             $this->getMainTable() .
             '.category_id = t.category_id AND ' .
             $this->getMainTable() .
