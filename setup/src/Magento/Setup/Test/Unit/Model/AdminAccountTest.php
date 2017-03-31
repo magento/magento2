@@ -61,7 +61,11 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             AdminAccount::KEY_USER => 'admin',
         ];
 
-        $this->adminAccount = new AdminAccount($this->setUpMock, $this->encryptor, $data);
+        $this->adminAccount = new AdminAccount(
+            $this->setUpMock,
+            $this->encryptor,
+            $data
+        );
     }
 
     public function testSaveUserExistsAdminRoleExists()
