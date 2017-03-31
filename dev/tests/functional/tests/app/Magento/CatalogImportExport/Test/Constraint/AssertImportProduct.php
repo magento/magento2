@@ -145,7 +145,17 @@ class AssertImportProduct extends AbstractConstraint
      */
     protected function getResultProductsData(array $productsData)
     {
-        return array_intersect_key($productsData, array_flip($this->neededKeys));
+        $resultProductsData = [];
+        array_walk_recursive(
+            $productsData,
+            function ($value, $key) use (&$resultProductsData) {
+                if (array_key_exists($key, array_flip($this->neededKeys)) !== false) {
+                    $resultProductsData[$key] = $value;
+                }
+            }
+        );
+
+        return $resultProductsData;
     }
 
     /**
@@ -158,7 +168,7 @@ class AssertImportProduct extends AbstractConstraint
     {
         $data = [];
         foreach ($csvData as $key => $value) {
-            if (array_search($key, $this->neededKeys)) {
+            if (array_key_exists($key, array_flip($this->neededKeys)) !== false) {
                 $data[$key] = $value;
             }
         }
