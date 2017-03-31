@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Test\TestStep;
@@ -57,7 +57,7 @@ class SignifydLoginStep implements TestStepInterface
     public function run()
     {
         $this->signifydLogin->open();
-        
+
         if ($this->signifydLogin->getLoginBlock()->isVisible()) {
             $this->signifydLogin->getLoginBlock()->fill($this->signifydAccount);
             $this->signifydLogin->getLoginBlock()->login();
