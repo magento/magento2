@@ -102,8 +102,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $this->reindex();
 
-        $this->removeUnnecessaryData();
-
         return $this;
     }
 
@@ -241,6 +239,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 )
             );
             $this->publishData();
+            $this->removeUnnecessaryData();
         }
     }
 
