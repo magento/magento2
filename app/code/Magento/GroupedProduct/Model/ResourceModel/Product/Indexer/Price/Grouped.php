@@ -12,6 +12,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 class Grouped extends DefaultPrice implements GroupedInterface
 {
+    /**
+     * Prefix for temporary table support.
+     */
     const TRANSIT_PREFIX = 'transit_';
 
     /**
