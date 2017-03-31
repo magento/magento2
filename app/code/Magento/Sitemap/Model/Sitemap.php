@@ -607,11 +607,12 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * Get media url
      *
      * @param string $url
-     * @return string
+     * @return string $url
+     * @deprecated No longer used, as we're generating product image URLs inside collection instead
      */
     protected function _getMediaUrl($url)
     {
-        return $this->_getUrl($url, \Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+        return $url;
     }
 
     /**

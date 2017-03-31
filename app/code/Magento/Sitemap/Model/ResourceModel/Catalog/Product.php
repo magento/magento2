@@ -7,6 +7,7 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Sitemap resource product collection model
@@ -339,7 +340,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         ) {
             $imagesCollection = [
                 new \Magento\Framework\DataObject(
-                    ['url' => $this->_getMediaConfig()->getBaseMediaUrlAddition() . $product->getImage()]
+                    ['url' => $this->getProductImageUrl($product->getImage())]
                 ),
             ];
         }
@@ -348,7 +349,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             // Determine thumbnail path
             $thumbnail = $product->getThumbnail();
             if ($thumbnail && $product->getThumbnail() != self::NOT_SELECTED_IMAGE) {
-                $thumbnail = $this->_getMediaConfig()->getBaseMediaUrlAddition() . $thumbnail;
+                $thumbnail = $this->getProductImageUrl($thumbnail);
             } else {
                 $thumbnail = $imagesCollection[0]->getUrl();
             }
@@ -378,11 +379,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $imagesCollection = [];
         if ($gallery) {
-            $productMediaPath = $this->_getMediaConfig()->getBaseMediaUrlAddition();
             foreach ($gallery as $image) {
                 $imagesCollection[] = new \Magento\Framework\DataObject(
                     [
-                        'url' => $productMediaPath . $image['file'],
+                        'url' => $this->getProductImageUrl($image['file']),
                         'caption' => $image['label'] ? $image['label'] : $image['label_default'],
                     ]
                 );
@@ -396,9 +396,29 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get media config
      *
      * @return \Magento\Catalog\Model\Product\Media\Config
+     * @deprecated No longer used, as we're getting full image URL from getProductImageUrl method
      */
     protected function _getMediaConfig()
     {
         return $this->_mediaConfig;
+    }
+
+
+    /**
+     * Get product image URL from image filename and path
+     *
+     * @param $image
+     * @return mixed
+     */
+    protected function getProductImageUrl($image)
+    {
+        $productObject = ObjectManager::getInstance()->get('Magento\Catalog\Model\Product');
+        $imgUrl = ObjectManager::getInstance()
+                               ->get('Magento\Catalog\Helper\Image')
+                               ->init($productObject, 'product_page_image_large')
+                               ->setImageFile($image)
+                               ->getUrl();
+
+        return $imgUrl;
     }
 }
