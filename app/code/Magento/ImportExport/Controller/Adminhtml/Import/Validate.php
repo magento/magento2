@@ -132,9 +132,7 @@ class Validate extends ImportResultController
     private function addMessageToSkipErrors(Result $resultBlock)
     {
         $import = $this->getImport();
-        if ($import->getValidationStrategy() == ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
-            && !$import->getErrorAggregator()->hasFatalExceptions()
-        ) {
+        if (!$import->getErrorAggregator()->hasFatalExceptions()) {
             $resultBlock->addSuccess(
                 __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
                 true
