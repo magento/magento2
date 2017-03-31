@@ -12,11 +12,16 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+$categoryLinkManagement = $objectManager->get(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
 
 $tierPrices = [];
 /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory */
 $tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
+/** @var  $tpExtensionAttributes */
+$tpExtensionAttributesFactory = $objectManager->get(ProductTierPriceExtensionFactory::class);
+
+$adminWebsite = $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class)->get('admin');
+$tierPriceWebsiteId = $tpExtensionAttributesFactory->create()->setWebsiteId($adminWebsite->getId());
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -25,7 +30,7 @@ $tierPrices[] = $tierPriceFactory->create(
             'value' => 8
         ]
     ]
-);
+)->setExtensionAttributes($tierPriceWebsiteId);
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -34,7 +39,7 @@ $tierPrices[] = $tierPriceFactory->create(
             'value' => 5
         ]
     ]
-);
+)->setExtensionAttributes($tierPriceWebsiteId);
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -43,10 +48,11 @@ $tierPrices[] = $tierPriceFactory->create(
             'value' => 5
         ]
     ]
-);
-/** @var  $tpExtensionAttributes */
-$tpExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
-$tpExtensionAttributes = $tpExtensionAttributesFactory->create()->setPercentageValue(50);
+)->setExtensionAttributes($tierPriceWebsiteId);
+
+$tierPricePercentageValue = $tpExtensionAttributesFactory->create()
+    ->setPercentageValue(50)
+    ->setWebsiteId($adminWebsite->getId());
 
 $tierPrices[] = $tierPriceFactory->create(
     [
@@ -55,50 +61,7 @@ $tierPrices[] = $tierPriceFactory->create(
             'qty' => 10
         ]
     ]
-)->setExtensionAttributes($tpExtensionAttributes);
-
-$tierPrices = [];
-/** @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory */
-$tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
-$tierPrices[] = $tierPriceFactory->create(
-    [
-        'data' => [
-            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-            'qty' => 2,
-            'value' => 8
-        ]
-    ]
-);
-$tierPrices[] = $tierPriceFactory->create(
-    [
-        'data' => [
-            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-            'qty' => 5,
-            'value' => 5
-        ]
-    ]
-);
-$tierPrices[] = $tierPriceFactory->create(
-    [
-        'data' => [
-            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-            'qty' => 3,
-            'value' => 5
-        ]
-    ]
-);
-/** @var  $tpExtensionAttributes */
-$tpExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
-$tpExtensionAttributes = $tpExtensionAttributesFactory->create()->setPercentageValue(50);
-
-$tierPrices[] = $tierPriceFactory->create(
-    [
-        'data' => [
-            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-            'qty' => 10
-        ]
-    ]
-)->setExtensionAttributes($tpExtensionAttributes);
+)->setExtensionAttributes($tierPricePercentageValue);
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
