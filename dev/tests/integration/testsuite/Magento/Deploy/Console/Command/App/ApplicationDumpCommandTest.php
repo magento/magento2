@@ -141,6 +141,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'Sensitive data can be stored in the following environment variables:',
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive',
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE3 for web/test/test_sensitive3',
+            'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT4 for web/test/test_sensitive_environment4',
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5'
         ]);
         $outputMock = $this->getMock(OutputInterface::class);
