@@ -142,11 +142,12 @@ class Full extends AbstractAction
                     $select->where('type_id = ?', $indexer->getTypeId());
 
                     $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
-                    $indexer->reindexEntity($entityIds);
-
-                    $select = $connection->select()->from($this->_getIdxTable(), $columns);
-                    $query = $select->insertFromSelect($tableName, $columns);
-                    $connection->query($query);
+                    if (!empty($entityIds)) {
+                        $indexer->reindexEntity($entityIds);
+                        $select = $connection->select()->from($this->_getIdxTable(), $columns);
+                        $query = $select->insertFromSelect($tableName, $columns);
+                        $connection->query($query);
+                    }
                 }
             }
         } catch (\Exception $e) {

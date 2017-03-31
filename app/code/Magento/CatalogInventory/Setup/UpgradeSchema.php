@@ -27,9 +27,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), $this->productCompositeKeyVersion, '<')) {
             $this->upgradeProductCompositeKey($setup);
-            $this->addReplicaTable($setup, 'cataloginventory_stock_status', 'cataloginventory_stock_status_replica');
         }
 
+        if (version_compare($context->getVersion(), '2.3.0', '<')) {
+            $this->addReplicaTable($setup, 'cataloginventory_stock_status', 'cataloginventory_stock_status_replica');
+        }
         $setup->endSetup();
     }
 
