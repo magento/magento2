@@ -135,11 +135,14 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
-            . 'Sensitive data can be stored in the following environment variables:'
-            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive"
-            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE3 for web/test/test_sensitive3"
-            . "\nCONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5";
+        $comment = implode(PHP_EOL, [
+            'Shared configuration was written to config.php and system-specific configuration to env.php.',
+            'Shared configuration file (config.php) doesn\'t contain sensitive data for security reasons.',
+            'Sensitive data can be stored in the following environment variables:',
+            'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE for web/test/test_sensitive',
+            'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE3 for web/test/test_sensitive3',
+            'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5'
+        ]);
         $outputMock = $this->getMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')

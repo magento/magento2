@@ -59,30 +59,22 @@ class Comment implements CommentInterface
      */
     public function get()
     {
-        $comment = array_reduce($this->source->getExcludedFields(), function ($comment, $path) {
-            if ($this->isCommendRequired($path)) {
-                $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
+        $comments = [];
+
+        foreach ($this->source->getExcludedFields() as $path) {
+            if ($this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE)) {
+                $comments[] = $this->placeholder->generate($path) . ' for ' . $path;
             }
-            return $comment;
-        });
-
-        if ($comment) {
-            $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
-                . 'Sensitive data can be stored in the following environment variables:'
-                . $comment;
         }
-        return $comment;
-    }
 
-    /**
-     * Checks if comment required for given configuration path.
-     *
-     * @param string $path Configuration field path
-     * @return bool
-     */
-    private function isCommendRequired($path)
-    {
-        return $this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE)
-            && !$this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT);
+        if (!empty($comments)) {
+            $comments = array_merge([
+                'Shared configuration was written to config.php and system-specific configuration to env.php.',
+                'Shared configuration file (config.php) doesn\'t contain sensitive data for security reasons.',
+                'Sensitive data can be stored in the following environment variables:'
+            ], $comments);
+        }
+
+        return implode(PHP_EOL, $comments);
     }
 }

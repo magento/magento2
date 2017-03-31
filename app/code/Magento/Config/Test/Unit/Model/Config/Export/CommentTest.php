@@ -148,27 +148,23 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                 'expectedMessage' => ''
             ],
             [
-                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2', 'some/sensitiveAndEnv/field1'],
+                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2', 'some/sensitive_and_env/field'],
                 'notSensitive' => ['some/notSensitive/field1', 'some/notSensitive/field2'],
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => $this->exactly(8),
+                            'expects' => $this->exactly(5),
                             'returnMap' => [
                                 ['some/sensitive/field1', TypePool::TYPE_SENSITIVE, true],
-                                ['some/sensitive/field1', TypePool::TYPE_ENVIRONMENT, false],
                                 ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, true],
-                                ['some/sensitive/field2', TypePool::TYPE_ENVIRONMENT, false],
-                                ['some/sensitiveAndEnv/field1', TypePool::TYPE_SENSITIVE, true],
-                                ['some/sensitiveAndEnv/field1', TypePool::TYPE_ENVIRONMENT, true],
+                                ['some/sensitive_and_env/field', TypePool::TYPE_SENSITIVE, true],
                                 ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
-                                ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
                             ]
                         ],
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => $this->exactly(2),
+                            'expects' => $this->exactly(3),
                             'returnMap' => [
                                 [
                                     'some/sensitive/field1',
@@ -182,14 +178,24 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                                     null,
                                     'CONFIG__SOME__SENSITIVE__FIELD2'
                                 ],
+                                [
+                                    'some/sensitive_and_env/field',
+                                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                                    null,
+                                    'CONFIG__SOME__SENSITIVE_AND_ENV__FIELD'
+                                ],
                             ],
                         ],
                     ],
                 ],
-                'expectedMessage' => 'The configuration file doesn\'t contain sensitive data for security reasons. '
-                    . 'Sensitive data can be stored in the following environment variables:'
-                    . "\n" . 'CONFIG__SOME__SENSITIVE__FIELD1 for some/sensitive/field1'
-                    . "\n" . 'CONFIG__SOME__SENSITIVE__FIELD2 for some/sensitive/field2'
+                'expectedMessage' => implode(PHP_EOL, [
+                    'Shared configuration was written to config.php and system-specific configuration to env.php.',
+                    'Shared configuration file (config.php) doesn\'t contain sensitive data for security reasons.',
+                    'Sensitive data can be stored in the following environment variables:',
+                    'CONFIG__SOME__SENSITIVE__FIELD1 for some/sensitive/field1',
+                    'CONFIG__SOME__SENSITIVE__FIELD2 for some/sensitive/field2',
+                    'CONFIG__SOME__SENSITIVE_AND_ENV__FIELD for some/sensitive_and_env/field'
+                ])
             ],
         ];
     }
