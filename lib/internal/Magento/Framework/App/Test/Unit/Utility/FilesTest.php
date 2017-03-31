@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class FilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,10 +21,30 @@ class FilesTest extends \PHPUnit_Framework_TestCase
      */
     private $componentRegistrar;
 
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->componentRegistrar = new ComponentRegistrar();
         $this->dirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->setMethods(['serialize'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+
         $themePackageList = $this->getMock(
             \Magento\Framework\View\Design\Theme\ThemePackageList::class,
             [],
@@ -31,7 +52,14 @@ class FilesTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch, $themePackageList));
+        Files::setInstance(
+            new Files(
+                $this->componentRegistrar,
+                $this->dirSearch,
+                $themePackageList,
+                $this->serializerMock
+            )
+        );
     }
 
     protected function tearDown()

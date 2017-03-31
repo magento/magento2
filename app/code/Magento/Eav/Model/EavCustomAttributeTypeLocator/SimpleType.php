@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class SimpleType
      * @var string[]
      */
     private $anyTypeAttributes = ['quantity_and_stock_status'];
-    
+
     /**
      * Get attribute type based on its frontend input and backend type.
      *

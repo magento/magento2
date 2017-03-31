@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Step for create order.

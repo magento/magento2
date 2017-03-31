@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Deploy\Model;
 
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface;
+use Magento\Deploy\Console\Command\DeployStaticOptions;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
@@ -19,7 +19,7 @@ use Magento\Deploy\Model\DeployManagerFactory;
 /**
  * A service for deploying Magento static view files for production mode
  *
- * @deprecated
+ * @deprecated since 2.2.0
  * @see Use DeployManager::deploy instead
  */
 class Deployer
@@ -69,7 +69,7 @@ class Deployer
             $this->options = $options;
         } else {
             // backward compatibility support
-            $this->options = [DeployStaticOptionsInterface::DRY_RUN => (bool)$options];
+            $this->options = [DeployStaticOptions::DRY_RUN => (bool)$options];
         }
     }
 

@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command\ConfigShow;
 
+use Magento\Config\Model\Config\Backend\Encrypted;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\StructureFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Config\ScopeInterface;
-use Magento\Framework\App\Area;
-use Magento\Config\Model\Config\Backend\Encrypted;
 
 /**
  * Class processes values using backend model which declared in system.xml.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
@@ -10,8 +10,7 @@ use Magento\Deploy\Model\Deploy\LocaleQuickDeploy;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
 use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
 use Magento\Deploy\Model\Deploy\JsDictionaryDeploy;
 use Magento\Deploy\Model\DeployStrategyFactory;
@@ -72,11 +71,10 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
         $locale = 'uk_UA';
         $baseLocal = 'en_US';
 
-        $this->staticDirectoryMock->expects(self::exactly(2))
+        $this->staticDirectoryMock->expects(self::exactly(1))
             ->method('createSymlink')
             ->withConsecutive(
-                ['adminhtml/Magento/backend/en_US', 'adminhtml/Magento/backend/uk_UA'],
-                ['_requirejs/adminhtml/Magento/backend/en_US', '_requirejs/adminhtml/Magento/backend/uk_UA']
+                ['adminhtml/Magento/backend/en_US', 'adminhtml/Magento/backend/uk_UA']
             );
 
         $model = $this->getModel([
@@ -90,36 +88,35 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
     {
         $area = 'adminhtml';
         $themePath = 'Magento/backend';
-        $locale = 'uk_UA';
         $baseLocale = 'en_US';
-        $baseDir = $baseLocale . 'dir';
+        $locale = 'uk_UA';
+        $baseDir = $baseLocale . '/dir';
         $file1 = 'file1';
         $file2 = 'file2';
-        $baseFile1 = $baseLocale . $file1;
-        $baseFile2 = $baseLocale . $file2;
+        $baseFile1 = $baseLocale . '/' . $file1;
+        $baseFile2 = $baseLocale . '/' . $file2;
 
         $dictionary = 'js-translation.json';
-        $baseDictionary = $baseLocale . $dictionary;
+        $baseDictionary = $baseLocale . '/' . $dictionary;
 
         $this->staticDirectoryMock->expects(self::never())->method('createSymlink');
-        $this->staticDirectoryMock->expects(self::exactly(2))->method('readRecursively')->willReturnMap(
+        $this->staticDirectoryMock->expects(self::exactly(1))->method('readRecursively')->willReturnMap(
             [
-                ['adminhtml/Magento/backend/en_US', [$baseFile1, $baseDir]],
-                [RequireJsConfig::DIR_NAME  . '/adminhtml/Magento/backend/en_US', [$baseFile2, $baseDictionary]]
+                ['adminhtml/Magento/backend/en_US', [$baseFile1, $baseDir]]
             ]
         );
-        $this->staticDirectoryMock->expects(self::exactly(4))->method('isFile')->willReturnMap([
+        $this->staticDirectoryMock->expects(self::exactly(2))->method('isFile')->willReturnMap([
             [$baseFile1, true],
             [$baseDir, false],
             [$baseFile2, true],
             [$baseDictionary, true]
         ]);
-        $this->staticDirectoryMock->expects(self::exactly(2))->method('copyFile')->withConsecutive(
-            [$baseFile1, $locale . $file1, null],
-            [$baseFile2, $locale . $file2, null]
+        $this->staticDirectoryMock->expects(self::exactly(1))->method('copyFile')->withConsecutive(
+            [$baseFile1, $locale . '/' . $file1, null],
+            [$baseFile2, $locale . '/' . $file2, null]
         );
 
-        $this->translationJsConfig->expects(self::exactly(3))->method('getDictionaryFileName')
+        $this->translationJsConfig->expects(self::exactly(1))->method('getDictionaryFileName')
             ->willReturn($dictionary);
 
         $this->translationJsConfig->expects($this->once())->method('dictionaryEnabled')->willReturn(true);

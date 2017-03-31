@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\TestStep;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Steps:
