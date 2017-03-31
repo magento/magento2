@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
@@ -62,7 +62,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         /** @var Order $order */
         $order = $this->objectManager->create(Order::class);
         $order->loadByIncrementId('100000001');
-        
+
         $orderItems = $order->getAllItems();
         $product = $orderItems[0]->getProduct();
         $payment = $order->getPayment();
