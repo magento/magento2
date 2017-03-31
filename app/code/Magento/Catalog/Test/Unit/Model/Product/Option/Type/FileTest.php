@@ -263,8 +263,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function testGetEditableOptionValue()
     {
-        $configurationItemOption = $this->getMockBuilder(\Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class)
-            ->disableOriginalConstructor()
+        $configurationItemOption = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
+        )->disableOriginalConstructor()
             ->setMethods(['getId', 'getValue'])
             ->getMock();
         $configurationItemOption->expects($this->once())
