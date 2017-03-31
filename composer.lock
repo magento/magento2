@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "93a80447e5c1c9455994a33d0b433bca",
-    "content-hash": "c6f66f39754e4b3b53b94ab34efdf214",
+    "hash": "19cc75370fe699d7b514202caf9aec49",
+    "content-hash": "c82e9bdc46322169625c26c1f8afc6c6",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1771,20 +1771,23 @@
         },
         {
             "name": "tubalmartin/cssmin",
-            "version": "v2.4.8-p6",
+            "version": "v2.4.8-p8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git",
-                "reference": "47c481b6309361845e88b580ab25e791169d9e9b"
+                "reference": "795a337e47f6ef84ef664ecb4755afa2f1381b84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/47c481b6309361845e88b580ab25e791169d9e9b",
-                "reference": "47c481b6309361845e88b580ab25e791169d9e9b",
+                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/795a337e47f6ef84ef664ecb4755afa2f1381b84",
+                "reference": "795a337e47f6ef84ef664ecb4755afa2f1381b84",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.0.0"
+            },
+            "require-dev": {
+                "cogpowered/finediff": "0.3.*"
             },
             "type": "library",
             "autoload": {
@@ -1808,10 +1811,11 @@
                 "compress",
                 "compressor",
                 "css",
+                "cssmin",
                 "minify",
                 "yui"
             ],
-            "time": "2017-03-21 11:08:23"
+            "time": "2017-03-27 16:51:47"
         },
         {
             "name": "zendframework/zend-captcha",
