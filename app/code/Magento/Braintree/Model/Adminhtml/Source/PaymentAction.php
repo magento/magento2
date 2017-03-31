@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Adminhtml\Source;
 
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Framework\Option\ArrayInterface;
+use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Class PaymentAction

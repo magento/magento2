@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CustomerImportExport\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\ImportExport\Test\Fixture\ImportData;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
+use Magento\ImportExport\Test\Fixture\ImportData;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Assert addresses from csv import file and page are match.
@@ -151,7 +151,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
             $csvRowData = $this->deleteWasteData($csvRowData);
             if (isset($this->mappingCountries[$csvRowData['country_id']])) {
                 $csvRowData['country_id'] = $this->mappingCountries[$csvRowData['country_id']];
-            };
+            }
             $resultCsvData[] = $csvRowData;
         }
         return $resultCsvData;

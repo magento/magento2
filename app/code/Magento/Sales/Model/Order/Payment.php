@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,10 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 
@@ -669,7 +669,7 @@ class Payment extends Info implements OrderPaymentInterface
                         throw $e;
                     }
                 }
-            } else if ($gateway->isOffline()) {
+            } elseif ($gateway->isOffline()) {
                 $gateway->setStore(
                     $this->getOrder()->getStoreId()
                 );

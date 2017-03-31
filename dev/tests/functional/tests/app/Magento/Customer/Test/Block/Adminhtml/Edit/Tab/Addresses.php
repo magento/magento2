@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Util\ModuleResolver\SequenceSorterInterface;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Block\Mapper;
-use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Customer addresses edit block.

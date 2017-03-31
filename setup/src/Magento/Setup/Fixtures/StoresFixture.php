@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use \Magento\Catalog\Model\Category;
-use \Magento\Catalog\Model\CategoryFactory;
-use \Magento\Framework\App\Config\Storage\Writer;
-use \Magento\Framework\Event\ManagerInterface;
-use \Magento\Framework\Locale\Config;
-use \Magento\Store\Model\Group;
-use \Magento\Store\Model\StoreManager;
-use \Magento\Store\Model\Website;
-use \Magento\Store\Api\Data\StoreInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\Config;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
 
 /**
  * Generate websites, store groups and store views based on profile configuration
@@ -41,7 +41,6 @@ use \Magento\Store\Api\Data\StoreInterface;
  */
 class StoresFixture extends Fixture
 {
-
     const DEFAULT_WEBSITE_COUNT = 1;
 
     const DEFAULT_STORE_COUNT = 1;

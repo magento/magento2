@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -646,7 +646,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             $xml = new \SimpleXMLElement($data);
             $this->filterXmlData($xml);
             $data = $xml->asXML();
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
         return $data;
     }
 
@@ -661,7 +662,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         foreach ($xml->children() as $child) {
             if ($child->count()) {
                 $this->filterXmlData($child);
-            } else if (in_array((string) $child->getName(), $this->_debugReplacePrivateDataKeys)) {
+            } elseif (in_array((string) $child->getName(), $this->_debugReplacePrivateDataKeys)) {
                 $child[0] = self::DEBUG_KEYS_MASK;
             }
         }

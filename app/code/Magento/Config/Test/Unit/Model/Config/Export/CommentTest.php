@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
-use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
+use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency\VirtualType;
@@ -133,7 +133,7 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            
+
             /**
              * expectation is the same for global area,
              * but extended for adminhtml as it contains own virtual types definitions
