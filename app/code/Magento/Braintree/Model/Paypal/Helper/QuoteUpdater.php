@@ -84,6 +84,14 @@ class QuoteUpdater extends AbstractHelper
 
         $quote->collectTotals();
 
+        /**
+         * Unset shipping assignment to prevent from saving / applying outdated data
+         * @see \Magento\Quote\Model\QuoteRepository\SaveHandler::processShippingAssignment
+         */
+        if ($quote->getExtensionAttributes()) {
+            $quote->getExtensionAttributes()->setShippingAssignments(null);
+        }
+
         $this->quoteRepository->save($quote);
     }
 
@@ -164,5 +172,10 @@ class QuoteUpdater extends AbstractHelper
         $address->setRegionCode($addressData['region']);
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
+
+        // PayPal's address supposes not saving against customer account
+        $address->setSaveInAddressBook(false);
+        $address->setSameAsBilling(false);
+        $address->setCustomerAddressId(null);
     }
 }
