@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\View\Layout\Reader;
 
-use Magento\Framework\View\Layout;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Layout;
 
 /**
  * Backend block structure reader with ACL support

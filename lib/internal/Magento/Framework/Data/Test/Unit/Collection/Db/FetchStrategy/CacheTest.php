@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Collection\Db\FetchStrategy;
 
-use Magento\Framework\Data\Collection\Db\FetchStrategy\Cache;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategy\Cache;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\SerializerInterface;

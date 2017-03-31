@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\AdvancedPricingImportExport\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\ImportExport\Test\Fixture\ImportData;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Check imported advanced prices are correct.

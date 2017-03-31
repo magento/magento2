@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
@@ -121,7 +121,7 @@ class LocaleDeployTest extends \PHPUnit_Framework_TestCase
             $designFactoryMock,
             $localeResolverMock,
             [],
-            [\Magento\Deploy\Console\Command\DeployStaticOptionsInterface::NO_JAVASCRIPT => 0]
+            [\Magento\Deploy\Console\Command\DeployStaticOptions::NO_JAVASCRIPT => 0]
         );
         $property = new \ReflectionProperty(get_class($this->model), 'themeList');
         $property->setAccessible(true);

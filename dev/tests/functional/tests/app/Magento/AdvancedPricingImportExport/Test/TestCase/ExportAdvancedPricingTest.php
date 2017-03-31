@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Test\TestCase;
 
-use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * Preconditions:

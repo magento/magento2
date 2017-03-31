@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\UpgradeCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Console\Cli;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\InstallerFactory;
+use Magento\Framework\Console\Cli;
+use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -170,7 +170,7 @@ class XssOutputValidator
     private function isNotEscapeMarkedBlock($contentBeforeString)
     {
         return !preg_match(
-            '%('. self::ESCAPE_NOT_VERIFIED_PATTERN . '|' . self::ESCAPED_PATTERN. ')$%sim',
+            '%(' . self::ESCAPE_NOT_VERIFIED_PATTERN . '|' . self::ESCAPED_PATTERN . ')$%sim',
             trim($contentBeforeString)
         );
     }
@@ -198,7 +198,7 @@ class XssOutputValidator
     private function isNotEscapeMarkedCommand($command)
     {
         return !preg_match(
-            '%' . self::ESCAPE_NOT_VERIFIED_PATTERN . '|'. self::ESCAPED_PATTERN . '%sim',
+            '%' . self::ESCAPE_NOT_VERIFIED_PATTERN . '|' . self::ESCAPED_PATTERN . '%sim',
             $command
         );
     }
