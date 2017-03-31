@@ -20,24 +20,28 @@ class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $rowSizeEstimatorMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->rowSizeEstimatorMock = $this->getMock(
             \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface::class
         );
-        $this->model = new BatchSizeManagement($this->rowSizeEstimatorMock);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->model = new BatchSizeManagement($this->rowSizeEstimatorMock, $this->loggerMock);
     }
 
-    /**
-     * @param int $batchSize number of records in the batch
-     * @param int $maxHeapTableSize max_heap_table_size MySQL value
-     * @param int $tmpTableSize tmp_table_size MySQL value
-     * @param int $size
-     *
-     * @dataProvider estimateBatchSizeDataProvider
-     */
-    public function testEnsureBatchSize($batchSize, $maxHeapTableSize, $tmpTableSize, $size)
+    public function testEnsureBatchSize()
     {
+        $batchSize = 200;
+        $maxHeapTableSize = 16384;
+        $tmpTableSize = 16384;
+        $size = 20000;
+        $innodbPollSize = 100;
+
         $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(100);
         $adapterMock = $this->getMock(AdapterInterface::class);
         $adapterMock->expects($this->at(0))
@@ -48,28 +52,26 @@ class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
             ->method('fetchOne')
             ->with('SELECT @@tmp_table_size;', [])
             ->willReturn($tmpTableSize);
-
         $adapterMock->expects($this->at(2))
+            ->method('fetchOne')
+            ->with('SELECT @@innodb_buffer_pool_size;', [])
+            ->willReturn($innodbPollSize);
+
+        $this->loggerMock->expects($this->once())
+            ->method('warning')
+            ->with(__(
+                'Memory size allocated for temporary table is more than 20% innodb_buffer_pool_size. ' .
+                'Please update innodb_buffer_pool_size or decrease batch size value.'
+            ));
+
+        $adapterMock->expects($this->at(3))
             ->method('query')
             ->with('SET SESSION tmp_table_size = ' . $size . ';', []);
 
-        $adapterMock->expects($this->at(3))
+        $adapterMock->expects($this->at(4))
             ->method('query')
             ->with('SET SESSION max_heap_table_size = ' . $size . ';', []);
 
         $this->model->ensureBatchSize($adapterMock, $batchSize);
-    }
-
-    /**
-     * @return array
-     */
-    public function estimateBatchSizeDataProvider()
-    {
-        return [
-            [200, 16384, 16384, 20000],
-            [300, 16384, 20000, 30000],
-            [400, 20000, 16384, 40000],
-            [500, 2000, 2000, 50000],
-        ];
     }
 }
