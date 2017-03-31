@@ -126,8 +126,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'class' => $behaviorCode,
                     'disabled' => true,
                     'values' => [
-                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => 'Stop on Error',
-                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => 'Skip error entries'
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR => __('Stop on Error'),
+                        ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS => __('Skip error entries')
                     ],
                     'after_element_html' => $this->getDownloadSampleFileHtml(),
                 ]
