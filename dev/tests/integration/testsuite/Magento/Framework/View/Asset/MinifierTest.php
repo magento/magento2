@@ -248,6 +248,6 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             file_get_contents(dirname(__DIR__) . '/_files/static/expected/styles.magento.min.css'),
             file_get_contents($fileToBePublished),
             'Minified file is not equal or minification did not work for deployed CSS'
-        );
+            );
     }
 }
