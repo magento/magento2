@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -69,7 +69,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);
     }
-    
+
     public function testModifyMetaNewProduct()
     {
         /** @var \Magento\Catalog\Model\Product $product */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config;
@@ -10,11 +10,11 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\FlagFactory;
 use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\FlagFactory;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
@@ -217,6 +217,5 @@ class Importer implements ImporterInterface
                 $backendModel->afterSave();
             }
         }
-
     }
 }
