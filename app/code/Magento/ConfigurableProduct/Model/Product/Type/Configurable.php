@@ -1367,7 +1367,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Get configured used collection
+     * Prepare collection for retrieving sub-products of specified configurable product
      *
      * Retrieve related products collection with additional configuration
      *
