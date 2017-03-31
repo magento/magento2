@@ -72,17 +72,17 @@ class QuantityValidator
     private function addErrorInfoToQuote($result, $quoteItem)
     {
         $quoteItem->addErrorInfo(
-                'cataloginventory',
-                Data::ERROR_QTY,
-                $result->getMessage()
-            );
+            'cataloginventory',
+            Data::ERROR_QTY,
+            $result->getMessage()
+        );
 
         $quoteItem->getQuote()->addErrorInfo(
-                $result->getQuoteMessageIndex(),
-                'cataloginventory',
-                Data::ERROR_QTY,
-                $result->getQuoteMessage()
-            );
+            $result->getQuoteMessageIndex(),
+            'cataloginventory',
+            Data::ERROR_QTY,
+            $result->getQuoteMessage()
+        );
     }
 
     /**

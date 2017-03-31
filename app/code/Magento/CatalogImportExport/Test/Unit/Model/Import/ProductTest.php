@@ -1071,7 +1071,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'entity_id' => null,
             'type_id' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_TYPE],//value
             //attr_set_id_val
-            'attr_set_id' => $_attrSetNameToId[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]],
+            'attr_set_id' =>
+                $_attrSetNameToId[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]],
             'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET],//value
             'row_id' => null
         ];
