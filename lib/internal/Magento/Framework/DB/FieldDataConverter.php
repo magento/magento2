@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\DataConverter\DataConversionException;
-use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select\QueryModifierInterface;
 
 /**

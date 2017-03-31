@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\SelectFactory;
-use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MysqlFactoryTest extends \PHPUnit_Framework_TestCase
 {
