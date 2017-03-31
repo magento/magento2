@@ -6116,3 +6116,6 @@ table tfoot tr td:last-child {
   content: ' Test\';\A}' "\A" '\A.test + .test._other ~ ul > li' " {\A    height: @var;\A    content: ' + ';\A}";
   white-space: pre;
 }
+.test-content-calc {
+  width: calc((100% / 12 * 2) - 10px);
+}
