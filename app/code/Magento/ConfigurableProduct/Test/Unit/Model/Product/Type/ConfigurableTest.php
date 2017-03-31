@@ -822,18 +822,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $childProductMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->entityMetadata->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('link');
+        $productMock->expects($this->any())->method('hasData')
+            ->withConsecutive(['store_id'], ['_cache_instance_products'])
+            ->willReturnOnConsecutiveCalls(true, true);
 
-        $productMock->expects($this->at(0))->method('getData')->with('image')->willReturn('no_selection');
-        $productMock->expects($this->at(1))->method('getData')->with('image')->willReturn('no_selection');
-        $productMock->expects($this->once())->method('hasData')->with('_cache_instance_products')->willReturn(true);
-        $productMock->expects($this->at(3))
-            ->method('getData')
-            ->with('_cache_instance_products')
-            ->willReturn([$childProductMock]);
+        $productMock->expects($this->any())->method('getData')
+            ->withConsecutive(['image'], ['image'], ['link'], ['store_id'], ['_cache_instance_products'])
+            ->willReturnOnConsecutiveCalls('no_selection', 'no_selection', 1, 1, [$childProductMock]);
+
         $childProductMock->expects($this->any())->method('getData')->with('image')->willReturn('image_data');
         $productMock->expects($this->once())->method('setImage')->with('image_data')->willReturnSelf();
 
         $this->_model->setImageFromChildProduct($productMock);
     }
 }
-

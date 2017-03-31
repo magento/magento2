@@ -1270,15 +1270,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param string $cacheKey
      * @param bool $salableOnly
-     * @return ProductInterface[]|null
+     * @return ProductInterface[]
      */
     private function loadUsedProducts(\Magento\Catalog\Model\Product $product, $cacheKey, $salableOnly = false)
     {
-        \Magento\Framework\Profiler::start(
-            'CONFIGURABLE:' . __METHOD__,
-            ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
-        );
-        if (!$product->hasData($this->usedSalableProducts)) {
+        $dataFieldName = $salableOnly ? $this->usedSalableProducts : $this->_usedProducts;
+        $hasData = $product->hasData($dataFieldName);
+        if (!$hasData) {
             $usedProducts = $this->readUsedProductsCacheData($cacheKey);
             if ($usedProducts === null) {
                 $collection = $this->getConfiguredUsedProductCollection($product);
@@ -1288,11 +1286,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $usedProducts = $collection->getItems();
                 $this->saveUsedProductsCacheData($product, $usedProducts, $cacheKey);
             }
-            $product->setData($this->usedSalableProducts, $usedProducts);
+            $product->setData($dataFieldName, $usedProducts);
         }
-        \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
+        $child = $product->getData($dataFieldName);
 
-        return $product->getData($this->usedSalableProducts);
+        return $child;
     }
 
     /**
