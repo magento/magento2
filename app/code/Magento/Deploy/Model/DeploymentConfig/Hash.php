@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
+use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
 
 /**

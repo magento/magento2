@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -123,13 +123,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         ];
         $leftJoinTables = [
             0 => [
-                0 =>
-                    [
+                0 => [
                         'store_value' => 'catalog_product_entity_media_gallery_value_video',
                     ],
                 1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                2 =>
-                    [
+                2 => [
                         'video_provider' => 'provider',
                         'video_url' => 'url',
                         'video_title' => 'title',
@@ -214,15 +212,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $storeId = 0;
         $cols = null;
         $leftJoinTables = [
-            0 =>
-                [
-                    0 =>
-                        [
+            0 => [
+                    0 => [
                             'store_value' => 'catalog_product_entity_media_gallery_value_video',
                         ],
                     1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                    2 =>
-                        [
+                    2 => [
                             'video_provider' => 'provider',
                             'video_url' => 'url',
                             'video_title' => 'title',

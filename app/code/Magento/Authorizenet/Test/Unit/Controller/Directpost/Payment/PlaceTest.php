@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -20,7 +21,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\IframeConfigProvider;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class PlaceTest
