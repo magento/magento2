@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\Constraint;
 
+use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\ImportExport\Test\Fixture\ImportData;
 
 /**
  * Check message after check data click.
