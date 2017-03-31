@@ -205,9 +205,9 @@ class AdvancedInventory extends AbstractModifier
                 'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',
                 'sortOrder' => (int) $this->arrayManager->get(
-                        $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
-                        $this->meta
-                    ) - 1,
+                    $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
+                    $this->meta
+                ) - 1,
             ];
             $qty['arguments']['data']['config'] = [
                 'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
