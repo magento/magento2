@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
-use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Config\Export\ExcludeList;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
