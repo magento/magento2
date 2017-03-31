@@ -39,17 +39,17 @@ class Main extends Block
     }
 
     /**
-     * Get dashboard orders information.
+     * Get orders report from dashboard.
      *
-     * @param array $items
+     * @param array $argumentsList
      * @return array
      */
-    public function getDashboardOrder(array $items)
+    public function getDashboardOrder(array $argumentsList)
     {
         $order = [];
-        foreach ($items as $item) {
-            $selector = sprintf($this->itemSelector, $item);
-            $order[strtolower($item)] = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+        foreach ($argumentsList as $argument) {
+            $selector = sprintf($this->itemSelector, $argument);
+            $order[strtolower($argument)] = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
         }
         return $order;
     }

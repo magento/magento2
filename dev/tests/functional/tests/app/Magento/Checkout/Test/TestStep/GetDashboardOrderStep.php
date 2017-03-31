@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,18 +26,18 @@ class GetDashboardOrderStep implements TestStepInterface
      *
      * @var array
      */
-    private $items;
+    private $argumentsList;
 
     /**
      * @param Dashboard $dashboard
-     * @param array $items
+     * @param array $argumentsList
      */
     public function __construct(
         Dashboard $dashboard,
-        array $items = []
+        array $argumentsList = []
     ) {
         $this->dashboard = $dashboard;
-        $this->items = $items;
+        $this->argumentsList = $argumentsList;
     }
 
     /**
@@ -47,9 +47,9 @@ class GetDashboardOrderStep implements TestStepInterface
      */
     public function run()
     {
-        if (isset($this->items)) {
+        if (isset($this->argumentsList)) {
             $this->dashboard->open();
-            $dashboardOrder = $this->dashboard->getMainBlock()->getDashboardOrder($this->items);
+            $dashboardOrder = $this->dashboard->getMainBlock()->getDashboardOrder($this->argumentsList);
             return ['dashboardOrder' => $dashboardOrder];
         }
     }

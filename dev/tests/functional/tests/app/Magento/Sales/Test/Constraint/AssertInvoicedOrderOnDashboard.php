@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,10 @@ use Magento\Mtf\Client\Browser;
 class AssertInvoicedOrderOnDashboard extends AbstractConstraint
 {
     /**
+     * Invoiced orders quantity.
+     */
+    const EXPECTED_ORDERS_QTY = 1;
+    /**
      * Graph image selector.
      *
      * @var string
@@ -28,23 +32,24 @@ class AssertInvoicedOrderOnDashboard extends AbstractConstraint
      * @param TestStepFactory $stepFactory
      * @param Browser $browser
      * @param array $dashboardOrder
-     * @param array $items
+     * @param array $argumentsList
      * @return void
      */
     public function processAssert(
         TestStepFactory $stepFactory,
         Browser $browser,
         array $dashboardOrder,
-        array $items
+        array $argumentsList
     ) {
         $orderQty = $stepFactory->create(
             \Magento\Checkout\Test\TestStep\GetDashboardOrderStep::class,
-            ['items' => $items]
+            ['argumentsList' => $argumentsList]
         )->run()['dashboardOrder']['quantity'];
+        $invoicedOrdersQty = $orderQty - $dashboardOrder['quantity'];
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $dashboardOrder['quantity'] + 1,
-            $orderQty,
+            $invoicedOrdersQty,
+            self::EXPECTED_ORDERS_QTY,
             'Order quantity om admin dashboard is not correct.'
         );
 
