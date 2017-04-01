@@ -13,6 +13,11 @@ class Information
     private $objectManagerConfig;
 
     /**
+     * @var string[]
+     */
+    private $preferences = [];
+
+    /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      */
     public function __construct(\Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig)
@@ -28,6 +33,20 @@ class Information
      */
     public function getPreference($className)
     {
-        return $this->objectManagerConfig->getPreference($className);
+        if (!isset($this->preferences[$className])) {
+            $this->preferences[$className] =  $this->objectManagerConfig->getPreference($className);
+        }
+        return $this->preferences[$className];
+    }
+
+    /**
+     * Retrieve parameters of the constructor for the class preference object
+     *
+     * @param $className
+     * @return array|null
+     */
+    public function getConstructorParameters($className)
+    {
+        return $this->objectManagerConfig->getArguments($className);
     }
 }
