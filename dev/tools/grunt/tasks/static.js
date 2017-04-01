@@ -26,7 +26,11 @@ module.exports = function (grunt) {
 
         setConfig('eslint', currentTarget, cvf.getFiles(file));
         setConfig('jscs', currentTarget, cvf.getFiles(file));
-        grunt.option('force', true);
+
+        if (grunt.option('force') !== false) {
+            grunt.option('force', false);
+        }
+
         grunt.task.run(tasks);
 
         if (!grunt.option('file')) {
