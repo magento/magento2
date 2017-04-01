@@ -40,13 +40,32 @@ class Information
     }
 
     /**
-     * Retrieve parameters of the constructor for the class preference object
+     * Retrieve parameters of the constructor for the preference of the class
      *
      * @param $className
      * @return array|null
      */
     public function getConstructorParameters($className)
     {
-        return $this->objectManagerConfig->getArguments($className);
+        $preferenceClass = $this->getPreference($className);
+        return $this->objectManagerConfig->getArguments($preferenceClass);
+    }
+
+    /**
+     * Retrieve virtual types for the class and the preference of the class
+     *
+     * @param $className
+     * @return array
+     */
+    public function getVirtualTypes($className)
+    {
+        $preference = $this->getPreference($className);
+        $virtualTypes = [];
+        foreach ($this->objectManagerConfig->getVirtualTypes() as $virtualType => $baseName) {
+            if ($baseName == $className || $baseName == $preference) {
+                $virtualTypes[] = $virtualType;
+            }
+        }
+        return $virtualTypes;
     }
 }
