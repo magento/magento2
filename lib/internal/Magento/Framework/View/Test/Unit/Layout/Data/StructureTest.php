@@ -64,7 +64,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn($stateMode);
         $this->loggerMock->expects($loggerExpects)
-            ->method('critical')
+            ->method('info')
             ->with(
                 "Broken reference: the '{$childName}' tries to reorder itself towards '', but " .
                 "their parents are different: '{$parentName}' and '' respectively."
