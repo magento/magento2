@@ -39,7 +39,7 @@ class ResetButton extends Field
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        array $components,
+        $components,
         array $data,
         ScopeConfigInterface $scopeConfig
     ) {
