@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
@@ -9,15 +9,15 @@ use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Update;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\GroupFactory;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreFactory;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
-use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Test for Update processor.

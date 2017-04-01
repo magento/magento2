@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Command for updating installed application after the code base has changed

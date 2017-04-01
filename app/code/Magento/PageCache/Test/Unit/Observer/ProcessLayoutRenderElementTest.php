@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -176,27 +176,27 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
         $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
 
-            $eventMock->expects($this->once())
+        $eventMock->expects($this->once())
                 ->method('getElementName')
                 ->will($this->returnValue('blockName'));
 
-            $eventMock->expects($this->once())
+        $eventMock->expects($this->once())
                 ->method('getTransport')
                 ->will($this->returnValue($this->_transport));
 
-            $this->_layoutMock->expects($this->once())
+        $this->_layoutMock->expects($this->once())
                 ->method('isCacheable')
                 ->will($this->returnValue(true));
 
-            $this->_layoutMock->expects($this->any())
+        $this->_layoutMock->expects($this->any())
                 ->method('getUpdate')
                 ->will($this->returnSelf());
 
-            $this->_layoutMock->expects($this->any())
+        $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
                 ->will($this->returnValue([]));
 
-            $this->_layoutMock->expects($this->once())
+        $this->_layoutMock->expects($this->once())
                 ->method('getBlock')
                 ->will($this->returnValue($this->_blockMock));
 
