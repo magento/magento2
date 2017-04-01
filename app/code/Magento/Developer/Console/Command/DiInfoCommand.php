@@ -11,6 +11,9 @@ namespace Magento\Developer\Console\Command;
 use Magento\Developer\Model\Di\Information;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 class DiInfoCommand extends Command
 {
@@ -46,11 +49,24 @@ class DiInfoCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-             ->setDescription('Generates the list of preferences for the class')
+             ->setDescription('Provides information on Dependency Injection configuration for the Command.')
              ->setDefinition([
                 new InputArgument(self::CLASS_NAME, InputArgument::REQUIRED, 'Class name')
             ]);
 
         parent::configure();
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $className = $input->getArgument(self::CLASS_NAME);
+        $output->writeln(sprintf('DI configuration for the class %s', $className));
+        $output->writeln(sprintf('- Preference: %s', $this->diInformation->getPreference($className)));
+        //$output->writeln(sprintf('- Constructor Parameters: %s', $this->diInformation->getPreference($className)));
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
