@@ -2,9 +2,9 @@ case $TEST_SUITE in
     static)
         TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
         phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER
-        grunt static
+        grunt static --force=false
         ;;
     js)
-        grunt spec;
+        grunt spec
         ;;
 esac
