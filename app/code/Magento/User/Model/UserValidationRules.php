@@ -35,7 +35,7 @@ class UserValidationRules
         $lastNameNotEmpty = new NotEmpty();
         $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $emailValidity = new EmailAddress();
-        $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
+        $emailValidity->setMessage(__('Please enter a valid email.'), \Magento\Framework\Validator\EmailAddress::INVALID);
 
         /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator->addRule(

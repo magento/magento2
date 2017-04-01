@@ -336,42 +336,42 @@ abstract class AbstractData
                     __("'%value%' appears to be a DNS hostname but cannot extract TLD part")
                     __("'%value%' appears to be a DNS hostname but cannot match TLD against known list")
                     */
-                    $validator = new \Zend_Validate_EmailAddress();
+                    $validator = new \Magento\Framework\Validator\EmailAddress();
                     $validator->setMessage(
                         __('"%1" invalid type entered.', $label),
-                        \Zend_Validate_EmailAddress::INVALID
+                        \Magento\Framework\Validator\EmailAddress::INVALID
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid email address.', $label),
-                        \Zend_Validate_EmailAddress::INVALID_FORMAT
+                        \Magento\Framework\Validator\EmailAddress::INVALID_FORMAT
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid hostname.', $label),
-                        \Zend_Validate_EmailAddress::INVALID_HOSTNAME
+                        \Magento\Framework\Validator\EmailAddress::INVALID_HOSTNAME
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid hostname.', $label),
-                        \Zend_Validate_EmailAddress::INVALID_MX_RECORD
+                        \Magento\Framework\Validator\EmailAddress::INVALID_MX_RECORD
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid hostname.', $label),
-                        \Zend_Validate_EmailAddress::INVALID_MX_RECORD
+                        \Magento\Framework\Validator\EmailAddress::INVALID_MX_RECORD
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid email address.', $label),
-                        \Zend_Validate_EmailAddress::DOT_ATOM
+                        \Magento\Framework\Validator\EmailAddress::DOT_ATOM
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid email address.', $label),
-                        \Zend_Validate_EmailAddress::QUOTED_STRING
+                        \Magento\Framework\Validator\EmailAddress::QUOTED_STRING
                     );
                     $validator->setMessage(
                         __('"%1" is not a valid email address.', $label),
-                        \Zend_Validate_EmailAddress::INVALID_LOCAL_PART
+                        \Magento\Framework\Validator\EmailAddress::INVALID_LOCAL_PART
                     );
                     $validator->setMessage(
                         __('"%1" uses too many characters.', $label),
-                        \Zend_Validate_EmailAddress::LENGTH_EXCEEDED
+                        \Magento\Framework\Validator\EmailAddress::LENGTH_EXCEEDED
                     );
                     $validator->setMessage(
                         __("'%value%' looks like an IP address, which is not an acceptable format."),

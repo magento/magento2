@@ -262,7 +262,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
                 'email',
                 [
                     // @codingStandardsIgnoreStart
-                    \Zend_Validate_EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
+                    \Magento\Framework\Validator\EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
                     \Zend_Validate_Hostname::INVALID_HOSTNAME => "'#\$' does not match the expected structure for a DNS hostname",
                     \Zend_Validate_Hostname::INVALID_LOCAL_NAME => "'#\$' does not look like a valid local network name."
                     // @codingStandardsIgnoreEnd
