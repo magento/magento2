@@ -96,6 +96,7 @@
                 <item name="dev_source_theme_deploy" xsi:type="object">Magento\Developer\Console\Command\SourceThemeDeployCommand</item>
                 <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
                 <item name="xml_catalog_generator" xsi:type="object">Magento\Developer\Console\Command\XmlCatalogGenerateCommand</item>
+                <item name="dev_di_info" xsi:type="object">Magento\Developer\Console\Command\DiInfoCommand</item>
             </argument>
         </arguments>
     </type>
