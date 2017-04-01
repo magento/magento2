@@ -19,3 +19,17 @@ phpenv rehash;
 
 # If env var is present, configure support for 3rd party builds which include private dependencies
 test -n "$GITHUB_TOKEN" && composer config github-oauth.github.com "$GITHUB_TOKEN" || true
+
+# Node.js setup via NVM
+if [ $TEST_SUITE = "static" ] || [ test $TEST_SUITE == "js" ]; then
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+    nvm install $NODE_JS_VERSION
+    nvm use $NODE_JS_VERSION
+    node --version
+
+    npm install -g yarn
+    yarn global add grunt-cli
+fi
