@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Cookie;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test PhpCookieManager
  *
  */
-class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
+class PhpCookieMonsterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Object Manager
@@ -23,14 +23,14 @@ class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Cookie Manager
      *
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
      */
     protected $cookieManager;
 
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->cookieManager = $this->objectManager->create(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class);
+        $this->cookieManager = $this->objectManager->create(\Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class);
     }
 
     public function testGetCookie()

@@ -9,7 +9,7 @@
 use Magento\Framework\App\Cache\Frontend\Factory;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
-use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
+use Magento\Framework\Stdlib\Cookie\PhpCookieEater;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
@@ -28,7 +28,7 @@ $isAllowed = function ($resource, array $allowedResources) {
 
 $request = new \Magento\MediaStorage\Model\File\Storage\Request(
     new Request(
-        new PhpCookieReader(),
+        new PhpCookieEater(),
         new Magento\Framework\Stdlib\StringUtils()
     )
 );

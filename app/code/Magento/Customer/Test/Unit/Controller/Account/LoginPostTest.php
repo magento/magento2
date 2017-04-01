@@ -299,7 +299,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->resultRedirect);
 
-        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataManager->expects($this->once())
@@ -364,7 +364,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->resultRedirect);
 
-        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataManager->expects($this->once())

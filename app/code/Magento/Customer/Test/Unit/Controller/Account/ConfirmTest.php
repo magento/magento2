@@ -314,7 +314,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
-        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataManager->expects($this->once())
@@ -443,7 +443,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($isSetFlag);
 
-        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataManager->expects($this->once())

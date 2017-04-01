@@ -7,12 +7,12 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PhpCookieMonster;
 
 class RefreshCustomerData implements ObserverInterface
 {
     /**
-     * @var PhpCookieManager
+     * @var PhpCookieMonster
      */
     private $cookieManager;
 
@@ -23,11 +23,11 @@ class RefreshCustomerData implements ObserverInterface
 
     /**
      * RefreshCustomerData constructor.
-     * @param PhpCookieManager $cookieManager
+     * @param PhpCookieMonster $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      */
     public function __construct(
-        PhpCookieManager $cookieManager,
+        PhpCookieMonster $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->cookieManager = $cookieManager;

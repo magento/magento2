@@ -10,7 +10,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PhpCookieMonster;
 
 class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -25,7 +25,7 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     private $cookieMetadataFactory;
 
     /**
-     * @var PhpCookieManager
+     * @var PhpCookieMonster
      */
     private $cookieMetadataManager;
 
@@ -45,12 +45,12 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve cookie manager
      *
      * @deprecated
-     * @return PhpCookieManager
+     * @return PhpCookieMonster
      */
     private function getCookieManager()
     {
         if (!$this->cookieMetadataManager) {
-            $this->cookieMetadataManager = ObjectManager::getInstance()->get(PhpCookieManager::class);
+            $this->cookieMetadataManager = ObjectManager::getInstance()->get(PhpCookieMonster::class);
         }
         return $this->cookieMetadataManager;
     }

@@ -22,7 +22,7 @@ class Identifier
     protected $markId;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
      */
     protected $cookieManager;
 
@@ -32,10 +32,10 @@ class Identifier
     protected $sessionConfig;
 
     /**
-     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieMonster $cookieManager
      */
     public function __construct(
-        \Magento\Framework\Stdlib\Cookie\PhpCookieManager $cookieManager
+        \Magento\Framework\Stdlib\Cookie\PhpCookieMonster $cookieManager
     ) {
         $this->cookieManager = $cookieManager;
     }

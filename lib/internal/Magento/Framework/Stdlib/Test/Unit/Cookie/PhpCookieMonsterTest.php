@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ namespace {
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
     // @codingStandardsIgnoreEnd
-    use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+    use Magento\Framework\Stdlib\Cookie\PhpCookieMonster;
     use Magento\Framework\Exception\InputException;
     use Magento\Framework\Stdlib\Cookie\FailureToSendException;
     use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
@@ -21,7 +21,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
     /**
      * Test PhpCookieManager
      */
-    class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
+    class PhpCookieMonsterTest extends \PHPUnit_Framework_TestCase
     {
         const COOKIE_NAME = 'cookie_name';
         const SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS = 'sensitive_cookie_name_no_metadata_https';
@@ -72,7 +72,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         /**
          * Cookie Manager
          *
-         * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+         * @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
          */
         protected $cookieManager;
         /**
@@ -114,7 +114,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
                 ->getMock();
             $this->readerMock = $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
             $this->cookieManager = $this->objectManager->getObject(
-                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
+                \Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class,
                 [
                     'scope' => $this->scopeMock,
                     'reader' => $this->readerMock,
@@ -567,7 +567,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::DELETE_COOKIE_NAME, $name);
             self::assertEquals('', $value);
-            self::assertEquals($expiry, PhpCookieManager::EXPIRE_NOW_TIME);
+            self::assertEquals($expiry, PhpCookieMonster::EXPIRE_NOW_TIME);
             self::assertFalse($secure);
             self::assertFalse($httpOnly);
             self::assertEquals('magento.url', $domain);
@@ -591,7 +591,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::DELETE_COOKIE_NAME_NO_METADATA, $name);
             self::assertEquals('', $value);
-            self::assertEquals($expiry, PhpCookieManager::EXPIRE_NOW_TIME);
+            self::assertEquals($expiry, PhpCookieMonster::EXPIRE_NOW_TIME);
             self::assertFalse($secure);
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
@@ -615,7 +615,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
-            self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
+            self::assertEquals(PhpCookieMonster::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
             self::assertTrue($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
@@ -639,7 +639,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
-            self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
+            self::assertEquals(PhpCookieMonster::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
             self::assertFalse($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
@@ -663,7 +663,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
-            self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
+            self::assertEquals(PhpCookieMonster::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
             self::assertTrue($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
@@ -687,7 +687,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
-            self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
+            self::assertEquals(PhpCookieMonster::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
             self::assertFalse($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('magento.url', $domain);
@@ -735,7 +735,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ) {
             self::assertEquals(self::PUBLIC_COOKIE_NAME_NO_METADATA, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
-            self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
+            self::assertEquals(PhpCookieMonster::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
             self::assertTrue($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('magento.url', $domain);

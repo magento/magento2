@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,9 @@
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\Stdlib\Cookie\PhpCookieEater;
+
+class PhpCookieEaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var array
@@ -16,7 +18,7 @@ class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
     protected $preTestCookies;
 
     /**
-     * @var PhpCookieReader
+     * @var PhpCookieEater
      */
     protected $model;
 
@@ -29,7 +31,7 @@ class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
         $this->preTestCookies = $_COOKIE;
         $_COOKIE = [];
         $_COOKIE[self::NAME] = self::VALUE;
-        $this->model = new PhpCookieReader();
+        $this->model = new PhpCookieEater();
     }
 
     public function testGetCookieExists()

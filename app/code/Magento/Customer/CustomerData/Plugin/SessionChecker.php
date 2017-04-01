@@ -7,12 +7,12 @@ namespace Magento\Customer\CustomerData\Plugin;
 
 use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PhpCookieMonster;
 
 class SessionChecker
 {
     /**
-     * @var PhpCookieManager
+     * @var PhpCookieMonster
      */
     private $cookieManager;
 
@@ -22,11 +22,11 @@ class SessionChecker
     private $cookieMetadataFactory;
 
     /**
-     * @param PhpCookieManager $cookieManager
+     * @param PhpCookieMonster $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      */
     public function __construct(
-        PhpCookieManager $cookieManager,
+        PhpCookieMonster $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->cookieManager = $cookieManager;

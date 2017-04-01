@@ -15,7 +15,7 @@ class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
     private $observer;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cookieManager;
 
@@ -36,7 +36,7 @@ class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+        $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)

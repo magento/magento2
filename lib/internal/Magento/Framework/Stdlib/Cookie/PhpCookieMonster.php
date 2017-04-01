@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ use Magento\Framework\Phrase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PhpCookieManager implements CookieManagerInterface
+class PhpCookieMonster implements CookieManagerInterface
 {
     /**#@+
      * Constants for Cookie manager.
@@ -181,13 +181,13 @@ class PhpCookieManager implements CookieManagerInterface
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
-        if ($numCookies > PhpCookieManager::MAX_NUM_COOKIES) {
+        if ($numCookies > PhpCookieMonster::MAX_NUM_COOKIES) {
             throw new CookieSizeLimitReachedException(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.')
             );
         }
 
-        if ($sizeOfCookie > PhpCookieManager::MAX_COOKIE_SIZE) {
+        if ($sizeOfCookie > PhpCookieMonster::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
                 new Phrase(
                     'Unable to send the cookie. Size of \'%name\' is %size bytes.',
@@ -208,15 +208,15 @@ class PhpCookieManager implements CookieManagerInterface
      */
     private function computeExpirationTime(array $metadataArray)
     {
-        if (isset($metadataArray[PhpCookieManager::KEY_EXPIRE_TIME])
-            && $metadataArray[PhpCookieManager::KEY_EXPIRE_TIME] < time()
+        if (isset($metadataArray[PhpCookieMonster::KEY_EXPIRE_TIME])
+            && $metadataArray[PhpCookieMonster::KEY_EXPIRE_TIME] < time()
         ) {
-            $expireTime = $metadataArray[PhpCookieManager::KEY_EXPIRE_TIME];
+            $expireTime = $metadataArray[PhpCookieMonster::KEY_EXPIRE_TIME];
         } else {
             if (isset($metadataArray[CookieMetadata::KEY_DURATION])) {
                 $expireTime = $metadataArray[CookieMetadata::KEY_DURATION] + time();
             } else {
-                $expireTime = PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME;
+                $expireTime = PhpCookieMonster::EXPIRE_AT_END_OF_SESSION_TIME;
             }
         }
 
@@ -269,7 +269,7 @@ class PhpCookieManager implements CookieManagerInterface
         $metadataArray = $this->scope->getCookieMetadata($metadata)->__toArray();
 
         // explicitly set an expiration time in the metadataArray.
-        $metadataArray[PhpCookieManager::KEY_EXPIRE_TIME] = PhpCookieManager::EXPIRE_NOW_TIME;
+        $metadataArray[PhpCookieMonster::KEY_EXPIRE_TIME] = PhpCookieMonster::EXPIRE_NOW_TIME;
 
         $this->checkAbilityToSendCookie($name, '');
 

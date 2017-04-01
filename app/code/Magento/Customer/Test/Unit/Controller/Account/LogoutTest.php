@@ -11,7 +11,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PhpCookieMonster;
 
 class LogoutTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class LogoutTest extends \PHPUnit_Framework_TestCase
     /** @var CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $cookieMetadataFactory;
 
-    /** @var PhpCookieManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PhpCookieMonster|\PHPUnit_Framework_MockObject_MockObject */
     protected $cookieManager;
 
     /** @var CookieMetadata|\PHPUnit_Framework_MockObject_MockObject */
@@ -55,7 +55,7 @@ class LogoutTest extends \PHPUnit_Framework_TestCase
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManager = $this->getMockBuilder(PhpCookieManager::class)
+        $this->cookieManager = $this->getMockBuilder(PhpCookieMonster::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->cookieMetadata = $this->getMockBuilder(CookieMetadata::class)
