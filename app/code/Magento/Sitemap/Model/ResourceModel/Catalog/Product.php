@@ -403,18 +403,17 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $this->_mediaConfig;
     }
 
-
     /**
      * Get product image URL from image filename and path
      *
-     * @param $image
+     * @param string $image
      * @return mixed
      */
     protected function getProductImageUrl($image)
     {
-        $productObject = ObjectManager::getInstance()->get('Magento\Catalog\Model\Product');
+        $productObject = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
         $imgUrl = ObjectManager::getInstance()
-                               ->get('Magento\Catalog\Helper\Image')
+                               ->get(\Magento\Catalog\Helper\Image::class)
                                ->init($productObject, 'product_page_image_large')
                                ->setImageFile($image)
                                ->getUrl();
