@@ -6,6 +6,10 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+/**
+ * Class Index
+ * @deprecated
+ */
 class Index extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**

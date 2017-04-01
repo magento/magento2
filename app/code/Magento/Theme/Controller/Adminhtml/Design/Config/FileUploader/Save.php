@@ -10,6 +10,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
+/**
+ * File Uploads Action Controller
+ *
+ * @api
+ */
 class Save extends Action
 {
     /**
