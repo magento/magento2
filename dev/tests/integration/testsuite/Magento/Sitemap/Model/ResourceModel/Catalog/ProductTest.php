@@ -15,6 +15,11 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Base product image path
+     */
+    const BASE_IMAGE_PATH = self::BASE_IMAGE_PATH.'';
+    
+    /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
      * 2) Check no images were loaded
@@ -71,30 +76,24 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($products[1]->getImages(), 'Images were loaded');
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
         $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/m/a/magento_image_sitemap.png',
+            self::BASE_IMAGE_PATH.'/m/a/magento_image_sitemap.png',
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
         );
-        // @codingStandardsIgnoreEnd
         $this->assertCount(2, $products[4]->getImages()->getCollection(), 'Not all images were loaded');
 
         $imagesCollection = $products[4]->getImages()->getCollection();
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/m/a/magento_image_sitemap.png',
+            self::BASE_IMAGE_PATH.'/m/a/magento_image_sitemap.png',
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
         );
-        // @codingStandardsIgnoreEnd
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/s/e/second_image.png',
+            self::BASE_IMAGE_PATH.'/s/e/second_image.png',
             $imagesCollection[1]->getUrl(),
             'Incorrect image url'
         );
-        // @codingStandardsIgnoreEnd
         $this->assertEmpty($imagesCollection[0]->getCaption(), 'Caption not empty');
 
         // Check no selection
@@ -102,20 +101,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('no_selection', $products[5]->getThumbnail(), 'thumbnail is incorrect');
         $imagesCollection = $products[5]->getImages()->getCollection();
         $this->assertCount(1, $imagesCollection);
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/s/e/second_image_1.png',
+            self::BASE_IMAGE_PATH.'/s/e/second_image_1.png',
             $imagesCollection[0]->getUrl(),
             'Image url is incorrect'
         );
-        // @codingStandardsIgnoreEnd
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/s/e/second_image_1.png',
+            self::BASE_IMAGE_PATH.'/s/e/second_image_1.png',
             $products[5]->getImages()->getThumbnail(),
             'Product thumbnail is incorrect'
         );
-        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -149,23 +144,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($products[1]->getImages(), 'Images were loaded');
         $this->assertNotEmpty($products[4]->getImages(), 'Images were not loaded');
         $this->assertEquals('Simple Images', $products[4]->getImages()->getTitle(), 'Incorrect title');
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/s/e/second_image.png',
+            self::BASE_IMAGE_PATH.'/s/e/second_image.png',
             $products[4]->getImages()->getThumbnail(),
             'Incorrect thumbnail'
         );
-        // @codingStandardsIgnoreEnd
         $this->assertCount(1, $products[4]->getImages()->getCollection(), 'Number of loaded images is incorrect');
 
         $imagesCollection = $products[4]->getImages()->getCollection();
-        // @codingStandardsIgnoreStart
         $this->assertEquals(
-            'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/s/e/second_image.png',
+            self::BASE_IMAGE_PATH.'/s/e/second_image.png',
             $imagesCollection[0]->getUrl(),
             'Incorrect image url'
         );
-        // @codingStandardsIgnoreEnd
         $this->assertEmpty($imagesCollection[0]->getCaption(), 'Caption not empty');
 
         // Check no selection
