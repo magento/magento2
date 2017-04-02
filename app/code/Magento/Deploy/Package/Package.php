@@ -10,9 +10,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
- * Package class
- *
- * @api
+ * Deployment Package
  */
 class Package
 {
