@@ -18,9 +18,9 @@ class PluginList extends Interception\PluginList\PluginList
      * @var array
      */
     private $pluginList = [
-        DefinitionInterface::LISTENER_BEFORE => [],
-        DefinitionInterface::LISTENER_AROUND => [],
-        DefinitionInterface::LISTENER_AFTER  => []
+       'before' => [],
+       'around' => [],
+       'after'  => []
     ];
 
     /**
@@ -91,31 +91,31 @@ class PluginList extends Interception\PluginList\PluginList
                 if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
                     if (!array_key_exists(
                         $plugin['instance'],
-                        $this->pluginList[DefinitionInterface::LISTENER_AROUND])
+                        $this->pluginList['around'])
                     ) {
-                        $this->pluginList[DefinitionInterface::LISTENER_AROUND][$plugin['instance']] = [];
+                        $this->pluginList['around'][$plugin['instance']] = [];
                     }
-                    $this->pluginList[DefinitionInterface::LISTENER_AROUND][$plugin['instance']][] = $pluginMethod ;
+                    $this->pluginList['around'][$plugin['instance']][] = $pluginMethod ;
 
                 }
                 if ($methodTypes & DefinitionInterface::LISTENER_BEFORE) {
                     if (!array_key_exists(
                         $plugin['instance'],
-                        $this->pluginList[DefinitionInterface::LISTENER_BEFORE])
+                        $this->pluginList['before'])
                     ) {
-                        $this->pluginList[DefinitionInterface::LISTENER_BEFORE][$plugin['instance']] = [];
+                        $this->pluginList['before'][$plugin['instance']] = [];
                     }
-                    $this->pluginList[DefinitionInterface::LISTENER_BEFORE][$plugin['instance']][] = $pluginMethod ;
+                    $this->pluginList['before'][$plugin['instance']][] = $pluginMethod ;
 
                 }
                 if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
                     if (!array_key_exists(
                         $plugin['instance'],
-                        $this->pluginList[DefinitionInterface::LISTENER_AFTER])
+                        $this->pluginList['after'])
                     ) {
-                        $this->pluginList[DefinitionInterface::LISTENER_AFTER][$plugin['instance']] = [];
+                        $this->pluginList['after'][$plugin['instance']] = [];
                     }
-                    $this->pluginList[DefinitionInterface::LISTENER_AFTER][$plugin['instance']][] = $pluginMethod ;
+                    $this->pluginList['after'][$plugin['instance']][] = $pluginMethod ;
                 }
             }
         }
