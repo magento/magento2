@@ -10,7 +10,7 @@
         <referenceBlock name="footer_links">
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="rss-link" ifconfig="rss/config/active">
                 <arguments>
-                    <argument name="label" xsi:type="string">RSS</argument>
+                    <argument name="label" xsi:type="string" translate="true">RSS</argument>
                     <argument name="path" xsi:type="string">rss</argument>
                 </arguments>
             </block>
