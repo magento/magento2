@@ -16,9 +16,9 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      *
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::INVALID            => '"%1" is not a valid email address.'
-    );
+    ];
 
     /**
      * Validate email address contains '@' sign
@@ -49,7 +49,7 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
     {
         if ($messageKey === null) {
             $keys = array_keys($this->_messageTemplates);
-            foreach($keys as $key) {
+            foreach ($keys as $key) {
                 $this->setMessage($messageString, $key);
             }
             return $this;
@@ -93,7 +93,7 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      */
     protected function _createMessage($messageKey, $value)
     {
-        if(!isset($this->_messageTemplates[$messageKey])){
+        if (!isset($this->_messageTemplates[$messageKey])){
             return null;
         }
         $message = $this->_messageTemplates[$messageKey];
