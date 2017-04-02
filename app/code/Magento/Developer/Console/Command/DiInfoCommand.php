@@ -67,43 +67,53 @@ class DiInfoCommand extends Command
         $className = $input->getArgument(self::CLASS_NAME);
         $output->writeln('');
         $output->writeln(sprintf('DI configuration for the class %s', $className));
-        $output->writeln('');
-        $output->writeln(sprintf('Preference: %s', $this->diInformation->getPreference($className)));
-        $output->writeln('');
-        $output->writeln("Constructor Parameters:");
-        $table = new Table($output);
-        $table
-            ->setHeaders(array('Name', 'Type', 'Configured Type'))
-            ->setRows($this->diInformation->getParameters($className));
 
-        $output->writeln($table->render());
-        $virtualTypes = $this->diInformation->getVirtualTypes($className);
-        if (!empty($virtualTypes)) {
+        if ($this->diInformation->isVirtualType($className)) {
+            $output->writeln(
+                sprintf('It is Virtual Type for the Class %s', $this->diInformation->getVirtualTypeBase($className))
+            );
+        } else {
+            $preference = $this->diInformation->getPreference($className);
             $output->writeln('');
-            $output->writeln("Virtual Types:");
-            foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
-                $output->writeln('   ' . $virtualType);
-            }
-        }
+            $output->writeln(sprintf('Preference: %s', $preference));
+            $output->writeln('');
+            $output->writeln("Constructor Parameters:");
 
-        $output->writeln('');
-        $output->writeln("Plugins:");
-        $plugins = $this->diInformation->getPlugins($className);
-        $parameters = [];
-        foreach ($plugins as $type => $plugin) {
-            foreach ($plugin as $instance => $pluginMethods){
-                foreach ($pluginMethods as $pluginMethod){
-                    $parameters[] = [$instance, $pluginMethod, $type];
+            $virtualTypes = $this->diInformation->getVirtualTypes($preference);
+            if (!empty($virtualTypes)) {
+                $output->writeln('');
+                $output->writeln("Virtual Types:");
+                foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
+                    $output->writeln('   ' . $virtualType);
                 }
             }
+
+            $table = new Table($output);
+            $table
+                ->setHeaders(array('Name', 'Type', 'Configured Type'))
+                ->setRows($this->diInformation->getParameters($preference));
+
+            $output->writeln($table->render());
+
+            $output->writeln('');
+            $output->writeln("Plugins:");
+            $plugins = $this->diInformation->getPlugins($className);
+            $parameters = [];
+            foreach ($plugins as $type => $plugin) {
+                foreach ($plugin as $instance => $pluginMethods){
+                    foreach ($pluginMethods as $pluginMethod){
+                        $parameters[] = [$instance, $pluginMethod, $type];
+                    }
+                }
+            }
+
+            $table = new Table($output);
+            $table
+                ->setHeaders(array('Plugin', 'Method', 'Type'))
+                ->setRows($parameters);
+
+            $output->writeln($table->render());
         }
-
-        $table = new Table($output);
-        $table
-            ->setHeaders(array('Plugin', 'Method', 'Type'))
-            ->setRows($parameters);
-
-        $output->writeln($table->render());
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
