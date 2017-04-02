@@ -11,7 +11,6 @@
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\Api\ArrayObjectSearch;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -327,9 +326,13 @@ abstract class AbstractData
                     /**
                     __('"%1" is not a valid email address.')
                     */
-                    $validator = ObjectManager::getInstance()->get(\Magento\Framework\Validator\Email::class);
+                    $validator = new \Magento\Framework\Validator\Email();
+                    $validator->setMessage(
+                        __('"%1" is not a valid email address.', $label),
+                        \Magento\Framework\Validator\Email::INVALID
+                    );
                     if (!$validator->isValid($value)) {
-                        return [__('"%1" is not a valid email address.', $label)];
+                        return array_unique($validator->getMessages());
                     }
                     break;
                 case 'url':

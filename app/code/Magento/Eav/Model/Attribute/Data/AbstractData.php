@@ -10,7 +10,6 @@ namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException as CoreException;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV Attribute Abstract Data Model
@@ -355,9 +354,13 @@ abstract class AbstractData
                     /**
                     __('"%1" is not a valid email address.')
                      */
-                    $validator = ObjectManager::getInstance()->get(\Magento\Framework\Validator\Email::class);
+                    $validator = new \Magento\Framework\Validator\Email();
+                    $validator->setMessage(
+                        __('"%1" is not a valid email address.', $label),
+                        \Magento\Framework\Validator\Email::INVALID
+                    );
                     if (!$validator->isValid($value)) {
-                        return [__('"%1" is not a valid email address.', $label)];
+                        return array_unique($validator->getMessages());
                     }
                     break;
                 case 'url':
