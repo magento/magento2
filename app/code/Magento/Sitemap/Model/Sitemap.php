@@ -7,6 +7,8 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Sitemap\Model;
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Sitemap model
@@ -175,13 +177,14 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
+        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
         $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;

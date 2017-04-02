@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\ObjectManager;
+
 class Robots extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -37,12 +40,14 @@ class Robots extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+
+        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
         $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
         $this->_file = 'robots.txt';
     }

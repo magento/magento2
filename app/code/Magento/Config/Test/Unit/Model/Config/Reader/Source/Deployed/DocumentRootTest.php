@@ -53,6 +53,9 @@ class DocumentRootTest extends \PHPUnit_Framework_TestCase
         $this->documentRoot = new Reader\Source\Deployed\DocumentRoot($this->configMock);
     }
 
+    /**
+     * Ensures that the path returned matches the pub/ path.
+     */
     public function testGetPath()
     {
         $this->configMockSetForDocumentRootIsPub();
@@ -60,6 +63,10 @@ class DocumentRootTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(DirectoryList::PUB, $this->documentRoot->getPath());
     }
 
+    /**
+     * Ensures that the deployment configuration returns the mocked value for
+     * the pub/ folder.
+     */
     public function testIsPub()
     {
         $this->configMockSetForDocumentRootIsPub();
