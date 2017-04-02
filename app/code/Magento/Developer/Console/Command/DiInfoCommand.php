@@ -14,6 +14,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\Table;
 
 class DiInfoCommand extends Command
 {
@@ -64,9 +65,33 @@ class DiInfoCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $className = $input->getArgument(self::CLASS_NAME);
+        $output->writeln('');
         $output->writeln(sprintf('DI configuration for the class %s', $className));
-        $output->writeln(sprintf('- Preference: %s', $this->diInformation->getPreference($className)));
-        //$output->writeln(sprintf('- Constructor Parameters: %s', $this->diInformation->getPreference($className)));
+        $output->writeln('');
+        $output->writeln(sprintf('Preference: %s', $this->diInformation->getPreference($className)));
+        $output->writeln('');
+        $output->writeln("Constructor Parameters:");
+        $parameters = [];
+        $diParametersConfiguration = $this->diInformation->getConfiguredConstructorParameters($className);
+        foreach ($this->diInformation->getConstructorParameters($className) as $parameter) {
+            $paramArray = [$parameter[0], $parameter[1], ''];
+            if (isset($diParametersConfiguration[$parameter[0]])) {
+                $paramArray[2] = $diParametersConfiguration[$parameter[0]]['instance'];
+            }
+            $parameters[] = $paramArray;
+        }
+        $table = new Table($output);
+        $table
+            ->setHeaders(array('Name', 'Type', 'Configured Type'))
+            ->setRows($parameters);
+
+        $output->writeln($table->render());
+        $output->writeln('');
+        $output->writeln("Virtual Types:");
+        foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
+            $output->writeln('   ' . $virtualType);
+        }
+
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

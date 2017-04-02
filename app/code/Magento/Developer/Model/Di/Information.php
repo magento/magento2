@@ -18,11 +18,20 @@ class Information
     private $preferences = [];
 
     /**
-     * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
+     * @var \Magento\Framework\ObjectManager\DefinitionInterface
      */
-    public function __construct(\Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig)
-    {
+    private $definitions;
+
+    /**
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
+     * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
+     */
+    public function __construct(
+        \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig,
+        \Magento\Framework\ObjectManager\DefinitionInterface $definitions
+    ) {
         $this->objectManagerConfig = $objectManagerConfig;
+        $this->definitions = $definitions;
     }
 
     /**
@@ -46,6 +55,19 @@ class Information
      * @return array|null
      */
     public function getConstructorParameters($className)
+    {
+        $preferenceClass = $this->getPreference($className);
+        $parameters = $this->definitions->getParameters($preferenceClass);
+        return $parameters;
+    }
+
+    /**
+     * Retrieve configured types of parameters of the constructor for the preference of the class
+     *
+     * @param $className
+     * @return array|null
+     */
+    public function getConfiguredConstructorParameters($className)
     {
         $preferenceClass = $this->getPreference($className);
         return $this->objectManagerConfig->getArguments($preferenceClass);
