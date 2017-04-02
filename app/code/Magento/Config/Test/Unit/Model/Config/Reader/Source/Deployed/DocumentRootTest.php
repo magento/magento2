@@ -25,24 +25,9 @@ class DocumentRootTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $placeholderMock;
-
-    /**
-     * @var Config\ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $scopeCodeResolverMock;
-
-    /**
      * @var SettingChecker
      */
     private $documentRoot;
-
-    /**
-     * @var array
-     */
-    private $env;
 
     public function setUp()
     {
