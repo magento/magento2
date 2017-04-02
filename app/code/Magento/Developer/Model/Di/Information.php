@@ -17,12 +17,17 @@ class Information
     /**
      * @var \Magento\Developer\Model\Di\PluginList
      */
-
     private $pluginList;
+
     /**
      * @var string[]
      */
     private $preferences = [];
+
+    /**
+     * @var array
+     */
+    private $virtualTypes = [];
 
     /**
      * @var \Magento\Framework\ObjectManager\DefinitionInterface
@@ -63,11 +68,31 @@ class Information
      * @param $className
      * @return array|null
      */
-    public function getConstructorParameters($className)
+    private function getConstructorParameters($className)
     {
         $preferenceClass = $this->getPreference($className);
         $parameters = $this->definitions->getParameters($preferenceClass);
         return $parameters;
+    }
+
+    /**
+     * Retrieve array of parameters for the class constructor
+     *
+     * @param $className
+     * @return array
+     */
+    public function getParameters($className)
+    {
+        $result = [];
+        $diConfiguration = $this->getConfiguredConstructorParameters($className);
+        foreach ($this->getConstructorParameters($className) as $parameter) {
+            $paramArray = [$parameter[0], $parameter[1], ''];
+            if (isset($diConfiguration[$parameter[0]])) {
+                $paramArray[2] = $diConfiguration[$parameter[0]]['instance'];
+            }
+            $result[] = $paramArray;
+        }
+        return $result;
     }
 
     /**
@@ -76,7 +101,7 @@ class Information
      * @param $className
      * @return array|null
      */
-    public function getConfiguredConstructorParameters($className)
+    private function getConfiguredConstructorParameters($className)
     {
         $preferenceClass = $this->getPreference($className);
         return $this->objectManagerConfig->getArguments($preferenceClass);
@@ -91,13 +116,15 @@ class Information
     public function getVirtualTypes($className)
     {
         $preference = $this->getPreference($className);
-        $virtualTypes = [];
-        foreach ($this->objectManagerConfig->getVirtualTypes() as $virtualType => $baseName) {
-            if ($baseName == $className || $baseName == $preference) {
-                $virtualTypes[] = $virtualType;
+        if (!isset($this->virtualTypes[$className])) {
+            $this->virtualTypes[$className] = [];
+            foreach ($this->objectManagerConfig->getVirtualTypes() as $virtualType => $baseName) {
+                if ($baseName == $className || $baseName == $preference) {
+                    $this->virtualTypes[$className][] = $virtualType;
+                }
             }
         }
-        return $virtualTypes;
+        return $this->virtualTypes[$className];
     }
 
     /**
@@ -107,6 +134,14 @@ class Information
     public function getPlugins($className)
     {
         return $this->pluginList->getPluginsListByClass($className);
+    }
 
+    /**
+     * Is the class a virtual type
+     */
+    public function isVirtualType($className)
+    {
+        $virtualTypes = $this->objectManagerConfig->getVirtualTypes();
+        return isset($virtualTypes[$className]);
     }
 }

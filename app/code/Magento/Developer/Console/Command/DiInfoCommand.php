@@ -71,27 +71,20 @@ class DiInfoCommand extends Command
         $output->writeln(sprintf('Preference: %s', $this->diInformation->getPreference($className)));
         $output->writeln('');
         $output->writeln("Constructor Parameters:");
-        $parameters = [];
-        $diParametersConfiguration = $this->diInformation->getConfiguredConstructorParameters($className);
-        foreach ($this->diInformation->getConstructorParameters($className) as $parameter) {
-            $paramArray = [$parameter[0], $parameter[1], ''];
-            if (isset($diParametersConfiguration[$parameter[0]])) {
-                $paramArray[2] = $diParametersConfiguration[$parameter[0]]['instance'];
-            }
-            $parameters[] = $paramArray;
-        }
         $table = new Table($output);
         $table
             ->setHeaders(array('Name', 'Type', 'Configured Type'))
-            ->setRows($parameters);
+            ->setRows($this->diInformation->getParameters($className));
 
         $output->writeln($table->render());
-        $output->writeln('');
-        $output->writeln("Virtual Types:");
-        foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
-            $output->writeln('   ' . $virtualType);
+        $virtualTypes = $this->diInformation->getVirtualTypes($className);
+        if (!empty($virtualTypes)) {
+            $output->writeln('');
+            $output->writeln("Virtual Types:");
+            foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
+                $output->writeln('   ' . $virtualType);
+            }
         }
-
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
