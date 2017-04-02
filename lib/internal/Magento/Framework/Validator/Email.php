@@ -54,7 +54,8 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
         }
 
         if (!isset($this->_messageTemplates[$messageKey])) {
-            throw new Exception("No message template exists for key '$messageKey'");
+            $exceptionPhrase = new \Magento\Framework\Phrase("No message template exists for key '$messageKey'");
+            throw new Exception($exceptionPhrase);
         }
 
         $this->_messageTemplates[$messageKey] = $messageString;
@@ -75,7 +76,7 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
 
         $this->_messages[$messageKey] = $this->_createMessage($messageKey, $value);
     }
-    
+
     /**
      * Constructs and returns a validation failure message with the given message key and value.
      *
