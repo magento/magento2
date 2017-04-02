@@ -17,7 +17,7 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      * @var array
      */
     protected $_messageTemplates = array(
-        self::INVALID            => "Email address is not valid."
+        self::INVALID            => '"%1" is not a valid email address.'
     );
 
     /**
@@ -96,7 +96,9 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
         if(!isset($this->_messageTemplates[$messageKey])){
             return null;
         }
+        $message = $this->_messageTemplates[$messageKey];
+        $message = str_replace('%1', $value, $message);
 
-        return $this->_messageTemplates[$messageKey];
+        return $message;
     }
 }
