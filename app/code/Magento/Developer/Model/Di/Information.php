@@ -5,8 +5,6 @@
  */
 namespace Magento\Developer\Model\Di;
 
-use Magento\Developer\Model\Di\PluginList;
-
 class Information
 {
     /**
@@ -87,7 +85,7 @@ class Information
         $diConfiguration = $this->getConfiguredConstructorParameters($className);
         $originalParameters = $this->isVirtualType($className) ?
             $this->getConstructorParameters($this->getVirtualTypeBase($className)) :
-            $this->getConstructorParameters($className);
+            $this->getConstructorParameters($this->getPreference($className));
 
         foreach ($originalParameters as $parameter) {
             $paramArray = [$parameter[0], $parameter[1], is_array($parameter[3]) ? "<empty array>" : $parameter[3]];
