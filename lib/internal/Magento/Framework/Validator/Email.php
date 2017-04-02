@@ -16,7 +16,7 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      *
      * @var array
      */
-    protected $_messageTemplates = [
+    protected $messageTemplates = [
         self::INVALID            => '"%1" is not a valid email address.'
     ];
 
@@ -31,7 +31,7 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
         $isValid = true;
         if (!is_string($value) || strrpos($value, '@') === false) {
             $isValid = false;
-            $this->_error(self::INVALID, $value);
+            $this->error(self::INVALID, $value);
         }
 
         return $isValid;
@@ -48,35 +48,37 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
     public function setMessage($messageString, $messageKey = null)
     {
         if ($messageKey === null) {
-            $keys = array_keys($this->_messageTemplates);
+            $keys = array_keys($this->messageTemplates);
             foreach ($keys as $key) {
                 $this->setMessage($messageString, $key);
             }
             return $this;
         }
 
-        if (!isset($this->_messageTemplates[$messageKey])) {
+        if (!isset($this->messageTemplates[$messageKey])) {
             $exceptionPhrase = new \Magento\Framework\Phrase("No message template exists for key '$messageKey'");
             throw new Exception($exceptionPhrase);
         }
 
-        $this->_messageTemplates[$messageKey] = $messageString;
+        $this->messageTemplates[$messageKey] = $messageString;
         return $this;
     }
 
     /**
+     * Handles errors, sets error messages
+     *
      * @param  string $messageKey
      * @param  string $value      OPTIONAL
      * @return void
      */
-    protected function _error($messageKey, $value = null)
+    protected function error($messageKey, $value = null)
     {
         if ($messageKey === null) {
-            $keys = array_keys($this->_messageTemplates);
+            $keys = array_keys($this->messageTemplates);
             $messageKey = current($keys);
         }
 
-        $this->_messages[$messageKey] = $this->_createMessage($messageKey, $value);
+        $this->_messages[$messageKey] = $this->createMessage($messageKey, $value);
     }
 
     /**
@@ -91,12 +93,12 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      * @param  string $value
      * @return string
      */
-    protected function _createMessage($messageKey, $value)
+    protected function createMessage($messageKey, $value)
     {
-        if (!isset($this->_messageTemplates[$messageKey])){
+        if (!isset($this->messageTemplates[$messageKey])) {
             return null;
         }
-        $message = $this->_messageTemplates[$messageKey];
+        $message = $this->messageTemplates[$messageKey];
         $message = str_replace('%1', $value, $message);
 
         return $message;
