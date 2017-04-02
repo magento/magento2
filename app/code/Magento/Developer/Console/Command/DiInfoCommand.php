@@ -94,8 +94,26 @@ class DiInfoCommand extends Command
                 ->setRows($this->diInformation->getParameters($preference));
 
             $output->writeln($table->render());
-        }
 
+            $output->writeln('');
+            $output->writeln("Plugins:");
+            $plugins = $this->diInformation->getPlugins($className);
+            $parameters = [];
+            foreach ($plugins as $type => $plugin) {
+                foreach ($plugin as $instance => $pluginMethods){
+                    foreach ($pluginMethods as $pluginMethod){
+                        $parameters[] = [$instance, $pluginMethod, $type];
+                    }
+                }
+            }
+
+            $table = new Table($output);
+            $table
+                ->setHeaders(array('Plugin', 'Method', 'Type'))
+                ->setRows($parameters);
+
+            $output->writeln($table->render());
+        }
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
