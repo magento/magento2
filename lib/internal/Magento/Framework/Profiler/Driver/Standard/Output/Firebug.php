@@ -111,7 +111,7 @@ class Firebug extends AbstractOutput
      * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response
      * @return void
      */
-    public function setResponse(\Magento\Framework\HTTP\PhpEnvironment\Response $response)
+    public function setResponse(\Zend_Controller_Response_Abstract $response)
     {
         $this->_response = $response;
     }
@@ -119,12 +119,12 @@ class Firebug extends AbstractOutput
     /**
      * Request getter
      *
-     * @return \Magento\Framework\HTTP\PhpEnvironment\Response
+     * @return \Zend_Controller_Response_Abstract
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = new \Magento\Framework\HTTP\PhpEnvironment\Response();
+            $this->_response = new \Zend_Controller_Response_Http();
         }
         return $this->_response;
     }
