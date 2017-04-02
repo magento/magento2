@@ -8,8 +8,6 @@
 
 namespace Magento\Sitemap\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * Sitemap model
  *
@@ -177,13 +175,14 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_cmsFactory = $cmsFactory;

@@ -30,6 +30,8 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB = 'db';
     const CONFIG_PATH_RESOURCE = 'resource';
     const CONFIG_PATH_CACHE_TYPES = 'cache_types';
+    const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub';
+
     /**#@-*/
 
     /**#@+
