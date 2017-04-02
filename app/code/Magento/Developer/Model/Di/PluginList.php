@@ -86,6 +86,8 @@ class PluginList extends Interception\PluginList\PluginList
     public function getPluginsListByClass($className)
     {
         $this->getPlugins($className);
+        if(!isset($this->_inherited[$className]))
+            return $this->pluginList;
         foreach ($this->_inherited[$className] as $pluginKey => $plugin) {
             foreach ($this->_definitions->getMethodList($plugin['instance']) as $pluginMethod => $methodTypes) {
                 if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
