@@ -84,10 +84,24 @@ class Information
     {
         $result = [];
         $diConfiguration = $this->getConfiguredConstructorParameters($className);
-        foreach ($this->getConstructorParameters($className) as $parameter) {
+        $originalParameters = $this->isVirtualType($className) ?
+            $this->getConstructorParameters($this->getVirtualTypeBase($className)) :
+            $this->getConstructorParameters($className);
+
+        foreach ($originalParameters as $parameter) {
             $paramArray = [$parameter[0], $parameter[1], ''];
             if (isset($diConfiguration[$parameter[0]])) {
-                $paramArray[2] = $diConfiguration[$parameter[0]]['instance'];
+                $configuredParameter = $diConfiguration[$parameter[0]];
+                if (is_array($configuredParameter)) {
+                    if (isset($configuredParameter['instance'])) {
+                        $paramArray[2] = $configuredParameter['instance'];
+                    } else {
+                        //TODO
+                    }
+                } else {
+                    $paramArray[2] = $configuredParameter;
+                }
+
             }
             $result[] = $paramArray;
         }
