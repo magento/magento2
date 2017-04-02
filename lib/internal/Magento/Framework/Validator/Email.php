@@ -41,7 +41,6 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      * @param  string $messageString
      * @param  string $messageKey     OPTIONAL
      * @return AbstractValidator Provides a fluent interface
-     * @throws Exception
      */
     public function setMessage($messageString, $messageKey = null)
     {
@@ -51,11 +50,6 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
                 $this->setMessage($messageString, $key);
             }
             return $this;
-        }
-
-        if (!isset($this->_messageTemplates[$messageKey])) {
-            $exceptionPhrase = new \Magento\Framework\Phrase("No message template exists for key '$messageKey'");
-            throw new Exception($exceptionPhrase);
         }
 
         $this->_messageTemplates[$messageKey] = $messageString;
@@ -88,11 +82,13 @@ class Email extends AbstractValidator implements \Magento\Framework\Validator\Va
      * @param  string $messageKey
      * @param  string $value
      * @return string
+     * @throws Exception
      */
     protected function _createMessage($messageKey, $value)
     {
-        if(!isset($this->_messageTemplates[$messageKey])){
-            return null;
+        if (!isset($this->_messageTemplates[$messageKey])) {
+            $exceptionPhrase = new \Magento\Framework\Phrase("No message template exists for key '$messageKey'");
+            throw new Exception($exceptionPhrase);
         }
 
         return $this->_messageTemplates[$messageKey];
