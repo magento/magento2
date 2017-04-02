@@ -3628,6 +3628,7 @@ return [
     ['Magento\ToolkitFramework\Helper\Cli'],
     ['Magento\ToolkitFramework\Config'],
     ['Magento\Framework\Locale\Validator', 'Magento\Framework\Validator\Locale'],
+    ['Magento\Framework\Validator\EmailAddress', 'Magento\Framework\Validator\Email'],
     ['Magento\ToolkitFramework\Fixture', 'Magento\Setup\Fixtures\Fixture'],
     ['Magento\ToolkitFramework\Application', 'Magento\Setup\Fixtures\FixtureModel'],
     ['Magento\Framework\Locale\Lists', 'Magento\Framework\Locale\TranslatedLists'],
