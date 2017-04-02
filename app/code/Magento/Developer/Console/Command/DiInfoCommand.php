@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * @author Andra Lungu <andra.lungu@bitbull.it>
- * Date: 01/04/17
- * Time: 14.02
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Developer\Console\Command;
@@ -59,27 +57,33 @@ class DiInfoCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \InvalidArgumentException
+     * Print Info on Class/Interface preference
+     *
+     * @param string $className
+     * @param OutputInterface $output
+     * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    private function printPreference($className, $output)
     {
-        $className = $input->getArgument(self::CLASS_NAME);
-        $output->writeln('');
-        $output->writeln(sprintf('DI configuration for the class %s', $className));
-
-        $output->writeln(
-            sprintf('It is Virtual Type for the Class %s', $this->diInformation->getVirtualTypeBase($className))
-        );
-
         $preference = $this->diInformation->getPreference($className);
         $output->writeln('');
         $output->writeln(sprintf('Preference: %s', $preference));
         $output->writeln('');
+    }
+
+    /**
+     * Print Info on Constructor Arguments
+     *
+     * @param string $className
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function printConstructorArguments($className, $output)
+    {
         $output->writeln("Constructor Parameters:");
         $paramsTable = new Table($output);
         $paramsTable
-            ->setHeaders(['Name', 'Type', 'Configured Value']);
+            ->setHeaders(['Name', 'Requested Type', 'Configured Value']);
         $parameters = $this->diInformation->getParameters($className);
         $paramsTableArray = [];
         foreach ($parameters as $parameterRow) {
@@ -90,8 +94,18 @@ class DiInfoCommand extends Command
         }
         $paramsTable->setRows($paramsTableArray);
         $output->writeln($paramsTable->render());
+    }
 
-        $virtualTypes = $this->diInformation->getVirtualTypes($preference);
+    /**
+     * Print Info on Virtual Types
+     *
+     * @param string $className
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function printVirtualTypes($className, $output)
+    {
+        $virtualTypes = $this->diInformation->getVirtualTypes($className);
         if (!empty($virtualTypes)) {
             $output->writeln('');
             $output->writeln("Virtual Types:");
@@ -99,14 +113,25 @@ class DiInfoCommand extends Command
                 $output->writeln('   ' . $virtualType);
             }
         }
+    }
 
+    /**
+     * Print Info on Plugins
+     *
+     * @param string $className
+     * @param OutputInterface $output
+     * @param string $label
+     * @return void
+     */
+    private function printPlugins($className, $output, $label)
+    {
         $output->writeln('');
-        $output->writeln("Plugins:");
+        $output->writeln($label);
         $plugins = $this->diInformation->getPlugins($className);
         $parameters = [];
         foreach ($plugins as $type => $plugin) {
-            foreach ($plugin as $instance => $pluginMethods){
-                foreach ($pluginMethods as $pluginMethod){
+            foreach ($plugin as $instance => $pluginMethods) {
+                foreach ($pluginMethods as $pluginMethod) {
                     $parameters[] = [$instance, $pluginMethod, $type];
                 }
             }
@@ -114,29 +139,30 @@ class DiInfoCommand extends Command
 
         $table = new Table($output);
         $table
-            ->setHeaders(array('Plugin', 'Method', 'Type'))
+            ->setHeaders(['Plugin', 'Method', 'Type'])
             ->setRows($parameters);
 
         $output->writeln($table->render());
+    }
 
+    /**
+     * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $className = $input->getArgument(self::CLASS_NAME);
         $output->writeln('');
-        $output->writeln("Preference Plugins:");
-        $plugins = $this->diInformation->getPlugins($preference);
-        $parameters = [];
-        foreach ($plugins as $type => $plugin) {
-            foreach ($plugin as $instance => $pluginMethods){
-                foreach ($pluginMethods as $pluginMethod){
-                    $parameters[] = [$instance, $pluginMethod, $type];
-                }
-            }
-        }
-
-        $table = new Table($output);
-        $table
-            ->setHeaders(array('Plugin', 'Method', 'Type'))
-            ->setRows($parameters);
-
-        $output->writeln($table->render());
+        $output->writeln(sprintf('DI configuration for the class %s', $className));
+        $output->writeln(
+            sprintf('It is Virtual Type for the Class %s', $this->diInformation->getVirtualTypeBase($className))
+        );
+        $this->printPreference($className, $output);
+        $this->printConstructorArguments($className, $output);
+        $preference = $this->diInformation->getPreference($className);
+        $this->printVirtualTypes($preference, $output);
+        $this->printPlugins($className, $output, 'Plugins:');
+        $this->printPlugins($preference, $output, 'Plugins for the Preference:');
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }

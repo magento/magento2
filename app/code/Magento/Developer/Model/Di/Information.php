@@ -37,6 +37,7 @@ class Information
     /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
+     * @param \Magento\Developer\Model\Di\PluginList $pluginList
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig,
@@ -65,7 +66,7 @@ class Information
     /**
      * Retrieve parameters of the constructor for the preference of the class
      *
-     * @param $className
+     * @param string $className
      * @return array|null
      */
     private function getConstructorParameters($className)
@@ -77,7 +78,7 @@ class Information
     /**
      * Retrieve array of parameters for the class constructor
      *
-     * @param $className
+     * @param string $className
      * @return array
      */
     public function getParameters($className)
@@ -101,7 +102,7 @@ class Information
     /**
      * Recursively retrieve array parameters
      *
-     * @param $configuredParameter
+     * @param string $configuredParameter
      * @return array|null
      */
     private function renderParameters($configuredParameter)
@@ -109,14 +110,14 @@ class Information
         $result = null;
         if (is_array($configuredParameter)) {
             if (isset($configuredParameter['instance'])) {
-                $result = $configuredParameter['instance'];
+                $result = 'instance of ' . $configuredParameter['instance'];
             } else {
                 foreach ($configuredParameter as $keyName => $instance) {
                     $result[$keyName] = $this->renderParameters($instance);
                 }
             }
         } else {
-            $result = $configuredParameter;
+            $result = 'string ' . $configuredParameter;
         }
         return $result;
     }
@@ -124,7 +125,7 @@ class Information
     /**
      * Retrieve configured types of parameters of the constructor for the preference of the class
      *
-     * @param $className
+     * @param string $className
      * @return array|null
      */
     private function getConfiguredConstructorParameters($className)
@@ -135,7 +136,7 @@ class Information
     /**
      * Retrieve virtual types for the class and the preference of the class
      *
-     * @param $className
+     * @param string $className
      * @return array
      */
     public function getVirtualTypes($className)

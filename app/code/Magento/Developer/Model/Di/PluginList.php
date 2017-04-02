@@ -63,7 +63,7 @@ class PluginList extends Interception\PluginList\PluginList
     /**
      * Load the plugins information
      *
-     * @param $type
+     * @param string $type
      * @return array
      */
     private function getPlugins($type)
@@ -79,42 +79,34 @@ class PluginList extends Interception\PluginList\PluginList
     /**
      * Return the list of plugins for the class
      *
-     * @param $className
+     * @param string $className
      * @return array
      * @throws \InvalidArgumentException
      */
     public function getPluginsListByClass($className)
     {
         $this->getPlugins($className);
-        if(!isset($this->_inherited[$className]))
+        if (!isset($this->_inherited[$className])) {
             return $this->pluginList;
+        }
+
         foreach ($this->_inherited[$className] as $pluginKey => $plugin) {
             foreach ($this->_definitions->getMethodList($plugin['instance']) as $pluginMethod => $methodTypes) {
                 if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
-                    if (!array_key_exists(
-                        $plugin['instance'],
-                        $this->pluginList['around'])
-                    ) {
+                    if (!array_key_exists($plugin['instance'], $this->pluginList['around'])) {
                         $this->pluginList['around'][$plugin['instance']] = [];
                     }
                     $this->pluginList['around'][$plugin['instance']][] = $pluginMethod ;
-
                 }
                 if ($methodTypes & DefinitionInterface::LISTENER_BEFORE) {
-                    if (!array_key_exists(
-                        $plugin['instance'],
-                        $this->pluginList['before'])
-                    ) {
+                    if (!array_key_exists($plugin['instance'], $this->pluginList['before'])) {
                         $this->pluginList['before'][$plugin['instance']] = [];
                     }
                     $this->pluginList['before'][$plugin['instance']][] = $pluginMethod ;
 
                 }
                 if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
-                    if (!array_key_exists(
-                        $plugin['instance'],
-                        $this->pluginList['after'])
-                    ) {
+                    if (!array_key_exists($plugin['instance'], $this->pluginList['after'])) {
                         $this->pluginList['after'][$plugin['instance']] = [];
                     }
                     $this->pluginList['after'][$plugin['instance']][] = $pluginMethod ;
@@ -124,3 +116,4 @@ class PluginList extends Interception\PluginList\PluginList
         return $this->pluginList;
     }
 }
+
