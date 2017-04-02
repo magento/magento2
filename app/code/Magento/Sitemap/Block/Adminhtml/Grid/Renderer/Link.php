@@ -27,7 +27,7 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     protected $_sitemapFactory;
 
     /**
-     * @var \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot
+     * @var DocumentRoot
      */
     protected $documentRoot;
 
@@ -36,13 +36,14 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * @param \Magento\Sitemap\Model\SitemapFactory $sitemapFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
+     * @param DocumentRoot $documentRoot
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Sitemap\Model\SitemapFactory $sitemapFactory,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
-        array $data = []
+        array $data = [],
+        DocumentRoot $documentRoot = null
     ) {
         $this->_sitemapFactory = $sitemapFactory;
         $this->_filesystem = $filesystem;

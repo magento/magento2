@@ -25,7 +25,7 @@ class DocumentRootTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
-     * @var SettingChecker
+     * @var Reader\Source\Deployed\DocumentRoot
      */
     private $documentRoot;
 

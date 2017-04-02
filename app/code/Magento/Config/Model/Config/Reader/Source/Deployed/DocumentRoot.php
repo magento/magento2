@@ -8,6 +8,7 @@ namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class DocumentRoot
@@ -15,13 +16,16 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class DocumentRoot
 {
+    /**
+     * @var DeploymentConfig
+     */
     private $config;
 
     /**
      * DocumentRoot constructor.
-     * @param \Magento\Framework\App\DeploymentConfig $config
+     * @param DeploymentConfig $config
      */
-    public function __construct(\Magento\Framework\App\DeploymentConfig $config)
+    public function __construct(DeploymentConfig $config)
     {
         $this->config = $config;
     }
