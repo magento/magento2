@@ -89,21 +89,34 @@ class Information
             $this->getConstructorParameters($className);
 
         foreach ($originalParameters as $parameter) {
-            $paramArray = [$parameter[0], $parameter[1], ''];
+            $paramArray = [$parameter[0], $parameter[1], is_array($parameter[3]) ? "<empty array>" : $parameter[3]];
             if (isset($diConfiguration[$parameter[0]])) {
-                $configuredParameter = $diConfiguration[$parameter[0]];
-                if (is_array($configuredParameter)) {
-                    if (isset($configuredParameter['instance'])) {
-                        $paramArray[2] = $configuredParameter['instance'];
-                    } else {
-                        //TODO
-                    }
-                } else {
-                    $paramArray[2] = $configuredParameter;
-                }
-
+                $paramArray[2] = $this->renderParameters($diConfiguration[$parameter[0]]);
             }
             $result[] = $paramArray;
+        }
+        return $result;
+    }
+
+    /**
+     * Recursively retrieve array parameters
+     *
+     * @param $configuredParameter
+     * @return array|null
+     */
+    private function renderParameters($configuredParameter)
+    {
+        $result = null;
+        if (is_array($configuredParameter)) {
+            if (isset($configuredParameter['instance'])) {
+                $result = $configuredParameter['instance'];
+            } else {
+                foreach ($configuredParameter as $keyName => $instance) {
+                    $result[$keyName] = $this->renderParameters($instance);
+                }
+            }
+        } else {
+            $result = $configuredParameter;
         }
         return $result;
     }

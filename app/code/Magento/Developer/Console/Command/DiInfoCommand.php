@@ -79,8 +79,16 @@ class DiInfoCommand extends Command
         $output->writeln("Constructor Parameters:");
         $paramsTable = new Table($output);
         $paramsTable
-            ->setHeaders(['Name', 'Type', 'Configured Type']);
-        $paramsTable->setRows([]);
+            ->setHeaders(['Name', 'Type', 'Configured Value']);
+        $parameters = $this->diInformation->getParameters($className);
+        $paramsTableArray = [];
+        foreach ($parameters as $parameterRow) {
+            if (is_array($parameterRow[2])) {
+                $parameterRow[2] = json_encode($parameterRow[2], JSON_PRETTY_PRINT);
+            }
+            $paramsTableArray[] = $parameterRow;
+        }
+        $paramsTable->setRows($paramsTableArray);
         $output->writeln($paramsTable->render());
 
         $virtualTypes = $this->diInformation->getVirtualTypes($preference);
