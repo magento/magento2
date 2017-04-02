@@ -5,6 +5,8 @@
  */
 namespace Magento\Developer\Model\Di;
 
+use Magento\Developer\Model\Di\PluginList;
+
 class Information
 {
     /**
@@ -13,6 +15,11 @@ class Information
     private $objectManagerConfig;
 
     /**
+     * @var \Magento\Developer\Model\Di\PluginList
+     */
+
+    private $pluginList;
+    /**
      * @var string[]
      */
     private $preferences = [];
@@ -20,9 +27,12 @@ class Information
     /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      */
-    public function __construct(\Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig)
+    public function __construct(\Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig,
+        \Magento\Developer\Model\Di\PluginList $pluginList
+    )
     {
         $this->objectManagerConfig = $objectManagerConfig;
+        $this->pluginList = $pluginList;
     }
 
     /**
@@ -67,5 +77,15 @@ class Information
             }
         }
         return $virtualTypes;
+    }
+
+    /**
+     * @param $className
+     * @return array
+     */
+    public function getPlugins($className)
+    {
+        return $this->pluginList->getPluginsListByClass($className);
+
     }
 }
