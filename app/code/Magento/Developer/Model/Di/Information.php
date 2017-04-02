@@ -70,8 +70,7 @@ class Information
      */
     private function getConstructorParameters($className)
     {
-        $preferenceClass = $this->getPreference($className);
-        $parameters = $this->definitions->getParameters($preferenceClass);
+        $parameters = $this->definitions->getParameters($className);
         return $parameters;
     }
 
@@ -103,8 +102,7 @@ class Information
      */
     private function getConfiguredConstructorParameters($className)
     {
-        $preferenceClass = $this->getPreference($className);
-        return $this->objectManagerConfig->getArguments($preferenceClass);
+        return $this->objectManagerConfig->getArguments($className);
     }
 
     /**
@@ -128,7 +126,7 @@ class Information
     }
 
     /**
-     * @param $className
+     * @param string $className
      * @return array
      */
     public function getPlugins($className)
@@ -138,10 +136,28 @@ class Information
 
     /**
      * Is the class a virtual type
+     *
+     * @param string $className
+     * @return boolean
      */
     public function isVirtualType($className)
     {
         $virtualTypes = $this->objectManagerConfig->getVirtualTypes();
         return isset($virtualTypes[$className]);
+    }
+
+    /**
+     * Get base class for the Virtual Type
+     *
+     * @param string $className
+     * @return string|boolean
+     */
+    public function getVirtualTypeBase($className)
+    {
+        $virtualTypes = $this->objectManagerConfig->getVirtualTypes();
+        if (isset($virtualTypes[$className])) {
+            return $virtualTypes[$className];
+        }
+        return false;
     }
 }

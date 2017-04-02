@@ -67,24 +67,35 @@ class DiInfoCommand extends Command
         $className = $input->getArgument(self::CLASS_NAME);
         $output->writeln('');
         $output->writeln(sprintf('DI configuration for the class %s', $className));
-        $output->writeln('');
-        $output->writeln(sprintf('Preference: %s', $this->diInformation->getPreference($className)));
-        $output->writeln('');
-        $output->writeln("Constructor Parameters:");
-        $table = new Table($output);
-        $table
-            ->setHeaders(array('Name', 'Type', 'Configured Type'))
-            ->setRows($this->diInformation->getParameters($className));
 
-        $output->writeln($table->render());
-        $virtualTypes = $this->diInformation->getVirtualTypes($className);
-        if (!empty($virtualTypes)) {
+        if ($this->diInformation->isVirtualType($className)) {
+            $output->writeln(
+                sprintf('It is Virtual Type for the Class %s', $this->diInformation->getVirtualTypeBase($className))
+            );
+        } else {
+            $preference = $this->diInformation->getPreference($className);
             $output->writeln('');
-            $output->writeln("Virtual Types:");
-            foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
-                $output->writeln('   ' . $virtualType);
+            $output->writeln(sprintf('Preference: %s', $preference));
+            $output->writeln('');
+            $output->writeln("Constructor Parameters:");
+
+            $virtualTypes = $this->diInformation->getVirtualTypes($preference);
+            if (!empty($virtualTypes)) {
+                $output->writeln('');
+                $output->writeln("Virtual Types:");
+                foreach ($this->diInformation->getVirtualTypes($className) as $virtualType) {
+                    $output->writeln('   ' . $virtualType);
+                }
             }
+
+            $table = new Table($output);
+            $table
+                ->setHeaders(array('Name', 'Type', 'Configured Type'))
+                ->setRows($this->diInformation->getParameters($preference));
+
+            $output->writeln($table->render());
         }
+
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
