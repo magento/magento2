@@ -232,7 +232,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             'username' => 'admin2',
             'firstname' => 'new firstname',
             'lastname' => 'new lastname',
-            'email' => 'example@domain.cim',
+            'email' => 'example.domain.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ];
@@ -245,6 +245,6 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('{"error":1,"html_message":', $body);
-        $this->assertContains("'domain.cim' is not a valid hostname for email address 'example@domain.cim'", $body);
+        $this->assertContains('"example.domain.com" is not a valid email address.', $body);
     }
 }
