@@ -32,9 +32,16 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_formattedOptionValue = null;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @deprecated
+     * @see $mediaDirectory
      */
-    protected $_mediaDirectory;
+    protected $_rootDirectory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $mediaDirectory;
 
     /**
      * Core file storage database
@@ -114,7 +121,9 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->_escaper = $escaper;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->filesystem = $filesystem ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Filesystem::class);
-        $this->_mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        /** The _rootDirectory is deprecated. The field is initialized for backward compatibility */
+        $this->_rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
         $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(Json::class);
@@ -473,17 +482,17 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $quotePath = $value['quote_path'];
             $orderPath = $value['order_path'];
 
-            if (!$this->_mediaDirectory->isFile($quotePath) || !$this->_mediaDirectory->isReadable($quotePath)) {
+            if (!$this->mediaDirectory->isFile($quotePath) || !$this->mediaDirectory->isReadable($quotePath)) {
                 throw new \Exception();
             }
-            
+
             if ($this->_coreFileStorageDatabase->checkDbUsage()) {
                 $this->_coreFileStorageDatabase->copyFile(
-                    $this->_mediaDirectory->getAbsolutePath($quotePath),
-                    $this->_mediaDirectory->getAbsolutePath($orderPath)
+                    $this->mediaDirectory->getAbsolutePath($quotePath),
+                    $this->mediaDirectory->getAbsolutePath($orderPath)
                 );
             } else {
-                $this->_mediaDirectory->copyFile($quotePath, $orderPath);
+                $this->mediaDirectory->copyFile($quotePath, $orderPath);
             }
         } catch (\Exception $e) {
             return $this;
