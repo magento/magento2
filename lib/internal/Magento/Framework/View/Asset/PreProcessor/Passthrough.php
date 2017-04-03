@@ -8,6 +8,9 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\View\Asset\PreProcessorInterface;
 
+/**
+ * Class Passthrough
+ */
 class Passthrough implements PreProcessorInterface
 {
     /**
