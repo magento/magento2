@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -24,6 +26,11 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
      * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
      */
     private $analyticsTokenMock;
+
+    /**
+     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flagManagerMock;
 
     /**
      * @var ObjectManagerHelper
@@ -48,47 +55,81 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->statusProvider = $this->objectManagerHelper->getObject(
             SubscriptionStatusProvider::class,
             [
                 'systemConfig' => $this->systemConfigMock,
-                'analyticsToken' => $this->analyticsTokenMock
+                'analyticsToken' => $this->analyticsTokenMock,
+                'flagManager' => $this->flagManagerMock,
             ]
         );
     }
 
-    /**
-     * @dataProvider statusDataProvider
-     *
-     * @param bool $isSubscriptionEnabled
-     * @param bool $hasToken
-     * @param int $attempts
-     * @param string $expectedStatus
-     */
-    public function testGetStatus($isSubscriptionEnabled, $hasToken, $attempts, $expectedStatus)
+    public function testGetStatusShouldBeFailed()
     {
-        $this->analyticsTokenMock->expects($this->exactly($attempts))
+        $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
-            ->willReturn($hasToken);
+            ->willReturn(false);
         $this->systemConfigMock->expects($this->once())
             ->method('get')
             ->with('default/analytics/subscription/enabled')
-            ->willReturn($isSubscriptionEnabled);
-        $this->assertEquals($expectedStatus, $this->statusProvider->getStatus());
+            ->willReturn(true);
+
+        $this->expectFlagCounterReturn(null);
+        $this->assertEquals(SubscriptionStatusProvider::FAILED, $this->statusProvider->getStatus());
+    }
+
+    public function testGetStatusShouldBePending()
+    {
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(false);
+        $this->systemConfigMock->expects($this->once())
+            ->method('get')
+            ->with('default/analytics/subscription/enabled')
+            ->willReturn(true);
+
+        $this->expectFlagCounterReturn(45);
+        $this->assertEquals(SubscriptionStatusProvider::PENDING, $this->statusProvider->getStatus());
+    }
+
+    public function testGetStatusShouldBeEnabled()
+    {
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(true);
+        $this->systemConfigMock->expects($this->once())
+            ->method('get')
+            ->with('default/analytics/subscription/enabled')
+            ->willReturn(true);
+        $this->assertEquals(SubscriptionStatusProvider::ENABLED, $this->statusProvider->getStatus());
+    }
+
+    public function testGetStatusShouldBeDisabled()
+    {
+        $this->systemConfigMock->expects($this->once())
+            ->method('get')
+            ->with('default/analytics/subscription/enabled')
+            ->willReturn(false);
+        $this->assertEquals(SubscriptionStatusProvider::DISABLED, $this->statusProvider->getStatus());
     }
 
     /**
-     * @return array
+     * @param null|int $value
      */
-    public function statusDataProvider()
+    private function expectFlagCounterReturn($value)
     {
-        return [
-            'TestWithEnabledStatus' => [true, true, 1, "Enabled"],
-            'TestWithPendingStatus' => [true, false, 1, "Pending"],
-            'TestWithDisabledStatus' => [false, false, 0, "Disabled"],
-            'TestWithDisabledStatus2' => [false, true, 0,  "Disabled"],
-        ];
+        $this->flagManagerMock->expects($this->once())->method('getFlagData')
+            ->willReturnMap(
+                [
+                    [SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $value],
+                ]
+            );
     }
 }

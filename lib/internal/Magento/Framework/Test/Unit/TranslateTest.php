@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use \Magento\Framework\Translate;
+use Magento\Framework\Translate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

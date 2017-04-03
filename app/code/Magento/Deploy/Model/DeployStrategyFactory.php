@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,11 @@ use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class DeployStrategyFactory
+ *
+ * @deprecated since 2.2.0
+ */
 class DeployStrategyFactory
 {
     /**

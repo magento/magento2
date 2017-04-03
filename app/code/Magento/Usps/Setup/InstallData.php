@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class InstallData implements InstallDataInterface
         $installer = $setup;
         $configDataTable = $installer->getTable('core_config_data');
         $connection = $installer->getConnection();
-        
+
         $oldToNewMethodCodesMap = [
             'First-Class' => '0_FCLE',
             'First-Class Mail International Large Envelope' => 'INT_14',
@@ -67,7 +67,7 @@ class InstallData implements InstallDataInterface
             'Priority Mail International Medium Flat Rate Box' => 'INT_9',
             'Priority Mail International Large Flat Rate Box' => 'INT_11',
         ];
-        
+
         $select = $connection->select()->from(
             $configDataTable
         )->where(
@@ -75,7 +75,7 @@ class InstallData implements InstallDataInterface
             ['carriers/usps/free_method', 'carriers/usps/allowed_methods']
         );
         $oldConfigValues = $connection->fetchAll($select);
-        
+
         foreach ($oldConfigValues as $oldValue) {
             if (stripos($oldValue['path'], 'free_method') && isset($oldToNewMethodCodesMap[$oldValue['value']])) {
                 $newValue = $oldToNewMethodCodesMap[$oldValue['value']];
@@ -90,7 +90,7 @@ class InstallData implements InstallDataInterface
             } else {
                 continue;
             }
-        
+
             if ($newValue && $newValue != $oldValue['value']) {
                 $whereConfigId = $connection->quoteInto('config_id = ?', $oldValue['config_id']);
                 $connection->update($configDataTable, ['value' => $newValue], $whereConfigId);

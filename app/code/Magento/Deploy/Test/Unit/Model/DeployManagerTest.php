@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

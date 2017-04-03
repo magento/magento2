@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -24,11 +24,6 @@
                     <item name="router" xsi:type="string">admin</item>
                 </item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\App\Router">
-        <arguments>
-            <argument name="routerId" xsi:type="string">admin</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">

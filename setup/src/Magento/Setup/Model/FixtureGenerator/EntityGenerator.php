@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -181,7 +181,7 @@ class EntityGenerator
 
         $sql = [];
         foreach ($this->sqlCollector->getSql() as $pattern) {
-            list ($binds, $table) = $pattern;
+            list($binds, $table) = $pattern;
 
             if (!isset($sql[$table])) {
                 $sql[$table] = [];
