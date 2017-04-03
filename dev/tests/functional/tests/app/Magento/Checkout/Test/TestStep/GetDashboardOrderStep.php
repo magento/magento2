@@ -47,10 +47,11 @@ class GetDashboardOrderStep implements TestStepInterface
      */
     public function run()
     {
+        $dashboardOrder = [];
         if (isset($this->argumentsList)) {
             $this->dashboard->open();
             $dashboardOrder = $this->dashboard->getMainBlock()->getDashboardOrder($this->argumentsList);
-            return ['dashboardOrder' => $dashboardOrder];
         }
+        return ['dashboardOrder' => $dashboardOrder];
     }
 }

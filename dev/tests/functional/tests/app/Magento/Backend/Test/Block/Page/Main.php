@@ -29,6 +29,13 @@ class Main extends Block
     private $itemSelector = '//span[contains(text(), "%s")]/following-sibling::strong';
 
     /**
+     * Graph image selector.
+     *
+     * @var string
+     */
+    private $graphImage = '#diagram_tab_orders_content .dashboard-diagram-chart';
+
+    /**
      * Get Revenue price block.
      *
      * @return string
@@ -52,5 +59,15 @@ class Main extends Block
             $order[strtolower($argument)] = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
         }
         return $order;
+    }
+
+    /**
+     * Return visibility of graph image on admin dashboard.
+     *
+     * @return bool
+     */
+    public function isGraphImageVisible()
+    {
+        return $this->_rootElement->find($this->graphImage)->isVisible();
     }
 }

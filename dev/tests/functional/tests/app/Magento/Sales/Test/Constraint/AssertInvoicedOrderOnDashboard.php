@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Mtf\Client\Browser;
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
  * Assert invoiced order on admin dashboard.
@@ -19,25 +19,20 @@ class AssertInvoicedOrderOnDashboard extends AbstractConstraint
      * Invoiced orders quantity.
      */
     const EXPECTED_ORDERS_QTY = 1;
-    /**
-     * Graph image selector.
-     *
-     * @var string
-     */
-    private $graphImage = '#diagram_tab_orders_content .dashboard-diagram-chart';
 
     /**
      * Assert orders quantity and graph image visibility on admin dashboard.
      *
      * @param TestStepFactory $stepFactory
-     * @param Browser $browser
+     * @param Dashboard $dashboard
      * @param array $dashboardOrder
      * @param array $argumentsList
      * @return void
+     * @internal param Browser $browser
      */
     public function processAssert(
         TestStepFactory $stepFactory,
-        Browser $browser,
+        Dashboard $dashboard,
         array $dashboardOrder,
         array $argumentsList
     ) {
@@ -54,13 +49,13 @@ class AssertInvoicedOrderOnDashboard extends AbstractConstraint
         );
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $browser->find($this->graphImage)->isVisible(),
+            $dashboard->getMainBlock()->isGraphImageVisible(),
             'Graph image is not visible on admin dashboard.'
         );
     }
 
     /**
-     * Returns string representation of successful assertion
+     * Returns string representation of successful assertion.
      *
      * @return string
      */

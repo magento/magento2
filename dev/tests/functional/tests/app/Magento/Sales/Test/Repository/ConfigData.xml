@@ -24,6 +24,7 @@
                 <item name="value" xsi:type="string">Pending</item>
             </field>
         </dataset>
+
         <dataset name="enable_charts">
             <field name="admin/dashboard/enable_charts" xsi:type="array">
                 <item name="scope" xsi:type="string">admin</item>
