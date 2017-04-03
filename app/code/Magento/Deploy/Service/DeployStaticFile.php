@@ -15,9 +15,7 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
- * Class DeployStaticFile
- *
- * @api
+ * Deploy static file service
  */
 class DeployStaticFile
 {

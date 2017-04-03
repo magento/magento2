@@ -8,9 +8,7 @@ namespace Magento\Deploy\Strategy;
 use Magento\Deploy\Package\Package;
 
 /**
- * Interface StrategyInterface
- *
- * @api
+ * Deployment strategy interface
  */
 interface StrategyInterface
 {

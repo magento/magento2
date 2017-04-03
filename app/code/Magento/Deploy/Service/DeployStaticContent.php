@@ -7,15 +7,15 @@ namespace Magento\Deploy\Service;
 
 use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Deploy\Process\QueueFactory;
-use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DeployStaticContent
+ * Main service for static content deployment
  *
- * @api
+ * Aggregates services to deploy static files, static files bundles, translations and minified templates
  */
 class DeployStaticContent
 {
