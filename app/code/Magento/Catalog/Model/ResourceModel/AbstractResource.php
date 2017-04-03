@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -568,6 +568,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $attributesData = $_data[1];
         }
 
-        return $attributesData ? $attributesData : false;
+        return $attributesData === false ? false : $attributesData;
     }
 }

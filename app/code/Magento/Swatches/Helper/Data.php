@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Helper;
 
+use Magento\Catalog\Api\Data\ProductInterface as Product;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Catalog\Api\Data\ProductInterface as Product;
-use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper Data
@@ -429,7 +429,7 @@ class Data
         foreach ($swatchCollection as $item) {
             if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
                 $swatches[$item['option_id']] = $item->getData();
-            } elseif ($item['store_id'] == $currentStoreId && $item['value']) {
+            } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
                 $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
             } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
                 $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();

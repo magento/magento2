@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Store\Model\Store;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier\AdvancedInventory;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\Store;
 
 /**
  * Class AdvancedInventoryTest
@@ -37,6 +38,11 @@ class AdvancedInventoryTest extends AbstractModifierTest
      */
     protected $stockConfigurationMock;
 
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -59,6 +65,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
         $this->productMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
+        $this->serializerMock = $this->getMock(Json::class);
     }
 
     /**
@@ -71,6 +78,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
             'stockRegistry' => $this->stockRegistryMock,
             'stockConfiguration' => $this->stockConfigurationMock,
             'arrayManager' => $this->arrayManagerMock,
+            'serializer' => $this->serializerMock
         ]);
     }
 
@@ -79,14 +87,31 @@ class AdvancedInventoryTest extends AbstractModifierTest
         $this->assertNotEmpty($this->getModel()->modifyMeta(['meta_key' => 'meta_value']));
     }
 
-    public function testModifyData()
-    {
-        $modelId = 1;
-        $someData = 1;
-
+    /**
+     * @param int $modelId
+     * @param int $someData
+     * @param int|string $defaultConfigValue
+     * @param null|array $unserializedValue
+     * @param int $serializeCallCount
+     * @dataProvider modifyDataProvider
+     */
+    public function testModifyData(
+        $modelId,
+        $someData,
+        $defaultConfigValue,
+        $unserializedValue = null,
+        $serializeCallCount = 0
+    ) {
         $this->productMock->expects($this->any())->method('getId')->willReturn($modelId);
 
-        $this->stockConfigurationMock->expects($this->any())->method('getDefaultConfigValue')->willReturn("a:0:{}");
+        $this->stockConfigurationMock->expects($this->any())
+            ->method('getDefaultConfigValue')
+            ->willReturn($defaultConfigValue);
+
+        $this->serializerMock->expects($this->exactly($serializeCallCount))
+            ->method('unserialize')
+            ->with($defaultConfigValue)
+            ->willReturn($unserializedValue);
 
         $this->stockItemMock->expects($this->once())->method('getData')->willReturn(['someData']);
         $this->stockItemMock->expects($this->once())->method('getManageStock')->willReturn($someData);
@@ -108,5 +133,13 @@ class AdvancedInventoryTest extends AbstractModifierTest
             ->willReturnArgument(1);
 
         $this->assertArrayHasKey($modelId, $this->getModel()->modifyData([]));
+    }
+
+    public function modifyDataProvider()
+    {
+        return [
+            [1, 1, 1],
+            [1, 1, '{"36000":2}', ['36000' => 2], 1]
+        ];
     }
 }

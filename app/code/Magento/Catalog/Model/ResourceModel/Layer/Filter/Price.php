@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
@@ -125,10 +125,10 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // remove join with main table
         $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset(
-                $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS]
-            ) || !isset(
-                $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS]
-            )
+            $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS]
+        ) || !isset(
+            $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS]
+        )
         ) {
             return $select;
         }

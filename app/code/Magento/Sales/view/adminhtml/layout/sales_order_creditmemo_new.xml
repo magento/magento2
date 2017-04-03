@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,18 +12,18 @@
 
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create" name="sales_creditmemo_create">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Form" name="form" template="order/creditmemo/create/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="order/view/info.phtml"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Form" name="form" template="Magento_Sales::order/creditmemo/create/form.phtml">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="order/creditmemo/create/items.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="order/creditmemo/create/items/renderer/default.phtml"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="items/column/qty.phtml" group="column"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="items/column/name.phtml" group="column"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="Magento_Sales::order/creditmemo/create/items.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/creditmemo/create/items/renderer/default.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
                         <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Totalbar" name="order_totalbar" template="order/totalbar.phtml"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Totals" name="creditmemo_totals" template="order/totals.phtml">
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Adjustments" name="adjustments" template="order/creditmemo/create/totals/adjustments.phtml"/>
-                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="order/totals/tax.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Totalbar" name="order_totalbar" template="Magento_Sales::order/totalbar.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Totals" name="creditmemo_totals" template="Magento_Sales::order/totals.phtml">
+                            <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Adjustments" name="adjustments" template="Magento_Sales::order/creditmemo/create/totals/adjustments.phtml"/>
+                            <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="Magento_Sales::order/totals/tax.phtml"/>
                         </block>
                         <container name="submit_before" label="Submit Before"/>
                         <container name="submit_after" label="Submit After"/>

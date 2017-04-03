@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
@@ -146,13 +146,11 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-        } elseif (
-            $filter->getType() === FilterInterface::TYPE_TERM &&
+        } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
             in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
             $resultQuery = $this->processTermSelect($filter, $isNegation);
-        } elseif (
-            $filter->getType() === FilterInterface::TYPE_RANGE &&
+        } elseif ($filter->getType() === FilterInterface::TYPE_RANGE &&
             in_array($attribute->getBackendType(), ['decimal', 'int'], true)
         ) {
             $resultQuery = $this->processRangeNumeric($filter, $query, $attribute);

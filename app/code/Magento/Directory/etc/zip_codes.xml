@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -277,8 +277,9 @@
     </zip>
     <zip countryCode="MT">
         <codes>
-            <code id="pattern_1" active="true" example="ABC 123">^[a-zA-Z]{3}\s[0-9]{3}$</code>
-            <code id="pattern_2" active="true" example="ABC 12">^[a-zA-Z]{3}\s[0-9]{2}$</code>
+            <code id="pattern_1" active="true" example="ABC 1234">^[a-zA-Z]{3}\s[0-9]{4}$</code>
+            <code id="pattern_2" active="true" example="ABC 123">^[a-zA-Z]{3}\s[0-9]{3}$</code>
+            <code id="pattern_3" active="true" example="ABC 12">^[a-zA-Z]{3}\s[0-9]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="MH">
@@ -318,7 +319,7 @@
     </zip>
     <zip countryCode="NL">
         <codes>
-            <code id="pattern_1" active="true" example="1234 AB">^[0-9]{4}\s[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="1234 AB">^[0-9]{4}\s?[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="NO">

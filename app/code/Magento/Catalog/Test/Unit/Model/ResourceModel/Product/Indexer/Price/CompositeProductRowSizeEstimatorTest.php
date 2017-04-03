@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,18 +18,30 @@ class CompositeProductRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $rowSizeEstimatorMock;
+    private $websiteManagementMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $defaultPriceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionFactoryMock;
+
     protected function setUp()
     {
-        $this->rowSizeEstimatorMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator::class,
+        $this->websiteManagementMock = $this->getMock(
+            \Magento\Store\Api\WebsiteManagementInterface::class,
             [],
+            [],
+            '',
+            false
+        );
+        $this->collectionFactoryMock = $this->getMock(
+            \Magento\Customer\Model\ResourceModel\Group\CollectionFactory::class,
+            ['create'],
             [],
             '',
             false
@@ -41,16 +53,29 @@ class CompositeProductRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new CompositeProductRowSizeEstimator($this->defaultPriceMock, $this->rowSizeEstimatorMock);
+        $this->model = new CompositeProductRowSizeEstimator(
+            $this->defaultPriceMock,
+            $this->websiteManagementMock,
+            $this->collectionFactoryMock
+        );
     }
 
     public function testEstimateRowSize()
     {
-        $expectedResult = 2000;
+        $expectedResult = 40000000;
         $tableName = 'catalog_product_relation';
         $maxRelatedProductCount = 10;
 
-        $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(200);
+        $this->websiteManagementMock->expects($this->once())->method('getCount')->willReturn(100);
+        $collectionMock = $this->getMock(
+            \Magento\Customer\Model\ResourceModel\Group\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('getSize')->willReturn(200);
 
         $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->defaultPriceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);

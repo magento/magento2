@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Helper;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\Area;
 use Magento\Catalog\Helper\Image;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Helper to move images from tmp to catalog directory
@@ -91,7 +91,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $this->imageFactory = $imageFactory;
         $this->themeCollection = $themeCollection;
         $this->viewConfig = $configInterface;
-
     }
 
     /**
@@ -101,9 +100,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSwatchAttributeImage($swatchType, $file)
     {
-        $generationPath = $swatchType. '/' . $this->getFolderNameSize($swatchType). $file;
+        $generationPath = $swatchType . '/' . $this->getFolderNameSize($swatchType) . $file;
         $absoluteImagePath = $this->mediaDirectory
-            ->getAbsolutePath($this->getSwatchMediaPath().'/'.$generationPath);
+            ->getAbsolutePath($this->getSwatchMediaPath() . '/' . $generationPath);
         if (!file_exists($absoluteImagePath)) {
             $this->generateSwatchVariations($file);
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -252,8 +252,7 @@ abstract class EntityAbstract
         if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif (
-            /**
+        } elseif (/**
              * If makeResultFileDirectory only fails because the file is already created,
              * a competing process has generated the file, no exception should be thrown.
              */

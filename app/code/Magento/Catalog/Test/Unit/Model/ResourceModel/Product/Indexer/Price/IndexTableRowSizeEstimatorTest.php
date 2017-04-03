@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
     public function testEstimateRowSize()
     {
-        $expectedValue = 1800000;
+        $expectedValue = 2400000;
 
         $this->websiteManagementMock->expects($this->once())->method('getCount')->willReturn(100);
         $collectionMock = $this->getMock(

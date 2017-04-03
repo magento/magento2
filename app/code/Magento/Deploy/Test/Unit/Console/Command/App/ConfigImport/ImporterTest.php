@@ -1,20 +1,25 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command\App\ConfigImport;
 
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Console\Command\App\ConfigImport\QuestionPerformer;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Psr\Log\LoggerInterface as Logger;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImporterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -26,6 +31,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configImporterPoolMock;
+
+    /**
+     * @var ImporterFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $importerFactoryMock;
 
     /**
      * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -48,15 +58,25 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $outputMock;
 
     /**
+     * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $inputMock;
+
+    /**
+     * @var QuestionPerformer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $questionPerformerMock;
+
+    /**
      * @var Importer
      */
     private $importer;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
+        $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,31 +94,47 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
+        $this->inputMock = $this->getMockBuilder(InputInterface::class)
+            ->getMockForAbstractClass();
+        $this->questionPerformerMock = $this->getMockBuilder(QuestionPerformer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->importer = new Importer(
             $this->configValidatorMock,
             $this->configImporterPoolMock,
+            $this->importerFactoryMock,
             $this->deploymentConfigMock,
             $this->configHashMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->questionPerformerMock
         );
     }
 
     /**
-     * @return void
+     * @param bool $isForce
+     * @param bool $doImport
+     * @param bool $skipImport
+     * @param array $warningMessages
+     * @dataProvider importDataProvider
      */
-    public function testImport()
+    public function testImport($isForce, $doImport, $skipImport, array $warningMessages)
     {
         $configData = ['some data'];
-        $messages = ['Import has done'];
-        $expectsMessages = ['Import has done'];
+        $messages = ['The import is complete'];
+        $expectsMessages = ['The import is complete'];
+        $importerClassName = 'someImporterClassName';
+        $importers = ['someSection' => $importerClassName];
         $importerMock = $this->getMockBuilder(ImporterInterface::class)
             ->getMockForAbstractClass();
-        $importers = ['someSection' => $importerMock];
 
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
             ->willReturn($importers);
+        $this->importerFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($importerClassName)
+            ->willReturn($importerMock);
         $this->configValidatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
@@ -106,36 +142,108 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('getConfigData')
             ->with('someSection')
             ->willReturn($configData);
-        $importerMock->expects($this->once())
-            ->method('import')
-            ->with($configData)
-            ->willReturn($messages);
-        $this->configHashMock->expects($this->once())
-            ->method('regenerate');
+
+        $this->inputMock->expects($this->any())
+            ->method('getOption')
+            ->with('no-interaction')
+            ->willReturn($isForce);
+        $importerMock->expects($this->any())
+            ->method('getWarningMessages')
+            ->willReturn($warningMessages);
+        $this->questionPerformerMock->expects($this->any())
+            ->method('execute')
+            ->with($warningMessages, $this->inputMock, $this->outputMock)
+            ->willReturn($doImport);
+
         $this->loggerMock->expects($this->never())
             ->method('error');
 
-        $this->outputMock->expects($this->at(0))
-            ->method('writeln')
-            ->with('<info>Start import:</info>');
-        $this->outputMock->expects($this->at(1))
-            ->method('writeln')
-            ->with($expectsMessages);
+        if ($skipImport) {
+            $this->outputMock->expects($this->once())
+                ->method('writeln')
+                ->with('<info>Processing configurations data from configuration file...</info>');
+            $importerMock->expects($this->never())
+                ->method('import');
+            $this->configHashMock->expects($this->never())
+                ->method('regenerate');
+        } else {
+            $this->outputMock->expects($this->at(0))
+                ->method('writeln')
+                ->with('<info>Processing configurations data from configuration file...</info>');
+            $this->outputMock->expects($this->at(1))
+                ->method('writeln')
+                ->with($expectsMessages);
+            $importerMock->expects($this->once())
+                ->method('import')
+                ->with($configData)
+                ->willReturn($messages);
+            $this->configHashMock->expects($this->once())
+                ->method('regenerate');
+        }
 
-        $this->importer->import($this->outputMock);
+        $this->importer->import($this->inputMock, $this->outputMock);
     }
 
     /**
-     * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Import is failed
+     * @return array
+     */
+    public function importDataProvider()
+    {
+        return [
+            [
+                'isForce' => false,
+                'doImport' => false,
+                'skipImport' => false,
+                'warningMessages' => [],
+            ],
+            [
+                'isForce' => true,
+                'doImport' => false,
+                'skipImport' => false,
+                'warningMessages' => [],
+            ],
+            [
+                'isForce' => false,
+                'doImport' => true,
+                'skipImport' => false,
+                'warningMessages' => [],
+            ],
+            [
+                'isForce' => false,
+                'doImport' => true,
+                'skipImport' => false,
+                'warningMessages' => ['Some message'],
+            ],
+            [
+                'isForce' => false,
+                'doImport' => true,
+                'skipImport' => false,
+                'warningMessages' => [],
+            ],
+            [
+                'isForce' => false,
+                'doImport' => false,
+                'skipImport' => true,
+                'warningMessages' => ['Some message'],
+            ],
+        ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Import is failed: Some error
      */
     public function testImportWithException()
     {
-        $exception = new LocalizedException(__('Some error'));
-        $this->outputMock->expects($this->at(0))
-            ->method('writeln')
-            ->with('<info>Start import:</info>');
+        $exception = new \Exception('Some error');
+        $this->outputMock->expects($this->never())
+            ->method('writeln');
+        $this->configHashMock->expects($this->never())
+            ->method('regenerate');
+        $this->configValidatorMock->expects($this->never())
+            ->method('isValid');
+        $this->deploymentConfigMock->expects($this->never())
+            ->method('getConfigData');
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
             ->willThrowException($exception);
@@ -143,13 +251,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('error')
             ->with($exception);
 
-        $this->importer->import($this->outputMock);
+        $this->importer->import($this->inputMock, $this->outputMock);
     }
 
     /**
      * @param array $importers
      * @param bool $isValid
-     * @return void
      * @dataProvider importNothingToImportDataProvider
      */
     public function testImportNothingToImport(array $importers, $isValid)
@@ -169,12 +276,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
         $this->outputMock->expects($this->at(0))
             ->method('writeln')
-            ->with('<info>Start import:</info>');
-        $this->outputMock->expects($this->at(1))
-            ->method('writeln')
-            ->with('<info>Nothing to import</info>');
+            ->with('<info>Nothing to import.</info>');
 
-        $this->importer->import($this->outputMock);
+        $this->importer->import($this->inputMock, $this->outputMock);
     }
 
     /**

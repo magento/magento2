@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
@@ -117,19 +117,23 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                     $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
 
                     if (!empty($entityIds)) {
-                        $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
+                        // Temporary table will created if not exists
+                        $idxTableName = $this->_defaultIndexerResource->getIdxTable();
+                        $this->_emptyTable($idxTableName);
+
                         if ($indexer->getIsComposite()) {
                             $this->_copyRelationIndexData($entityIds);
                         }
                         $this->_prepareTierPriceIndex($entityIds);
+
                         // Reindex entities by id
                         $indexer->reindexEntity($entityIds);
 
                         // Sync data from temp table to index table
-                        $this->_insertFromTable(
-                            $this->_defaultIndexerResource->getIdxTable(),
-                            $this->_defaultIndexerResource->getMainTable()
-                        );
+                        $this->_insertFromTable($idxTableName, $this->_defaultIndexerResource->getMainTable());
+
+                        // Drop temporary index table
+                        $connection->dropTable($idxTableName);
                     }
                 }
             }

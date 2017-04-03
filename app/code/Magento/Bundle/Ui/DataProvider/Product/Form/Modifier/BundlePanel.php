@@ -1,21 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Framework\UrlInterface;
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
-use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Ui\Component\Container;
-use Magento\Ui\Component\DynamicRows;
-use Magento\Ui\Component\Form;
-use Magento\Ui\Component\Modal;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Container;
+use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields

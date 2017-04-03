@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
+use Magento\Store\Api\WebsiteManagementInterface;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Estimate index memory size for largest composite product in catalog.
@@ -14,9 +16,9 @@ use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
 class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
     /**
-     * @var IndexTableRowSizeEstimator
+     * Calculated memory size for one record in catalog_product_index_price table
      */
-    private $indexTableRowSizeEstimator;
+    const MEMORY_SIZE_FOR_ONE_ROW = 200;
 
     /**
      * @var DefaultPrice
@@ -24,15 +26,28 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     private $indexerResource;
 
     /**
+     * @var WebsiteManagementInterface
+     */
+    private $websiteManagement;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param DefaultPrice $indexerResource
-     * @param IndexTableRowSizeEstimator $indexTableRowSizeEstimator
+     * @param WebsiteManagementInterface $websiteManagement
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         DefaultPrice $indexerResource,
-        IndexTableRowSizeEstimator $indexTableRowSizeEstimator
+        WebsiteManagementInterface $websiteManagement,
+        CollectionFactory $collectionFactory
     ) {
         $this->indexerResource = $indexerResource;
-        $this->indexTableRowSizeEstimator = $indexTableRowSizeEstimator;
+        $this->websiteManagement = $websiteManagement;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -42,6 +57,9 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
      */
     public function estimateRowSize()
     {
+        $websitesCount = $this->websiteManagement->getCount();
+        $customerGroupCount = $this->collectionFactory->create()->getSize();
+
         $connection = $this->indexerResource->getConnection();
         $relationSelect = $connection->select();
         $relationSelect->from(
@@ -61,7 +79,10 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
          * Calculate memory size for largest composite product in database.
          *
          * $maxRelatedProductCount - maximum number of related products
+         * $websitesCount - active websites
+         * $customerGroupCount - active customer groups
+         * MEMORY_SIZE_FOR_ONE_ROW - calculated memory size for one record in catalog_product_index_price table
          */
-        return ceil($maxRelatedProductCount * $this->indexTableRowSizeEstimator->estimateRowSize());
+        return ceil($maxRelatedProductCount * $websitesCount * $customerGroupCount * self::MEMORY_SIZE_FOR_ONE_ROW);
     }
 }

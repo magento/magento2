@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
@@ -55,18 +55,27 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $configData
+     * @param string $sectionName
+     * @param array $fullConfigData
+     * @param string|null $configData
      * @param string $generatedHash
      * @param string $savedHash
      * @param bool $expectedResult
      * @return void
      * @dataProvider isValidDataProvider
      */
-    public function testIsValid($configData, $generatedHash, $savedHash, $expectedResult)
-    {
+    public function testIsValid(
+        $sectionName,
+        $fullConfigData,
+        $configData,
+        $generatedHash,
+        $savedHash,
+        $expectedResult
+    ) {
         $this->dataConfigCollectorMock->expects($this->once())
             ->method('getConfig')
-            ->willReturn($configData);
+            ->with($sectionName)
+            ->willReturn($fullConfigData);
         $this->hashGeneratorMock->expects($this->any())
             ->method('generate')
             ->with($configData)
@@ -75,7 +84,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($savedHash);
 
-        $this->assertSame($expectedResult, $this->validator->isValid());
+        $this->assertSame($expectedResult, $this->validator->isValid($sectionName));
     }
 
     /**
@@ -84,11 +93,45 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function isValidDataProvider()
     {
         return [
-            ['configData' => 'some data', 'generatedHash' => '123', 'savedHash' => '123', 'expectedResult' => true],
-            ['configData' => 'some data', 'generatedHash' => '321', 'savedHash' => '123', 'expectedResult' => false],
-            ['configData' => 'some data', 'generatedHash' => '321', 'savedHash' => null, 'expectedResult' => false],
-            ['configData' => null, 'generatedHash' => '321', 'savedHash' => '123', 'expectedResult' => true],
-            ['configData' => null, 'generatedHash' => '321', 'savedHash' => null, 'expectedResult' => true],
+            [
+                'sectionName' => null,
+                'fullConfigData' => ['section' => 'some data'],
+                'configData' => 'some data',
+                'generatedHash' => '123',
+                'savedHash' => ['section' => '123'],
+                'expectedResult' => true
+            ],
+            [
+                'sectionName' => 'section',
+                'fullConfigData' => ['section' => 'some data'],
+                'configData' => 'some data',
+                'generatedHash' => '321',
+                'savedHash' => ['section' => '123'],
+                'expectedResult' => false
+            ],
+            [
+                'sectionName' => null,
+                'fullConfigData' => ['section' => 'some data'],
+                'configData' => 'some data',
+                'generatedHash' => '321',
+                'savedHash' => [],
+                'expectedResult' => false
+            ],
+            [
+                'sectionName' => 'section',
+                'fullConfigData' => [],
+                'configData' => null,
+                'generatedHash' => '321',
+                'savedHash' => ['section' => '123'],
+                'expectedResult' => true],
+            [
+                'sectionName' => null,
+                'fullConfigData' => [],
+                'configData' => null,
+                'generatedHash' => '321',
+                'savedHash' => [],
+                'expectedResult' => true
+            ],
         ];
     }
 }

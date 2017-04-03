@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -316,9 +316,11 @@ class Calculator implements BundleCalculatorInterface
 
         foreach ($selectionPriceList as $selectionPrice) {
             ++$i;
-            $amountList[$i]['amount'] = $selectionPrice->getAmount();
-            // always honor the quantity given
-            $amountList[$i]['quantity'] = $selectionPrice->getQuantity();
+            if ($selectionPrice) {
+                $amountList[$i]['amount'] = $selectionPrice->getAmount();
+                // always honor the quantity given
+                $amountList[$i]['quantity'] = $selectionPrice->getQuantity();
+            }
         }
 
         /** @var  Store $store */

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -15,6 +15,6 @@
         <field name="id" is_required="1" />
         <field name="entity" is_required="" />
         <field name="file_format" is_required="" />
-        <field name="data_export" is_required="" />
+        <field name="data_export" is_required="" source="Magento\ImportExport\Test\Fixture\ExportData\DataExport"/>
     </fixture>
 </config>

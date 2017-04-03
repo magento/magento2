@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -49,9 +49,12 @@ class AnchorRenderer
     public function renderAnchor($activeItem, Item $menuItem, $level)
     {
         if ($level == 1 && $menuItem->getUrl() == '#') {
-            $output = '<strong class="submenu-group-title" role="presentation">'
-                . '<span>' . $this->escaper->escapeHtml(__($menuItem->getTitle())) . '</span>'
-                . '</strong>';
+            $output = '';
+            if ($menuItem->hasChildren()) {
+                $output = '<strong class="submenu-group-title" role="presentation">'
+                    . '<span>' . $this->escaper->escapeHtml(__($menuItem->getTitle())) . '</span>'
+                    . '</strong>';
+            }
         } else {
             $target = $menuItem->getTarget() ? ('target=' . $menuItem->getTarget()) : '';
             $output = '<a href="' . $menuItem->getUrl() . '" ' . $target . ' ' . $this->_renderItemAnchorTitle(

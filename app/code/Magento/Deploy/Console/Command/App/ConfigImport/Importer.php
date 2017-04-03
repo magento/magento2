@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Runs importing of config data from deployment configuration files.
@@ -20,92 +22,133 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Importer
 {
     /**
-     * The configuration data validator.
+     * The configuration data validator
      *
      * @var Validator
      */
     private $configValidator;
 
     /**
-     * Pool of all deployment configuration importers.
+     * Pool of all deployment configuration importers
      *
      * @var ImporterPool
      */
     private $configImporterPool;
 
     /**
-     * Application deployment configuration.
+     * Application deployment configuration
      *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * Hash updater of config data.
+     * Hash updater of config data
      *
      * @var Hash
      */
     private $configHash;
 
     /**
-     * Logger.
+     * Factory for creation of importer instance
+     *
+     * @var ImporterFactory
+     */
+    private $importerFactory;
+
+    /**
+     * Logger
      *
      * @var Logger
      */
     private $logger;
 
     /**
+     * Asks questions in interactive mode of cli commands.
+     *
+     * @var QuestionPerformer
+     */
+    private $questionPerformer;
+
+    /**
      * @param Validator $configValidator the manager of deployment configuration hash
      * @param ImporterPool $configImporterPool the pool of all deployment configuration importers
+     * @param ImporterFactory $importerFactory the factory for creation of importer instance
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
      * @param Hash $configHash the hash updater of config data
      * @param Logger $logger the logger
+     * @param QuestionPerformer $questionPerformer The question performer for cli command
      */
     public function __construct(
         Validator $configValidator,
         ImporterPool $configImporterPool,
+        ImporterFactory $importerFactory,
         DeploymentConfig $deploymentConfig,
         Hash $configHash,
-        Logger $logger
+        Logger $logger,
+        QuestionPerformer $questionPerformer
     ) {
         $this->configValidator = $configValidator;
         $this->configImporterPool = $configImporterPool;
+        $this->importerFactory = $importerFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->configHash = $configHash;
         $this->logger = $logger;
+        $this->questionPerformer = $questionPerformer;
     }
 
     /**
-     * Runs importing of config data from deployment configuration files.
+     * Runs importing of config data from deployment configuration files
      *
-     * @param OutputInterface $output the CLI output
+     * @param InputInterface $input The CLI input
+     * @param OutputInterface $output The CLI output
      * @return void
-     * @throws LocalizedException
+     * @throws RuntimeException is thrown when import has failed
      */
-    public function import(OutputInterface $output)
+    public function import(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>Start import:</info>');
-
         try {
             $importers = $this->configImporterPool->getImporters();
-
             if (!$importers || $this->configValidator->isValid()) {
-                $output->writeln('<info>Nothing to import</info>');
+                $output->writeln('<info>Nothing to import.</info>');
+                return;
             } else {
-                /**
-                 * @var string $namespace
-                 * @var ImporterInterface $importer
-                 */
-                foreach ($importers as $namespace => $importer) {
-                    $messages = $importer->import($this->deploymentConfig->getConfigData($namespace));
-                    $output->writeln($messages);
+                $output->writeln('<info>Processing configurations data from configuration file...</info>');
+            }
+
+            /**
+             * @var string $section
+             * @var string $importerClassName
+             */
+            foreach ($importers as $section => $importerClassName) {
+                if ($this->configValidator->isValid($section)) {
+                    continue;
                 }
 
-                $this->configHash->regenerate();
+                /** @var ImporterInterface $importer */
+                $importer = $this->importerFactory->create($importerClassName);
+                $data = (array)$this->deploymentConfig->getConfigData($section);
+                $warnings = $importer->getWarningMessages($data);
+
+                /**
+                 * The importer return some warning questions which are contained in variable $warnings.
+                 * A user should confirm import continuing if $warnings is not empty.
+                 */
+                if (
+                    !$input->getOption('no-interaction')
+                    && !empty($warnings)
+                    && !$this->questionPerformer->execute($warnings, $input, $output)
+                ) {
+                    continue;
+                }
+
+                $messages = $importer->import($data);
+                $output->writeln($messages);
+                $this->configHash->regenerate($section);
             }
-        } catch (LocalizedException $exception) {
+        } catch (\Exception $exception) {
             $this->logger->error($exception);
-            throw new LocalizedException(__('Import is failed'), $exception);
+            throw new RuntimeException(__('Import is failed: %1', $exception->getMessage()), $exception);
         }
     }
 }

@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * CatalogWidget Rule Product Condition data model
@@ -155,7 +154,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $collection->addAttributeToSelect($attribute->getAttributeCode(), 'inner');
                 break;
             default:
-                $alias = 'at_'. md5($this->getId()) . $attribute->getAttributeCode();
+                $alias = 'at_' . md5($this->getId()) . $attribute->getAttributeCode();
                 $collection->getSelect()->join(
                     [$alias => $collection->getTable('catalog_product_index_eav')],
                     "($alias.entity_id = e.entity_id) AND ($alias.store_id = $storeId)" .

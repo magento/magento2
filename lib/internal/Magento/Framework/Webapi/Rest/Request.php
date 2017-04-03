@@ -2,7 +2,7 @@
 /**
  * REST API request.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -130,7 +130,6 @@ class Request extends \Magento\Framework\Webapi\Request
             if ($this->getContent()) {
                 $this->_bodyParams = (array)$this->_getDeserializer()->deserialize((string)$this->getContent());
             }
-
         }
         return $this->_bodyParams;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
@@ -59,16 +59,22 @@ class Validator
      * If config data is empty always returns true.
      * In the other cases returns true.
      *
+     * @param string $sectionName is section name for check data of the specific section
      * @return bool
      */
-    public function isValid()
+    public function isValid($sectionName = null)
     {
-        $config = $this->dataConfigCollector->getConfig();
+        $configs = $this->dataConfigCollector->getConfig($sectionName);
+        $hashes = $this->configHash->get();
 
-        if (!$config) {
-            return true;
+        foreach ($configs as $section => $config) {
+            $savedHash = isset($hashes[$section]) ? $hashes[$section] : null;
+            $generatedHash = empty($config) && !$savedHash ? null : $this->hashGenerator->generate($config);
+            if ($generatedHash !== $savedHash) {
+                return false;
+            }
         }
 
-        return $this->hashGenerator->generate($config) === $this->configHash->get();
+        return true;
     }
 }

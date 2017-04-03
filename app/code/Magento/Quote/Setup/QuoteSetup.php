@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Setup;
@@ -94,10 +94,10 @@ class QuoteSetup extends EavSetup
     public function addAttribute($entityTypeId, $code, array $attr)
     {
         if (isset(
-                $this->_flatEntityTables[$entityTypeId]
-            ) && $this->_flatTableExist(
-                $this->_flatEntityTables[$entityTypeId]
-            )
+            $this->_flatEntityTables[$entityTypeId]
+        ) && $this->_flatTableExist(
+            $this->_flatEntityTables[$entityTypeId]
+        )
         ) {
             $this->_addFlatAttribute($this->_flatEntityTables[$entityTypeId], $code, $attr);
         } else {

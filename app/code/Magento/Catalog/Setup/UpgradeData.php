@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script
@@ -389,7 +389,6 @@ class UpgradeData implements UpgradeDataInterface
                 ['is_html_allowed_on_front' => 0],
                 $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
             );
-
     }
 
     /**
@@ -401,13 +400,14 @@ class UpgradeData implements UpgradeDataInterface
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         foreach (['price', 'cost', 'special_price'] as $attributeCode) {
             $attribute = $categorySetup->getAttribute($entityTypeId, $attributeCode);
-            $categorySetup->updateAttribute(
-                $entityTypeId,
-                $attribute['attribute_id'],
-                'is_global',
-                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
-            );
-
+            if (isset($attribute['attribute_id'])) {
+                $categorySetup->updateAttribute(
+                    $entityTypeId,
+                    $attribute['attribute_id'],
+                    'is_global',
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+                );
+            }
         }
     }
 }

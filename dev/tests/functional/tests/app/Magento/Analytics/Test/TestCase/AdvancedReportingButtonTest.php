@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\TestCase;
@@ -31,6 +31,6 @@ class AdvancedReportingButtonTest extends Injectable
     public function test(Dashboard $dashboard)
     {
         $dashboard->open();
-        $dashboard->getAdvancedReportingBlock()->click();
+        $dashboard->getReportsSectionBlock()->click();
     }
 }
