@@ -9,9 +9,7 @@ namespace Magento\Theme\Model\ResourceModel;
 use Magento\Framework\Stdlib\DateTime;
 
 /**
- * Core Design Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Design Change Resource Model
  */
 class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

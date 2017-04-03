@@ -9,9 +9,7 @@ use Magento\Framework\View\Asset;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Class PackageFile
- *
- * @api
+ * Deployment Package File class
  */
 class PackageFile extends Asset
 {
