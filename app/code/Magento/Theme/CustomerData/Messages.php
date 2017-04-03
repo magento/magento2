@@ -18,6 +18,7 @@ class Messages implements SectionSourceInterface
 {
     /**
      * Manager messages
+     *
      * @var MessageManager
      */
     protected $messageManager;
@@ -29,6 +30,7 @@ class Messages implements SectionSourceInterface
 
     /**
      * Constructor
+     * 
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
      */
@@ -41,7 +43,7 @@ class Messages implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {

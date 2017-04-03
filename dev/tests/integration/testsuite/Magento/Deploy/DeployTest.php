@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\Config\View;
 use Magento\Deploy\Config\BundleConfig;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
