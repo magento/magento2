@@ -10,6 +10,7 @@
         <variation name="LowStockProductsReportEntityTestVariation1">
             <data name="issue" xsi:type="string">MAGETWO-62279: Low stock products report doesn't work</data>
             <data name="product/dataset" xsi:type="string">low_stock_product</data>
+            <data name="configData" xsi:type="string">notify_stock_quantity_2</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid" />
         </variation>
     </testCase>
