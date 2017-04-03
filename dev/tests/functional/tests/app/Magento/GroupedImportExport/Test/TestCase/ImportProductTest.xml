@@ -6,10 +6,10 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductTest" summary="Import grouped products">
-        <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Grouped Products with Replace Behavior">
+    <testCase name="Magento\CatalogImportExport\Test\TestCase\ImportProductsTest" summary="Import grouped products">
+        <variation name="ImportProductVariation3" ticketId="MAGETWO-47720" summary="Import Grouped Product with Replace Behavior">
             <data name="import/data/import_file/entities/2" xsi:type="string">groupedProduct::withSimpleProduct</data>
-            <constraint name="Magento\GroupedImportExport\Test\Constraint\AssertGroupedImportProduct" />
+            <constraint name="Magento\GroupedImportExport\Test\Constraint\AssertImportedGroupedProducts" />
         </variation>
     </testCase>
 </config>

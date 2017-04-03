@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Scenario;
  * @group ImportExport
  * @ZephyrId MAGETWO-47724, MAGETWO-47719, MAGETWO-47720
  */
-class ImportProductTest extends Scenario
+class ImportProductsTest extends Scenario
 {
     /**
      * Run import data test.

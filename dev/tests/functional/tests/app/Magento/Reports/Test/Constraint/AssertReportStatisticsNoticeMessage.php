@@ -11,7 +11,7 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use DateTime;
 
 /**
- * Assert that message in Sales Reports Pages display correct date/time.
+ * Assert that message in Sales Reports Pages displays correct date/time.
  */
 class AssertReportStatisticsNoticeMessage extends AbstractAssertSalesReportResult
 {

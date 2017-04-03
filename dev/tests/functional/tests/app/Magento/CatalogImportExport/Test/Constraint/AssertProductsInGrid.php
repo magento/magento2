@@ -11,12 +11,12 @@ use Magento\Catalog\Test\Constraint\AssertProductInGrid;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that entities are present in products grid.
+ * Assert that products are present in products grid.
  */
-class AssertEntitiesInGrid extends AbstractConstraint
+class AssertProductsInGrid extends AbstractConstraint
 {
     /**
-     * Assert that products are presents in products grid and can be found by sku, type, status and attribute set.
+     * Assert that products are present in products grid and can be found by sku, type, status and attribute set.
      *
      * @param CatalogProductIndex $productIndex
      * @param AssertProductInGrid $assertProductInGrid
@@ -40,6 +40,6 @@ class AssertEntitiesInGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Entities are presents in products grid.';
+        return 'Products are present in products grid.';
     }
 }

@@ -6,13 +6,13 @@
 
 namespace Magento\BundleImportExport\Test\Constraint;
 
-use Magento\CatalogImportExport\Test\Constraint\AssertImportProduct;
+use Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert products data from csv import file and page are match.
+ * Assert that products data from CSV import file and data from product edit page are correct and match.
  */
-class AssertBundleImportProduct extends AssertImportProduct
+class AssertImportedBundleProducts extends AssertImportedProducts
 {
     /**
      * Product type.
@@ -40,12 +40,9 @@ class AssertBundleImportProduct extends AssertImportProduct
      * @param FixtureInterface $product
      * @return array
      */
-    protected function getPrepareProductsData(FixtureInterface $product)
+    protected function getDisplayedProductData(FixtureInterface $product)
     {
-        $productId = $this->retrieveProductBySku($product)['id'];
-        $this->catalogProductEdit->open(['id' => $productId]);
-        $productData = $this->catalogProductEdit->getProductForm()->getData($product);
-
+        $productData = $this->getDisplayedOnProductPageData($product);
         $bundleSelection = $productData['bundle_selections'][0];
         $assignedProduct = $bundleSelection['assigned_products'][0];
 
@@ -71,6 +68,6 @@ class AssertBundleImportProduct extends AssertImportProduct
      */
     public function toString()
     {
-        return 'Imported bundle products data from csv are correct.';
+        return 'Products data from CSV import file and data from product edit page are correct and match.';
     }
 }

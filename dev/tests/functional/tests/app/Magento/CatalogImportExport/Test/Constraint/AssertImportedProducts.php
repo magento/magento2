@@ -14,9 +14,9 @@ use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert products data from csv import file and page are match.
+ * Assert that products data from CSV import file and data from product edit page are correct and match.
  */
-class AssertImportProduct extends AbstractConstraint
+class AssertImportedProducts extends AbstractConstraint
 {
     /**
      * Product type.
@@ -46,7 +46,7 @@ class AssertImportProduct extends AbstractConstraint
     private $import;
 
     /**
-     * Edit page in Admin.
+     * Edit product page in Admin.
      *
      * @var CatalogProductEdit
      */
@@ -89,7 +89,7 @@ class AssertImportProduct extends AbstractConstraint
         $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
         foreach ($products as $product) {
             if ($product->getDataConfig()['type_id'] === $this->productType) {
-                $resultProductsData = $this->getPrepareProductsData($product);
+                $resultProductsData = $this->getDisplayedProductData($product);
                 $resultCsvData = $this->getResultCsv($product->getSku());
                 \PHPUnit_Framework_Assert::assertEquals(
                     $resultProductsData,
@@ -101,18 +101,30 @@ class AssertImportProduct extends AbstractConstraint
     }
 
     /**
-     * Prepare product data.
+     * Prepare displayed product data.
      *
      * @param FixtureInterface $product
      * @return array
      */
-    protected function getPrepareProductsData(FixtureInterface $product)
+    protected function getDisplayedProductData(FixtureInterface $product)
+    {
+        $productData = $this->getDisplayedOnProductPageData($product);
+
+        return $this->getResultProductsData($productData);
+    }
+
+    /**
+     * Get product data that is displayed on product edit page in Admin.
+     *
+     * @param FixtureInterface $product
+     * @return array
+     */
+    protected function getDisplayedOnProductPageData(FixtureInterface $product)
     {
         $productId = $this->retrieveProductBySku($product)['id'];
         $this->catalogProductEdit->open(['id' => $productId]);
-        $productData = $this->catalogProductEdit->getProductForm()->getData($product);
 
-        return $this->getResultProductsData($productData);
+        return $this->catalogProductEdit->getProductForm()->getData($product);
     }
 
     /**
@@ -136,8 +148,18 @@ class AssertImportProduct extends AbstractConstraint
     }
 
     /**
-     * Return prepared products data. Returned array has needed keys only(according with $this-neededKeys).
-     * Input array: ['sku' => 'simple', 'type' => 'simple', 'qty' => '100', 'weight' => '30', 'url_key' => 'simple_url']
+     * Return prepared products data. Parses multidimensional array and returns array with necessary keys
+     * only (according with $this->neededKeys).
+     * Input array: [
+     *      'sku' => 'simple',
+     *      'type' => 'simple',
+     *      'qty' => '100',
+     *      'weight' => '30',
+     *      'url_key' => 'simple_url'б,
+     *      'website_ids' => [
+     *          '1'
+     *      ]
+     * ]
      * Output array: ['type' => 'simple', 'qty' => '100']
      *
      * @param array $productsData
@@ -198,6 +220,6 @@ class AssertImportProduct extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Imported products are presents in Admin Data Grid and StoreFront';
+        return 'Products data from CSV import file and data from product edit page are correct and match.';
     }
 }

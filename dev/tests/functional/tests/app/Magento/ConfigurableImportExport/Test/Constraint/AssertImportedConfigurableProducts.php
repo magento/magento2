@@ -6,13 +6,13 @@
 
 namespace Magento\ConfigurableImportExport\Test\Constraint;
 
-use Magento\CatalogImportExport\Test\Constraint\AssertImportProduct;
+use Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert products data from csv import file and page are match.
+ * Assert that products data from CSV import file and data from product edit page are correct and match.
  */
-class AssertConfigurableImportProduct extends AssertImportProduct
+class AssertImportedConfigurableProducts extends AssertImportedProducts
 {
     /**
      * Product type.
@@ -40,11 +40,9 @@ class AssertConfigurableImportProduct extends AssertImportProduct
      * @param FixtureInterface $product
      * @return array
      */
-    protected function getPrepareProductsData(FixtureInterface $product)
+    protected function getDisplayedProductData(FixtureInterface $product)
     {
-        $productId = $this->retrieveProductBySku($product)['id'];
-        $this->catalogProductEdit->open(['id' => $productId]);
-        $productData = $this->catalogProductEdit->getProductForm()->getData($product);
+        $productData = $this->getDisplayedOnProductPageData($product);
         $attributesData = $productData['configurable_attributes_data']['matrix']['0'];
         $form = $this->catalogProductEdit->getProductForm();
         $form->openSection('variations');
@@ -64,6 +62,6 @@ class AssertConfigurableImportProduct extends AssertImportProduct
      */
     public function toString()
     {
-        return 'Imported configurable products data from csv are correct.';
+        return 'Products data from CSV import file and data from product edit page are correct and match.';
     }
 }

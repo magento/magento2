@@ -11,12 +11,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
 
 /**
- * Assert that entities are present on storefront.
+ * Assert that products are present on storefront.
  */
-class AssertEntitiesOnStorefront extends AbstractConstraint
+class AssertProductsOnStorefront extends AbstractConstraint
 {
     /**
-     * Assert that products are presents on storefront.
+     * Assert that products are present on storefront.
      *
      * @param CatalogProductView $catalogProductView
      * @param BrowserInterface $browser
@@ -45,6 +45,6 @@ class AssertEntitiesOnStorefront extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Entities are presents on storefront.';
+        return 'Products are present on storefront.';
     }
 }
