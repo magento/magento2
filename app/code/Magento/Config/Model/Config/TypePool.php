@@ -53,7 +53,7 @@ class TypePool
      * Checks if the configuration path is contained in exclude list.
      *
      * @var ExcludeList
-     * @deprecated We use it only to support backward compatibility if some configurations
+     * @deprecated We use it only to support backward compatibility. If some configurations
      *             were set to this list before, we need to read them.
      *             It will be supported for next 2 minor releases or until a major release.
      *             TypePool should be used to mark configurations with types.
@@ -77,8 +77,8 @@ class TypePool
      * Verifies that the configuration field path belongs to the specified type.
      *
      * For sensitive type, if configuration path was not found in the sensitive type pool
-     * checks if this configuration path present in ExcludeList. It used only to support backward compatibility
-     * if some configurations were set to ExcludeList before, we need to read them.
+     * checks if this configuration path present in ExcludeList. It used only to support backward compatibility.
+     * If some configurations were set to ExcludeList before, we need to read them.
      * It will be supported for next 2 minor releases or until a major release.
      *
      * @param string $path Configuration field path. For example, 'contact/email/recipient_email'
