@@ -583,8 +583,10 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
+        // @codingStandardsIgnoreStart
         $serializeData = $this->serializer->serialize($entityIdsFilter);
         $entityIdsFilterHash = md5($serializeData);
+        // @codingStandardsIgnoreEnd
 
         if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue])) {
             $linkField = $this->getLinkField();
@@ -767,7 +769,6 @@ class Category extends AbstractResource
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),

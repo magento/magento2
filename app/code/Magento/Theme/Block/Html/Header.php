@@ -8,6 +8,8 @@ namespace Magento\Theme\Block\Html;
 
 /**
  * Html page header block
+ *
+ * @api
  */
 class Header extends \Magento\Framework\View\Element\Template
 {

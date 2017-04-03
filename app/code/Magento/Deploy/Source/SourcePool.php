@@ -6,7 +6,7 @@
 namespace Magento\Deploy\Source;
 
 /**
- * Class SourcePool
+ * Configurable (via di.xml) pool of available sources of static files eligible for deployment
  */
 class SourcePool
 {

@@ -11,8 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Factory class for @see \Magento\Deploy\Process\Queue
- *
- * @api
  */
 class QueueFactory
 {

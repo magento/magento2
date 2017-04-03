@@ -203,15 +203,22 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 []
             ],
             [
-                ['frontend/Magento/luma' => ['Data of theme']],
-                [],
-                ['frontend/Magento/luma'],
                 [
-                    '<info>The following themes will be registered:</info> frontend/Magento/luma',
+                    'frontend/Magento/luma' => ['Data of theme'],
+                    'frontend/Magento/blank' => ['Data of theme']
+                ],
+                [],
+                ['frontend/Magento/luma', 'frontend/Magento/blank'],
+                [
+                    '<info>The following themes will be registered:</info>'
+                    . ' frontend/Magento/luma, frontend/Magento/blank',
                 ]
             ],
             [
-                ['frontend/Magento/luma' => ['Data of theme']],
+                [
+                    'frontend/Magento/luma' => ['Data of theme'],
+                    'frontend/Magento/blank' => ['Data of theme']
+                ],
                 [],
                 [],
                 []
@@ -226,10 +233,10 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [],
-                ['frontend/Magento/luma'],
+                ['frontend/Magento/luma', 'frontend/Magento/blank'],
                 [],
                 [
-                    '<info>The following themes will be removed:</info> frontend/Magento/luma',
+                    '<info>The following themes will be removed:</info> frontend/Magento/luma, frontend/Magento/blank',
                 ]
             ],
             [

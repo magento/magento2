@@ -9,9 +9,7 @@ use Magento\Framework\View\Template\Html\MinifierInterface;
 use Magento\Framework\App\Utility\Files;
 
 /**
- * Minify Templates
- *
- * @api
+ * Minify PHTML templates service
  */
 class MinifyTemplates
 {
