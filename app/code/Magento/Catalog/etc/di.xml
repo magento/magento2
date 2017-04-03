@@ -950,6 +950,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
         <arguments>
+            <argument name="batchRowsCount" xsi:type="number">100000</argument>
             <argument name="batchSizeManagement" xsi:type="object">Magento\Catalog\Model\Indexer\CategoryProductBatchSize</argument>
         </arguments>
     </type>

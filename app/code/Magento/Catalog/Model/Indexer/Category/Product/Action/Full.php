@@ -16,12 +16,6 @@ use Magento\Framework\App\ResourceConnection;
  */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
-
-    /**
-     * Row count to process in a batch
-     */
-    const DEFAULT_BATCH_SIZE = 100000;
-
     /**
      * @var \Magento\Framework\Indexer\BatchSizeManagementInterface
      */
@@ -47,7 +41,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @var int
      */
-    private $batchSize;
+    private $batchRowsCount;
 
     /**
      * @param ResourceConnection $resource
@@ -58,7 +52,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
-     * @param int|null $batchSize
+     * @param int|null $batchRowsCount
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -69,7 +63,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        $batchSize = null
+        $batchRowsCount = null
     ) {
         parent::__construct(
             $resource,
@@ -90,7 +84,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->indexerStateFactory = $stateFactory ?: $objectManager->get(
             \Magento\Indexer\Model\Indexer\StateFactory::class
         );
-        $this->batchSize = $batchSize ?: self::DEFAULT_BATCH_SIZE;
+        $this->batchRowsCount = $batchRowsCount;
     }
 
     /**
@@ -215,12 +209,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $columns = array_keys($this->connection->describeTable($this->getMainTmpTable()));
-        $this->batchSizeManagement->ensureBatchSize($this->connection, $this->batchSize);
+        $this->batchSizeManagement->ensureBatchSize($this->connection, $this->batchRowsCount);
         $batches = $this->batchProvider->getBatches(
             $this->connection,
             $entityMetadata->getEntityTable(),
             $entityMetadata->getIdentifierField(),
-            $this->batchSize
+            $this->batchRowsCount
         );
         foreach ($batches as $batch) {
             $this->clearTmpData();
