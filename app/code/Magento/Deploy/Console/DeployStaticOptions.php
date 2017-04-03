@@ -4,18 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Deploy\Console\Command;
+namespace Magento\Deploy\Console;
 
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Class DeployStaticOptions
+ * Static Content Deployment Options helper
  *
  * This class contains the list options and their related constants,
- * which must be used to refer to static content deployment CLI commands arguments.
- *
- * @api
+ * which can be used for static content deployment CLI command
  */
 class DeployStaticOptions
 {
@@ -132,9 +130,18 @@ class DeployStaticOptions
      * Deploy static command options list
      *
      * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptionsList()
+    {
+        return array_merge($this->getBasicOptions(), $this->getSkipOptions());
+    }
+
+    /**
+     * Basic options
+     *
+     * @return array
+     */
+    private function getBasicOptions()
     {
         return [
             new InputOption(
@@ -143,6 +150,87 @@ class DeployStaticOptions
                 InputOption::VALUE_NONE,
                 'Deploy files in any mode.'
             ),
+            new InputOption(
+                self::STRATEGY,
+                '-s',
+                InputOption::VALUE_OPTIONAL,
+                'Deploy files using specified strategy.',
+                'quick'
+            ),
+            new InputOption(
+                self::AREA,
+                '-a',
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Generate files only for the specified areas.',
+                ['all']
+            ),
+            new InputOption(
+                self::EXCLUDE_AREA,
+                null,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Do not generate files for the specified areas.',
+                ['none']
+            ),
+            new InputOption(
+                self::THEME,
+                '-t',
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Generate static view files for only the specified themes.',
+                ['all']
+            ),
+            new InputOption(
+                self::EXCLUDE_THEME,
+                null,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Do not generate files for the specified themes.',
+                ['none']
+            ),
+            new InputOption(
+                self::LANGUAGE,
+                '-l',
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Generate files only for the specified languages.',
+                ['all']
+            ),
+            new InputOption(
+                self::EXCLUDE_LANGUAGE,
+                null,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Do not generate files for the specified languages.',
+                ['none']
+            ),
+            new InputOption(
+                self::JOBS_AMOUNT,
+                '-j',
+                InputOption::VALUE_OPTIONAL,
+                'Enable parallel processing using the specified number of jobs.',
+                self::DEFAULT_JOBS_AMOUNT
+            ),
+            new InputOption(
+                self::SYMLINK_LOCALE,
+                null,
+                InputOption::VALUE_NONE,
+                'Create symlinks for the files of those locales, which are passed for deployment, '
+                . 'but have no customizations'
+            ),
+            new InputArgument(
+                self::LANGUAGES_ARGUMENT,
+                InputArgument::IS_ARRAY,
+                'Space-separated list of ISO-636 language codes for which to output static view files.'
+            ),
+        ];
+    }
+
+    /**
+     * Additional options
+     *
+     * Used to re-deploy specific types of static files
+     *
+     * @return array
+     */
+    private function getSkipOptions()
+    {
+        return [
             new InputOption(
                 self::NO_JAVASCRIPT,
                 null,
@@ -190,75 +278,7 @@ class DeployStaticOptions
                 null,
                 InputOption::VALUE_NONE,
                 'Do not minify HTML files.'
-            ),
-            new InputOption(
-                self::THEME,
-                '-t',
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Generate static view files for only the specified themes.',
-                ['all']
-            ),
-            new InputOption(
-                self::EXCLUDE_THEME,
-                null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Do not generate files for the specified themes.',
-                ['none']
-            ),
-            new InputOption(
-                self::LANGUAGE,
-                '-l',
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Generate files only for the specified languages.',
-                ['all']
-            ),
-            new InputOption(
-                self::EXCLUDE_LANGUAGE,
-                null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Do not generate files for the specified languages.',
-                ['none']
-            ),
-            new InputOption(
-                self::AREA,
-                '-a',
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Generate files only for the specified areas.',
-                ['all']
-            ),
-            new InputOption(
-                self::EXCLUDE_AREA,
-                null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Do not generate files for the specified areas.',
-                ['none']
-            ),
-            new InputOption(
-                self::JOBS_AMOUNT,
-                '-j',
-                InputOption::VALUE_OPTIONAL,
-                'Enable parallel processing using the specified number of jobs.',
-                self::DEFAULT_JOBS_AMOUNT
-            ),
-            new InputOption(
-                self::SYMLINK_LOCALE,
-                null,
-                InputOption::VALUE_NONE,
-                'Create symlinks for the files of those locales, which are passed for deployment, '
-                . 'but have no customizations'
-            ),
-            new InputOption(
-                self::STRATEGY,
-                '-s',
-                InputOption::VALUE_OPTIONAL,
-                'Deploy files using specified strategy.',
-                'quick'
-            ),
-            new InputArgument(
-                self::LANGUAGES_ARGUMENT,
-                InputArgument::IS_ARRAY,
-                'Space-separated list of ISO-636 language codes for which to output static view files.'
-            ),
+            )
         ];
     }
 }
