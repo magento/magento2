@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,16 +9,22 @@ namespace Magento\Payment\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Model\Method\AbstractMethod;
 
+/**
+ * Methods List service class.
+ *
+ * @api
+ */
 class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @deprecated
+     * @deprecated Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
+     * @deprecated Do not use this property in case of inheritance.
      */
     protected $methodSpecificationFactory;
 
@@ -47,7 +53,6 @@ class MethodList
     /**
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
-     * @api
      */
     public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
@@ -90,7 +95,6 @@ class MethodList
      * Get payment method list.
      *
      * @return \Magento\Payment\Api\PaymentMethodListInterface
-     * @deprecated
      */
     private function getPaymentMethodList()
     {
@@ -106,7 +110,6 @@ class MethodList
      * Get payment method instance factory.
      *
      * @return \Magento\Payment\Model\Method\InstanceFactory
-     * @deprecated
      */
     private function getPaymentMethodInstanceFactory()
     {

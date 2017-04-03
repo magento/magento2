@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -337,7 +337,7 @@ abstract class AbstractAction
         $field,
         $range = self::RANGE_CATEGORY_STEP
     ) {
-        if($this->isRangingNeeded()) {
+        if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,
                 $select,

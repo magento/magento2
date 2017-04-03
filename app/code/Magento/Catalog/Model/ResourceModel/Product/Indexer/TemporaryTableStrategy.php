@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
  */
 class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\StrategyInterface
 {
+    /**
+     * Suffix for new temporary table
+     */
     const TEMP_SUFFIX = '_temp';
 
     /**
@@ -31,7 +34,7 @@ class TemporaryTableStrategy implements \Magento\Framework\Indexer\Table\Strateg
      * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
-        \Magento\Framework\Indexer\Table\Strategy $strategy,
+        \Magento\Framework\Indexer\Table\StrategyInterface $strategy,
         \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->strategy = $strategy;

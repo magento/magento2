@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Ui\Component\Listing\Column\Scope;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\System\Store as SystemStore;
 
 /**

@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,9 +15,20 @@
     <div class="modal-inner-wrap"
          data-role="focusable-scope">
         <header class="modal-header">
-            <% if(data.title){ %>
+            <% if(data.title || data.subTitle){ %>
             <h1 class="modal-title"
-                data-role="title"><%= data.title %></h1>
+                data-role="title">
+                <% if(data.title){ %>
+                    <%= data.title %>
+                <% } %>
+
+                <% if(data.subTitle){ %>
+                <span class="modal-subtitle"
+                      data-role="subtitle">
+                    <%= data.subTitle %>
+                </span>
+                <% } %>
+            </h1>
             <% } %>
             <button
                 class="action-close"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@
 
 namespace Magento\Framework;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 
 /**
@@ -186,6 +188,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $hostChecker;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
@@ -199,6 +206,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $scopeType
      * @param array $data
      * @param HostChecker|null $hostChecker
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -214,7 +222,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor,
         $scopeType,
         array $data = [],
-        HostChecker $hostChecker = null
+        HostChecker $hostChecker = null,
+        Json $serializer = null
     ) {
         $this->_request = $request;
         $this->_routeConfig = $routeConfig;
@@ -229,6 +238,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_scopeType = $scopeType;
         $this->hostChecker = $hostChecker ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(HostChecker::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($data);
     }
 
@@ -851,12 +861,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             );
         }
 
-        $cashedParams = $routeParams;
+        $cachedParams = $routeParams;
         if ($isArray) {
-            ksort($cashedParams);
+            ksort($cachedParams);
         }
 
-        $cacheKey = md5($routePath . serialize($cashedParams));
+        $cacheKey = sha1($routePath . $this->serializer->serialize($cachedParams));
         if (!isset($this->cacheUrl[$cacheKey])) {
             $this->cacheUrl[$cacheKey] = $this->getUrlModifier()->execute(
                 $this->createUrl($routePath, $routeParams)

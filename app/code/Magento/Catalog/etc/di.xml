@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -919,7 +919,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
             <argument name="batchRowsCount" xsi:type="array">
-                <item name="default" xsi:type="number">200000</item>
+                <item name="default" xsi:type="number">5000</item>
             </argument>
             <argument name="estimators" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Model\Indexer\Price\BatchSizeManagement</item>
@@ -980,14 +980,12 @@
             <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy" shared="false" />
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy" shared="false">
         <arguments>
-            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
-            <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="strategy" xsi:type="object">Magento\Framework\Indexer\Table\Strategy</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice">
         <arguments>
             <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>

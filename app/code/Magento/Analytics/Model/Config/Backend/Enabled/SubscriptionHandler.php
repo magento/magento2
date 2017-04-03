@@ -1,19 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
+use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\FlagManager;
-use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Framework\App\Config\Value;
 
 /**
- * Add additional handling on config value change.
+ * Class for processing of activation/deactivation MBI subscription.
  */
 class SubscriptionHandler
 {
@@ -81,36 +80,18 @@ class SubscriptionHandler
     }
 
     /**
-     * Performs change subscription environment on config value change.
+     * Processing of activation MBI subscription.
      *
-     * Activate process of subscription handling
-     * if subscription was activated and Analytics token has not been received
-     * or interrupt subscription handling.
-     *
-     * @param Value $configValue
+     * Activate process of subscription handling if Analytics token is not received.
      *
      * @return bool
      */
-    public function process(Value $configValue)
+    public function processEnabled()
     {
-        if (!$configValue->isValueChanged()) {
-            return true;
-        }
-
-        $enabled = $configValue->getData('value');
-
-        if (!$enabled) {
-            $this->disableCollectionData();
-        }
-
         if (!$this->analyticsToken->isTokenExist()) {
-            if ($enabled) {
-                $this->setCronSchedule();
-                $this->setAttemptsFlag();
-                $this->notificationTime->unsetLastTimeNotificationValue();
-            } else {
-                $this->unsetAttemptsFlag();
-            }
+            $this->setCronSchedule();
+            $this->setAttemptsFlag();
+            $this->notificationTime->unsetLastTimeNotificationValue();
         }
 
         return true;
@@ -147,6 +128,25 @@ class SubscriptionHandler
     {
         return $this->flagManager
             ->saveFlag(self::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue);
+    }
+
+    /**
+     * Processing of deactivation MBI subscription.
+     *
+     * Disable data collection
+     * and interrupt subscription handling if Analytics token is not received.
+     *
+     * @return bool
+     */
+    public function processDisabled()
+    {
+        $this->disableCollectionData();
+
+        if (!$this->analyticsToken->isTokenExist()) {
+            $this->unsetAttemptsFlag();
+        }
+
+        return true;
     }
 
     /**

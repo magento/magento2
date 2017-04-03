@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
 
-use Magento\Framework\AppInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Profiler;
 
 /**
  * A bootstrap of Magento application
@@ -180,7 +178,7 @@ class Bootstrap
         $extraDrivers = [];
         if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS])) {
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
-        };
+        }
         return new DriverPool($extraDrivers);
     }
 

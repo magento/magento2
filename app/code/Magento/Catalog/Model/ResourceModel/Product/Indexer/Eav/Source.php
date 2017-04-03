@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
@@ -15,8 +15,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
  */
 class Source extends AbstractEav
 {
-    const TRANSIT_PREFIX = 'transit_';
-
     /**
      * Catalog resource helper
      *
@@ -362,46 +360,5 @@ class Source extends AbstractEav
         }
 
         $this->_saveIndexData($data);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _prepareRelationIndex($parentIds = null)
-    {
-        $connection = $this->getConnection();
-        $idxTable = $this->getIdxTable();
-
-        if (!$this->tableStrategy->getUseIdxTable()) {
-            $additionalIdxTable = $connection->getTableName(self::TRANSIT_PREFIX . $this->getIdxTable());
-            $connection->createTemporaryTableLike($additionalIdxTable, $idxTable);
-
-            $query = $connection->insertFromSelect(
-                $this->_prepareRelationIndexSelect($parentIds),
-                $additionalIdxTable,
-                []
-            );
-            $connection->query($query);
-
-            $select = $connection->select()->from($additionalIdxTable);
-            $query = $connection->insertFromSelect(
-                $select,
-                $idxTable,
-                [],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
-            );
-            $connection->query($query);
-
-            $connection->dropTemporaryTable($additionalIdxTable);
-        } else {
-            $query = $connection->insertFromSelect(
-                $this->_prepareRelationIndexSelect($parentIds),
-                $idxTable,
-                [],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
-            );
-            $connection->query($query);
-        }
-        return $this;
     }
 }
