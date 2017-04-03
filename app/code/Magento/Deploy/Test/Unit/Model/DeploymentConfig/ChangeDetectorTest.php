@@ -5,12 +5,12 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Deploy\Model\DeploymentConfig\DataCollector;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ChangeDetectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Hash|\PHPUnit_Framework_MockObject_MockObject
@@ -28,9 +28,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     private $dataConfigCollectorMock;
 
     /**
-     * @var Validator
+     * @var ChangeDetector
      */
-    private $validator;
+    private $changeDetector;
 
     /**
      * @return void
@@ -47,7 +47,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validator = new Validator(
+        $this->changeDetector = new ChangeDetector(
             $this->configHashMock,
             $this->hashGeneratorMock,
             $this->dataConfigCollectorMock
@@ -62,9 +62,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @param string $savedHash
      * @param bool $expectedResult
      * @return void
-     * @dataProvider isValidDataProvider
+     * @dataProvider hasChangesDataProvider
      */
-    public function testIsValid(
+    public function testHasChanges(
         $sectionName,
         $fullConfigData,
         $configData,
@@ -84,13 +84,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($savedHash);
 
-        $this->assertSame($expectedResult, $this->validator->isValid($sectionName));
+        $this->assertSame($expectedResult, $this->changeDetector->hasChanges($sectionName));
     }
 
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public function hasChangesDataProvider()
     {
         return [
             [
@@ -99,7 +99,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'configData' => 'some data',
                 'generatedHash' => '123',
                 'savedHash' => ['section' => '123'],
-                'expectedResult' => true
+                'expectedResult' => false
             ],
             [
                 'sectionName' => 'section',
@@ -107,7 +107,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'configData' => 'some data',
                 'generatedHash' => '321',
                 'savedHash' => ['section' => '123'],
-                'expectedResult' => false
+                'expectedResult' => true
             ],
             [
                 'sectionName' => null,
@@ -115,7 +115,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'configData' => 'some data',
                 'generatedHash' => '321',
                 'savedHash' => [],
-                'expectedResult' => false
+                'expectedResult' => true
             ],
             [
                 'sectionName' => 'section',
@@ -123,14 +123,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'configData' => null,
                 'generatedHash' => '321',
                 'savedHash' => ['section' => '123'],
-                'expectedResult' => true],
+                'expectedResult' => false
+            ],
             [
                 'sectionName' => null,
                 'fullConfigData' => [],
                 'configData' => null,
                 'generatedHash' => '321',
                 'savedHash' => [],
-                'expectedResult' => true
+                'expectedResult' => false
             ],
         ];
     }
