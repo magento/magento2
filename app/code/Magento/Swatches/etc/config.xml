@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,6 +10,7 @@
         <catalog>
             <frontend>
                 <swatches_per_product>16</swatches_per_product>
+                <show_swatches_in_product_list>1</show_swatches_in_product_list>
             </frontend>
         </catalog>
         <general>

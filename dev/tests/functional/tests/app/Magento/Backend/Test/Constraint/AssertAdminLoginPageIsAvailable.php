@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that AdminAuthLogin page is present as the result of an expired admin session.

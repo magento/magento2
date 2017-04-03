@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Framework\App\CacheInterface;
-use Magento\Store\Model\Config\Importer;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Store\Model\Config\Importer;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

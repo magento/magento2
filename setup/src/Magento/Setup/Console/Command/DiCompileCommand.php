@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -284,9 +284,6 @@ class DiCompileCommand extends Command
                             'InterceptionPreferencesResolving' =>
                                 ['instance' =>
                                     \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
-                            'ArgumentsSerialization' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization::class],
                         ]
                     ]
                 ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [

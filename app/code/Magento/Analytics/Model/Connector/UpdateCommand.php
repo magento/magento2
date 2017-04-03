@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\FlagManager;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
-use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Store;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
+use Magento\Config\Model\Config;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class UpdateCommand

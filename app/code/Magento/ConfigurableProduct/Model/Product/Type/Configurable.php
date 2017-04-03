@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Framework\App\ObjectManager;
@@ -164,6 +165,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $customerSession;
 
     /**
+     * @var ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -184,6 +190,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param ProductInterfaceFactory $productFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -206,7 +213,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Cache\FrontendInterface $cache = null,
         \Magento\Customer\Model\Session $customerSession = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ProductInterfaceFactory $productFactory = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -218,6 +226,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->cache = $cache;
         $this->customerSession = $customerSession;
+        $this->productFactory = $productFactory ?: ObjectManager::getInstance()
+            ->get(ProductInterfaceFactory::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -529,15 +539,16 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ]
                 )
             );
-            $collection = $this->getUsedProductCollection($product);
             $data = $this->serializer->unserialize($this->getCache()->load($key));
             if (!empty($data)) {
                 $usedProducts = [];
                 foreach ($data as $item) {
-                    $productItem = $collection->getNewEmptyItem()->setData($item);
+                    $productItem = $this->productFactory->create();
+                    $productItem->setData($item);
                     $usedProducts[] = $productItem;
                 }
             } else {
+                $collection = $this->getUsedProductCollection($product);
                 $collection
                     ->setFlag('has_stock_status_filter', true)
                     ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())

@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Config;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
-use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory;
-use Magento\Theme\Model\ResourceModel\Theme\Data\Collection as ThemeDbCollection;
-use Magento\Theme\Model\Theme\Registration;
-use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\ResourceModel\Theme as ThemeResourceModel;
+use Magento\Theme\Model\ResourceModel\Theme\Data\Collection as ThemeDbCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory;
+use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
+use Magento\Theme\Model\Theme\Data;
+use Magento\Theme\Model\Theme\Registration;
 
 /**
  * Imports themes from configurations files.
@@ -136,11 +136,11 @@ class Importer implements ImporterInterface
         $messages = [];
 
         if ($newThemes) {
-            $messages[] = '<info>The following themes will be registered:</info> ' . implode(PHP_EOL, $newThemes);
+            $messages[] = '<info>The following themes will be registered:</info> ' . implode(', ', $newThemes);
         }
 
         if ($toBeRemoved) {
-            $messages[] = '<info>The following themes will be removed:</info> ' . implode(PHP_EOL, $toBeRemoved);
+            $messages[] = '<info>The following themes will be removed:</info> ' . implode(', ', $toBeRemoved);
         }
 
         return $messages;

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -93,7 +94,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $themeConfig = $this->getMockBuilder(
             \Magento\Framework\Config\Theme::class
         )->disableOriginalConstructor()->getMock();
-        $theme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)->disableOriginalConstructor()->getMock();
+        $theme = $this->getMockBuilder(Theme::class)->disableOriginalConstructor()->getMock();
         $parentTheme = ['parentThemeCode'];
         $parentThemePath = 'frontend/parent/theme';
 
@@ -124,7 +125,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($themeConfig);
         $this->entityFactory->expects($this->any())
             ->method('create')
-            ->with(\Magento\Theme\Model\Theme::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
         $themeConfig->expects($this->once())
             ->method('getMedia')

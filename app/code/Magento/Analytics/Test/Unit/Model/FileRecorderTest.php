@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
@@ -136,7 +136,7 @@ class FileRecorderTest extends \PHPUnit_Framework_TestCase
 
         $hashLength = 64;
         $fileRelativePathPattern = '#' . preg_quote($this->fileSubdirectoryPath, '#')
-            . '.{' . $hashLength . '}/' . preg_quote($this->encodedFileName, '#') .'#';
+            . '.{' . $hashLength . '}/' . preg_quote($this->encodedFileName, '#') . '#';
         $this->directoryMock
             ->expects($this->once())
             ->method('writeFile')
