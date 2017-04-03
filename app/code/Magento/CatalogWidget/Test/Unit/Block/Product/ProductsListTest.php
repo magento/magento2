@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogWidget\Test\Unit\Block\Product;
 
-use \Magento\CatalogWidget\Block\Product\ProductsList;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;
+
+use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ProductsListTest
@@ -93,7 +93,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
         $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
         $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);

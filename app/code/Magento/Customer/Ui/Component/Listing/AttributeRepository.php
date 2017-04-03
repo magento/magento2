@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component\Listing;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Api\CustomerMetadataManagementInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataManagementInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
 /**
- * Class SimpleCollector collects configuration value from user input.
+ * Class SimpleCollector collects configuration value from user input
  */
 class SimpleCollector implements CollectorInterface
 {
@@ -42,36 +42,35 @@ class SimpleCollector implements CollectorInterface
     }
 
     /**
-     * Collects single configuration value from user input.
-     * For example, this method will return
+     * Collects single configuration value from user input
      *
+     * For example, this method will return
      * ```php
      * ['some/configuration/path' => 'someValue']
      * ```
-     *
      * {@inheritdoc}
      */
     public function getValues(InputInterface $input, OutputInterface $output, array $configPaths)
     {
         $inputPath = $input->getArgument(SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH);
         $configPathQuestion = $this->getConfigPathQuestion($configPaths);
-        $configPath = $inputPath === null ?
-            $this->questionHelper->ask($input, $output, $configPathQuestion) :
-            $inputPath;
+        $configPath = ($inputPath === null)
+            ? $this->questionHelper->ask($input, $output, $configPathQuestion)
+            : $inputPath;
 
         $this->validatePath($configPath, $configPaths);
 
         $inputValue = $input->getArgument(SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE);
         $configValueQuestion = $this->getConfigValueQuestion();
-        $configValue = $inputValue === null ?
-            $this->questionHelper->ask($input, $output, $configValueQuestion) :
-            $inputValue;
+        $configValue = $inputValue === null
+            ? $this->questionHelper->ask($input, $output, $configValueQuestion)
+            : $inputValue;
 
         return [$configPath => $configValue];
     }
 
     /**
-     * Get Question to fill configuration path with autocompletion in interactive mode.
+     * Get Question to fill configuration path with autocompletion in interactive mode
      *
      * @param array $configPaths
      * @return Question
@@ -92,7 +91,7 @@ class SimpleCollector implements CollectorInterface
     }
 
     /**
-     * Get Question to fill configuration value in interactive mode.
+     * Get Question to fill configuration value in interactive mode
      *
      * @return Question
      */
@@ -113,12 +112,12 @@ class SimpleCollector implements CollectorInterface
     }
 
     /**
-     * Check if entered configuration path is valid, throw LocalizedException otherwise.
+     * Check if entered configuration path is valid, throw LocalizedException otherwise
      *
      * @param string $configPath Path that should be validated.
      * @param array $configPaths List of allowed paths.
      * @return void
-     * @throws LocalizedException If config path not exist in allowed config paths.
+     * @throws LocalizedException If config path not exist in allowed config paths
      */
     private function validatePath($configPath, array $configPaths)
     {

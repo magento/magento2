@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use Magento\Framework\Config\Dom;
-use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\Module\Dir\Reader as DirectoryReader;
-use \Magento\Framework\Config\ValidationStateInterface;
+use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Class DomMerger

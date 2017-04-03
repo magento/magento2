@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -9,6 +9,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Payment information model
+ *
+ * @api
  */
 class Info extends AbstractExtensibleModel implements InfoInterface
 {
