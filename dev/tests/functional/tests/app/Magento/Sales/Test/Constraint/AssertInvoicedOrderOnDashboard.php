@@ -28,7 +28,6 @@ class AssertInvoicedOrderOnDashboard extends AbstractConstraint
      * @param array $dashboardOrder
      * @param array $argumentsList
      * @return void
-     * @internal param Browser $browser
      */
     public function processAssert(
         TestStepFactory $stepFactory,
