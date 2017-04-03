@@ -249,6 +249,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * @deprecated
      * @return string
      */
     public function getHeader()
