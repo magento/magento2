@@ -42,7 +42,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     private $listeners = [];
 
     /**
-     * List of controllers which should be skipped from auth check
+     * List of controllers and their actions which should be skipped from auth check
      *
      * @var array
      */
