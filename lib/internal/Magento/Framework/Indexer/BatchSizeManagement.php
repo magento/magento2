@@ -17,13 +17,21 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
     private $rowSizeEstimator;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * CompositeProductBatchSizeCalculator constructor.
      * @param \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface $rowSizeEstimator
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface $rowSizeEstimator
+        \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface $rowSizeEstimator,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->rowSizeEstimator = $rowSizeEstimator;
+        $this->logger = $logger;
     }
 
     /**
@@ -35,9 +43,18 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
 
         $maxHeapTableSize = $connection->fetchOne('SELECT @@max_heap_table_size;');
         $tmpTableSize = $connection->fetchOne('SELECT @@tmp_table_size;');
+        $bufferPoolSize = $connection->fetchOne('SELECT @@innodb_buffer_pool_size;');
         $maxMemoryTableSize = min($maxHeapTableSize, $tmpTableSize);
 
         $size = (int) ($rowMemory * $batchSize);
+
+        // Log warning if allocated memory for temp table greater than 20% of innodb_buffer_pool_size
+        if ($size > $bufferPoolSize * .2) {
+            $this->logger->warning(new \Magento\Framework\Phrase(
+                'Memory size allocated for temporary table is more than 20% innodb_buffer_pool_size. ' .
+                'Please update innodb_buffer_pool_size or decrease batch size value.'
+            ));
+        }
 
         if ($maxMemoryTableSize < $size) {
             $connection->query('SET SESSION tmp_table_size = ' . $size . ';');

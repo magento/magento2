@@ -16,6 +16,11 @@ use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
     /**
+     * Calculated memory size for one record in catalog_product_index_price table
+     */
+    const MEMORY_SIZE_FOR_ONE_ROW = 200;
+
+    /**
      * @var DefaultPrice
      */
     private $indexerResource;
@@ -76,8 +81,8 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
          * $maxRelatedProductCount - maximum number of related products
          * $websitesCount - active websites
          * $customerGroupCount - active customer groups
-         * 200 - calculated memory size for one record in catalog_product_index_price table
+         * MEMORY_SIZE_FOR_ONE_ROW - calculated memory size for one record in catalog_product_index_price table
          */
-        return ceil($maxRelatedProductCount * $websitesCount * $customerGroupCount * 200);
+        return ceil($maxRelatedProductCount * $websitesCount * $customerGroupCount * self::MEMORY_SIZE_FOR_ONE_ROW);
     }
 }

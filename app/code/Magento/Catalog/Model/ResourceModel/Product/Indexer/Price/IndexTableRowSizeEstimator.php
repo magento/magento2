@@ -13,6 +13,11 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface
 {
     /**
+     * Calculated memory size for one record in catalog_product_index_price table
+     */
+    const MEMORY_SIZE_FOR_ONE_ROW = 120;
+
+    /**
      * @var \Magento\Store\Api\WebsiteManagementInterface
      */
     private $websiteManagement;
@@ -51,8 +56,8 @@ class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTabl
          *
          * $websitesCount - active websites
          * $customerGroupCount - active customer groups
-         * 120 - calculated memory size for one record in catalog_product_index_price table
+         * MEMORY_SIZE_FOR_ONE_ROW - calculated memory size for one record in catalog_product_index_price table
          */
-        return ceil($websitesCount * $customerGroupCount * 120);
+        return ceil($websitesCount * $customerGroupCount * self::MEMORY_SIZE_FOR_ONE_ROW);
     }
 }
