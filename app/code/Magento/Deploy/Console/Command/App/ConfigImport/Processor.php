@@ -8,56 +8,57 @@ namespace Magento\Deploy\Console\Command\App\ConfigImport;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
+use Magento\Framework\Console\QuestionPerformer\YesNo;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * Runs importing of config data from deployment configuration files.
+ * Runs process of importing config data from deployment configuration files.
  */
-class Importer
+class Processor
 {
     /**
-     * The configuration data validator
+     * Configuration data changes detector.
      *
-     * @var Validator
+     * @var ChangeDetector
      */
-    private $configValidator;
+    private $changeDetector;
 
     /**
-     * Pool of all deployment configuration importers
+     * Pool of all deployment configuration importers.
      *
      * @var ImporterPool
      */
     private $configImporterPool;
 
     /**
-     * Application deployment configuration
+     * Application deployment configuration.
      *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * Hash updater of config data
+     * Hash updater of config data.
      *
      * @var Hash
      */
     private $configHash;
 
     /**
-     * Factory for creation of importer instance
+     * Factory for creation of importer instance.
      *
      * @var ImporterFactory
      */
     private $importerFactory;
 
     /**
-     * Logger
+     * Logger.
      *
      * @var Logger
      */
@@ -66,29 +67,29 @@ class Importer
     /**
      * Asks questions in interactive mode of cli commands.
      *
-     * @var QuestionPerformer
+     * @var YesNo
      */
     private $questionPerformer;
 
     /**
-     * @param Validator $configValidator the manager of deployment configuration hash
+     * @param ChangeDetector $changeDetector configuration data changes detector
      * @param ImporterPool $configImporterPool the pool of all deployment configuration importers
      * @param ImporterFactory $importerFactory the factory for creation of importer instance
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
      * @param Hash $configHash the hash updater of config data
      * @param Logger $logger the logger
-     * @param QuestionPerformer $questionPerformer The question performer for cli command
+     * @param YesNo $questionPerformer The question performer for cli command
      */
     public function __construct(
-        Validator $configValidator,
+        ChangeDetector $changeDetector,
         ImporterPool $configImporterPool,
         ImporterFactory $importerFactory,
         DeploymentConfig $deploymentConfig,
         Hash $configHash,
         Logger $logger,
-        QuestionPerformer $questionPerformer
+        YesNo $questionPerformer
     ) {
-        $this->configValidator = $configValidator;
+        $this->changeDetector = $changeDetector;
         $this->configImporterPool = $configImporterPool;
         $this->importerFactory = $importerFactory;
         $this->deploymentConfig = $deploymentConfig;
@@ -98,18 +99,18 @@ class Importer
     }
 
     /**
-     * Runs importing of config data from deployment configuration files
+     * Runs importing of config data from deployment configuration files.
      *
      * @param InputInterface $input The CLI input
      * @param OutputInterface $output The CLI output
      * @return void
      * @throws RuntimeException is thrown when import has failed
      */
-    public function import(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             $importers = $this->configImporterPool->getImporters();
-            if (!$importers || $this->configValidator->isValid()) {
+            if (!$importers || !$this->changeDetector->hasChanges()) {
                 $output->writeln('<info>Nothing to import.</info>');
                 return;
             } else {
@@ -121,7 +122,7 @@ class Importer
              * @var string $importerClassName
              */
             foreach ($importers as $section => $importerClassName) {
-                if ($this->configValidator->isValid($section)) {
+                if (!$this->changeDetector->hasChanges($section)) {
                     continue;
                 }
 
@@ -129,16 +130,13 @@ class Importer
                 $importer = $this->importerFactory->create($importerClassName);
                 $data = (array)$this->deploymentConfig->getConfigData($section);
                 $warnings = $importer->getWarningMessages($data);
+                $questions = array_merge($warnings, ['Do you want to continue [yes/no]?']);
 
                 /**
                  * The importer return some warning questions which are contained in variable $warnings.
                  * A user should confirm import continuing if $warnings is not empty.
                  */
-                if (
-                    !$input->getOption('no-interaction')
-                    && !empty($warnings)
-                    && !$this->questionPerformer->execute($warnings, $input, $output)
-                ) {
+                if (!empty($warnings) && !$this->questionPerformer->execute($questions, $input, $output)) {
                     continue;
                 }
 
@@ -148,7 +146,7 @@ class Importer
             }
         } catch (\Exception $exception) {
             $this->logger->error($exception);
-            throw new RuntimeException(__('Import is failed: %1', $exception->getMessage()), $exception);
+            throw new RuntimeException(__('Import failed: %1', $exception->getMessage()), $exception);
         }
     }
 }
