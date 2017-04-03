@@ -988,4 +988,10 @@
             <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\EavDecimal\FrontendResource</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
+        </arguments>
+    </type>
 </config>
