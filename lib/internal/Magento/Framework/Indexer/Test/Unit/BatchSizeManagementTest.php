@@ -60,8 +60,9 @@ class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock->expects($this->once())
             ->method('warning')
             ->with(__(
-                'Memory size allocated for temporary table is more than 20% innodb_buffer_pool_size. ' .
-                'Please update innodb_buffer_pool_size or decrease batch size value.'
+                'Memory size allocated for the temporary table is more than 20% of innodb_buffer_pool_size. ' .
+                'Please update innodb_buffer_pool_size or decrease batch size value '.
+                '(which decreases memory usages for the temporary table).'
             ));
 
         $adapterMock->expects($this->at(3))
