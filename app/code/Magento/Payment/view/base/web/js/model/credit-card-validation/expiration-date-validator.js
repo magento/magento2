@@ -1,8 +1,9 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* @api */
 define([
     'mageUtils',
     'Magento_Payment/js/model/credit-card-validation/expiration-date-validator/parse-date',

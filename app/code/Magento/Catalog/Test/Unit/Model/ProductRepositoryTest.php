@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,11 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Framework\DB\Adapter\ConnectionException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class ProductRepositoryTest
@@ -1176,8 +1176,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $newEntriesData = [
-            'images' =>
-                [
+            'images' => [
                     [
                         'value_id' => null,
                         'label' => "label_text",

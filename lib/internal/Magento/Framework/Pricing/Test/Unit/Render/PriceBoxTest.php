@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\PriceBox;
+use Magento\Framework\Pricing\Render\PriceBox;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\PriceBox
