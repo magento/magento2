@@ -9,11 +9,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Deploy\Package\PackageFileFactory;
 
 /**
- * Class Themes
- *
- * Provides files collected from all themes
- *
- * @api
+ * Collect files eligible for deployment from themes
  */
 class Themes implements SourceInterface
 {

@@ -36,6 +36,17 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Initialize unique fields
+     *
+     * @return $this
+     */
+    protected function _initUniqueFields()
+    {
+        $this->_uniqueFields = [['field' => 'code', 'title' => __('Group with the same code')]];
+        return $this;
+    }
+
+    /**
      * Update default store group for website
      *
      * @param int $websiteId
