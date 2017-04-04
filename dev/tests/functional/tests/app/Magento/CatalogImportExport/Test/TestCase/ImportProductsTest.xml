@@ -30,7 +30,7 @@
                 </item>
             </data>
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProduct" />
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
         </variation>
         <variation name="ImportProductVariation2" ticketId="MAGETWO-47719" summary="Import Products assigned to different websites with Replace Behavior">
@@ -61,7 +61,7 @@
             <data name="import/data/import_file/template/entities" xsi:type="string">7</data>
             <data name="import/data/import_file/entities/0" xsi:type="string">catalogProductSimple::default_in_custom_website</data>
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsOnStorefront" />
-            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProduct" />
+            <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertImportedProducts" />
             <constraint name="Magento\CatalogImportExport\Test\Constraint\AssertProductsInGrid" />
         </variation>
     </testCase>
