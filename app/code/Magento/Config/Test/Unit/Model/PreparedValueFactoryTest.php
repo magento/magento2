@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model;
@@ -13,6 +13,11 @@ use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\StructureFactory;
+use Magento\Config\Model\PreparedValueFactory;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * @inheritdoc

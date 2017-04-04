@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Console;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console;
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Console\CompilerPreparation;
-use Magento\Framework\App\ProductMetadata;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Symfony\Component\Console;
 use Zend\ServiceManager\ServiceManager;
 
 /**

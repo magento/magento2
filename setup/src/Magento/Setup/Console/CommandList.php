@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -73,7 +73,6 @@ class CommandList
             \Magento\Setup\Console\Command\UpgradeCommand::class,
             \Magento\Setup\Console\Command\UninstallCommand::class,
             \Magento\Setup\Console\Command\DeployStaticContentCommand::class,
-            \Magento\Setup\Console\Command\Deploy\StaticContentCommand::class,
         ];
     }
 

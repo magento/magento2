@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,13 @@ class ProductItem extends CatalogProductItem
      * @var string
      */
     protected $swatchSelector = 'div[option-id="%s"]';
+
+    /**
+     * Selector for the swatches of the product.
+     *
+     * @var string
+     */
+    protected $swatchBlockSelector = '.swatch-attribute-options';
 
     /**
      * Fill product options on category page.
@@ -69,5 +76,15 @@ class ProductItem extends CatalogProductItem
     {
         $this->_rootElement->hover();
         parent::clickAddToCart();
+    }
+
+    /**
+     * Check swatches visibility.
+     *
+     * @return bool
+     */
+    public function isSwatchesBlockVisible()
+    {
+        return $this->_rootElement->find($this->swatchBlockSelector)->isVisible();
     }
 }

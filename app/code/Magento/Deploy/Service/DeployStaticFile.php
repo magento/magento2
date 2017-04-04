@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Service;
@@ -15,9 +15,7 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
- * Class DeployStaticFile
- *
- * @api
+ * Deploy static file service
  */
 class DeployStaticFile
 {

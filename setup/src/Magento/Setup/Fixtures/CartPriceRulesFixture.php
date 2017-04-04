@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -240,7 +240,7 @@ class CartPriceRulesFixture extends Fixture
                 'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
                 'operator'  => '==',
-                'value'     => $categoriesArray[($ruleId / 4 ) % count($categoriesArray)][0],
+                'value'     => $categoriesArray[($ruleId / 4) % count($categoriesArray)][0],
             ];
 
             $subtotal = [0, 5, 10, 15];

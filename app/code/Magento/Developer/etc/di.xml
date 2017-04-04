@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Logger\Handler\Debug" type="Magento\Developer\Model\Logger\Handler\Debug"/>
+
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="pageConfigRendererFactory" xsi:type="object">Magento\Developer\Model\View\Page\Config\RendererFactory</argument>
@@ -111,7 +112,6 @@
             <argument name="adapter" xsi:type="object">jsMinificationAdapter</argument>
         </arguments>
     </virtualType>
-
 
     <!-- Configuration for Magento\Framework\Css\PreProcessor\Instruction\Import base flow -->
     <virtualType name="FileGeneratorPublicationDecoratorForBaseFlow" type="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
@@ -219,13 +219,6 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

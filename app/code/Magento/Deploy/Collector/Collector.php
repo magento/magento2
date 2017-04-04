@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Collector;
@@ -11,11 +11,9 @@ use Magento\Deploy\Package\PackageFactory;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
- * Class Collector
+ * Deployable files collector
  *
- * Default implementation uses Source Pool object which provides collection of static files sources
- *
- * @see SourcePool
+ * Default implementation uses Source Pool object (@see SourcePool)
  */
 class Collector implements CollectorInterface
 {
