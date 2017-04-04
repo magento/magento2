@@ -6,13 +6,11 @@
 namespace Magento\Deploy\Strategy;
 
 use Magento\Deploy\Package\PackagePool;
-use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Process\Queue;
 
 /**
- * Class StandardDeploy
- *
- * @api
+ * Standard deployment strategy implementation
  */
 class StandardDeploy implements StrategyInterface
 {

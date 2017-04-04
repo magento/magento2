@@ -10,9 +10,6 @@ namespace Magento\Config\Model\Config;
  *
  * Used when you need to know if the configuration path belongs to a certain type.
  * Participates in the mechanism for creating the configuration dump file.
- * There are several types:
- * - sensitive - the fields that have this type will not be written in the dump configuration;
- * - environment - the fields that have this type will not be written to the dump configuration.
  */
 class TypePool
 {
@@ -88,7 +85,7 @@ class TypePool
      * );
      * ```
      *
-     * @param string $type Type configuration fields paths. Allowed values of types:
+     * @param string $type Type of configuration fields. Allowed values of types:
      * - sensitive or TypePool::TYPE_SENSITIVE;
      * - environment or TypePool::TYPE_ENVIRONMENT.
      * @return array

@@ -25,10 +25,11 @@ class PhpFormatter implements FormatterInterface
             foreach ($data as $key => $value) {
                 $comment = '  ';
                 if (!empty($comments[$key])) {
+                    $section = " * For the section: " . $key . "\n";
                     $exportedComment = is_string($comments[$key])
                         ? $comments[$key]
                         : var_export($comments[$key], true);
-                    $comment = "  /**\n * " . str_replace("\n", "\n * ", $exportedComment) . "\n */\n";
+                    $comment = "  /**\n" . $section . " * " . str_replace("\n", "\n * ", $exportedComment) . "\n */\n";
                 }
                 $space = is_array($value) ? " \n" : ' ';
                 $elements[] = $comment . var_export($key, true) . ' =>' . $space . var_export($value, true);
