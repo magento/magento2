@@ -13,11 +13,6 @@ use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Config\Model\PreparedValueFactory;
-use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueFactory;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * @inheritdoc
