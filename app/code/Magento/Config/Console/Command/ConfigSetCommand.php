@@ -116,6 +116,7 @@ class ConfigSetCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $areaScope = $this->scope->getCurrentScope();
             // Emulating adminhtml scope to be able to read configs.
             $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($input, $output) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
@@ -130,6 +131,8 @@ class ConfigSetCommand extends Command
 
                 $output->writeln('<info>' . $message . '</info>');
             });
+
+            $this->scope->setCurrentScope($areaScope);
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
