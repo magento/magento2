@@ -19,19 +19,13 @@
             <data name="searchTerm/data/num_results" xsi:type="string">1</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
         </variation>
-        <variation name="SuggestSearchingResultEntityTestVariation3" summary="Auto-complete search with product price" ticketId="MAGETWO-23186">
-            <data name="issue" xsi:type="string">MAGETWO-64382: Impossible search product by price</data>
-            <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::price</data>
-            <data name="searchTerm/data/num_results" xsi:type="string">1</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
-        </variation>
-        <variation name="SuggestSearchingResultEntityTestVariation4" summary="Auto-complete search with product description" ticketId="MAGETWO-23186">
+        <variation name="SuggestSearchingResultEntityTestVariation3" summary="Auto-complete search with product description" ticketId="MAGETWO-23186">
             <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::abc_dfj_simple_for_advancedsearch::adc_Full</data>
             <data name="searchTerm/data/num_results" xsi:type="string">1</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid" />
         </variation>
-        <variation name="SuggestSearchingResultEntityTestVariation5" summary="Auto-complete search with product short description" ticketId="MAGETWO-23186">
+        <variation name="SuggestSearchingResultEntityTestVariation4" summary="Auto-complete search with product short description" ticketId="MAGETWO-23186">
             <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::abc_dfj_simple_for_advancedsearch::abc_short</data>
             <data name="searchTerm/data/num_results" xsi:type="string">1</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
