@@ -347,14 +347,17 @@ class ConfigurableAttributesData extends DataSource
             $rowName = $row['name'];
             $rowSku = $row['sku'];
             $index = 1;
-            foreach ($attribute['options'] as $optionKey => $option) {
-                $compositeKey = "{$attributeKey}:{$optionKey}";
-                $row['name'] = $rowName . ' ' . $randIsolation . ' ' . $index;
-                $row['sku'] = $rowSku . '_' . $randIsolation . '_' . $index;
-                $row['price'] = $option['pricing_value'];
-                $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
-                $result[$newRowKey] = $row;
-                $index++;
+
+            if (isset($attribute['options'])) {
+                foreach ($attribute['options'] as $optionKey => $option) {
+                    $compositeKey = "{$attributeKey}:{$optionKey}";
+                    $row['name'] = $rowName . ' ' . $randIsolation . ' ' . $index;
+                    $row['sku'] = $rowSku . '_' . $randIsolation . '_' . $index;
+                    $row['price'] = $option['pricing_value'];
+                    $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
+                    $result[$newRowKey] = $row;
+                    $index++;
+                }
             }
         }
 
