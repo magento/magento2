@@ -1,31 +1,31 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
-use Magento\CatalogInventory\Model\Stock\Status;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\CatalogInventory\Helper\Data;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem;
-use Magento\CatalogInventory\Model\StockState;
-use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
-use Magento\Framework\Event\Observer;
-use Magento\Quote\Model\Quote;
-use Magento\Store\Model\Store;
-use Magento\Quote\Model\Quote\Item;
-use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Model\Stock\Item as StockMock;
-use Magento\Bundle\Model\Product\Type;
+use Magento\CatalogInventory\Model\Stock\Status;
+use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\CatalogInventory\Model\StockState;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Event;
-use Magento\CatalogInventory\Helper\Data;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option as OptionItem;
+use Magento\Store\Model\Store;
 
 /**
  * Class QuantityValidatorTest

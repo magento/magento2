@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,8 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
-use Magento\Framework\DB\Query\BatchIteratorInterface as BatchIteratorInterface;
-use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
@@ -325,7 +324,7 @@ abstract class AbstractAction
         $field,
         $range = self::RANGE_CATEGORY_STEP
     ) {
-        if($this->isRangingNeeded()) {
+        if ($this->isRangingNeeded()) {
             $iterator = $this->queryGenerator->generate(
                 $field,
                 $select,

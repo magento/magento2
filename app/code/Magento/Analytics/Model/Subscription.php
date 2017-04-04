@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model;
 
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -12,7 +13,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory as ConfigValueFactory;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-/*
+/**
  * Model for handling of changing of subscription status to Magento BI.
  */
 class Subscription
@@ -60,21 +61,41 @@ class Subscription
     private $reinitableConfig;
 
     /**
+     * Service for processing of activation/deactivation MBI subscription.
+     *
+     * @var SubscriptionHandler
+     */
+    private $subscriptionHandler;
+
+    /**
+     * Resource which provides a status of subscription.
+     *
+     * @var SubscriptionStatusProvider
+     */
+    private $statusProvider;
+
+    /**
      * @param ConfigValueFactory $configValueFactory
      * @param SearchInterface $configStructure
      * @param AbstractDb $configValueResource
      * @param ReinitableConfigInterface $reinitableConfig
+     * @param SubscriptionHandler $subscriptionHandler
+     * @param SubscriptionStatusProvider $statusProvider
      */
     public function __construct(
         ConfigValueFactory $configValueFactory,
         SearchInterface $configStructure,
         AbstractDb $configValueResource,
-        ReinitableConfigInterface $reinitableConfig
+        ReinitableConfigInterface $reinitableConfig,
+        SubscriptionHandler $subscriptionHandler,
+        SubscriptionStatusProvider $statusProvider
     ) {
         $this->configValueFactory = $configValueFactory;
         $this->configStructure = $configStructure;
         $this->configValueResource = $configValueResource;
         $this->reinitableConfig = $reinitableConfig;
+        $this->subscriptionHandler = $subscriptionHandler;
+        $this->statusProvider = $statusProvider;
     }
 
     /**
@@ -102,6 +123,21 @@ class Subscription
             ->save($configValue);
 
         $this->reinitableConfig->reinit();
+
+        return true;
+    }
+
+    /**
+     * Retry process of subscription that was unsuccessful.
+     *
+     * @return bool
+     */
+    public function retry()
+    {
+        if ($this->statusProvider->getStatus() === SubscriptionStatusProvider::FAILED) {
+            $this->subscriptionHandler->processEnabled();
+            $this->reinitableConfig->reinit();
+        }
 
         return true;
     }

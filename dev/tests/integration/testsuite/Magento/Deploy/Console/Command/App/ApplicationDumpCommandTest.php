@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App;
@@ -82,6 +82,15 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return string
+     */
+    private function loadRawConfig()
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)
+            ->readFile($this->configFilePool->getPath(ConfigFilePool::APP_CONFIG));
+    }
+
+    /**
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Deploy/_files/config_data.php
      */
@@ -142,6 +151,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
         $this->assertNotEmpty($this->hash->get());
+        $this->assertContains('For the section: system', $this->loadRawConfig());
     }
 
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -21,7 +21,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\App\FrontControllerInterface">
-        <plugin name="configHash" type="Magento\Deploy\Model\Plugin\ConfigValidator" sortOrder="50"/>
+        <plugin name="configHash" type="Magento\Deploy\Model\Plugin\ConfigChangeDetector" sortOrder="50"/>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
@@ -44,6 +44,29 @@
             <argument name="types" xsi:type="array">
                 <item name="interactive" xsi:type="string">Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector</item>
                 <item name="simple" xsi:type="string">Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\Deploy\Package\BundleInterface" type="Magento\Deploy\Package\Bundle\RequireJs"/>
+    <type name="Magento\Deploy\Source\SourcePool">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="lib" xsi:type="object">Magento\Deploy\Source\Lib</item>
+                <item name="modules" xsi:type="object">Magento\Deploy\Source\Modules</item>
+                <item name="themes" xsi:type="object">Magento\Deploy\Source\Themes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Package\Package">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="less" xsi:type="object">Magento\Deploy\Package\Processor\PreProcessor\Less</item>
+                <item name="css" xsi:type="object">Magento\Deploy\Package\Processor\PreProcessor\Css</item>
+            </argument>
+            <argument name="postProcessors" xsi:type="array">
+                <item name="map" xsi:type="object">Magento\Deploy\Package\Processor\PostProcessor\Map</item>
+                <item name="cssUrls" xsi:type="object">Magento\Deploy\Package\Processor\PostProcessor\CssUrls</item>
             </argument>
         </arguments>
     </type>

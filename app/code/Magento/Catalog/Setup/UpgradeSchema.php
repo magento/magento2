@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -34,6 +34,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.1.4', '<')) {
+            $this->addSourceEntityIdToProductEavIndex($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.1.5', '<')) {
             $this->addPercentageValueColumn($setup);
             $tables = [
                 'catalog_product_index_price_cfg_opt_agr_idx',
@@ -56,7 +60,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => 'integer', 'nullable' => false]
                 );
             }
-            $this->addSourceEntityIdToProductEavIndex($setup);
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
@@ -236,7 +239,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         if ($setup->tableExists(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE)) {
             return;
-        };
+        }
 
         /** Add support video media attribute */
         $this->createValueToEntityTable($setup);

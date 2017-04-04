@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Indexer\Model\Config;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test

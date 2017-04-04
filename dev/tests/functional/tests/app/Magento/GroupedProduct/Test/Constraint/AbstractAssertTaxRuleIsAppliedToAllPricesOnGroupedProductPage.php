@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Constraint;
 
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Tax\Test\Constraint\AbstractAssertTaxRuleIsAppliedToAllPrices;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Tax\Test\Constraint\AbstractAssertTaxRuleIsAppliedToAllPrices;
 
 /**
  * Checks that prices excl tax on category, product and cart pages are equal to specified in dataset.
