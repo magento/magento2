@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Class Helper Data
@@ -71,6 +72,11 @@ class Data
     private $metadataPool;
 
     /**
+     * @var SwatchAttributesProvider
+     */
+    private $swatchAttributesProvider;
+
+    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -95,6 +101,7 @@ class Data
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param Image $imageHelper
      * @param Json|null $serializer
+     * @param SwatchAttributesProvider $swatchAttributesProvider
      */
     public function __construct(
         CollectionFactory $productCollectionFactory,
@@ -102,7 +109,8 @@ class Data
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
         Image $imageHelper,
-        Json $serializer = null
+        Json $serializer = null,
+        SwatchAttributesProvider $swatchAttributesProvider = null
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
         $this->productRepository = $productRepository;
@@ -110,6 +118,8 @@ class Data
         $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->imageHelper = $imageHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
+        $this->swatchAttributesProvider = $swatchAttributesProvider
+            ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
     }
 
     /**
@@ -358,14 +368,8 @@ class Data
      */
     private function getSwatchAttributes(Product $product)
     {
-        $attributes = $this->getAttributesFromConfigurable($product);
-        $result = [];
-        foreach ($attributes as $attribute) {
-            if ($this->isSwatchAttribute($attribute)) {
-                $result[] = $attribute;
-            }
-        }
-        return $result;
+        $swatchAttributes = $this->swatchAttributesProvider->provide($product);
+        return $swatchAttributes;
     }
 
     /**
@@ -470,7 +474,8 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        return sizeof($this->getSwatchAttributes($product));
+        $swatchAttributes = $this->getSwatchAttributes($product);
+        return count($swatchAttributes) > 0;
     }
 
     /**
