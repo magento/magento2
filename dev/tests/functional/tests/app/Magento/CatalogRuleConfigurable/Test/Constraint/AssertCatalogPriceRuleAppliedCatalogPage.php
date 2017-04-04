@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogRule\Test\Constraint;
+namespace Magento\CatalogRuleConfigurable\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
@@ -12,12 +12,12 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
- * Assert that Catalog Price Rule is applied for product(s) in Catalog.
+ * Assert that Catalog Price Rule is applied for configurable product(s) in Catalog.
  */
 class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
 {
     /**
-     * Assert that Catalog Price Rule is applied for product(s) in Catalog
+     * Assert that Catalog Price Rule is applied for configurable product(s) in Catalog
      * according to Priority(Priority/Stop Further Rules Processing).
      *
      * @param CmsIndex $cmsIndexPage
@@ -52,11 +52,8 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
                 $priceBlock->isVisible(),
                 'Price block is not displayed for product ' . $product->getName()
             );
-            $actualPrice['special'] = (float)$priceBlock->getSpecialPrice();
-            if ($productPrice[$key]['regular'] !== 'No') {
-                $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
-                $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
-            }
+            // Product price with applied rule displayed as usual price for Configurable products (MAGETWO-64882)
+            $actualPrice['special'] = (float)$priceBlock->getPrice();
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);
             \PHPUnit_Framework_Assert::assertTrue(
                 empty($diff),
