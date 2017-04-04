@@ -18,6 +18,11 @@ use \Magento\Store\Api\Data\WebsiteInterface;
 use \Magento\Store\Api\Data\StoreInterface;
 use \Magento\Store\Model\StoreManager;
 
+// @codingStandardsIgnoreFile
+
+/**
+ * Tests Magento\Setup\Model\PackagesData
+ */
 class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 {
 
