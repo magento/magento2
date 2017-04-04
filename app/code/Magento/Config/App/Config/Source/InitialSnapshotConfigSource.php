@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\App\Config\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\DataObjectFactory;
-use Magento\Framework\FlagFactory;
+use Magento\Framework\FlagManager;
 
 /**
  * The source with previously imported configuration.
@@ -17,9 +17,9 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
     /**
      * The factory of Flag instances.
      *
-     * @var FlagFactory
+     * @var FlagManager
      */
-    private $flagFactory;
+    private $flagManager;
 
     /**
      * The factory of DataObject instances.
@@ -29,12 +29,12 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
     private $dataObjectFactory;
 
     /**
-     * @param FlagFactory $flagFactory The factory of Flag instances
+     * @param FlagManager $flagManager The factory of Flag instances
      * @param DataObjectFactory $dataObjectFactory The factory of DataObject instances
      */
-    public function __construct(FlagFactory $flagFactory, DataObjectFactory $dataObjectFactory)
+    public function __construct(FlagManager $flagManager, DataObjectFactory $dataObjectFactory)
     {
-        $this->flagFactory = $flagFactory;
+        $this->flagManager = $flagManager;
         $this->dataObjectFactory = $dataObjectFactory;
     }
 
@@ -46,11 +46,10 @@ class InitialSnapshotConfigSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        $flag = $this->flagFactory->create();
-        $flag->getResource()->load($flag, 'system_config_snapshot', 'flag_code');
+        $flagData = (array)($this->flagManager->getFlagData('system_config_snapshot') ?: []);
 
         $data = $this->dataObjectFactory->create(
-            ['data' => (array)($flag->getFlagData() ?: [])]
+            ['data' => $flagData]
         );
 
         return $data->getData($path) ?: [];

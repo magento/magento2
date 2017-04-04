@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\App\Config\Source;
@@ -8,8 +8,7 @@ namespace Magento\Config\Test\Unit\App\Config\Source;
 use Magento\Config\App\Config\Source\InitialSnapshotConfigSource;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
-use Magento\Framework\Flag;
-use Magento\Framework\FlagFactory;
+use Magento\Framework\FlagManager;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -23,19 +22,9 @@ class InitialSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var FlagFactory
+     * @var FlagManager|Mock
      */
-    private $flagFactoryMock;
-
-    /**
-     * @var Flag|Mock
-     */
-    private $flagMock;
-
-    /**
-     * @var Flag\FlagResource|Mock
-     */
-    private $flagResourceMock;
+    private $flagManagerMock;
 
     /**
      * @var DataObjectFactory|Mock
@@ -52,13 +41,7 @@ class InitialSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagResourceMock = $this->getMockBuilder(Flag\FlagResource::class)
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
@@ -69,27 +52,25 @@ class InitialSnapshotConfigSourceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->flagFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->flagMock);
         $this->dataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->dataObjectMock);
 
         $this->model = new InitialSnapshotConfigSource(
-            $this->flagFactoryMock,
+            $this->flagManagerMock,
             $this->dataObjectFactoryMock
         );
     }
 
     public function testGet()
     {
-        $this->flagMock->expects($this->exactly(2))
-            ->method('getResource')
-            ->willReturn($this->flagResourceMock);
-        $this->flagResourceMock->expects($this->exactly(2))
-            ->method('load')
-            ->with($this->flagMock, 'system_config_snapshot', 'flag_code');
+        $this->flagManagerMock->expects($this->exactly(2))
+            ->method('getFlagData')
+            ->with('system_config_snapshot')
+            ->willReturnOnConsecutiveCalls(
+                ['some' => 'data'],
+                'data'
+            );
         $this->dataObjectMock->expects($this->exactly(2))
             ->method('getData')
             ->willReturnOnConsecutiveCalls(

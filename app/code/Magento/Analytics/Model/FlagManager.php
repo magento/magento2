@@ -5,36 +5,23 @@
  */
 namespace Magento\Analytics\Model;
 
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
-use Magento\Framework\Flag;
-
 /**
  * Service that allows to handle a flag object as a scalar value.
  */
 class FlagManager
 {
     /**
-     * @var FlagFactory
+     * @var \Magento\Framework\FlagManager
      */
-    private $flagFactory;
+    private $flagManager;
 
     /**
-     * @var FlagResource
-     */
-    private $flagResource;
-
-    /**
-     * FlagManager constructor.
-     * @param FlagFactory $flagFactory
-     * @param FlagResource $flagResource
+     * @param \Magento\Framework\FlagManager $flagManager
      */
     public function __construct(
-        FlagFactory $flagFactory,
-        FlagResource $flagResource
+        \Magento\Framework\FlagManager $flagManager
     ) {
-        $this->flagFactory = $flagFactory;
-        $this->flagResource = $flagResource;
+        $this->flagManager = $flagManager;
     }
 
     /**
@@ -44,7 +31,7 @@ class FlagManager
      */
     public function getFlagData($flagCode)
     {
-        return $this->getFlagObject($flagCode)->getFlagData();
+        return $this->flagManager->getFlagData($flagCode);
     }
 
     /**
@@ -55,10 +42,7 @@ class FlagManager
      */
     public function saveFlag($flagCode, $value)
     {
-        $flag = $this->getFlagObject($flagCode);
-        $flag->setFlagData($value);
-        $this->flagResource->save($flag);
-        return true;
+        return $this->flagManager->saveFlag($flagCode, $value);
     }
 
     /**
@@ -69,25 +53,6 @@ class FlagManager
      */
     public function deleteFlag($flagCode)
     {
-        $flag = $this->getFlagObject($flagCode);
-        if ($flag->getId()) {
-            $this->flagResource->delete($flag);
-        }
-        return true;
-    }
-
-    /**
-     * Returns flag object
-     *
-     * @param string $flagCode
-     * @return Flag
-     */
-    private function getFlagObject($flagCode)
-    {
-        /** @var Flag $flag */
-        $flag = $this->flagFactory
-            ->create(['data' => ['flag_code' => $flagCode]]);
-        $this->flagResource->load($flag, $flagCode, 'flag_code');
-        return $flag;
+        return $this->flagManager->deleteFlag($flagCode);
     }
 }
