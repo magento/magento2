@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -225,6 +225,26 @@
             <argument name="processors" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
                 <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
+        <arguments>
+            <argument name="importers" xsi:type="array">
+                <item name="system" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Config\Model\Config\Importer</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="environment" xsi:type="array">
+                <item name="web/cookie/cookie_domain" xsi:type="string">1</item>
+                <item name="web/cookie/cookie_path" xsi:type="string">1</item>
+                <item name="web/secure/base_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_link_url" xsi:type="string">1</item>
+                <item name="web/unsecure/base_url" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

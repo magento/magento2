@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,14 +10,14 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 /**
  * Product collection
@@ -863,6 +863,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Filter Product by Categories
      *
      * @param array $categoriesFilter
+     * @return $this
      */
     public function addCategoriesFilter(array $categoriesFilter)
     {
@@ -874,8 +875,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $selectCondition = [
                 $this->mapConditionType($conditionType) => $categorySelect
             ];
-            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
+            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id', $selectCondition));
         }
+        return $this;
     }
 
     /**
@@ -2124,7 +2126,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $select = $backend->getResource()->getSelect($websiteId);
         $select->columns(['product_id' => $linkField])->where(
-            $linkField .' IN(?)',
+            $linkField . ' IN(?)',
             $productIds
         )->order(
             $linkField

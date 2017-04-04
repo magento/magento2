@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
-use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 
 /**
  * Checks permissions to files and folders.
@@ -141,6 +141,7 @@ class FilePermissions
      */
     private function checkRecursiveDirectories($directory)
     {
+        /** @var $directoryIterator \RecursiveIteratorIterator   */
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
@@ -158,6 +159,8 @@ class FilePermissions
                 $this->directoryList->getPath(DirectoryList::SESSION) . '/',
             ]
         );
+
+        $directoryIterator->setMaxDepth(1);
 
         $foundNonWritable = false;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 $configData = [
@@ -9,6 +9,16 @@ $configData = [
             'web/test/test_value_1' => 'http://local2.test/',
             'web/test/test_value_2' => 5,
             'web/test/test_sensitive' => 10,
+
+            'web/test/test_sensitive1' => 'some_value1',
+            'web/test/test_sensitive2' => 'some_value2',
+            'web/test/test_sensitive3' => 'some_value3',
+            'web/test/test_sensitive_environment4' => 'some_value4',
+            'web/test/test_sensitive_environment5' => 'some_value5',
+            'web/test/test_sensitive_environment6' => 'some_value6',
+            'web/test/test_environment7' => 'some_value7',
+            'web/test/test_environment8' => 'some_value8',
+            'web/test/test_environment9' => 'some_value9',
         ]
     ],
 ];

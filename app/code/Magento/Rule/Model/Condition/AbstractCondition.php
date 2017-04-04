@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -441,6 +441,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
         if (!empty($valueArr)) {
             $value = implode(', ', $valueArr);
+        } elseif (is_array($value)) {
+            $value = implode(', ', $value);
         }
         return $value;
     }

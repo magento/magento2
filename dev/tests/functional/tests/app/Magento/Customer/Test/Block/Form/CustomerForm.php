@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Form;
 
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Customer account edit form.
@@ -107,8 +107,7 @@ class CustomerForm extends Form
     {
         $mapping = $this->dataMapping();
         return $this->_rootElement->find(
-            $mapping['firstname']['selector'],
-            $mapping['firstname']['strategy']
+            $mapping['customer']['value']['firstname']['selector']
         )->getValue();
     }
 
@@ -121,8 +120,7 @@ class CustomerForm extends Form
     {
         $mapping = $this->dataMapping();
         return $this->_rootElement->find(
-            $mapping['lastname']['selector'],
-            $mapping['lastname']['strategy']
+            $mapping['customer']['value']['lastname']['selector']
         )->getValue();
     }
 
@@ -139,7 +137,7 @@ class CustomerForm extends Form
             $mapping['change_email']['selector'],
             $mapping['change_email']['strategy'],
             'checkbox'
-        )->setValue($value ?  "Yes" : "No");
+        )->setValue($value ? "Yes" : "No");
     }
 
     /**
@@ -155,7 +153,7 @@ class CustomerForm extends Form
             $mapping['change_password']['selector'],
             $mapping['change_password']['strategy'],
             'checkbox'
-        )->setValue($value ?  "Yes" : "No");
+        )->setValue($value ? "Yes" : "No");
     }
 
     /**
@@ -167,8 +165,7 @@ class CustomerForm extends Form
     {
         $mapping = $this->dataMapping();
         return $this->_rootElement->find(
-            $mapping['current_password']['selector'],
-            $mapping['current_password']['strategy']
+            $mapping['customer']['value']['current_password']['selector']
         )->isVisible();
     }
 
@@ -181,8 +178,7 @@ class CustomerForm extends Form
     {
         $mapping = $this->dataMapping();
         return $this->_rootElement->find(
-            $mapping['password']['selector'],
-            $mapping['password']['strategy']
+            $mapping['customer']['value']['password']['selector']
         )->isVisible();
     }
 
@@ -209,8 +205,7 @@ class CustomerForm extends Form
     {
         $mapping = $this->dataMapping();
         return $this->_rootElement->find(
-            $mapping['email']['selector'],
-            $mapping['email']['strategy']
+            $mapping['customer']['value']['email']['selector']
         )->isVisible();
     }
 }

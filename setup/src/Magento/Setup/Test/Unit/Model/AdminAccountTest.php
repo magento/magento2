@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,7 +61,11 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             AdminAccount::KEY_USER => 'admin',
         ];
 
-        $this->adminAccount = new AdminAccount($this->setUpMock, $this->encryptor, $data);
+        $this->adminAccount = new AdminAccount(
+            $this->setUpMock,
+            $this->encryptor,
+            $data
+        );
     }
 
     public function testSaveUserExistsAdminRoleExists()

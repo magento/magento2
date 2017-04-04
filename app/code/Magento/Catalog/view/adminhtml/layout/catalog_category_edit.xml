@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,7 +18,7 @@
             <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="catalog/category/tree.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="Magento_Catalog::catalog/category/tree.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="category_form"/>

@@ -1,8 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'ko',
     'jquery',
@@ -136,8 +139,8 @@ define([
             drEl.instanceCtx = this.getRecord(originRecord[0]);
             drEl.eventMousedownY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY;
             drEl.minYpos =
-                $table.offset().top - originRecord.offset().top + $table.find('thead').outerHeight();
-            drEl.maxYpos = drEl.minYpos + $table.find('tbody').outerHeight() - originRecord.outerHeight();
+                $table.offset().top - originRecord.offset().top + $table.children('thead').outerHeight();
+            drEl.maxYpos = drEl.minYpos + $table.children('tbody').outerHeight() - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
 
             if (isTouchDevice) {

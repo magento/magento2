@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -282,4 +282,11 @@
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideThemeFiltered</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="environment" xsi:type="array">
+                <item name="dev/js/session_storage_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

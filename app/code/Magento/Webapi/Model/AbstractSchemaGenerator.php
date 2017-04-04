@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Controller\Rest;
-use Magento\Webapi\Model\Cache\Type\Webapi;
-use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Authorization;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 
 /**
  * Abstract API schema generator.
@@ -42,6 +42,13 @@ abstract class AbstractSchemaGenerator
     protected $authorization;
 
     /**
+     * Instance of serializer.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * Initialize dependencies.
      *
      * @param Webapi $cache
@@ -49,19 +56,22 @@ abstract class AbstractSchemaGenerator
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
+     * @param Json|null $serializer
      */
     public function __construct(
         Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         ServiceMetadata $serviceMetadata,
-        Authorization $authorization
+        Authorization $authorization,
+        Json $serializer = null
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->serviceMetadata = $serviceMetadata;
         $this->authorization = $authorization;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -96,7 +106,8 @@ abstract class AbstractSchemaGenerator
     {
         /** Sort requested services by names to prevent caching of the same schema file more than once. */
         ksort($requestedServices);
-        $cacheId = $this->cache->generateCacheIdUsingContext(get_class($this) . serialize($requestedServices));
+        $prefix = get_class($this) . $this->serializer->serialize($requestedServices);
+        $cacheId = $this->cache->generateCacheIdUsingContext($prefix);
         $cachedSchemaContent = $this->cache->load($cacheId);
         if ($cachedSchemaContent !== false) {
             return $cachedSchemaContent;

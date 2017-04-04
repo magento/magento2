@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
-use Magento\Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Create new simple product via curl.
@@ -30,6 +30,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @var array
      */
     protected $fields;
+
+    /**
+     * Product website.
+     *
+     * @var array
+     */
+    protected $website;
 
     /**
      * Mapping values for data.
@@ -274,6 +281,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $this->fields = ['product' => $fixture->getData()];
 
         $this->prepareProductDetails();
+        $this->prepareWebsitesData();
         $this->prepareWebsites();
         $this->prepareAdvancedPricing();
         $this->prepareAdvancedInventory();
@@ -437,6 +445,20 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
+     * Update product websites.
+     *
+     * @return void
+     */
+    protected function prepareWebsitesData()
+    {
+        if (!empty($this->fields['product']['website_ids'])) {
+            foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
+                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
+            }
+        }
+    }
+
+    /**
      * Preparation of tier price data.
      *
      * @param array $fields
@@ -444,12 +466,19 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function preparePriceFields(array $fields)
     {
+        $this->website = $this->fixture->getDataFieldConfig('tier_price')['source']->getWebsite();
         foreach ($fields as $priceKey => &$field) {
             foreach ($this->priceData as $key => $data) {
                 if ($data['name'] == 'cust_group') {
                     $field[$data['name']] = $this->fixture->getDataFieldConfig('tier_price')['source']
                         ->getCustomerGroups()[$priceKey]->getCustomerGroupId();
                 } else {
+                    if ($this->website !== null) {
+                        unset($this->priceData['website']['data']);
+                        $this->priceData['website']['data'][$this->website->getCode()]
+                            = $this->website->getData('website_id');
+                    }
+
                     $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
                 }
                 unset($field[$key]);

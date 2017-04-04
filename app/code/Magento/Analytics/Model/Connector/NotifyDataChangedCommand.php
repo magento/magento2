@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Config\Model\Config;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Command notifies MBI about that data collection was finished.

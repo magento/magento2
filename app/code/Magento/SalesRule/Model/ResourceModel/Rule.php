@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
@@ -196,7 +196,7 @@ class Rule extends AbstractResource
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
-            $this->getTable('rule_customer'),
+            $this->getTable('salesrule_customer'),
             ['cnt' => 'count(*)']
         )->where(
             'rule_id = :rule_id'
