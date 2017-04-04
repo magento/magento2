@@ -28,14 +28,46 @@ class LowStockProductsReportEntityTest extends Injectable
     /* end tags */
 
     /**
+     * Configuration data
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
      * Create product
      *
      * @param CatalogProductSimple $product
+     * @param string|null $configData
      * @return void
      */
-    public function test(CatalogProductSimple $product)
+    public function test(CatalogProductSimple $product, $configData = null)
     {
+        $this->configData = $configData;
+
+        if ($this->configData) {
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => $this->configData, 'flushCache' => true]
+            )->run();
+        }
+
         // Preconditions
         $product->persist();
+    }
+
+    /**
+     * Clear data after test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        if ($this->configData) {
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => $this->configData, 'rollback' => true, 'flushCache' => true]
+            )->run();
+        }
     }
 }
