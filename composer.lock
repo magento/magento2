@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e4e6a8213c7b6bfd32dc0ebf2fc782b",
+    "content-hash": "1e52568aafa11689028311fb3060e920",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1770,29 +1770,29 @@
         },
         {
             "name": "tubalmartin/cssmin",
-            "version": "v2.4.8-p10",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git",
-                "reference": "9c640e5d2d6fe1eac2167ff138b8b0ce39475d03"
+                "reference": "210b058bf9b3b43516e2c80e6db526c1ce215b04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/9c640e5d2d6fe1eac2167ff138b8b0ce39475d03",
-                "reference": "9c640e5d2d6fe1eac2167ff138b8b0ce39475d03",
+                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/210b058bf9b3b43516e2c80e6db526c1ce215b04",
+                "reference": "210b058bf9b3b43516e2c80e6db526c1ce215b04",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0"
+                "php": ">=5.3.2"
             },
             "require-dev": {
                 "cogpowered/finediff": "0.3.*"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "cssmin.php"
-                ]
+                "psr-4": {
+                    "tubalmartin\\CssMin\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1814,7 +1814,7 @@
                 "minify",
                 "yui"
             ],
-            "time": "2017-04-04T14:38:03+00:00"
+            "time": "2017-04-04T14:33:00+00:00"
         },
         {
             "name": "zendframework/zend-captcha",
