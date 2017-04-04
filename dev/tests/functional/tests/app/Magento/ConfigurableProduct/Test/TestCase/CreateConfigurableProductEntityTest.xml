@@ -173,5 +173,18 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation12" summary="Create configurable product with images" ticketId="MAGETWO-41354">
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">color_and_size_with_images</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">6</data>
+            <data name="product/data/weight" xsi:type="string">2</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="product/data/image/0/file" xsi:type="string">Magento/Catalog/Test/_files/test1.png</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductImages" />
+        </variation>
     </testCase>
 </config>

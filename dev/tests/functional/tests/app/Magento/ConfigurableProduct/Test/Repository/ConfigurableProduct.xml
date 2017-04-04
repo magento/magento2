@@ -303,7 +303,7 @@
                 <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="custom_options" xsi:type="array">
-                <item name="dataset" xsi:type="string">two_fixed_dropdown_options</item>
+                <item name="dataset" xsi:type="string">two_fixed_drop_down_options</item>
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>

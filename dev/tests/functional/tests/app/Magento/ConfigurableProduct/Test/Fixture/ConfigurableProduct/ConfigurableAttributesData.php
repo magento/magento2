@@ -62,6 +62,13 @@ class ConfigurableAttributesData extends DataSource
     protected $products = [];
 
     /**
+     * Values for Bulk Images Price and Quantity step.
+     *
+     * @var array
+     */
+    private $bulkImagesPriceQuantity = [];
+
+    /**
      * @constructor
      * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
@@ -90,6 +97,7 @@ class ConfigurableAttributesData extends DataSource
             $this->prepareProducts($data);
             $this->prepareVariationsMatrix($data);
             $this->prepareData();
+            $this->prepareBulkImagesPriceQuantity($data);
         }
     }
 
@@ -418,6 +426,19 @@ class ConfigurableAttributesData extends DataSource
     }
 
     /**
+     * Prepare Bulk Image Price and Quantity value.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function prepareBulkImagesPriceQuantity(array $data)
+    {
+        if (isset($data['bulk_images_price_quantity'])) {
+            $this->bulkImagesPriceQuantity = $data['bulk_images_price_quantity'];
+        }
+    }
+
+    /**
      * Get prepared attributes data.
      *
      * @return array
@@ -435,6 +456,16 @@ class ConfigurableAttributesData extends DataSource
     public function getVariationsMatrix()
     {
         return $this->variationsMatrix;
+    }
+
+    /**
+     * Bulk Image Price and Quantity value.
+     *
+     * @return array
+     */
+    public function getBulkImagesPriceQuantity()
+    {
+        return $this->bulkImagesPriceQuantity;
     }
 
     /**
