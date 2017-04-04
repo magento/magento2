@@ -6,6 +6,8 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\JsonConverter;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -56,11 +58,16 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $successHandler = $this->getMockBuilder(\Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface::class)
+            ->getMockForAbstractClass();
+        $successHandler->method('handleResponse')
+            ->willReturn(true);
 
         $this->notifyDataChangedCommand = new NotifyDataChangedCommand(
             $this->analyticsTokenMock,
             $this->httpClientMock,
             $this->configMock,
+            new ResponseResolver(new JsonConverter(), [201 => $successHandler]),
             $this->loggerMock
         );
     }
@@ -95,6 +102,6 @@ class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->httpClientMock->expects($this->never())
             ->method('request');
-        $this->assertTrue($this->notifyDataChangedCommand->execute());
+        $this->assertFalse($this->notifyDataChangedCommand->execute());
     }
 }
