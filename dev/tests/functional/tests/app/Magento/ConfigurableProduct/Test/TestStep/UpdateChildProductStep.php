@@ -166,7 +166,6 @@ class UpdateChildProductStep implements TestStepInterface
      * Returns lowest possible price of configurable product.
      *
      * @param array $product
-     *
      * @return string
      */
     private function getLowestConfigurablePrice(array $product)
