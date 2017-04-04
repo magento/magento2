@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -111,6 +112,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $catalogConfig;
 
     /**
+     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -177,6 +183,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($this->entityMetadata);
+        $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
@@ -197,6 +207,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
                 'serializer' => $this->serializer,
+                'productFactory' => $this->productFactory,
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
@@ -372,6 +383,50 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->_productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
         $this->_model->getUsedProducts($product);
+    }
+
+    public function testGetUsedProductsWithDataInCache()
+    {
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $dataKey = '_cache_instance_products';
+        $usedProductsData = [['first']];
+        $usedProducts = [$childProduct];
+
+        $product->expects($this->once())
+            ->method('hasData')
+            ->with($dataKey)
+            ->willReturn(false);
+        $product->expects($this->once())
+            ->method('setData')
+            ->with($dataKey, $usedProducts);
+        $product->expects($this->any())
+            ->method('getData')
+            ->willReturnOnConsecutiveCalls(1, $usedProducts);
+
+        $childProduct->expects($this->once())
+            ->method('setData')
+            ->with($usedProductsData[0]);
+
+        $this->productFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($childProduct);
+
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->willReturn($usedProductsData);
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($usedProductsData)
+            ->willReturn($usedProductsData);
+
+        self::assertEquals($usedProducts, $this->_model->getUsedProducts($product));
     }
 
     /**

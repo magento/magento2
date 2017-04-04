@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Observer;
@@ -660,7 +660,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $schedule->expects($this->any())->method('unsScheduleId')->willReturnSelf();
         $schedule->expects($this->any())->method('trySchedule')->willReturnSelf();
         $schedule->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $schedule->expects($this->exactly(1))->method('save')->willReturnSelf();
+        $schedule->expects($this->atLeastOnce())->method('save')->willReturnSelf();
 
         $this->_collection->addItem(new \Magento\Framework\DataObject());
         $this->_collection->addItem($schedule);
