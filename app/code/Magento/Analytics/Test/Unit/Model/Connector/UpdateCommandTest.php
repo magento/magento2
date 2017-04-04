@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
@@ -80,7 +80,7 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
         $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->updateCommand = new UpdateCommand(
             $this->analyticsTokenMock,
             $this->httpClientMock,

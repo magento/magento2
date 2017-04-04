@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -249,6 +249,21 @@
             <field name="country_id" xsi:type="string">Germany</field>
             <field name="region" xsi:type="string">Berlin</field>
             <field name="telephone" xsi:type="string">333-33-333-33</field>
+        </dataset>
+
+        <dataset name="DE_address_default">
+            <field name="firstname" xsi:type="string">Jan</field>
+            <field name="lastname" xsi:type="string">Jansen</field>
+            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Berlin</field>
+            <field name="street" xsi:type="string">Augsburger Strabe 41</field>
+            <field name="postcode" xsi:type="string">10789</field>
+            <field name="country_id" xsi:type="string">Germany</field>
+            <field name="region" xsi:type="string">Berlin</field>
+            <field name="telephone" xsi:type="string">333-33-333-33</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
 
         <dataset name="DE_address_Frankfurt">

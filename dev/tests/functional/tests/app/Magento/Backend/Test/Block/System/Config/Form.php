@@ -2,14 +2,14 @@
 /**
  * Store configuration edit form.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Block\System\Config;
 
-use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class Form.

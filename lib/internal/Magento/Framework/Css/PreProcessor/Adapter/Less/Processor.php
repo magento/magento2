@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
-use Magento\Framework\Phrase;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Source;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\Source;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Processor
@@ -88,7 +88,7 @@ class Processor implements ContentProcessorInterface
             gc_enable();
 
             if (trim($content) === '') {
-                $this->logger->warning('Parsed less file is empty: ' .  $path);
+                $this->logger->warning('Parsed less file is empty: ' . $path);
                 return '';
             } else {
                 return $content;
