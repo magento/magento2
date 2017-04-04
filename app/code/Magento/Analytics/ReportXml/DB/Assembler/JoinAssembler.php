@@ -43,6 +43,7 @@ class JoinAssembler implements AssemblerInterface
      * @param ConditionResolver $conditionResolver
      * @param ColumnsResolver $columnsResolver
      * @param NameResolver $nameResolver
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ConditionResolver $conditionResolver,
