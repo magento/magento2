@@ -83,8 +83,8 @@ class OrderGetTest extends WebapiAbstract
             $this->assertArrayHasKey(
                 $field,
                 $result['billing_address'],
-                "Billing address should have field {$field}")
-            ;
+                "Billing address should have field {$field}"
+            );
             $this->assertArrayHasKey(
                 $field,
                 $result['shipping_address'],
