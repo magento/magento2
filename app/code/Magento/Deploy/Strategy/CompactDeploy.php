@@ -5,16 +5,12 @@
  */
 namespace Magento\Deploy\Strategy;
 
-use Magento\Deploy\Console\Command\DeployStaticOptions;
-use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackagePool;
+use Magento\Deploy\Package\Package;
 use Magento\Deploy\Process\Queue;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class CompactDeploy
- *
- * @api
+ * Compact deployment strategy implementation
  */
 class CompactDeploy implements StrategyInterface
 {

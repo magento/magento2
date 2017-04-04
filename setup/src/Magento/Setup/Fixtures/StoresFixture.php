@@ -254,6 +254,7 @@ class StoresFixture extends Fixture
         while ($existedStoreGroupCount < $this->storeGroupsCount) {
             $websiteId = $this->websiteIds[$existedStoreGroupCount % $existedWebsitesCount];
             $storeGroupName = sprintf('Store Group %d - website_id_%d', ++$existedStoreGroupCount, $websiteId);
+            $storeGroupCode = sprintf('store_group_%d', $existedStoreGroupCount);
 
             $storeGroup = clone $this->defaultStoreGroup;
             $storeGroup->addData(
@@ -261,6 +262,7 @@ class StoresFixture extends Fixture
                     'group_id' => null,
                     'website_id' => $websiteId,
                     'name' => $storeGroupName,
+                    'code' => $storeGroupCode,
                     'root_category_id' => $this->getStoreCategoryId($storeGroupName),
                 ]
             );

@@ -6,9 +6,7 @@
 namespace Magento\Deploy\Package;
 
 /**
- * Interface BundleInterface
- *
- * @api
+ * Bundle Interface
  */
 interface BundleInterface
 {

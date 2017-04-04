@@ -13,7 +13,6 @@ use Magento\Framework\Phrase;
  * Factory class for Package object
  *
  * @see Package
- * @api
  */
 class PackageFactory
 {

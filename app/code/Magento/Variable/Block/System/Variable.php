@@ -8,7 +8,7 @@ namespace Magento\Variable\Block\System;
 /**
  * Custom Variable Block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Variable extends \Magento\Backend\Block\Widget\Grid\Container
 {
