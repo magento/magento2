@@ -12,6 +12,7 @@ use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * The process for updating of existing entities.
@@ -49,21 +50,31 @@ class Update implements ProcessorInterface
     private $groupFactory;
 
     /**
+     * The event manager.
+     *
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator The calculator for data differences
      * @param WebsiteFactory $websiteFactory The factory for website entity
      * @param StoreFactory $storeFactory The factory for store entity
      * @param GroupFactory $groupFactory The factory for group entity
+     * @param ManagerInterface $eventManager The event manager
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
         WebsiteFactory $websiteFactory,
         StoreFactory $storeFactory,
-        GroupFactory $groupFactory
+        GroupFactory $groupFactory,
+        ManagerInterface $eventManager
     ) {
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->websiteFactory = $websiteFactory;
         $this->storeFactory = $storeFactory;
         $this->groupFactory = $groupFactory;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -162,6 +173,9 @@ class Update implements ProcessorInterface
             }
 
             $store->getResource()->save($store);
+            $store->getResource()->addCommitCallback(function () use ($store) {
+                $this->eventManager->dispatch('store_edit', ['store' => $store]);
+            });
         }
     }
 
@@ -178,7 +192,11 @@ class Update implements ProcessorInterface
         foreach ($items as $code => $groupData) {
             $websiteId = $groupData['website_id'];
 
-            unset($groupData['group_id'], $groupData['website_id']);
+            unset(
+                $groupData['group_id'],
+                $groupData['website_id'],
+                $groupData['root_category_id']
+            );
 
             $website = $this->findWebsiteById($data, $websiteId);
 
@@ -194,6 +212,9 @@ class Update implements ProcessorInterface
             }
 
             $group->getResource()->save($group);
+            $group->getResource()->addCommitCallback(function () use ($group) {
+                $this->eventManager->dispatch('store_group_save', ['group' => $group]);
+            });
         }
     }
 
