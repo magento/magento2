@@ -15,9 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
- * Class ConsoleLogger
- *
- * @api
+ * PSR logger implementation for CLI
  */
 class ConsoleLogger extends AbstractLogger
 {

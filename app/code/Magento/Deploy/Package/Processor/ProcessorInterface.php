@@ -8,7 +8,7 @@ namespace Magento\Deploy\Package\Processor;
 use Magento\Deploy\Package\Package;
 
 /**
- * Interface ProcessorInterface
+ * Deploy packages processor interface
  */
 interface ProcessorInterface
 {
