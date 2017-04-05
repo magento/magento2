@@ -211,7 +211,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $command = $this->objectManager->create(
             SensitiveConfigSetCommand::class,
             [
-                'sensitiveConfigSetFacade' => $this->objectManager->create(
+                'facade' => $this->objectManager->create(
                     SensitiveConfigSetFacade::class,
                     [
                         'collectorFactory' => $collectorFactoryMock
