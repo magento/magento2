@@ -13,7 +13,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $configWriter = $objectManager->get(\Magento\Framework\App\Config\Storage\WriterInterface::class);
 
 $configWriter->delete(SubscriptionHandler::CRON_STRING_PATH);
-$configWriter->save('default/analytics/subscription/enabled', 0);
+$configWriter->save('analytics/subscription/enabled', 0);
 
 /**
  * @var $analyticsToken \Magento\Analytics\Model\AnalyticsToken

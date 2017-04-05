@@ -98,7 +98,12 @@ class ReSignUpResponseResolverTest extends \PHPUnit_Framework_TestCase
          * @var $scopeConfig ScopeConfigInterface
          */
         $scopeConfig = $objectManager->get(ScopeConfigInterface::class);
-        return $scopeConfig->getValue(SubscriptionHandler::CRON_STRING_PATH);
+
+        return $scopeConfig->getValue(
+            SubscriptionHandler::CRON_STRING_PATH,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
     }
 
     /**
