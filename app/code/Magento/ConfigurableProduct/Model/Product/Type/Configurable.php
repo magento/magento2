@@ -1218,7 +1218,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  array $requiredAttributeIds
      * @return ProductInterface[]
      */
-    public function getUsedProducts(\Magento\Catalog\Model\Product $product, $requiredAttributeIds = null)
+    public function getUsedProducts($product, $requiredAttributeIds = null)
     {
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $keyParts = [
