@@ -12,6 +12,10 @@ use Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator;
 use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
 
+/**
+ * Class SwatchesGeneratorTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SwatchesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
