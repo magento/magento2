@@ -373,20 +373,7 @@ class Bootstrap
     {
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
-    }
-
-    /**
-     * Initializes object manager
-     *
-     * @return void
-     */
-    private function initObjectManager()
-    {
-        if (!$this->objectManager) {
-            $this->objectManager = $this->factory->create($this->server);
-            $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
-        }
-    }
+    }   
 
     /**
      * Getter for error code
