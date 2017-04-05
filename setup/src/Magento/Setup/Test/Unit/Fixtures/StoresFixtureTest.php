@@ -22,6 +22,7 @@ use \Magento\Store\Model\StoreManager;
 
 /**
  * Tests Magento\Setup\Model\PackagesData
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 {
