@@ -394,7 +394,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function getAttribute($attribute)
     {
-
         /** @var $config \Magento\Eav\Model\Config */
         $config = $this->_getConfig();
         if (is_numeric($attribute)) {
@@ -456,6 +455,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function addAttribute(AbstractAttribute $attribute)
     {
+        $attribute = clone $attribute; //we change state of attribute, so lets make copy
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 
@@ -961,13 +961,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $object->isObjectNew(true);
         }
 
-        $this->loadAttributesMetadata($attributes);
-
-        $this->_loadModelAttributes($object);
-        $this->_afterLoad($object);
-        $object->afterLoad();
-        $object->setOrigData();
-        $object->setHasDataChanges(false);
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }
@@ -975,21 +968,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
+     * @deprecated Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
      */
     protected function loadAttributesMetadata($attributes)
     {
-        if (empty($attributes)) {
-            $this->loadAllAttributes();
-        } else {
-            if (!is_array($attributes)) {
-                $attributes = [$attributes];
-            }
-            foreach ($attributes as $attrCode) {
-                $this->getAttribute($attrCode);
-            }
-        }
+        $this->loadAttributesForObject($attributes);
     }
 
     /**
@@ -1925,5 +1910,23 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function afterDelete(\Magento\Framework\DataObject $object)
     {
         $this->_afterDelete($object);
+    }
+
+    /**
+     * @param array $attributes
+     * @param |null $object
+     */
+    protected function loadAttributesForObject($attributes, $object = null)
+    {
+        if (empty($attributes)) {
+            $this->loadAllAttributes($object);
+        } else {
+            if (!is_array($attributes)) {
+                $attributes = [$attributes];
+            }
+            foreach ($attributes as $attrCode) {
+                $this->getAttribute($attrCode);
+            }
+        }
     }
 }

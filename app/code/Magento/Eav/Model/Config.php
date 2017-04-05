@@ -107,7 +107,7 @@ class Config
     protected $_universalFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     * @var AbstractAttribute[]
      */
     private $attributeProto = [];
 
@@ -499,22 +499,22 @@ class Config
             return $code;
         }
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
-        $this->_initAttributes($entityType);
-
         $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();
-        if (is_numeric($code)) {
-            $attributeCode = $this->_getAttributeReference($code, $entityTypeCode);
-            if ($attributeCode) {
-                $code = $attributeCode;
-            }
+
+        if (is_numeric($code)) { // if code is numeric, try to map attribute id to code
+            $code = $this->_getAttributeReference($code, $entityTypeCode) ?: $code;
         }
 
         $attributes = $this->loadAttributes($entityTypeCode);
         $attribute = isset($attributes[$code]) ? $attributes[$code] : null;
         if (!$attribute) {
             $attribute = $this->createAttributeByAttributeCode($entityType, $code);
-            $this->_addAttributeReference($code, $code, $entityTypeCode);
-            $this->saveAttribute($attribute, $entityTypeCode, $code);
+            $this->_addAttributeReference(
+                $attribute->getAttributeId(),
+                $attribute->getAttributeCode(),
+                $entityTypeCode
+            );
+            $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
         }
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $attribute;
@@ -529,7 +529,7 @@ class Config
     private function createAttribute($model)
     {
         if (!isset($this->attributeProto[$model])) {
-            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+            /** @var AbstractAttribute $attribute */
             $this->attributeProto[$model] = $this->_universalFactory->create($model);
         }
         return clone $this->attributeProto[$model];
@@ -563,25 +563,7 @@ class Config
             return $this->_attributeCodes[$cacheKey];
         }
 
-        if ($attributeSetId) {
-            $attributesInfo = $this->_universalFactory->create(
-                $entityType->getEntityAttributeCollection()
-            )->setEntityTypeFilter(
-                $entityType
-            )->setAttributeSetFilter(
-                $attributeSetId
-            )->addStoreLabel(
-                $storeId
-            )->getData();
-            $attributes = [];
-            foreach ($attributesInfo as $attributeData) {
-                $attributes[] = $attributeData['attribute_code'];
-                $this->_createAttribute($entityType, $attributeData);
-            }
-        } else {
-            $this->_initAttributes($entityType);
-            $attributes = array_keys($this->_attributeData[$entityType->getEntityTypeCode()]);
-        }
+        $attributes = array_keys($this->getEntityAttributes($entityType, $object));
 
         $this->_attributeCodes[$cacheKey] = $attributes;
         if ($this->isCacheEnabled()) {
@@ -595,6 +577,49 @@ class Config
             );
         }
 
+        return $attributes;
+    }
+
+
+    /**
+     * Get all entity type attributes
+     *
+     * @param  int|string|Type $entityType
+     * @param  \Magento\Framework\DataObject|null $object
+     * @return AbstractAttribute[]
+     */
+    public function getEntityAttributes($entityType, $object = null)
+    {
+        $entityType = $this->getEntityType($entityType);
+        $attributeSetId = 0;
+        $storeId = 0;
+        if ($object instanceof \Magento\Framework\DataObject) {
+            $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
+            $storeId = $object->getStoreId() ?: $storeId;
+        }
+
+        $attributes = [];
+        if ($attributeSetId) {
+            $attributesInfo = $this->_universalFactory->create(
+                $entityType->getEntityAttributeCollection()
+            )->setEntityTypeFilter(
+                $entityType
+            )->setAttributeSetFilter(
+                $attributeSetId
+            )->addStoreLabel(
+                $storeId
+            )->getData();
+
+            foreach ($attributesInfo as $attributeData) {
+                $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
+            }
+        } else {
+            $this->_initAttributes($entityType);
+            $attributesData = $this->_attributeData[$entityType->getEntityTypeCode()];
+            foreach ($attributesData as $attributeData) {
+                $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
+            }
+        }
         return $attributes;
     }
 
@@ -691,7 +716,13 @@ class Config
     {
         $entityType = $this->getEntityType($entityType);
         $attribute = $this->createAttribute($entityType->getAttributeModel());
-        $attribute->setAttributeCode($attributeCode);
+        if (is_numeric($attributeCode)) {
+            $attribute->load($attributeCode);
+        } else {
+            $attribute->loadByCode($entityType->getEntityTypeId(), $attributeCode);
+            $attribute->setAttributeCode($attributeCode);
+        }
+
         $entity = $entityType->getEntity();
         if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
             $attribute->setBackendType(
