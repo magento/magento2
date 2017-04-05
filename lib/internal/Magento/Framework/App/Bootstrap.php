@@ -228,7 +228,7 @@ class Bootstrap
      */
     public function createApplication($type, $arguments = [])
     {
-        try {        
+        try {
             $application = $this->objectManager->create($type, $arguments);
             if (!($application instanceof AppInterface)) {
                 throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
@@ -250,7 +250,7 @@ class Bootstrap
         try {
             try {
                 \Magento\Framework\Profiler::start('magento');
-                $this->initErrorHandler();              
+                $this->initErrorHandler();
                 $this->assertMaintenance();
                 $this->assertInstalled();
                 $response = $application->launch();
@@ -278,7 +278,7 @@ class Bootstrap
         $isExpected = $this->getIsExpected(self::PARAM_REQUIRE_MAINTENANCE, self::DEFAULT_REQUIRE_MAINTENANCE);
         if (null === $isExpected) {
             return;
-        }     
+        }
         /** @var \Magento\Framework\App\MaintenanceMode $maintenance */
         $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
 
@@ -310,7 +310,7 @@ class Bootstrap
         $isExpected = $this->getIsExpected(self::PARAM_REQUIRE_IS_INSTALLED, self::DEFAULT_REQUIRE_IS_INSTALLED);
         if (null === $isExpected) {
             return;
-        }     
+        }
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
@@ -373,8 +373,8 @@ class Bootstrap
     {
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
-    }   
-
+    }
+    
     /**
      * Getter for error code
      *
