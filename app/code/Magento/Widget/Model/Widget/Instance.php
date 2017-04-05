@@ -20,6 +20,9 @@ use Magento\Framework\App\ObjectManager;
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
