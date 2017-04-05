@@ -205,6 +205,7 @@ class Bootstrap
         $this->rootDir = $rootDir;
         $this->server = $initParams;
         $this->objectManager = $this->factory->create($this->server);
+        $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
     }
 
     /**
