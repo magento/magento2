@@ -86,6 +86,29 @@
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
         </arguments>
     </type>
+    <virtualType name="systemSnapshot" type="Magento\Config\App\Config\Type\System">
+        <arguments>
+            <argument name="source" xsi:type="object">systemConfigSnapshotSourceAggregated</argument>
+            <argument name="configType" xsi:type="string">system_snapshot</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="configSnapshot" type="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="system" xsi:type="object">systemSnapshot</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="snapshotValueFactory" type="Magento\Config\Model\PreparedValueFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">configSnapshot</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\Model\Config\Importer">
+        <arguments>
+            <argument name="valueBuilder" xsi:type="object">snapshotValueFactory</argument>
+        </arguments>
+    </type>
     <virtualType name="modulesDataProviderProxy" type="Magento\Framework\App\Config\InitialConfigSource\Proxy">
         <arguments>
             <argument name="instanceName" xsi:type="string">modulesDataProvider</argument>
@@ -136,6 +159,16 @@
                 </item>
                 <item name="initial" xsi:type="array">
                     <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="systemConfigSnapshotSourceAggregated" type="systemConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\InitialSnapshotConfigSource</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
             </argument>
