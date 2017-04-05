@@ -8,6 +8,8 @@ namespace Magento\Security\Model\ResourceModel;
 
 /**
  * Password reset request event mysql resource model
+ *
+ * @api
  */
 class PasswordResetRequestEvent extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

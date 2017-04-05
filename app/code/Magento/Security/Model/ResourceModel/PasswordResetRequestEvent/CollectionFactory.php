@@ -9,8 +9,9 @@ use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
 
 /**
- * Factory class for @see
- * \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
+ * Factory class for @see \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
+ *
+ * @api
  */
 class CollectionFactory
 {
