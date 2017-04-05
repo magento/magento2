@@ -161,6 +161,13 @@ class Attribute extends Form
     private $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
 
     /**
+     * Wizard Images step CSS selector.
+     *
+     * @var string
+     */
+    private $wizardImagesStep = '#variation-steps-wizard_step3';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -486,7 +493,7 @@ class Attribute extends Form
             return;
         }
 
-        $wizardStep = $this->browser->find('#variation-steps-wizard_step3');
+        $wizardStep = $this->browser->find($this->wizardImagesStep);
         $data = $this->prepareImageStepData($attributeSource->getBulkImagesPriceQuantity(), $attributes);
         $mapping = $this->dataMapping($data);
         $this->_fill($mapping, $wizardStep);

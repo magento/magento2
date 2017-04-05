@@ -170,13 +170,11 @@ class UpdateChildProductStep implements TestStepInterface
      */
     private function getLowestConfigurablePrice(array $product)
     {
-        $price = "0";
-
         $configurableOptions = $product['configurable_attributes_data'];
+        $attributeOption = reset($configurableOptions['matrix']);
+        $price = isset($attributeOption['price']) ? $attributeOption['price'] : "0";
 
         foreach ($configurableOptions['matrix'] as $option) {
-            $price = $price === '0' ? $option['price'] : $price;
-
             if ($price > $option['price']) {
                 $price = $option['price'];
             }

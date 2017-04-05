@@ -79,6 +79,7 @@ class AssertConfigurableProductImages extends AssertProductPage
             $displayedImage = $this->productView->getBaseImageSource();
             if (in_array($displayedImage, $this->displayedImages)) {
                 $message = 'Option image is not correct.';
+                break;
             }
 
             $this->displayedImages[] = $displayedImage;

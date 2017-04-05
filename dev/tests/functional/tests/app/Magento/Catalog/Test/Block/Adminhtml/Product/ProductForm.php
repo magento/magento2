@@ -77,7 +77,7 @@ class ProductForm extends FormSections
      *
      * @var string
      */
-    protected $websiteCheckbox = '//div/div[1]/label[text()="%s"]/../input';
+    protected $websiteCheckbox = '//label[text()="%s"]/../input';
 
     /**
      * Fill the product form.
@@ -148,7 +148,7 @@ class ProductForm extends FormSections
     /**
      * Unassign product from website by website name.
      *
-     * @param $name
+     * @param string $name
      */
     public function unassignFromWebsite($name)
     {
