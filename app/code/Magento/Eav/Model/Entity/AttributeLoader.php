@@ -62,19 +62,12 @@ class AttributeLoader implements AttributeLoaderInterface
         /**
          * Check and init default attributes
          */
-        $storage = $object ?: $resource;
-        $defaultAttributes = $resource->getDefaultAttributes();
-        foreach ($defaultAttributes as $attributeCode) {
-            $attributeIndex = array_search($attributeCode, $attributeCodes);
-            if ($attributeIndex !== false) {
-                $storage->getAttribute($attributeCodes[$attributeIndex]);
-                unset($attributeCodes[$attributeIndex]);
-            } else {
-                $storage->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
-            }
+        $defaultAttributesCodes =  array_intersect($resource->getDefaultAttributes(), $attributeCodes);
+        foreach ($defaultAttributesCodes as $attributeCode) {
+            $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
         }
         foreach ($attributes as $code => $attribute) {
-            $storage->addAttribute($attribute);
+            $resource->addAttribute($attribute);
         }
         return $resource;
     }

@@ -957,9 +957,17 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
         if (is_array($row)) {
             $object->addData($row);
+            $this->loadAttributesForObject($attributes, $object);
+
+            $this->_loadModelAttributes($object);
+            $this->_afterLoad($object);
+            $object->afterLoad();
+            $object->setOrigData();
+            $object->setHasDataChanges(false);
         } else {
             $object->isObjectNew(true);
         }
+
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
@@ -1655,7 +1663,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $data = [
             'attribute_id' => $attribute->getId(),
-            $entity->getLinkField() => $object->getData($entity->getLinkField()),
+            $this->getLinkField() => $object->getData($this->getLinkField()),
         ];
 
         if (!$this->getEntityTable()) {
