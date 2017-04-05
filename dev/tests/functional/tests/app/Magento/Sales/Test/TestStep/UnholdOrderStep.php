@@ -3,7 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Test\TestStep;
+
+namespace Magento\Sales\Test\TestStep;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
@@ -11,25 +12,37 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class AcceptPaymentStep
+ * Unhold order in admin.
  */
-class AcceptPaymentStep implements TestStepInterface
+class UnholdOrderStep implements TestStepInterface
 {
     /**
+     * Orders Page.
+     *
      * @var OrderIndex
      */
-    private $orderIndex;
+    protected $orderIndex;
 
     /**
+     * Order View Page.
+     *
      * @var SalesOrderView
      */
-    private $salesOrderView;
+    protected $salesOrderView;
 
     /**
+     * OrderInjectable fixture.
+     *
      * @var OrderInjectable
      */
-    private $order;
+    protected $order;
 
+    /**
+     * @construct
+     * @param OrderIndex $orderIndex
+     * @param SalesOrderView $salesOrderView
+     * @param OrderInjectable $order
+     */
     public function __construct(OrderIndex $orderIndex, SalesOrderView $salesOrderView, OrderInjectable $order)
     {
         $this->orderIndex = $orderIndex;
@@ -38,12 +51,14 @@ class AcceptPaymentStep implements TestStepInterface
     }
 
     /**
-     * @inheritdoc
+     * On hold order in admin.
+     *
+     * @return void
      */
     public function run()
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->accept();
+        $this->salesOrderView->getPageActions()->unhold();
     }
 }

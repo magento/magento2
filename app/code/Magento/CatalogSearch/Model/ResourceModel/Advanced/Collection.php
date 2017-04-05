@@ -84,6 +84,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -113,7 +114,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -144,7 +146,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool
+            $metadataPool,
+            $indexerFrontendResource
         );
     }
 
