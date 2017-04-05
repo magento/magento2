@@ -788,9 +788,27 @@ class Installer
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
-        $this->checkInstallationFilePermissions();
+        $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+    }
+
+    /**
+     * Check permissions of directories that are expected to be writable for database upgrade
+     *
+     * @return void
+     * @throws \Exception If some of the required directories isn't writable
+     */
+    public function checkFilePermissionsForDbUpgrade()
+    {
+        $results = $this->filePermissions->getMissingWritableDirectoriesForDbUpgrade();
+        if ($results) {
+            $errorMsg = sprintf(
+                "Missing write permissions to the following directories: '%s'",
+                implode(' ', $results)
+            );
+            throw new \Exception($errorMsg);
+        }
     }
 
     /**
