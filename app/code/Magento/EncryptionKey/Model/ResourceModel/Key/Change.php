@@ -14,6 +14,8 @@ use Magento\Framework\Config\File\ConfigFilePool;
  * Encryption key changer resource model
  * The operation must be done in one transaction
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
