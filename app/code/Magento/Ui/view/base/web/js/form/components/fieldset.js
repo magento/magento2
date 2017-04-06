@@ -22,6 +22,7 @@ define([
             opened: false,
             level: 0,
             visible: true,
+            initializeFieldsetDataByDefault: false,
             disabled: false,
             listens: {
                 'opened': 'onVisibilityChange'
@@ -80,7 +81,7 @@ define([
                 'loading':  this.onContentLoading,
                 'error':  this.onChildrenError
             });
-
+            this._wasOpened = true;
             if (this.disabled) {
                 try {
                     elem.disabled(true);
