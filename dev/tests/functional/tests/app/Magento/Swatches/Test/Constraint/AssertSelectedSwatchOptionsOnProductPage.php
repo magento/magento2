@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Swatches\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductPage;
@@ -12,9 +11,9 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 
 /**
- * Assert that product with swatches and regular dropdown redirect can't be add to cart from catalog catergory page.
+ * Assert that selected(add to cart from category page) swatch attributes are displayed and selected on product page
  */
-class AssertSwatchConfigurableProductPage extends AssertProductPage
+class AssertSelectedSwatchOptionsOnProductPage extends AssertProductPage
 {
     /**
      * {@inheritdoc}
@@ -27,7 +26,6 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
         $this->product = $product;
         $this->productView = $catalogProductView->getProductViewWithSwatchesBlock();
 
-        // we need this line for waiti until page will be fully loaded
         $this->productView->getSelectedSwatchOptions($this->product);
         $errors = $this->verify();
         \PHPUnit_Framework_Assert::assertEmpty(
