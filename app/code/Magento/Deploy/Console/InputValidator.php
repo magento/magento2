@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console;
 
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
-use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\Validator\Locale;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * Class InputValidator
- *
- * @api
+ * Command input arguments validator class
  */
 class InputValidator
 {
@@ -84,7 +82,7 @@ class InputValidator
             $input->getOption(Options::EXCLUDE_THEME)
         );
         $this->checkLanguagesInput(
-            $input->getArgument(DeployStaticContentCommand::LANGUAGES_ARGUMENT) ?: ['all'],
+            $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'],
             $input->getOption(Options::EXCLUDE_LANGUAGE)
         );
     }

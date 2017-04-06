@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -1247,6 +1247,7 @@
         <arguments>
             <argument name="queryModifiers" xsi:type="array">
                 <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
+                <item name="like" xsi:type="string">Magento\Framework\DB\Select\LikeQueryModifier</item>
             </argument>
         </arguments>
     </type>
@@ -1261,6 +1262,11 @@
                 <item name="MEMORY" xsi:type="string">MEMORY</item>
                 <item name="MYISAM" xsi:type="string">MYISAM</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\FieldDataConverter">
+        <arguments>
+            <argument name="envBatchSize" xsi:type="init_parameter">Magento\Framework\DB\FieldDataConverter::BATCH_SIZE_VARIABLE_NAME</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Asset\PreProcessor\Chain">

@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Layout model

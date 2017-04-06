@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -364,7 +364,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 ['module' => ['Magento_A']],
                 [
                     "Cannot uninstall module 'Magento_A' because the following module(s) depend on it:" .
-                    PHP_EOL .  "\tMagento_D"
+                    PHP_EOL . "\tMagento_D"
                 ]
             ],
             [
@@ -372,7 +372,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 ['module' => ['Magento_A', 'Magento_B']],
                 [
                     "Cannot uninstall module 'Magento_A' because the following module(s) depend on it:" .
-                    PHP_EOL .  "\tMagento_D"
+                    PHP_EOL . "\tMagento_D"
                 ]
             ],
             [
@@ -383,9 +383,9 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 ['module' => ['Magento_A', 'Magento_B']],
                 [
                     "Cannot uninstall module 'Magento_A' because the following module(s) depend on it:" .
-                    PHP_EOL .  "\tMagento_D",
+                    PHP_EOL . "\tMagento_D",
                     "Cannot uninstall module 'Magento_B' because the following module(s) depend on it:" .
-                    PHP_EOL .  "\tMagento_E"
+                    PHP_EOL . "\tMagento_E"
                 ]
             ],
         ];

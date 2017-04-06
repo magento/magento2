@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model;
@@ -8,9 +8,11 @@ namespace Magento\Config\Model;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\ValueInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverPool;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Creates a prepared instance of Value.
@@ -20,11 +22,11 @@ use Magento\Framework\App\Config\ValueFactory;
 class PreparedValueFactory
 {
     /**
-     * The deployment configuration reader.
+     * The scope resolver pool.
      *
-     * @var DeploymentConfig
+     * @var ScopeResolverPool
      */
-    private $deploymentConfig;
+    private $scopeResolverPool;
 
     /**
      * The manager for system configuration structure.
@@ -42,16 +44,16 @@ class PreparedValueFactory
     private $valueFactory;
 
     /**
-     * @param DeploymentConfig $deploymentConfig The deployment configuration reader
+     * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
      * @param StructureFactory $structureFactory The manager for system configuration structure
      * @param ValueFactory $valueFactory The factory for configuration value objects
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
+        ScopeResolverPool $scopeResolverPool,
         StructureFactory $structureFactory,
         ValueFactory $valueFactory
     ) {
-        $this->deploymentConfig = $deploymentConfig;
+        $this->scopeResolverPool = $scopeResolverPool;
         $this->structureFactory = $structureFactory;
         $this->valueFactory = $valueFactory;
     }
@@ -62,31 +64,41 @@ class PreparedValueFactory
      * @param string $path The configuration path in format group/section/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
-     * @param string $scopeCode The scope code
+     * @param string|int|null $scopeCode The scope code
      * @return ValueInterface
+     * @throws RuntimeException If Value can not be created
      * @see ValueInterface
      * @see Value
      */
-    public function create($path, $value, $scope, $scopeCode)
+    public function create($path, $value, $scope, $scopeCode = null)
     {
-        /** @var Structure $structure */
-        $structure = $this->structureFactory->create();
-        /** @var Structure\ElementInterface $field */
-        $field = $this->deploymentConfig->isAvailable()
-            ? $structure->getElement($path)
-            : null;
-        /** @var ValueInterface $backendModel */
-        $backendModel = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-            ? $field->getBackendModel()
-            : $this->valueFactory->create();
+        try {
+            /** @var Structure $structure */
+            $structure = $this->structureFactory->create();
+            /** @var Structure\ElementInterface $field */
+            $field = $structure->getElement($path);
+            /** @var ValueInterface $backendModel */
+            $backendModel = $field instanceof Structure\Element\Field && $field->hasBackendModel()
+                ? $field->getBackendModel()
+                : $this->valueFactory->create();
 
-        if ($backendModel instanceof Value) {
-            $backendModel->setPath($path);
-            $backendModel->setScope($scope);
-            $backendModel->setScopeId($scopeCode);
-            $backendModel->setValue($value);
+            if ($backendModel instanceof Value) {
+                $scopeId = 0;
+
+                if ($scope !== ScopeInterface::SCOPE_DEFAULT) {
+                    $scopeResolver = $this->scopeResolverPool->get($scope);
+                    $scopeId = $scopeResolver->getScope($scopeCode)->getId();
+                }
+
+                $backendModel->setPath($path);
+                $backendModel->setScope($scope);
+                $backendModel->setScopeId($scopeId);
+                $backendModel->setValue($value);
+            }
+
+            return $backendModel;
+        } catch (\Exception $exception) {
+            throw new RuntimeException(__('%1', $exception->getMessage()), $exception);
         }
-
-        return $backendModel;
     }
 }

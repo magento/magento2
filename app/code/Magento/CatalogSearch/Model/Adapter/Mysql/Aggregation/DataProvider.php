@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
@@ -16,6 +16,8 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,22 +50,32 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
+     * @var FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
+     * @param FrontendResource $indexerFrontendResource
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Session $customerSession
+        Session $customerSession,
+        FrontendResource $indexerFrontendResource = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
         $this->customerSession = $customerSession;
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
+            Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
     }
 
     /**
@@ -92,7 +104,7 @@ class DataProvider implements DataProviderInterface
             if (!$store instanceof \Magento\Store\Model\Store) {
                 throw new \RuntimeException('Illegal scope resolved');
             }
-            $table = $this->resource->getTableName('catalog_product_index_price');
+            $table = $this->indexerFrontendResource->getMainTable();
             $select->from(['main_table' => $table], null)
                 ->columns([BucketInterface::FIELD_VALUE => 'main_table.min_price'])
                 ->where('main_table.customer_group_id = ?', $this->customerSession->getCustomerGroupId())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -61,7 +61,7 @@ class DependencyChecker
      */
     public function checkDependenciesWhenDisableModules($toBeDisabledModules, $currentlyEnabledModules = null)
     {
-        $masterList = isset($currentlyEnabledModules) ? $currentlyEnabledModules: $this->enabledModuleList;
+        $masterList = isset($currentlyEnabledModules) ? $currentlyEnabledModules : $this->enabledModuleList;
         // assume disable succeeds: currently enabled modules - to-be-disabled modules
         $enabledModules = array_diff($masterList, $toBeDisabledModules);
         return $this->checkDependencyGraph(false, $toBeDisabledModules, $enabledModules);
@@ -76,7 +76,7 @@ class DependencyChecker
      */
     public function checkDependenciesWhenEnableModules($toBeEnabledModules, $currentlyEnabledModules = null)
     {
-        $masterList = isset($currentlyEnabledModules) ? $currentlyEnabledModules: $this->enabledModuleList;
+        $masterList = isset($currentlyEnabledModules) ? $currentlyEnabledModules : $this->enabledModuleList;
         // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
         $enabledModules = array_unique(array_merge($masterList, $toBeEnabledModules));
         return $this->checkDependencyGraph(true, $toBeEnabledModules, $enabledModules);

@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogWidget\Test\Unit\Block\Product;
 
-use \Magento\CatalogWidget\Block\Product\ProductsList;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;
+
+use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ProductsListTest
@@ -97,11 +97,9 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
         $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
-        $this->widgetConditionsHelper = $this->getMock(
-            \Magento\Widget\Helper\Conditions::class,
-            [],
-            ['serializer' => $this->serializer]
-        );
+        $this->widgetConditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
 

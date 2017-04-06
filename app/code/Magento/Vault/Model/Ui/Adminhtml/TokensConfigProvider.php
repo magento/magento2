@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui\Adminhtml;
@@ -26,6 +26,8 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * Class ConfigProvider
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class TokensConfigProvider
 {
