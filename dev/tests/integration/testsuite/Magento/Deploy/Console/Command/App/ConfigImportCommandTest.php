@@ -138,6 +138,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportStores()
     {
+        $this->markTestSkipped('MAGETWO-67125');
         $this->assertEmpty($this->hash->get());
 
         $dumpCommand = $this->objectManager->create(ApplicationDumpCommand::class);

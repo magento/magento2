@@ -9,18 +9,12 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testcase">
         <allow>
-            <tag group="test_type" value="3rd_party_test" />
-        </allow>
-        <deny>
             <tag group="test_type" value="3rd_party_test_single_flow" />
-        </deny>
+        </allow>
     </rule>
     <rule scope="variation">
         <allow>
-            <tag group="test_type" value="3rd_party_test" />
-        </allow>
-        <deny>
             <tag group="test_type" value="3rd_party_test_single_flow" />
-        </deny>
+        </allow>
     </rule>
 </config>
