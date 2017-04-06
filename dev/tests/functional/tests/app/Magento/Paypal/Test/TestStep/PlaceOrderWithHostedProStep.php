@@ -7,6 +7,7 @@
 namespace Magento\Paypal\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
@@ -54,6 +55,11 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
     private $creditCard;
 
     /**
+     * @var CheckoutOnepageSuccess
+     */
+    private $checkoutOnepageSuccess;
+
+    /**
      * Fixture OrderInjectable.
      *
      * @var OrderInjectable
@@ -64,6 +70,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param FixtureFactory $fixtureFactory
      * @param CreditCard $creditCard
+     * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param array $payment
      * @param array $products
      * @param OrderInjectable|null $order
@@ -72,6 +79,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         CheckoutOnepage $checkoutOnepage,
         FixtureFactory $fixtureFactory,
         CreditCard $creditCard,
+        CheckoutOnepageSuccess $checkoutOnepageSuccess,
         array $payment,
         array $products,
         OrderInjectable $order = null
@@ -81,6 +89,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         $this->creditCard = $creditCard;
         $this->payment = $payment;
         $this->products = $products;
+        $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->order = $order;
     }
 
@@ -100,7 +109,11 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             $this->checkoutOnepage->getHostedProBlock()->fillPaymentData($this->creditCard);
             $attempts++;
         }
+
+        $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
+        /** @var OrderInjectable $order */
         $data = [
+            'id' => $orderId,
             'entity_id' => ['products' => $this->products]
         ];
         $orderData = $this->order !== null ? $this->order->getData() : [];
@@ -109,6 +122,9 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             ['data' => array_merge($data, $orderData)]
         );
 
-        return ['order' => $order];
+        return [
+            'orderId' => $orderId,
+            'order' => $order,
+        ];
     }
 }
