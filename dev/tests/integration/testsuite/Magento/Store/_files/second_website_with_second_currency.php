@@ -28,6 +28,9 @@ $configResource->saveConfig(
     0
 );
 
+/**
+ * Configuration cache clean is required to reload currency setting
+ */
 /** @var Magento\Config\App\Config\Type\System $config */
 $config = $objectManager->get(\Magento\Config\App\Config\Type\System::class);
 $config->clean();

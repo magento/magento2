@@ -69,9 +69,8 @@ class SystemTest extends \PHPUnit_Framework_TestCase
         $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['serialize', 'unserialize'])
             ->getMock();
+
         $this->configType = new System(
             $this->source,
             $this->postProcessor,

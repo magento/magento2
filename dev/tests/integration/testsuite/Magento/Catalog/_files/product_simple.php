@@ -21,7 +21,9 @@ $tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPri
 $tpExtensionAttributesFactory = $objectManager->get(ProductTierPriceExtensionFactory::class);
 
 $adminWebsite = $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class)->get('admin');
-$tierPriceWebsiteId = $tpExtensionAttributesFactory->create()->setWebsiteId($adminWebsite->getId());
+$tierPriceExtensionAttributes1 = $tpExtensionAttributesFactory->create()
+    ->setWebsiteId($adminWebsite->getId());
+
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -30,7 +32,8 @@ $tierPrices[] = $tierPriceFactory->create(
             'value' => 8
         ]
     ]
-)->setExtensionAttributes($tierPriceWebsiteId);
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -39,7 +42,8 @@ $tierPrices[] = $tierPriceFactory->create(
             'value' => 5
         ]
     ]
-)->setExtensionAttributes($tierPriceWebsiteId);
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
 $tierPrices[] = $tierPriceFactory->create(
     [
         'data' => [
@@ -48,11 +52,11 @@ $tierPrices[] = $tierPriceFactory->create(
             'value' => 5
         ]
     ]
-)->setExtensionAttributes($tierPriceWebsiteId);
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
 
-$tierPricePercentageValue = $tpExtensionAttributesFactory->create()
-    ->setPercentageValue(50)
-    ->setWebsiteId($adminWebsite->getId());
+$tierPriceExtensionAttributes2 = $tpExtensionAttributesFactory->create()
+    ->setWebsiteId($adminWebsite->getId())
+    ->setPercentageValue(50);
 
 $tierPrices[] = $tierPriceFactory->create(
     [
@@ -61,7 +65,7 @@ $tierPrices[] = $tierPriceFactory->create(
             'qty' => 10
         ]
     ]
-)->setExtensionAttributes($tierPricePercentageValue);
+)->setExtensionAttributes($tierPriceExtensionAttributes2);
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);

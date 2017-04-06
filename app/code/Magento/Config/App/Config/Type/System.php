@@ -24,7 +24,7 @@ class System implements ConfigTypeInterface
     private $source;
 
     /**
-     * @var DataObject[]
+     * @var DataObject
      */
     private $data;
 
@@ -129,6 +129,10 @@ class System implements ConfigTypeInterface
 
     /**
      * Check whether configuration is cached
+     *
+     * In case configuration cache exists method 'load' returns
+     * value equal to $this->cacheExistenceKey
+     *
      * @return bool
      */
     private function isCacheExists()
@@ -138,6 +142,9 @@ class System implements ConfigTypeInterface
 
     /**
      * Explode path by '/'(forward slash) separator
+     *
+     * In case $path string contains forward slash symbol(/) the $path is exploded and parts array is returned
+     * In other case empty array is returned
      *
      * @param string $path
      * @return array
@@ -154,6 +161,11 @@ class System implements ConfigTypeInterface
     /**
      * Check whether requested configuration data is read to memory
      *
+     * Because of configuration is cached partially each part can be loaded separately
+     * Method performs check if corresponding system configuration part is already loaded to memory
+     * and value can be retrieved directly without cache look up
+     *
+     *
      * @param string $path
      * @return bool
      */
@@ -165,6 +177,9 @@ class System implements ConfigTypeInterface
 
     /**
      * Load configuration from all the sources
+     *
+     * System configuration is loaded in 3 steps performing consecutive calls to
+     * Pre Processor, Fallback Processor, Post Processor accordingly
      *
      * @return array
      */
@@ -206,6 +221,10 @@ class System implements ConfigTypeInterface
     /**
      * Read cached configuration
      *
+     * Read section of system configuration corresponding to requested $path from cache
+     * Configuration stored to internal property right after load to prevent additional
+     * requests to cache storage
+     *
      * @param string $path
      * @return mixed
      */
@@ -219,12 +238,11 @@ class System implements ConfigTypeInterface
         $pathParts = $this->getPathParts($path);
         if (!empty($pathParts)) {
             $result = $this->cache->load(self::CONFIG_TYPE . '_' . $pathParts[0] . $pathParts[1]);
-        }
-
-        if ($result !== false && $result !== null) {
-            $readData = $this->data->getData();
-            $readData[$pathParts[0]][$pathParts[1]] = $this->serializer->unserialize($result);
-            $this->data = new DataObject($readData);
+            if ($result !== false) {
+                $readData = $this->data->getData();
+                $readData[$pathParts[0]][$pathParts[1]] = $this->serializer->unserialize($result);
+                $this->data->setData($readData);
+            }
         }
 
         return $this->data->getData($path);
@@ -232,6 +250,10 @@ class System implements ConfigTypeInterface
 
     /**
      * Clean cache and global variables cache
+     *
+     * Next items cleared:
+     * - Internal property intended to store already loaded configuration data
+     * - All records in cache storage tagged with CACHE_TAG
      *
      * @return void
      */
