@@ -8,7 +8,6 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
  * Assert invoiced order on admin dashboard.
@@ -16,40 +15,30 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 class AssertInvoicedOrderOnDashboard extends AbstractConstraint
 {
     /**
-     * Invoiced orders quantity.
-     */
-    const EXPECTED_ORDERS_QTY = 1;
-
-    /**
-     * Assert orders quantity and graph image visibility on admin dashboard.
+     * Assert orders quantity on admin dashboard.
      *
      * @param TestStepFactory $stepFactory
-     * @param Dashboard $dashboard
      * @param array $dashboardOrder
      * @param array $argumentsList
+     * @param int $expectedOrdersQuantityOnDashboard
      * @return void
      */
     public function processAssert(
         TestStepFactory $stepFactory,
-        Dashboard $dashboard,
         array $dashboardOrder,
-        array $argumentsList
+        array $argumentsList,
+        $expectedOrdersQuantityOnDashboard
     ) {
         $orderQty = $stepFactory->create(
-            \Magento\Checkout\Test\TestStep\GetDashboardOrderStep::class,
+            \Magento\Backend\Test\TestStep\GetDashboardOrderStep::class,
             ['argumentsList' => $argumentsList]
         )->run()['dashboardOrder']['quantity'];
         $invoicedOrdersQty = $orderQty - $dashboardOrder['quantity'];
 
         \PHPUnit_Framework_Assert::assertEquals(
             $invoicedOrdersQty,
-            self::EXPECTED_ORDERS_QTY,
+            $expectedOrdersQuantityOnDashboard,
             'Order quantity om admin dashboard is not correct.'
-        );
-
-        \PHPUnit_Framework_Assert::assertTrue(
-            $dashboard->getMainBlock()->isGraphImageVisible(),
-            'Graph image is not visible on admin dashboard.'
         );
     }
 

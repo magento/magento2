@@ -6,8 +6,7 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
@@ -21,53 +20,19 @@ use Magento\Mtf\TestCase\Injectable;
  * @group Reports
  * @ZephyrId MAGETWO-27193
  */
-class LowStockProductsReportEntityTest extends Injectable
+class LowStockProductsReportEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'no';
     /* end tags */
 
     /**
-     * Configuration data
-     *
-     * @var string
-     */
-    private $configData;
-
-    /**
-     * Create product
-     *
-     * @param CatalogProductSimple $product
-     * @param string|null $configData
-     * @return void
-     */
-    public function test(CatalogProductSimple $product, $configData = null)
-    {
-        $this->configData = $configData;
-
-        if ($this->configData) {
-            $this->objectManager->create(
-                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-                ['configData' => $this->configData, 'flushCache' => true]
-            )->run();
-        }
-
-        // Preconditions
-        $product->persist();
-    }
-
-    /**
-     * Clear data after test.
+     * Runs low stock products report test.
      *
      * @return void
      */
-    public function tearDown()
+    public function test()
     {
-        if ($this->configData) {
-            $this->objectManager->create(
-                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-                ['configData' => $this->configData, 'rollback' => true, 'flushCache' => true]
-            )->run();
-        }
+        $this->executeScenario();
     }
 }

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\TestStep;
+namespace Magento\Backend\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
