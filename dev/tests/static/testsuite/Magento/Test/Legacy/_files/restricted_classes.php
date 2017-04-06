@@ -127,7 +127,17 @@ return [
                 'type' => 'library',
                 'name' => 'magento/framework',
                 'path' => 'Flag.php'
-            ]
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Widget',
+                'path' => 'Setup/LayoutUpdateConverter.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Cms',
+                'path' => 'Setup/ContentConverter.php'
+            ],
         ]
     ],
     'ArrayObject' => [
