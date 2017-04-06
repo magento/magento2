@@ -98,8 +98,7 @@ class Activate extends Action
                 $configValue = $this->preparedValueFactory->create(
                     Enabled::XML_ENABLED_CONFIG_STRUCTURE_PATH,
                     Enabledisable::ENABLE_VALUE,
-                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                    0
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 );
 
                 $this->configValueResource

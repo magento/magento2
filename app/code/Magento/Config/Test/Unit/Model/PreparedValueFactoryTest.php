@@ -146,7 +146,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $this->fieldMock->expects($this->once())
             ->method('getBackendModel')
             ->willReturn($this->valueMock);
-        $this->valueFactoryMock->expects($this->never())
+        $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())

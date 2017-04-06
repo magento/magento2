@@ -75,12 +75,13 @@ class PreparedValueFactory
         try {
             /** @var Structure $structure */
             $structure = $this->structureFactory->create();
+            $backendModel = $this->valueFactory->create();
             /** @var Structure\ElementInterface $field */
             $field = $structure->getElement($path);
-            /** @var ValueInterface $backendModel */
-            $backendModel = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-                ? $field->getBackendModel()
-                : $this->valueFactory->create();
+            if ($field instanceof Structure\Element\Field && $field->hasBackendModel()) {
+                $backendModel = $field->getBackendModel();
+                $path = $field->getConfigPath() ?: $path;
+            }
 
             if ($backendModel instanceof Value) {
                 $scopeId = 0;
