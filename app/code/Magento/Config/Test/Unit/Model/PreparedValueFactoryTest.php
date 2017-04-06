@@ -8,12 +8,6 @@ namespace Magento\Config\Test\Unit\Model;
 use Magento\Config\Model\Config\BackendFactory;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Framework\App\Config\Value;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\Structure\Element\Field;
-use Magento\Framework\App\Config\ValueFactory;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
@@ -34,8 +28,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $structureFactoryMock;
 
     /**
-     * @var BackendFactory|\PHPUnit_Framework_MockObject_MockObject
-     * @var ValueFactory|Mock
+     * @var BackendFactory|Mock
      */
     private $valueFactoryMock;
 
@@ -55,7 +48,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $fieldMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|Mock
      */
     private $configMock;
 
@@ -159,10 +152,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
-        $this->fieldMock->expects($this->once())
-            ->method('getBackendModel')
-            ->willReturn($this->valueMock);
-        $this->valueFactoryMock->expects($this->never())
+        $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
@@ -271,17 +261,6 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                 'someScope',
                 'someScopeCode',
                 1,
-            [
-                'deploymentConfigIsAvailable' => ['return' => true],
-                'structureGetElement' => ['expects' => $this->once()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->once(),
-                        'return' => true
-                    ],
-                    'getBackendModel' => ['expects' => $this->never()]
-                ],
-                'valueFactory' => ['expects' => $this->once()]
             ],
             'default scope flow' => [
                 '/some/path',

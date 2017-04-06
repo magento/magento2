@@ -10,11 +10,7 @@ use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueInterface;
-use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
@@ -92,25 +88,15 @@ class PreparedValueFactory
             $structure = $this->structureFactory->create();
             /** @var Structure\ElementInterface $field */
             $field = $structure->getElement($path);
+            /** @var string $backendModelName */
+            $backendModelName = $field instanceof Structure\Element\Field && $field->hasBackendModel()
+                ? $field->getData()['backend_model']
+                : ValueInterface::class;
             /** @var ValueInterface $backendModel */
-            $backendModel = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-                ? $field->getBackendModel()
-                : $this->valueFactory->create();
-        /** @var Structure $structure */
-        $structure = $this->structureFactory->create();
-        /** @var Structure\ElementInterface $field */
-        $field = $this->deploymentConfig->isAvailable()
-            ? $structure->getElement($path)
-            : null;
-        /** @var string $backendModelName */
-        $backendModelName = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-            ? $field->getData()['backend_model']
-            : ValueInterface::class;
-        /** @var ValueInterface $backendModel */
-        $backendModel = $this->valueFactory->create(
-            $backendModelName,
-            ['config' => $this->config]
-        );
+            $backendModel = $this->valueFactory->create(
+                $backendModelName,
+                ['config' => $this->config]
+            );
 
             if ($backendModel instanceof Value) {
                 $scopeId = 0;
