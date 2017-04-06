@@ -11,8 +11,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Class which hold all translation sources and merge them
- *
- * @package Magento\Translation\App\Config\Type
  */
 class Translation implements ConfigTypeInterface
 {
