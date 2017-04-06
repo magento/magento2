@@ -90,7 +90,7 @@ interface AbstractCarrierInterface
      * @return $this|\Magento\Framework\DataObject|boolean
      * @api
      */
-    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request);
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request);
 
     /**
      * Determine whether current carrier enabled for activity

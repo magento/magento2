@@ -105,7 +105,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $this->stockItemData->expects($this->atLeastOnce())->method('getIsDecimalDivided')
             ->will($this->returnValue(true));
 
-        $this->carrier->proccessAdditionalValidation($request);
+        $this->carrier->processAdditionalValidation($request);
     }
 
     public function testParseXml()
