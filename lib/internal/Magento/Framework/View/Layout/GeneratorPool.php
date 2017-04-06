@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Layout;
 
+use Magento\Framework\View\Layout\Condition\AndConditionFactory;
+
 /**
  * Pool of generators for structural elements
  */
@@ -21,37 +23,29 @@ class GeneratorPool
     protected $generators = [];
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
+     * @var \Magento\Framework\View\Layout\Condition\AndConditionFactory
+     */
+    private $andConditionFactory;
+
+    /**
      * @param ScheduledStructure\Helper $helper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param AndConditionFactory $andConditionFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $generators
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        AndConditionFactory $andConditionFactory,
         \Psr\Log\LoggerInterface $logger,
         array $generators = null
     ) {
         $this->helper = $helper;
-        $this->scopeConfig = $scopeConfig;
-        $this->scopeResolver = $scopeResolver;
+        $this->andConditionFactory = $andConditionFactory;
         $this->logger = $logger;
         $this->addGenerators($generators);
     }
@@ -123,12 +117,16 @@ class GeneratorPool
         foreach ($scheduledStructure->getListToRemove() as $elementToRemove) {
             $this->removeElement($scheduledStructure, $structure, $elementToRemove);
         }
-        foreach ($scheduledStructure->getIfconfigList() as $elementToCheckConfig) {
-            list($configPath, $scopeType) = $scheduledStructure->getIfconfigElement($elementToCheckConfig);
-            if (!empty($configPath)
-                && !$this->scopeConfig->isSetFlag($configPath, $scopeType, $this->scopeResolver->getScope())
+        foreach ($scheduledStructure->getElements() as $name => $data) {
+            list(, $data) = $data;
+            if (
+                array_key_exists('visibilityConditions', $data['attributes']) &&
+                !empty($data['attributes']['visibilityConditions'])
             ) {
-                $this->removeIfConfigElement($scheduledStructure, $structure, $elementToCheckConfig);
+                $andCondition = $this->andConditionFactory->create($data['attributes']['visibilityConditions']);
+                if (!$andCondition->isVisible($data['attributes']['visibilityConditions'])) {
+                    $this->removeElement($scheduledStructure, $structure, $name);
+                }
             }
         }
         return $this;
@@ -197,33 +195,6 @@ class GeneratorPool
         if (!$isChild) {
             $structure->unsetElement($elementName);
             $scheduledStructure->unsetElementFromListToRemove($elementName);
-        }
-        return $this;
-    }
-
-    /**
-     * Remove scheduled element if config isn't true
-     *
-     * @param ScheduledStructure $scheduledStructure
-     * @param Data\Structure $structure
-     * @param string $elementName
-     * @param bool $isChild
-     * @return $this
-     */
-    protected function removeIfConfigElement(
-        ScheduledStructure $scheduledStructure,
-        Data\Structure $structure,
-        $elementName,
-        $isChild = false
-    ) {
-        $elementsToRemove = array_keys($structure->getChildren($elementName));
-        $scheduledStructure->unsetElement($elementName);
-        foreach ($elementsToRemove as $element) {
-            $this->removeIfConfigElement($scheduledStructure, $structure, $element, true);
-        }
-        if (!$isChild) {
-            $structure->unsetElement($elementName);
-            $scheduledStructure->unsetElementFromIfconfigList($elementName);
         }
         return $this;
     }

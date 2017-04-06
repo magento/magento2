@@ -3,10 +3,9 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model\Condition;
 
-use Magento\Backend\Model\View\Layout\VisibilityConditionInterface;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Intl\DateTimeFactory;
 
@@ -18,6 +17,11 @@ use Magento\Framework\Intl\DateTimeFactory;
  */
 class CanViewNotification implements VisibilityConditionInterface
 {
+    /**
+     * Unique condition name.
+     */
+    const NAME = 'can_view_notification';
+
     /**
      * Time interval in seconds
      *
@@ -64,5 +68,13 @@ class CanViewNotification implements VisibilityConditionInterface
         return (
             $datetime->getTimestamp() >= $lastNotificationTime + $this->notificationInterval
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return self::NAME;
     }
 }

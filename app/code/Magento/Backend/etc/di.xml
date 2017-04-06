@@ -207,14 +207,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\View\Layout\Filter">
-        <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="acl-filter" xsi:type="object">Magento\Backend\Model\View\Layout\Filter\Acl</item>
-                <item name="condition-filter" xsi:type="object">Magento\Backend\Model\View\Layout\Filter\Condition</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Block\Menu">
         <arguments>
             <argument name="menuItemChecker" xsi:type="object">Magento\Backend\Block\MenuItemChecker</argument>

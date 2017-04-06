@@ -487,10 +487,9 @@
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Layout\Reader\UiComponent">
+    <type name="Magento\Framework\View\Layout\ConfigCondition">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -581,11 +580,6 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Generator\Block">
-        <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Layout\Generator\UiComponent">
         <arguments>
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>

@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\View\Layout;
+namespace Magento\Framework\View\Layout\Condition;
 
 /**
  * Composite condition which iterate over included conditions.
@@ -34,7 +34,7 @@ class AndCondition
     public function isVisible(array $arguments)
     {
         foreach ($this->conditions as $condition) {
-            if (!$condition->isVisible($arguments)) {
+            if (!$condition->isVisible($arguments[$condition->getName()]['arguments'])) {
                 return false;
             }
         }

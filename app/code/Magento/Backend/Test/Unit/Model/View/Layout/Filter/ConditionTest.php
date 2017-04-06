@@ -5,8 +5,8 @@
  */
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
 
-use Magento\Backend\Model\View\Layout\VisibilityConditionFactory;
-use Magento\Backend\Model\View\Layout\VisibilityConditionInterface;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionFactory;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\View\Layout\Filter\Condition;
@@ -37,7 +37,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     private $visibilityConditionFactoryMock;
 
     /**
-     * @var VisibilityConditionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Condition\VisibilityConditionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $conditionMock;
 

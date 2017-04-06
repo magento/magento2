@@ -15,40 +15,10 @@ use Magento\Framework\App\ObjectManager;
 class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
 {
     /**
-     * @var Filter\Acl
-     */
-    protected $aclFilter;
-
-    /**
      * @var FilterInterface
      */
     private $filter;
 
-    /**
-     * @param ScheduledStructure\Helper $helper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param Filter\Acl $aclFilter
-     * @param array $generators
-     */
-    public function __construct(
-        ScheduledStructure\Helper $helper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        \Psr\Log\LoggerInterface $logger,
-        Filter\Acl $aclFilter,
-        array $generators = null
-    ) {
-        $this->aclFilter = $aclFilter;
-        parent::__construct(
-            $helper,
-            $scopeConfig,
-            $scopeResolver,
-            $logger,
-            $generators
-        );
-    }
 
     /**
      * @return FilterInterface

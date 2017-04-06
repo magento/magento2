@@ -241,6 +241,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="visibilityCondition" type="visibilityConditionType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="componentNameType" name="component" use="optional"/>
         <xs:attribute type="elementNameType" name="name" use="optional"/>
@@ -249,7 +250,6 @@
         <xs:attribute type="elementPositionType" name="after" use="optional"/>
         <xs:attribute type="elementOutputType" name="output" use="optional"/>
         <xs:attribute type="xs:string" name="aclResource" use="optional"/>
-        <xs:attribute type="xs:string" name="visibilityCondition" use="optional"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
         <xs:attribute type="xs:string" name="group" use="optional" />
         <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
@@ -272,6 +272,19 @@
         </xs:sequence>
         <xs:attribute type="xs:string" name="method" use="required"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="visibilityConditionType">
+        <xs:annotation>
+            <xs:documentation>
+                Apply visibility rules.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="className" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="updateType">
