@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\CreateVirtualProductEntityTest" summary="Create Virtual Product" ticketId="MAGETWO-23417">
         <variation name="CreateVirtualProductEntityTestVariation1">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with required fields</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
