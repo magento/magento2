@@ -104,7 +104,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->structureMock->expects($this->any())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
         $this->deploymentConfigMock->expects($this->any())
             ->method('isAvailable')

@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -109,6 +110,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
      * @param string $path
      * @param string $value
      * @param string $scope
+     * @param string $resolvedScope
      * @param string|int|null $scopeCode
      * @param int $scopeId
      * @dataProvider createDataProvider
@@ -117,13 +119,14 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $path,
         $value,
         $scope,
+        $resolvedScope,
         $scopeCode,
         $scopeId
     ) {
         if (ScopeInterface::SCOPE_DEFAULT !== $scope) {
             $this->scopeResolverPoolMock->expects($this->once())
                 ->method('get')
-                ->with($scope)
+                ->with($resolvedScope)
                 ->willReturn($this->scopeResolverMock);
             $this->scopeResolverMock->expects($this->once())
                 ->method('getScope')
@@ -138,7 +141,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->structureMock);
         $this->structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
@@ -155,7 +158,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScope')
-            ->with($scope)
+            ->with($resolvedScope)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScopeId')
@@ -182,6 +185,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                 '/some/path',
                 'someValue',
                 'someScope',
+                'someScope',
                 'someScopeCode',
                 1,
             ],
@@ -189,6 +193,39 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                 '/some/path',
                 'someValue',
                 ScopeInterface::SCOPE_DEFAULT,
+                ScopeInterface::SCOPE_DEFAULT,
+                null,
+                0,
+            ],
+            'website scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_WEBSITE,
+                StoreScopeInterface::SCOPE_WEBSITES,
+                null,
+                0,
+            ],
+            'websites scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_WEBSITES,
+                StoreScopeInterface::SCOPE_WEBSITES,
+                null,
+                0,
+            ],
+            'store scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_STORE,
+                StoreScopeInterface::SCOPE_STORES,
+                null,
+                0,
+            ],
+            'stores scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_STORES,
+                StoreScopeInterface::SCOPE_STORES,
                 null,
                 0,
             ],
@@ -219,7 +256,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->structureMock);
         $this->structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')

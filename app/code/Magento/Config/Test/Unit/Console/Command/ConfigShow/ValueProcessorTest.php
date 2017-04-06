@@ -157,7 +157,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($backendModelMock);
 
         $structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->with($path)
             ->willReturn($fieldMock);
 

@@ -7,12 +7,13 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
-use Magento\Config\Model\Config;
-use Magento\Config\Model\ConfigFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Config\Model\PreparedValueFactory;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
@@ -29,16 +30,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var ConfigFactory|Mock
-     */
-    private $configFactoryMock;
-
-    /**
-     * @var Config|Mock
-     */
-    private $configMock;
-
-    /**
      * @var DeploymentConfig|Mock
      */
     private $deploymentConfigMock;
@@ -49,30 +40,45 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $configPathResolverMock;
 
     /**
+     * @var PreparedValueFactory|Mock
+     */
+    private $preparedValueFactoryMock;
+
+    /**
+     * @var Value|Mock
+     */
+    private $valueMock;
+
+    /**
+     * @var AbstractDb|Mock
+     */
+    private $resourceModelMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->configFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->configMock);
+        $this->resourceModelMock = $this->getMockBuilder(AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['save'])
+            ->getMockForAbstractClass();
+        $this->valueMock = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getResource'])
+            ->getMock();
+        $this->preparedValueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new DefaultProcessor(
-            $this->configFactoryMock,
+            $this->preparedValueFactoryMock,
             $this->deploymentConfigMock,
             $this->configPathResolverMock
         );
@@ -101,8 +107,16 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $this->configMock->expects($this->once())
-            ->method('save');
+        $this->preparedValueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->valueMock);
+        $this->valueMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->resourceModelMock);
+        $this->resourceModelMock->expects($this->once())
+            ->method('save')
+            ->with($this->valueMock)
+            ->willReturnSelf();
 
         $this->model->process($path, $value, $scope, $scopeCode);
     }
@@ -131,8 +145,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(false);
-        $this->configMock->expects($this->never())
-            ->method('save');
 
         $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }

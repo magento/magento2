@@ -78,7 +78,7 @@ class ValueProcessor
         $this->scope->setCurrentScope($areaScope);
 
         /** @var Field $field */
-        $field = $configStructure->getElement($path);
+        $field = $configStructure->getElementByConfigPath($path);
 
         /** @var Value $backendModel */
         $backendModel = $field && $field->hasBackendModel()

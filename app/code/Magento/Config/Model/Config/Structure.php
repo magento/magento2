@@ -58,6 +58,24 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     protected $sectionList;
 
     /**
+     * Collects config paths and their structure paths from configuration files
+     *
+     * For example:
+     * ```php
+     * [
+     *  'section_id/group_id/field_one_id' => [
+     *      'section_id/group_id/field_one_id'
+     *  ],
+     * 'section/group/field' => [
+     *      'section_id/group_id/field_two_id'
+     * ]
+     * ```
+     *
+     * @var array
+     */
+    private $mappedPaths;
+
+    /**
      * @param \Magento\Config\Model\Config\Structure\Data $structureData
      * @param \Magento\Config\Model\Config\Structure\Element\Iterator\Tab $tabIterator
      * @param \Magento\Config\Model\Config\Structure\Element\FlyweightFactory $flyweightFactory
@@ -114,13 +132,30 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Find element by path
+     * Find element by structure path
      *
      * @param string $path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
      */
     public function getElement($path)
     {
+        return $this->getElementByPathParts(explode('/', $path));
+    }
+
+    /**
+     * Find element by config path
+     *
+     * @param string $path
+     * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
+     */
+    public function getElementByConfigPath($path)
+    {
+        $allPaths = $this->getFieldPaths();
+
+        if (isset($allPaths[$path])) {
+            $path = array_shift($allPaths[$path]);
+        }
+
         return $this->getElementByPathParts(explode('/', $path));
     }
 
@@ -291,7 +326,11 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     {
         $sections = !empty($this->_data['sections']) ? $this->_data['sections'] : [];
 
-        return $this->getFieldsRecursively($sections);
+        if (!$this->mappedPaths) {
+            $this->mappedPaths = $this->getFieldsRecursively($sections);
+        }
+
+        return $this->mappedPaths;
     }
 
     /**

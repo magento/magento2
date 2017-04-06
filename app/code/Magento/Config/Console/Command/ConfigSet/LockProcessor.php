@@ -102,7 +102,7 @@ class LockProcessor implements ConfigSetProcessorInterface
             $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
             /** @var Structure\Element\Field $field */
             $field = $this->deploymentConfig->isAvailable()
-                ? $this->configStructure->getElement($path)
+                ? $this->configStructure->getElementByConfigPath($path)
                 : null;
             /** @var Value $backendModel */
             $backendModel = $field && $field->hasBackendModel()

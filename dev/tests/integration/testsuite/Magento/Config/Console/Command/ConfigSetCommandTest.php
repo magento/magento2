@@ -172,6 +172,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ['general/region/display_all', '1'],
             ['general/region/state_required', 'BR,FR', ScopeInterface::SCOPE_WEBSITE, 'base'],
             ['admin/security/use_form_key', '0'],
+            ['carriers/fedex/account', '123']
         ];
     }
 
@@ -230,7 +231,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function runLockDataProvider()
     {
-        return $this->runDataProvider();
+        return [
+            ['general/region/display_all', '1'],
+            ['general/region/state_required', 'BR,FR', ScopeInterface::SCOPE_WEBSITE, 'base'],
+            ['admin/security/use_form_key', '0'],
+        ];
     }
 
     /**
@@ -320,7 +325,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function runExtendedDataProvider()
     {
-        return $this->runDataProvider();
+        return $this->runLockDataProvider();
     }
 
     /**
@@ -476,7 +481,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                     $output->expects($this->once())
                         ->method('writeln')
                         ->with(
-                            '<error>Invalid Base URL. Value must be a URL or one of placeholders: {{base_url}}</error>'
+                            '<error>Invalid value. Value must be a URL or one of placeholders: {{base_url}}</error>'
                         );
                 },
                 'web/unsecure/base_url',
