@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Test\TestStep;
+namespace Magento\Sales\Test\TestStep;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
@@ -11,9 +11,9 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class DenyPaymentStep
+ * Class AcceptPaymentStep
  */
-class DenyPaymentStep implements TestStepInterface
+class AcceptPaymentStep implements TestStepInterface
 {
     /**
      * @var OrderIndex
@@ -44,6 +44,6 @@ class DenyPaymentStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->deny();
+        $this->salesOrderView->getPageActions()->accept();
     }
 }
