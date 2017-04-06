@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account;
@@ -170,10 +170,10 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     public function getSubscriptionText()
     {
         if ($this->getSubscriptionObject()->isSubscribed()) {
-            return __('You subscribe to our newsletter.');
+            return __('You are subscribed to our newsletter.');
         }
 
-        return __('You don\'t subscribe to our newsletter.');
+        return __('You aren\'t subscribed to our newsletter.');
     }
 
     /**

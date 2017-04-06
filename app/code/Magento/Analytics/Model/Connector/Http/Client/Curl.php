@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Connector\Http\Client;
 
-use Psr\Log\LoggerInterface;
-use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Analytics\Model\Connector\Http\ResponseFactory;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * A CURL HTTP client.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,10 +17,10 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
-use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Class ProductTest
@@ -776,7 +776,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 1);
         $this->assertEquals(
             "Value for 'multiselect_attribute' attribute contains incorrect value, "
-            ."see acceptable values on settings specified for Admin",
+            . "see acceptable values on settings specified for Admin",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
     }
@@ -1038,11 +1038,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
         );
         $errorCount = count($errorProcessor->getAllErrors());
-        $this->assertTrue($errorCount === 1 , 'Error expected');
+        $this->assertTrue($errorCount === 1, 'Error expected');
 
         $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
-        $this->assertContains('URL key for specified store already exists' , $errorMessage);
-        $this->assertContains('Default Category/Category 2' , $errorMessage);
+        $this->assertContains('URL key for specified store already exists', $errorMessage);
+        $this->assertContains('Default Category/Category 2', $errorMessage);
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);
@@ -1384,7 +1384,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $this->assertCount(3, $productCollection->getItems());
         $actualProductSkus = array_map(
-            function(ProductInterface $item) {
+            function (ProductInterface $item) {
                 return $item->getSku();
             },
             $productCollection->getItems()

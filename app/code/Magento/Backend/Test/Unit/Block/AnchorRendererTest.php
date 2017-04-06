@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Block\MenuItemChecker;
-use Magento\Framework\Escaper;
 use Magento\Backend\Block\AnchorRenderer;
+use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AnchorRendererTest extends \PHPUnit_Framework_TestCase

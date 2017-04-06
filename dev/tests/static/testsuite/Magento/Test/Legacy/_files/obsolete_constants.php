@@ -4,7 +4,7 @@
  *
  * Format: array(<constant_name>[, <class_scope> = ''[, <replacement>]])
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -728,11 +728,6 @@ return [
         'DEFAULT_GROUP',
         'Magento\Framework\Message\ManagerInterface',
         'Magento\Framework\Message\Manager::DEFAULT_GROUP',
-    ],
-    [
-        'SCOPE_DEFAULT',
-        'Magento\Framework\App\ScopeInterface',
-        'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT',
     ],
     ['CURRENT_CUSTOMER', 'Magento\Customer\Controller\RegistryConstants'],
     ['METHOD_WPS', 'Magento\Paypal\Model\Config'],

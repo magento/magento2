@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -251,7 +251,7 @@ class GeneratorPool
             $structure->setAsChild($element, $destination, $alias);
             $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
         } catch (\OutOfBoundsException $e) {
-            $this->logger->warning('Broken reference: '. $e->getMessage());
+            $this->logger->warning('Broken reference: ' . $e->getMessage());
         }
         $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;

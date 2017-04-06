@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 namespace Magento\Weee\Test\Unit\Pricing;
 
-use \Magento\Weee\Pricing\TaxAdjustment;
+use Magento\Weee\Pricing\TaxAdjustment;
 
 class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,8 +89,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
         $isWeeeTaxable,
         $weeeDisplayConfig,
         $expectedResult
-    )
-    {
+    ) {
         $this->weeeHelperMock->expects($this->any())
             ->method('isEnabled')
             ->willReturn(true);

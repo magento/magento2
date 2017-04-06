@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\Framework\App\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Strategy which processes exclusions from general rules
@@ -29,18 +31,28 @@ class ExclusionStrategy implements FilterStrategyInterface
     private $storeManager;
 
     /**
+     * @var FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
+     * @param FrontendResource $indexerFrontendResource
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        AliasResolver $aliasResolver
+        AliasResolver $aliasResolver,
+        FrontendResource $indexerFrontendResource = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
         $this->aliasResolver = $aliasResolver;
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
     }
 
     /**
@@ -52,9 +64,10 @@ class ExclusionStrategy implements FilterStrategyInterface
     ) {
         $isApplied = false;
         $field = $filter->getField();
+
         if ('price' === $field) {
             $alias = $this->aliasResolver->getAlias($filter);
-            $tableName = $this->resourceConnection->getTableName('catalog_product_index_price');
+            $tableName = $this->indexerFrontendResource->getMainTable();
             $select->joinInner(
                 [
                     $alias => $tableName
