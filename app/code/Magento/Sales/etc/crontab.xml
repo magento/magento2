@@ -31,7 +31,7 @@
             <schedule>* * * * *</schedule>
         </job>
         <job name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsertCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_grid_order_shipment_async_insert" instance="SalesShipmentIndexGridAsyncInsertCron" method="execute">
             <schedule>* * * * *</schedule>
