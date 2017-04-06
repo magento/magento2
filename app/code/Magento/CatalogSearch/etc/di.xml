@@ -210,6 +210,7 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
     </type>
@@ -282,6 +283,16 @@
                 <item name="use_temporary_table" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\TemporaryResolver</item>
                 <item name="use_main_table" xsi:type="string">\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider">
+        <arguments>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
+        <arguments>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
     </type>
 </config>
