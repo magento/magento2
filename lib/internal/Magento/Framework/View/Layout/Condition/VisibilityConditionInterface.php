@@ -8,14 +8,21 @@ namespace Magento\Framework\View\Layout\Condition;
 /**
  * Class VisibilityConditionInterface
  *
- * Introduces family of visibility conditions for layout elements at the backend.
+ * Introduces family of visibility conditions for layout elements.
  * By using this interface a developer can specify dynamic rule for ui component visibility.
  *
  * Condition can be used by ui component declaration in layout
  *
- * <uiComponent name="form" visibilityCondition="ConditionFullClassPath" />
+ * <uiComponent name="form">
+ *      <visibilityCondition name='can_show_awesome_element'>
+ *          <arguments>
+ *              <argument name="aclResource" xsi:type="string">Magento_Framework::awesome_page</argument>
+ *              <argument name="extraData" xsi:type="array"></argument>
+ *          <arguments>
+ *      </visibilityCondition>
+ * </uiComponent>
  *
- * "visibilityCondition" just another optional attribute of ui component declaration
+ * "visibilityCondition" just another optional child element of ui component declaration
  */
 interface VisibilityConditionInterface
 {

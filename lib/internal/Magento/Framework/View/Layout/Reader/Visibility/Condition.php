@@ -10,7 +10,7 @@ use Magento\Framework\Simplexml\Element;
 use Magento\Framework\View\Layout\Argument\Parser;
 
 /**
- * Class Condition
+ * Parse conditions from element.
  */
 class Condition
 {
@@ -50,15 +50,6 @@ class Condition
     public function parseConditions(Element $element)
     {
         $visibilityConditions = [];
-        /** @var $childElement Element */
-        foreach ($element as $childElement) {
-            if ($childElement->getName() === 'visibilityCondition') {
-                $visibilityConditions[$childElement->getAttribute('name')] = [
-                    'name' => $childElement->getAttribute('className'),
-                    'arguments' => $this->evaluateArguments($childElement),
-                ];
-            }
-        }
         $configPath = (string)$element->getAttribute('ifconfig');
         if (!empty($configPath)) {
             $visibilityConditions['ifconfig'] = [
@@ -77,6 +68,16 @@ class Condition
                     'acl' => $aclResource
                 ],
             ];
+        }
+
+        /** @var $childElement Element */
+        foreach ($element as $childElement) {
+            if ($childElement->getName() === 'visibilityCondition') {
+                $visibilityConditions[$childElement->getAttribute('name')] = [
+                    'name' => $childElement->getAttribute('className'),
+                    'arguments' => $this->evaluateArguments($childElement),
+                ];
+            }
         }
 
         return $visibilityConditions;
@@ -110,14 +111,13 @@ class Condition
     }
 
     /**
-     * Get block arguments
+     * @param Element $element
      *
-     * @param Element $blockElement
      * @return array
      */
-    private function getArguments(Element $blockElement)
+    private function getArguments(Element $element)
     {
-        $arguments = $this->getElementsByType($blockElement, self::TYPE_ARGUMENTS);
+        $arguments = $this->getElementsByType($element, self::TYPE_ARGUMENTS);
         // We have only one declaration of <arguments> node in block or its reference
         $argumentElement = reset($arguments);
         return $argumentElement ? $this->parseArguments($argumentElement) : [];

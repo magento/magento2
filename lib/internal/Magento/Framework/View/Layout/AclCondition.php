@@ -8,18 +8,21 @@ namespace Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 
 /**
- * Class AclCondition.
+ * Check that user is allowed to watch resource with given acl resource..
  */
 class AclCondition implements VisibilityConditionInterface
 {
+    /**
+     * Unique name.
+     */
+    const NAME = 'acl';
+
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
     private $authorization;
 
     /**
-     * AclCondition constructor.
-     *
      * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(\Magento\Framework\AuthorizationInterface $authorization)
@@ -28,12 +31,7 @@ class AclCondition implements VisibilityConditionInterface
     }
 
     /**
-     * Validate logical condition for ui component
-     * If validation passed block will be displayed
-     *
-     * @param array $arguments Attributes from element node.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isVisible(array $arguments)
     {
@@ -45,6 +43,6 @@ class AclCondition implements VisibilityConditionInterface
      */
     public function getName()
     {
-        return 'acl';
+        return self::NAME;
     }
 }

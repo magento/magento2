@@ -11,10 +11,15 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 
 /**
- * Class ConfigCondition
+ * Check that config flag is set to true,
  */
 class ConfigCondition implements VisibilityConditionInterface
 {
+    /**
+     * Unique name.
+     */
+    const NAME = 'ifconfig';
+
     /**
      * @var ScopeConfigInterface
      */
@@ -48,12 +53,7 @@ class ConfigCondition implements VisibilityConditionInterface
     }
 
     /**
-     * Validate logical condition for ui component
-     * If validation passed block will be displayed
-     *
-     * @param array $arguments Attributes from element node.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isVisible(array $arguments)
     {
@@ -69,6 +69,6 @@ class ConfigCondition implements VisibilityConditionInterface
      */
     public function getName()
     {
-        return 'ifconfig';
+        return self::NAME;
     }
 }
