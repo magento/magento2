@@ -63,6 +63,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.0', '<')) {
+            $this->addProductPriceIndexReplicaTable($setup);
+        }
         $setup->endSetup();
     }
 
@@ -448,5 +451,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->setComment('Catalog Category Product Indexer temporary table');
 
         $setup->getConnection()->createTable($table);
+    }
+
+    /**
+     * Add Replica for Catalog Product Price Index Table.
+     *
+     * By adding 'catalog_product_index_price_replica' we provide separation of tables used for indexation write
+     * and read operations and affected models.
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addProductPriceIndexReplicaTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getTable('catalog_product_index_price_replica')
+            )
+        );
     }
 }
