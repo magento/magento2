@@ -60,6 +60,13 @@ class Bundle extends Section
     protected $deleteOption = './tr[%d]//*[@data-index="delete_button"]';
 
     /**
+     * Selector for attribute sku.
+     *
+     * @var string
+     */
+    private $attributeSku = 'span[data-index="sku"]';
+
+    /**
      * Get bundle options block.
      *
      * @param int $rowNumber
@@ -165,5 +172,15 @@ class Bundle extends Section
         }
 
         return $newFields;
+    }
+
+    /**
+     * Get attribute sku.
+     *
+     * @return string
+     */
+    public function getAttributeSku()
+    {
+        return $this->_rootElement->find($this->attributeSku)->getText();
     }
 }
