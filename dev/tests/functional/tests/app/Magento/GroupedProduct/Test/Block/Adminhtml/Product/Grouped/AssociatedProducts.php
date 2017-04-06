@@ -70,7 +70,7 @@ class AssociatedProducts extends Tab
      *
      * @return ListAssociatedProducts
      */
-    protected function getListAssociatedProductsBlock()
+    public function getListAssociatedProductsBlock()
     {
         return $this->blockFactory->create(
             ListAssociatedProducts::class,
