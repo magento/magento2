@@ -9,6 +9,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
 /**
  * Block structure reader
@@ -77,6 +78,11 @@ class Block implements Layout\ReaderInterface
     protected $argumentInterpreter;
 
     /**
+     * @var Condition
+     */
+    private $conditionReader;
+
+    /**
      * @deprecated
      * @var string
      */
@@ -89,6 +95,7 @@ class Block implements Layout\ReaderInterface
      * @param Layout\Argument\Parser $argumentParser
      * @param Layout\ReaderPool $readerPool
      * @param InterpreterInterface $argumentInterpreter
+     * @param Condition $conditionReader
      * @param string|null $scopeType
      */
     public function __construct(
@@ -96,6 +103,7 @@ class Block implements Layout\ReaderInterface
         Layout\Argument\Parser $argumentParser,
         Layout\ReaderPool $readerPool,
         InterpreterInterface $argumentInterpreter,
+        Condition $conditionReader,
         $scopeType = null
     ) {
         $this->helper = $helper;
@@ -103,6 +111,7 @@ class Block implements Layout\ReaderInterface
         $this->readerPool = $readerPool;
         $this->scopeType = $scopeType;
         $this->argumentInterpreter = $argumentInterpreter;
+        $this->conditionReader = $conditionReader;
     }
 
     /**
@@ -162,12 +171,11 @@ class Block implements Layout\ReaderInterface
         $data['attributes'] = $this->mergeBlockAttributes($data, $currentElement);
         $this->updateScheduledData($currentElement, $data);
         $this->evaluateArguments($currentElement, $data);
+        $data['attributes'] = array_merge(
+            $data['attributes'],
+            ['visibilityConditions' => $this->conditionReader->parseConditions($currentElement)]
+        );
         $scheduledStructure->setStructureElementData($elementName, $data);
-
-        $configPath = (string)$currentElement->getAttribute('ifconfig');
-        if (!empty($configPath)) {
-            $scheduledStructure->setElementToIfconfigList($elementName, $configPath, $this->scopeType);
-        }
     }
 
     /**
