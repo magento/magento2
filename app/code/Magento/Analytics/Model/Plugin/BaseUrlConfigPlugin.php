@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Model\Plugin;
 
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
+use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
