@@ -15,12 +15,7 @@ return [
      * CONFIG__DEFAULT__SOME__CONFIG__PATH_TWO for some/config/path_two
      * CONFIG__DEFAULT__SOME__CONFIG__PATH_THREE for some/config/path_three
      */
-    'system' => [
-        'default' => [
-            'web' => [],
-            'general' => []
-        ]
-    ],
+    'system' => [],
     'integrationTestImporter' => [
         'someGroup' => [
             'someField' => 'testValue',
