@@ -865,6 +865,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve flat columns definition in old format (before MMDB support)
      * Used in database compatible mode
      *
+     * @deprecated
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

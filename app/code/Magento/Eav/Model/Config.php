@@ -716,12 +716,12 @@ class Config
     {
         $entityType = $this->getEntityType($entityType);
         $attribute = $this->createAttribute($entityType->getAttributeModel());
-        if (is_numeric($attributeCode)) {
-            $attribute->load($attributeCode);
-        } else {
-            $attribute->loadByCode($entityType->getEntityTypeId(), $attributeCode);
+
+        $attribute->loadByCode($entityType->getEntityTypeId(), $attributeCode);
+        if (empty($attribute->getId())) {
             $attribute->setAttributeCode($attributeCode);
         }
+
 
         $entity = $entityType->getEntity();
         if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
