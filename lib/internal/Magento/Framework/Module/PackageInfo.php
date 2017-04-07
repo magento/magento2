@@ -87,8 +87,8 @@ class PackageInfo
                     } catch (\Zend_Json_Exception $e) {
                         throw new \Zend_Json_Exception(
                             sprintf(
-                                "%s composer.json error: %s", 
-                                $moduleName, 
+                                "%s composer.json error: %s",
+                                $moduleName,
                                 $e->getMessage()
                             )
                         );
