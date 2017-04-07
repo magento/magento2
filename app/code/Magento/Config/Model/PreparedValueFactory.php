@@ -88,7 +88,7 @@ class PreparedValueFactory
             /** @var Structure $structure */
             $structure = $this->structureFactory->create();
             /** @var Structure\ElementInterface $field */
-            $field = $structure->getElement($path);
+            $field = $structure->getElementByConfigPath($path);
             /** @var string $backendModelName */
             $backendModelName = $field instanceof Structure\Element\Field && $field->hasBackendModel()
                 ? $field->getData()['backend_model']
