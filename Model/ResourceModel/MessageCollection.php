@@ -7,8 +7,6 @@ namespace Magento\MysqlMq\Model\ResourceModel;
 
 /**
  * Message collection.
- *
- * @api
  */
 class MessageCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
