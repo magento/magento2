@@ -229,7 +229,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             }
         }
 
-        $destinationFolder = $attribute->getEntity()->getEntityTypeCode();
+        $destinationFolder = $attribute->getEntityType()->getEntityTypeCode();
 
         // unlink entity file
         if ($toDelete) {

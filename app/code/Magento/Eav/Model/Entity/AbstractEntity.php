@@ -685,7 +685,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Get attributes by name array
      *
-     * @return \Magento\Eav\Model\Entity\Attribute[]
+     * @return array
      */
     public function getAttributesByCode()
     {
