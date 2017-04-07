@@ -152,7 +152,7 @@ class BlockRepository implements BlockRepositoryInterface
         $storeIdentifier = $storeId === null ? Store::DEFAULT_STORE_ID : $storeId;
         $result = $this->resource->getByIdentifier($blockIdentifier, $storeIdentifier);
 
-        if(empty($result)) {
+        if (empty($result)) {
             throw new NoSuchEntityException(
                 __('CMS Block with identifier "%1" and store id "%2" does not exist.', $blockIdentifier, $storeId)
             );
