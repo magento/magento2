@@ -455,7 +455,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function addAttribute(AbstractAttribute $attribute)
     {
-        $attribute = clone $attribute; //we change state of attribute, so lets make copy
+        $attribute = $attribute; //we change state of attribute, so lets make copy
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 
@@ -685,7 +685,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Get attributes by name array
      *
-     * @return array
+     * @return \Magento\Eav\Model\Entity\Attribute[]
      */
     public function getAttributesByCode()
     {

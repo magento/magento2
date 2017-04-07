@@ -66,7 +66,7 @@ class AttributeLoader implements AttributeLoaderInterface
         foreach ($defaultAttributesCodes as $attributeCode) {
             $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
         }
-        foreach ($attributes as $code => $attribute) {
+        foreach ($attributes as $attributeCode => $attribute) {
             $resource->addAttribute($attribute);
         }
         return $resource;

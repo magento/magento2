@@ -62,3 +62,26 @@ date_default_timezone_set('UTC');
 /*  Adjustment of precision value for several versions of PHP */
 ini_set('precision', 17);
 ini_set('serialize_precision', 17);
+
+register_shutdown_function(function (){
+    if (strpos(@$_SERVER['HTTP_ACCEPT'], 'text/html') !== false) {
+        /** @var \Magento\Framework\App\Resource $adapter */
+        $adapter =  \Magento\Framework\App\ObjectManager::getInstance()
+            ->get('Magento\Framework\App\ResourceConnection');
+        // composer.phar  require "jdorn/sql-formatter:1.3.*@dev"
+        // require_once '/home/user/.composer/vendor/jdorn/sql-formatter/lib/SqlFormatter.php';
+        /** @var Zend_Db_Profiler $profiler */
+        $profiler = $adapter->getConnection('read')->getProfiler();
+        if ($profiler->getEnabled()) {
+            echo "<table cellpadding='0' cellspacing='0' border='0'>";
+            echo '<tr><th>', $profiler->getTotalElapsedSecs(), 's ','</th><th>', $profiler->getTotalNumQueries() , 'queries', '</th><th>', microtime(1) - $_SERVER['REQUEST_TIME_FLOAT'], '</th></tr>';
+            foreach ($profiler->getQueryProfiles() as $query) {
+                /** @var Zend_Db_Profiler_Query $query*/
+                echo '<tr>';
+                echo '<td>', number_format(1000 * $query->getElapsedSecs(), 2), 'ms', '</td>';
+                echo '<td>', $query->getQuery(), '</td>';
+                echo '</tr>';
+            }
+        }
+    }
+});
