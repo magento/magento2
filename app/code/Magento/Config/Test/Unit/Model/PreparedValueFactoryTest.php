@@ -5,8 +5,9 @@
  */
 namespace Magento\Config\Test\Unit\Model;
 
+use Magento\Config\Model\Config\BackendFactory;
 use Magento\Config\Model\PreparedValueFactory;
-use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
@@ -27,7 +28,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $structureFactoryMock;
 
     /**
-     * @var ValueFactory|Mock
+     * @var BackendFactory|Mock
      */
     private $valueFactoryMock;
 
@@ -45,6 +46,11 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
      * @var Field|Mock
      */
     private $fieldMock;
+
+    /**
+     * @var ScopeConfigInterface|Mock
+     */
+    private $configMock;
 
     /**
      * @var ScopeResolverPool|Mock
@@ -75,7 +81,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
+        $this->valueFactoryMock = $this->getMockBuilder(BackendFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -89,6 +95,8 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue'])
             ->getMock();
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
         $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -101,7 +109,8 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $this->preparedValueFactory = new PreparedValueFactory(
             $this->scopeResolverPoolMock,
             $this->structureFactoryMock,
-            $this->valueFactoryMock
+            $this->valueFactoryMock,
+            $this->configMock
         );
     }
 
@@ -143,10 +152,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
-        $this->fieldMock->expects($this->once())
-            ->method('getBackendModel')
-            ->willReturn($this->valueMock);
-        $this->valueFactoryMock->expects($this->never())
+        $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
