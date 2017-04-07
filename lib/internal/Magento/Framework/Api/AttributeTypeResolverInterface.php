@@ -6,9 +6,6 @@
 
 namespace Magento\Framework\Api;
 
-/**
- * @api
- */
 interface AttributeTypeResolverInterface
 {
     /**

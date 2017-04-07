@@ -16,8 +16,6 @@ use Magento\Framework\Phrase;
  *
  * During web API requests, all exceptions are converted to this exception,
  * which is then used for proper error response generation.
- *
- * @api
  */
 class Exception extends LocalizedException
 {
