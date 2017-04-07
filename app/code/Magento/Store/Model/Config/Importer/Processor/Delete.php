@@ -126,6 +126,7 @@ class Delete implements ProcessorInterface
                         break;
                     case ScopeInterface::SCOPE_GROUPS:
                         $this->deleteGroups($items);
+                        break;
                 }
             }
         } catch (\Exception $e) {
@@ -181,7 +182,7 @@ class Delete implements ProcessorInterface
         $items = array_keys($items);
         /** @var Group[] $groups */
         $groups = $this->groupCollection
-            ->addFilter('code', ['in' => $items])
+            ->addFieldToFilter('code', ['in' => $items])
             ->getItems();
 
         foreach ($groups as $group) {
