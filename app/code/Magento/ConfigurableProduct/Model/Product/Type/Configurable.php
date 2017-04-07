@@ -74,6 +74,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_usedProducts = '_cache_instance_products';
 
     /**
+     * Cache key for salable used products
+     *
+     * @var string
+     */
+    private $usedSalableProducts = '_cache_instance_salable_products';
+
+    /**
      * Product is composite
      *
      * @var bool
@@ -166,9 +173,18 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $customerSession;
 
     /**
+     * Product factory
+     *
      * @var ProductInterfaceFactory
      */
     private $productFactory;
+
+    /**
+     * Collection salable processor
+     *
+     * @var SalableProcessor
+     */
+    private $salableProcessor;
 
     /**
      * @codingStandardsIgnoreStart/End
@@ -192,6 +208,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param ProductInterfaceFactory $productFactory
+     * @param SalableProcessor $salableProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -511,88 +528,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $product->setData($this->_usedProductIds, $usedProductIds);
         }
         return $product->getData($this->_usedProductIds);
-    }
-
-    /**
-     * Retrieve array of "subproducts"
-     *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  array $requiredAttributeIds
-     * @return array
-     */
-    public function getUsedProducts($product, $requiredAttributeIds = null)
-    {
-        \Magento\Framework\Profiler::start(
-            'CONFIGURABLE:' . __METHOD__,
-            ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
-        );
-        if (!$product->hasData($this->_usedProducts)) {
-            $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-            $productId = $product->getData($metadata->getLinkField());
-
-            $key = md5(
-                implode(
-                    '_',
-                    [
-                        __METHOD__,
-                        $productId,
-                        $product->getStoreId(),
-                        $this->getCustomerSession()->getCustomerGroupId(),
-                        json_encode($requiredAttributeIds)
-                    ]
-                )
-            );
-            $data = $this->serializer->unserialize($this->getCache()->load($key));
-            if (!empty($data)) {
-                $usedProducts = [];
-                foreach ($data as $item) {
-                    $productItem = $this->productFactory->create();
-                    $productItem->setData($item);
-                    $usedProducts[] = $productItem;
-                }
-            } else {
-                $collection = $this->getUsedProductCollection($product);
-                $collection
-                    ->setFlag('has_stock_status_filter', true)
-                    ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
-                    ->addFilterByRequiredOptions()
-                    ->setStoreId($product->getStoreId());
-
-                $requiredAttributes = ['name', 'price', 'weight', 'image', 'thumbnail', 'status', 'media_gallery'];
-                foreach ($requiredAttributes as $attributeCode) {
-                    $collection->addAttributeToSelect($attributeCode);
-                }
-                foreach ($this->getUsedProductAttributes($product) as $usedProductAttribute) {
-                    $collection->addAttributeToSelect($usedProductAttribute->getAttributeCode());
-                }
-                $collection->addMediaGalleryData();
-                $collection->addTierPriceData();
-                $usedProducts = $collection->getItems();
-
-                $this->getCache()->save(
-                    $this->serializer->serialize(array_map(
-                        function ($item) {
-                            return $item->getData();
-                        },
-                        $usedProducts
-                    )),
-                    $key,
-                    array_merge(
-                        $product->getIdentities(),
-                        [
-                            \Magento\Catalog\Model\Category::CACHE_TAG,
-                            \Magento\Catalog\Model\Product::CACHE_TAG,
-                            'price',
-                            self::TYPE_CODE . '_' . $productId
-                        ]
-                    )
-                );
-            }
-            $product->setData($this->_usedProducts, $usedProducts);
-        }
-        \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
-        $usedProducts = $product->getData($this->_usedProducts);
-        return $usedProducts;
     }
 
     /**
@@ -1272,5 +1207,187 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $isAllCustomOptionsDisplayed;
+    }
+
+    /**
+     * Returns array of sub-products for specified configurable product
+     *
+     * Result array contains all children for specified configurable product
+     *
+     * @param  \Magento\Catalog\Model\Product $product
+     * @param  array $requiredAttributeIds
+     * @return ProductInterface[]
+     */
+    public function getUsedProducts($product, $requiredAttributeIds = null)
+    {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $keyParts = [
+            __METHOD__,
+            $product->getData($metadata->getLinkField()),
+            $product->getStoreId(),
+            $this->getCustomerSession()->getCustomerGroupId(),
+            $requiredAttributeIds
+        ];
+        $cacheKey = $this->getUsedProductsCacheKey($keyParts);
+        return $this->loadUsedProducts($product, $cacheKey);
+    }
+
+    /**
+     * Returns array of sub-products for specified configurable product filtered by salable status
+     *
+     * Result array contains only those children for specified configurable product which are salable on store front
+     *
+     * @deprecated Not used anymore. Keep it for backward compatibility.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array|null $requiredAttributeIds
+     * @return ProductInterface[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getSalableUsedProducts(\Magento\Catalog\Model\Product $product, $requiredAttributeIds = null)
+    {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $keyParts = [
+            __METHOD__,
+            $product->getData($metadata->getLinkField()),
+            $product->getStoreId(),
+            $this->getCustomerSession()->getCustomerGroupId()
+        ];
+        $cacheKey = $this->getUsedProductsCacheKey($keyParts);
+
+        return $this->loadUsedProducts($product, $cacheKey, true);
+    }
+
+    /**
+     * Load collection on sub-products for specified configurable product
+     *
+     * Load collection of sub-products, apply result to specified configurable product and store result to cache
+     * Number of loaded sub-products depends on $salableOnly parameter
+     * $salableOnly = true - result array contains only salable sub-products
+     * $salableOnly = false - result array contains all sub-products
+     * $cacheKey - allow store result data in different cache records
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $cacheKey
+     * @param bool $salableOnly
+     * @return ProductInterface[]
+     */
+    private function loadUsedProducts(\Magento\Catalog\Model\Product $product, $cacheKey, $salableOnly = false)
+    {
+        $dataFieldName = $salableOnly ? $this->usedSalableProducts : $this->_usedProducts;
+        if (!$product->hasData($dataFieldName)) {
+            $usedProducts = $this->readUsedProductsCacheData($cacheKey);
+            if ($usedProducts === null) {
+                $collection = $this->getConfiguredUsedProductCollection($product);
+                if ($salableOnly) {
+                    $collection = $this->salableProcessor->process($collection);
+                }
+                $usedProducts = $collection->getItems();
+                $this->saveUsedProductsCacheData($product, $usedProducts, $cacheKey);
+            }
+            $product->setData($dataFieldName, $usedProducts);
+        }
+
+        return $product->getData($dataFieldName);
+    }
+
+    /**
+     * Read used products data from cache
+     *
+     * Looking for cache record stored under provided $cacheKey
+     * In case data exists turns it into array of products
+     *
+     * @param string $cacheKey
+     * @return ProductInterface[]|null
+     */
+    private function readUsedProductsCacheData($cacheKey)
+    {
+        $usedProducts = null;
+        $data = $this->serializer->unserialize($this->getCache()->load($cacheKey));
+        if (!empty($data)) {
+            $usedProducts = [];
+            foreach ($data as $item) {
+                $productItem = $this->productFactory->create();
+                $productItem->setData($item);
+                $usedProducts[] = $productItem;
+            }
+        }
+
+        return $usedProducts;
+    }
+
+    /**
+     * Save $subProducts to cache record identified with provided $cacheKey
+     *
+     * Cached data will be tagged with combined list of product tags and data specific tags i.e. 'price' etc.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param ProductInterface[] $subProducts
+     * @param string $cacheKey
+     * @return bool
+     */
+    private function saveUsedProductsCacheData(\Magento\Catalog\Model\Product $product, array $subProducts, $cacheKey)
+    {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        return $this->getCache()->save(
+            $this->serializer->serialize(array_map(
+                function ($item) {
+                    return $item->getData();
+                },
+                $subProducts
+            )),
+            $cacheKey,
+            array_merge(
+                $product->getIdentities(),
+                [
+                    \Magento\Catalog\Model\Category::CACHE_TAG,
+                    \Magento\Catalog\Model\Product::CACHE_TAG,
+                    'price',
+                    self::TYPE_CODE . '_' . $product->getData($metadata->getLinkField())
+                ]
+            )
+        );
+    }
+
+    /**
+     * Create string key based on $keyParts
+     *
+     * $keyParts - one dimensional array of strings
+     *
+     * @param array $keyParts
+     * @return string
+     */
+    private function getUsedProductsCacheKey($keyParts)
+    {
+        return md5(implode('_', $keyParts));
+    }
+
+    /**
+     * Prepare collection for retrieving sub-products of specified configurable product
+     *
+     * Retrieve related products collection with additional configuration
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     */
+    private function getConfiguredUsedProductCollection(\Magento\Catalog\Model\Product $product)
+    {
+        $collection = $this->getUsedProductCollection($product);
+        $collection
+            ->setFlag('has_stock_status_filter', true)
+            ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
+            ->addFilterByRequiredOptions()
+            ->setStoreId($product->getStoreId());
+
+        $requiredAttributes = ['name', 'price', 'weight', 'image', 'thumbnail', 'status', 'media_gallery'];
+        foreach ($requiredAttributes as $attributeCode) {
+            $collection->addAttributeToSelect($attributeCode);
+        }
+        foreach ($this->getUsedProductAttributes($product) as $usedProductAttribute) {
+            $collection->addAttributeToSelect($usedProductAttribute->getAttributeCode());
+        }
+        $collection->addMediaGalleryData();
+        $collection->addTierPriceData();
+        return $collection;
     }
 }
