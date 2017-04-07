@@ -100,6 +100,8 @@ class Store extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             ]
         );
 
+        $isDisabledStatusField = $storeModel->isReadOnly()
+            || ($storeModel->getId() && $storeModel->isDefault() && $storeModel->isActive());
         $fieldset->addField(
             'store_is_active',
             'select',
@@ -109,10 +111,19 @@ class Store extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 'value' => $storeModel->isActive(),
                 'options' => [0 => __('Disabled'), 1 => __('Enabled')],
                 'required' => true,
-                'disabled' => $storeModel->isReadOnly()
-                    || ($storeModel->getId() && $storeModel->isDefault() && $storeModel->isActive())
+                'disabled' => $isDisabledStatusField
             ]
         );
+        if ($isDisabledStatusField) {
+            $fieldset->addField(
+                'store_is_active_hidden',
+                'hidden',
+                [
+                    'name' => 'store[is_active]',
+                    'value' => $storeModel->isActive(),
+                ]
+            );
+        }
 
         $fieldset->addField(
             'store_sort_order',
