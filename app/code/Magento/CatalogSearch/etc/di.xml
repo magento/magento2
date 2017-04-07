@@ -52,6 +52,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver">
+        <arguments>
+            <argument name="attributeCollection" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
     </type>
