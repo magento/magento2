@@ -441,9 +441,7 @@ class Config
             }
             // attributes should be reloaded via model to be processed by custom resource model
             $attributeObject = $this->_createAttribute($entityType, $attribute);
-            $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->load(
-                $attributeObject->getId()
-            )->toArray();
+            $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->toArray();
         }
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
