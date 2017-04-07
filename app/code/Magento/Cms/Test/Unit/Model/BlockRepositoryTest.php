@@ -219,6 +219,24 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
+    public function testGetByIdentifierException()
+    {
+        $blockIdentifier = "test";
+        $storeId = 0;
+
+        $this->blockResource->expects($this->once())
+            ->method('getByIdentifier')
+            ->with($blockIdentifier, $storeId)
+            ->willReturn(null);
+
+        $this->repository->getByIdentifier($blockIdentifier, $storeId);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testGetByIdException()
     {
         $blockId = '123';

@@ -17,6 +17,7 @@ use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Class BlockRepository
@@ -142,18 +143,22 @@ class BlockRepository implements BlockRepositoryInterface
      * Load Block data by given Block identifier
      *
      * @param string $blockIdentifier
+     * @param int $storeId
      * @return Block
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByIdentifier($blockIdentifier)
+    public function getByIdentifier($blockIdentifier, $storeId = null)
     {
-        $block = $this->blockFactory->create();
-        $this->resource->load($block, $blockIdentifier, BlockInterface::IDENTIFIER);
-        if (!$block->getId()) {
-            throw new NoSuchEntityException(__('CMS Block with identifier "%1" does not exist.', $blockIdentifier));
+        $storeIdentifier = $storeId === null ? Store::DEFAULT_STORE_ID : $storeId;
+        $result = $this->resource->getByIdentifier($blockIdentifier, $storeIdentifier);
+
+        if(empty($result)) {
+            throw new NoSuchEntityException(
+                __('CMS Block with identifier "%1" and store id "%2" does not exist.', $blockIdentifier, $storeId)
+            );
         }
 
-        return $block;
+        return $this->blockFactory->create()->setData($result);
     }
 
     /**

@@ -254,4 +254,26 @@ class Block extends AbstractDb
         $this->entityManager->delete($object);
         return $this;
     }
+
+    /**
+     * Return the block data linked the given id and store id
+     *
+     * @param string $identifier is the block identifier
+     * @param int $storeId is the store id
+     * @return array
+     */
+    public function getByIdentifier($identifier, $storeId)
+    {
+        $select = parent::_getLoadSelect(BlockInterface::IDENTIFIER, $identifier, BlockInterface::class);
+
+        $select->join(
+            ['cbs' => $this->getTable('cms_block_store')],
+            $this->getMainTable() . '.' . BlockInterface::BLOCK_ID . ' = cbs.' . BlockInterface::BLOCK_ID,
+            ['store_id']
+        )
+            ->where('cbs.store_id = (?)', $storeId)
+            ->limit(1);
+
+        return $this->getConnection()->fetchRow($select);
+    }
 }
