@@ -115,6 +115,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         /** @var Writer $writer */
         $writer = $this->objectManager->get(Writer::class);
         $writer->saveConfig([ConfigFilePool::APP_ENV => $this->config]);
+        $this->appConfig->reinit();
     }
 
     /**
