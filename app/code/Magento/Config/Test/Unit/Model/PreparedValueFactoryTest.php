@@ -20,6 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * @inheritdoc
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 {
