@@ -7,9 +7,9 @@ namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Config\App\Config\Type\System;
+use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
