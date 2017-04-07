@@ -458,11 +458,9 @@ class Installer
      */
     public function checkInstallationFilePermissions()
     {
-        $results = $this->filePermissions->getMissingWritablePathsForInstallation();
-        if ($results) {
-            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
-            throw new \Exception($errorMsg);
-        }
+        $this->throwExceptionForNotWritablePaths(
+            $this->filePermissions->getMissingWritablePathsForInstallation()
+        );
     }
 
     /**
@@ -801,12 +799,22 @@ class Installer
      */
     public function checkFilePermissionsForDbUpgrade()
     {
-        $results = $this->filePermissions->getMissingWritableDirectoriesForDbUpgrade();
-        if ($results) {
-            $errorMsg = sprintf(
-                "Missing write permissions to the following directories: '%s'",
-                implode(' ', $results)
-            );
+        $this->throwExceptionForNotWritablePaths(
+            $this->filePermissions->getMissingWritableDirectoriesForDbUpgrade()
+        );
+    }
+
+    /**
+     * Throws exception with appropriate message if given not empty array of paths that requires writing permission
+     *
+     * @param array $paths List of not writable paths
+     * @return void
+     * @throws \Exception If given not empty array of not writable paths
+     */
+    private function throwExceptionForNotWritablePaths(array $paths)
+    {
+        if ($paths) {
+            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $paths);
             throw new \Exception($errorMsg);
         }
     }
