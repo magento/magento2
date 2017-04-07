@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Catalog\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -214,7 +215,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Cache\FrontendInterface $cache = null,
         \Magento\Customer\Model\Session $customerSession = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ProductInterfaceFactory $productFactory = null
+        ProductInterfaceFactory $productFactory = null,
+        SalableProcessor $salableProcessor = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -228,6 +230,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->customerSession = $customerSession;
         $this->productFactory = $productFactory ?: ObjectManager::getInstance()
             ->get(ProductInterfaceFactory::class);
+        $this->salableProcessor = $salableProcessor ?: ObjectManager::getInstance()->get(SalableProcessor::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -401,7 +404,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedProductAttributes = [];
             $usedAttributes = [];
             foreach ($this->getConfigurableAttributes($product) as $attribute) {
-                if (!is_null($attribute->getProductAttribute())) {
+                if (null !== $attribute->getProductAttribute()) {
                     $id = $attribute->getProductAttribute()->getId();
                     $usedProductAttributes[$id] = $attribute->getProductAttribute();
                     $usedAttributes[$id] = $attribute;
@@ -588,7 +591,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $product->setData($this->_usedProducts, $usedProducts);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
-        $usedProducts =  $product->getData($this->_usedProducts);
+        $usedProducts = $product->getData($this->_usedProducts);
         return $usedProducts;
     }
 
@@ -621,7 +624,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setProductFilter(
             $product
         );
-        if (!is_null($this->getStoreFilter($product))) {
+        if (null !== $this->getStoreFilter($product)) {
             $collection->addStoreFilter($this->getStoreFilter($product));
         }
 
@@ -676,7 +679,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         parent::save($product);
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-        $cacheId =  __CLASS__ . $product->getData($metadata->getLinkField()) . '_' . $product->getStoreId();
+        $cacheId = __CLASS__ . $product->getData($metadata->getLinkField()) . '_' . $product->getStoreId();
         $this->cache->remove($cacheId);
 
         $extensionAttributes = $product->getExtensionAttributes();
@@ -775,17 +778,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $salable = parent::isSalable($product);
 
         if ($salable !== false) {
-            $salable = false;
-            if (!is_null($product)) {
-                $this->setStoreFilter($product->getStoreId(), $product);
-            }
-            /** @var \Magento\Catalog\Model\Product $child */
-            foreach ($this->getUsedProducts($product) as $child) {
-                if ($child->isSalable()) {
-                    $salable = true;
-                    break;
-                }
-            }
+            $collection = $this->getUsedProductCollection($product);
+            $collection->addStoreFilter($this->getStoreFilter($product));
+            $collection = $this->salableProcessor->process($collection);
+            $salable = 0 !== $collection->getSize();
         }
 
         return $salable;
