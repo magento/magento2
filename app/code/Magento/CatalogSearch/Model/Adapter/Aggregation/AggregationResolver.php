@@ -87,7 +87,7 @@ class AggregationResolver implements AggregationResolverInterface
 
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('attribute_set_id', $attributeSetIds, 'in')
-            ->addFilter('is_filterable', true)
+            ->addFilter('is_filterable', 0, 'neq')
             ->create();
         $result = $this->productAttributeRepository->getList($searchCriteria);
 
