@@ -181,11 +181,10 @@ class Delete implements ProcessorInterface
     {
         $items = array_keys($items);
         /** @var Group[] $groups */
-        $groups = $this->groupCollection
-            ->addFieldToFilter('code', ['in' => $items])
-            ->getItems();
+        $this->groupCollection->addFieldToFilter('code', ['in' => $items]);
+        $this->groupCollection->load();
 
-        foreach ($groups as $group) {
+        foreach ($this->groupCollection->getItems() as $group) {
             $group->getResource()->delete($group);
         }
     }
