@@ -86,8 +86,11 @@ class PackageInfo
                         $packageData = \Zend_Json::decode($jsonData[$key]);
                     } catch (\Zend_Json_Exception $e) {
                         throw new \Zend_Json_Exception(
-                            sprintf("%s's composer.json error: ", $moduleName) .
-                            $e->getMessage()
+                            sprintf(
+                                "%s composer.json error: %s", 
+                                $moduleName, 
+                                $e->getMessage()
+                            )
                         );
                     }
 
