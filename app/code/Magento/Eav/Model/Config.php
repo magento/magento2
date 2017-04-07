@@ -608,7 +608,8 @@ class Config
                 $attributeSetId
             )->addStoreLabel(
                 $storeId
-            )->addSetInfo()->getData();
+            )
+                ->getData();
 
             foreach ($attributesInfo as $attributeData) {
                 $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
@@ -716,12 +717,15 @@ class Config
     {
         $entityType = $this->getEntityType($entityType);
         $attribute = $this->createAttribute($entityType->getAttributeModel());
-
-        $attribute->loadByCode($entityType->getEntityTypeId(), $attributeCode);
-        if (empty($attribute->getId())) {
+        if (is_numeric($attributeCode)) {
+            $attribute->load($attributeCode);
+            if ($attribute->getEntityTypeId() != $entityType->getId()) {
+                $attribute = $this->createAttribute($entityType->getAttributeModel());
+            }
+        } else {
+            $attribute->loadByCode($entityType->getEntityTypeId(), $attributeCode);
             $attribute->setAttributeCode($attributeCode);
         }
-
 
         $entity = $entityType->getEntity();
         if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
