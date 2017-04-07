@@ -145,7 +145,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Find element by config path
      *
-     * @param string $path
+     * @param string $path The configuration path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
      */
     public function getElementByConfigPath($path)

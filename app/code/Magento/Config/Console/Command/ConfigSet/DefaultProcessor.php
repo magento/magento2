@@ -87,8 +87,10 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         try {
             /** @var Value $backendModel */
             $backendModel = $this->preparedValueFactory->create($path, $value, $scope, $scopeCode);
-            $resourceModel = $backendModel->getResource();
-            $resourceModel->save($backendModel);
+            if ($backendModel instanceof Value) {
+                $resourceModel = $backendModel->getResource();
+                $resourceModel->save($backendModel);
+            }
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
         }
