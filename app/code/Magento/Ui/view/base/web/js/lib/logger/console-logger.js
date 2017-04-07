@@ -6,8 +6,9 @@ define([
     './message-poll',
     './levels-poll',
     'Magento_Ui/js/lib/core/storage/local',
-    'underscore'
-], function (Logger, entryFactory, ConsoleHandler, Formatter, messagePoll, levelsPoll, storage, _) {
+    'underscore',
+    './logger-utils'
+], function (Logger, entryFactory, ConsoleHandler, Formatter, messagePoll, levelsPoll, storage, _, LoggerUtils) {
     'use strict';
 
     var STORAGE_NAMESPACE = 'CONSOLE_LOGGER';
@@ -20,7 +21,8 @@ define([
     function ConsoleLogger() {
         var formatter = new Formatter(),
             consoleHandler = new ConsoleHandler(formatter),
-            savedLevel = storage.get(STORAGE_NAMESPACE);
+            savedLevel = storage.get(STORAGE_NAMESPACE),
+            utils = new LoggerUtils(this);
 
         Logger.call(this, consoleHandler, entryFactory);
 
@@ -28,6 +30,7 @@ define([
             this.displayLevel_ = savedLevel;
         }
 
+        this.utils = utils;
         this.messages = messagePoll;
         this.levels = levelsPoll.getLevels();
     }

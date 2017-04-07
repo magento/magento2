@@ -1,7 +1,26 @@
 define(function () {
     'use strict';
 
-    var MESSAGES = {};
+    var MESSAGES = {
+        templateStartLoading:
+            'The "${ $.template }" template requested by  the "${$.component}" component started loading.',
+        templateLoadedFromServer:
+            'The "${ $.template }" template requested by the "${$.component}" component  was loaded from server."',
+        templateLoadedFromCache:
+            'The "${ $.template }" template  requested by the "${$.component}" component was loaded from cache."',
+        templateLoadingFail: 'Failed to load the "${ $.template }" template requested by "${$.component}".',
+        componentStartInitialization:
+            'Component "${$.component}" start initialization with instance name "${$.componentName}".',
+        componentStartLoading: ' Started loading the "${$.component}" component.',
+        componentFinishLoading: 'The "${$.component}" component was loaded.',
+        componentLoadingFail: 'Failed to load the "${$.component}" component.',
+        depsLoadingFail: 'Could not get the declared "${$.deps}" dependency for the "${$.component}" instance.',
+        depsStartRequesting: 'Requesting the "${$.deps}" dependency for the "${$.component}" instance.',
+        depsFinishRequesting: 'The "${$.deps}" dependency for the "${$.component}" instance was received.',
+        requestingComponent: 'Requesting the "${$.component}" component.',
+        requestingComponentIsLoaded: 'The requested "${$.component}" component was received.',
+        requestingComponentIsFailed: 'Could not get the requested "${$.component}" component.'
+    };
 
     return {
         /**
