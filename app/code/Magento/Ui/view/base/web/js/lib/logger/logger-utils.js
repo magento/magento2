@@ -17,7 +17,7 @@ define([], function () {
     /**
      * Method for logging asynchronous operations
      * @param {Promise} promise
-     * @param {object} config
+     * @param {Object} config
      */
     LogUtils.prototype.asyncLog = function (promise, config) {
         var levels,
@@ -29,11 +29,10 @@ define([], function () {
         messages = config.messages || this.createMessages();
         wait = config.wait || 5000;
 
-
         this.logger[levels.requested](messages.requested, config.data);
         setTimeout(function () {
             promise.state() === 'pending' ?
-                this.logger[levels.failed](messages.failed, config.data):
+                this.logger[levels.failed](messages.failed, config.data) :
                 this.logger[levels.loaded](messages.loaded, config.data);
         }.bind(this), wait)
     };

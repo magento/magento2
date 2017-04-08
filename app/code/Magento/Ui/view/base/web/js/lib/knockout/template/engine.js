@@ -81,7 +81,6 @@ define([
                 });
             }
 
-
             return source;
         } else if (template.nodeType === 1 || template.nodeType === 8) {
             source = new ko.templateSources.anonymousTemplate(template);
