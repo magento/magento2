@@ -3,8 +3,8 @@ define([
     './entry-factory',
     './console-output-handler',
     './formatter',
-    './message-poll',
-    './levels-poll',
+    './message-pool',
+    './levels-pool',
     'Magento_Ui/js/lib/core/storage/local',
     'underscore',
     './logger-utils'

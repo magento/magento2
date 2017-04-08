@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    './levels-poll'
+    './levels-pool'
 ], function (logLevels) {
     'use strict';
 
