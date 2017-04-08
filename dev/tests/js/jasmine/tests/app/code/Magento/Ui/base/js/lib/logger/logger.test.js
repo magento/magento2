@@ -7,7 +7,7 @@
 
 define([
     'Magento_Ui/js/lib/logger/logger',
-    'Magento_Ui/js/lib/logger/levels-poll'
+    'Magento_Ui/js/lib/logger/levels-pool'
 ], function (Logger, levelsPoll) {
     'use strict';
 

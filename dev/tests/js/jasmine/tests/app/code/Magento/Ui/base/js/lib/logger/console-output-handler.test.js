@@ -7,7 +7,7 @@
 
 define([
     'Magento_Ui/js/lib/logger/console-output-handler',
-    'Magento_Ui/js/lib/logger/levels-poll'
+    'Magento_Ui/js/lib/logger/levels-pool'
 ], function (ConsoleHandler, levelsPoll) {
     'use strict';
 

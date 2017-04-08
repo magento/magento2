@@ -9,8 +9,8 @@ define([
     'Magento_Ui/js/lib/logger/console-logger',
     'Magento_Ui/js/lib/logger/logger',
     'Magento_Ui/js/lib/logger/entry',
-    'Magento_Ui/js/lib/logger/levels-poll',
-    'Magento_Ui/js/lib/logger/message-poll'
+    'Magento_Ui/js/lib/logger/levels-pool',
+    'Magento_Ui/js/lib/logger/message-pool'
 ], function (logger, Logger, LogEntry, levelsPoll, messagePoll) {
     'use strict';
 
