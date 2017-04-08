@@ -28,7 +28,7 @@ define([
          * @protected
          * @type {Number}
          */
-        this.displayLevel_ = levels.ALL;
+        this.displayLevel_ = levels.WARN;
 
         /**
          * An array of display criteria.
