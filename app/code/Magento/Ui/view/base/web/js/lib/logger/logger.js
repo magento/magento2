@@ -216,7 +216,7 @@ define([
      * @returns {Boolean}
      */
     Logger.prototype.matchesLevel_ = function (entry) {
-        return entry.level >= this.displayLevel_;
+        return entry.level <= this.displayLevel_;
     };
 
     return Logger;
