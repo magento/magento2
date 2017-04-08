@@ -207,6 +207,7 @@ define([
                     logData = {},
                     entry;
 
+                logger.setDisplayLevel(levels.ALL);
                 spyOn(entryHandler, 'show');
                 spyOn(entryFactory, 'createEntry').and.callThrough();
 
@@ -228,6 +229,7 @@ define([
                     logData = {},
                     entry;
 
+                logger.setDisplayLevel(levels.ALL);
                 spyOn(entryHandler, 'show');
                 spyOn(entryFactory, 'createEntry').and.callThrough();
 
