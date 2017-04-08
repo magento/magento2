@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config;
@@ -204,9 +204,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             'websites' => ['base' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]]],
         ];
 
-        $this->valueMock->expects($this->exactly(2))
-            ->method('setData')
-            ->with('force_changed_value', true);
         $this->valueMock->expects($this->exactly(2))
             ->method('beforeSave');
         $this->valueMock->expects($this->exactly(2))

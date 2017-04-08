@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,9 +11,10 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Framework\DB\Adapter\ConnectionException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -146,6 +147,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -297,6 +303,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
+        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
         $this->model = $this->objectManager->getObject(
             \Magento\Catalog\Model\ProductRepository::class,
             [
@@ -317,7 +334,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'imageProcessor' => $this->imageProcessorMock,
                 'storeManager' => $this->storeManagerMock,
                 'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
-                'collectionProcessor' => $this->collectionProcessorMock
+                'collectionProcessor' => $this->collectionProcessorMock,
+                'serializer' => $this->serializerMock,
             ]
         );
     }
@@ -436,6 +454,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->productMock));
         $this->productMock->expects($this->exactly(2))->method('load');
         $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($identifier);
+        $this->serializerMock->expects($this->exactly(3))->method('serialize');
+
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
         //second invocation should just return from cache
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
@@ -461,6 +481,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($sku);
         $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')
             ->with($sku)->willReturn($id);
+        $this->serializerMock->expects($this->exactly(3))->method('serialize');
+
         $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
         //second invocation should just return from cache
         $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
@@ -1154,8 +1176,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $newEntriesData = [
-            'images' =>
-                [
+            'images' => [
                     [
                         'value_id' => null,
                         'label' => "label_text",

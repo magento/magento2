@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 
 namespace Magento\Persistent\Test\Unit\Model;
 
-use \Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Model\QuoteManager;
 
 class QuoteManagerTest extends \PHPUnit_Framework_TestCase
 {

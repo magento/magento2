@@ -1,15 +1,11 @@
 <?php
 /**
- * Mysql PDO DB adapter
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\DB\Adapter\Pdo;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
@@ -20,20 +16,24 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\ExpressionConverter;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Profiler;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Framework\DB\Query\Generator as QueryGenerator;
 
 /**
+ * MySQL database adapter
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
@@ -207,23 +207,33 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $queryGenerator;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param SelectFactory $selectFactory
      * @param array $config
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         StringUtils $string,
         DateTime $dateTime,
         LoggerInterface $logger,
         SelectFactory $selectFactory,
-        array $config = []
+        array $config = [],
+        SerializerInterface $serializer = null
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
         $this->selectFactory = $selectFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->exceptionMap = [
             // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2006 => ConnectionException::class,
@@ -1462,7 +1472,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $cacheId = $this->_getCacheId($tableCacheKey, $ddlType);
             $data = $this->_cacheAdapter->load($cacheId);
             if ($data !== false) {
-                $data = unserialize($data);
+                $data = $this->serializer->unserialize($data);
                 $this->_ddlCache[$ddlType][$tableCacheKey] = $data;
             }
             return $data;
@@ -1488,7 +1498,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if ($this->_cacheAdapter) {
             $cacheId = $this->_getCacheId($tableCacheKey, $ddlType);
-            $data = serialize($data);
+            $data = $this->serializer->serialize($data);
             $this->_cacheAdapter->save($data, $cacheId, [self::DDL_CACHE_TAG]);
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -276,11 +276,6 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Router\Base">
-        <arguments>
-            <argument name="routerId" xsi:type="string">standard</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
             <argument name="defaultTimezonePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
@@ -389,8 +384,8 @@
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="create" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Create</item>
-                <item name="delete" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Delete</item>
                 <item name="update" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Update</item>
+                <item name="delete" xsi:type="string">Magento\Store\Model\Config\Importer\Processor\Delete</item>
             </argument>
         </arguments>
     </type>

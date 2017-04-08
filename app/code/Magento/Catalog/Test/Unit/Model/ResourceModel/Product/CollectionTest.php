@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -152,7 +152,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $productLimitationMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(
+            ProductLimitationFactory::class
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
         $this->collection = $this->objectManager->getObject(

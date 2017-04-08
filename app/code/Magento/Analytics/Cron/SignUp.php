@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Cron;
 
-use Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Analytics\Model\Connector;
+use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\AdminNotification\Model\InboxFactory;
-use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
-use Magento\Analytics\Model\FlagManager;
 
 /**
  * Class SignUp
@@ -29,16 +27,6 @@ class SignUp
     private $configWriter;
 
     /**
-     * @var InboxFactory
-     */
-    private $inboxFactory;
-
-    /**
-     * @var InboxResource
-     */
-    private $inboxResource;
-
-    /**
      * @var FlagManager
      */
     private $flagManager;
@@ -51,27 +39,19 @@ class SignUp
     private $reinitableConfig;
 
     /**
-     * SignUp constructor.
-     *
      * @param Connector $connector
      * @param WriterInterface $configWriter
-     * @param InboxFactory $inboxFactory
-     * @param InboxResource $inboxResource
      * @param FlagManager $flagManager
      * @param ReinitableConfigInterface $reinitableConfig
      */
     public function __construct(
         Connector $connector,
         WriterInterface $configWriter,
-        InboxFactory $inboxFactory,
-        InboxResource $inboxResource,
         FlagManager $flagManager,
         ReinitableConfigInterface $reinitableConfig
     ) {
         $this->connector = $connector;
         $this->configWriter = $configWriter;
-        $this->inboxFactory = $inboxFactory;
-        $this->inboxResource = $inboxResource;
         $this->flagManager = $flagManager;
         $this->reinitableConfig = $reinitableConfig;
     }
@@ -85,20 +65,10 @@ class SignUp
     public function execute()
     {
         $attemptsCount = $this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
-        if ($attemptsCount === null) {
-            $this->deleteAnalyticsCronExpr();
-            return false;
-        }
 
-        if ($attemptsCount <= 0) {
+        if (($attemptsCount === null) || ($attemptsCount <= 0)) {
             $this->deleteAnalyticsCronExpr();
             $this->flagManager->deleteFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
-            $inboxNotification = $this->inboxFactory->create();
-            $inboxNotification->addNotice(
-                "Analytics subscription unsuccessful",
-                "Analytics subscription unsuccessful"
-            );
-            $this->inboxResource->save($inboxNotification);
             return false;
         }
 

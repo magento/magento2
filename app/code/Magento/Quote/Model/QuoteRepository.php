@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -105,7 +105,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     public function get($cartId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesById[$cartId])) {
-            $quote = $this->loadQuote('load', 'cartId', $cartId, $sharedStoreIds);
+            $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
             $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
         }
