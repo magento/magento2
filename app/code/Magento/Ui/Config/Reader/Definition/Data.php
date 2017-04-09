@@ -18,12 +18,6 @@ use Magento\Ui\Config\Reader\DefinitionFactory;
 class Data implements \Magento\Framework\Config\DataInterface
 {
     /**
-     * Suffix for UI Components with new arguments semantic
-     * TODO: Should be removed after MAGETWO-63833 will be implemented
-     */
-    const COMPONENT_SUFFIX = '_new';
-
-    /**
      * ID in the storage cache
      */
     const CACHE_ID = 'ui_component_configuration_definition_data';
@@ -83,7 +77,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->argumentInterpreter = $argumentInterpreter;
-        $this->cacheId = static::CACHE_ID . static::COMPONENT_SUFFIX;
+        $this->cacheId = static::CACHE_ID;
         $this->initData();
     }
 

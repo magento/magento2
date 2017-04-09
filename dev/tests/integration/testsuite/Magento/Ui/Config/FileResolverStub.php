@@ -17,7 +17,7 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
      * @var array
      */
     private $files = [
-        'etc/definition_new.xml' => [
+        'etc/definition.xml' => [
             'module_one/ui_component/etc/test_definition.xml',
             'module_two/ui_component/etc/test_definition.xml'
         ],

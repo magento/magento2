@@ -93,7 +93,7 @@
     </virtualType>
     <type name="Magento\Ui\Config\Reader\Definition">
         <arguments>
-            <argument name="fileName" xsi:type="string">etc/definition_new.xml</argument>
+            <argument name="fileName" xsi:type="string">etc/definition.xml</argument>
             <argument name="converter" xsi:type="object">Magento\Ui\Config\Converter</argument>
             <argument name="fileResolver" xsi:type="object">Magento\Ui\Config\Reader\FileResolver</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\Definition\SchemaLocator</argument>

@@ -16,12 +16,6 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class Data implements \Magento\Framework\Config\DataInterface
 {
     /**
-     * Suffix for UI Components with new arguments semantic
-     * TODO: Should be removed after MAGETWO-63833 will be implemented
-     */
-    const COMPONENT_SUFFIX = '_new';
-
-    /**
      * ID in the storage cache
      */
     const CACHE_ID = 'ui_component_configuration_data';
@@ -89,7 +83,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         $this->serializer = $serializer;
         $this->componentName = $componentName;
         $this->argumentInterpreter = $argumentInterpreter;
-        $this->cacheId = static::CACHE_ID . '_' . $componentName . static::COMPONENT_SUFFIX;
+        $this->cacheId = static::CACHE_ID . '_' . $componentName;
         $this->initData();
     }
 
@@ -104,7 +98,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         if (false === $data) {
             /** @var Reader $reader */
             $reader = $this->readerFactory->create(
-                ['fileName' => sprintf(self::SEARCH_PATTERN, $this->componentName . static::COMPONENT_SUFFIX)]
+                ['fileName' => sprintf(self::SEARCH_PATTERN, $this->componentName)]
             );
             $data = $reader->read();
             $this->cache->save($this->serializer->serialize($data), $this->cacheId);
