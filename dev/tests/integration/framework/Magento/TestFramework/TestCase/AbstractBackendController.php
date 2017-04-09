@@ -57,8 +57,8 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     protected function _getAdminCredentials()
     {
         return [
-            'user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+            'user' => 'admin',
+            'password' => '123123q'
         ];
     }
 

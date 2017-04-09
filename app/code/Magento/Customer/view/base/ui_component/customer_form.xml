@@ -48,6 +48,15 @@
             </item>
         </argument>
     </dataSource>
+    <htmlContent name="customer_edit_tab_view_content">
+        <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="Magento_Customer::tab/view.phtml">
+            <arguments>
+                <argument name="sort_order" xsi:type="number">10</argument>
+                <argument name="tab_label" xsi:type="string" translate="true">Customer View</argument>
+            </arguments>
+            <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="Magento_Customer::tab/view/personal_info.phtml"/>
+        </block>
+    </htmlContent>
     <fieldset name="customer">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

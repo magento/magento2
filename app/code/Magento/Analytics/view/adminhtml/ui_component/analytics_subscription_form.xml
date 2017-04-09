@@ -17,7 +17,7 @@
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">analytics_subscription_form</item>
             <item name="ajaxSaveType" xsi:type="string">simple</item>
-            <item name="ajaxSave" xsi:type="string">true</item>
+            <item name="ajaxSave" xsi:type="boolean">true</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
     </argument>
@@ -97,7 +97,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="displayArea" xsi:type="string">actions-secondary</item>
-                            <item name="displayAsLink" xsi:type="string">true</item>
+                            <item name="displayAsLink" xsi:type="boolean">true</item>
                             <item name="buttonClasses" xsi:type="string">advanced-reports-subscription-postpone</item>
                             <item name="title" xsi:type="string" translate="true">Remind me later</item>
                             <item name="actions" xsi:type="array">
@@ -113,7 +113,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="displayArea" xsi:type="string">actions-secondary</item>
-                            <item name="displayAsLink" xsi:type="string">true</item>
+                            <item name="displayAsLink" xsi:type="boolean">true</item>
                             <item name="buttonClasses" xsi:type="string">advanced-reports-subscription-disable</item>
                             <item name="title" xsi:type="string" translate="true">Disable Advanced Reporting</item>
                             <item name="actions" xsi:type="array">

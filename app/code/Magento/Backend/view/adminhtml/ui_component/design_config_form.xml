@@ -91,7 +91,7 @@
                         </item>
                     </argument>
                 </field>
-                <actionDelete>
+                <actionDelete name="actionDelete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="componentType" xsi:type="string">actionDelete</item>

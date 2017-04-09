@@ -30,7 +30,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()->setPostValue($inputData);
         $this->getRequest()->setParam('store', $storeId);
         $this->getRequest()->setParam('id', 2);
-        $this->dispatch('backend/catalog/category/save');
+        $this->dispatch('admin/catalog/category/save?XDEBUG_SESSION_START=PHPSTORM');
 
         if ($isSuccess) {
             $this->assertSessionMessages(
@@ -77,12 +77,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         $this->getRequest()->setPostValue($postData);
 
-        $this->dispatch('backend/catalog/category/save');
+        $this->dispatch('admin/catalog/category/save');
         $body = $this->getResponse()->getBody();
 
         if (empty($postData['return_session_messages_only'])) {
             $this->assertRedirect(
-                $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/')
+                $this->stringContains('http://localhost/index.php/admin/catalog/category/edit/')
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -126,7 +126,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testSuggestCategoriesActionDefaultCategoryFound()
     {
         $this->getRequest()->setParam('label_part', 'Default');
-        $this->dispatch('backend/catalog/category/suggestCategories');
+        $this->dispatch('admin/catalog/category/suggestCategories');
         $this->assertEquals(
             '[{"id":"2","children":[],"is_active":"1","label":"Default Category"}]',
             $this->getResponse()->getBody()
@@ -136,7 +136,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testSuggestCategoriesActionNoSuggestions()
     {
         $this->getRequest()->setParam('label_part', strrev('Default'));
-        $this->dispatch('backend/catalog/category/suggestCategories');
+        $this->dispatch('admin/catalog/category/suggestCategories');
         $this->assertEquals('[]', $this->getResponse()->getBody());
     }
 
@@ -337,7 +337,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 ],
             ]
         );
-        $this->dispatch('backend/catalog/category/save');
+        $this->dispatch('admin/catalog/category/save');
         $this->assertSessionMessages(
             $this->equalTo(['The value of attribute "is_active" must be set']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
@@ -375,7 +375,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()
             ->setPostValue('id', $grandChildId)
             ->setPostValue('pid', $parentId);
-        $this->dispatch('backend/catalog/category/move');
+        $this->dispatch('admin/catalog/category/move');
         $jsonResponse = json_decode($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
         $this->assertEquals($error, $jsonResponse->error);

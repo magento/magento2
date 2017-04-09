@@ -385,4 +385,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Ui\Component\MassAction\Group\Options">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="urlPath" xsi:type="string">customer/index/massAssignGroup</item>
+                <item name="paramName" xsi:type="string">group</item>
+                <item name="confirm" xsi:type="array">
+                    <item name="title" xsi:type="string">Assign a Customer Group</item>
+                    <item name="message" xsi:type="string">Are you sure to assign selected customers to new group?</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
