@@ -19,7 +19,7 @@
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">bulk_details_form_modal</item>
             <item name="ajaxSaveType" xsi:type="string">simple</item>
-            <item name="ajaxSave" xsi:type="string">true</item>
+            <item name="ajaxSave" xsi:type="boolean">true</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
     </argument>

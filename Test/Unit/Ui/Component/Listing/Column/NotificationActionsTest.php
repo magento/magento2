@@ -52,7 +52,7 @@ class NotificationActionsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->context->expects($this->any())->method('getProcessor')->will($this->returnValue($processor));
+        $this->context->expects($this->never())->method('getProcessor')->will($this->returnValue($processor));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->actionColumn = $objectManager->getObject(
             \Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationActions::class,
