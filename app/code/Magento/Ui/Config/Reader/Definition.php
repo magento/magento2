@@ -20,7 +20,11 @@ class Definition extends \Magento\Framework\Config\Reader\Filesystem implements 
      *
      * @var array
      */
-    protected $_idAttributes = ['/components' => 'name'];
+    protected $_idAttributes = [
+        '/components' => 'name',
+        '/components/(.*)/argument' => 'name',
+        '/components/(.*)/argument(/item)+' => 'name'
+    ];
 
     /**
      * Read, merge configuration files and validate resulted XML
