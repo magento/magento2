@@ -9,7 +9,7 @@ use Magento\Framework\Config\ConverterInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 
 /**
- * Class Converter
+ * Converter for definition.map.xml
  */
 class Converter implements ConverterInterface
 {

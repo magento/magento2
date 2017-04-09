@@ -13,7 +13,7 @@ use Magento\Ui\Config\Reader\Definition;
 use Magento\Ui\Config\Reader\DefinitionFactory;
 
 /**
- * UI Component definition configuration data
+ * Read UI Component definition configuration data ang evaluate arguments
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {
