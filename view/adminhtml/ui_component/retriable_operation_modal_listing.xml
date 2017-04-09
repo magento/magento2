@@ -9,61 +9,51 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">retriable_operation_modal_listing.retriable_operation_modal_listing_data_source</item>
-            <item name="deps" xsi:type="string">retriable_operation_modal_listing.retriable_operation_modal_listing_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">retriable_operation_modal_listing_columns</item>
     </argument>
-    <dataSource name="retriable_operation_modal_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">retriable_operation_modal_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">id</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <spinner>retriable_operation_modal_listing_columns</spinner>
+        <deps>
+            <dep>retriable_operation_modal_listing.retriable_operation_modal_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="retriable_operation_modal_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="retriable_operation_modal_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="retriable_operation_modal_listing_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="dndConfig" xsi:type="array">
-                    <item name="enabled" xsi:type="boolean">false</item>
-                </item>
-            </item>
-        </argument>
-        <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">error_code</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
+        <settings>
+            <dndConfig>
+                <param name="enabled" xsi:type="boolean">false</param>
+            </dndConfig>
+        </settings>
+        <selectionsColumn name="ids" sortOrder="10">
+            <settings>
+                <indexField>error_code</indexField>
+            </settings>
         </selectionsColumn>
-        <column name="result_message">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Error</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                </item>
-            </argument>
+        <column name="result_message" sortOrder="20">
+            <settings>
+                <label translate="true">Error</label>
+            </settings>
         </column>
-        <column name="records_qty">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Number of Records Affected</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                </item>
-            </argument>
+        <column name="records_qty" sortOrder="30">
+            <settings>
+                <label translate="true">Number of Records Affected</label>
+            </settings>
         </column>
     </columns>
 </listing>

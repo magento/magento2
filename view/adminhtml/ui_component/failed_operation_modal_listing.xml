@@ -9,81 +9,66 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">failed_operation_modal_listing.failed_operation_modal_listing_data_source</item>
-            <item name="deps" xsi:type="string">failed_operation_modal_listing.failed_operation_modal_listing_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">failed_operation_modal_listing_columns</item>
     </argument>
-    <dataSource name="failed_operation_modal_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">failed_operation_modal_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">id</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <spinner>failed_operation_modal_listing_columns</spinner>
+        <deps>
+            <dep>failed_operation_modal_listing.failed_operation_modal_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="failed_operation_modal_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="failed_operation_modal_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
         <paging name="listing_paging"/>
         <exportButton name="export_button">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="additionalParams" xsi:type="array">
-                        <item name="uuid" xsi:type="string">${ $.provider}:params.uuid</item>
-                    </item>
-                </item>
-            </argument>
+            <settings>
+                <additionalParams>
+                    <param xsi:type="string" name="uuid">${ $.provider}:params.uuid</param>
+                </additionalParams>
+            </settings>
         </exportButton>
     </listingToolbar>
     <columns name="failed_operation_modal_listing_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="dndConfig" xsi:type="array">
-                    <item name="enabled" xsi:type="boolean">false</item>
-                </item>
-            </item>
-        </argument>
+        <settings>
+            <dndConfig>
+                <param name="enabled" xsi:type="boolean">false</param>
+            </dndConfig>
+        </settings>
         <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">id</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>id</indexField>
+                <visible>false</visible>
+            </settings>
         </selectionsColumn>
-        <column name="entity_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/link</item>
-                    <item name="label" xsi:type="string" translate="true">ID</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
+        <column name="entity_id" component="Magento_Ui/js/grid/columns/link" sortOrder="10">
+            <settings>
+                <label translate="true">ID</label>
+                <sortable>false</sortable>
+            </settings>
         </column>
-        <column name="meta_information">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Meta Information</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                </item>
-            </argument>
+        <column name="meta_information" sortOrder="20">
+            <settings>
+                <label translate="true">Meta Information</label>
+                <sortable>false</sortable>
+            </settings>
         </column>
-        <column name="result_message">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Error</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                </item>
-            </argument>
+        <column name="result_message" sortOrder="30">
+            <settings>
+                <label translate="true">Error</label>
+            </settings>
         </column>
     </columns>
 </listing>
