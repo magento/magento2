@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Layout\Argument\Interpreter;
 
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\UrlInterfaceFactory;
+use Magento\Framework\UrlFactory;
 
 /**
  * Interpreter that builds URL by input path and optional parameters
@@ -25,10 +25,10 @@ class Url implements InterpreterInterface
     private $paramsInterpreter;
 
     /**
-     * @param UrlInterfaceFactory $urlResolverFactory
+     * @param UrlFactory $urlResolverFactory
      * @param NamedParams $paramsInterpreter
      */
-    public function __construct(UrlInterfaceFactory $urlResolverFactory, NamedParams $paramsInterpreter)
+    public function __construct(UrlFactory $urlResolverFactory, NamedParams $paramsInterpreter)
     {
         $this->urlResolver = $urlResolverFactory->create();
         $this->paramsInterpreter = $paramsInterpreter;
