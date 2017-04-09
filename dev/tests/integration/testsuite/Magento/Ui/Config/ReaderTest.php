@@ -35,6 +35,21 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function tearDown()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+
+        $objectManager->configure(
+            [
+                'preferences' => [
+                    \Magento\Ui\Config\Reader\FileResolver::class => \Magento\Ui\Config\Reader\FileResolver::class
+                ]
+            ]
+        );
+
+        parent::tearDown();
+    }
+
     /**
      * @return void
      */
