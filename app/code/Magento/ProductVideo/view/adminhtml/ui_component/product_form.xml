@@ -6,18 +6,20 @@
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <htmlContent name="video_gallery">
+    <htmlContent name="video_gallery" sortOrder="22">
         <argument name="data" xsi:type="array">
             <item name="wrapper" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Images And Videos</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="opened" xsi:type="boolean">false</item>
-                <item name="sortOrder" xsi:type="string">22</item>
-                <item name="canShow" xsi:type="boolean">true</item>
-                <item name="componentType" xsi:type="string">fieldset</item>
             </item>
         </argument>
-
+        <settings>
+            <wrapper>
+                <canShow>true</canShow>
+                <componentType>fieldset</componentType>
+            </wrapper>
+        </settings>
         <block name="gallery" class="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery">
             <arguments>
                 <argument name="config" xsi:type="array">
