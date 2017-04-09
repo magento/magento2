@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Layout\Argument\Interpreter;
+namespace Magento\Ui\Config\Argument\Parser;
 
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\UrlFactory;
+use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 
 /**
  * Interpreter that builds URL by input path and optional parameters
+ *
+ * Used isolated instance of UrlInterface since the shared instance has global state causing issues.
  */
 class Url implements InterpreterInterface
 {
@@ -24,12 +28,12 @@ class Url implements InterpreterInterface
     private $paramsInterpreter;
 
     /**
-     * @param UrlInterface $urlResolver
+     * @param UrlFactory $urlResolverFactory
      * @param NamedParams $paramsInterpreter
      */
-    public function __construct(UrlInterface $urlResolver, NamedParams $paramsInterpreter)
+    public function __construct(UrlFactory $urlResolverFactory, NamedParams $paramsInterpreter)
     {
-        $this->urlResolver = $urlResolver;
+        $this->urlResolver = $urlResolverFactory->create();
         $this->paramsInterpreter = $paramsInterpreter;
     }
 

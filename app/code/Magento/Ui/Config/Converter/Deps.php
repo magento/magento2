@@ -8,9 +8,23 @@ namespace Magento\Ui\Config\Converter;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
+use Magento\Ui\Config\ConverterUtils;
 
 class Deps implements ConverterInterface
 {
+    /**
+     * @var ConverterUtils
+     */
+    private $converterUtils;
+
+    /**
+     * @param ConverterUtils $converterUtils
+     */
+    public function __construct(ConverterUtils $converterUtils)
+    {
+        $this->converterUtils = $converterUtils;
+    }
+
     /**
      * @inheritdoc
      */
@@ -31,7 +45,7 @@ class Deps implements ConverterInterface
     private function toArray(\DOMNode $node)
     {
         $result = [
-            'name' => Converter::getComponentName($node),
+            'name' => $this->converterUtils->getComponentName($node),
             Dom::TYPE_ATTRIBUTE => 'array'
         ];
         if ($this->hasChildNodes($node)) {

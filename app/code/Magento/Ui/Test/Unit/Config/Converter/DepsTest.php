@@ -7,6 +7,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Framework\Data\Argument\Interpreter\Composite;
 use Magento\Ui\Config\Converter\Deps;
+use Magento\Ui\Config\ConverterUtils;
 
 class DepsTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +18,7 @@ class DepsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->converter = new Deps();
+        $this->converter = new Deps(new ConverterUtils());
     }
 
     public function testConvert()

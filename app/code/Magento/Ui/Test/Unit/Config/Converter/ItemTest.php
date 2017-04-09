@@ -7,6 +7,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\Converter\Item;
+use Magento\Ui\Config\ConverterUtils;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');
         $this->domXpath = new \DOMXPath($dom);
         $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
-        $this->converter = new Item($this->urlConverter);
+        $this->converter = new Item($this->urlConverter, new ConverterUtils());
     }
 
     /**

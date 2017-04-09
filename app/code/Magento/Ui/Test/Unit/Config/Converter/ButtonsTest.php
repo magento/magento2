@@ -7,6 +7,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\Buttons;
 use Magento\Ui\Config\ConverterInterface;
+use Magento\Ui\Config\ConverterUtils;
 
 class ButtonsTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +24,7 @@ class ButtonsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
-        $this->converter = new Buttons($this->urlConverter);
+        $this->converter = new Buttons($this->urlConverter, new ConverterUtils());
     }
 
     public function testConvert()

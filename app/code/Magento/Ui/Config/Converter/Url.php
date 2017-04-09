@@ -8,9 +8,26 @@ namespace Magento\Ui\Config\Converter;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
+use Magento\Ui\Config\ConverterUtils;
 
+/**
+ * Converter for URL type settings.
+ */
 class Url implements ConverterInterface
 {
+    /**
+     * @var ConverterUtils
+     */
+    private $converterUtils;
+
+    /**
+     * @param ConverterUtils $converterUtils
+     */
+    public function __construct(ConverterUtils $converterUtils)
+    {
+        $this->converterUtils = $converterUtils;
+    }
+
     /**
      * @inheritdoc
      */
@@ -31,7 +48,7 @@ class Url implements ConverterInterface
      */
     public function toArray(\DOMNode $node)
     {
-        $result[Converter::NAME_ATTRIBUTE_KEY] = Converter::getComponentName($node);
+        $result[Converter::NAME_ATTRIBUTE_KEY] = $this->converterUtils->getComponentName($node);
         if ($node->localName != 'param') {
              $result[Dom::TYPE_ATTRIBUTE] = 'url';
         }
@@ -99,7 +116,7 @@ class Url implements ConverterInterface
         /** @var \DOMNode $childNode */
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType === XML_ELEMENT_NODE) {
-                $result['param'][Converter::getComponentName($childNode)] = $this->toArray($childNode);
+                $result['param'][$this->converterUtils->getComponentName($childNode)] = $this->toArray($childNode);
             }
         }
         return $result;

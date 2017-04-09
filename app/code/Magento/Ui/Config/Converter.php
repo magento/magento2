@@ -68,18 +68,26 @@ class Converter implements ConfigConverterInterface
     private $parser;
 
     /**
+     * @var ConverterUtils
+     */
+    private $converterUtils;
+
+    /**
      * @param Parser $argumentParser
      * @param ParserInterface $parser
      * @param ReaderInterface $reader
+     * @param ConverterUtils $converterUtils
      */
     public function __construct(
         Parser $argumentParser,
         ParserInterface $parser,
-        ReaderInterface $reader
+        ReaderInterface $reader,
+        ConverterUtils $converterUtils
     ) {
         $this->argumentParser = $argumentParser;
         $this->reader = $reader;
         $this->parser = $parser;
+        $this->converterUtils = $converterUtils;
     }
 
     /**
@@ -120,7 +128,7 @@ class Converter implements ConfigConverterInterface
                     $result[$attributes[static::NAME_ATTRIBUTE_KEY]] = $this->argumentParser->parse($node);
                 } else {
                     $resultComponent = [];
-                    if (!empty($node->localName) && static::isUiComponent($node)) {
+                    if (!empty($node->localName) && $this->converterUtils->isUiComponent($node)) {
                         $resultComponent = $this->convertNode($node);
                     }
                     $arguments = [];
@@ -132,10 +140,13 @@ class Converter implements ConfigConverterInterface
                         }
                         if ($itemNode->localName === static::ARGUMENT_KEY) {
                             $arguments += $this->toArray($itemNode);
-                        } elseif (static::isUiComponent($itemNode) && isset($this->schemaMap[$itemNode->localName])) {
-                            $childResult[static::getComponentName($itemNode)] = $this->toArray($itemNode);
+                        } elseif (
+                            $this->converterUtils->isUiComponent($itemNode)
+                            && isset($this->schemaMap[$itemNode->localName])
+                        ) {
+                            $childResult[$this->converterUtils->getComponentName($itemNode)] = $this->toArray($itemNode);
                             // 'uiComponentType' is needed this for Reader to merge default values from definition
-                            $childResult[static::getComponentName($itemNode)]['uiComponentType'] = $itemNode->localName;
+                            $childResult[$this->converterUtils->getComponentName($itemNode)]['uiComponentType'] = $itemNode->localName;
                         } else {
                             continue;
                         }
@@ -157,28 +168,6 @@ class Converter implements ConfigConverterInterface
                     }
                 }
                 break;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Retrieve component name
-     *
-     * @param \DOMNode $node
-     * @return string
-     */
-    public static function getComponentName(\DOMNode $node)
-    {
-        $result = $node->localName;
-        if (!$node->hasAttributes()) {
-            return $result;
-        }
-        foreach ($node->attributes as $attribute) {
-            if ($attribute->name == static::NAME_ATTRIBUTE_KEY) {
-                $result = $attribute->value;
-                break;
-            }
         }
 
         return $result;
@@ -226,24 +215,5 @@ class Converter implements ConfigConverterInterface
         }
 
         return $resultComponent;
-    }
-
-    /**
-     * Check that $node is UiComponent
-     *
-     * If $node has 'settings', 'formElements' node in any parent node that it is not UiComponent
-     *
-     * @param \DOMNode $node
-     * @return boolean
-     */
-    public static function isUiComponent(\DOMNode $node)
-    {
-        if (in_array($node->localName, [static::SETTINGS_KEY, 'formElements'])) {
-            return false;
-        } elseif ($node->parentNode !== null) {
-            return static::isUiComponent($node->parentNode);
-        }
-
-        return true;
     }
 }

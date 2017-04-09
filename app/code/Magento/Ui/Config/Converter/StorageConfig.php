@@ -8,7 +8,11 @@ namespace Magento\Ui\Config\Converter;
 use Magento\Ui\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Ui\Config\ConverterUtils;
 
+/**
+ * Converter for data provider storage configuration settings
+ */
 class StorageConfig implements ConverterInterface
 {
     /**
@@ -17,11 +21,18 @@ class StorageConfig implements ConverterInterface
     private $converter;
 
     /**
-     * @param ConverterInterface $converter
+     * @var ConverterUtils
      */
-    public function __construct(ConverterInterface $converter)
+    private $converterUtils;
+
+    /**
+     * @param ConverterInterface $converter
+     * @param ConverterUtils $converterUtils
+     */
+    public function __construct(ConverterInterface $converter, ConverterUtils $converterUtils)
     {
         $this->converter = $converter;
+        $this->converterUtils = $converterUtils;
     }
 
     /**
@@ -50,7 +61,7 @@ class StorageConfig implements ConverterInterface
         }
 
         $result = [];
-        $result[Converter::NAME_ATTRIBUTE_KEY] = Converter::getComponentName($node);
+        $result[Converter::NAME_ATTRIBUTE_KEY] = $this->converterUtils->getComponentName($node);
 
         if ($this->hasChildElements($node)) {
             $result = array_merge($result, $this->processChildNodes($node));
@@ -58,7 +69,7 @@ class StorageConfig implements ConverterInterface
             if ($node->nodeType == XML_ELEMENT_NODE) {
                 $childResult = [];
                 $attributes = [];
-                $childResult[Converter::NAME_ATTRIBUTE_KEY] = Converter::getComponentName($node);
+                $childResult[Converter::NAME_ATTRIBUTE_KEY] = $this->converterUtils->getComponentName($node);
                 $childResult[Dom::TYPE_ATTRIBUTE] = 'string';
                 if ($node->hasAttributes()) {
                     foreach ($node->attributes as $attribute) {
@@ -103,7 +114,7 @@ class StorageConfig implements ConverterInterface
         /** @var \DOMNode $childNode */
         foreach ($node->childNodes as $childNode) {
             if ($childNode->nodeType === XML_ELEMENT_NODE) {
-                $result['item'][Converter::getComponentName($childNode)] = $this->toArray($childNode);
+                $result['item'][$this->converterUtils->getComponentName($childNode)] = $this->toArray($childNode);
             }
         }
         return $result;
