@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
+  ~ /**
+  ~  * Copyright © Magento, Inc. All rights reserved.
+  ~  * See COPYING.txt for license details.
+  ~  */
+  -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="sales_order_columns">
-        <column name="signifyd_guarantee_status">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Signifyd\Ui\Component\Listing\Column\Guarantee\Options</item>
-                <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Signifyd Guarantee Decision</item>
-                </item>
-            </argument>
+        <column name="signifyd_guarantee_status" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Signifyd\Ui\Component\Listing\Column\Guarantee\Options"/>
+                <visible>true</visible>
+                <dataType>select</dataType>
+                <label translate="true">Signifyd Guarantee Decision</label>
+            </settings>
         </column>
     </columns>
 </listing>
