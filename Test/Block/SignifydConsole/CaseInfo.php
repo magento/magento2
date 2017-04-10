@@ -87,7 +87,7 @@ class CaseInfo extends Block
      *
      * @var string
      */
-    private $cardHolder = '[data-dropdown="peopleLinks0"]';
+    private $cardHolder = '[data-dropdown="peopleLinks0_card_holders"]';
 
     /**
      * Css selector of displayed billing address.
