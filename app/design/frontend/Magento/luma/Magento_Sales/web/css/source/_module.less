@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,7 +12,7 @@
         .item {
             line-height: @tab-control__height;
             margin: 0 0 -1px;
-    
+
             strong {
                 .lib-css(background, @tab-control__active__background-color);
                 border: @border-width__base solid @border-color__base;
@@ -20,7 +20,7 @@
                 font-weight: @tab-control__font-weight;
                 padding: 0 20px;
             }
-    
+
             a {
                 .lib-css(background, @tab-control__background-color);
                 .lib-css(color, @tab-control__color);
@@ -28,7 +28,7 @@
                 display: block;
                 font-weight: @tab-control__font-weight;
                 padding: 0 20px;
-    
+
                 &:hover {
                     .lib-css(background, @tab-control__hover__background-color);
                     .lib-css(text-decoration, @tab-control__hover__text-decoration);
@@ -36,87 +36,87 @@
             }
         }
     }
-    
+
     .order-details-items {
         border: @border-width__base solid @border-color__base;
         margin-bottom: @indent__xl;
         padding: @indent__s;
-    
+
         .order-title {
             border-bottom: @border-width__base solid @border-color__base;
             padding: 0 0 @indent__s;
-    
+
             > strong {
                 .lib-font-size(24);
                 font-weight: @font-weight__light;
             }
-    
+
             .action {
                 display: inline-block;
             }
         }
-    
+
         .table-wrapper {
             margin: 0;
-    
+
             + .actions-toolbar {
                 display: none;
             }
-    
+
             &:not(:last-child) {
                 margin-bottom: @indent__l;
             }
         }
-    
+
         .table-order-items {
             > thead > tr > th {
                 border-bottom: 1px solid @border-color__base;
             }
-    
+
             tbody {
                 & + tbody {
                     border-top: 1px solid @border-color__base;
                 }
-    
+
                 .account & {
                     tr:nth-child(even) td {
                         background: none;
                     }
                 }
-    
+
                 td {
                     padding-bottom: 20px;
                     padding-top: 20px;
                 }
-    
+
                 .col {
                     &.label {
                         font-weight: @font-weight__bold;
                         padding-bottom: 5px;
                         padding-top: 0;
                     }
-    
+
                     &.options {
                         padding: 0 0 15px;
                     }
                 }
-    
+
                 > .item-parent {
                     td {
                         padding-bottom: 5px;
                     }
-    
+
                     + tr td {
                         padding-top: 5px;
                     }
                 }
-    
+
                 .item-options-container td {
                     padding-bottom: 15px;
                     padding-top: 0;
                 }
             }
-    
+
             .product-item-name {
                 margin: 0 0 10px;
             }
@@ -124,61 +124,61 @@
 
         .item-options {
             margin: 0;
-    
+
             dt {
                 margin: 0;
             }
-    
+
             dd {
                 margin: 0 0 15px;
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
-    
+
             &.links {
                 dt {
                     display: inline-block;
-    
+
                     &:after {
                         content: ': ';
                     }
                 }
-    
+
                 dd {
                     margin: 0;
                 }
             }
         }
-    
+
         thead {
             .col.qty {
                 text-align: center;
             }
         }
-    
+
         .col {
             &.price,
             &.subtotal {
                 &:extend(.abs-incl-excl-tax all);
             }
-    
+
             &.name {
                 padding-top: 16px;
             }
         }
-    
+
         .cart-tax-total {
             &:extend(.abs-tax-total all);
             &-expanded {
                 &:extend(.abs-tax-total-expanded all);
             }
         }
-    
+
         tfoot {
             &:extend(.abs-account-summary all);
         }
-    
+
         .action {
             &.show {
                 .lib-icon-font(
@@ -190,7 +190,7 @@
                     @_icon-font-display: inline-block
                 );
                 .lib-css(color, @primary__color);
-    
+
                 &.expanded {
                     .lib-icon-font-symbol(
                         @_icon-font-content: @icon-up,
@@ -199,17 +199,17 @@
                 }
             }
         }
-    
+
         .product-item-name {
             .lib-font-size(18);
         }
-    
+
         .items-qty {
             &:extend(.abs-reset-list all);
             .item {
                 white-space: nowrap;
             }
-    
+
             .title {
                 &:after {
                     content: ': ';
@@ -226,42 +226,42 @@
             }
         }
     }
-    
+
     .block-order-details {
         &-comments {
             margin: 0 0 40px;
-    
+
             .comment-date {
                 font-weight: @font-weight__semibold;
             }
-    
+
             .comment-content {
                 line-height: 1.6;
                 margin: 0 0 20px;
             }
         }
-    
+
         &-view {
             .block-content .box {
                 margin-bottom: 30px;
             }
-    
+
             .box-title {
                 font-weight: @font-weight__semibold;
             }
-    
+
             .box-content {
                 .payment-method {
                     .title {
                         font-weight: @font-weight__regular;
                     }
-    
+
                     .content {
                         margin: 0;
-    
+
                         > strong {
                             font-weight: @font-weight__regular;
-    
+
                             &:after {
                                 content: ': ';
                             }
@@ -270,42 +270,42 @@
                 }
             }
         }
-    
+
         &-gift-message {
             .column.main .order-details-items & {
                 margin: 40px 0 0;
             }
-    
+
             + .actions-toolbar {
                 display: none;
             }
         }
     }
-    
+
     .order-tracking {
         .order-title + & {
             border-bottom: @border-width__base solid @border-color__base;
         }
-    
+
         margin: 0;
         padding: 20px 0;
-    
+
         .tracking-title {
             display: inline-block;
         }
-    
+
         .tracking-content {
             display: inline-block;
             margin: 0 0 0 5px;
         }
     }
-    
+
     .order-actions-toolbar {
         margin-bottom: 25px;
-    
+
         .action {
             margin-right: 30px;
-    
+
             &.print {
                 &:extend(.abs-action-print all);
                 display: none;
@@ -313,18 +313,18 @@
             }
         }
     }
-    
+
     .order-status {
         &:extend(.abs-status all);
     }
-    
+
     .account,
     [class^='sales-guest-'],
     .sales-guest-view,
     .magento-rma-guest-returns {
         &:extend(.abs-title-orders all);
     }
-    
+
     .form-orders-search {
         .field {
             &:last-child {
@@ -332,35 +332,35 @@
             }
         }
     }
-    
+
     .block-reorder {
         .block-title {
             &:extend(.abs-block-widget-title all);
         }
-    
+
         .actions-toolbar {
             margin: 17px 0;
         }
-    
+
         .product-item-name {
             display: inline-block;
         }
-    
+
         .product-item {
             .label {
                 &:extend(.abs-visually-hidden all);
             }
-    
+
             .field.item {
                 display: inline-block;
             }
         }
     }
-    
+
     //
     //  Guest order view page
     //  ---------------------------------------------
-    
+
     [class^='sales-guest-'],
     .sales-guest-view {
         .column.main {
@@ -369,7 +369,7 @@
             }
         }
     }
-    
+
     .magento-rma-guest-returns {
         .column.main {
             .order-details-items {

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\ImportExport\Test\Fixture\Import\File;
 use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Fill custom import form.

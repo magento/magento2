@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,10 @@
             <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <field id="swatches_per_product" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Swatches per Product</label>
+                </field>
+                <field id="show_swatches_in_product_list" translate="label comment" type="select" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Swatches in Product List</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>

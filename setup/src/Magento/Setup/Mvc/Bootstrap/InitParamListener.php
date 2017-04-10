@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,13 +42,13 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     private $listeners = [];
 
     /**
-     * List of controllers which should be skipped from auth check
+     * List of controllers and their actions which should be skipped from auth check
      *
      * @var array
      */
     private $controllersToSkip = [
-        \Magento\Setup\Controller\Session::class,
-        \Magento\Setup\Controller\Success::class
+        \Magento\Setup\Controller\Session::class => ['index', 'unlogin'],
+        \Magento\Setup\Controller\Success::class => ['index']
     ];
 
     /**
@@ -110,8 +110,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /** @var RouteMatch $routeMatch */
         $routeMatch = $event->getRouteMatch();
         $controller = $routeMatch->getParam('controller');
+        $action = $routeMatch->getParam('action');
 
-        if (!in_array($controller, $this->controllersToSkip)) {
+        $skipCheck = array_key_exists($controller, $this->controllersToSkip)
+            && in_array($action, $this->controllersToSkip[$controller]);
+
+        if (!$skipCheck) {
             /** @var Application $application */
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();

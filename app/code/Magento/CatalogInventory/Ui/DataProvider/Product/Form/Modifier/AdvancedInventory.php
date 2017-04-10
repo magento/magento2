@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
@@ -8,11 +8,11 @@ namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Data provider for advanced inventory form
@@ -204,11 +204,10 @@ class AdvancedInventory extends AbstractModifier
                 'dataScope' => $fieldCode,
                 'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',
-                'sortOrder' =>
-                    (int) $this->arrayManager->get(
-                        $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
-                        $this->meta
-                    ) - 1,
+                'sortOrder' => (int) $this->arrayManager->get(
+                    $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
+                    $this->meta
+                ) - 1,
             ];
             $qty['arguments']['data']['config'] = [
                 'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',

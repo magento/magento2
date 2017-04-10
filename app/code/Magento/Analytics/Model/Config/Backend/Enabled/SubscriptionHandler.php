@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
-use Magento\Analytics\Model\Config\Backend\CollectionTime;
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\NotificationTime;
+use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
@@ -140,7 +140,6 @@ class SubscriptionHandler
      */
     public function processDisabled()
     {
-
         $this->disableCollectionData();
 
         if (!$this->analyticsToken->isTokenExist()) {
