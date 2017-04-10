@@ -22,8 +22,8 @@ $analyticsToken = $objectManager->get(\Magento\Analytics\Model\AnalyticsToken::c
 $analyticsToken->storeToken('42');
 
 /**
- * @var $flagManager \Magento\Analytics\Model\FlagManager
+ * @var $flagManager \Magento\Framework\FlagManager
  */
-$flagManager = $objectManager->get(\Magento\Analytics\Model\FlagManager::class);
+$flagManager = $objectManager->get(\Magento\Framework\FlagManager::class);
 
 $flagManager->deleteFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
