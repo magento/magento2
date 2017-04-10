@@ -144,9 +144,10 @@ class Converter implements ConfigConverterInterface
                             $this->converterUtils->isUiComponent($itemNode)
                             && isset($this->schemaMap[$itemNode->localName])
                         ) {
-                            $childResult[$this->converterUtils->getComponentName($itemNode)] = $this->toArray($itemNode);
+                            $itemNodeName = $this->converterUtils->getComponentName($itemNode);
+                            $childResult[$itemNodeName] = $this->toArray($itemNode);
                             // 'uiComponentType' is needed this for Reader to merge default values from definition
-                            $childResult[$this->converterUtils->getComponentName($itemNode)]['uiComponentType'] = $itemNode->localName;
+                            $childResult[$itemNodeName]['uiComponentType'] = $itemNode->localName;
                         } else {
                             continue;
                         }
