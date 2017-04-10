@@ -12,6 +12,8 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * Publishers pool.
+ *
+ * @api
  */
 class PublisherPool implements PublisherInterface, BulkPublisherInterface
 {
