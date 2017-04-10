@@ -358,6 +358,7 @@
             </argument>
             <argument name="configFactory" xsi:type="object">uiComponentConfigFactory</argument>
             <argument name="definitionData" xsi:type="object">Magento\Ui\Config\Reader\Definition\Data</argument>
+            <argument name="componentManager" xsi:type="object">Magento\Ui\Model\Manager\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Ui\Config\Argument\Parser\ArrayType">

@@ -8,6 +8,9 @@ namespace Magento\Ui\Config\Converter;
 use Magento\Framework\View\Element\UiComponent\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
 
+/**
+ * Converter for htmlContent component wrapped block
+ */
 class HtmlContent implements ConverterInterface
 {
     /**

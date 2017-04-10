@@ -10,6 +10,9 @@ use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 use Magento\Ui\Config\Argument\ParserInterface;
 
+/**
+ * Converter for UI Component instances configuration files
+ */
 class Converter implements ConfigConverterInterface
 {
     /**
@@ -125,43 +128,15 @@ class Converter implements ConfigConverterInterface
                     $result[$attributes[static::NAME_ATTRIBUTE_KEY]] = $this->argumentParser->parse($node);
                 } else {
                     $resultComponent = $this->convertNode($node);
-                    $arguments = [];
-                    $childResult = [];
-                    for ($i = 0, $iLength = $node->childNodes->length; $i < $iLength; ++$i) {
-                        $itemNode = $node->childNodes->item($i);
-                        if ($itemNode->localName == null) {
-                            continue;
-                        }
-                        if ($itemNode->localName === static::ARGUMENT_KEY) {
-                            $arguments += $this->toArray($itemNode);
-                        } elseif (
-                            $this->converterUtils->isUiComponent($itemNode)
-                            && isset($this->schemaMap[$itemNode->localName])
-                        ) {
-                            $itemNodeName = $this->converterUtils->getComponentName($itemNode);
-                            $childResult[$itemNodeName] = $this->toArray($itemNode);
-                            // 'uiComponentType' is needed this for Reader to merge default values from definition
-                            $childResult[$itemNodeName]['uiComponentType'] = $itemNode->localName;
-                        } else {
-                            continue;
-                        }
-                    }
+                    list($arguments, $childResult) = $this->convertChildNodes($node);
 
-                    if (!empty($arguments) || !empty($resultComponent)) {
-                        $arguments = array_replace_recursive($resultComponent, $arguments);
-                        $result[static::DATA_ARGUMENTS_KEY] = $arguments;
-                    }
-
-                    if (!empty($attributes)) {
-                        $result[static::DATA_ATTRIBUTES_KEY] = $attributes;
-                    }
-
-                    if ($node->parentNode !== null) {
-                        $result[static::DATA_COMPONENTS_KEY] = $childResult;
-                    } else {
-                        $result = $childResult;
-                    }
+                    $result = array_merge(
+                        $this->processArguments($arguments, $resultComponent),
+                        $this->processAttributes($attributes),
+                        $this->processChildResult($node, $childResult)
+                    );
                 }
+
                 break;
         }
 
@@ -180,7 +155,9 @@ class Converter implements ConfigConverterInterface
             return [];
         }
 
-        $this->schemaMap = $this->reader->read();
+        if (!$this->schemaMap) {
+            $this->schemaMap = $this->reader->read();
+        }
         $result = $this->toArray($source);
         return empty($result) ? $result : reset($result);
     }
@@ -213,5 +190,86 @@ class Converter implements ConfigConverterInterface
         }
 
         return $resultComponent;
+    }
+
+    /**
+     * Process component arguments
+     *
+     * @param array $arguments
+     * @param array $resultComponent
+     * @return array
+     */
+    private function processArguments(array $arguments, array $resultComponent)
+    {
+        $result = [];
+        if (!empty($arguments) || !empty($resultComponent)) {
+            $result[static::DATA_ARGUMENTS_KEY] = array_replace_recursive($resultComponent, $arguments);
+        }
+        return $result;
+    }
+
+    /**
+     * Process component attributes
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function processAttributes(array $attributes)
+    {
+        $result = [];
+        if (!empty($attributes)) {
+            $result[static::DATA_ATTRIBUTES_KEY] = $attributes;
+        }
+        return $result;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param array $childResult
+     * @return array
+     */
+    private function processChildResult(\DOMNode $node, array $childResult)
+    {
+        $result = [];
+        if ($node->parentNode !== null) {
+            $result[static::DATA_COMPONENTS_KEY] = $childResult;
+        } else {
+            $result = $childResult;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert child nodes of $node
+     *
+     * @param \DOMNode $node
+     * @return array
+     */
+    private function convertChildNodes(\DOMNode $node)
+    {
+        $arguments = [];
+        $childResult = [];
+        for ($i = 0, $iLength = $node->childNodes->length; $i < $iLength; ++$i) {
+            $itemNode = $node->childNodes->item($i);
+            if ($itemNode->localName == null) {
+                continue;
+            }
+            if ($itemNode->localName === static::ARGUMENT_KEY) {
+                $arguments += $this->toArray($itemNode);
+            } elseif (
+                $this->converterUtils->isUiComponent($itemNode)
+                && isset($this->schemaMap[$itemNode->localName])
+            ) {
+                $itemNodeName = $this->converterUtils->getComponentName($itemNode);
+                $childResult[$itemNodeName] = $this->toArray($itemNode);
+                // 'uiComponentType' is needed this for Reader to merge default values from definition
+                $childResult[$itemNodeName]['uiComponentType'] = $itemNode->localName;
+            } else {
+                continue;
+            }
+        }
+
+        return [$arguments, $childResult];
     }
 }

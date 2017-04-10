@@ -11,7 +11,7 @@ use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
 
 /**
- * Converter for URL type settings.
+ * Converter for URL type settings
  */
 class Url implements ConverterInterface
 {

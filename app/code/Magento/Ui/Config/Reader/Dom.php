@@ -11,7 +11,7 @@ use Magento\Ui\Config\Converter;
 use Magento\Framework\Config\Dom as ConfigDom;
 
 /**
- * Class Dom
+ * UI Component configuration file DOM object representation
  */
 class Dom extends ConfigDom
 {
@@ -117,10 +117,11 @@ class Dom extends ConfigDom
     /**
      * Merge node to matched root elements
      *
-     * @param $rootMatchList
-     * @param $insertedItem
+     * @param \DOMNodeList $rootMatchList
+     * @param \DOMElement $insertedItem
+     * @return void
      */
-    private function processMatchedNodes($rootMatchList, $insertedItem)
+    private function processMatchedNodes(\DOMNodeList $rootMatchList, \DOMElement $insertedItem)
     {
         foreach ($rootMatchList as $rootItem) {
             if ($this->_isTextNode($insertedItem) && $this->_isTextNode($rootItem)) {

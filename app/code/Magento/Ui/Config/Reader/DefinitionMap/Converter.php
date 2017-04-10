@@ -85,25 +85,9 @@ class Converter implements ConverterInterface
                     $result[ $attributes[static::NAME_ATTRIBUTE_KEY] ] = $this->argumentParser->parse($node);
 
                 } else {
-                    $arguments = [];
-                    $childResult = [];
-                    foreach ($node->childNodes as $itemNode) {
-                        if (empty($itemNode->localName)) {
-                            continue;
-                        }
-                        if ($itemNode->localName === static::ARGUMENT_KEY) {
-                            $arguments += $this->toArray($itemNode);
-                        } else {
-                            $childResult[$this->getComponentName($itemNode)] = $this->toArray($itemNode);
-                        }
-                    }
+                    list($arguments, $childResult) = $this->convertChildNodes($node);
 
-                    if (!empty($arguments)) {
-                        foreach ($arguments as $name => $argument) {
-                            $result[static::ARGUMENT_KEY][$name] = $argument;
-                        }
-                    }
-
+                    $result += $this->processArguments($arguments);
                     $result += $childResult;
                 }
                 break;
@@ -177,6 +161,46 @@ class Converter implements ConverterInterface
 
         if (isset($componentData[static::CURRENT_SCHEMA_KEY])) {
             $result = array_replace_recursive($componentData[static::CURRENT_SCHEMA_KEY], $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert child nodes of $node
+     *
+     * @param \DOMNode $node
+     * @return array
+     */
+    private function convertChildNodes(\DOMNode $node)
+    {
+        $arguments = [];
+        $childResult = [];
+        foreach ($node->childNodes as $itemNode) {
+            if (empty($itemNode->localName)) {
+                continue;
+            }
+            if ($itemNode->localName === static::ARGUMENT_KEY) {
+                $arguments += $this->toArray($itemNode);
+            } else {
+                $childResult[$this->getComponentName($itemNode)] = $this->toArray($itemNode);
+            }
+        }
+
+        return [$arguments, $childResult];
+    }
+
+    /**
+     * Process component arguments
+     *
+     * @param array $arguments
+     * @return array
+     */
+    private function processArguments(array $arguments)
+    {
+        $result = [];
+        if (!empty($arguments)) {
+            $result[static::ARGUMENT_KEY] = $arguments;
         }
 
         return $result;

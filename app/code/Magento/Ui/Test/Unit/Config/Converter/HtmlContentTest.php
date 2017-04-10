@@ -27,19 +27,26 @@ class HtmlContentTest extends \PHPUnit_Framework_TestCase
 
     public function testConvert()
     {
-        $xml = trim(file_get_contents(__DIR__ . '/_files/expected.xml'));
+        $xml = '<?xml version="1.0"?>' .
+                '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
+                        '<block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" ' .
+                                'template="Magento_Customer::tab/view.phtml">' .
+                            '<block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" '.
+                                    'name="personal_info" template="Magento_Customer::tab/view/personal_info.phtml"/>' .
+                        '</block>' .
+                '</layout>';
         $expectedResult = [
             'xsi:type' => 'array',
             'item' => [
                 'layout' => [
                     'xsi:type' => 'string',
                     'name' => 'layout',
-                    'value' => $xml
+                    'value' => ''
                 ],
                 'name' => [
                     'xsi:type' => 'string',
                     'name' => 'block',
-                    'value' => 'customer_edit_tab_view_content',
+                    'value' => 'customer_edit_tab_view',
                 ],
             ],
         ];
@@ -47,8 +54,16 @@ class HtmlContentTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'testForm.xml');
         $domXpath = new \DOMXPath($dom);
-        $node = $domXpath->query('//form/htmlContent')->item(0);
+        $node = $domXpath->query('//form/htmlContent/block')->item(0);
 
-        $this->assertEquals($expectedResult, $this->converter->convert($node, []));
+        $actualResult = $this->converter->convert($node, []);
+        $this->assertTrue(isset($actualResult['item']['layout']['value']));
+
+        // assert xml structures
+        $this->assertXmlStringEqualsXmlString($xml, $actualResult['item']['layout']['value']);
+        $actualResult['item']['layout']['value'] = '';
+
+        // assert that all expected keys in array are exists
+        $this->assertEquals($expectedResult, $actualResult);
     }
 }
