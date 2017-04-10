@@ -84,17 +84,18 @@ class AssertUsesPerCouponWorks extends AbstractConstraint
                 ['shipping' => $shipping]
             )->run();
 
-            // select payment method.
-            $objectManager->create(
-                \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,
-                ['payment' => $payment])
-                ->run();
-
             // apply coupon code and get message.
             $message = $checkoutOnepage->getDiscountCodesBlock()->applyCouponCode($generatedCouponCodes[0]['code']);
 
             // check coupon code applying message.
             $this->assertCouponCodeApplyingMessage($message, $salesRule->getUsesPerCoupon(), $i);
+
+
+            // select payment method.
+            $objectManager->create(
+                \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,
+                ['payment' => $payment])
+                ->run();
 
             // place order.
             $objectManager->create(\Magento\Checkout\Test\TestStep\PlaceOrderStep::class)->run();
