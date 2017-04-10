@@ -93,8 +93,8 @@ class AssertUsesPerCouponWorks extends AbstractConstraint
             // select payment method.
             $objectManager->create(
                 \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,
-                ['payment' => $payment])
-                ->run();
+                ['payment' => $payment]
+            )->run();
 
             // place order.
             $objectManager->create(\Magento\Checkout\Test\TestStep\PlaceOrderStep::class)->run();
