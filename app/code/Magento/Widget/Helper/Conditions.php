@@ -44,7 +44,7 @@ class Conditions
      */
     public function encode(array $value)
     {
-        return $this->normalizer->replaceReservedCharaters($this->serializer->serialize($value));
+        return $this->normalizer->replaceReservedCharacters($this->serializer->serialize($value));
     }
 
     /**
@@ -56,7 +56,7 @@ class Conditions
     public function decode($value)
     {
         return $this->serializer->unserialize(
-            $this->normalizer->restoreReservedCharaters($value)
+            $this->normalizer->restoreReservedCharacters($value)
         );
     }
 }

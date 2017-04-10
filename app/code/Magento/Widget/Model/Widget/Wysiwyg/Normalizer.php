@@ -12,8 +12,8 @@ class Normalizer
 {
 
     const WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP = [
-        '{' => '[',
-        '}' => ']',
+        '{' => '^[',
+        '}' => '^]',
         '"' => '`',
         '\\' => '|',
     ];
@@ -24,7 +24,7 @@ class Normalizer
      * @param string $content
      * @return string
      */
-    public function replaceReservedCharaters($content)
+    public function replaceReservedCharacters($content)
     {
         return str_replace(
             array_keys(Normalizer::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
@@ -39,7 +39,7 @@ class Normalizer
      * @param string $content
      * @return string
      */
-    public function restoreReservedCharaters($content)
+    public function restoreReservedCharacters($content)
     {
         return str_replace(
             array_values(Normalizer::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),

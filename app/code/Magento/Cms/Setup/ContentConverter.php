@@ -71,6 +71,14 @@ class ContentConverter extends SerializedToJson
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function isValidJsonValue($value)
+    {
+        return parent::isValidJsonValue($this->normalizer->restoreReservedCharacters($value));
+    }
+
+    /**
      * Convert widget parameters from serialized format to JSON format
      *
      * @param string $paramsString
@@ -83,11 +91,11 @@ class ContentConverter extends SerializedToJson
         $tokenizer->setString($paramsString);
         $widgetParameters = $tokenizer->tokenize();
         if (isset($widgetParameters['conditions_encoded'])) {
-            $conditions = $this->normalizer->restoreReservedCharaters($widgetParameters['conditions_encoded']);
-            if ($this->isValidJsonValue($conditions)) {
+            if ($this->isValidJsonValue($widgetParameters['conditions_encoded'])) {
                 return $paramsString;
             }
-            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharaters(
+            $conditions = $this->restoreReservedCharactersInSerializedContent($widgetParameters['conditions_encoded']);
+            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharacters(
                 parent::convert($conditions)
             );
             $newParamsString = '';
@@ -98,5 +106,26 @@ class ContentConverter extends SerializedToJson
         } else {
             return $paramsString;
         }
+    }
+
+    /**
+     * Restore the reserved characters in the existing serialized content
+     *
+     * @param string $serializedContent
+     * @return string
+     */
+    private function restoreReservedCharactersInSerializedContent($serializedContent)
+    {
+        $map = [
+            '{' => '[',
+            '}' => ']',
+            '"' => '`',
+            '\\' => '|',
+        ];
+        return str_replace(
+            array_values($map),
+            array_keys($map),
+            $serializedContent
+        );
     }
 }

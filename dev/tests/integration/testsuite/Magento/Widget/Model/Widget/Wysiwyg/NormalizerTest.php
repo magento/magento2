@@ -19,17 +19,28 @@ class NormalizerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testReplaceReservedCharaters()
+    public function testReplaceReservedCharacters()
     {
-        $content = '{}\\""';
-        $expected = '[]|``';
-        $this->assertEquals($expected, $this->normalizer->replaceReservedCharaters($content));
+        $content = '{}\\""[]';
+        $expected = '^[^]|``[]';
+        $this->assertEquals($expected, $this->normalizer->replaceReservedCharacters($content));
     }
 
-    public function testRestoreReservedCharaters()
+    public function testRestoreReservedCharacters()
     {
-        $content = '[]|``';
-        $expected = '{}\\""';
-        $this->assertEquals($expected, $this->normalizer->restoreReservedCharaters($content));
+        $content = '^[^]|``[]';
+        $expected = '{}\\""[]';
+        $this->assertEquals($expected, $this->normalizer->restoreReservedCharacters($content));
+    }
+
+    public function testReplaceAndRestoreReservedCharacters()
+    {
+        $value = '{"1":{"type":"Magento\\CatalogWidget\\Model\\Rule\\Condition\\Combine","aggregator":"all","value":"1","new_child":""},"1--1":{"type":"Magento\\CatalogWidget\\Model\\Rule\\Condition\\Product","attribute":"pattern","operator":"{}","value":["212,213"]}}';
+        $this->assertEquals(
+            $value,
+            $this->normalizer->restoreReservedCharacters(
+                $this->normalizer->replaceReservedCharacters($value)
+            )
+        );
     }
 }
