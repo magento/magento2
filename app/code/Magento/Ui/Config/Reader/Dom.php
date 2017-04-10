@@ -11,7 +11,7 @@ use Magento\Ui\Config\Converter;
 use Magento\Framework\Config\Dom as ConfigDom;
 
 /**
- * Class Dom
+ * UI Component configuration file DOM object representation
  */
 class Dom extends ConfigDom
 {
@@ -119,6 +119,7 @@ class Dom extends ConfigDom
      *
      * @param $rootMatchList
      * @param $insertedItem
+     * @return void
      */
     private function processMatchedNodes($rootMatchList, $insertedItem)
     {

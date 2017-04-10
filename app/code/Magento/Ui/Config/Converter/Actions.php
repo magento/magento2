@@ -10,6 +10,9 @@ use Magento\Ui\Config\ConverterInterface;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\ConverterUtils;
 
+/**
+ * Converter for 'settings/actions' configuration settings
+ */
 class Actions implements ConverterInterface
 {
     /**

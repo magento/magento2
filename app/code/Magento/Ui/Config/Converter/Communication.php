@@ -9,6 +9,9 @@ use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
 
+/**
+ * Converter for "communication" types of configuration settings ('imports', 'exports', 'links', etc)
+ */
 class Communication implements ConverterInterface
 {
     /**

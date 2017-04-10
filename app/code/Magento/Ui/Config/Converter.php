@@ -10,6 +10,9 @@ use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 use Magento\Ui\Config\Argument\ParserInterface;
 
+/**
+ * Converter for UI Component instances configuration files
+ */
 class Converter implements ConfigConverterInterface
 {
     /**
@@ -147,21 +150,13 @@ class Converter implements ConfigConverterInterface
                         }
                     }
 
-                    if (!empty($arguments) || !empty($resultComponent)) {
-                        $arguments = array_replace_recursive($resultComponent, $arguments);
-                        $result[static::DATA_ARGUMENTS_KEY] = $arguments;
-                    }
-
-                    if (!empty($attributes)) {
-                        $result[static::DATA_ATTRIBUTES_KEY] = $attributes;
-                    }
-
-                    if ($node->parentNode !== null) {
-                        $result[static::DATA_COMPONENTS_KEY] = $childResult;
-                    } else {
-                        $result = $childResult;
-                    }
+                    $result = array_merge(
+                        $this->processArguments($arguments, $resultComponent),
+                        $this->processAttributes($attributes),
+                        $this->processChildResult($node, $childResult)
+                    );
                 }
+
                 break;
         }
 
@@ -215,5 +210,53 @@ class Converter implements ConfigConverterInterface
         }
 
         return $resultComponent;
+    }
+
+    /**
+     * Process component arguments
+     *
+     * @param array $arguments
+     * @param array $resultComponent
+     * @return array
+     */
+    private function processArguments(array $arguments, array $resultComponent)
+    {
+        $result = [];
+        if (!empty($arguments) || !empty($resultComponent)) {
+            $result[static::DATA_ARGUMENTS_KEY] = array_replace_recursive($resultComponent, $arguments);
+        }
+        return $result;
+    }
+
+    /**
+     * Process component attributes
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function processAttributes(array $attributes)
+    {
+        $result = [];
+        if (!empty($attributes)) {
+            $result[static::DATA_ATTRIBUTES_KEY] = $attributes;
+        }
+        return $result;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param array $childResult
+     * @return array
+     */
+    private function processChildResult(\DOMNode $node, array $childResult)
+    {
+        $result = [];
+        if ($node->parentNode !== null) {
+            $result[static::DATA_COMPONENTS_KEY] = $childResult;
+        } else {
+            $result = $childResult;
+        }
+
+        return $result;
     }
 }

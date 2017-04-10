@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\ConverterUtils;
 
 /**
- * Converter for 'options' setting
+ * Converter for 'settings/options' configuration settings
  */
 class Options implements ConverterInterface
 {

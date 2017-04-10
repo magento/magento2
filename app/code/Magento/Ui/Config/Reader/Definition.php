@@ -16,13 +16,31 @@ use Magento\Framework\Phrase;
 class Definition extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
+     * Load configuration scope
+     *
+     * @param string|null $scope
+     * @return array
+     */
+    public function read($scope = null)
+    {
+        $scope = $scope ?: $this->_defaultScope;
+        $fileList = $this->_fileResolver->get($this->_fileName, $scope);
+        if (!count($fileList)) {
+            return [];
+        }
+        $output = $this->readFiles($fileList);
+
+        return $output;
+    }
+
+    /**
      * Read, merge configuration files and validate resulted XML
      *
      * @param array $fileList
      * @return array
      * @throws LocalizedException if XML file is invalid
      */
-    protected function _readFiles($fileList)
+    private function readFiles($fileList)
     {
         /** @var \Magento\Framework\Config\Dom $configMerger */
         $configMerger = null;
