@@ -270,6 +270,6 @@ class Converter implements ConfigConverterInterface
             }
         }
 
-        return array($arguments, $childResult);
+        return [$arguments, $childResult];
     }
 }

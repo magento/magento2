@@ -87,10 +87,7 @@ class Converter implements ConverterInterface
                 } else {
                     list($arguments, $childResult) = $this->convertChildNodes($node);
 
-                    if (!empty($arguments)) {
-                        $result[static::ARGUMENT_KEY] = $arguments;
-                    }
-
+                    $result += $this->processArguments($arguments);
                     $result += $childResult;
                 }
                 break;
@@ -190,6 +187,22 @@ class Converter implements ConverterInterface
             }
         }
 
-        return array($arguments, $childResult);
+        return [$arguments, $childResult];
+    }
+
+    /**
+     * Process component arguments
+     *
+     * @param array $arguments
+     * @return array
+     */
+    private function processArguments(array $arguments)
+    {
+        $result = [];
+        if (!empty($arguments)) {
+            $result[static::ARGUMENT_KEY] = $arguments;
+        }
+
+        return $result;
     }
 }

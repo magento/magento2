@@ -89,6 +89,7 @@ class UiComponentFactory extends DataObject
         DataInterface $definitionData = null
     ) {
         $this->objectManager = $objectManager;
+        $this->componentManager = $componentManager;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->contextFactory = $contextFactory;
         $this->componentChildFactories = $componentChildFactories;
