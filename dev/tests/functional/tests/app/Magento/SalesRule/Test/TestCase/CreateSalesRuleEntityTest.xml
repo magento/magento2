@@ -403,7 +403,7 @@
             <data name="cartPrice/discount" xsi:type="string">75.00</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
-        </variation>-->
+        </variation>
         <variation name="CreateSalesRuleEntityTestVariation16" summary="Coupon code can be applied only one times when Uses per Coupon = 1" ticketId="MAGETWO-67267">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule3 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
