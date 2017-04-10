@@ -41,8 +41,10 @@ class EmulatedAdminhtmlAreaProcessor
     /**
      * Emulate callback inside adminhtml area code.
      *
-     * @param callable $callback
-     * @param array $params
+     * Returns the return value of the callback.
+     *
+     * @param callable $callback The callable to be called
+     * @param array $params The parameters to be passed to the callback, as an indexed array
      * @return mixed
      * @throws \Exception
      */
