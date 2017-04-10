@@ -55,18 +55,25 @@ class DataProvider implements DataProviderInterface
     private $indexerFrontendResource;
 
     /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory|null
+     */
+    private $stateFactory;
+
+    /**
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
-     * @param FrontendResource $indexerFrontendResource
+     * @param FrontendResource|null $indexerFrontendResource
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
         Session $customerSession,
-        FrontendResource $indexerFrontendResource = null
+        FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
@@ -76,6 +83,8 @@ class DataProvider implements DataProviderInterface
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
             Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
+        $this->stateFactory = $stateFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
     }
 
     /**
@@ -112,9 +121,13 @@ class DataProvider implements DataProviderInterface
         } else {
             $currentScopeId = $this->scopeResolver->getScope($currentScope)
                 ->getId();
+            $tableSufix = $this->stateFactory->create()->loadByIndexer(
+                \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
+            )->getTableSuffix();
             $table = $this->resource->getTableName(
                 'catalog_product_index_eav' . ($attribute->getBackendType() === 'decimal' ? '_decimal' : '')
             );
+            $table .= $tableSufix;
             $subSelect = $select;
             $subSelect->from(['main_table' => $table], ['main_table.value'])
                 ->joinLeft(

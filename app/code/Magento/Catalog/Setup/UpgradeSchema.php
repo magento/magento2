@@ -64,6 +64,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.2.0', '<')) {
+            $this->addProductEavIndexReplicaTables($setup);
             //  By adding 'catalog_product_index_price_replica' we provide separation of tables
             //  used for indexation write and read operations and affected models.
             $this->addReplicaTable(
@@ -483,6 +484,32 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTableByDdl(
                 $setup->getTable($existingTable),
                 $setup->getTable($replicaTable)
+            )
+        );
+    }
+
+    /**
+     * Add Replica for Catalog Product Eav Index Tables.
+     *
+     * By adding 'catalog_product_index_eav_replica', 'catalog_product_index_eav_decimal_replica' we provide separation
+     * of tables used for indexation write and read operations and affected models.
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addProductEavIndexReplicaTables(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable('catalog_product_index_eav'),
+                $setup->getTable('catalog_product_index_eav_replica')
+            )
+        );
+
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable('catalog_product_index_eav_decimal'),
+                $setup->getTable('catalog_product_index_eav_decimal_replica')
             )
         );
     }

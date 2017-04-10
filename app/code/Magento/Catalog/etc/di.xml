@@ -990,6 +990,42 @@
         <arguments>
             <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
+        <arguments>
+            <argument name="indexerId" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID</argument>
+            <argument name="indexerBaseTable" xsi:type="string">catalog_product_index_eav</argument>
+            <argument name="idFieldName" xsi:type="string">entity_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\EavDecimal\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
+        <arguments>
+            <argument name="indexerId" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID</argument>
+            <argument name="indexerBaseTable" xsi:type="string">catalog_product_index_eav_decimal</argument>
+            <argument name="idFieldName" xsi:type="string">entity_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Indexer\Product\Eav\Action\Full">
+        <arguments>
+            <argument name="batchSizeCalculator" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute">
+        <arguments>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal">
+        <arguments>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\EavDecimal\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
         </arguments>
     </type>
 </config>
