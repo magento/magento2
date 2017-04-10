@@ -18,9 +18,9 @@ class HtmlContent implements ConverterInterface
         $items = [];
         /** @var \DOMElement $node */
         if ($node->nodeType == XML_ELEMENT_NODE) {
-            $xml = '<?xml version="1.0"?>'
-                . '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
-                . $node->ownerDocument->saveXml($node)
+            $xml = '<?xml version="1.0"?>' . "\n"
+                . '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . "\n"
+                . $node->ownerDocument->saveXml($node) . "\n"
                 . '</layout>';
             $items['layout']['xsi:type'] = 'string';
             $items['layout']['name'] = 'layout';

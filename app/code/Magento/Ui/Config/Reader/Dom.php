@@ -10,6 +10,9 @@ use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Ui\Config\Converter;
 use Magento\Framework\Config\Dom as ConfigDom;
 
+/**
+ * Class Dom
+ */
 class Dom extends ConfigDom
 {
     /**
@@ -37,7 +40,8 @@ class Dom extends ConfigDom
     private $schemaLocator;
 
     /**
-     * Dom constructor.
+     * Dom constructor
+     *
      * @param string $xml
      * @param ValidationStateInterface $validationState
      * @param SchemaLocatorInterface $schemaLocator
@@ -80,8 +84,6 @@ class Dom extends ConfigDom
      * @param \DOMNode $contextNode
      * @param \DOMNodeList $insertedNodes
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function nestedMerge(\DOMNode $contextNode, \DOMNodeList $insertedNodes)
     {
@@ -102,19 +104,30 @@ class Dom extends ConfigDom
 
                     $jLength = $rootMatchList->length;
                     if ($jLength > 0) {
-                        foreach ($rootMatchList as $rootItem) {
-                            if ($this->_isTextNode($insertedItem) && $this->_isTextNode($rootItem)) {
-                                $rootItem->nodeValue = $insertedItem->nodeValue;
-                            } else {
-                                $this->nestedMerge($rootItem, $insertedItem->childNodes);
-                                $this->_mergeAttributes($rootItem, $insertedItem);
-                            }
-                        }
+                        $this->processMatchedNodes($rootMatchList, $insertedItem);
                     } else {
                         $this->appendNode($insertedItem, $contextNode);
                     }
 
                     break;
+            }
+        }
+    }
+
+    /**
+     * Merge node to matched root elements
+     *
+     * @param $rootMatchList
+     * @param $insertedItem
+     */
+    private function processMatchedNodes($rootMatchList, $insertedItem)
+    {
+        foreach ($rootMatchList as $rootItem) {
+            if ($this->_isTextNode($insertedItem) && $this->_isTextNode($rootItem)) {
+                $rootItem->nodeValue = $insertedItem->nodeValue;
+            } else {
+                $this->nestedMerge($rootItem, $insertedItem->childNodes);
+                $this->_mergeAttributes($rootItem, $insertedItem);
             }
         }
     }

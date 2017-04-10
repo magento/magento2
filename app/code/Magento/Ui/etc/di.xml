@@ -97,6 +97,10 @@
             <argument name="converter" xsi:type="object">Magento\Ui\Config\Converter</argument>
             <argument name="fileResolver" xsi:type="object">Magento\Ui\Config\Reader\FileResolver</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\Definition\SchemaLocator</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/components/(.*)/argument" xsi:type="string">name</item>
+                <item name="/components/(.*)/argument(/item)+" xsi:type="string">name</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Ui\Config\Reader\DefinitionMap">
@@ -105,6 +109,9 @@
             <argument name="converter" xsi:type="object">Magento\Ui\Config\Reader\DefinitionMap\Converter</argument>
             <argument name="fileResolver" xsi:type="object">Magento\Ui\Config\Reader\FileResolver</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\DefinitionMap\SchemaLocator</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/components/component" xsi:type="string">name</item>
+            </argument>
         </arguments>
     </type>
     <virtualType name="Magento\Ui\Config\Definition\Data" type="Magento\Framework\Config\Data">
