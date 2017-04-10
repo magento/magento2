@@ -38,8 +38,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         array $searchModules = [],
         array $previewModules = []
-    )
-    {
+    ) {
         $this->_searchModules = $searchModules;
         $this->previewModules = $previewModules;
         parent::__construct($context);
