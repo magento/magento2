@@ -120,6 +120,7 @@ class Compiled implements ConfigInterface
      */
     public function getPreference($type)
     {
+        $type = ltrim($type, '\\');
         if (isset($this->preferences[$type])) {
             return $this->preferences[$type];
         }
