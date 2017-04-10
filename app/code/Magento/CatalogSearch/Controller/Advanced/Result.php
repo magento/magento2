@@ -6,13 +6,14 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\UrlFactory;
 
 class Result extends \Magento\Framework\App\Action\Action
 {
+
     /**
      * Url factory
      *
@@ -45,20 +46,24 @@ class Result extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return void
+     * Advanced Search Result page
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQueryValue());
-            $this->_view->loadLayout();
-            $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-            $defaultUrl = $this->_urlFactory->create()
-                ->addQueryParams($this->getRequest()->getQueryValue())
-                ->getUrl('*/*/');
-            $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
+            $this->messageManager->addErrorMessage($e->getMessage());
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->getConfig()->getTitle()->set(__('Catalog Advanced Search'));
+        return $resultPage;
     }
 }
