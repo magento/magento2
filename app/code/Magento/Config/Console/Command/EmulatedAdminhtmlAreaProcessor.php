@@ -10,7 +10,8 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 
 /**
- * Emulator adminhtml area for CLI command.
+ * Emulates callback inside adminhtml area code and adminhtml scope.
+ * It is used for CLI commands which should work with data available only in adminhtml scope.
  */
 class EmulatedAdminhtmlAreaProcessor
 {
@@ -39,19 +40,18 @@ class EmulatedAdminhtmlAreaProcessor
     }
 
     /**
-     * Emulate callback inside adminhtml area code.
+     * Emulates callback inside adminhtml area code and adminhtml scope.
      *
      * Returns the return value of the callback.
      *
      * @param callable $callback The callable to be called
      * @param array $params The parameters to be passed to the callback, as an indexed array
-     * @return mixed
+     * @return boolean|integer|float|string|array|object|callable|resource|null
      * @throws \Exception The exception is thrown if the parameter $callback throws an exception
      */
     public function process(callable $callback, array $params = [])
     {
         $currentScope = $this->scope->getCurrentScope();
-
         try {
             return $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($callback, $params) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
