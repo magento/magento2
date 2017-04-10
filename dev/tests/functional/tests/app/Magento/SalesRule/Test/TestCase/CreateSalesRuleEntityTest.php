@@ -6,6 +6,9 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
+use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\PromoQuoteForm;
+use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\BlockPromoSalesRuleEditTabCoupons;
+use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\BlockPromoSalesRuleEditTabCoupons\Grid;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
@@ -102,15 +105,20 @@ class CreateSalesRuleEntityTest extends Injectable
      * @param CatalogProductSimple $productForSalesRule2
      * @param Customer $customer
      * @param string $conditionEntity
+     * @param SalesRule $manageCouponCodes
+     *
+     * @return array
      */
     public function testCreateSalesRule(
         SalesRule $salesRule,
         CatalogProductSimple $productForSalesRule1,
         CatalogProductSimple $productForSalesRule2 = null,
         Customer $customer = null,
-        $conditionEntity = null
+        $conditionEntity = null,
+        SalesRule $manageCouponCodes = null
     ) {
         $replace = null;
+        $generatedCouponCodes = [];
         $this->salesRuleName = $salesRule->getName();
 
         // Prepare data
@@ -128,7 +136,28 @@ class CreateSalesRuleEntityTest extends Injectable
         // Steps
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
-        $this->promoQuoteNew->getFormPageActions()->save();
+
+        if ($salesRule->getUseAutoGeneration() == 'Yes') {
+            $this->promoQuoteNew->getFormPageActions()->saveAndContinue();
+
+            /** @var PromoQuoteForm $salesRuleForm */
+            $salesRuleForm = $this->promoQuoteNew->getSalesRuleForm();
+            $salesRuleForm->fill($manageCouponCodes);
+
+            /** @var BlockPromoSalesRuleEditTabCoupons $manageCouponCodesSection */
+            $manageCouponCodesSection = $salesRuleForm->getSection('block_promo_sales_rule_edit_tab_coupons');
+            $manageCouponCodesSection->pressGenerateButton();
+
+            /** @var Grid $couponGrid */
+            $couponGrid = $manageCouponCodesSection->getCouponGrid();
+
+            $generatedCouponCodes = $couponGrid->getRowsData(['code']);;
+            ;
+        } else {
+            $this->promoQuoteNew->getFormPageActions()->save();
+        }
+
+        return ['generatedCouponCodes' => $generatedCouponCodes];
     }
 
     /**

@@ -27,6 +27,9 @@
             <coupon_type>
                 <input>select</input>
             </coupon_type>
+            <use_auto_generation>
+                <input>checkbox</input>
+            </use_auto_generation>
             <coupon_code />
             <uses_per_coupon />
             <uses_per_customer />
@@ -80,4 +83,17 @@
         <selector>[data-index="labels"]</selector>
         <strategy>css selector</strategy>
     </labels>
+    <block_promo_sales_rule_edit_tab_coupons>
+        <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\BlockPromoSalesRuleEditTabCoupons</class>
+        <selector>[data-index="block_promo_sales_rule_edit_tab_coupons"]</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <qty />
+            <length />
+            <format />
+            <prefix />
+            <suffix />
+            <dash />
+        </fields>
+    </block_promo_sales_rule_edit_tab_coupons>
 </sections>

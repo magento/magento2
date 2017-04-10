@@ -15,6 +15,15 @@ use Magento\Mtf\Client\Locator;
  */
 class DiscountCodes extends Form
 {
+    // @codingStandardsIgnoreStart
+    /**
+     * Message after coupon applying.
+     *
+     * @var string
+     */
+    protected $couponApplyingMessage = './/div[contains(@class,"messages")]//div[contains(@class,"message")]';
+    // @codingStandardsIgnoreEnd
+
     /**
      * Form wrapper selector
      *
@@ -47,12 +56,14 @@ class DiscountCodes extends Form
      * Enter discount code and click apply button
      *
      * @param string $code
-     * @return void
+     * @return string
      */
     public function applyCouponCode($code)
     {
         $this->_rootElement->find($this->openForm, Locator::SELECTOR_CSS)->click();
         $this->_rootElement->find($this->couponCode, Locator::SELECTOR_CSS)->setValue($code);
         $this->_rootElement->find($this->applyButton, Locator::SELECTOR_CSS)->click();
+
+        return $this->_rootElement->find($this->couponApplyingMessage, Locator::SELECTOR_XPATH)->getText();
     }
 }
