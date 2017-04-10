@@ -85,23 +85,10 @@ class Converter implements ConverterInterface
                     $result[ $attributes[static::NAME_ATTRIBUTE_KEY] ] = $this->argumentParser->parse($node);
 
                 } else {
-                    $arguments = [];
-                    $childResult = [];
-                    foreach ($node->childNodes as $itemNode) {
-                        if (empty($itemNode->localName)) {
-                            continue;
-                        }
-                        if ($itemNode->localName === static::ARGUMENT_KEY) {
-                            $arguments += $this->toArray($itemNode);
-                        } else {
-                            $childResult[$this->getComponentName($itemNode)] = $this->toArray($itemNode);
-                        }
-                    }
+                    list($arguments, $childResult) = $this->convertChildNodes($node);
 
                     if (!empty($arguments)) {
-                        foreach ($arguments as $name => $argument) {
-                            $result[static::ARGUMENT_KEY][$name] = $argument;
-                        }
+                        $result[static::ARGUMENT_KEY] = $arguments;
                     }
 
                     $result += $childResult;
@@ -180,5 +167,29 @@ class Converter implements ConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Convert child nodes of $node
+     *
+     * @param \DOMNode $node
+     * @return array
+     */
+    private function convertChildNodes(\DOMNode $node)
+    {
+        $arguments = [];
+        $childResult = [];
+        foreach ($node->childNodes as $itemNode) {
+            if (empty($itemNode->localName)) {
+                continue;
+            }
+            if ($itemNode->localName === static::ARGUMENT_KEY) {
+                $arguments += $this->toArray($itemNode);
+            } else {
+                $childResult[$this->getComponentName($itemNode)] = $this->toArray($itemNode);
+            }
+        }
+
+        return array($arguments, $childResult);
     }
 }

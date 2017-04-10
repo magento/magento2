@@ -128,27 +128,7 @@ class Converter implements ConfigConverterInterface
                     $result[$attributes[static::NAME_ATTRIBUTE_KEY]] = $this->argumentParser->parse($node);
                 } else {
                     $resultComponent = $this->convertNode($node);
-                    $arguments = [];
-                    $childResult = [];
-                    for ($i = 0, $iLength = $node->childNodes->length; $i < $iLength; ++$i) {
-                        $itemNode = $node->childNodes->item($i);
-                        if ($itemNode->localName == null) {
-                            continue;
-                        }
-                        if ($itemNode->localName === static::ARGUMENT_KEY) {
-                            $arguments += $this->toArray($itemNode);
-                        } elseif (
-                            $this->converterUtils->isUiComponent($itemNode)
-                            && isset($this->schemaMap[$itemNode->localName])
-                        ) {
-                            $itemNodeName = $this->converterUtils->getComponentName($itemNode);
-                            $childResult[$itemNodeName] = $this->toArray($itemNode);
-                            // 'uiComponentType' is needed this for Reader to merge default values from definition
-                            $childResult[$itemNodeName]['uiComponentType'] = $itemNode->localName;
-                        } else {
-                            continue;
-                        }
-                    }
+                    list($arguments, $childResult) = $this->convertChildNodes($node);
 
                     $result = array_merge(
                         $this->processArguments($arguments, $resultComponent),
@@ -258,5 +238,38 @@ class Converter implements ConfigConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Convert child nodes of $node
+     *
+     * @param \DOMNode $node
+     * @return array
+     */
+    private function convertChildNodes(\DOMNode $node)
+    {
+        $arguments = [];
+        $childResult = [];
+        for ($i = 0, $iLength = $node->childNodes->length; $i < $iLength; ++$i) {
+            $itemNode = $node->childNodes->item($i);
+            if ($itemNode->localName == null) {
+                continue;
+            }
+            if ($itemNode->localName === static::ARGUMENT_KEY) {
+                $arguments += $this->toArray($itemNode);
+            } elseif (
+                $this->converterUtils->isUiComponent($itemNode)
+                && isset($this->schemaMap[$itemNode->localName])
+            ) {
+                $itemNodeName = $this->converterUtils->getComponentName($itemNode);
+                $childResult[$itemNodeName] = $this->toArray($itemNode);
+                // 'uiComponentType' is needed this for Reader to merge default values from definition
+                $childResult[$itemNodeName]['uiComponentType'] = $itemNode->localName;
+            } else {
+                continue;
+            }
+        }
+
+        return array($arguments, $childResult);
     }
 }
