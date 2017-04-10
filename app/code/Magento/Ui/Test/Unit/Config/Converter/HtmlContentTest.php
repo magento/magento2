@@ -27,14 +27,16 @@ class HtmlContentTest extends \PHPUnit_Framework_TestCase
 
     public function testConvert()
     {
-        $xml = trim(file_get_contents(__DIR__ . '/_files/expected.xml'));
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->formatOutput = true;
+        $dom->load(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'expected.xml');
         $expectedResult = [
             'xsi:type' => 'array',
             'item' => [
                 'layout' => [
                     'xsi:type' => 'string',
                     'name' => 'layout',
-                    'value' => $xml
+                    'value' => ''
                 ],
                 'name' => [
                     'xsi:type' => 'string',
@@ -49,6 +51,18 @@ class HtmlContentTest extends \PHPUnit_Framework_TestCase
         $domXpath = new \DOMXPath($dom);
         $node = $domXpath->query('//form/htmlContent')->item(0);
 
-        $this->assertEquals($expectedResult, $this->converter->convert($node, []));
+        $actualResult = $this->converter->convert($node, []);
+        $this->assertTrue(isset($actualResult['item']['layout']['value']));
+
+        $actualDom = $dom = new \DOMDocument('1.0', 'UTF-8');
+        $actualDom->formatOutput = true;
+        $actualDom->loadXML($actualResult['item']['layout']['value']);
+        $actualResult['item']['layout']['value'] = '';
+
+        // assert that expected and actual xml are the same
+        $this->assertSame($dom, $actualDom);
+
+        // assert that all expected keys in array are exists
+        $this->assertEquals($expectedResult, $actualResult);
     }
 }
