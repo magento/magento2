@@ -10,6 +10,8 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Amqp connection type resolver.
+ *
+ * @api
  */
 class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 {
