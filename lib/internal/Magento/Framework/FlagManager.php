@@ -3,11 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Model;
+namespace Magento\Framework;
 
-use Magento\Framework\FlagFactory;
 use Magento\Framework\Flag\FlagResource;
-use Magento\Framework\Flag;
 
 /**
  * Service that allows to handle a flag object as a scalar value.
@@ -15,19 +13,24 @@ use Magento\Framework\Flag;
 class FlagManager
 {
     /**
+     * The factory of flags.
+     *
      * @var FlagFactory
+     * @see Flag
      */
     private $flagFactory;
 
     /**
+     * The flag resource.
+     *
      * @var FlagResource
      */
     private $flagResource;
 
     /**
-     * FlagManager constructor.
-     * @param FlagFactory $flagFactory
-     * @param FlagResource $flagResource
+     *
+     * @param FlagFactory $flagFactory The factory of flags
+     * @param FlagResource $flagResource The flag resource
      */
     public function __construct(
         FlagFactory $flagFactory,
@@ -38,56 +41,65 @@ class FlagManager
     }
 
     /**
-     * Return raw data from flag
-     * @param string $flagCode
+     * Retrieves raw data from the flag.
+     *
+     * @param string $code The code of flag
      * @return mixed
      */
-    public function getFlagData($flagCode)
+    public function getFlagData($code)
     {
-        return $this->getFlagObject($flagCode)->getFlagData();
+        return $this->getFlagObject($code)->getFlagData();
     }
 
     /**
-     * Save flag by code
-     * @param string $flagCode
-     * @param mixed $value
+     * Saves the flag value by code.
+     *
+     * @param string $code The code of flag
+     * @param mixed $value The value of flag
      * @return bool
      */
-    public function saveFlag($flagCode, $value)
+    public function saveFlag($code, $value)
     {
-        $flag = $this->getFlagObject($flagCode);
+        $flag = $this->getFlagObject($code);
         $flag->setFlagData($value);
         $this->flagResource->save($flag);
+
         return true;
     }
 
     /**
-     * Delete flag by code
+     * Deletes the flag by code.
      *
-     * @param string $flagCode
+     * @param string $code The code of flag
      * @return bool
      */
-    public function deleteFlag($flagCode)
+    public function deleteFlag($code)
     {
-        $flag = $this->getFlagObject($flagCode);
+        $flag = $this->getFlagObject($code);
+
         if ($flag->getId()) {
             $this->flagResource->delete($flag);
         }
+
         return true;
     }
 
     /**
      * Returns flag object
      *
-     * @param string $flagCode
+     * @param string $code
      * @return Flag
      */
-    private function getFlagObject($flagCode)
+    private function getFlagObject($code)
     {
         /** @var Flag $flag */
-        $flag = $this->flagFactory
-            ->create(['data' => ['flag_code' => $flagCode]]);
-        $this->flagResource->load($flag, $flagCode, 'flag_code');
+        $flag = $this->flagFactory->create(['data' => ['flag_code' => $code]]);
+        $this->flagResource->load(
+            $flag,
+            $code,
+            'flag_code'
+        );
+
         return $flag;
     }
 }
