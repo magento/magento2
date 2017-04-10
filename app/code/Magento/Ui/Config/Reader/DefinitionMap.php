@@ -12,10 +12,4 @@ use Magento\Framework\Config\ReaderInterface;
  */
 class DefinitionMap extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
-    /**
-     * List of identifier attributes for merging
-     *
-     * @var array
-     */
-    protected $_idAttributes = ['/components/component' => 'name'];
 }

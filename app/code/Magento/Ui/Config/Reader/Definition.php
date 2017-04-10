@@ -16,13 +16,6 @@ use Magento\Framework\Phrase;
 class Definition extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
-     * List of identifier attributes for merging
-     *
-     * @var array
-     */
-    protected $_idAttributes = ['/components' => 'name'];
-
-    /**
      * Read, merge configuration files and validate resulted XML
      *
      * @param array $fileList

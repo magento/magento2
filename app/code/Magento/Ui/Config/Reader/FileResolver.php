@@ -17,6 +17,11 @@ class FileResolver implements FileResolverInterface
     private $fileCollectorFactory;
 
     /**
+     * @var string
+     */
+    private $scope;
+
+    /**
      * @param AggregatedFileCollectorFactory $fileCollectorFactory
      */
     public function __construct(AggregatedFileCollectorFactory $fileCollectorFactory)
@@ -26,10 +31,10 @@ class FileResolver implements FileResolverInterface
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function get($filename, $scope)
     {
+        $this->scope = $scope;
         /** @var AggregatedFileCollector $aggregatedFiles */
         $aggregatedFiles = $this->fileCollectorFactory->create();
         return $aggregatedFiles->collectFiles($filename);

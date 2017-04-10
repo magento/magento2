@@ -6,6 +6,7 @@
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\AdditionalClasses;
+use Magento\Ui\Config\ConverterUtils;
 
 class AdditionalClassesTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,7 @@ class AdditionalClassesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->converter = new AdditionalClasses();
+        $this->converter = new AdditionalClasses(new ConverterUtils());
     }
 
     public function testConvert()

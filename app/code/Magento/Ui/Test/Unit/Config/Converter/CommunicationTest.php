@@ -6,6 +6,7 @@
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\Communication;
+use Magento\Ui\Config\ConverterUtils;
 
 class CommunicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,7 @@ class CommunicationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->converter = new Communication();
+        $this->converter = new Communication(new ConverterUtils());
     }
 
     public function testExportsConvert()

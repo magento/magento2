@@ -86,7 +86,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      *
      * @return void
      */
-    protected function initData()
+    private function initData()
     {
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {

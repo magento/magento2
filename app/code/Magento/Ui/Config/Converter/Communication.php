@@ -6,11 +6,24 @@
 namespace Magento\Ui\Config\Converter;
 
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
-use Magento\Ui\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
+use Magento\Ui\Config\ConverterUtils;
 
 class Communication implements ConverterInterface
 {
+    /**
+     * @var ConverterUtils
+     */
+    private $converterUtils;
+
+    /**
+     * @param ConverterUtils $converterUtils
+     */
+    public function __construct(ConverterUtils $converterUtils)
+    {
+        $this->converterUtils = $converterUtils;
+    }
+
     /**
      * @inheritdoc
      */
@@ -31,15 +44,16 @@ class Communication implements ConverterInterface
     private function toArray(\DOMNode $node)
     {
         $result = [
-            'name' => Converter::getComponentName($node),
+            'name' => $this->converterUtils->getComponentName($node),
             Dom::TYPE_ATTRIBUTE => 'array'
         ];
         if ($this->hasChildNodes($node)) {
             /** @var \DOMNode $childNode */
             foreach ($node->childNodes as $childNode) {
                 if ($childNode->nodeType === XML_ELEMENT_NODE) {
-                    $result['item'][Converter::getComponentName($childNode)] = [
-                        'name' => Converter::getComponentName($childNode),
+                    $childNodeName = $this->converterUtils->getComponentName($childNode);
+                    $result['item'][$childNodeName] = [
+                        'name' => $childNodeName,
                         Dom::TYPE_ATTRIBUTE => 'string',
                         'value' => trim($childNode->nodeValue)
                     ];
