@@ -60,7 +60,7 @@ define([
                 var entry = new Entry('message', levels.INFO, {});
 
                 expect(entry.timestamp).not.toBeLessThan(0);
-                expect(entry.timestamp).toBeLessThan(Date.now()+1);
+                expect(entry.timestamp).toBeLessThan(Date.now() + 1);
             });
         });
     });
