@@ -180,7 +180,9 @@ class Converter implements ConfigConverterInterface
             return [];
         }
 
-        $this->schemaMap = $this->reader->read();
+        if (!$this->schemaMap) {
+            $this->schemaMap = $this->reader->read();
+        }
         $result = $this->toArray($source);
         return empty($result) ? $result : reset($result);
     }

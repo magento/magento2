@@ -70,6 +70,7 @@ class UiComponentFactory extends DataObject
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @param ManagerInterface $componentManager
      * @param InterpreterInterface $argumentInterpreter
      * @param ContextFactory $contextFactory
      * @param DataInterfaceFactory|null $configFactory
