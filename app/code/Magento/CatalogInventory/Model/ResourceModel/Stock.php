@@ -127,11 +127,24 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
         $itemTable = $this->getTable('cataloginventory_stock_item');
         $productTable = $this->getTable('catalog_product_entity');
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
-            ->join(['p' => $productTable], 'p.entity_id=si.product_id', ['type_id'])
             ->where('website_id=?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
-        return $this->getConnection()->fetchAll($select);
+        $rows = $this->getConnection()->fetchAll($select);
+
+        // Add type_id to result using separate select without FOR UPDATE instead
+        // of a join which causes only an S lock on catalog_product_entity rather
+        // than an X lock. An X lock on a table causes an S lock on all foreign keys
+        // so using a separate query here significantly reduces the number of
+        // unnecessarily locked rows in other tables, thereby avoiding deadlocks.
+        $select = $this->getConnection()->select()
+            ->from($productTable, ['entity_id', 'type_id'])
+            ->where('entity_id IN(?)', $productIds);
+        $typeIds = $this->getConnection()->fetchPairs($select);
+        foreach ($rows as &$row) {
+            $row['type_id'] = $typeIds[$row['product_id']];
+        }
+        return $rows;
     }
 
     /**
