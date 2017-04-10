@@ -90,7 +90,6 @@ class AssertUsesPerCouponWorks extends AbstractConstraint
             // check coupon code applying message.
             $this->assertCouponCodeApplyingMessage($message, $salesRule->getUsesPerCoupon(), $i);
 
-
             // select payment method.
             $objectManager->create(
                 \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,

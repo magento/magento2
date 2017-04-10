@@ -12,6 +12,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * @var \Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory
      */
     private $generationSpecFactory;
+
     /**
      * @var \Magento\SalesRule\Model\Service\CouponManagementService
      */
