@@ -98,9 +98,6 @@ class Converter implements ConfigConverterInterface
      *
      * @param \DOMNode $node
      * @return array|string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function toArray(\DOMNode $node)
     {
@@ -130,10 +127,7 @@ class Converter implements ConfigConverterInterface
                     }
                     $result[$attributes[static::NAME_ATTRIBUTE_KEY]] = $this->argumentParser->parse($node);
                 } else {
-                    $resultComponent = [];
-                    if (!empty($node->localName) && $this->converterUtils->isUiComponent($node)) {
-                        $resultComponent = $this->convertNode($node);
-                    }
+                    $resultComponent = $this->convertNode($node);
                     $arguments = [];
                     $childResult = [];
                     for ($i = 0, $iLength = $node->childNodes->length; $i < $iLength; ++$i) {
@@ -156,21 +150,13 @@ class Converter implements ConfigConverterInterface
                         }
                     }
 
-                    if (!empty($arguments) || !empty($resultComponent)) {
-                        $arguments = array_replace_recursive($resultComponent, $arguments);
-                        $result[static::DATA_ARGUMENTS_KEY] = $arguments;
-                    }
-
-                    if (!empty($attributes)) {
-                        $result[static::DATA_ATTRIBUTES_KEY] = $attributes;
-                    }
-
-                    if ($node->parentNode !== null) {
-                        $result[static::DATA_COMPONENTS_KEY] = $childResult;
-                    } else {
-                        $result = $childResult;
-                    }
+                    $result = array_merge(
+                        $this->processArguments($arguments, $resultComponent),
+                        $this->processAttributes($attributes),
+                        $this->processChildResult($node, $childResult)
+                    );
                 }
+
                 break;
         }
 
@@ -203,7 +189,10 @@ class Converter implements ConfigConverterInterface
     private function convertNode(\DOMNode $node)
     {
         $resultComponent = [];
-        if (!isset($this->schemaMap[$node->localName])) {
+        if (empty($node->localName)
+            || !$this->converterUtils->isUiComponent($node)
+            || !isset($this->schemaMap[$node->localName])
+        ) {
             return $resultComponent;
         }
 
@@ -219,5 +208,53 @@ class Converter implements ConfigConverterInterface
         }
 
         return $resultComponent;
+    }
+
+    /**
+     * Process component arguments
+     *
+     * @param array $arguments
+     * @param array $resultComponent
+     * @return array
+     */
+    private function processArguments(array $arguments, array $resultComponent)
+    {
+        $result = [];
+        if (!empty($arguments) || !empty($resultComponent)) {
+            $result[static::DATA_ARGUMENTS_KEY] = array_replace_recursive($resultComponent, $arguments);
+        }
+        return $result;
+    }
+
+    /**
+     * Process component attributes
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function processAttributes(array $attributes)
+    {
+        $result = [];
+        if (!empty($attributes)) {
+            $result[static::DATA_ATTRIBUTES_KEY] = $attributes;
+        }
+        return $result;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param array $childResult
+     * @return array
+     */
+    private function processChildResult(\DOMNode $node, array $childResult)
+    {
+        $result = [];
+        if ($node->parentNode !== null) {
+            $result[static::DATA_COMPONENTS_KEY] = $childResult;
+        } else {
+            $result = $childResult;
+        }
+
+        return $result;
     }
 }

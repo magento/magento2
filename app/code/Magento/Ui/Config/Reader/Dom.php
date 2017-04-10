@@ -119,6 +119,7 @@ class Dom extends ConfigDom
      *
      * @param $rootMatchList
      * @param $insertedItem
+     * @return void
      */
     private function processMatchedNodes($rootMatchList, $insertedItem)
     {

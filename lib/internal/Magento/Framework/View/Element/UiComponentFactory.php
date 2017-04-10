@@ -46,6 +46,14 @@ class UiComponentFactory extends DataObject
     protected $contextFactory;
 
     /**
+     * UI component manager
+     *
+     * @deprecated since 2.2.0
+     * @var ManagerInterface
+     */
+    protected $componentManager;
+
+    /**
      * @var ComponentFactoryInterface[]
      */
     private $componentChildFactories;
@@ -71,6 +79,7 @@ class UiComponentFactory extends DataObject
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
+        ManagerInterface $componentManager,
         InterpreterInterface $argumentInterpreter,
         ContextFactory $contextFactory,
         DataInterfaceFactory $configFactory = null,
