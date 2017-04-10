@@ -5,6 +5,11 @@
  */
 namespace Magento\Weee\Model\Sales\Pdf;
 
+/**
+ * Sales order total for PDF, taking into account WEEE tax
+ *
+ * @api
+ */
 class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
     /**
@@ -32,6 +37,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 
     /**
      * Check if weee total amount should be included
+     *
      * array(
      *  $index => array(
      *      'amount'   => $amount,

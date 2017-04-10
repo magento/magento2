@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
+
 define([
     'Magento_Weee/js/view/checkout/summary/item/price/weee'
 ], function (weee) {

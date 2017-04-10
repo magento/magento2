@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product\Condition\ConditionInterface;
 
 /**
  * Wee tax resource model
+ *
+ * @api
  */
 class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -9,6 +9,8 @@ use Magento\Store\Model\Store;
 
 /**
  * WEEE config model
+ *
+ * @api
  */
 class Config
 {

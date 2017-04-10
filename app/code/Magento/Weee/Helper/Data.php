@@ -12,7 +12,9 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
