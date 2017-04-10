@@ -91,16 +91,8 @@
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
         <arguments>
-            <argument name="searchModules" xsi:type="array">
-                <item name="customers" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Customer</item>
-                    <item name="acl" xsi:type="string">Magento_Customer::customer</item>
-                </item>
-                <item name="sales" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Order</item>
-                    <item name="acl" xsi:type="string">Magento_Sales::sales</item>
-                </item>
-            </argument>
+            <argument name="searchModules" xsi:type="array" />
+            <argument name="prevideModules" xsi:type="array" />
         </arguments>
     </type>
     <virtualType name="Magento\Backend\Model\Auth\Session\Storage" type="Magento\Framework\Session\Storage">

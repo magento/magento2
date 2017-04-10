@@ -56,6 +56,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
+        <arguments>
+            <argument name="previewModules" xsi:type="array">
+                <item name="cms-pages" xsi:type="array">
+                    <item name="url" xsi:type="string">cms/page/index</item>
+                    <item name="text" xsi:type="string">'%1' in Pages</item>
+                    <item name="acl" xsi:type="string">Magento_Cms::page</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">

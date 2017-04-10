@@ -115,6 +115,23 @@
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
+    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
+        <arguments>
+            <argument name="searchModules" xsi:type="array">
+                <item name="sales" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Order</item>
+                    <item name="acl" xsi:type="string">Magento_Sales::sales</item>
+                </item>
+            </argument>
+            <argument name="previewModules" xsi:type="array">
+                <item name="sales" xsi:type="array">
+                    <item name="url" xsi:type="string">sales/order/index</item>
+                    <item name="text" xsi:type="string">'%1' in Orders</item>
+                    <item name="acl" xsi:type="string">Magento_Sales::sales</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">

@@ -21,16 +21,27 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     protected $_searchModules;
 
     /**
+     * modules that support preview
+     *
+     * @var array
+     */
+    protected $previewModules;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param array $searchModules
+     * @param array $previewModules
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        array $searchModules = []
-    ) {
+        array $searchModules = [],
+        array $previewModules = []
+    )
+    {
         $this->_searchModules = $searchModules;
+        $this->previewModules = $previewModules;
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
     }
@@ -52,7 +63,11 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
                 'description' => __('You need more permissions to do this.'),
             ];
         } else {
-            if (empty($this->_searchModules)) {
+            $previewItems = $this->getPreviewItems();
+            $searchItems = $this->getSearchItems();
+            $items = array_merge_recursive($items, $previewItems, $searchItems);
+
+            if (empty($items)) {
                 $items[] = [
                     'id' => 'error',
                     'type' => __('Error'),
@@ -61,34 +76,64 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
                         'Please make sure that all global admin search modules are installed and activated.'
                     ),
                 ];
-            } else {
-                $start = $this->getRequest()->getParam('start', 1);
-                $limit = $this->getRequest()->getParam('limit', 10);
-                $query = $this->getRequest()->getParam('query', '');
-                foreach ($this->_searchModules as $searchConfig) {
-                    if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])) {
-                        continue;
-                    }
-
-                    $className = $searchConfig['class'];
-                    if (empty($className)) {
-                        continue;
-                    }
-                    $searchInstance = $this->_objectManager->create($className);
-                    $results = $searchInstance->setStart(
-                        $start
-                    )->setLimit(
-                        $limit
-                    )->setQuery(
-                        $query
-                    )->load()->getResults();
-                    $items = array_merge_recursive($items, $results);
-                }
             }
         }
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($items);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPreviewItems()
+    {
+        $result = [];
+        $query = $this->getRequest()->getParam('query', '');
+        foreach ($this->previewModules as $previewConfig) {
+            if ($previewConfig['acl'] && !$this->_authorization->isAllowed($previewConfig['acl'])) {
+                continue;
+            }
+            if (!$previewConfig['url'] || !$previewConfig['text']) {
+                continue;
+            }
+            $result[] = [
+                'url' => $this->getUrl($previewConfig['url']).'?search='.$query,
+                'name' => __($previewConfig['text'], $query)
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSearchItems()
+    {
+        $items = [];
+        $start = $this->getRequest()->getParam('start', 1);
+        $limit = $this->getRequest()->getParam('limit', 10);
+        $query = $this->getRequest()->getParam('query', '');
+        foreach ($this->_searchModules as $searchConfig) {
+            if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])) {
+                continue;
+            }
+
+            $className = $searchConfig['class'];
+            if (empty($className)) {
+                continue;
+            }
+            $searchInstance = $this->_objectManager->create($className);
+            $results = $searchInstance->setStart(
+                $start
+            )->setLimit(
+                $limit
+            )->setQuery(
+                $query
+            )->load()->getResults();
+            $items = array_merge_recursive($items, $results);
+        }
+        return $items;
     }
 }

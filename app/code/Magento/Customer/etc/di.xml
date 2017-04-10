@@ -90,6 +90,24 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
+        <arguments>
+            <argument name="searchModules" xsi:type="array">
+                <item name="customers" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Customer</item>
+                    <item name="acl" xsi:type="string">Magento_Customer::customer</item>
+                </item>
+            </argument>
+            <argument name="previewModules" xsi:type="array">
+                <item name="customers" xsi:type="array">
+                    <item name="url" xsi:type="string">customer/index/index</item>
+                    <item name="text" xsi:type="string">'%1' in Customers</item>
+                    <item name="acl" xsi:type="string">Magento_Customer::customer</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Customer\Model\ResourceModel\Address">
         <arguments>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
