@@ -83,10 +83,10 @@ class UiComponentFactory extends DataObject
         ManagerInterface $componentManager,
         InterpreterInterface $argumentInterpreter,
         ContextFactory $contextFactory,
-        DataInterfaceFactory $configFactory = null,
         array $data = [],
         array $componentChildFactories = [],
-        DataInterface $definitionData = null
+        DataInterface $definitionData = null,
+        DataInterfaceFactory $configFactory = null
     ) {
         $this->objectManager = $objectManager;
         $this->componentManager = $componentManager;
