@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Encryption;
 
 /**
  * Class encapsulates cryptographic algorithm
+ *
+ * @api
  */
 class Crypt
 {
@@ -85,8 +85,6 @@ class Crypt
 
     /**
      * Destructor frees allocated resources
-     *
-     * @return void
      */
     public function __destruct()
     {
