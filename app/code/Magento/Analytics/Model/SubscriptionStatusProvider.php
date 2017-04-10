@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\FlagManager;
 
 /**
  * Provider of subscription status.

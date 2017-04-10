@@ -7,9 +7,9 @@ namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Config\Model\Config;
+use Magento\Framework\FlagManager;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;

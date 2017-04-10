@@ -7,10 +7,10 @@ namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\FlagManager;
 
 /**
  * Class for processing of activation/deactivation MBI subscription.
