@@ -1,20 +1,34 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/* global jQuery */
+/* eslint-disable max-nested-callbacks */
 define([
-    'Magento_Ui/js/timeline/timeline'
-], function (Timeline) {
+    'squire'
+], function (Squire) {
     'use strict';
 
+    var injector = new Squire(),
+        mocks = {
+            'uiRegistry': jasmine.createSpy()
+        },
+        timeline;
+
     describe('Magento_Ui/js/timeline/timeline', function () {
-        var timeline;
-
-        beforeEach(function () {
-            timeline = new Timeline({});
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require(['Magento_Ui/js/timeline/timeline'], function (Constr) {
+                timeline = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    links: '',
+                    listens: ''
+                });
+                done();
+            });
         });
-
         describe('isActive method', function () {
             it('record status is 1', function () {
                 expect(timeline.isActive({
