@@ -9,6 +9,9 @@ use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
 
+/**
+ * UI Component configuration files resolver
+ */
 class FileResolver implements FileResolverInterface
 {
     /**

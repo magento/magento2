@@ -10,6 +10,9 @@ use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 use Magento\Ui\Config\Argument\ParserInterface;
 
+/**
+ * Converter for UI Component instances configuration files
+ */
 class Converter implements ConfigConverterInterface
 {
     /**

@@ -8,6 +8,9 @@ namespace Magento\Ui\Config\Reader\DefinitionMap;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 
+/**
+ * Config schema locator interface
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

@@ -7,6 +7,11 @@ namespace Magento\Ui\Config\Converter;
 
 use Magento\Ui\Config\ConverterInterface;
 
+/**
+ * Composite converter
+ *
+ * Identify required converter
+ */
 class Composite implements ConverterInterface
 {
     /**

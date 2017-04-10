@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Config;
 
+/**
+ * Converter interface is used to convert UI Component XML configuration into UI Component interfaces arguments
+ */
 interface ConverterInterface
 {
     /**

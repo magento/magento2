@@ -7,6 +7,9 @@ namespace Magento\Ui\Config\Reader\Template;
 
 use Magento\Framework\Module\Dir;
 
+/**
+ * Config schema locator interface
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

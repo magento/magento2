@@ -10,6 +10,9 @@ use Magento\Ui\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
 
+/**
+ * Converter for 'settings/additionalClasses' configuration settings
+ */
 class AdditionalClasses implements ConverterInterface
 {
     /**
