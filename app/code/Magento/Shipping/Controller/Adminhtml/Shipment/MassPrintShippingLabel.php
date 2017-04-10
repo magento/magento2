@@ -37,6 +37,11 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
     protected $fileFactory;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param FileFactory $fileFactory
@@ -89,5 +94,13 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
 
         $this->messageManager->addError(__('There are no shipping labels related to selected shipments.'));
         return $this->resultRedirectFactory->create()->setPath('sales/shipment/');
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

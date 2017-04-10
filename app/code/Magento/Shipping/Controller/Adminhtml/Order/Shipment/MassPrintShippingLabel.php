@@ -70,6 +70,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
         $this->collectionFactory = $collectionFactory;
         $this->shipmentCollectionFactory = $shipmentCollectionFactory;
         $this->labelGenerator = $labelGenerator;
+        $this->filter = $filter;
         parent::__construct($context, $filter);
     }
 
@@ -107,5 +108,13 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
 
         $this->messageManager->addError(__('There are no shipping labels related to selected orders.'));
         return $this->resultRedirectFactory->create()->setPath('sales/order/');
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

@@ -20,7 +20,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
+class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
      * @var FileFactory
@@ -41,6 +41,11 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocuments
      * @var CollectionFactory
      */
     protected $collectionFactory;
+
+    /**
+     * @var \Magento\Ui\Component\MassAction\Filter
+     */
+    protected $filter;
 
     /**
      * @param Context $context
@@ -84,5 +89,13 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocuments
             DirectoryList::VAR_DIR,
             'application/pdf'
         );
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

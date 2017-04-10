@@ -44,6 +44,11 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
     protected $dateTime;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param Creditmemo $pdfCreditmemo
@@ -80,5 +85,13 @@ class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractM
             DirectoryList::VAR_DIR,
             'application/pdf'
         );
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

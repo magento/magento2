@@ -13,12 +13,18 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
+        $this->filter = $filter;
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
     }
@@ -54,5 +60,13 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

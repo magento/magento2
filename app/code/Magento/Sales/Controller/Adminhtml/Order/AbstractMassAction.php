@@ -23,23 +23,27 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     protected $redirectUrl = '*/*/';
 
     /**
-     * @var \Magento\Ui\Component\MassAction\Filter
-     */
-    protected $filter;
-
-    /**
      * @var object
      */
     protected $collectionFactory;
 
     /**
+     * @var \Magento\Ui\Component\MassAction\Filter
+     */
+    protected $filter;
+
+    /**
      * @param Context $context
      * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     * @param OrderManagementInterface $orderManagement
      */
-    public function __construct(Context $context, Filter $filter)
-    {
-        parent::__construct($context);
+    public function __construct(
+        Context $context,
+        Filter $filter
+    ) {
         $this->filter = $filter;
+        parent::__construct($context);
     }
 
     /**
@@ -51,8 +55,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $collection = $this->filter->getCollection($this->collectionFactory->create());
-            return $this->massAction($collection);
+            return $this->massAction($this->filter->getCollection($this->getCollection()));
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
@@ -79,4 +82,9 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      * @return ResponseInterface|ResultInterface
      */
     abstract protected function massAction(AbstractCollection $collection);
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    abstract protected function getCollection();
 }
