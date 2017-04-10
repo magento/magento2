@@ -94,7 +94,10 @@ class UiComponent implements Layout\ReaderInterface
             $scheduledStructure->setElementToIfconfigList($referenceName, $configPath, $this->scopeType);
         }
 
-        foreach ($this->getLayoutElementsFromUiConfiguration($referenceName) as $layoutElement) {
+        $elements = [];
+        $config = $this->uiConfigFactory->create(['componentName' => $referenceName])->get($referenceName);
+        $this->getLayoutElementsFromUiConfiguration([$referenceName => $config], $elements);
+        foreach ($elements as $layoutElement) {
             $layoutElement = simplexml_load_string(
                 $layoutElement,
                 Element::class
@@ -108,19 +111,20 @@ class UiComponent implements Layout\ReaderInterface
     /**
      * Find layout elements in UI configuration for correct layout generation
      *
-     * @param string $uiConfigName
-     * @return array
+     * @param array $config
+     * @param array $elements
+     * @return void
      */
-    private function getLayoutElementsFromUiConfiguration($uiConfigName)
+    private function getLayoutElementsFromUiConfiguration(array $config, array &$elements = [])
     {
-        $elements = [];
-        $config = $this->uiConfigFactory->create(['componentName' => $uiConfigName])->get($uiConfigName);
-        foreach ($config['children'] as $name => $data) {
+        foreach ($config as $name => $data) {
             if (isset($data['arguments']['block']['layout'])) {
-                $elements[$name] = $data['arguments']['block']['layout'];
+                $elements[] = $data['arguments']['block']['layout'];
+            }
+            if (isset($data['children']) && !empty($data['children'])) {
+                $this->getLayoutElementsFromUiConfiguration($data['children'], $elements);
             }
         }
-        return $elements;
     }
 
     /**
