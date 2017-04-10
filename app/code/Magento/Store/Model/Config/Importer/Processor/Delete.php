@@ -179,12 +179,9 @@ class Delete implements ProcessorInterface
      */
     private function deleteGroups(array $items)
     {
-        $items = array_keys($items);
-        /** @var Group[] $groups */
-        $this->groupCollection->addFieldToFilter('code', ['in' => $items]);
-        $this->groupCollection->load();
-
-        foreach ($this->groupCollection->getItems() as $group) {
+        $this->groupCollection->addFieldToFilter('code', ['in' => array_keys($items)]);
+        /** @var Group $group */
+        foreach ($this->groupCollection as $group) {
             $group->getResource()->delete($group);
         }
     }
