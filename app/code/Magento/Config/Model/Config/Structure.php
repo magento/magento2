@@ -7,6 +7,37 @@ namespace Magento\Config\Model\Config;
 
 /**
  * System configuration structure.
+ *
+ * All paths are declared in module's system.xml.
+ *
+ * ```xml
+ * <section id="section_id">
+ *      <group id="group_id" ...>
+ *          <field id="field_one_id" ...>
+ *              <label>Field One</label>
+ *              ...
+ *          </field>
+ *          <field id="field_two_id" ...>
+ *              <label>Field Two</label>
+ *              <config_path>section/group/field</config_path>
+ *              ...
+ *          </field>
+ *      </group>
+ * </section>
+ * ```
+ *
+ * Structure path is the nested path of node ids (section, group, field).
+ *
+ * Config path is the path which is declared in <config_path> node.
+ * If this node is not provided then config path is the same as structure path.
+ *
+ * With the example above you can see that the field <field id="field_one_id"> has the next paths:
+ *  - the structure path section_id/group_id/field_one_id
+ *  - the configuration path section_id/group_id/field_one_id
+ *
+ * Also you can see that the field <field id="field_two_id"> has the next paths:
+ * - the structure path section_id/group_id/field_two_id
+ * - the configuration path section/group/field
  */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {
@@ -134,7 +165,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Find element by structure path
      *
-     * @param string $path
+     * @param string $path The structure path
      * @return \Magento\Config\Model\Config\Structure\ElementInterface|null
      */
     public function getElement($path)

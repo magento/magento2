@@ -194,7 +194,6 @@ class ConfigShowCommand extends Command
     {
         if (!is_array($configValue)) {
             $value = $this->valueProcessor->process($this->scope, $this->scopeCode, $configValue, $configPath);
-            $value = is_array($value) ? $configValue : $value;
             $output->writeln($this->inputPath === $configPath ? $value : sprintf("%s - %s", $configPath, $value));
         } elseif (is_array($configValue)) {
             foreach ($configValue as $name => $value) {

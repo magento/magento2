@@ -63,13 +63,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param string $value
-     * @param string|array $processedValue
-     * @param string $expectedValue
-     * @dataProvider executeDataProvider
-     */
-    public function testExecute($value, $processedValue, $expectedValue)
+    public function testExecute()
     {
         $configPath = 'some/config/path';
         $resolvedConfigPath = 'someScope/someScopeCode/some/config/path';
@@ -87,11 +81,11 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
         $this->configSourceMock->expects($this->once())
             ->method('get')
             ->with($resolvedConfigPath)
-            ->willReturn($value);
+            ->willReturn('someValue');
         $this->valueProcessorMock->expects($this->once())
             ->method('process')
-            ->with($scope, $scopeCode, $value, $configPath)
-            ->willReturn($processedValue);
+            ->with($scope, $scopeCode, 'someValue', $configPath)
+            ->willReturn('someProcessedValue');
 
         $tester = $this->getConfigShowCommandTester($configPath, $scope, $scopeCode);
 
@@ -100,20 +94,9 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
             $tester->getStatusCode()
         );
         $this->assertContains(
-            $expectedValue,
+            'someProcessedValue',
             $tester->getDisplay()
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function executeDataProvider()
-    {
-        return [
-            ['someValue', 'someProcessedValue', 'someProcessedValue'],
-            ['{value:someValue}', ['someProcessedValue'], '{value:someValue}']
-        ];
     }
 
     public function testNotValidScopeOrScopeCode()

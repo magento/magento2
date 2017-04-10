@@ -94,7 +94,8 @@ class ValueProcessor
         $backendModel->setScopeId($scopeCode);
         $backendModel->setValue($value);
         $backendModel->afterLoad();
+        $processedValue = $backendModel->getValue();
 
-        return $backendModel->getValue();
+        return is_array($processedValue) ? $value : $processedValue;
     }
 }
