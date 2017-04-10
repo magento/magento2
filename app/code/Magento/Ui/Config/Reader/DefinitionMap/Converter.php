@@ -53,8 +53,6 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return array|string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function toArray(\DOMNode $node)
     {

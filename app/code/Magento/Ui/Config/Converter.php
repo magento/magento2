@@ -95,9 +95,6 @@ class Converter implements ConfigConverterInterface
      *
      * @param \DOMNode $node
      * @return array|string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function toArray(\DOMNode $node)
     {
@@ -127,10 +124,7 @@ class Converter implements ConfigConverterInterface
                     }
                     $result[$attributes[static::NAME_ATTRIBUTE_KEY]] = $this->argumentParser->parse($node);
                 } else {
-                    $resultComponent = [];
-                    if (!empty($node->localName) && $this->converterUtils->isUiComponent($node)) {
-                        $resultComponent = $this->convertNode($node);
-                    }
+                    $resultComponent = $this->convertNode($node);
                     $arguments = [];
                     $childResult = [];
                     for ($i = 0, $iLength = $node->childNodes->length; $i < $iLength; ++$i) {
@@ -200,7 +194,10 @@ class Converter implements ConfigConverterInterface
     private function convertNode(\DOMNode $node)
     {
         $resultComponent = [];
-        if (!isset($this->schemaMap[$node->localName])) {
+        if (empty($node->localName)
+            || !$this->converterUtils->isUiComponent($node)
+            || !isset($this->schemaMap[$node->localName])
+        ) {
             return $resultComponent;
         }
 
