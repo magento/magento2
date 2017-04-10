@@ -8,17 +8,15 @@ namespace Magento\Framework\DB\DataConverter;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\QueryModifierInterface;
 use Magento\Framework\DB\Select\InQueryModifier;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Query\BatchIterator;
+use Magento\Framework\ObjectManagerInterface;
 
 class DataConverterTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
     /**
      * @var InQueryModifier|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -30,12 +28,12 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
     private $dataConverter;
 
     /**
-     * @var \Magento\Framework\DB\Query\BatchIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchIterator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var \Magento\Framework\DB\Query\Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $queryGeneratorMock;
 
@@ -55,6 +53,11 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
     private $fieldDataConverter;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * Set up before test
      */
     protected function setUp()
@@ -62,14 +65,14 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var InQueryModifier $queryModifier */
-        $this->queryModifierMock = $this->getMockBuilder(Select\QueryModifierInterface::class)
+        $this->queryModifierMock = $this->getMockBuilder(QueryModifierInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['modify'])
             ->getMock();
 
         $this->dataConverter = $this->objectManager->get(SerializedToJson::class);
 
-        $this->iteratorMock = $this->getMockBuilder(\Magento\Framework\DB\Query\BatchIterator::class)
+        $this->iteratorMock = $this->getMockBuilder(BatchIterator::class)
             ->disableOriginalConstructor()
             ->setMethods(['current', 'valid', 'next'])
             ->getMock();
@@ -77,8 +80,9 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
         $iterationComplete = false;
 
         // mock valid() call so iterator passes only current() result in foreach invocation
-        $this->iteratorMock->expects($this->any())->method('valid')->will(
-            $this->returnCallback(
+        $this->iteratorMock->expects($this->any())
+            ->method('valid')
+            ->willReturnCallback(
                 function () use (&$iterationComplete) {
                     if (!$iterationComplete) {
                         $iterationComplete = true;
@@ -87,10 +91,9 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
                         return false;
                     }
                 }
-            )
-        );
+            );
 
-        $this->queryGeneratorMock = $this->getMockBuilder(\Magento\Framework\DB\Query\Generator::class)
+        $this->queryGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
             ->setMethods(['generate'])
             ->getMock();
@@ -111,7 +114,7 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->adapterMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchAll', 'quoteInto', 'update'])
+            ->setMethods(['fetchPairs', 'quoteInto', 'update'])
             ->getMock();
 
         $this->adapterMock->expects($this->any())
@@ -129,55 +132,49 @@ class DataConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that exception with valid text is thrown when data is corrupted
+     *
      * @expectedException \Magento\Framework\DB\FieldDataConversionException
      * @expectedExceptionMessage Error converting field `value` in table `table` where `id`=2 using
      */
     public function testDataConvertErrorReporting()
     {
-        /** @var Serialize $serializer */
-        $serializer = $this->objectManager->create(Serialize::class);
-        $serializedData = $serializer->serialize(['some' => 'data', 'other' => 'other data']);
-        $serializedDataLength = strlen($serializedData);
-        $brokenSerializedData = substr($serializedData, 0, $serializedDataLength - 6);
         $rows = [
-            ['id' => 1, 'value' => 'N;'],
-            ['id' => 2, 'value' => $brokenSerializedData],
+            1 => 'N;',
+            2 => 'a:2:{s:3:"foo";s:3:"bar";s:3:"bar";s:',
         ];
 
         $this->adapterMock->expects($this->any())
-            ->method('fetchAll')
+            ->method('fetchPairs')
             ->with($this->selectByRangeMock)
             ->will($this->returnValue($rows));
 
         $this->adapterMock->expects($this->once())
             ->method('update')
-            ->with('table', ['value' => 'null'], ['id = ?' => 1]);
+            ->with('table', ['value' => 'null'], ['id IN (?)' => [1]]);
 
         $this->fieldDataConverter->convert($this->adapterMock, 'table', 'id', 'value', $this->queryModifierMock);
     }
 
-    /**
-     */
     public function testAlreadyConvertedDataSkipped()
     {
         $rows = [
-            ['id' => 2, 'value' => '[]'],
-            ['id' => 3, 'value' => '{}'],
-            ['id' => 4, 'value' => 'null'],
-            ['id' => 5, 'value' => '""'],
-            ['id' => 6, 'value' => '0'],
-            ['id' => 7, 'value' => 'N;'],
-            ['id' => 8, 'value' => '{"valid": "json value"}'],
+            2 => '[]',
+            3 => '{}',
+            4 => 'null',
+            5 => '""',
+            6 => '0',
+            7 => 'N;',
+            8 => '{"valid": "json value"}',
         ];
 
         $this->adapterMock->expects($this->any())
-            ->method('fetchAll')
+            ->method('fetchPairs')
             ->with($this->selectByRangeMock)
             ->will($this->returnValue($rows));
 
         $this->adapterMock->expects($this->once())
             ->method('update')
-            ->with('table', ['value' => 'null'], ['id = ?' => 7]);
+            ->with('table', ['value' => 'null'], ['id IN (?)' => [7]]);
 
         $this->fieldDataConverter->convert($this->adapterMock, 'table', 'id', 'value', $this->queryModifierMock);
     }
