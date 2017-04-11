@@ -47,8 +47,8 @@ interface CaseRepositoryInterface
     /**
      * Gets list of case entities.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Signifyd\Api\Data\CaseSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }
