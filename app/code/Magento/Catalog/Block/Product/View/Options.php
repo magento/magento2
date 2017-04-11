@@ -12,6 +12,7 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -208,7 +209,7 @@ class Options extends \Magento\Framework\View\Element\Template
         $config = [];
         foreach ($this->getOptions() as $option) {
             /* @var $option \Magento\Catalog\Model\Product\Option */
-            if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
+            if ($option->getGroupByType() == ProductCustomOptionInterface::OPTION_GROUP_SELECT) {
                 $tmpPriceValues = [];
                 foreach ($option->getValues() as $valueId => $value) {
                     $tmpPriceValues[$valueId] = $this->_getPriceConfiguration($value);
