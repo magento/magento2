@@ -117,7 +117,7 @@ class UiComponent implements Layout\ReaderInterface
      */
     private function getLayoutElementsFromUiConfiguration(array $config, array &$elements = [])
     {
-        foreach ($config as $name => $data) {
+        foreach ($config as $data) {
             if (isset($data['arguments']['block']['layout'])) {
                 $elements[] = $data['arguments']['block']['layout'];
             }
