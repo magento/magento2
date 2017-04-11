@@ -67,8 +67,8 @@ class DiscountCodes extends Form
      *
      * @return string
      */
-    public function getCouponApplyingMessage()    {
-
+    public function getCouponApplyingMessage()
+    {
         return $this->_rootElement->find($this->couponApplyingMessage, Locator::SELECTOR_XPATH)->getText();
     }
 }
