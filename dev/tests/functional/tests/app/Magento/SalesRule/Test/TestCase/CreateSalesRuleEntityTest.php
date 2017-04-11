@@ -151,13 +151,7 @@ class CreateSalesRuleEntityTest extends Injectable
             $couponGrid = $manageCouponCodesSection->getCouponGrid();
 
             /** @var array $generatedCouponCodes */
-            $generatedCouponCodes = $couponGrid->getRowsData(['code']);
-            $generatedCouponCodes = array_map(
-                function ($element) {
-                    return $element['code'];
-                },
-                $generatedCouponCodes
-            );
+            $generatedCouponCodes = $couponGrid->getCouponCodes();
         } else {
             $this->promoQuoteNew->getFormPageActions()->save();
         }
