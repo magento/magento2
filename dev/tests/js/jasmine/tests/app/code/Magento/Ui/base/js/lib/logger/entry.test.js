@@ -59,7 +59,8 @@ define([
             it('has the "timestamp" field', function () {
                 var entry = new Entry('message', levels.INFO, {});
 
-                expect(entry.timestamp).toBe(Date.now());
+                expect(entry.timestamp).not.toBeLessThan(0);
+                expect(entry.timestamp).toBeLessThan(Date.now() + 1);
             });
         });
     });
