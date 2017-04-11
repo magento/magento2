@@ -115,7 +115,7 @@ class ClassesScanner implements ClassesScannerInterface
         return $classes;
     }
 
-    protected function includeClasses(array $classNames, $fileItemPath)
+    private function includeClasses(array $classNames, $fileItemPath)
     {
         foreach ($classNames as $className) {
             if (!class_exists($className)) {
