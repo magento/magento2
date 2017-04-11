@@ -46,7 +46,8 @@ class EmulatedAdminhtmlAreaProcessor
      *
      * @param callable $callback The callable to be called
      * @param array $params The parameters to be passed to the callback, as an indexed array
-     * @return boolean|integer|float|string|array|object|callable|resource|null
+     * @return bool|int|float|string|array|null - as the result of this method is the result of callback,
+     * you can use callback only with specified in this method return types
      * @throws \Exception The exception is thrown if the parameter $callback throws an exception
      */
     public function process(callable $callback, array $params = [])

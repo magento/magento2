@@ -6,6 +6,7 @@
 namespace Magento\Config\Test\Unit\Console\Command;
 
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -51,6 +52,8 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $currentScope = 'currentScope';
+        $callback = function () {
+        };
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($currentScope);
@@ -60,10 +63,11 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($currentScope);
 
         $this->stateMock->expects($this->once())
-            ->method('emulateAreaCode');
+            ->method('emulateAreaCode')
+            ->with(Area::AREA_ADMINHTML, $callback)
+            ->willReturn('result');
 
-        $this->emulatedAdminhtmlProcessorArea->process(function () {
-        });
+        $this->assertEquals('result', $this->emulatedAdminhtmlProcessorArea->process($callback));
     }
 
     /**
