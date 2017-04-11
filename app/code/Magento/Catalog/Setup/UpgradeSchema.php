@@ -65,6 +65,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.2.0', '<')) {
             $this->addProductEavIndexReplicaTables($setup);
+            $this->addPathKeyToCategoryEntityTableIfNotExists($setup);
             //  By adding 'catalog_product_index_price_replica' we provide separation of tables
             //  used for indexation write and read operations and affected models.
             $this->addReplicaTable(
@@ -468,6 +469,38 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->setComment('Catalog Category Product Indexer temporary table');
 
         $setup->getConnection()->createTable($table);
+    }
+
+    /**
+     * Add key for the path field if not exists
+     * significantly improves category tree performance
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addPathKeyToCategoryEntityTableIfNotExists(SchemaSetupInterface $setup)
+    {
+        /**
+         * @var \Magento\Framework\DB\Adapter\AdapterInterface
+         */
+        $connection = $setup->getConnection();
+        $tableName = $setup->getTable('catalog_category_entity');
+
+        $keyName = $setup->getIdxName(
+            $tableName,
+            ['path'],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+        );
+
+        $existingKeys = $connection->getIndexList($tableName);
+        if (!array_key_exists($keyName, $existingKeys)) {
+            $connection->addIndex(
+                $tableName,
+                $keyName,
+                ['path'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+            );
+        }
     }
 
     /**
