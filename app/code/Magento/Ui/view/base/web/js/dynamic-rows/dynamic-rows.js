@@ -633,7 +633,6 @@ define([
         getChildItems: function (data, page) {
             var dataRecord = data || this.relatedData,
                 startIndex;
-
             this.startIndex = (~~this.currentPage() - 1) * this.pageSize;
 
             startIndex = page || this.startIndex;
@@ -672,9 +671,8 @@ define([
             this.bubble('addChild', false);
 
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
-                this.clear();
                 this.pages(this.pages() + 1);
-                this.currentPage(this.pages());
+                this.nextPage();
             } else if (~~this.currentPage() !== this.pages()) {
                 this.currentPage(this.pages());
             }
@@ -717,8 +715,8 @@ define([
                 return false;
             }
 
-            this.clear();
             this.initChildren();
+            return true;
         },
 
         /**
@@ -743,6 +741,7 @@ define([
          * Change page to next
          */
         nextPage: function () {
+            this.clear();
             this.currentPage(this.currentPage() + 1);
         },
 
@@ -750,6 +749,7 @@ define([
          * Change page to previous
          */
         previousPage: function () {
+            this.clear();
             this.currentPage(this.currentPage() - 1);
         },
 
