@@ -89,7 +89,7 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
      * @api
-     * @deprecated
+     * @deprecated Use processAdditionalValidation() instead
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request);
 
