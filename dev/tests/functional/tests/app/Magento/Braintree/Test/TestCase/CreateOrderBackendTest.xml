@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -22,6 +22,7 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
@@ -48,10 +49,9 @@
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
-            <data name="capturedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">145.98</item>
-            </data>
+            <data name="order/data/price/dataset" xsi:type="string">captured_price_145.98</data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree, braintree_sale</data>
@@ -79,6 +79,7 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>

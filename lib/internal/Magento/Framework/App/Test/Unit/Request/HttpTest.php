@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,7 @@
 namespace Magento\Framework\App\Test\Unit\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Framework\App\Request\Http;
-use Magento\Framework\App\ScopeInterface;
-use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +51,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
         $this->_routerListMock = $this->getMock(
             \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup'],
@@ -86,7 +83,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     private function getModel($uri = null, $appConfigMock = true)
     {
-
         $model = $this->objectManager->getObject(
             \Magento\Framework\App\Request\Http::class,
             [
@@ -99,7 +95,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
@@ -151,7 +147,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFrontName()
     {
-
         $uri = 'http://test.com/one/two';
         $this->_model = $this->getModel($uri);
         $this->assertEquals('one', $this->_model->getFrontName());
@@ -282,7 +277,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ['sub\\dir\\script.php', 'sub/dir/'],
         ];
     }
-
 
     public function serverVariablesProvider()
     {

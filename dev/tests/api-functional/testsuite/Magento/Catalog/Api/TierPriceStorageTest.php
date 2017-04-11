@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -257,8 +257,7 @@ class TierPriceStorageTest extends WebapiAbstract
             $priceIsCorrect = $price['price_type'] === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 ? (float)$tierPrice->getExtensionAttributes()->getPercentageValue() === (float)$price['price']
                 : (float)$tierPrice->getValue() === (float)$price['price'];
-            if (
-                $priceIsCorrect
+            if ($priceIsCorrect
                 && (int)$tierPrice->getQty() === (int)$price['quantity']
                 && $tierPrice->getExtensionAttributes()->getWebsiteId() == $price['website_id']
             ) {

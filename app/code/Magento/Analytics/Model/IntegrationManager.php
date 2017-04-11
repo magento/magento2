@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -76,7 +76,7 @@ class IntegrationManager
     /**
      * This method execute Generate Token command and enable integration
      *
-     * @return bool|string
+     * @return bool|\Magento\Integration\Model\Oauth\Token
      */
     public function generateToken()
     {

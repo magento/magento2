@@ -1,23 +1,29 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command\ConfigShow;
 
+use Magento\Config\Model\Config\Backend\Encrypted;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\StructureFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Config\ScopeInterface;
-use Magento\Framework\App\Area;
 
 /**
  * Class processes values using backend model which declared in system.xml.
  */
 class ValueProcessor
 {
+    /**
+     * Placeholder for the output of sensitive data.
+     */
+    const SAFE_PLACEHOLDER = '******';
+
     /**
      * System configuration structure factory.
      *
@@ -55,7 +61,7 @@ class ValueProcessor
     }
 
     /**
-     * Processes value using backend model.
+     * Processes value to display using backend model.
      *
      * @param string $scope The scope of configuration. E.g. 'default', 'website' or 'store'
      * @param string $scopeCode The scope code of configuration
@@ -78,6 +84,11 @@ class ValueProcessor
         $backendModel = $field && $field->hasBackendModel()
             ? $field->getBackendModel()
             : $this->configValueFactory->create();
+
+        if ($backendModel instanceof Encrypted) {
+            return  $value ? self::SAFE_PLACEHOLDER : null;
+        }
+
         $backendModel->setPath($path);
         $backendModel->setScope($scope);
         $backendModel->setScopeId($scopeCode);

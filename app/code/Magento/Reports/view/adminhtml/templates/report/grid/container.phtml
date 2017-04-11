@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 ?>
 
@@ -33,7 +32,9 @@ require([
         }
 
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
+            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl();?>filter/'+
+                Base64.encode(Form.serializeElements(elements))+'/'
+            );
         }
     }
 //]]>

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <wrapper>order[account]</wrapper>
     <fields>
         <group_id>
-            <input>select</input>>
+            <input>select</input>
         </group_id>
         <email />
     </fields>

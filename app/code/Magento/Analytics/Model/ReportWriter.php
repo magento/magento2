@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model;
@@ -9,8 +9,6 @@ use Magento\Analytics\ReportXml\DB\ReportValidator;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
- * Class ReportWriter
- *
  * Writes reports in files in csv format
  * @inheritdoc
  */
@@ -60,7 +58,6 @@ class ReportWriter implements ReportWriterInterface
      */
     public function write(WriteInterface $directory, $path)
     {
-        $directory->create($path);
         $errorsList = [];
         foreach ($this->config->get() as $file) {
             $provider = reset($file['providers']);
@@ -76,7 +73,6 @@ class ReportWriter implements ReportWriterInterface
             $fileName = $provider['parameters'] ? $provider['parameters']['name'] : $provider['name'];
             $fileFullPath = $path . $fileName . '.csv';
             $fileData = $providerObject->getReport(...array_values($provider['parameters']));
-            $directory->create($path);
             $stream = $directory->openFile($fileFullPath, 'w+');
             $stream->lock();
             $headers = [];
@@ -84,7 +80,6 @@ class ReportWriter implements ReportWriterInterface
                 if (!$headers) {
                     $headers = array_keys($row);
                     $stream->writeCsv($headers);
-
                 }
                 $stream->writeCsv($row);
             }
@@ -100,5 +95,7 @@ class ReportWriter implements ReportWriterInterface
             }
             $errorStream->close();
         }
+
+        return true;
     }
 }

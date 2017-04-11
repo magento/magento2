@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\AdminNotification\Model\System\Message;
 use Magento\Store\Model\Store;
 
 /**
- * @deprecated 
+ * @deprecated
  */
 class Baseurl implements \Magento\Framework\Notification\MessageInterface
 {

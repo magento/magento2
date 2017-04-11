@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Unserialize\Test\Unit;
+
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * @package Magento\Framework
@@ -15,7 +17,22 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->unserialize = new \Magento\Framework\Unserialize\Unserialize();
+        $serializer = $this->getMockBuilder(Serialize::class)
+            ->setMethods(['serialize', 'unserialize'])
+            ->getMock();
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(function ($parameter) {
+                return serialize($parameter);
+            });
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(function ($parameter) {
+                return unserialize($parameter);
+            });
+        $this->unserialize = new \Magento\Framework\Unserialize\Unserialize(
+            $serializer
+        );
     }
 
     public function testUnserializeArray()

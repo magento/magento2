@@ -1,19 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Сlass responsible for loading and caching of attributes related to the given attribute set.
- *
- * Can be used to improve performance of services that mostly read attribute data.
+ * Loads attributes by attribute set
  */
 class AttributeLoader
 {
@@ -36,43 +33,31 @@ class AttributeLoader
     private $searchCriteriaBuilder;
 
     /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
-
-    /**
-     * AttributeLoader constructor.
+     * Constructor
+     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param AttributeCache $attributeCache
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        AttributeCache $attributeCache
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->attributeCache = $attributeCache;
     }
 
     /**
      * Get attributes list from attribute set
      *
      * @param string $entityType
-     * @param int $attributeSetId
-     * @return \Magento\Eav\Api\Data\AttributeInterface[]|\object[]
+     * @param int|null $attributeSetId
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
      */
     public function getAttributes($entityType, $attributeSetId = null)
     {
-        $suffix =  self::ATTRIBUTE_SET_ID . '-' . ($attributeSetId ?: 'all');
-        if ($attributes = $this->attributeCache->getAttributes($entityType, $suffix)) {
-            return $attributes;
-        }
-
         $metadata = $this->metadataPool->getMetadata($entityType);
 
         if ($attributeSetId === null) {
@@ -87,11 +72,6 @@ class AttributeLoader
         );
         $attributes = $searchResult->getItems();
 
-        $this->attributeCache->saveAttributes(
-            $entityType,
-            $attributes,
-            $suffix
-        );
         return $attributes;
     }
 }

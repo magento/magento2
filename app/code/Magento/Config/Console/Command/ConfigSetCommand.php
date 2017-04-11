@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
-use Magento\Framework\App\Area;
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Console\Command\ConfigSet\EmulatedProcessorFacade;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Scope\ValidatorInterface;
-use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,33 +34,39 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * @var ConfigSetProcessorFactory
+     * The emulated processor facade.
+     *
+     * @var EmulatedProcessorFacade
      */
-    private $configSetProcessorFactory;
+    private $emulatedProcessorFacade;
 
     /**
-     * @var ValidatorInterface
+     * The config change detector.
+     *
+     * @var ChangeDetector
      */
-    private $validator;
+    private $changeDetector;
 
     /**
-     * @var ScopeInterface
+     * The hash manager.
+     *
+     * @var Hash
      */
-    private $scope;
+    private $hash;
 
     /**
-     * @param ConfigSetProcessorFactory $configSetProcessorFactory
-     * @param ValidatorInterface $validator
-     * @param ScopeInterface $scope
+     * @param EmulatedProcessorFacade $emulatedProcessorFacade The emulated processor facade
+     * @param ChangeDetector $changeDetector The config change detector
+     * @param Hash $hash The hash manager
      */
     public function __construct(
-        ConfigSetProcessorFactory $configSetProcessorFactory,
-        ValidatorInterface $validator,
-        ScopeInterface $scope
+        EmulatedProcessorFacade $emulatedProcessorFacade,
+        ChangeDetector $changeDetector,
+        Hash $hash
     ) {
-        $this->configSetProcessorFactory = $configSetProcessorFactory;
-        $this->validator = $validator;
-        $this->scope = $scope;
+        $this->emulatedProcessorFacade = $emulatedProcessorFacade;
+        $this->changeDetector = $changeDetector;
+        $this->hash = $hash;
 
         parent::__construct();
     }
@@ -109,29 +116,27 @@ class ConfigSetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
+            $output->writeln(
+                '<error>'
+                . 'This command is unavailable right now. '
+                . 'To continue working with it please run app:config:import or setup:upgrade command before.'
+                . '</error>'
+            );
+
+            return Cli::RETURN_FAILURE;
+        }
+
         try {
-            $this->validator->isValid(
+            $message = $this->emulatedProcessorFacade->process(
+                $input->getArgument(static::ARG_PATH),
+                $input->getArgument(static::ARG_VALUE),
                 $input->getOption(static::OPTION_SCOPE),
-                $input->getOption(static::OPTION_SCOPE_CODE)
+                $input->getOption(static::OPTION_SCOPE_CODE),
+                $input->getOption(static::OPTION_LOCK)
             );
 
-            // Emulating adminhtml scope to be able to read configs.
-            $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
-
-            $processor = $input->getOption(static::OPTION_LOCK)
-                ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-            $message = $input->getOption(static::OPTION_LOCK)
-                ? 'Value was saved and locked.'
-                : 'Value was saved.';
-
-            // The processing flow depends on --lock option.
-            $processor->process(
-                $input->getArgument(ConfigSetCommand::ARG_PATH),
-                $input->getArgument(ConfigSetCommand::ARG_VALUE),
-                $input->getOption(ConfigSetCommand::OPTION_SCOPE),
-                $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE)
-            );
+            $this->hash->regenerate(System::CONFIG_TYPE);
 
             $output->writeln('<info>' . $message . '</info>');
 

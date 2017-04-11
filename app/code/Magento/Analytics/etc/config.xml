@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,13 +9,17 @@
     <default>
         <analytics>
             <url>
-                <signup>http://drakelair1.corp.magento.com/mamock/signup</signup>
-                <update>http://drakelair1.corp.magento.com/mamock/update</update>
-                <basic_tier>https://dashboard.rjmetrics.com/v2/magento/signup</basic_tier>
-                <otp>http://drakelair1.corp.magento.com/mamock/otp</otp>
-                <report>http://drakelair1.corp.magento.com/mamock/report</report>
+                <signup>https://advancedreporting.rjmetrics.com/signup</signup>
+                <update>https://advancedreporting.rjmetrics.com/update</update>
+                <bi_essentials>https://dashboard.rjmetrics.com/v2/magento/signup</bi_essentials>
+                <otp>https://advancedreporting.rjmetrics.com/otp</otp>
+                <report>https://advancedreporting.rjmetrics.com/report</report>
+                <notify_data_changed>https://advancedreporting.rjmetrics.com/report</notify_data_changed>
             </url>
             <integration_name>Magento Analytics user</integration_name>
+            <general>
+                <collection_time>02,00,00</collection_time>
+            </general>
         </analytics>
     </default>
 </config>

@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\TaxRulesFixture;
-use \Magento\Framework\App\Config\Storage\Writer as ConfigWriter;
-use \Magento\Tax\Api\TaxRateRepositoryInterface;
-use \Magento\Tax\Api\TaxRuleRepositoryInterface;
-use \Magento\Tax\Api\Data\TaxRateInterfaceFactory;
-use \Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
-use \Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
+use Magento\Framework\App\Config\Storage\Writer as ConfigWriter;
+use Magento\Setup\Fixtures\TaxRulesFixture;
+use Magento\Tax\Api\Data\TaxRateInterfaceFactory;
+use Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -62,7 +62,6 @@ class TaxRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()
             ->getMock();

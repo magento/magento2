@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
-
 
 /**
  * Pool of generators for structural elements
@@ -156,8 +155,7 @@ class GeneratorPool
                 $element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING]
             );
 
-            if (
-                isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
+            if (isset($siblingElement[ScheduledStructure::ELEMENT_NAME])
                     && $structure->hasElement($siblingElement[ScheduledStructure::ELEMENT_NAME])
             ) {
                 $this->reorderElements(
@@ -253,7 +251,7 @@ class GeneratorPool
             $structure->setAsChild($element, $destination, $alias);
             $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
         } catch (\OutOfBoundsException $e) {
-            $this->logger->critical('Broken reference: '. $e->getMessage());
+            $this->logger->warning('Broken reference: ' . $e->getMessage());
         }
         $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;

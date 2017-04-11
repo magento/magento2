@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -97,8 +97,7 @@ class SystemPackage
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
 
-        if (
-            in_array(static::EDITION_ENTERPRISE, $systemPackages)
+        if (in_array(static::EDITION_ENTERPRISE, $systemPackages)
             && !in_array(static::EDITION_B2B, $systemPackages)
         ) {
             $result = array_merge($this->getAllowedB2BVersions($currentEE), $result);

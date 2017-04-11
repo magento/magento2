@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Model\View\Layout;
 
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Interface FilterInterface
@@ -23,7 +23,7 @@ use Magento\Framework\View\Layout\Data\Structure;
  *         </argument>
  *     </arguments>
  * </type>
- * 
+ *
  */
 interface FilterInterface
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,12 @@ namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Controller\Adminhtml\Subscription\Activate;
 use Magento\Analytics\Model\NotificationTime;
-use Magento\Analytics\Model\Subscription;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Psr\Log\LoggerInterface;
 
@@ -32,9 +33,14 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     private $resultJsonMock;
 
     /**
-     * @var Subscription|\PHPUnit_Framework_MockObject_MockObject
+     * @var PreparedValueFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $subscriptionModelMock;
+    private $preparedValueFactoryMock;
+
+    /**
+     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configValueResourceMock;
 
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -79,7 +85,11 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->subscriptionModelMock = $this->getMockBuilder(Subscription::class)
+        $this->preparedValueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->configValueResourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -101,7 +111,8 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             Activate::class,
             [
                 'resultFactory' => $this->resultFactoryMock,
-                'subscription'  => $this->subscriptionModelMock,
+                'preparedValueFactory'  => $this->preparedValueFactoryMock,
+                'configValueResource'  => $this->configValueResourceMock,
                 'logger' => $this->loggerMock,
                 'notificationTime' => $this->notificationTimeMock,
                 '_request' => $this->requestMock,
@@ -130,10 +141,12 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             ->willReturn($isSubscriptionEnabled);
 
         if ($isSubscriptionEnabled) {
-            $this->subscriptionModelMock
+            $configValue = $this->createConfigValueMock();
+            $this->preparedValueFactoryMock
                 ->expects($this->once())
-                ->method('enable')
-                ->willReturn(true);
+                ->method('create')
+                ->willReturn($configValue);
+            $this->configValueResourceMock->expects($this->once())->method('save')->with($configValue);
         } else {
             $this->notificationTimeMock
                 ->expects($this->once())
@@ -168,9 +181,9 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             ->with($this->subscriptionApprovedField)
             ->willReturn(true);
 
-        $this->subscriptionModelMock
+        $this->preparedValueFactoryMock
             ->expects($this->once())
-            ->method('enable')
+            ->method('create')
             ->willThrowException($exception);
         $this->loggerMock
             ->expects($this->once())
@@ -203,6 +216,16 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             $this->resultJsonMock,
             $this->activateController->execute()
         );
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createConfigValueMock()
+    {
+        return $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**

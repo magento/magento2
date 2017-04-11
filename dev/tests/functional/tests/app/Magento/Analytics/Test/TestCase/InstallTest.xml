@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,19 +10,19 @@
         <variation name="InstallTestVariation1" summary="Restore Magento analytics subscription" ticketId="MAGETWO-63196">
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="vertical" xsi:type="string">Apps and Games</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertSkipSubscriptionPopup" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored" />
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored" prev="Magento\Analytics\Test\Constraint\AssertSkipSubscriptionPopup" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertSkipReportingInPopup" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored" prev="Magento\Analytics\Test\Constraint\AssertSkipReportingInPopup" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored" />
         </variation>
         <variation name="InstallTestVariation2" summary="Decline Magento analytics subscription" ticketId="MAGETWO-63156">
             <data name="tag" xsi:type="string">severity:S1</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" prev="Magento\Install\Test\Constraint\AssertCurrencySelected" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" prev="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertDisableReportingInPopup" prev="Magento\Install\Test\Constraint\AssertCurrencySelected" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" prev="Magento\Analytics\Test\Constraint\AssertDisableReportingInPopup" />
         </variation>
         <variation name="InstallTestVariation3" summary="Accept Magento analytics subscription" ticketId="MAGETWO-63108">
             <data name="tag" xsi:type="string">severity:S1</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertAcceptSubscriptionPopup" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\Analytics\Test\Constraint\AssertAcceptSubscriptionPopup" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertEnableReportingInPopup" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\Analytics\Test\Constraint\AssertEnableReportingInPopup" />
         </variation>
     </testCase>
 </config>

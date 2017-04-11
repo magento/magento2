@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Constraint;
@@ -26,7 +26,7 @@ class AssertImportCheckDataErrorMessage extends AbstractConstraint
      */
     public function processAssert(AdminImportIndex $adminImportIndex)
     {
-        $actualMessage = $adminImportIndex->getImportResult()->getErrorMessage();
+        $actualMessage = $adminImportIndex->getMessagesBlock()->getErrorMessage();
 
         \PHPUnit_Framework_Assert::assertNotFalse($actualMessage, 'Error message is absent.');
 

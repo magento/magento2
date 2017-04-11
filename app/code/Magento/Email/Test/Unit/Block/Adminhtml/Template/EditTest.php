@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
@@ -56,7 +56,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(
             \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)],
+            '',
+            false,
+            false
         );
         $menuItemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false, false);
         $urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false, false);

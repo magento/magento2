@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model;
@@ -84,6 +84,5 @@ class AttributeCreateTest extends \PHPUnit_Framework_TestCase
         $attribute = $om->get(ProductAttributeRepositoryInterface::class)->save($attribute);
         $this->assertNotEmpty($attribute->getId());
         $this->assertEquals('swatch_visual', $attribute->getFrontendInput());
-
     }
 }

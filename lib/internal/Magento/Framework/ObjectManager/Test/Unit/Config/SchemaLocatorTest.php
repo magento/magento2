@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
@@ -26,7 +26,6 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $property = new \ReflectionProperty($this->model, 'urnResolver');
         $property->setAccessible(true);
         $property->setValue($this->model, $this->urnResolverMock);
-
     }
 
     public function testGetSchema()
