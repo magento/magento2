@@ -36,7 +36,7 @@ class ClassesScanner implements ClassesScannerInterface
     public function __construct(array $excludePatterns = [], DirectoryList $directoryList = null)
     {
         $this->excludePatterns = $excludePatterns;
-        if (!$directoryList instanceof DirectoryList) {
+        if ($directoryList === null) {
             $directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
         }
         $this->generationDirectory = $directoryList->getPath(DirectoryList::GENERATION);
