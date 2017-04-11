@@ -13,6 +13,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Class processes values using backend model which declared in system.xml.
@@ -46,18 +47,29 @@ class ValueProcessor
     private $scope;
 
     /**
-     * @param ScopeInterface $scope
-     * @param StructureFactory $structureFactory
-     * @param ValueFactory $valueFactory
+     * The json serializer.
+     *
+     * @var JsonSerializer
+     */
+    private $jsonSerializer;
+
+    /**
+     * @param ScopeInterface $scope The object for managing configuration scope
+     * @param StructureFactory $structureFactory The system configuration structure factory.
+     * @param ValueFactory $valueFactory The factory of object that
+     *        implement \Magento\Framework\App\Config\ValueInterface
+     * @param JsonSerializer $jsonSerializer The json serializer
      */
     public function __construct(
         ScopeInterface $scope,
         StructureFactory $structureFactory,
-        ValueFactory $valueFactory
+        ValueFactory $valueFactory,
+        JsonSerializer $jsonSerializer
     ) {
         $this->scope = $scope;
         $this->configStructureFactory = $structureFactory;
         $this->configValueFactory = $valueFactory;
+        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**
@@ -96,6 +108,10 @@ class ValueProcessor
         $backendModel->afterLoad();
         $processedValue = $backendModel->getValue();
 
-        return is_array($processedValue) ? $value : $processedValue;
+        /**
+         * If $processedValue is array it means that $value is json array (string).
+         * It should be converted to string for displaying.
+         */
+        return is_array($processedValue) ? $this->jsonSerializer->serialize($processedValue) : $processedValue;
     }
 }
