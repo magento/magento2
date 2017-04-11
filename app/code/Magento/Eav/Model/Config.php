@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

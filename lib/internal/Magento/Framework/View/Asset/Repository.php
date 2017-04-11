@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -204,6 +204,14 @@ class Repository
         if (!$module && $params['module']) {
             $module = $params['module'];
         }
+
+        if (!isset($params['publish'])) {
+            $map = $this->getRepositoryFilesMap($fileId, $params);
+            if ($map) {
+                $params = array_replace($params, $map);
+            }
+        }
+
         $isSecure = isset($params['_secure']) ? (bool) $params['_secure'] : null;
         $themePath = isset($params['theme']) ? $params['theme'] : $this->design->getThemePath($params['themeModel']);
         $context = $this->getFallbackContext(
@@ -227,7 +235,7 @@ class Repository
     /**
      * Get current context for static view files
      *
-     * @return \Magento\Framework\View\Asset\ContextInterface
+     * @return \Magento\Framework\View\Asset\File\FallbackContext
      */
     public function getStaticViewFileContext()
     {
@@ -429,5 +437,16 @@ class Repository
             );
         }
         return [$result[0], $result[1]];
+    }
+
+    /**
+     * @param string $fileId
+     * @param array $params
+     * @return RepositoryMap
+     */
+    private function getRepositoryFilesMap($fileId, array $params)
+    {
+        $repositoryMap = ObjectManager::getInstance()->get(RepositoryMap::class);
+        return $repositoryMap->getMap($fileId, $params);
     }
 }

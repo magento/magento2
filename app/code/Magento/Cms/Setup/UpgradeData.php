@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Setup;
 
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -24,11 +25,95 @@ class UpgradeData implements UpgradeDataInterface
     private $pageFactory;
 
     /**
-     * @param PageFactory $pageFactory
+     * @var \Magento\Framework\DB\FieldDataConverterFactory
      */
-    public function __construct(PageFactory $pageFactory)
-    {
+    private $fieldDataConverterFactory;
+
+    /**
+     * @var \Magento\Framework\DB\Select\QueryModifierFactory
+     */
+    private $queryModifierFactory;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * UpgradeData constructor.
+     *
+     * @param PageFactory $pageFactory
+     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+     * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
+     * @param MetadataPool $metadataPool
+     */
+    public function __construct(
+        PageFactory $pageFactory,
+        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
+        \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory,
+        MetadataPool $metadataPool
+    ) {
         $this->pageFactory = $pageFactory;
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->queryModifierFactory = $queryModifierFactory;
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
+     * Upgrades data for a module
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $this->upgradeVersionTwoZeroOne();
+        }
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $this->convertWidgetConditionsToJson($setup);
+        }
+    }
+
+    /**
+     * Upgrade data to version 2.0.2
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function convertWidgetConditionsToJson(ModuleDataSetupInterface $setup)
+    {
+        $fieldDataConverter = $this->fieldDataConverterFactory->create(
+            \Magento\Cms\Setup\ContentConverter::class
+        );
+
+        $queryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'content' => '%conditions_encoded%'
+                ]
+            ]
+        );
+
+        $blockMetadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\BlockInterface::class);
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('cms_block'),
+            $blockMetadata->getIdentifierField(),
+            'content',
+            $queryModifier
+        );
+
+        $pageMetadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\PageInterface::class);
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('cms_page'),
+            $pageMetadata->getIdentifierField(),
+            'content',
+            $queryModifier
+        );
     }
 
     /**
@@ -42,18 +127,14 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Upgrades data for a module
+     * Upgrade data to version 2.0.1,
      *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    private function upgradeVersionTwoZeroOne()
     {
-        $setup->startSetup();
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $newPageContent = <<<EOD
+        $newPageContent = <<<EOD
 <div class="privacy-policy cms-content">
     <div class="message info">
         <span>
@@ -237,16 +318,14 @@ class UpgradeData implements UpgradeDataInterface
     </table>
 </div>
 EOD;
-            $privacyAndCookiePolicyPage = $this->createPage()->load(
-                'privacy-policy-cookie-restriction-mode',
-                'identifier'
-            );
-            $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
-            if ($privacyAndCookiePolicyPageId) {
-                $privacyAndCookiePolicyPage->setContent($newPageContent);
-                $privacyAndCookiePolicyPage->save();
-            }
+        $privacyAndCookiePolicyPage = $this->createPage()->load(
+            'privacy-policy-cookie-restriction-mode',
+            'identifier'
+        );
+        $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
+        if ($privacyAndCookiePolicyPageId) {
+            $privacyAndCookiePolicyPage->setContent($newPageContent);
+            $privacyAndCookiePolicyPage->save();
         }
-        $setup->endSetup();
     }
 }

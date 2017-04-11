@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,14 +16,12 @@ use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Activate
- *
- * Activates subscription with Free Tier program
+ * Activates subscription to Magento BI Advanced Reporting.
  */
 class Activate extends Action
 {
     /**
-     * Resource for managing subscription to Magento Analytics.
+     * Resource for managing subscription to Magento BI.
      *
      * @var Subscription
      */
@@ -35,7 +33,7 @@ class Activate extends Action
     private $logger;
 
     /**
-     * Resource for managing last notification time about subscription to Magento Analytics.
+     * Resource for managing last notification time about subscription to Magento BI.
      *
      * @var NotificationTime
      */
@@ -79,7 +77,7 @@ class Activate extends Action
     }
 
     /**
-     * Activate subscription to Magento Analytics via AJAX.
+     * Activate subscription to Magento BI via AJAX.
      *
      * @return Json
      */

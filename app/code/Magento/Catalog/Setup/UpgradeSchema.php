@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -34,6 +34,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.1.4', '<')) {
+            $this->addSourceEntityIdToProductEavIndex($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.1.5', '<')) {
             $this->addPercentageValueColumn($setup);
             $tables = [
                 'catalog_product_index_price_cfg_opt_agr_idx',
@@ -56,10 +60,25 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => 'integer', 'nullable' => false]
                 );
             }
-            $this->addSourceEntityIdToProductEavIndex($setup);
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.2.0', '<')) {
+            $this->addProductEavIndexReplicaTables($setup);
+            //  By adding 'catalog_product_index_price_replica' we provide separation of tables
+            //  used for indexation write and read operations and affected models.
+            $this->addReplicaTable(
+                $setup,
+                'catalog_product_index_price',
+                'catalog_product_index_price_replica'
+            );
+            // the same for 'catalog_category_product_index'
+            $this->addReplicaTable(
+                $setup,
+                'catalog_category_product_index',
+                'catalog_category_product_index_replica'
+            );
+        }
         $setup->endSetup();
     }
 
@@ -236,7 +255,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         if ($setup->tableExists(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE)) {
             return;
-        };
+        }
 
         /** Add support video media attribute */
         $this->createValueToEntityTable($setup);
@@ -397,7 +416,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         // Drop catalog_category_product_index_tmp table
         $setup->getConnection()->dropTable($tableName);
 
-        // Create catalog_category_product_index_tmp table with PK and engine=InnoDB
+        // Create catalog_category_product_index_tmp table with PK
         $table = $setup->getConnection()
             ->newTable($tableName)
             ->addColumn(
@@ -442,8 +461,56 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ['unsigned' => true, 'nullable' => false],
                 'Visibility'
             )
+            ->setOption(
+                'type',
+                \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
+            )
             ->setComment('Catalog Category Product Indexer temporary table');
 
         $setup->getConnection()->createTable($table);
+    }
+
+    /**
+     * Add the replica table for existing one.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param string $existingTable
+     * @param string $replicaTable
+     * @return void
+     */
+    private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
+    {
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable($existingTable),
+                $setup->getTable($replicaTable)
+            )
+        );
+    }
+
+    /**
+     * Add Replica for Catalog Product Eav Index Tables.
+     *
+     * By adding 'catalog_product_index_eav_replica', 'catalog_product_index_eav_decimal_replica' we provide separation
+     * of tables used for indexation write and read operations and affected models.
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addProductEavIndexReplicaTables(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable('catalog_product_index_eav'),
+                $setup->getTable('catalog_product_index_eav_replica')
+            )
+        );
+
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable('catalog_product_index_eav_decimal'),
+                $setup->getTable('catalog_product_index_eav_decimal_replica')
+            )
+        );
     }
 }

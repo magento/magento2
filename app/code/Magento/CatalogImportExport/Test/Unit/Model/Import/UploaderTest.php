@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
@@ -157,7 +157,6 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
-
         $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
         $driverMock = $this->getMock($expectedDriverPool, ['readAll']);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);

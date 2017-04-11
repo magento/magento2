@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Test\Unit\Model;
 
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\Subscription as SubscriptionModel;
+use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -49,6 +51,16 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
      * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $reinitableConfigMock;
+
+    /**
+     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subscriptionHandlerMock;
+
+    /**
+     * @var SubscriptionStatusProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $statusProviderMock;
 
     /**
      * @var ObjectManagerHelper
@@ -105,6 +117,14 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->subscriptionHandlerMock = $this->getMockBuilder(SubscriptionHandler::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->statusProviderMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionModel = $this->objectManagerHelper->getObject(
@@ -116,6 +136,8 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                 'reinitableConfig' => $this->reinitableConfigMock,
                 'enabledConfigStructurePath' => $this->enableConfigStructurePath,
                 'yesValueDropdown'  => $this->yesValueDropdown,
+                'subscriptionHandler' => $this->subscriptionHandlerMock,
+                'statusProvider' => $this->statusProviderMock,
             ]
         );
     }
@@ -192,6 +214,44 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             'TestWithBackendModelWithConfigPath' => [true, $this->configPath],
             'TestWithoutBackendModelWithoutConfigPath' => [false, null],
             'TestWithoutBackendModelWithConfigPath' => [false, $this->configPath],
+        ];
+    }
+
+    /**
+     * @dataProvider retryDataProvider
+     * @param string $status
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $invokedCount
+     * @return void
+     */
+    public function testRetry($status, \PHPUnit_Framework_MockObject_Matcher_InvokedCount $invokedCount)
+    {
+        $this->statusProviderMock
+            ->expects($this->once())
+            ->method('getStatus')
+            ->with()
+            ->willReturn($status);
+        $this->subscriptionHandlerMock
+            ->expects(clone $invokedCount)
+            ->method('processEnabled')
+            ->with()
+            ->willReturn(true);
+        $this->reinitableConfigMock
+            ->expects(clone $invokedCount)
+            ->method('reinit')
+            ->with()
+            ->willReturnSelf();
+        $this->assertTrue($this->subscriptionModel->retry());
+    }
+
+    /**
+     * @return array
+     */
+    public function retryDataProvider()
+    {
+        return [
+            'Status Pending' => [SubscriptionStatusProvider::PENDING, $this->never()],
+            'Status Failed' => [SubscriptionStatusProvider::FAILED, $this->once()],
+            'Status Disabled' => [SubscriptionStatusProvider::DISABLED, $this->never()],
         ];
     }
 }
