@@ -178,8 +178,8 @@ return [
         </config>',
         [
             "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '' is not accepted by the pattern '" .
-            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': '' is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
@@ -194,8 +194,8 @@ return [
         </config>',
         [
             "Element 'virtualType', attribute 'type': [facet 'pattern'] The value '' is not accepted by the pattern '" .
-            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'type': '' is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
@@ -208,8 +208,8 @@ return [
         [
             "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '777Digits\\IsNotAllowed' " .
             "is not accepted by the pattern '" .
-            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': '777Digits\\IsNotAllowed' " .
             "is not a valid value of the atomic type 'phpClassName'." .
@@ -226,8 +226,8 @@ return [
         [
             "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '\\777Digits\\IsNotAllowed' " .
             "is not accepted by the pattern '" .
-            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': '\\777Digits\\IsNotAllowed' " .
             "is not a valid value of the atomic type 'phpClassName'." .
