@@ -23,14 +23,16 @@ class AssertCouponCodeSuccessGeneratedMessage extends AbstractConstraint
      * Assert that success message is displayed after generating coupon('s).
      *
      * @param PromoQuoteNew $promoQuoteNew
-     * @param SalesRule $manageCouponCodes
+     * @param array $generateCouponsSettings
      * @return void
      */
     public function processAssert(
         PromoQuoteNew $promoQuoteNew,
-        SalesRule $manageCouponCodes
+        array $generateCouponsSettings
     ) {
-        $expectedMessage = sprintf(self::SUCCESS_MESSAGE, $manageCouponCodes->getQty());
+        $qty = isset($generateCouponsSettings['qty']) ? $generateCouponsSettings['qty'] : null;
+
+        $expectedMessage = sprintf(self::SUCCESS_MESSAGE, $qty);
 
         /** @var PromoQuoteForm $salesRuleForm */
         $salesRuleForm = $promoQuoteNew->getSalesRuleForm();

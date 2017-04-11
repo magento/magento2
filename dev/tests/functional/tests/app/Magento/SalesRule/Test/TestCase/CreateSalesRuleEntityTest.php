@@ -105,7 +105,7 @@ class CreateSalesRuleEntityTest extends Injectable
      * @param CatalogProductSimple $productForSalesRule2
      * @param Customer $customer
      * @param string $conditionEntity
-     * @param SalesRule $manageCouponCodes
+     * @param array $generateCouponsSettings
      *
      * @return array
      */
@@ -115,10 +115,10 @@ class CreateSalesRuleEntityTest extends Injectable
         CatalogProductSimple $productForSalesRule2 = null,
         Customer $customer = null,
         $conditionEntity = null,
-        SalesRule $manageCouponCodes = null
+        array $generateCouponsSettings = null
     ) {
         $replace = null;
-        $generatedCouponCodes = [];
+        $generatedCouponCodes = null;
         $this->salesRuleName = $salesRule->getName();
 
         // Prepare data
@@ -137,26 +137,32 @@ class CreateSalesRuleEntityTest extends Injectable
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
 
-        if ($salesRule->getUseAutoGeneration() == 'Yes') {
+        if ($salesRule->getUseAutoGeneration() == 'Yes' && !empty($generateCouponsSettings)) {
             $this->promoQuoteNew->getFormPageActions()->saveAndContinue();
 
             /** @var PromoQuoteForm $salesRuleForm */
             $salesRuleForm = $this->promoQuoteNew->getSalesRuleForm();
-            $salesRuleForm->fill($manageCouponCodes);
+            $salesRuleForm->generateCoupons($generateCouponsSettings);
 
             /** @var BlockPromoSalesRuleEditTabCoupons $manageCouponCodesSection */
             $manageCouponCodesSection = $salesRuleForm->getSection('block_promo_sales_rule_edit_tab_coupons');
-            $manageCouponCodesSection->pressGenerateButton();
 
             /** @var Grid $couponGrid */
             $couponGrid = $manageCouponCodesSection->getCouponGrid();
 
+            /** @var array $generatedCouponCodes */
             $generatedCouponCodes = $couponGrid->getRowsData(['code']);
+            $generatedCouponCodes = array_map(
+                function ($element) {
+                    return $element['code'];
+                },
+                $generatedCouponCodes
+            );
         } else {
             $this->promoQuoteNew->getFormPageActions()->save();
         }
 
-        return ['generatedCouponCodes' => $generatedCouponCodes];
+        return ['salesRule' => $salesRule, 'couponCodes' => $generatedCouponCodes];
     }
 
     /**

@@ -6,12 +6,7 @@
 
 namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section;
 
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Block\Mapper;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Util\ModuleResolver\SequenceSorterInterface;
 use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\BlockPromoSalesRuleEditTabCoupons\Grid;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 
@@ -39,27 +34,7 @@ class BlockPromoSalesRuleEditTabCoupons extends Section
      *
      * @var string
      */
-    private $gridSelector = '#couponCodesGrid_table';
-
-    /**
-     * BlockPromoSalesRuleEditTabCoupons constructor.
-     * @param SimpleElement $element
-     * @param BlockFactory $blockFactory
-     * @param Mapper $mapper
-     * @param BrowserInterface $browser
-     * @param SequenceSorterInterface $sequenceSorter
-     * @param array $config
-     */
-    public function __construct(
-        SimpleElement $element,
-        BlockFactory $blockFactory,
-        Mapper $mapper,
-        BrowserInterface $browser,
-        SequenceSorterInterface $sequenceSorter,
-        array $config = []
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser, $sequenceSorter, $config);
-    }
+    private $gridSelector = '#couponCodesGrid';
 
     /**
      * Press generate button to generate coupons.
@@ -69,6 +44,8 @@ class BlockPromoSalesRuleEditTabCoupons extends Section
     public function pressGenerateButton()
     {
         $this->_rootElement->find($this->generateButtonSelector, Locator::SELECTOR_XPATH)->click();
+
+        $this->waitForElementVisible($this->successMessage);
     }
 
     /**
@@ -86,12 +63,15 @@ class BlockPromoSalesRuleEditTabCoupons extends Section
     /**
      * Get coupon codes grid.
      *
-     * @return \Magento\Mtf\Block\BlockInterface
+     * @return Grid
      */
     public function getCouponGrid()
     {
         $element = $this->_rootElement->find($this->gridSelector);
 
-        return $this->blockFactory->create(Grid::class, ['element' => $element]);
+        /** @var Grid $couponGrid */
+        $couponGrid = $this->blockFactory->create(Grid::class, ['element' => $element]);
+
+        return $couponGrid;
     }
 }

@@ -11,27 +11,5 @@ namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\BlockP
  */
 class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
-    /**
-     * Get rows data
-     *
-     * @param array $columns
-     * @return array
-     */
-    public function getRowsData(array $columns)
-    {
-        $this->waitLoader();
 
-        $data = [];
-        $rows = $this->_rootElement->getElements($this->rowItem);
-        foreach ($rows as $row) {
-            $rowData = [];
-            foreach ($columns as $columnName) {
-                $rowData[$columnName] = trim($row->find('.col-' . $columnName)->getText());
-            }
-
-            $data[] = $rowData;
-        }
-
-        return $data;
-    }
 }
