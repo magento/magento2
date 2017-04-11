@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * MSRP price interface
+ *
+ * @api
  */
 interface MsrpPriceInterface
 {
