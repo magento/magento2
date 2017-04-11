@@ -61,11 +61,11 @@
     <xs:simpleType name="modelName">
         <xs:annotation>
             <xs:documentation>
-                Model name can contain only [A-Za-z_\\\\].
+                Model name can contain only [A-Za-z_\\].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z_\\\\]+" />
+            <xs:pattern value="[A-Za-z_\\]+" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
