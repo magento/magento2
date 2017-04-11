@@ -36,7 +36,6 @@ class FileClassScanner
      *
      * @param string $filename
      */
-
     public function __construct($filename)
     {
         $filename = realpath($filename);
@@ -56,7 +55,6 @@ class FileClassScanner
      *
      * @return string
      */
-
     public function getFileContents()
     {
         return file_get_contents($this->filename);
@@ -73,7 +71,6 @@ class FileClassScanner
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return array
      */
-
     private function extract()
     {
         $allowedOpenBraces = [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES, T_STRING_VARNAME];
