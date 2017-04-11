@@ -193,6 +193,7 @@
                         <item name="add_variables" xsi:type="boolean">false</item>
                         <item name="add_widgets" xsi:type="boolean">false</item>
                         <item name="add_images" xsi:type="boolean">false</item>
+                        <item name="add_directives" xsi:type="boolean">true</item>
                     </item>
                     <item name="source" xsi:type="string">category</item>
                 </item>
