@@ -59,8 +59,23 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
         }
         $this->_sharedInstances = $sharedInstances;
         $this->_config->clean();
+        $this->clearMappedTableNames();
 
         return $this;
+    }
+
+    /**
+     * Clear mapped table names list.
+     *
+     * @return void
+     */
+    private function clearMappedTableNames()
+    {
+        $resourceConnection = $this->get(\Magento\Framework\App\ResourceConnection::class);
+        $reflection = new \ReflectionClass($resourceConnection);
+        $dataProperty = $reflection->getProperty('mappedTableNames');
+        $dataProperty->setAccessible(true);
+        $dataProperty->setValue($resourceConnection, null);
     }
 
     /**
