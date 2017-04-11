@@ -121,7 +121,6 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
      * @param string|null $configPath
      * @param string $value
      * @param string $scope
-     * @param string $resolvedScope
      * @param string|int|null $scopeCode
      * @param int $scopeId
      * @dataProvider createDataProvider
@@ -131,14 +130,13 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $configPath,
         $value,
         $scope,
-        $resolvedScope,
         $scopeCode,
         $scopeId
     ) {
         if (ScopeInterface::SCOPE_DEFAULT !== $scope) {
             $this->scopeResolverPoolMock->expects($this->once())
                 ->method('get')
-                ->with($resolvedScope)
+                ->with($scope)
                 ->willReturn($this->scopeResolverMock);
             $this->scopeResolverMock->expects($this->once())
                 ->method('getScope')
@@ -170,7 +168,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScope')
-            ->with($resolvedScope)
+            ->with($scope)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScopeId')
