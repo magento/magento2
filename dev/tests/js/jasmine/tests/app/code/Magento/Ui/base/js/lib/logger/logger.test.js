@@ -189,6 +189,7 @@ define([
                 spyOn(entryHandler, 'show');
                 spyOn(entryFactory, 'createEntry').and.callThrough();
 
+                logger.setDisplayLevel(levels.WARN);
                 entry = logger.warn('warn message', logData);
 
                 expect(entry instanceof LogEntry).toBe(true);
