@@ -726,14 +726,10 @@ class Config
         }
 
         $entity = $entityType->getEntity();
-        if ($entity instanceof \Magento\Eav\Model\Entity\AbstractEntity
+        if ($entity instanceof \Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface
             && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes(), true)
         ) {
-            $attribute->setBackendType(
-                AbstractAttribute::TYPE_STATIC
-            )->setIsGlobal(
-                1
-            );
+            $attribute->setBackendType(AbstractAttribute::TYPE_STATIC)->setIsGlobal(1);
         }
         $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
         return $attribute;
