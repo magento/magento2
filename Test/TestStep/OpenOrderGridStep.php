@@ -123,8 +123,8 @@ class OpenOrderGridStep implements TestStepInterface
     public function run()
     {
         $this->checkOrdersGrid();
-        $this->checkOrderStatus();
         $this->checkCaseInfo();
+        $this->checkOrderStatus();
     }
 
     /**
@@ -136,7 +136,6 @@ class OpenOrderGridStep implements TestStepInterface
     {
         $this->assertOrdersGrid->processAssert(
             $this->orderId,
-            $this->placeOrderStatus,
             $this->ordersGrid,
             $this->signifydData
         );
