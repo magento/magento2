@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright © 2013-2017 Magento, Inc. All rights reserved.
+# Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
 set -e
@@ -75,5 +75,26 @@ case $TEST_SUITE in
         cat "$changed_files_ce" | sed 's/^/  + including /'
 
         cd ../../..
+        ;;
+    js)
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+        nvm install $NODE_JS_VERSION
+        nvm use $NODE_JS_VERSION
+        node --version
+
+        cp package.json.sample package.json
+        cp Gruntfile.js.sample Gruntfile.js
+        npm install -g yarn
+        yarn global add grunt-cli
+        yarn
+
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q --admin-user="admin" --admin-password="123123q" --admin-email="admin@example.com" --admin-firstname="John" --admin-lastname="Doe"
+
+        echo "Deploying Static Content"
+        php bin/magento setup:static-content:deploy -f -q -j=2 --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
         ;;
 esac

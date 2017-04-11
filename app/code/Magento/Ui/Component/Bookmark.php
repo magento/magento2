@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
@@ -50,7 +50,6 @@ class Bookmark extends AbstractComponent
         $this->bookmarkRepository = $bookmarkRepository;
         $this->bookmarkManagement = $bookmarkManagement;
     }
-
 
     /**
      * Get component name

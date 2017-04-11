@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
-use \Magento\Framework\ObjectManager\Factory\Compiled;
+use Magento\Framework\ObjectManager\Factory\Compiled;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting;
@@ -155,10 +155,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 'array_value' => 'value',
-                'array_configured_instance' => new $sharedType,
+                'array_configured_instance' => new $sharedType(),
                 'array_configured_array' => [
                     'array_array_value' => 'value',
-                    'array_array_configured_instance' => new $nonSharedType,
+                    'array_array_configured_instance' => new $nonSharedType(),
                 ],
                 'array_global_argument' => null,
                 'array_global_existing_argument' => 'GLOBAL_ARGUMENT',
@@ -219,8 +219,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 '_ins_' => DependencyTesting::class,
             ],
             'sharedDependency' => [
-                '_i_' =>
-                    DependencySharedTesting::class,
+                '_i_' => DependencySharedTesting::class,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -251,8 +250,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 '_ins_' => DependencyTesting::class,
             ],
             'sharedDependency' => [
-                '_i_' =>
-                    DependencySharedTesting::class,
+                '_i_' => DependencySharedTesting::class,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -305,47 +303,40 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     private function getRuntimeParameters()
     {
         return [
-            0 =>
-                [
+            0 => [
                     0 => 'nonSharedDependency',
                     1 => DependencyTesting::class,
                     2 => true,
                     3 => null,
                 ],
-            1 =>
-                [
+            1 => [
                     0 => 'sharedDependency',
                     1 => DependencySharedTesting::class,
                     2 => true,
                     3 => null,
                 ],
-            2 =>
-                [
+            2 => [
                     0 => 'value',
                     1 => null,
                     2 => false,
                     3 => 'value',
                 ],
-            3 =>
-                [
+            3 => [
                     0 => 'valueArray',
                     1 => null,
                     2 => false,
-                    3 =>
-                        [
+                    3 => [
                             0 => 'default_value1',
                             1 => 'default_value2',
                         ],
                 ],
-            4 =>
-                [
+            4 => [
                     0 => 'globalValue',
                     1 => null,
                     2 => false,
                     3 => '',
                 ],
-            5 =>
-                [
+            5 => [
                     0 => 'nullValue',
                     1 => null,
                     2 => false,

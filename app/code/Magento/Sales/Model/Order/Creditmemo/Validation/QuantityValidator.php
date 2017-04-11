@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Validation;
 
+use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -81,8 +81,7 @@ class QuantityValidator implements ValidatorInterface
             }
             $orderItem = $orderItemsById[$item->getOrderItemId()];
 
-            if (
-                !$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
+            if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
                 !$this->isQtyAvailable($orderItem, $item->getQty())
             ) {
                 $messages[] =__(
@@ -129,8 +128,7 @@ class QuantityValidator implements ValidatorInterface
             $invoiceQtysRefunded = [];
             $invoice = $this->invoiceRepository->get($creditmemo->getInvoiceId());
             foreach ($order->getCreditmemosCollection() as $createdCreditmemo) {
-                if (
-                    $createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
+                if ($createdCreditmemo->getState() != Creditmemo::STATE_CANCELED &&
                     $createdCreditmemo->getInvoiceId() == $invoice->getId()
                 ) {
                     foreach ($createdCreditmemo->getAllItems() as $createdCreditmemoItem) {

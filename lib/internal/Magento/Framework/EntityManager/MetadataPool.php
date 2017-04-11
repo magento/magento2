@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\EntityManager;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\EntityManager\Sequence\SequenceFactory;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class MetadataPool
@@ -90,7 +90,6 @@ class MetadataPool
             throw new \Exception(sprintf('Unknown entity type: %s requested', $entityType));
         }
         if (!isset($this->registry[$entityType])) {
-
             $this->registry[$entityType] = $this->createMetadata($entityType);
         }
         return $this->registry[$entityType];

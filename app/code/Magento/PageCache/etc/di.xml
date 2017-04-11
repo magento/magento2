@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,5 +12,17 @@
     </type>
     <type name="Magento\Framework\App\PageCache\Cache">
         <plugin name="fpc-type-plugin" type="Magento\PageCache\Model\App\PageCachePlugin"/>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="system/full_page_cache/varnish/access_list" xsi:type="string">1</item>
+                <item name="system/full_page_cache/varnish/backend_host" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="system/full_page_cache/varnish/backend_host" xsi:type="string">1</item>
+                <item name="system/full_page_cache/varnish/backend_port" xsi:type="string">1</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
@@ -13,6 +13,9 @@ use Zend\Stdlib\ParametersInterface;
 use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Request extends \Zend\Http\PhpEnvironment\Request
 {
     /**#@+
@@ -92,14 +95,14 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
-    
+
     /**
      * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
      *
      * @var string
      */
     protected $sslOffloadHeader;
-    
+
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -414,20 +417,19 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         if ($this->immediateRequestSecure()) {
             return true;
         }
-      
-        return $this->initialRequestSecure($this->SslOffloadHeader());
+
+        return $this->initialRequestSecure($this->getSslOffloadHeader());
     }
 
-    /***
+    /**
      * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
      */
-    private function SslOffloadHeader()
+    private function getSslOffloadHeader()
     {
         // Lets read from db only one time okay.
         if ($this->sslOffloadHeader === null) {
-
             // @todo: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
             // installed MAGETWO-31756
             // Check if a proxy sent a header indicating an initial secure request
@@ -531,7 +533,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
-     * Retrieve GET parameters
+     * Set GET parameters
      *
      * @param string $name
      * @param mixed $value
@@ -564,7 +566,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         }
         return $post;
     }
-
 
     /**
      * Set POST parameters
@@ -725,7 +726,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         if ($checkProxy && $this->getServer('HTTP_CLIENT_IP') != null) {
             $ip = $this->getServer('HTTP_CLIENT_IP');
-        } else if ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
+        } elseif ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
             $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
         } else {
             $ip = $this->getServer('REMOTE_ADDR');
@@ -780,7 +781,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         $this->requestUri = $requestUri;
         return $this;
     }
-
 
     /**
      * Get base url

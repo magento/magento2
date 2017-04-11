@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
@@ -16,6 +16,8 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,22 +50,41 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
+     * @var FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory|null
+     */
+    private $stateFactory;
+
+    /**
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
+     * @param FrontendResource|null $indexerFrontendResource
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Session $customerSession
+        Session $customerSession,
+        FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->scopeResolver = $scopeResolver;
         $this->customerSession = $customerSession;
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
+            Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
+        $this->stateFactory = $stateFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
     }
 
     /**
@@ -92,7 +113,7 @@ class DataProvider implements DataProviderInterface
             if (!$store instanceof \Magento\Store\Model\Store) {
                 throw new \RuntimeException('Illegal scope resolved');
             }
-            $table = $this->resource->getTableName('catalog_product_index_price');
+            $table = $this->indexerFrontendResource->getMainTable();
             $select->from(['main_table' => $table], null)
                 ->columns([BucketInterface::FIELD_VALUE => 'main_table.min_price'])
                 ->where('main_table.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
@@ -100,9 +121,13 @@ class DataProvider implements DataProviderInterface
         } else {
             $currentScopeId = $this->scopeResolver->getScope($currentScope)
                 ->getId();
+            $tableSufix = $this->stateFactory->create()->loadByIndexer(
+                \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
+            )->getTableSuffix();
             $table = $this->resource->getTableName(
                 'catalog_product_index_eav' . ($attribute->getBackendType() === 'decimal' ? '_decimal' : '')
             );
+            $table .= $tableSufix;
             $subSelect = $select;
             $subSelect->from(['main_table' => $table], ['main_table.value'])
                 ->joinLeft(

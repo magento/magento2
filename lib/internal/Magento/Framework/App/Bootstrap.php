@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Profiler;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * A bootstrap of Magento application
@@ -180,7 +178,7 @@ class Bootstrap
         $extraDrivers = [];
         if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS])) {
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
-        };
+        }
         return new DriverPool($extraDrivers);
     }
 
@@ -284,7 +282,14 @@ class Bootstrap
         $this->initObjectManager();
         /** @var \Magento\Framework\App\MaintenanceMode $maintenance */
         $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
-        $isOn = $this->maintenance->isOn(isset($this->server['REMOTE_ADDR']) ? $this->server['REMOTE_ADDR'] : '');
+
+        /** @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $phpRemoteAddressEnvironment */
+        $phpRemoteAddressEnvironment = $this->objectManager->get(
+            \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class
+        );
+        $remoteAddress = $phpRemoteAddressEnvironment->getRemoteAddress();
+        $isOn = $this->maintenance->isOn($remoteAddress ? $remoteAddress : '');
+
         if ($isOn && !$isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
             throw new \Exception('Unable to proceed: the maintenance mode is enabled. ');
@@ -332,7 +337,7 @@ class Bootstrap
     {
         if (array_key_exists($key, $this->server)) {
             if (isset($this->server[$key])) {
-                return (bool)(int)$this->server[$key];
+                return (bool) (int) $this->server[$key];
             }
             return null;
         }

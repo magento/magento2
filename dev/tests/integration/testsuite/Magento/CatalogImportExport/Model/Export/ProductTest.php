@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
@@ -122,7 +122,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
-     * 
+     *
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export

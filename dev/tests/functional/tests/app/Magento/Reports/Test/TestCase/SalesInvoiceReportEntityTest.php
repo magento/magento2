@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\SalesInvoiceReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -43,13 +44,18 @@ class SalesInvoiceReportEntityTest extends Injectable
     /**
      * Sales invoice report.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param SalesInvoiceReport $salesInvoiceReport
      * @param OrderInjectable $order
      * @param array $invoiceReport
      * @return array
      */
-    public function test(SalesInvoiceReport $salesInvoiceReport, OrderInjectable $order, array $invoiceReport)
-    {
+    public function test(
+        FixtureFactory $fixtureFactory,
+        SalesInvoiceReport $salesInvoiceReport,
+        OrderInjectable $order,
+        array $invoiceReport
+    ) {
         // Preconditions
         $salesInvoiceReport->open();
         $salesInvoiceReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
@@ -58,9 +64,12 @@ class SalesInvoiceReportEntityTest extends Injectable
         $initialInvoiceResult = $salesInvoiceReport->getGridBlock()->getLastResult();
         $initialInvoiceTotalResult = $salesInvoiceReport->getGridBlock()->getTotalResult();
         $order->persist();
+        $products = $order->getEntityId()['products'];
+        $cart['data']['items'] = ['products' => $products];
+        $cart = $fixtureFactory->createByCode('cart', $cart);
         $invoice = $this->objectManager->create(
             \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
-            ['order' => $order]
+            ['order' => $order, 'cart' => $cart]
         );
         $invoice->run();
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\ReportXml;
@@ -61,6 +61,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                 'select' => $this->selectMock,
                 'connectionName' => $this->connectionName,
                 'selectHydrator' => $this->selectHydratorMock,
+                'config' => []
             ]
         );
     }
@@ -81,6 +82,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'connectionName' => $this->connectionName,
             'select_parts' => $selectParts,
+            'config' => []
         ];
 
         $this->assertSame($expectedResult, $this->query->jsonSerialize());

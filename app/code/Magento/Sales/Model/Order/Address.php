@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\AbstractModel;
-use Magento\Customer\Model\Address\AddressModelInterface;
 
 /**
  * Sales order address model
@@ -88,7 +87,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
             $resourceCollection,
             $data
         );
-
     }
 
     /**
@@ -729,5 +727,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,6 +59,7 @@ class Grid extends DataGrid
      */
     public function getIds()
     {
+        $this->resetFilter();
         $result = [];
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $shipmentIds = $this->_rootElement->getElements($this->shipmentId);

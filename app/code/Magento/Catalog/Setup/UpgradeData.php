@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Eav\Model\Entity\AttributeCache;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script
@@ -36,30 +35,22 @@ class UpgradeData implements UpgradeDataInterface
     private $eavSetupFactory;
 
     /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
-
-    /**
      * Init
      *
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
-     * @param AttributeCache $attributeCache
      */
-    public function __construct(
-        CategorySetupFactory $categorySetupFactory,
-        EavSetupFactory $eavSetupFactory,
-        AttributeCache $attributeCache
-    ) {
+    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory)
+    {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
-        $this->attributeCache = $attributeCache;
     }
 
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -146,24 +137,19 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         if (version_compare($context->getVersion(), '2.0.4') < 0) {
-            $mediaBackendType = 'static';
-            $mediaBackendModel = null;
             /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
             $categorySetup->updateAttribute(
                 'catalog_product',
                 'media_gallery',
                 'backend_type',
-                $mediaBackendType
+                'static'
             );
             $categorySetup->updateAttribute(
                 'catalog_product',
                 'media_gallery',
-                'backend_model',
-                $mediaBackendModel
+                'backend_model'
             );
-
-            $this->changeMediaGalleryAttributeInCache($mediaBackendType, $mediaBackendModel);
         }
 
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
@@ -376,7 +362,33 @@ class UpgradeData implements UpgradeDataInterface
             $this->changePriceAttributeDefaultScope($categorySetup);
         }
 
+        if (version_compare($context->getVersion(), '2.1.5') < 0) {
+            $this->dissallowUsingHtmlForProductName($setup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * Set to 'No' 'Is Allowed Html on Store Front' option on product name attribute, because product name
+     * is multi entity field (used in order, quote) and cannot be conditionally escaped in all places
+     *
+     * @param ModuleDataSetupInterface $categorySetup
+     * @return void
+     */
+    private function dissallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
+    {
+        /** @var CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'name');
+
+        $setup->getConnection()
+            ->update(
+                $setup->getTable('catalog_eav_attribute'),
+                ['is_html_allowed_on_front' => 0],
+                $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            );
     }
 
     /**
@@ -388,33 +400,13 @@ class UpgradeData implements UpgradeDataInterface
         $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
         foreach (['price', 'cost', 'special_price'] as $attributeCode) {
             $attribute = $categorySetup->getAttribute($entityTypeId, $attributeCode);
-            $categorySetup->updateAttribute(
-                $entityTypeId,
-                $attribute['attribute_id'],
-                'is_global',
-                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
-            );
-
-        }
-    }
-
-    /**
-     * @param string $mediaBackendType
-     * @param string $mediaBackendModel
-     * @return void
-     */
-    private function changeMediaGalleryAttributeInCache($mediaBackendType, $mediaBackendModel)
-    {
-        // need to do, because media_gallery has backend model in cache.
-        $catalogProductAttributes = $this->attributeCache->getAttributes('catalog_product', '0-0');
-
-        if (is_array($catalogProductAttributes)) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $catalogProductAttribute */
-            foreach ($catalogProductAttributes as $catalogProductAttribute) {
-                if ($catalogProductAttribute->getAttributeCode() == 'media_gallery') {
-                    $catalogProductAttribute->setBackendModel($mediaBackendModel);
-                    $catalogProductAttribute->setBackendType($mediaBackendType);
-                }
+            if (isset($attribute['attribute_id'])) {
+                $categorySetup->updateAttribute(
+                    $entityTypeId,
+                    $attribute['attribute_id'],
+                    'is_global',
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+                );
             }
         }
     }

@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Deploy\Console\ConsoleLogger;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\State as AppState;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Deploy\Strategy\DeployStrategyFactory;
 
 /**
  * Tests for minifier
@@ -93,7 +96,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test JS minification library
-     * 
+     *
      * @return void
      */
     public function testJshrinkLibrary()
@@ -214,10 +217,6 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->objectManager));
 
-        $output = $this->objectManager->create(
-            \Symfony\Component\Console\Output\ConsoleOutput::class
-        );
-
         $filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
         $filesUtil->expects($this->any())
             ->method('getStaticLibraryFiles')
@@ -235,13 +234,57 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        /** @var \Magento\Deploy\Model\Deploy\LocaleDeploy $deployer */
-        $deployer = $this->objectManager->create(
-            \Magento\Deploy\Model\Deploy\LocaleDeploy::class,
-            ['filesUtil' => $filesUtil, 'output' => $output]
+        $this->objectManager->addSharedInstance($filesUtil, \Magento\Framework\App\Utility\Files::class);
+
+        $output = $this->objectManager->create(
+            \Symfony\Component\Console\Output\ConsoleOutput::class
         );
 
-        $deployer->deploy('frontend', 'FrameworkViewMinifier/default', 'en_US', []);
+        $logger = $this->objectManager->create(
+            ConsoleLogger::class,
+            ['output' => $output]
+        );
+
+        $versionStorage = $this->getMock(
+            \Magento\Framework\App\View\Deployment\Version\StorageInterface::class,
+            ['save', 'load'],
+            [],
+            '',
+            false
+        );
+
+        /** @var \Magento\Deploy\Service\DeployStaticContent $deployService */
+        $deployService = $this->objectManager->create(
+            \Magento\Deploy\Service\DeployStaticContent::class,
+            [
+                'objectManager' => $this->objectManager,
+                'logger' => $logger,
+                'versionStorage' => $versionStorage,
+            ]
+        );
+
+        $deployService->deploy(
+            [
+                Options::DRY_RUN => false,
+                Options::NO_JAVASCRIPT => true,
+                Options::NO_CSS => false,
+                Options::NO_LESS => false,
+                Options::NO_IMAGES => true,
+                Options::NO_FONTS => true,
+                Options::NO_HTML => true,
+                Options::NO_MISC => true,
+                Options::NO_HTML_MINIFY => true,
+                Options::AREA => ['frontend'],
+                Options::EXCLUDE_AREA => ['none'],
+                Options::THEME => ['FrameworkViewMinifier/default'],
+                Options::EXCLUDE_THEME => ['none'],
+                Options::LANGUAGE => ['en_US'],
+                Options::EXCLUDE_LANGUAGE => ['none'],
+                Options::JOBS_AMOUNT => 0,
+                Options::SYMLINK_LOCALE => false,
+                Options::STRATEGY => DeployStrategyFactory::DEPLOY_STRATEGY_QUICK
+            ]
+        );
 
         $this->assertFileExists($fileToBePublished);
         $this->assertEquals(

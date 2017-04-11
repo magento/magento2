@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
@@ -15,6 +15,8 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface as 
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -52,18 +54,25 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
+     * @var FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * @param ResourceConnection $resource
      * @param Range $range
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
+     * @param FrontendResource $indexerFrontendResource
      */
     public function __construct(
         ResourceConnection $resource,
         Range $range,
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,
-        IntervalFactory $intervalFactory
+        IntervalFactory $intervalFactory,
+        FrontendResource $indexerFrontendResource = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -71,6 +80,9 @@ class DataProvider implements DataProviderInterface
         $this->customerSession = $customerSession;
         $this->dataProvider = $dataProvider;
         $this->intervalFactory = $intervalFactory;
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
     }
 
     /**
@@ -95,7 +107,7 @@ class DataProvider implements DataProviderInterface
 
         $select = $this->getSelect();
 
-        $tableName = $this->resource->getTableName('catalog_product_index_price');
+        $tableName = $this->indexerFrontendResource->getMainTable();
         /** @var Table $table */
         $table = $entityStorage->getSource();
         $select->from(['main_table' => $tableName], [])

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -491,6 +491,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return int|null Credit memo shipping address ID.
      */
     public function getShippingAddressId();
+
     /**
      * Gets the credit memo shipping amount.
      *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -162,6 +162,8 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
                 $data['value'] = md5(microtime(1));
             }
         }
+
+        $data['value'] = html_entity_decode($data['value']);
 
         // prepare element dropdown values
         if ($values = $parameter->getValues()) {

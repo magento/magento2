@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
@@ -74,6 +74,9 @@ class TableBuilder
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
         $entityTableColumns = $eavAttributes[$entityTableName];
+        $linkField = $this->getMetadataPool()
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
 
         $temporaryEavAttributes = $eavAttributes;
 
@@ -101,11 +104,11 @@ class TableBuilder
             $temporaryTableName = $this->_getTemporaryTableName($tableName);
 
             //Add primary key to temporary table for increase speed of joins in future
-            $this->_addPrimaryKeyToTable($temporaryTableName);
+            $this->_addPrimaryKeyToTable($temporaryTableName, $linkField);
 
             //Create temporary table for composite attributes
             if (isset($valueTables[$temporaryTableName . $valueFieldSuffix])) {
-                $this->_addPrimaryKeyToTable($temporaryTableName . $valueFieldSuffix);
+                $this->_addPrimaryKeyToTable($temporaryTableName . $valueFieldSuffix, $linkField);
             }
 
             //Fill temporary tables with attributes grouped by it type

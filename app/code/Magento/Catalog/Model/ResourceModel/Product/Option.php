@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -260,7 +260,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 if ($existInCurrentStore) {
                     if ($isDeleteStoreTitle && (int)$storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                         $connection->delete($titleTableName, ['option_title_id = ?' => $existInCurrentStore]);
-
                     } elseif ($object->getStoreId() == $storeId) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(['title' => $object->getTitle()]),
@@ -277,8 +276,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     }
                 } else {
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (
-                        ($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                    if (($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
                         (
                             $storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID &&
                             !$existInCurrentStore &&

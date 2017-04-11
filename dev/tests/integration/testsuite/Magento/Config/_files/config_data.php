@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,6 +16,7 @@ $configData = [
             'web/test/test_value_2' => 'value2.db.default.test',
             'web/test2/test_value_3' => 'value3.db.default.test',
             'web/test2/test_value_4' => 'value4.db.default.test',
+            'carriers/fedex/account' => 'value5.db.hashed.value',
         ]
     ],
     ScopeInterface::SCOPE_WEBSITES => [

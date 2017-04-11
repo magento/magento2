@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Helper;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
 
 /**
@@ -33,6 +32,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Configuration path for show related
      */
     const XML_PATH_SHOW_RELATED = 'catalog/product_video/show_related';
+
     /**
      * Configuration path for video auto restart
      */

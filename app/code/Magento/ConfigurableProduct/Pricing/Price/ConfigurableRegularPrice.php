@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
@@ -100,7 +99,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
             $this->maxRegularAmount = $this->doGetMaxRegularAmount() ?: false;
         }
         return $this->maxRegularAmount;
-
     }
 
     /**

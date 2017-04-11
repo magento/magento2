@@ -1,19 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Cron;
 
-use Magento\Analytics\Model\AnalyticsConnector;
+use Magento\Analytics\Cron\SignUp;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Analytics\Model\Connector;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\AdminNotification\Model\InboxFactory;
-use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
-use Magento\Analytics\Model\FlagManager;
-use Magento\Analytics\Cron\SignUp;
-use Magento\AdminNotification\Model\Inbox;
+use Magento\Framework\FlagManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -21,29 +18,14 @@ use Magento\AdminNotification\Model\Inbox;
 class SignUpTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AnalyticsConnector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Connector|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $analyticsConnectorMock;
+    private $connectorMock;
 
     /**
      * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configWriterMock;
-
-    /**
-     * @var InboxFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inboxFactoryMock;
-
-    /**
-     * @var Inbox|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inboxMock;
-
-    /**
-     * @var InboxResource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inboxResourceMock;
 
     /**
      * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
@@ -62,23 +44,13 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->analyticsConnectorMock =  $this->getMockBuilder(AnalyticsConnector::class)
+        $this->connectorMock =  $this->getMockBuilder(Connector::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->inboxFactoryMock =  $this->getMockBuilder(InboxFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inboxResourceMock =  $this->getMockBuilder(InboxResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inboxMock =  $this->getMockBuilder(Inbox::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
@@ -86,10 +58,8 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->signUp = new SignUp(
-            $this->analyticsConnectorMock,
+            $this->connectorMock,
             $this->configWriterMock,
-            $this->inboxFactoryMock,
-            $this->inboxResourceMock,
             $this->flagManagerMock,
             $this->reinitableConfigMock
         );
@@ -108,7 +78,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
-        $this->analyticsConnectorMock->expects($this->once())
+        $this->connectorMock->expects($this->once())
             ->method('execute')
             ->with('signUp')
             ->willReturn(true);
@@ -140,14 +110,6 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->flagManagerMock->expects($this->once())
             ->method('deleteFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
-        $this->inboxFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->inboxMock);
-        $this->inboxMock->expects($this->once())
-            ->method('addNotice');
-        $this->inboxResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->inboxMock);
         $this->assertFalse($this->signUp->execute());
     }
 

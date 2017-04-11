@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,8 @@
 
 namespace Magento\Bundle\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Bundle\Model\LinkManagement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class LinkManagementTest
@@ -174,7 +174,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $helper->getObject(
-            
+
             LinkManagement::class,
             [
                 'productRepository' => $this->productRepository,
@@ -487,7 +487,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with($this->linkField)
             ->willReturn($this->linkField);
-
 
         $linkedProductMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getId')->will($this->returnValue(13));

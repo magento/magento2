@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -187,6 +187,17 @@
         display: block;
     }
 
+    // External link marker
+    [target='_blank'] {
+        &:after {
+            &:extend(.abs-icon all);
+            content: @icon-external-link__content;
+            font-size: 0.5rem;
+            margin-left: @indent__xs;
+            vertical-align: super;
+        }
+    }
+
     .level-0 {
         &:first-child {
             > a {
@@ -251,7 +262,7 @@
             transition-timing-function: ease-in-out;
             visibility: hidden;
             z-index: @submenu__z-index - 1;
-            
+
             .ie10 &,
             .ie11 & {
                 height: 100%;

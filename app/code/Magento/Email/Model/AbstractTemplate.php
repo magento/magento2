@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\DataObject;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Information as StoreInformation;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -672,8 +672,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($storeId !== null && $storeId !== false) {
             // save current design settings
             $this->emulatedDesignConfig = clone $this->getDesignConfig();
-            if (
-                $this->getDesignConfig()->getStore() != $storeId
+            if ($this->getDesignConfig()->getStore() != $storeId
                 || $this->getDesignConfig()->getArea() != $area
             ) {
                 $this->setDesignConfig(['area' => $area, 'store' => $storeId]);

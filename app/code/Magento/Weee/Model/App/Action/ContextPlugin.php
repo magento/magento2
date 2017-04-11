@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -123,7 +123,7 @@ class ContextPlugin
         if (!$countryId && !$regionId) {
             // country and region does not exist
             return;
-        } else if ($countryId && !$regionId) {
+        } elseif ($countryId && !$regionId) {
             // country exist and region does not exist
             $regionId = 0;
             $exist = $this->weeeTax->isWeeeInLocation(
@@ -186,8 +186,7 @@ class ContextPlugin
                 $countryId = $defaultShippingAddress['country_id'];
                 $regionId = $defaultShippingAddress['region_id'];
             }
-
-        } else if ($basedOn == 'billing') {
+        } elseif ($basedOn == 'billing') {
             $defaultBillingAddress = $this->customerSession->getDefaultTaxBillingAddress();
             if (empty($defaultBillingAddress)) {
                 $countryId = $defaultCountryId;

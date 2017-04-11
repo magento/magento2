@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -221,7 +221,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getEntityAdapter()
     {
-
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
             if (isset($entities[$this->getEntity()])) {
@@ -432,7 +431,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
-
 
         return $result;
     }
@@ -748,7 +746,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         }
         return $this;
     }
-
 
     /**
      * Get count of created items

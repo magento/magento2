@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -197,7 +197,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $params = ['_scope_to_url' => true];
         $defaultStore = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
         $defaultStore->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(5));
-
 
         $url = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
         $url->expects($this->atLeastOnce())->method('setScope')->will($this->returnSelf());
@@ -387,12 +386,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
 
-
         $this->requestMock->expects($this->atLeastOnce())->method('getRequestString')->will($this->returnValue(''));
         $this->requestMock->expects($this->atLeastOnce())->method('getQueryValue')->will($this->returnValue([
             'SID' => 'sid'
         ]));
-
 
         $urlMock = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
         $urlMock->expects($this->atLeastOnce())->method('setScope')->will($this->returnSelf());
@@ -580,8 +577,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'unsecure request, no secure base url registered' => [false, 443, false, true, null],
             'unsecure request, not using registered port' => [false, 80],
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
-            'unsecure request, no secure base url registered, not using secure in frontend' =>
-                [false, 443, false, false, null],
+            'unsecure request, no secure base url registered, not using secure in frontend' => [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
         ];
     }

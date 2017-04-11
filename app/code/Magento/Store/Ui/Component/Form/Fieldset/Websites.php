@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Ui\Component\Form\Fieldset;
 
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Ui\Component\Form\Fieldset;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Ui\Component\Form\Fieldset;
 
 /**
  * Class Websites Fieldset
@@ -38,7 +38,6 @@ class Websites extends Fieldset
     ) {
         parent::__construct($context, $components, $data);
         $this->storeManager = $storeManager;
-
     }
 
     /**

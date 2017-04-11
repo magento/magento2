@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,6 +95,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'flatTableBuilder' => $this->_flatTableBuilder
         ]);
     }
+
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Bad value was supplied.

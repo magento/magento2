@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Controller;
@@ -46,6 +46,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
+
     public static function dataInvalidPostAction()
     {
         return [

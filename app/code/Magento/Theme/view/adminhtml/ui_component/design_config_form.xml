@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -67,7 +67,7 @@
                         <item name="componentType" xsi:type="string">fileUploader</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</item>
                         <item name="maxFileSize" xsi:type="number">2097152</item>
-                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg ico</item>
+                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg ico apng</item>
                         <item name="uploaderConfig" xsi:type="array">
                             <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
                         </item>
@@ -77,7 +77,7 @@
             <field name="head_default_title">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Title</item>
+                        <item name="label" xsi:type="string" translate="true">Default Page Title</item>
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_default_title</item>
@@ -90,7 +90,7 @@
             <field name="head_title_prefix">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Title Prefix</item>
+                        <item name="label" xsi:type="string" translate="true">Page Title Prefix</item>
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_title_prefix</item>
@@ -103,7 +103,7 @@
             <field name="head_title_suffix">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Title Suffix</item>
+                        <item name="label" xsi:type="string" translate="true">Page Title Suffix</item>
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_title_suffix</item>
@@ -116,7 +116,7 @@
             <field name="head_default_description">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Description</item>
+                        <item name="label" xsi:type="string" translate="true">Default Meta Description</item>
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_default_description</item>
@@ -129,7 +129,7 @@
             <field name="head_default_keywords">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Keywords</item>
+                        <item name="label" xsi:type="string" translate="true">Default Meta Keywords</item>
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_default_keywords</item>
