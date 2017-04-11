@@ -89,6 +89,17 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
      * @api
+     * @deprecated
+     */
+    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request);
+
+    /**
+     * Processing additional validation to check is carrier applicable.
+     * This method just fix a typo in the one above.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|\Magento\Framework\DataObject|boolean
+     * @api
      */
     public function processAdditionalValidation(\Magento\Framework\DataObject $request);
 
