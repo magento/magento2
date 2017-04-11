@@ -726,7 +726,9 @@ class Config
         }
 
         $entity = $entityType->getEntity();
-        if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
+        if ($entity instanceof \Magento\Eav\Model\Entity\AbstractEntity
+            && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes(), true)
+        ) {
             $attribute->setBackendType(
                 AbstractAttribute::TYPE_STATIC
             )->setIsGlobal(
