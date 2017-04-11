@@ -1,9 +1,8 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* global jQuery */
-/* eslint-disable max-nested-callbacks */
+
 define([
     'squire'
 ], function (Squire) {
@@ -11,24 +10,32 @@ define([
 
     var injector = new Squire(),
         mocks = {
-            'uiRegistry': jasmine.createSpy()
+            'Magento_Ui/js/timeline/timeline-view': jasmine.createSpy()
         },
         timeline;
 
-    describe('Magento_Ui/js/timeline/timeline', function () {
-        beforeEach(function (done) {
-            injector.mock(mocks);
-            injector.require(['Magento_Ui/js/timeline/timeline'], function (Constr) {
-                timeline = new Constr({
-                    provider: 'provName',
-                    name: '',
-                    index: '',
-                    links: '',
-                    listens: ''
-                });
-                done();
+    beforeEach(function (done) {
+        injector.mock(mocks);
+        injector.require(['Magento_Ui/js/timeline/timeline', 'knockoutjs/knockout-es5'], function (Constr) {
+            timeline = new Constr({
+                name: '',
+                index: '',
+                links: '',
+                listens: '',
+                viewConfig: {
+                    component: '',
+                    model: ''
+                },
+                dndConfig: {
+                    enabled: false
+                }
             });
+            done();
         });
+    });
+
+    describe('Magento_Ui/js/timeline/timeline', function () {
+
         describe('isActive method', function () {
             it('record status is 1', function () {
                 expect(timeline.isActive({
