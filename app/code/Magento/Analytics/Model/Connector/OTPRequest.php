@@ -6,11 +6,11 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
-use Zend_Http_Response as HttpResponse;
 
 /**
  * Representation of an 'OTP' request.
@@ -45,6 +45,11 @@ class OTPRequest
     private $config;
 
     /**
+     * @var ResponseResolver
+     */
+    private $responseResolver;
+
+    /**
      * Path to the configuration value which contains
      * an URL that provides an OTP.
      *
@@ -56,17 +61,20 @@ class OTPRequest
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
      * @param ScopeConfigInterface $config
+     * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
         ScopeConfigInterface $config,
+        ResponseResolver $responseResolver,
         LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->httpClient = $httpClient;
         $this->config = $config;
+        $this->responseResolver = $responseResolver;
         $this->logger = $logger;
     }
 
@@ -79,70 +87,29 @@ class OTPRequest
      */
     public function call()
     {
-        $otp = false;
+        $result = false;
 
         if ($this->analyticsToken->isTokenExist()) {
-            try {
-                $response = $this->httpClient->request(
-                    ZendClient::POST,
-                    $this->config->getValue($this->otpUrlConfigPath),
-                    $this->getRequestJson(),
-                    ['Content-Type: application/json']
+            $response = $this->httpClient->request(
+                ZendClient::POST,
+                $this->config->getValue($this->otpUrlConfigPath),
+                [
+                    "access-token" => $this->analyticsToken->getToken(),
+                    "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
+                ]
+            );
+
+            $result = $this->responseResolver->getResult($response);
+            if (!$result) {
+                $this->logger->warning(
+                    sprintf(
+                        'Obtaining of an OTP from the MBI service has been failed: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                    )
                 );
-
-                if ($response) {
-                    $otp = $this->extractOtp($response);
-
-                    if (!$otp) {
-                        $this->logger->warning(
-                            sprintf(
-                                'Obtaining of an OTP from the MBI service has been failed: %s',
-                                !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
-                            )
-                        );
-                    }
-                }
-            } catch (\Exception $e) {
-                $this->logger->critical($e);
             }
         }
 
-        return $otp;
-    }
-
-    /**
-     * Prepares request data in JSON format.
-     *
-     * @return string
-     */
-    private function getRequestJson()
-    {
-        return json_encode(
-            [
-                "access-token" => $this->analyticsToken->getToken(),
-                "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
-            ]
-        );
-    }
-
-    /**
-     * Extracts an OTP from the response.
-     *
-     * Returns the OTP or FALSE if the OTP is not found.
-     *
-     * @param HttpResponse $response
-     * @return string|false
-     */
-    private function extractOtp(HttpResponse $response)
-    {
-        $otp = false;
-
-        if ($response->getStatus() === 201) {
-            $body = json_decode($response->getBody(), 1);
-
-            $otp = !empty($body['otp']) ? $body['otp'] : false;
-        }
-
-        return $otp;
+        return $result;
     }
 }

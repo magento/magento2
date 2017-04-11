@@ -118,6 +118,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $path
+     * @param string|null $configPath
      * @param string $value
      * @param string $scope
      * @param string $resolvedScope
@@ -127,6 +128,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate(
         $path,
+        $configPath,
         $value,
         $scope,
         $resolvedScope,
@@ -156,12 +158,15 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
+        $this->fieldMock
+            ->method('getConfigPath')
+            ->willReturn($configPath);
         $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
             ->method('setPath')
-            ->with($path)
+            ->with($configPath ?: $path)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScope')
@@ -190,6 +195,15 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             'standard flow' => [
                 '/some/path',
+                null,
+                'someValue',
+                'someScope',
+                'someScopeCode',
+                1,
+            ],
+            'standard flow with custom config path' => [
+                '/some/path',
+                '/custom/config_path',
                 'someValue',
                 'someScope',
                 'someScope',
@@ -198,6 +212,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ],
             'default scope flow' => [
                 '/some/path',
+                null,
                 'someValue',
                 ScopeInterface::SCOPE_DEFAULT,
                 ScopeInterface::SCOPE_DEFAULT,

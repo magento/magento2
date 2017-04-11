@@ -5,6 +5,8 @@
  */
 namespace Magento\Analytics\Test\Unit\ReportXml\DB\Assembler;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * A unit test for testing of the 'from' assembler.
  */
@@ -36,6 +38,11 @@ class FromAssemblerTest extends \PHPUnit_Framework_TestCase
     private $columnsResolverMock;
 
     /**
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnection;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -61,6 +68,10 @@ class FromAssemblerTest extends \PHPUnit_Framework_TestCase
         ->disableOriginalConstructor()
         ->getMock();
 
+        $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper =
             new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -68,45 +79,43 @@ class FromAssemblerTest extends \PHPUnit_Framework_TestCase
             \Magento\Analytics\ReportXml\DB\Assembler\FromAssembler::class,
             [
                 'nameResolver' => $this->nameResolverMock,
-                'columnsResolver' => $this->columnsResolverMock
+                'columnsResolver' => $this->columnsResolverMock,
+                'resourceConnection' => $this->resourceConnection,
             ]
         );
     }
 
     /**
+     * @dataProvider assembleDataProvider
+     * @param array $queryConfig
+     * @param string $tableName
      * @return void
      */
-    public function testAssemble()
+    public function testAssemble(array $queryConfig, $tableName)
     {
-        $queryConfigMock = [
-            'source' => [
-                'name' => 'sales_order',
-                'alias' => 'sales',
-                'attribute' => [
-                    [
-                        'name' => 'entity_id'
-                    ]
-                ]
-            ]
-        ];
-
         $this->nameResolverMock->expects($this->any())
             ->method('getAlias')
-            ->with($queryConfigMock['source'])
-            ->willReturn($queryConfigMock['source']['alias']);
+            ->with($queryConfig['source'])
+            ->willReturn($queryConfig['source']['alias']);
 
-        $this->nameResolverMock->expects($this->any())
+        $this->nameResolverMock->expects($this->once())
             ->method('getName')
-            ->with($queryConfigMock['source'])
-            ->willReturn($queryConfigMock['source']['name']);
+            ->with($queryConfig['source'])
+            ->willReturn($queryConfig['source']['name']);
+
+        $this->resourceConnection
+            ->expects($this->once())
+            ->method('getTableName')
+            ->with($queryConfig['source']['name'])
+            ->willReturn($tableName);
 
         $this->selectBuilderMock->expects($this->once())
             ->method('setFrom')
-            ->with([$queryConfigMock['source']['alias'] => $queryConfigMock['source']['name']]);
+            ->with([$queryConfig['source']['alias'] => $tableName]);
 
         $this->columnsResolverMock->expects($this->once())
             ->method('getColumns')
-            ->with($this->selectBuilderMock, $queryConfigMock['source'])
+            ->with($this->selectBuilderMock, $queryConfig['source'])
             ->willReturn(['entity_id' => 'sales.entity_id']);
 
         $this->selectBuilderMock->expects($this->once())
@@ -115,7 +124,44 @@ class FromAssemblerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->selectBuilderMock,
-            $this->subject->assemble($this->selectBuilderMock, $queryConfigMock)
+            $this->subject->assemble($this->selectBuilderMock, $queryConfig)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function assembleDataProvider()
+    {
+        return [
+            'Tables without prefixes' => [
+                [
+                    'source' => [
+                        'name' => 'sales_order',
+                        'alias' => 'sales',
+                        'attribute' => [
+                            [
+                                'name' => 'entity_id'
+                            ]
+                        ],
+                    ],
+                ],
+                'sales_order',
+            ],
+            'Tables with prefixes' => [
+                [
+                    'source' => [
+                        'name' => 'sales_order',
+                        'alias' => 'sales',
+                        'attribute' => [
+                            [
+                                'name' => 'entity_id'
+                            ]
+                        ],
+                    ],
+                ],
+                'pref_sales_order',
+            ]
+        ];
     }
 }

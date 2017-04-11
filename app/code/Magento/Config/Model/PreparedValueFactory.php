@@ -89,10 +89,14 @@ class PreparedValueFactory
             $structure = $this->structureFactory->create();
             /** @var Structure\ElementInterface $field */
             $field = $structure->getElementByConfigPath($path);
+            $configPath = $path;
             /** @var string $backendModelName */
-            $backendModelName = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-                ? $field->getData()['backend_model']
-                : ValueInterface::class;
+            if ($field instanceof Structure\Element\Field && $field->hasBackendModel()) {
+                $backendModelName = $field->getData()['backend_model'];
+                $configPath = $field->getConfigPath() ?: $path;
+            } else {
+                $backendModelName = ValueInterface::class;
+            }
             /** @var ValueInterface $backendModel */
             $backendModel = $this->valueFactory->create(
                 $backendModelName,
@@ -113,7 +117,7 @@ class PreparedValueFactory
                     $scopeId = $scopeResolver->getScope($scopeCode)->getId();
                 }
 
-                $backendModel->setPath($path);
+                $backendModel->setPath($configPath);
                 $backendModel->setScope($scope);
                 $backendModel->setScopeId($scopeId);
                 $backendModel->setValue($value);
