@@ -74,7 +74,7 @@ class FileClassScanner
      * @return array
      */
 
-    protected function extract()
+    private function extract()
     {
         $allowedOpenBraces = [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES, T_STRING_VARNAME];
         $classes = [];
@@ -141,8 +141,7 @@ class FileClassScanner
      * @param integer $index
      * @return bool
      */
-
-    protected function isBracedNamespace($index)
+    private function isBracedNamespace($index)
     {
         $len = count($this->tokens);
         while ($index++ < $len) {
@@ -168,7 +167,6 @@ class FileClassScanner
      *
      * @return array
      */
-
     public function getClassNames()
     {
         if ($this->classNames === false) {
