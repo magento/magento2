@@ -14,7 +14,6 @@ class FileClassScanner
      *
      * @var string
      */
-
     private $filename;
 
     /**
@@ -22,13 +21,11 @@ class FileClassScanner
      *
      * @var bool
      */
-
     private $classNames = false;
 
     /**
      * @var array
      */
-
     private $tokens;
 
     /**

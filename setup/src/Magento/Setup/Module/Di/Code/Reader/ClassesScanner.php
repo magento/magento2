@@ -19,20 +19,17 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * @var array
      */
-
     private $fileResults = [];
 
     /**
      * @var string
      */
-
     private $generationDirectory;
 
     /**
      * @param array $excludePatterns
      * @param string $generationDirectory
      */
-
     public function __construct(array $excludePatterns = [], DirectoryList $directoryList = null)
     {
         $this->excludePatterns = $excludePatterns;
