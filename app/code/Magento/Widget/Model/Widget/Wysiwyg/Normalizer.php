@@ -11,7 +11,7 @@ namespace Magento\Widget\Model\Widget\Wysiwyg;
 class Normalizer
 {
 
-    const WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP = [
+    const WYSIWYG_RESERVED_CHARACTERS_REPLACEMENT_MAP = [
         '{' => '^[',
         '}' => '^]',
         '"' => '`',
@@ -27,8 +27,8 @@ class Normalizer
     public function replaceReservedCharacters($content)
     {
         return str_replace(
-            array_keys(Normalizer::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            array_values(Normalizer::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
+            array_keys(Normalizer::WYSIWYG_RESERVED_CHARACTERS_REPLACEMENT_MAP),
+            array_values(Normalizer::WYSIWYG_RESERVED_CHARACTERS_REPLACEMENT_MAP),
             $content
         );
     }
@@ -42,8 +42,8 @@ class Normalizer
     public function restoreReservedCharacters($content)
     {
         return str_replace(
-            array_values(Normalizer::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
-            array_keys(Normalizer::WYSIWYG_RESERVED_CHARCTERS_REPLACEMENT_MAP),
+            array_values(Normalizer::WYSIWYG_RESERVED_CHARACTERS_REPLACEMENT_MAP),
+            array_keys(Normalizer::WYSIWYG_RESERVED_CHARACTERS_REPLACEMENT_MAP),
             $content
         );
     }
