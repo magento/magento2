@@ -515,7 +515,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     public function getEntity()
     {
         if (!$this->_entity) {
-            throw new \RuntimeException('Entity does not set');
+            $this->_entity = $this->getEntityType()->getEntity();
         }
 
         return $this->_entity;

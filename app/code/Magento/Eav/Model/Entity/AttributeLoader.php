@@ -62,7 +62,7 @@ class AttributeLoader implements AttributeLoaderInterface
         /**
          * Check and init default attributes
          */
-        $defaultAttributesCodes =  array_intersect($resource->getDefaultAttributes(), $attributeCodes);
+        $defaultAttributesCodes = array_diff($resource->getDefaultAttributes(), $attributeCodes);
         foreach ($defaultAttributesCodes as $attributeCode) {
             $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
         }
