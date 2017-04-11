@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Factory for composite.
  */
-class AndConditionFactory
+class ConditionFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -28,7 +28,7 @@ class AndConditionFactory
     /**
      * @param array $elementVisibilityConditions
      *
-     * @return AndCondition
+     * @return Condition
      */
     public function create(array $elementVisibilityConditions)
     {
@@ -36,6 +36,6 @@ class AndConditionFactory
         foreach ($elementVisibilityConditions as $condition) {
             $conditions[] = $this->objectManager->create($condition['name']);
         }
-        return $this->objectManager->create(AndCondition::class, ['conditions' => $conditions]);
+        return $this->objectManager->create(Condition::class, ['conditions' => $conditions]);
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Layout;
 
-use Magento\Framework\View\Layout\Condition\AndConditionFactory;
+use Magento\Framework\View\Layout\Condition\ConditionFactory;
 
 /**
  * Pool of generators for structural elements
@@ -28,24 +28,24 @@ class GeneratorPool
     protected $logger;
 
     /**
-     * @var \Magento\Framework\View\Layout\Condition\AndConditionFactory
+     * @var \Magento\Framework\View\Layout\Condition\ConditionFactory
      */
-    private $andConditionFactory;
+    private $conditionFactory;
 
     /**
      * @param ScheduledStructure\Helper $helper
-     * @param AndConditionFactory $andConditionFactory
+     * @param ConditionFactory $conditionFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $generators
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
-        AndConditionFactory $andConditionFactory,
+        ConditionFactory $conditionFactory,
         \Psr\Log\LoggerInterface $logger,
         array $generators = null
     ) {
         $this->helper = $helper;
-        $this->andConditionFactory = $andConditionFactory;
+        $this->conditionFactory = $conditionFactory;
         $this->logger = $logger;
         $this->addGenerators($generators);
     }
@@ -123,8 +123,8 @@ class GeneratorPool
                 array_key_exists('visibilityConditions', $data['attributes']) &&
                 !empty($data['attributes']['visibilityConditions'])
             ) {
-                $andCondition = $this->andConditionFactory->create($data['attributes']['visibilityConditions']);
-                if (!$andCondition->isVisible($data['attributes']['visibilityConditions'])) {
+                $condition = $this->conditionFactory->create($data['attributes']['visibilityConditions']);
+                if (!$condition->isVisible($data['attributes']['visibilityConditions'])) {
                     $this->removeElement($scheduledStructure, $structure, $name);
                 }
             }

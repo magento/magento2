@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Layout\Condition;
 /**
  * Composite condition which iterate over included conditions.
  */
-class AndCondition
+class Condition
 {
     /**
      * @var VisibilityConditionInterface[]
