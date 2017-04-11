@@ -64,9 +64,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.2.0', '<')) {
-            $this->addProductPriceIndexReplicaTable($setup);
             $this->addProductEavIndexReplicaTables($setup);
             $this->addPathKeyToCategoryEntityTableIfNotExists($setup);
+            //  By adding 'catalog_product_index_price_replica' we provide separation of tables
+            //  used for indexation write and read operations and affected models.
+            $this->addReplicaTable(
+                $setup,
+                'catalog_product_index_price',
+                'catalog_product_index_price_replica'
+            );
+            // the same for 'catalog_category_product_index'
+            $this->addReplicaTable(
+                $setup,
+                'catalog_category_product_index',
+                'catalog_category_product_index_replica'
+            );
         }
         $setup->endSetup();
     }
@@ -405,7 +417,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         // Drop catalog_category_product_index_tmp table
         $setup->getConnection()->dropTable($tableName);
 
-        // Create catalog_category_product_index_tmp table with PK and engine=InnoDB
+        // Create catalog_category_product_index_tmp table with PK
         $table = $setup->getConnection()
             ->newTable($tableName)
             ->addColumn(
@@ -450,6 +462,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ['unsigned' => true, 'nullable' => false],
                 'Visibility'
             )
+            ->setOption(
+                'type',
+                \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
+            )
             ->setComment('Catalog Category Product Indexer temporary table');
 
         $setup->getConnection()->createTable($table);
@@ -488,20 +504,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
     }
 
     /**
-     * Add Replica for Catalog Product Price Index Table.
-     *
-     * By adding 'catalog_product_index_price_replica' we provide separation of tables used for indexation write
-     * and read operations and affected models.
+     * Add the replica table for existing one.
      *
      * @param SchemaSetupInterface $setup
+     * @param string $existingTable
+     * @param string $replicaTable
      * @return void
      */
-    private function addProductPriceIndexReplicaTable(SchemaSetupInterface $setup)
+    private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {
         $setup->getConnection()->createTable(
             $setup->getConnection()->createTableByDdl(
-                $setup->getTable('catalog_product_index_price'),
-                $setup->getTable('catalog_product_index_price_replica')
+                $setup->getTable($existingTable),
+                $setup->getTable($replicaTable)
             )
         );
     }
