@@ -10,7 +10,7 @@ class ClassReader implements ClassReaderInterface
     /**
      * @var array
      */
-     protected $classNameParents;
+     protected $_classNameParents;
      
     /**
      * Read class constructor signature
@@ -61,8 +61,8 @@ class ClassReader implements ClassReaderInterface
      */
     public function getParents($className)
     {
-        if (isset($this->classNameParents[$className])) {
-            return $this->classNameParents[$className];
+        if (isset($this->_classNameParents[$className])) {
+            return $this->_classNameParents[$className];
         } else {
             $parentClass = get_parent_class($className);
             if ($parentClass) {
@@ -85,7 +85,7 @@ class ClassReader implements ClassReaderInterface
                     $result = [];
                 }
             }
-            $this->classNameParents[$className] = $result;
+            $this->_classNameParents[$className] = $result;
             return $result;
         }
     }
