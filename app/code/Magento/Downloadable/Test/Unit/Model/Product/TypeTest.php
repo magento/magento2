@@ -153,9 +153,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
         $this->product->expects($this->any())->method('canAffectOptions')->with($this->equalTo(true));
 
-        $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityAttributeCodes'], [], '', false);
+        $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, ['getEntityAttributes'], [], '', false);
         $eavConfigMock->expects($this->any())
-            ->method('getEntityAttributeCodes')
+            ->method('getEntityAttributes')
             ->with($this->equalTo($entityTypeMock), $this->equalTo($this->product))
             ->will($this->returnValue([]));
 

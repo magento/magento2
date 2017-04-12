@@ -578,7 +578,6 @@ class Config
         return $attributes;
     }
 
-
     /**
      * Get all entity type attributes
      *
@@ -606,8 +605,7 @@ class Config
                 $attributeSetId
             )->addStoreLabel(
                 $storeId
-            )
-                ->getData();
+            )->getData();
 
             foreach ($attributesInfo as $attributeData) {
                 $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
