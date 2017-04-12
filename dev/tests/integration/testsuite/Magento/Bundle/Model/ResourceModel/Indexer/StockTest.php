@@ -3,21 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
-/**
- * Full reindex Test
- */
-class FullTest extends \PHPUnit_Framework_TestCase
+namespace Magento\Bundle\Model\ResourceModel\Indexer;
+
+class StockTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $_processor;
+    protected $processor;
 
     protected function setUp()
     {
-        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
         );
     }
@@ -25,11 +23,11 @@ class FullTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Bundle/_files/product_in_category.php
      */
     public function testReindexAll()
     {
-        $this->_processor->reindexAll();
+        $this->processor->reindexAll();
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\CategoryFactory::class
@@ -57,13 +55,17 @@ class FullTest extends \PHPUnit_Framework_TestCase
             'left'
         );
 
-        $this->assertCount(1, $productCollection);
+        $this->assertCount(3, $productCollection);
+
+        $expectedResult = [
+            'Simple Product' => 22,
+            'Custom Design Simple Product' => 24,
+            'Bundle Product' => 0
+        ];
 
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals('Simple Product', $product->getName());
-            $this->assertEquals('Short description', $product->getShortDescription());
-            $this->assertEquals(100, $product->getQty());
+            $this->assertEquals($expectedResult[$product->getName()], $product->getQty());
         }
     }
 }
