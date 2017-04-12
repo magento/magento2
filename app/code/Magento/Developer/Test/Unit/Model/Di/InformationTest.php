@@ -65,10 +65,17 @@ class InformationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParameters()
     {
+        $this->definitions->expects($this->any())
+            ->method('getParameters')
+            ->with(Information::class)
+            ->willReturn([['information', Information::class, false, null]]);
         $this->objectManagerConfig->expects($this->any())
-            ->method('getArguments')
+            ->method('getPreference')
             ->with(Information::class)
             ->willReturn(Information::class);
-        $this->assertEquals([], $this->object->getParameters(Information::class));
+        $this->assertEquals(
+            [['information', Information::class, null]],
+            $this->object->getParameters(Information::class)
+        );
     }
 }
