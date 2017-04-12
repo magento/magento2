@@ -107,15 +107,24 @@ class PluginList extends Interception\PluginList\PluginList
             return $this->pluginList;
         }
 
-        foreach ($this->_inherited[$className] as $pluginKey => $plugin) {
+        foreach ($this->_inherited[$className] as $plugin) {
             foreach ($this->_definitions->getMethodList($plugin['instance']) as $pluginMethod => $methodTypes) {
-                $this->addPluginToList($plugin['instance'], $pluginMethod, $methodTypes,
+                $this->addPluginToList(
+                    $plugin['instance'],
+                    $pluginMethod,
+                    $methodTypes,
                     DefinitionInterface::LISTENER_AROUND
                 );
-                $this->addPluginToList($plugin['instance'], $pluginMethod, $methodTypes,
+                $this->addPluginToList(
+                    $plugin['instance'],
+                    $pluginMethod,
+                    $methodTypes,
                     DefinitionInterface::LISTENER_BEFORE
                 );
-                $this->addPluginToList($plugin['instance'], $pluginMethod, $methodTypes,
+                $this->addPluginToList(
+                    $plugin['instance'],
+                    $pluginMethod,
+                    $methodTypes,
                     DefinitionInterface::LISTENER_AFTER
                 );
             }
@@ -130,6 +139,7 @@ class PluginList extends Interception\PluginList\PluginList
      * @param string $pluginMethod
      * @param int $methodTypes
      * @param int $typeCode
+     * @return void
      */
     private function addPluginToList($pluginInstance, $pluginMethod, $methodTypes, $typeCode)
     {
