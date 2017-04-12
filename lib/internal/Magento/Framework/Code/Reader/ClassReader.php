@@ -63,7 +63,8 @@ class ClassReader implements ClassReaderInterface
     {
         if (isset($this->classNameParents[$className])) {
             return $this->classNameParents[$className];
-        } 
+        }
+
             $parentClass = get_parent_class($className);
             if ($parentClass) {
                 $result = [];
@@ -86,6 +87,6 @@ class ClassReader implements ClassReaderInterface
                 }
             }
             $this->classNameParents[$className] = $result;
-            return $result;        
+            return $result;
     }
 }
