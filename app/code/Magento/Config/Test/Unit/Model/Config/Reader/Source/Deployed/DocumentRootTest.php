@@ -6,13 +6,11 @@
 namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
 use Magento\Config\Model\Config\Reader;
-use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Config\Model\Placeholder\PlaceholderInterface;
-use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 
 /**
  * Test class for checking settings that defined in config file
@@ -25,7 +23,7 @@ class DocumentRootTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
-     * @var Reader\Source\Deployed\DocumentRoot
+     * @var DocumentRoot
      */
     private $documentRoot;
 
@@ -35,7 +33,7 @@ class DocumentRootTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->documentRoot = new Reader\Source\Deployed\DocumentRoot($this->configMock);
+        $this->documentRoot = new DocumentRoot($this->configMock);
     }
 
     /**
