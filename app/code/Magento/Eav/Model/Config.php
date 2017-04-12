@@ -565,17 +565,14 @@ class Config
             $storeId = $object->getStoreId() ?: $storeId;
         }
         $cacheKey = self::ATTRIBUTES_CODES_CACHE_ID . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
-        if (isset($this->_attributeCodes[$cacheKey])) {
-            return $this->_attributeCodes[$cacheKey];
-        }
 
-        $attributeData = $this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))
+        $attributesData = $this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attributes)
             : null;
 
 
         $attributes = [];
-        if ($attributeData === null) {
+        if ($attributesData === null) {
             if ($attributeSetId) {
                 $attributesData = $this->_universalFactory->create(
                     $entityType->getEntityAttributeCollection()
