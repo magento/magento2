@@ -57,7 +57,7 @@ class AttributeLoader implements AttributeLoaderInterface
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
-        $attributes = $this->config->getEntityAttributes($resource->getEntityType(), $object);
+        $attributes = (array)$this->config->getEntityAttributes($resource->getEntityType(), $object);
         $attributeCodes = array_keys($attributes);
         /**
          * Check and init default attributes

@@ -544,37 +544,7 @@ class Config
      */
     public function getEntityAttributeCodes($entityType, $object = null)
     {
-        $entityType = $this->getEntityType($entityType);
-        $attributeSetId = 0;
-        $storeId = 0;
-        if ($object instanceof \Magento\Framework\DataObject) {
-            $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
-            $storeId = $object->getStoreId() ?: $storeId;
-        }
-        $cacheKey = self::ATTRIBUTES_CODES_CACHE_ID . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
-        if (isset($this->_attributeCodes[$cacheKey])) {
-            return $this->_attributeCodes[$cacheKey];
-        }
-
-        if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
-            $this->_attributeCodes[$cacheKey] = $this->serializer->unserialize($attributes);
-            return $this->_attributeCodes[$cacheKey];
-        }
-
         $attributes = array_keys($this->getEntityAttributes($entityType, $object));
-
-        $this->_attributeCodes[$cacheKey] = $attributes;
-        if ($this->isCacheEnabled()) {
-            $this->_cache->save(
-                $this->serializer->serialize($attributes),
-                $cacheKey,
-                [
-                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
-                ]
-            );
-        }
-
         return $attributes;
     }
 
@@ -594,29 +564,48 @@ class Config
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
             $storeId = $object->getStoreId() ?: $storeId;
         }
+        $cacheKey = self::ATTRIBUTES_CODES_CACHE_ID . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
+        if (isset($this->_attributeCodes[$cacheKey])) {
+            return $this->_attributeCodes[$cacheKey];
+        }
+
+        $attributeData = $this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))
+            ? $this->serializer->unserialize($attributes)
+            : null;
+
 
         $attributes = [];
-        if ($attributeSetId) {
-            $attributesInfo = $this->_universalFactory->create(
-                $entityType->getEntityAttributeCollection()
-            )->setEntityTypeFilter(
-                $entityType
-            )->setAttributeSetFilter(
-                $attributeSetId
-            )->addStoreLabel(
-                $storeId
-            )->getData();
-
-            foreach ($attributesInfo as $attributeData) {
-                $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
-            }
-        } else {
-            $this->_initAttributes($entityType);
-            $attributesData = $this->_attributeData[$entityType->getEntityTypeCode()];
-            foreach ($attributesData as $attributeData) {
-                $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
+        if ($attributeData === null) {
+            if ($attributeSetId) {
+                $attributesData = $this->_universalFactory->create(
+                    $entityType->getEntityAttributeCollection()
+                )->setEntityTypeFilter(
+                    $entityType
+                )->setAttributeSetFilter(
+                    $attributeSetId
+                )->addStoreLabel(
+                    $storeId
+                )->getData();
+            } else {
+                $this->_initAttributes($entityType);
+                $attributesData = $this->_attributeData[$entityType->getEntityTypeCode()];
             }
         }
+        if ($this->isCacheEnabled()) {
+            $this->_cache->save(
+                $this->serializer->serialize($attributesData),
+                $cacheKey,
+                [
+                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                ]
+            );
+        }
+
+        foreach ($attributesData as $attributeData) {
+            $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
+        }
+
         return $attributes;
     }
 

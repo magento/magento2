@@ -113,14 +113,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData', 'load', 'toArray'])
+            ->setMethods(['setData', 'loadByCode', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $entityAttributeMock->method('setData')
+        $entityAttributeMock->expects($this->atLeastOnce())->method('setData')
             ->willReturnSelf();
-        $entityAttributeMock->method('load')
+        $entityAttributeMock->expects($this->atLeastOnce())->method('loadByCode')
             ->willReturnSelf();
-        $entityAttributeMock->method('toArray')
+        $entityAttributeMock->expects($this->atLeastOnce())->method('toArray')
             ->willReturn($attributeData);
         $factoryCalls = [
             [
@@ -180,7 +180,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValueMap($factoryCalls));
 
-        $this->assertEquals($entityAttributeMock, $this->config->getAttribute($entityType, 'attribute_code_1'));
+        $this->assertInstanceOf(Attribute::class, $this->config->getAttribute($entityType, 'attribute_code_1'));
     }
 
     /**
