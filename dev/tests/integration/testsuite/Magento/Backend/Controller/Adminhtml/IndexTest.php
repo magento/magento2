@@ -49,6 +49,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/index/globalSearch');
 
         $actual = $this->getResponse()->getBody();
-        $this->assertEquals([], json_decode($actual));
+        $this->assertEquals(3, count(json_decode($actual, true)));
     }
 }
