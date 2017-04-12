@@ -3,21 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
-/**
- * Full reindex Test
- */
-class FullTest extends \PHPUnit_Framework_TestCase
+namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Stock;
+
+class GroupedTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $_processor;
+    protected $processor;
 
     protected function setUp()
     {
-        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
         );
     }
@@ -25,18 +23,20 @@ class FullTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      */
     public function testReindexAll()
     {
-        $this->_processor->reindexAll();
+        $this->processor->reindexAll();
 
+        /** @var \Magento\Catalog\Model\CategoryFactory $categoryFactory */
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\CategoryFactory::class
         );
-        /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
-        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Block\Product\ListProduct::class
+        $category = $categoryFactory->create()->load(2);
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        $productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
         /** @var \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource */
@@ -44,10 +44,8 @@ class FullTest extends \PHPUnit_Framework_TestCase
             \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
         );
 
-        $category = $categoryFactory->create()->load(2);
-        $layer = $listProduct->getLayer();
-        $layer->setCurrentCategory($category);
-        $productCollection = $layer->getProductCollection();
+        $productCollection->addAttributeToSelect('name');
+        $productCollection->addUrlRewrite($category->getId());
         $productCollection->joinField(
             'qty',
             $indexerStockFrontendResource->getMainTable(),
@@ -57,13 +55,17 @@ class FullTest extends \PHPUnit_Framework_TestCase
             'left'
         );
 
-        $this->assertCount(1, $productCollection);
+        $this->assertCount(3, $productCollection);
+
+        $expectedResult = [
+            'Simple Product' => 22,
+            'Virtual Product' => 10,
+            'Grouped Product' => 0
+        ];
 
         /** @var $product \Magento\Catalog\Model\Product */
         foreach ($productCollection as $product) {
-            $this->assertEquals('Simple Product', $product->getName());
-            $this->assertEquals('Short description', $product->getShortDescription());
-            $this->assertEquals(100, $product->getQty());
+            $this->assertEquals($expectedResult[$product->getName()], $product->getQty());
         }
     }
 }
