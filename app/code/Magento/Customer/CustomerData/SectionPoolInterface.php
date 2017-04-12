@@ -7,8 +7,6 @@ namespace Magento\Customer\CustomerData;
 
 /**
  * Section pool interface
- *
- * @api Use to collect data sections in customer data which are transported from backend to frontend local storage
  */
 interface SectionPoolInterface
 {
