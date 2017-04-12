@@ -14,13 +14,31 @@ use Magento\Framework\Interception\DefinitionInterface;
  */
 class PluginList extends Interception\PluginList\PluginList
 {
+    /**#@+
+     * Constants for the plugin types
+     */
+    const PLUGIN_TYPE_BEFORE = 'before';
+    const PLUGIN_TYPE_AROUND = 'around';
+    const PLUGIN_TYPE_AFTER = 'after';
+    /**#@-*/
+
     /**
      * @var array
      */
     private $pluginList = [
-       'before' => [],
-       'around' => [],
-       'after'  => []
+       self::PLUGIN_TYPE_BEFORE => [],
+       self::PLUGIN_TYPE_AROUND => [],
+       self::PLUGIN_TYPE_AFTER  => []
+    ];
+
+    /**
+     * Mapping of plugin type codes to plugin types
+     * @var array
+     */
+    private $pluginTypeMapping = [
+        DefinitionInterface::LISTENER_AROUND => self::PLUGIN_TYPE_AROUND,
+        DefinitionInterface::LISTENER_BEFORE => self::PLUGIN_TYPE_BEFORE,
+        DefinitionInterface::LISTENER_AFTER => self::PLUGIN_TYPE_AFTER
     ];
 
     /**
@@ -75,7 +93,6 @@ class PluginList extends Interception\PluginList\PluginList
         return $this->_inherited[$type];
     }
 
-
     /**
      * Return the list of plugins for the class
      *
@@ -92,28 +109,35 @@ class PluginList extends Interception\PluginList\PluginList
 
         foreach ($this->_inherited[$className] as $pluginKey => $plugin) {
             foreach ($this->_definitions->getMethodList($plugin['instance']) as $pluginMethod => $methodTypes) {
-                if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
-                    if (!array_key_exists($plugin['instance'], $this->pluginList['around'])) {
-                        $this->pluginList['around'][$plugin['instance']] = [];
-                    }
-                    $this->pluginList['around'][$plugin['instance']][] = $pluginMethod ;
-                }
-                if ($methodTypes & DefinitionInterface::LISTENER_BEFORE) {
-                    if (!array_key_exists($plugin['instance'], $this->pluginList['before'])) {
-                        $this->pluginList['before'][$plugin['instance']] = [];
-                    }
-                    $this->pluginList['before'][$plugin['instance']][] = $pluginMethod ;
-
-                }
-                if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
-                    if (!array_key_exists($plugin['instance'], $this->pluginList['after'])) {
-                        $this->pluginList['after'][$plugin['instance']] = [];
-                    }
-                    $this->pluginList['after'][$plugin['instance']][] = $pluginMethod ;
-                }
+                $this->addPluginToList($plugin['instance'], $pluginMethod, $methodTypes,
+                    DefinitionInterface::LISTENER_AROUND
+                );
+                $this->addPluginToList($plugin['instance'], $pluginMethod, $methodTypes,
+                    DefinitionInterface::LISTENER_BEFORE
+                );
+                $this->addPluginToList($plugin['instance'], $pluginMethod, $methodTypes,
+                    DefinitionInterface::LISTENER_AFTER
+                );
             }
         }
         return $this->pluginList;
     }
-}
 
+    /**
+     * Add plugin to the appropriate type bucket
+     *
+     * @param string $pluginInstance
+     * @param string $pluginMethod
+     * @param int $methodTypes
+     * @param int $typeCode
+     */
+    private function addPluginToList($pluginInstance, $pluginMethod, $methodTypes, $typeCode)
+    {
+        if ($methodTypes & $typeCode) {
+            if (!array_key_exists($pluginInstance, $this->pluginList[$this->pluginTypeMapping[$typeCode]])) {
+                $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance] = [];
+            }
+            $this->pluginList[$this->pluginTypeMapping[$typeCode]][$pluginInstance][] = $pluginMethod ;
+        }
+    }
+}

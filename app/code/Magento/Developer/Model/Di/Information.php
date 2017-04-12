@@ -87,6 +87,10 @@ class Information
             $this->getConstructorParameters($this->getVirtualTypeBase($className)) :
             $this->getConstructorParameters($this->getPreference($className));
 
+        if (!$originalParameters) {
+            return $result;
+        }
+
         foreach ($originalParameters as $parameter) {
             $paramArray = [$parameter[0], $parameter[1], is_array($parameter[3]) ? "<empty array>" : $parameter[3]];
             if (isset($diConfiguration[$parameter[0]])) {
