@@ -10,41 +10,47 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class DiscountCodes
- * Discount codes block
+ * Discount codes block.
  */
 class DiscountCodes extends Form
 {
     /**
-     * Form wrapper selector
+     * Message after coupon applying.
+     *
+     * @var string
+     */
+    protected $couponApplyingMessage = './/div[contains(@class,"messages")]//div[contains(@class,"message")]';
+
+    /**
+     * Form wrapper selector.
      *
      * @var string
      */
     protected $formWrapper = '.content';
 
     /**
-     * Open discount codes form selector
+     * Open discount codes form selector.
      *
      * @var string
      */
     protected $openForm = '.payment-option-title';
 
     /**
-     * Fill discount code input selector
+     * Fill discount code input selector.
      *
      * @var string
      */
     protected $couponCode = '#discount-code';
 
     /**
-     * Click apply button selector
+     * Click apply button selector.
      *
      * @var string
      */
     protected $applyButton = '.action.action-apply';
 
     /**
-     * Enter discount code and click apply button
+     * Enter discount code and click apply button.
      *
      * @param string $code
      * @return void
@@ -54,5 +60,15 @@ class DiscountCodes extends Form
         $this->_rootElement->find($this->openForm, Locator::SELECTOR_CSS)->click();
         $this->_rootElement->find($this->couponCode, Locator::SELECTOR_CSS)->setValue($code);
         $this->_rootElement->find($this->applyButton, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Get message after coupon applying.
+     *
+     * @return string
+     */
+    public function getCouponApplyingMessage()
+    {
+        return $this->_rootElement->find($this->couponApplyingMessage, Locator::SELECTOR_XPATH)->getText();
     }
 }
