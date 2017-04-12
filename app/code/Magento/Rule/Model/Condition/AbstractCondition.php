@@ -4,21 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Abstract Rule condition data model
- *
- * @method string getOperator()
- * @method string getFormName()
- * @method setFormName()
- */
 namespace Magento\Rule\Model\Condition;
 
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
+ * Abstract Rule condition data model
+ *
+ * @method string getOperator()
+ * @method string getFormName()
+ * @method setFormName()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 abstract class AbstractCondition extends \Magento\Framework\DataObject implements ConditionInterface
 {

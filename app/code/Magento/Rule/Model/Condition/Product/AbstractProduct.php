@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Abstract Rule product condition data model
- *
- * @author Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Rule\Model\Condition\Product;
 
 /**
+ * Abstract Rule product condition data model
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
