@@ -13,6 +13,7 @@
         "grunt": "~1.0.1",
         "grunt-autoprefixer": "~3.0.4",
         "grunt-banner": "~0.6.0",
+        "grunt-continue": "~0.1.0",
         "grunt-contrib-clean": "~1.0.0",
         "grunt-contrib-connect": "~1.0.2",
         "grunt-contrib-cssmin": "~2.0.0",
