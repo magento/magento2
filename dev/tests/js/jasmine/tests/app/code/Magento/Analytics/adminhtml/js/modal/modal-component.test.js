@@ -42,7 +42,7 @@ define([
         });
     });
 
-    describe('Magento_Analytics/js/modal/modal-component', function () {
+    xdescribe('Magento_Analytics/js/modal/modal-component', function () {
         describe('"sendPostponeRequest" method', function () {
             it('should send a ajax request', function () {
                 spyOn(jQuery, 'ajax').and.callFake(function () {
