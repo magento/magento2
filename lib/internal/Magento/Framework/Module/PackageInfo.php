@@ -82,7 +82,18 @@ class PackageInfo
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
                 $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
-                    $packageData = \Zend_Json::decode($jsonData[$key]);
+                    try {
+                        $packageData = \Zend_Json::decode($jsonData[$key]);
+                    } catch (\Zend_Json_Exception $e) {
+                        throw new \Zend_Json_Exception(
+                            sprintf(
+                                "%s composer.json error: %s",
+                                $moduleName,
+                                $e->getMessage()
+                            )
+                        );
+                    }
+
                     if (isset($packageData['name'])) {
                         $this->packageModuleMap[$packageData['name']] = $moduleName;
                     }
