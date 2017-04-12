@@ -315,22 +315,21 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            try {
-                $value = $this->serializer->unserialize($optionValue);
-
-                $customOptionUrlParams = $this->getCustomOptionUrlParams() ? $this->getCustomOptionUrlParams() : [
+            $value = $this->serializer->unserialize($optionValue);
+            if ($value === null) {
+                return $optionValue;
+            }
+            $customOptionUrlParams = $this->getCustomOptionUrlParams()
+                ? $this->getCustomOptionUrlParams()
+                : [
                     'id' => $this->getConfigurationItemOption()->getId(),
                     'key' => $value['secret_key']
                 ];
 
-                $value['url'] = ['route' => $this->_customOptionDownloadUrl, 'params' => $customOptionUrlParams];
+            $value['url'] = ['route' => $this->_customOptionDownloadUrl, 'params' => $customOptionUrlParams];
 
-                $this->_formattedOptionValue = $this->_getOptionHtml($value);
-                $this->getConfigurationItemOption()->setValue($this->serializer->serialize($value));
-                return $this->_formattedOptionValue;
-            } catch (\Exception $e) {
-                return $optionValue;
-            }
+            $this->_formattedOptionValue = $this->_getOptionHtml($value);
+            $this->getConfigurationItemOption()->setValue($this->serializer->serialize($value));
         }
         return $this->_formattedOptionValue;
     }
@@ -401,16 +400,15 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getEditableOptionValue($optionValue)
     {
-        try {
-            $value = $this->serializer->unserialize($optionValue);
+        $unserializedValue = $this->serializer->unserialize($optionValue);
+        if ($unserializedValue !== null) {
             return sprintf(
                 '%s [%d]',
-                $this->_escaper->escapeHtml($value['title']),
+                $this->_escaper->escapeHtml($unserializedValue['title']),
                 $this->getConfigurationItemOption()->getId()
             );
-        } catch (\Exception $e) {
-            return $optionValue;
         }
+        return $optionValue;
     }
 
     /**
@@ -430,15 +428,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if (preg_match('/\[([0-9]+)\]/', $optionValue, $matches)) {
             $confItemOptionId = $matches[1];
             $option = $this->_itemOptionFactory->create()->load($confItemOptionId);
-            try {
-                $this->serializer->unserialize($option->getValue());
+            if ($this->serializer->unserialize($option->getValue()) !== null) {
                 return $option->getValue();
-            } catch (\Exception $e) {
-                return null;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -449,12 +443,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function prepareOptionValueForRequest($optionValue)
     {
-        try {
-            $result = $this->serializer->unserialize($optionValue);
-            return $result;
-        } catch (\Exception $e) {
-            return null;
+        $unserializedValue = $this->serializer->unserialize($optionValue);
+        if ($unserializedValue !== null) {
+            return $unserializedValue;
         }
+        return null;
     }
 
     /**
