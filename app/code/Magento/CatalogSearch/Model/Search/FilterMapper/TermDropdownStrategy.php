@@ -18,7 +18,6 @@ use Magento\Framework\App\ObjectManager;
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TermDropdownStrategy implements FilterStrategyInterface
@@ -51,6 +50,11 @@ class TermDropdownStrategy implements FilterStrategyInterface
     /**
      * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
+    private $frontendResource;
+
+    /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
     private $indexerStockFrontendResource;
 
     /**
@@ -59,7 +63,9 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param EavConfig $eavConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
      * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -67,6 +73,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
         EavConfig $eavConfig,
         ScopeConfigInterface $scopeConfig,
         AliasResolver $aliasResolver,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->storeManager = $storeManager;
@@ -74,6 +81,8 @@ class TermDropdownStrategy implements FilterStrategyInterface
         $this->eavConfig = $eavConfig;
         $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
+        $this->frontendResource = $frontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource::class);
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
@@ -95,7 +104,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
             $this->storeManager->getWebsite()->getId()
         );
         $select->joinLeft(
-            [$alias => $this->resourceConnection->getTableName('catalog_product_index_eav')],
+            [$alias => $this->frontendResource->getMainTable()],
             $joinCondition,
             []
         );

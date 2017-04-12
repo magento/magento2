@@ -329,7 +329,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $totalsCollector;
 
     /**
-     * @var \\Magento\Quote\Model\Quote\TotalsReader
+     * @var \Magento\Quote\Model\Quote\TotalsReader
      */
     protected $totalsReader;
 
