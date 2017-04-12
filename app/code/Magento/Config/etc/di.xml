@@ -86,6 +86,29 @@
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
         </arguments>
     </type>
+    <virtualType name="systemSnapshot" type="Magento\Config\App\Config\Type\System">
+        <arguments>
+            <argument name="source" xsi:type="object">systemConfigSnapshotSourceAggregated</argument>
+            <argument name="configType" xsi:type="string">system_snapshot</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="configSnapshot" type="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="system" xsi:type="object">systemSnapshot</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="snapshotValueFactory" type="Magento\Config\Model\PreparedValueFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">configSnapshot</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\Model\Config\Importer">
+        <arguments>
+            <argument name="valueBuilder" xsi:type="object">snapshotValueFactory</argument>
+        </arguments>
+    </type>
     <virtualType name="modulesDataProviderProxy" type="Magento\Framework\App\Config\InitialConfigSource\Proxy">
         <arguments>
             <argument name="instanceName" xsi:type="string">modulesDataProvider</argument>
@@ -141,6 +164,16 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="systemConfigSnapshotSourceAggregated" type="systemConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\InitialSnapshotConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="systemConfigInitialDataProvider" type="Magento\Framework\App\Config\InitialConfigSource">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
@@ -161,20 +194,43 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="appDumpConfigSystemSource" type="appDumpSystemSource">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="default" xsi:type="const">Magento\Config\App\Config\Source\DumpConfigSourceAggregated::RULE_TYPE_INCLUDE</item>
+                <item name="environment" xsi:type="const">Magento\Config\App\Config\Source\DumpConfigSourceAggregated::RULE_TYPE_EXCLUDE</item>
+                <item name="sensitive" xsi:type="const">Magento\Config\App\Config\Source\DumpConfigSourceAggregated::RULE_TYPE_EXCLUDE</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="appDumpEnvSystemSource" type="appDumpSystemSource">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="default" xsi:type="const">Magento\Config\App\Config\Source\DumpConfigSourceAggregated::RULE_TYPE_EXCLUDE</item>
+                <item name="environment" xsi:type="const">Magento\Config\App\Config\Source\DumpConfigSourceAggregated::RULE_TYPE_INCLUDE</item>
+                <item name="sensitive" xsi:type="const">Magento\Config\App\Config\Source\DumpConfigSourceAggregated::RULE_TYPE_INCLUDE</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
         <arguments>
             <argument name="sources" xsi:type="array">
                 <item name="system" xsi:type="array">
-                    <item name="source" xsi:type="object">appDumpSystemSource</item>
+                    <item name="source" xsi:type="object">appDumpConfigSystemSource</item>
                     <item name="namespace" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</item>
                     <item name="comment" xsi:type="object">Magento\Config\Model\Config\Export\Comment</item>
+                </item>
+                <item name="system_env" xsi:type="array">
+                    <item name="source" xsi:type="object">appDumpEnvSystemSource</item>
+                    <item name="namespace" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</item>
+                    <item name="pool" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_ENV</item>
                 </item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Config\Model\Config\Export\Comment">
         <arguments>
-            <argument name="source" xsi:type="object">appDumpSystemSource</argument>
+            <argument name="source" xsi:type="object">appDumpConfigSystemSource</argument>
         </arguments>
     </type>
     <type name="Magento\Config\Model\Placeholder\PlaceholderFactory">
@@ -246,6 +302,7 @@
                 <item name="web/unsecure/base_link_url" xsi:type="string">1</item>
                 <item name="web/unsecure/base_url" xsi:type="string">1</item>
             </argument>
+            <argument name="excludeList" xsi:type="object">Magento\Config\Model\Config\Export\ExcludeList</argument>
         </arguments>
     </type>
 </config>

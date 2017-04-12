@@ -36,7 +36,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="([a-zA-Z_&#x7f;-&#xff;][a-zA-Z0-9_&#x7f;-&#xff;]*)(\\[a-zA-Z_&#x7f;-&#xff;][a-zA-Z0-9_&#x7f;-&#xff;]*)*"/>
+            <xs:pattern value="(\\?[a-zA-Z_&#x7f;-&#xff;][a-zA-Z0-9_&#x7f;-&#xff;]*)(\\[a-zA-Z_&#x7f;-&#xff;][a-zA-Z0-9_&#x7f;-&#xff;]*)*"/>
         </xs:restriction>
     </xs:simpleType>
 
