@@ -32,16 +32,6 @@ interface BlockRepositoryInterface
     public function getById($blockId);
 
     /**
-     * Load Block data by given Block identifier
-     *
-     * @param string $blockIdentifier
-     * @param int $storeId
-     * @return \Magento\Cms\Api\Data\BlockInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function getByIdentifier($blockIdentifier, $storeId);
-
-    /**
      * Retrieve blocks matching the specified criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
