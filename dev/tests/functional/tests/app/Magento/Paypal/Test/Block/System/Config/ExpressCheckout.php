@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,8 +20,6 @@ class ExpressCheckout extends Block
      * @var array
      */
     private $fields = [
-        'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_alternative_payment_methods_express_' .
-            'checkout_us_express_checkout_required_express_checkout_required_express_checkout_business_account',
         'API Username' => '#payment_us_paypal_alternative_payment_methods_express_checkout_us_express_checkout_' .
             'required_express_checkout_required_express_checkout_api_username',
         'API Password' => '#payment_us_paypal_alternative_payment_methods_express_checkout_us_express_checkout_' .
@@ -72,8 +70,6 @@ class ExpressCheckout extends Block
      */
     public function specifyCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])
-            ->setValue('test@test.com');
         $this->_rootElement->find($this->fields['API Username'])->setValue('1');
         $this->_rootElement->find($this->fields['API Password'])->setValue('1');
         $this->_rootElement->find($this->fields['API Signature'])->setValue('1');
@@ -86,7 +82,6 @@ class ExpressCheckout extends Block
      */
     public function clearCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])->setValue('');
         $this->_rootElement->find($this->fields['API Username'])->setValue('');
         $this->_rootElement->find($this->fields['API Password'])->setValue('');
         $this->_rootElement->find($this->fields['API Signature'])->setValue('');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\ResourceModel;
@@ -158,7 +158,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
-
         } else {
             $selectMock->expects($this->once())->method('insertFromSelect')->with(
                 $destTable,

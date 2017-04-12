@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,8 +42,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->notationResolver = $this->getMock(
             \Magento\Framework\View\Asset\NotationResolver\Module::class, [], [], '', false
         );
+        $contextMock = $this->getMockForAbstractClass(
+            \Magento\Framework\View\Asset\ContextInterface::class, [], '', false
+        );
+        $contextMock->expects($this->any())->method('getPath')->willReturn('');
         $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
+        $this->asset->expects($this->any())->method('getContext')->willReturn($contextMock);
 
         $this->relatedFileGeneratorMock = $this->getMockBuilder(RelatedGenerator::class)
             ->disableOriginalConstructor()
@@ -63,7 +68,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testProcess($originalContent, $foundPath, $resolvedPath, $expectedContent)
     {
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'less', 'path');
-        $this->notationResolver->expects($this->once())
+        $invoke =  $this->once();
+        if (preg_match('/^(http:|https:|\/+)/', $foundPath)) {
+            $invoke = $this->never();
+        }
+        $this->notationResolver->expects($invoke)
             ->method('convertModuleNotationToPath')
             ->with($this->asset, $foundPath)
             ->will($this->returnValue($resolvedPath));
@@ -78,50 +87,70 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            'non-modular notation' => [
-                '@import (type) "some/file.css" media;',
-                'some/file.css',
-                'some/file.css',
-                "@import (type) 'some/file.css' media;",
+            'non-modular notation, no extension' => [
+                '@import (type) \'some/file\' media;',
+                'some/file.less',
+                'some/file.less',
+                '@import (type) \'some/file.less\' media;',
             ],
             'modular, with extension' => [
                 '@import (type) "Magento_Module::something.css" media;',
                 'Magento_Module::something.css',
                 'Magento_Module/something.css',
-                "@import (type) 'Magento_Module/something.css' media;",
+                '@import (type) "Magento_Module/something.css" media;',
+            ],
+            'remote file import url()' => [
+                '@import (type) url("http://example.com/css/some.css") media;',
+                'http://example.com/css/some.css',
+                null,
+                '@import (type) url("http://example.com/css/some.css") media;',
+            ],
+            'invalid path' => [
+                '@import (type) url("/example.com/css/some.css") media;',
+                '/example.com/css/some.css',
+                null,
+                '@import (type) url("/example.com/css/some.css") media;',
             ],
             'modular, no extension' => [
                 '@import (type) "Magento_Module::something" media;',
                 'Magento_Module::something.less',
                 'Magento_Module/something.less',
-                "@import (type) 'Magento_Module/something.less' media;",
+                '@import (type) "Magento_Module/something.less" media;',
             ],
             'no type' => [
                 '@import "Magento_Module::something.css" media;',
                 'Magento_Module::something.css',
                 'Magento_Module/something.css',
-                "@import 'Magento_Module/something.css' media;",
+                '@import "Magento_Module/something.css" media;',
             ],
             'no media' => [
                 '@import (type) "Magento_Module::something.css";',
                 'Magento_Module::something.css',
                 'Magento_Module/something.css',
-                "@import (type) 'Magento_Module/something.css';",
+                '@import (type) "Magento_Module/something.css";',
             ],
-            'with single line comment' => [
-                '@import (type) "some/file.css" media;' . PHP_EOL
-                    . '// @import (type) "unnecessary/file.css" media;',
-                'some/file.css',
-                'some/file.css',
-                "@import (type) 'some/file.css' media;" . PHP_EOL,
+            'with single line comment, replace' => [
+                '@import (type) "some/file" media;' . PHP_EOL
+                . '// @import (type) "unnecessary/file.css" media;',
+                'some/file.less',
+                'some/file.less',
+                '@import (type) "some/file.less" media;' . PHP_EOL,
+            ],
+            'with single line comment, no replace' => [
+                '@import (type) "some/file.less" media;' . PHP_EOL
+                . '// @import (type) "unnecessary/file" media;',
+                'some/file.less',
+                'some/file.less',
+                '@import (type) "some/file.less" media;' . PHP_EOL
+                . '// @import (type) "unnecessary/file" media;',
             ],
             'with multi line comment' => [
-                '@import (type) "some/file.css" media;' . PHP_EOL
+                '@import (type) "some/file" media;' . PHP_EOL
                     . '/* @import (type) "unnecessary/file.css" media;' . PHP_EOL
                     . '@import (type) "another/unnecessary/file.css" media; */',
-                'some/file.css',
-                'some/file.css',
-                "@import (type) 'some/file.css' media;" . PHP_EOL,
+                'some/file.less',
+                'some/file.less',
+                '@import (type) "some/file.less" media;' . PHP_EOL,
             ],
         ];
     }

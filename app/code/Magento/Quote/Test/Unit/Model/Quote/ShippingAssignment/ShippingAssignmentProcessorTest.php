@@ -1,111 +1,191 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\ShippingAssignment;
 
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
-use Magento\Quote\Api\Data\ShippingInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\ShippingAssignmentFactory;
-use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Quote\Model\Quote\Item\CartItemPersister;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Api\Data\ShippingInterface;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class ShippingAssignmentProcessorTest
- */
 class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ShippingAssignmentFactory|MockObject
-     */
-    private $shippingAssignmentFactory;
-
-    /**
-     * @var ShippingProcessor|MockObject
-     */
-    private $shippingProcessor;
-
-    /**
-     * @var CartItemPersister|MockObject
-     */
-    private $cartItemPersister;
-
     /**
      * @var ShippingAssignmentProcessor
      */
     private $shippingAssignmentProcessor;
 
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @var ShippingAssignmentFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingAssignmentFactoryMock;
+
+    /**
+     * @var ShippingProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingProcessorMock;
+
+    /**
+     * @var CartItemPersister|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cartItemPersisterMock;
+
+    /**
+     * @var AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $addressRepositoryMock;
+
+    /**
+     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteMock;
+
+    /**
+     * @var ShippingAssignmentInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingAssignmentMock;
+
+    /**
+     * @var QuoteAddress|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingAddressMock;
+
+    /**
+     * @var ShippingInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingMock;
+
     protected function setUp()
     {
-        $this->shippingAssignmentFactory = $this->getMockBuilder(ShippingAssignmentFactory::class)
+        $this->shippingAssignmentFactoryMock = $this->getMockBuilder(ShippingAssignmentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
-        $this->shippingProcessor = $this->getMockBuilder(ShippingProcessor::class)
+        $this->shippingProcessorMock = $this->getMockBuilder(ShippingProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->cartItemPersisterMock = $this->getMockBuilder(CartItemPersister::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingAssignmentMock = $this->getMockBuilder(ShippingAssignmentInterface::class)
+            ->getMockForAbstractClass();
+        $this->shippingAddressMock = $this->getMockBuilder(QuoteAddress::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingMock = $this->getMockBuilder(ShippingInterface::class)
+            ->getMockForAbstractClass();
 
-        $this->cartItemPersister = $this->getMockBuilder(CartItemPersister::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock->expects(static::any())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAssignmentMock->expects(static::any())
+            ->method('getShipping')
+            ->willReturn($this->shippingMock);
+        $this->shippingMock->expects(static::any())
+            ->method('getAddress')
+            ->willReturn($this->shippingAddressMock);
 
-        $this->shippingAssignmentProcessor = new ShippingAssignmentProcessor(
-            $this->shippingAssignmentFactory,
-            $this->shippingProcessor,
-            $this->cartItemPersister
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->shippingAssignmentProcessor = $this->objectManagerHelper->getObject(
+            ShippingAssignmentProcessor::class,
+            [
+                'shippingAssignmentFactory' => $this->shippingAssignmentFactoryMock,
+                'shippingProcessor' => $this->shippingProcessorMock,
+                'cartItemPersister' => $this->cartItemPersisterMock,
+                'addressRepository' => $this->addressRepositoryMock
+            ]
         );
     }
 
-    /**
-     * Test saving shipping assignments with deleted cart items
-     *
-     * @covers \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor::save
-     */
     public function testSaveWithDeletedCartItems()
     {
-        $shippingAssignment = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
-        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
-        $quoteId = 1;
+        $quoteItemId = 1;
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteItem->expects(static::once())
-            ->method('isDeleted')
-            ->willReturn(true);
-        $quoteItem->expects(static::once())
-            ->method('getItemId')
-            ->willReturn($quoteId);
-        
-        $quote->expects(static::once())
-            ->method('getItemById')
-            ->with($quoteId)
-            ->willReturn(null);
-
-        $shippingAssignment->expects(static::once())
+        $this->shippingAssignmentMock->expects(static::once())
             ->method('getItems')
-            ->willReturn([$quoteItem]);
-        $shippingAssignment->expects(static::once())
-            ->method('getShipping')
-            ->willReturn($shipping);
-
-        $this->cartItemPersister->expects(static::never())
+            ->willReturn([$this->createQuoteItemMock($quoteItemId, true)]);
+        $this->quoteMock->expects(static::atLeastOnce())
+            ->method('getItemById')
+            ->with($quoteItemId)
+            ->willReturn(null);
+        $this->cartItemPersisterMock->expects(static::never())
             ->method('save');
-
-        $this->shippingProcessor->expects(static::once())
+        $this->shippingAddressMock->expects(static::atLeastOnce())
+            ->method('getCustomerAddressId')
+            ->willReturn(null);
+        $this->addressRepositoryMock->expects(static::never())
+            ->method('getById');
+        $this->shippingProcessorMock->expects(static::once())
             ->method('save')
-            ->with($shipping, $quote);
+            ->with($this->shippingMock, $this->quoteMock);
 
-        $this->shippingAssignmentProcessor->save(
-            $quote,
-            $shippingAssignment
-        );
+        $this->shippingAssignmentProcessor->save($this->quoteMock, $this->shippingAssignmentMock);
+    }
+
+    public function testSaveWithNotExistingCustomerAddress()
+    {
+        $customerAddressId = 11;
+
+        $this->shippingAssignmentMock->expects(static::atLeastOnce())
+            ->method('getItems')
+            ->willReturn([]);
+        $this->shippingAddressMock->expects(static::atLeastOnce())
+            ->method('getCustomerAddressId')
+            ->willReturn($customerAddressId);
+        $this->addressRepositoryMock->expects(static::once())
+            ->method('getById')
+            ->with($customerAddressId)
+            ->willThrowException(new NoSuchEntityException());
+        $this->shippingAddressMock->expects(static::once())
+            ->method('setCustomerAddressId')
+            ->with(null)
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingProcessorMock->expects(static::once())
+            ->method('save')
+            ->with($this->shippingMock, $this->quoteMock);
+
+        $this->shippingAssignmentProcessor->save($this->quoteMock, $this->shippingAssignmentMock);
+    }
+
+    /**
+     * Create quote item mock
+     *
+     * @param int|string $id
+     * @param bool $isDeleted
+     * @return QuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createQuoteItemMock($id, $isDeleted)
+    {
+        $quoteItemMock = $this->getMockBuilder(QuoteItem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $quoteItemMock->expects(static::any())
+            ->method('getItemId')
+            ->willReturn($id);
+        $quoteItemMock->expects(static::any())
+            ->method('isDeleted')
+            ->willReturn($isDeleted);
+
+        return $quoteItemMock;
     }
 }

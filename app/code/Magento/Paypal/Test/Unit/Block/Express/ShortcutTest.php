@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
 use Magento\Paypal\Block\Express\Shortcut;
-use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\ConfigFactory;
 
 class ShortcutTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,6 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $paypalConfigFactoryMock->expects(self::once())
             ->method('create')

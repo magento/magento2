@@ -1,24 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 <div class="page-actions">
     <div class="page-actions-inner">
         <div class="page-actions-buttons">
-            <form
-                action="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/refreshStatistics'); ?>"
-                method="post">
+            <?php echo $block->getChildHtml(); ?>
+
+            <form class="action-element"
+                  action="<?php echo $block->escapeUrl($block->getUrl('*/*/refreshStatistics')); ?>"
+                  method="post">
                 <input
                     name="form_key"
                     type="hidden"
-                    value="<?php /* @escapeNotVerified */ echo $block->getFormKey(); ?>"/>
+                    value="<?php echo $block->escapeHtmlAttr($block->getFormKey()); ?>"/>
                 <button
                     class="action-primary"
                     type="submit"
-                    title="Refresh Data">
-                    <?php /* @escapeNotVerified */ echo __('Reload Data') ?>
+                    title="<?php echo $block->escapeHtmlAttr(__('Reload Data')) ?>">
+                    <?php echo $block->escapeHtml(__('Reload Data')) ?>
                 </button>
             </form>
         </div>

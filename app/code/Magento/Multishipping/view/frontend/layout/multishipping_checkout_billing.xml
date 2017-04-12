@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,7 +14,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Multishipping\Block\Checkout\Billing" name="checkout_billing" template="checkout/billing.phtml" cacheable="false">
+            <block class="Magento\Multishipping\Block\Checkout\Billing" name="checkout_billing" template="Magento_Multishipping::checkout/billing.phtml" cacheable="false">
                 <container name="payment_methods_before" label="Payment Methods Before"/>
                 <container name="payment_methods_after" label="Payment Methods After"/>
             </block>

@@ -1,36 +1,46 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<config>
+<config xmlns:xi="http://www.w3.org/2001/XInclude">
     <profile>
+        <di>di.xml</di>
         <websites>1</websites>
-        <!-- Number of websites to generate -->
         <store_groups>1</store_groups>
-        <!--Number of stores-->
         <store_views>1</store_views>
-        <!-- Number of store views -->
-        <simple_products>800</simple_products>
-        <!-- Simple products count -->
-        <configurable_products>50</configurable_products>
-        <!--Configurable products count (each configurable has 3 simple products as options, that are not displayed individually in catalog) -->
+        <simple_products>2</simple_products>
+        <bundle_products>2</bundle_products>
+        <bundle_products_options>2</bundle_products_options>
+        <bundle_products_variation>2</bundle_products_variation>
+        <product-images>
+            <images-count>3</images-count>
+            <images-per-product>1</images-per-product>
+        </product-images>
+        <configurable_products>
+            <config>
+                <attributeSet>Default</attributeSet>
+                <sku>Configurable Product - Default %s</sku>
+                <products>2</products>
+            </config>
+            <config>
+                <attributeSet>Attribute Set 1</attributeSet>
+                <sku>Configurable Product - Color-Size %s</sku>
+                <products>2</products>
+            </config>
+            <config>
+                <attributes>2</attributes>
+                <options>2</options>
+                <sku>Configurable Product 2-2 %s</sku>
+                <products>2</products>
+            </config>
+        </configurable_products>
+        <configurable_products_variation>3</configurable_products_variation>
         <categories>30</categories>
-        <!-- Number of categories to generate -->
         <categories_nesting_level>3</categories_nesting_level>
-        <!-- Nesting level for categories -->
         <catalog_price_rules>10</catalog_price_rules>
-        <!-- Number os catalog price rules -->
-        <cart_price_rules>10</cart_price_rules>
-        <!-- Number of cart price rules -->
-        <cart_price_rules_floor>2</cart_price_rules_floor>
-        <!-- The price rule condition: minimum products amount in shopping cart for price rule to be applied -->
-        <customers>20</customers>
-        <!-- Number of customers to generate -->
-        <orders>80</orders>
-        <!-- Orders count -->
         <configs> <!-- Config variables and values for change -->
             <config>
                 <path>admin/security/use_form_key</path>
@@ -115,5 +125,6 @@
                 <set_scheduled>false</set_scheduled>
             </indexer>
         </indexers>
+        <xi:include href="./attributeSets.xml"/>
     </profile>
 </config>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
     </head>
     <body>
         <referenceContainer name="js">
-            <block class="Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector" template="product/configurable/affected-attribute-set-selector/js.phtml"/>
+            <block class="Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector" template="Magento_ConfigurableProduct::product/configurable/affected-attribute-set-selector/js.phtml"/>
             <block class="Magento\Framework\View\Element\Template" template="Magento_ConfigurableProduct::product/configurable/stock/disabler.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">

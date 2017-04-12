@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry" />
+    <preference for="Magento\Framework\Validator\ValidatorInterface" type="Magento\Framework\Validator\AllowedProtocols" />
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
         <arguments>
             <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
@@ -44,5 +45,12 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Gallery">
         <plugin name="external_video_media_resource_backend" type="Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend" />
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="catalog/product_video/youtube_api_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
     </type>
 </config>

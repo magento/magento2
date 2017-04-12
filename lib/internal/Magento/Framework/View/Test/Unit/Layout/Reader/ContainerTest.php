@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -102,6 +102,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->with($contextMock, $elementCurrent)
             ->willReturnSelf();
 
+        if ($elementCurrent->getAttribute('remove') == 'false') {
+            $scheduledStructureMock->expects($this->once())
+                ->method('unsetElementFromListToRemove')
+                ->with($elementCurrent->getAttribute('name'));
+        }
+        
         $this->container->interpret($contextMock, $elementCurrent);
     }
 

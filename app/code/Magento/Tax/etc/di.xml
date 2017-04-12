@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,7 +43,7 @@
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface" type="Magento\Tax\Model\Sales\Order\Tax" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsInterface" type="Magento\Tax\Model\Sales\Order\Details" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface" type="Magento\Sales\Model\Order\Tax\Item" />
-    <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="\Magento\Tax\Model\TaxClass\Management" />
+    <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="Magento\Tax\Model\TaxClass\Management" />
     <preference for="Magento\Tax\Api\TaxClassRepositoryInterface" type="Magento\Tax\Model\TaxClass\Repository" />
     <preference for="Magento\Tax\Api\Data\TaxClassInterface" type="Magento\Tax\Model\ClassModel" />
     <preference for="Magento\Tax\Api\Data\TaxRuleInterface" type="Magento\Tax\Model\Calculation\Rule" />
@@ -54,7 +54,7 @@
     <preference for="Magento\Tax\Api\Data\TaxRateInterface" type="Magento\Tax\Model\Calculation\Rate" />
     <preference for="Magento\Tax\Api\Data\QuoteDetailsInterface" type="Magento\Tax\Model\Sales\Quote\QuoteDetails" />
     <preference for="Magento\Tax\Api\Data\QuoteDetailsItemInterface" type="Magento\Tax\Model\Sales\Quote\ItemDetails" />
-    <preference for="Magento\Tax\Api\Data\TaxClassKeyInterface" type="\Magento\Tax\Model\TaxClass\Key" />
+    <preference for="Magento\Tax\Api\Data\TaxClassKeyInterface" type="Magento\Tax\Model\TaxClass\Key" />
     <preference for="Magento\Tax\Api\Data\AppliedTaxInterface" type="Magento\Tax\Model\TaxDetails\AppliedTax" />
     <preference for="Magento\Tax\Api\Data\AppliedTaxRateInterface" type="Magento\Tax\Model\TaxDetails\AppliedTaxRate" />
     <preference for="Magento\Tax\Api\Data\TaxDetailsInterface" type="Magento\Tax\Model\TaxDetails\TaxDetails" />

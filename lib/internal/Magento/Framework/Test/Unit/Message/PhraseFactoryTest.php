@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit\Message;
 
-use Magento\Framework\Message\PhraseFactory;
 use Magento\Framework\Message\Error;
+use Magento\Framework\Message\PhraseFactory;
 
 class PhraseFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,5 +52,4 @@ class PhraseFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-
 }

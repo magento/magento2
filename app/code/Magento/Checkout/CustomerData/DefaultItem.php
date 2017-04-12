@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -70,6 +70,7 @@ class DefaultItem extends AbstractItem
             'item_id' => $this->item->getId(),
             'configure_url' => $this->getConfigureUrl(),
             'is_visible_in_site_visibility' => $this->item->getProduct()->isVisibleInSiteVisibility(),
+            'product_id' => $this->item->getProduct()->getId(),
             'product_name' => $this->item->getProduct()->getName(),
             'product_sku' => $this->item->getProduct()->getSku(),
             'product_url' => $this->getProductUrl(),

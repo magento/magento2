@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
@@ -23,7 +23,9 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $data = $object->getData($attributeCode);
         if (is_array($data)) {
-            $data = array_filter($data);
+            $data = array_filter($data, function ($value) {
+                return $value === '0' || !empty($value);
+            });
             $object->setData($attributeCode, implode(',', $data));
         }
 
@@ -42,6 +44,8 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         $data = $object->getData($attributeCode);
         if (is_array($data)) {
             $object->setData($attributeCode, implode(',', array_filter($data)));
+        } elseif (empty($data)) {
+            $object->setData($attributeCode, null);
         }
         return parent::validate($object);
     }

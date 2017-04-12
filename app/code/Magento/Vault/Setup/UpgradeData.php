@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Setup;
@@ -23,12 +23,14 @@ class UpgradeData implements UpgradeDataInterface
     {
         $setup->startSetup();
 
+        // data update for Vault module < 2.0.1
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $connection = $setup->getConnection();
-            $connection->update($setup->getTable(InstallSchema::PAYMENT_TOKEN_TABLE), [
+            // update sets credit card as default token type
+            $setup->getConnection()->update($setup->getTable(InstallSchema::PAYMENT_TOKEN_TABLE), [
                 PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD
             ], PaymentTokenInterface::TYPE . ' = ""');
         }
+
         $setup->endSetup();
     }
 }

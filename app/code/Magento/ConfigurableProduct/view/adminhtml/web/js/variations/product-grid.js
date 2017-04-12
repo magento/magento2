@@ -1,14 +1,16 @@
 // jscs:disable requireDotNotation
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'uiComponent',
     'jquery',
     'Magento_Ui/js/core/app',
     'underscore',
-    'notification'
+    'notification',
+    'mage/translate'
 ], function (Component, $, bootstrap, _) {
     'use strict';
 
@@ -35,6 +37,7 @@ define([
 
         /**
          * Initialize
+         *
          * @param {Array} options
          */
         initialize: function (options) {
@@ -46,10 +49,7 @@ define([
                     {
                         text: $.mage.__('Cancel'),
 
-                        /**
-                         * Close modal
-                         * @event
-                         */
+                        /** Close modal */
                         click: function () {
                             this.closeModal();
                         }
@@ -200,6 +200,10 @@ define([
             return this.button(variations.length);
         },
 
+        /**
+         * @param {Array} variations
+         * @private
+         */
         _switchProductType: function (variations) {
             $(document).trigger('changeConfigurableTypeProduct', variations.length);
         },
@@ -221,9 +225,7 @@ define([
 
             if (data.items.length) {
                 this.productsModal.notification('add', {
-                    message: $.mage.__(
-                        'Choose a new product to delete and replace the current product configuration.'
-                    ),
+                    message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
                     messageContainer: this.gridSelector
                 });
             } else {
@@ -265,7 +267,7 @@ define([
          * @private
          */
         _handleManualGridOpening: function (data) {
-            if (data.items.length && this.callbackName == 'appendProducts') {
+            if (data.items.length && this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
                 this.productsColumns().elems().each(function (rowElement) {
                     rowElement.disableAction = true;
                 });
@@ -294,7 +296,7 @@ define([
                     rowsForDisable = _.keys(_.pick(
                         variationKeyMap,
                         function (variationKey) {
-                            return configurableVariationKeys.indexOf(variationKey) != -1;
+                            return configurableVariationKeys.indexOf(variationKey) !== -1;
                         }
                     ));
 
@@ -306,11 +308,13 @@ define([
          * @private
          */
         _handleManualGridSelect: function (selected) {
-            if (this.callbackName == 'appendProducts') {
-                var selectedRows = _.filter(this.productsProvider().data.items, function (row) {
-                        return selected.indexOf(row['entity_id']) != -1;
-                    }),
-                    selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
+            var selectedRows, selectedVariationKeys;
+
+            if (this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
+                selectedRows = _.filter(this.productsProvider().data.items, function (row) {
+                    return selected.indexOf(row['entity_id']) !== -1;
+                });
+                selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
                 this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);
             }
         },
@@ -318,7 +322,7 @@ define([
         /**
          * Get variation key map used in manual grid.
          *
-         * @param items
+         * @param {Object} items
          * @returns {Array} [{entity_id: variation-key}, ...]
          * @private
          */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -16,28 +16,144 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $escaper = null;
 
     /**
      * @var \Magento\Framework\ZendEscaper
      */
     private $zendEscaper;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
-        $this->_escaper = new Escaper();
+        $this->escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
+        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
+    }
+
+    /**
+     * Convert a unicode codepoint to a literal UTF-8 character
+     *
+     * @param int $codepoint Unicode codepoint in hex notation
+     * @return string UTF-8 literal string
+     */
+    protected function codepointToUtf8($codepoint)
+    {
+        if ($codepoint < 0x80) {
+            return chr($codepoint);
+        }
+        if ($codepoint < 0x800) {
+            return chr($codepoint >> 6 & 0x3f | 0xc0)
+                . chr($codepoint & 0x3f | 0x80);
+        }
+        if ($codepoint < 0x10000) {
+            return chr($codepoint >> 12 & 0x0f | 0xe0)
+                . chr($codepoint >> 6 & 0x3f | 0x80)
+                . chr($codepoint & 0x3f | 0x80);
+        }
+        if ($codepoint < 0x110000) {
+            return chr($codepoint >> 18 & 0x07 | 0xf0)
+                . chr($codepoint >> 12 & 0x3f | 0x80)
+                . chr($codepoint >> 6 & 0x3f | 0x80)
+                . chr($codepoint & 0x3f | 0x80);
+        }
+        throw new \Exception('Codepoint requested outside of unicode range');
+    }
+
+    public function testEscapeJsEscapesOwaspRecommendedRanges()
+    {
+        // Exceptions to escaping ranges
+        $immune = [',', '.', '_'];
+        for ($chr = 0; $chr < 0xFF; $chr++) {
+            if ($chr >= 0x30 && $chr <= 0x39
+                || $chr >= 0x41 && $chr <= 0x5A
+                || $chr >= 0x61 && $chr <= 0x7A
+            ) {
+                $literal = $this->codepointToUtf8($chr);
+                $this->assertEquals($literal, $this->escaper->escapeJs($literal));
+            } else {
+                $literal = $this->codepointToUtf8($chr);
+                if (in_array($literal, $immune)) {
+                    $this->assertEquals($literal, $this->escaper->escapeJs($literal));
+                } else {
+                    $this->assertNotEquals(
+                        $literal,
+                        $this->escaper->escapeJs($literal),
+                        $literal . ' should be escaped!'
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $data
+     * @param string $expected
+     * @dataProvider escapeJsDataProvider
+     */
+    public function testEscapeJs($data, $expected)
+    {
+        $this->assertEquals($expected, $this->escaper->escapeJs($data));
+    }
+
+    public function escapeJsDataProvider()
+    {
+        return [
+            'zero length string' => ['', ''],
+            'only digits' => ['123', '123'],
+            '<' => ['<', '\u003C'],
+            '>' => ['>', '\\u003E'],
+            '\'' => ['\'', '\\u0027'],
+            '"' => ['"', '\\u0022'],
+            '&' => ['&', '\\u0026'],
+            'Characters beyond ASCII value 255 to unicode escape' => ['Ā', '\\u0100'],
+            'Characters beyond Unicode BMP to unicode escape' => ["\xF0\x90\x80\x80", '\\uD800DC00'],
+            /* Immune chars excluded */
+            ',' => [',', ','],
+            '.' => ['.', '.'],
+            '_' => ['_', '_'],
+            /* Basic alnums exluded */
+            'a' => ['a', 'a'],
+            'A' => ['A', 'A'],
+            'z' => ['z', 'z'],
+            'Z' => ['Z', 'Z'],
+            '0' => ['0', '0'],
+            '9' => ['9', '9'],
+            /* Basic control characters and null */
+            "\r" => ["\r", '\\u000D'],
+            "\n" => ["\n", '\\u000A'],
+            "\t" => ["\t", '\\u0009'],
+            "\0" => ["\0", '\\u0000'],
+            'Encode spaces for quoteless attribute protection' => [' ', '\\u0020'],
+        ];
     }
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
      * @dataProvider escapeHtmlDataProvider
      */
-    public function testEscapeHtml($data, $expected, $allowedTags = null)
+    public function testEscapeHtml($data, $expected, $allowedTags = [])
     {
-        $actual = $this->_escaper->escapeHtml($data, $allowedTags);
+        $actual = $this->escaper->escapeHtml($data, $allowedTags);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::escapeHtml
+     * @dataProvider escapeHtmlInvalidDataProvider
+     */
+    public function testEscapeHtmlWithInvalidData($data, $expected, $allowedTags = [])
+    {
+        $this->loggerMock->expects($this->once())
+            ->method('critical');
+        $actual = $this->escaper->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }
 
@@ -47,22 +163,95 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     public function escapeHtmlDataProvider()
     {
         return [
-            'array data' => [
+            'array -> [text with no tags, text with no allowed tags]' => [
                 'data' => ['one', '<two>three</two>'],
                 'expected' => ['one', '&lt;two&gt;three&lt;/two&gt;'],
-                null,
             ],
-            'string data conversion' => [
-                'data' => '<two>three</two>',
-                'expected' => '&lt;two&gt;three&lt;/two&gt;',
-                null,
+            'text with special characters' => [
+                'data' => '&<>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
+                'expected' => '&amp;&lt;&gt;&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;'
             ],
-            'string data no conversion' => ['data' => 'one', 'expected' => 'one'],
-            'string data with allowed tags' => [
-                'data' => '<span><b>some text in tags</b></span>',
-                'expected' => '<span><b>some text in tags</b></span>',
+            'text with multiple allowed tags, includes self closing tag' => [
+                'data' => '<span>some text in tags<br /></span>',
+                'expected' => '<span>some text in tags<br></span>',
+                'allowedTags' => ['span', 'br'],
+            ],
+            'text with multiple allowed tags and allowed attribute in double quotes' => [
+                'data' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
                 'allowedTags' => ['span', 'b'],
-            ]
+            ],
+            'text with multiple allowed tags and allowed attribute in single quotes' => [
+                'data' => 'Only <span id=\'sku_max_allowed\'><b>2</b></span> in stock',
+                'expected' => 'Only <span id="sku_max_allowed"><b>2</b></span> in stock',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with multiple allowed tags with allowed attribute' => [
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">'
+                    . 'create an account</a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign in</a> or '
+                    . '<a href="%2">create an account</a>',
+                'allowedTags' => ['a'],
+            ],
+            'text with not allowed attribute in single quotes' => [
+                'data' => 'Only <span type=\'1\'><b>2</b></span> in stock',
+                'expected' => 'Only <span><b>2</b></span> in stock',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with allowed and not allowed tags' => [
+                'data' => 'Only registered users can write reviews. Please <a href="%1">Sign in<span>three</span></a> '
+                    . 'or <a href="%2"><span id="action">create an account</span></a>',
+                'expected' => 'Only registered users can write reviews. Please <a href="%1">Sign inthree</a> or '
+                    . '<a href="%2">create an account</a>',
+                'allowedTags' => ['a'],
+            ],
+            'text with allowed and not allowed tags, with allowed and not allowed attributes' => [
+                'data' => 'Some test <span>text in span tag</span> <strong>text in strong tag</strong> '
+                    . '<a type="some-type" href="http://domain.com/" onclick="alert(1)">Click here</a><script>alert(1)'
+                    . '</script>',
+                'expected' => 'Some test <span>text in span tag</span> text in strong tag <a href="http://domain.com/">'
+                    . 'Click here</a>alert(1)',
+                'allowedTags' => ['a', 'span'],
+            ],
+            'text with html comment' => [
+                'data' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
+                'expected' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with non ascii characters' => [
+                'data' => ['абвгд', 'مثال', '幸福'],
+                'expected' => ['абвгд', 'مثال', '幸福'],
+                'allowedTags' => [],
+            ],
+            'html and body tags' => [
+                'data' => '<html><body><span>String</span></body></html>',
+                'expected' => '<span>String</span>',
+                'allowedTags' => ['span'],
+            ],
+            'invalid tag' => [
+                'data' => '<some tag> some text',
+                'expected' => ' some text',
+                'allowedTags' => ['span'],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeHtmlInvalidDataProvider()
+    {
+        return [
+            'text with allowed script tag' => [
+                'data' => '<span><script>some text in tags</script></span>',
+                'expected' => '<span>some text in tags</span>',
+                'allowedTags' => ['span', 'script'],
+            ],
+            'text with invalid html' => [
+                'data' => '<spa>n id="id1">Some string</span>',
+                'expected' => 'n id=&quot;id1&quot;&gt;Some string',
+                'allowedTags' => ['span'],
+            ],
         ];
     }
 
@@ -73,8 +262,8 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     {
         $data = 'http://example.com/search?term=this+%26+that&view=list';
         $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
-        $this->assertEquals($expected, $this->_escaper->escapeUrl($data));
-        $this->assertEquals($expected, $this->_escaper->escapeUrl($expected));
+        $this->assertEquals($expected, $this->escaper->escapeUrl($data));
+        $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
     }
 
     /**
@@ -84,8 +273,8 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     {
         $data = ["Don't do that.", 'lost_key' => "Can't do that."];
         $expected = ["Don\\'t do that.", "Can\\'t do that."];
-        $this->assertEquals($expected, $this->_escaper->escapeJsQuote($data));
-        $this->assertEquals($expected[0], $this->_escaper->escapeJsQuote($data[0]));
+        $this->assertEquals($expected, $this->escaper->escapeJsQuote($data));
+        $this->assertEquals($expected[0], $this->escaper->escapeJsQuote($data[0]));
     }
 
     /**
@@ -98,8 +287,8 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
             "Text with &#039;single&#039; and &quot;double&quot; quotes",
             "Text with \\&#039;single\\&#039; and \\&quot;double\\&quot; quotes",
         ];
-        $this->assertEquals($expected[0], $this->_escaper->escapeQuote($data));
-        $this->assertEquals($expected[1], $this->_escaper->escapeQuote($data, true));
+        $this->assertEquals($expected[0], $this->escaper->escapeQuote($data));
+        $this->assertEquals($expected[1], $this->escaper->escapeQuote($data, true));
     }
 
     /**
@@ -110,7 +299,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
      */
     public function testEscapeXssInUrl($input, $expected)
     {
-        $this->assertEquals($expected, $this->_escaper->escapeXssInUrl($input));
+        $this->assertEquals($expected, $this->escaper->escapeXssInUrl($input));
     }
 
     /**

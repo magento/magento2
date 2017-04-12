@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
-use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -29,23 +28,27 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     protected $configurable;
 
     /**
-     * @var ConfigurableOptionsProviderInterface
+     * @var LowestPriceOptionsProviderInterface
      */
-    private $configurableOptionsProvider;
+    private $lowestPriceOptionsProvider;
 
     /**
      * @param PriceResolverInterface $priceResolver
      * @param Configurable $configurable
      * @param PriceCurrencyInterface $priceCurrency
+     * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      */
     public function __construct(
         PriceResolverInterface $priceResolver,
         Configurable $configurable,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         $this->priceResolver = $priceResolver;
         $this->configurable = $configurable;
         $this->priceCurrency = $priceCurrency;
+        $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
+            ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
     }
 
     /**
@@ -57,29 +60,11 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     {
         $price = null;
 
-        foreach ($this->getConfigurableOptionsProvider()->getProducts($product) as $subProduct) {
+        foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
             $price = $price ? min($price, $productPrice) : $productPrice;
         }
-        if ($price === null) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Configurable product "%1" does not have sub-products', $product->getSku())
-            );
-        }
 
         return (float)$price;
-    }
-
-    /**
-     * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
-     * @deprecated
-     */
-    private function getConfigurableOptionsProvider()
-    {
-        if (null === $this->configurableOptionsProvider) {
-            $this->configurableOptionsProvider = ObjectManager::getInstance()
-                ->get(ConfigurableOptionsProviderInterface::class);
-        }
-        return $this->configurableOptionsProvider;
     }
 }

@@ -1,40 +1,34 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Pricing\ConfiguredPrice;
 
-use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Pricing\PriceInfoInterface;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct;
-
 class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $saleableItem;
 
     /**
-     * @var CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $calculator;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $priceCurrency;
 
     /**
-     * @var ConfigurableProduct
+     * @var \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct
      */
     private $model;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $priceInfoMock;
 
@@ -49,9 +43,6 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
                 'getCustomOption',
             ])
             ->getMockForAbstractClass();
-        $this->saleableItem->expects($this->once())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
 
         $this->calculator = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\CalculatorInterface::class)
             ->getMockForAbstractClass();
@@ -59,7 +50,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new ConfigurableProduct(
+        $this->model = new \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct(
             $this->saleableItem,
             null,
             $this->calculator,
@@ -82,7 +73,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(ConfigurableProduct::PRICE_CODE)
+            ->with(\Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct::PRICE_CODE)
             ->willReturn($priceMock);
 
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
@@ -109,11 +100,28 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueWithNoCustomOption()
     {
+        $priceValue = 100;
+
+        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+            ->getMockForAbstractClass();
+        $priceMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($priceValue);
+
         $this->saleableItem->expects($this->once())
             ->method('getCustomOption')
             ->with('simple_product')
             ->willReturn(null);
 
-        $this->assertEquals(0, $this->model->getValue());
+        $this->saleableItem->expects($this->once())
+            ->method('getPriceInfo')
+            ->willReturn($this->priceInfoMock);
+
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with(\Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct::PRICE_CODE)
+            ->willReturn($priceMock);
+
+        $this->assertEquals(100, $this->model->getValue());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -101,13 +101,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock(\Magento\Customer\Model\ResourceModel\Customer::class, [], [], '', false);
         $this->customerRegistry = $this->getMock(\Magento\Customer\Model\CustomerRegistry::class, [], [], '', false);
         $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
-        $this->customerFactory  = $this->getMock(
-            \Magento\Customer\Model\CustomerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->customerFactory  =
+            $this->getMock(\Magento\Customer\Model\CustomerFactory::class, ['create'], [], '', false);
         $this->customerSecureFactory  = $this->getMock(
             \Magento\Customer\Model\Data\CustomerSecureFactory::class,
             ['create'],
@@ -115,7 +110,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->addressRepository = $this->getMock(
             \Magento\Customer\Model\ResourceModel\AddressRepository::class,
             [],
@@ -123,7 +117,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->customerMetadata = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerMetadataInterface::class,
             [],
@@ -172,11 +165,15 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
-            false
+            true,
+            true,
+            true,
+            [
+                '__toArray'
+            ]
         );
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
-
         $this->model = new \Magento\Customer\Model\ResourceModel\CustomerRepository(
             $this->customerFactory,
             $this->customerSecureFactory,
@@ -254,6 +251,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn(['default_billing', 'default_shipping']);
+
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [],
@@ -495,6 +497,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getId'
             ]
         );
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn(['default_billing', 'default_shipping']);
+
         $customerModel = $this->getMock(
             \Magento\Customer\Model\Customer::class,
             [

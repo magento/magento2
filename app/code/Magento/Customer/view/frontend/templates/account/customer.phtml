@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
-
+/** @var Magento\Customer\Block\Account\Customer $block */
 ?>
 <?php if($block->customerLoggedIn()): ?>
     <li class="customer-welcome">
@@ -21,7 +21,7 @@
                     class="action switch"
                     tabindex="-1"
                     data-action="customer-menu-toggle">
-                <span><?php /* @escapeNotVerified */ echo __('Change')?></span>
+                <span><?php echo $block->escapeHtml(__('Change'))?></span>
             </button>
         </span>
         <script type="text/x-magento-init">

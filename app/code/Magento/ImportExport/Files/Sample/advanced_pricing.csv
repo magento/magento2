@@ -1,5 +1,5 @@
-sku,tier_price_website,tier_price_customer_group,tier_price_qty,tier_price
-sku123,base,General,2,10
-sku124,All Websites [USD],ALL GROUPS,3,15
-sku123,,,,
-sku124,,,,
+sku,tier_price_website,tier_price_customer_group,tier_price_qty,tier_price,tier_price_value_type
+sku123,base,General,2,10,Fixed
+sku124,All Websites [USD],ALL GROUPS,3,15,Discount
+sku123,,,,,
+sku124,,,,,

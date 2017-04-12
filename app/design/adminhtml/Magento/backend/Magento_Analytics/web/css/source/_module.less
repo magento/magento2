@@ -1,0 +1,192 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@button-advanced-reports__background-color: #007dbd;
+@button-advanced-reports__color: @color-white;
+
+@button-advanced-reports__hover__background-color: darken(@button-advanced-reports__background-color, 3%);
+@button-advanced-reports__hover__border-color: @button-advanced-reports__background-color;
+
+//
+//  Dashboard Section
+//  _____________________________________________
+
+.dashboard-advanced-reports {
+    .lib-vendor-prefix-display(flex);
+    border-color: @color-gray89;
+    border-style: solid;
+    border-width: 1px 0;
+    margin-bottom: @indent__l;
+    padding: @indent__m 0;
+}
+
+.dashboard-advanced-reports-title {
+    &:extend(.dashboard-item-title all);
+    margin-bottom: @indent__s;
+}
+
+.dashboard-advanced-reports-content {
+    line-height: @line-height__xl;
+}
+
+.dashboard-advanced-reports-actions {
+    .lib-vendor-prefix-flex-basis(auto);
+    .lib-vendor-prefix-flex-grow(1);
+    .lib-vendor-prefix-flex-shrink(1);
+    align-self: center;
+    margin-left: @indent__m;
+    margin-right: @page-main-actions__padding;
+    text-align: right;
+}
+
+.action-advanced-reports {
+    &:extend(.abs-action-l all);
+    &:extend(.abs-action-pattern all);
+    background-color: @button-advanced-reports__background-color;
+    border-color: @button-advanced-reports__background-color;
+    color: @button-advanced-reports__color;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
+    white-space: nowrap;
+
+    &:after {
+        &:extend(.abs-icon all);
+        content: @icon-external-link__content;
+        font-size: @font-size__xs;
+        vertical-align: super;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: @button-advanced-reports__hover__background-color;
+        border-color: @button-advanced-reports__hover__border-color;
+        box-shadow: @button__hover__box-shadow;
+        color: @button-advanced-reports__color;
+        text-decoration: none;
+    }
+
+    &.disabled,
+    &[disabled] {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+//
+//  Modal on dashboard
+//  ---------------------------------------------
+
+.advanced-reports-decline-subscription-modal,
+.advanced-reports-subscription-modal {
+    .modal-inner-wrap {
+        max-width: 80rem;
+    }
+}
+
+.advanced-reports-subscription-modal {
+    .admin__fieldset {
+        padding: 0;
+    }
+}
+
+.advanced-reports-decline-subscription-modal {
+    .advanced-reports-subscription-text {
+        margin-bottom: 0;
+    }
+
+    .modal-content {
+        padding-bottom: 0;
+    }
+}
+
+.advanced-reports-subscription-text {
+    line-height: @line-height__xl;
+
+    .list {
+        .lib-list-reset-styles(@_margin: @indent__m 0, @_padding: 0);
+
+        li {
+            padding-left: @indent__l;
+            position: relative;
+
+            &:before {
+                content: '\2022';
+                left: 1rem;
+                position: absolute;
+            }
+
+            + li {
+                margin-top: @indent__m;
+            }
+        }
+    }
+}
+
+.advanced-reports-subscription-actions {
+    font-size: 0;
+    text-align: justify;
+
+    &:after {
+        content: '';
+        display: inline-block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        width: 100%;
+    }
+
+    .action-basic,
+    .action-additional {
+        &:extend(.abs-action-l all);
+    }
+
+    .advanced-reports-subscription-postpone,
+    .advanced-reports-subscription-disable,
+    .advanced-reports-subscription-enable {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.advanced-reports-subscription-enable {
+    .admin__field {
+        max-width: 22rem;
+    }
+
+    .admin__field-label {
+        font-size: @font-size__s;
+        line-height: @line-height__l;
+    }
+
+    .action-basic {
+        &:extend(.abs-action-primary all);
+        margin-bottom: @indent__s;
+    }
+}
+
+//
+//  Configuration
+//  _____________________________________________
+
+.config-additional-comment {
+  border-color: @color-gray80;
+  border-style: solid;
+  border-width: 1px 0;
+  margin: @indent__l 0;
+  padding: @indent__m;
+}
+
+.config-additional-comment-title {
+  margin-bottom: @indent__xs;
+}
+
+.config-additional-comment-content {
+  line-height: @line-height__l;
+}

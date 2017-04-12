@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block;
@@ -9,6 +9,8 @@ use Magento\Payment\Model\MethodInterface;
 
 /**
  * Payment method form base block
+ *
+ * @api
  */
 class Form extends \Magento\Framework\View\Element\Template
 {

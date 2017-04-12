@@ -1,9 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model;
+
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\Menu\Item\Factory;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class MenuTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +26,14 @@ class MenuTest extends \PHPUnit_Framework_TestCase
      */
     protected $_items = [];
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManagerHelper;
+
     protected function setUp()
     {
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_items['item1'] = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
 
@@ -35,7 +45,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
         $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
-        $this->_model = new \Magento\Backend\Model\Menu($this->_logger);
+        $this->_model = $this->objectManagerHelper->getObject(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'logger' => $this->_logger
+            ]
+        );
     }
 
     public function testAdd()
@@ -53,7 +68,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMock(\Magento\Backend\Model\Menu::class, [], [$this->_logger]);
+        $subMenu = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -101,19 +116,29 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRecursive()
     {
-        $menu1 = new \Magento\Backend\Model\Menu($this->_logger);
-        $menu2 = new \Magento\Backend\Model\Menu($this->_logger);
+        $menuOne = $this->objectManagerHelper->getObject(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'logger' => $this->_logger
+            ]
+        );
+        $menuTwo = $this->objectManagerHelper->getObject(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'logger' => $this->_logger
+            ]
+        );
 
         $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menu1));
+        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuOne));
         $this->_model->add($this->_items['item1']);
 
         $this->_items['item2']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item2']->expects($this->any())->method('getChildren')->will($this->returnValue($menu2));
-        $menu1->add($this->_items['item2']);
+        $this->_items['item2']->expects($this->any())->method('getChildren')->will($this->returnValue($menuTwo));
+        $menuOne->add($this->_items['item2']);
 
         $this->_items['item3']->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
-        $menu2->add($this->_items['item3']);
+        $menuTwo->add($this->_items['item3']);
 
         $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
         $this->assertEquals($this->_items['item2'], $this->_model->get('item2'));
@@ -126,11 +151,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
 
-        $subMenu = $this->getMock(
-            \Magento\Backend\Model\Menu::class,
-            [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
-        );
+        $subMenu = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -179,11 +200,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveRemovesMenuItemRecursively()
     {
-        $menuMock = $this->getMock(
-            \Magento\Backend\Model\Menu::class,
-            [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
-        );
+        $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)->disableOriginalConstructor()->getMock();
         $menuMock->expects($this->once())->method('remove')->with($this->equalTo('item2'));
 
         $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
@@ -214,7 +231,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     {
         $this->_logger->expects($this->any())->method('log');
 
-        $subMenu = new \Magento\Backend\Model\Menu($this->_logger);
+        $subMenu = $this->objectManagerHelper->getObject(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'logger' => $this->_logger
+            ]
+        );
 
         $this->_items['item1']->expects($this->any())->method("hasChildren")->will($this->returnValue(true));
 
@@ -285,11 +307,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             $items[] = $item->getId();
         }
 
-        $items2 = [];
+        $itemsTwo = [];
         foreach ($this->_model as $item) {
-            $items2[] = $item->getId();
+            $itemsTwo[] = $item->getId();
         }
-        $this->assertEquals($items, $items2);
+        $this->assertEquals($items, $itemsTwo);
     }
 
     /**
@@ -307,10 +329,10 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             'item3' => ['item1', 'item2', 'item3'],
         ];
         $actual = [];
-        foreach ($this->_model as $valLoop1) {
-            $keyLevel1 = $valLoop1->getId();
-            foreach ($this->_model as $valLoop2) {
-                $actual[$keyLevel1][] = $valLoop2->getId();
+        foreach ($this->_model as $valLoopOne) {
+            $keyLevelOne = $valLoopOne->getId();
+            foreach ($this->_model as $valLoopTwo) {
+                $actual[$keyLevelOne][] = $valLoopTwo->getId();
             }
         }
         $this->assertEquals($expected, $actual);
@@ -318,7 +340,45 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
-        $this->assertNotEmpty($this->_model->serialize());
-        $this->_model->add($this->_items['item1']);
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with([['arrayData']])
+            ->willReturn('serializedString');
+        $menu = $this->objectManagerHelper->getObject(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'logger' => $this->_logger,
+                'serializer' => $serializerMock,
+            ]
+        );
+        $itemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $itemMock->expects($this->any())->method('getId')->will($this->returnValue('item1'));
+        $itemMock->expects($this->once())
+            ->method('toArray')
+            ->willReturn(['arrayData']);
+        $menu->add($itemMock);
+        $this->assertEquals('serializedString', $menu->serialize());
+    }
+
+    public function testUnserialize()
+    {
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->willReturn([['unserializedData']]);
+        $menuItemFactoryMock = $this->getMock(Factory::class, [], [], '', false);
+        $menuItemFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['unserializedData']);
+        $menu = $this->objectManagerHelper->getObject(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'logger' => $this->_logger,
+                'serializer' => $serializerMock,
+                'menuItemFactory' => $menuItemFactoryMock,
+            ]
+        );
+        $menu->unserialize('serializedString');
     }
 }

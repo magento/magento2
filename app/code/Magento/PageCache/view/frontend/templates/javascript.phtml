@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\PageCache\Block\Javascript $block */
 ?>
-<?php /** @var \Magento\PageCache\Block\Javascript $block */ ?>
 <script type="text/x-magento-init">
     {
         "body": {
-            "pageCache": <?php /* @escapeNotVerified */ echo $block->getScriptOptions(); ?>
+            "pageCache": <?php /* @noEscape */ echo $block->getScriptOptions(); ?>
         }
     }
 </script>

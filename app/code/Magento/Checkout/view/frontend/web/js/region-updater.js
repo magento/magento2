@@ -1,15 +1,15 @@
 /**
- * @category    frontend Checkout region-updater
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true expr:true*/
+
 define([
     'jquery',
     'mage/template',
+    'underscore',
     'jquery/ui',
     'mage/validation'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, _) {
     'use strict';
 
     $.widget('mage.regionUpdater', {
@@ -124,6 +124,8 @@ define([
          * @private
          */
         _clearError: function () {
+            var args = ['clearError', this.options.regionListId, this.options.regionInputId, this.options.postcodeId];
+
             if (this.options.clearError && typeof this.options.clearError === 'function') {
                 this.options.clearError.call(this);
             } else {
@@ -133,8 +135,8 @@ define([
 
                 this.options.form = $(this.options.form);
 
-                this.options.form && this.options.form.data('validator') && this.options.form.validation('clearError',
-                    this.options.regionListId, this.options.regionInputId, this.options.postcodeId);
+                this.options.form && this.options.form.data('validator') &&
+                    this.options.form.validation.apply(this.options.form, _.compact(args));
 
                 // Clean up errors on region & zip fix
                 $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();
@@ -184,7 +186,7 @@ define([
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
                     requiredLabel.removeClass('required');
 
-                    if (!this.options.optionalRegionAllowed) {
+                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionList.attr('disabled', 'disabled');
                     }
                 }
@@ -197,7 +199,7 @@ define([
                     regionInput.addClass('required-entry').removeAttr('disabled');
                     requiredLabel.addClass('required');
                 } else {
-                    if (!this.options.optionalRegionAllowed) {
+                    if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionInput.attr('disabled', 'disabled');
                     }
                     requiredLabel.removeClass('required');
@@ -230,7 +232,7 @@ define([
             var self = this;
 
             this.options.isRegionRequired = false;
-            $.each(this.options.regionJson.config.regions_required, function (index, elem) {
+            $.each(this.options.regionJson.config['regions_required'], function (index, elem) {
                 if (elem === country) {
                     self.options.isRegionRequired = true;
                 }

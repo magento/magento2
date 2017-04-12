@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Source\Group;
 
+use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
 
 class Multiselect implements \Magento\Framework\Option\ArrayInterface
 {
@@ -17,25 +19,36 @@ class Multiselect implements \Magento\Framework\Option\ArrayInterface
     protected $_options;
 
     /**
+     * @deprecated
      * @var GroupManagementInterface
      */
     protected $_groupManagement;
 
     /**
+     * @deprecated
      * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;
 
     /**
+     * @var GroupSourceLoggedInOnlyInterface
+     */
+    private $groupSourceLoggedInOnly;
+
+    /**
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\DataObject $converter
+     * @param GroupSourceLoggedInOnlyInterface|null $groupSourceLoggedInOnly
      */
     public function __construct(
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\Convert\DataObject $converter
+        \Magento\Framework\Convert\DataObject $converter,
+        GroupSourceLoggedInOnlyInterface $groupSourceLoggedInOnly = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;
+        $this->groupSourceLoggedInOnly = $groupSourceLoggedInOnly
+            ?: ObjectManager::getInstance()->get(GroupSourceLoggedInOnlyInterface::class);
     }
 
     /**
@@ -46,8 +59,7 @@ class Multiselect implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $groups = $this->_groupManagement->getLoggedInGroups();
-            $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
+            $this->_options = $this->groupSourceLoggedInOnly->toOptionArray();
         }
         return $this->_options;
     }

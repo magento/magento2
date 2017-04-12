@@ -1,12 +1,13 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 define([
     'jquery',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/translate'
 ], function ($, alert) {
         'use strict';
 

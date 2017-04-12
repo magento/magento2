@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\File;
@@ -39,7 +39,7 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
 
     /**
      *
-     * Copyright © 2016 Magento. All rights reserved.
+     * Copyright © Magento, Inc. All rights reserved.
      * See COPYING.txt for license details.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Downloadable\Model\Link $link

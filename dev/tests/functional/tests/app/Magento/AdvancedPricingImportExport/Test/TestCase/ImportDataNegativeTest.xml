@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ImportExport\Test\TestCase\ImportDataNegativeTest" summary="Import data">
+        <variation name="PreventImportAdvancedPricingIfIncorrectData" ticketId="MAGETWO-46155" summary="Import advanced pricing if incorrect data">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="patterns" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="0" xsi:type="string">Value for 'tier_price' attribute</item>
+                    <item name="1" xsi:type="string">in row(s): 1</item>
+                </item>
+            </data>
+            <data name="import/data" xsi:type="array">
+                <item name="entity" xsi:type="string">Advanced Pricing</item>
+                <item name="behavior" xsi:type="string">Add/Update</item>
+                <item name="validation_strategy" xsi:type="string">Stop on Error</item>
+                <item name="allowed_error_count" xsi:type="string">10</item>
+                <item name="import_field_separator" xsi:type="string">,</item>
+                <item name="import_multiple_value_separator" xsi:type="string">,</item>
+                <item name="import_file" xsi:type="array">
+                    <item name="entities" xsi:type="array">
+                        <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                    </item>
+                    <item name="template" xsi:type="array">
+                        <item name="filename"
+                              xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_incorrect</item>
+                        <item name="count" xsi:type="number">1</item>
+                    </item>
+                </item>
+            </data>
+            <constraint name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessage" />
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportCheckDataErrorMessagesList" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAdvancedPriceAbsentOnProductForm" />
+        </variation>
+    </testCase>
+</config>

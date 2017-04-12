@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,10 +11,12 @@
             <options>
                 <onepage_checkout_enabled>1</onepage_checkout_enabled>
                 <guest_checkout>1</guest_checkout>
+                <max_items_display_count>10</max_items_display_count>
             </options>
             <cart>
                 <delete_quote_after>30</delete_quote_after>
                 <redirect_to_cart>0</redirect_to_cart>
+                <number_items_to_display_pager>20</number_items_to_display_pager>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>
@@ -22,6 +24,7 @@
             <sidebar>
                 <display>1</display>
                 <count>5</count>
+                <max_items_display_count>10</max_items_display_count>
             </sidebar>
             <payment_failed>
                 <identity>general</identity>

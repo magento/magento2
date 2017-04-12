@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Setup;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * @codeCoverageIgnore
@@ -94,7 +94,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.0.3') < 0) {
-
             // Drop and recreate 'search_synonyms' table
             $connection->dropTable($installer->getTable('search_synonyms'));
 

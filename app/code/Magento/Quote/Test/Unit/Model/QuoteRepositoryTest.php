@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteRepository\LoadHandler;
+use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 
 /**
@@ -64,6 +65,11 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     private $loadHandlerMock;
 
     /**
+     * @var LoadHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $saveHandlerMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessor;
@@ -84,6 +90,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Quote\Model\Quote::class,
             [
                 'load',
+                'loadByIdWithoutStore',
                 'loadByCustomer',
                 'getIsActive',
                 'getId',
@@ -91,7 +98,9 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setSharedStoreIds',
                 'save',
                 'delete',
-                'getCustomerId'
+                'getCustomerId',
+                'getStoreId',
+                'getData'
             ],
             [],
             '',
@@ -136,10 +145,16 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->loadHandlerMock = $this->getMock(LoadHandler::class, [], [], '', false);
+        $this->saveHandlerMock = $this->getMock(SaveHandler::class, [], [], '', false);
+
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty('loadHandler');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $this->loadHandlerMock);
+
+        $reflectionProperty = $reflection->getProperty('saveHandler');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $this->saveHandlerMock);
     }
 
     /**
@@ -155,7 +170,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(false);
@@ -179,7 +194,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects(static::never())
             ->method('setSharedStoreIds');
         $this->quoteMock->expects(static::once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects(static::once())
@@ -212,7 +227,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects(static::never())
             ->method('setSharedStoreIds');
         $this->quoteMock->expects(static::once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects(static::once())
@@ -235,7 +250,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWithSharedStoreIds()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 16;
         $sharedStoreIds = [1, 2];
 
@@ -247,12 +261,16 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($sharedStoreIds)
             ->willReturnSelf();
         $this->quoteMock->expects($this->once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
 
-        $this->assertEquals($this->quoteMock, $this->model->get($cartId, $sharedStoreIds));
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($this->quoteMock)
+            ->willReturn($this->quoteMock);
+
         $this->assertEquals($this->quoteMock, $this->model->get($cartId, $sharedStoreIds));
     }
 
@@ -301,7 +319,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(false);
@@ -316,7 +334,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetActiveWithExceptionByIsActive()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 15;
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -324,18 +341,22 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
         $this->quoteMock->expects($this->once())->method('getIsActive')->willReturn(0);
+
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($this->quoteMock)
+            ->willReturn($this->quoteMock);
 
         $this->model->getActive($cartId);
     }
 
     public function testGetActive()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 15;
 
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
@@ -343,19 +364,22 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->quoteMock->expects($this->exactly(2))->method('getIsActive')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('getIsActive')->willReturn(1);
 
-        $this->assertEquals($this->quoteMock, $this->model->getActive($cartId));
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($this->quoteMock)
+            ->willReturn($this->quoteMock);
+
         $this->assertEquals($this->quoteMock, $this->model->getActive($cartId));
     }
 
     public function testGetActiveWithSharedStoreIds()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 16;
         $sharedStoreIds = [1, 2];
 
@@ -367,19 +391,22 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($sharedStoreIds)
             ->willReturnSelf();
         $this->quoteMock->expects($this->once())
-            ->method('load')
+            ->method('loadByIdWithoutStore')
             ->with($cartId)
             ->willReturn($this->storeMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->quoteMock->expects($this->exactly(2))->method('getIsActive')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('getIsActive')->willReturn(1);
 
-        $this->assertEquals($this->quoteMock, $this->model->getActive($cartId, $sharedStoreIds));
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($this->quoteMock)
+            ->willReturn($this->quoteMock);
+
         $this->assertEquals($this->quoteMock, $this->model->getActive($cartId, $sharedStoreIds));
     }
 
     public function testGetActiveForCustomer()
     {
-        $this->markTestSkipped('MAGETWO-48531');
         $cartId = 17;
         $customerId = 23;
 
@@ -394,19 +421,50 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->exactly(2))->method('getId')->willReturn($cartId);
         $this->quoteMock->expects($this->exactly(2))->method('getIsActive')->willReturn(1);
 
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($this->quoteMock)
+            ->willReturn($this->quoteMock);
+
         $this->assertEquals($this->quoteMock, $this->model->getActiveForCustomer($customerId));
         $this->assertEquals($this->quoteMock, $this->model->getActiveForCustomer($customerId));
     }
 
     public function testSave()
     {
-        $this->markTestSkipped('MAGETWO-48531');
-        $this->quoteMock->expects($this->once())
-            ->method('save');
-        $this->quoteMock->expects($this->exactly(1))->method('getId')->willReturn(1);
-        $this->quoteMock->expects($this->exactly(1))->method('getCustomerId')->willReturn(2);
+        $cartId = 100;
+        $quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getId', 'getCustomerId', 'getStoreId', 'hasData', 'setData'],
+            [],
+            '',
+            false
+        );
+        $quoteMock->expects($this->exactly(3))->method('getId')->willReturn($cartId);
+        $quoteMock->expects($this->once())->method('getCustomerId')->willReturn(2);
+        $quoteMock->expects($this->once())->method('getStoreId')->willReturn(5);
 
-        $this->model->save($this->quoteMock);
+        $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
+        $this->quoteMock->expects($this->once())->method('setSharedStoreIds');
+        $this->quoteMock->expects($this->once())
+            ->method('loadByIdWithoutStore')
+            ->with($cartId)
+            ->willReturn($this->storeMock);
+        $this->loadHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($this->quoteMock)
+            ->willReturn($this->quoteMock);
+
+        $this->quoteMock->expects($this->once())->method('getData')->willReturn(['key' => 'value']);
+
+        $quoteMock->expects($this->once())->method('hasData')->with('key')->willReturn(false);
+        $quoteMock->expects($this->once())->method('setData')->with('key', 'value')->willReturnSelf();
+
+        $this->saveHandlerMock->expects($this->once())->method('save')->with($quoteMock)->willReturn($quoteMock);
+        $this->model->save($quoteMock);
     }
 
     public function testDelete()

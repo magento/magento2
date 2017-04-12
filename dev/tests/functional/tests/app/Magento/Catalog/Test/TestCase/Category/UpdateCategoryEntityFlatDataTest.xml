@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateCategoryEntityFlatDataTest" summary="Update Category if Use Category Flat (Cron is ON, 'Update on Save' Mode)" ticketId="MAGETWO-20169">
+        <variation name="UpdateCategoryEntityFlatDataTestVariation1" summary="Update Category with custom name and description">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
+            <data name="category/data/description" xsi:type="string">Category Description Updated</data>
+            <data name="indexers/0" xsi:type="string">Category Flat Data</data>
+            <data name="indexersMode/0/indexer" xsi:type="string">category_flat_data</data>
+            <data name="indexersMode/0/mode" xsi:type="string">schedule</data>
+            <data name="firstStore/dataset" xsi:type="string">custom</data>
+            <data name="secondStore/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">category_flat</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
+        </variation>
+        <variation name="UpdateCategoryEntityFlatDataTestVariation2" summary="Inactive category and check that category is absent on frontend">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="category/data/is_active" xsi:type="string">No</data>
+            <data name="indexers/0" xsi:type="string">Category Flat Data</data>
+            <data name="indexersMode/0/indexer" xsi:type="string">category_flat_data</data>
+            <data name="indexersMode/0/mode" xsi:type="string">schedule</data>
+            <data name="firstStore/dataset" xsi:type="string">custom</data>
+            <data name="secondStore/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">category_flat</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnFrontend" />
+        </variation>
+        <variation name="UpdateCategoryEntityFlatDataTestVariation3" summary="Inactive category and check that category is not active on frontend">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="initialCategory/data/is_active" xsi:type="string">No</data>
+            <data name="category/data/is_active" xsi:type="string">No</data>
+            <data name="indexers/0" xsi:type="string">Category Flat Data</data>
+            <data name="indexersMode/0/indexer" xsi:type="string">category_flat_data</data>
+            <data name="indexersMode/0/mode" xsi:type="string">schedule</data>
+            <data name="firstStore/dataset" xsi:type="string">custom</data>
+            <data name="secondStore/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">category_flat</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIsNotActive" />
+        </variation>
+        <variation name="UpdateCategoryEntityFlatDataTestVariation4" summary="Exclude category from navigation menu">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="category/data/include_in_menu" xsi:type="string">No</data>
+            <data name="indexers/0" xsi:type="string">Category Flat Data</data>
+            <data name="indexersMode/0/indexer" xsi:type="string">category_flat_data</data>
+            <data name="indexersMode/0/mode" xsi:type="string">schedule</data>
+            <data name="firstStore/dataset" xsi:type="string">custom</data>
+            <data name="secondStore/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">category_flat</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
+        </variation>
+        <variation name="UpdateCategoryEntityFlatDataTestVariation5" summary="Include category to navigation menu">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="initialCategory/data/include_in_menu" xsi:type="string">No</data>
+            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="indexers/0" xsi:type="string">Category Flat Data</data>
+            <data name="indexersMode/0/indexer" xsi:type="string">category_flat_data</data>
+            <data name="indexersMode/0/mode" xsi:type="string">schedule</data>
+            <data name="firstStore/dataset" xsi:type="string">custom</data>
+            <data name="secondStore/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">category_flat</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryInNavigationMenu" />
+        </variation>
+        <variation name="UpdateCategoryEntityFlatDataTestVariation6" summary="Update category and assert assigned products">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default</data>
+            <data name="indexers/0" xsi:type="string">Category Flat Data</data>
+            <data name="indexersMode/0/indexer" xsi:type="string">category_flat_data</data>
+            <data name="indexersMode/0/mode" xsi:type="string">schedule</data>
+            <data name="firstStore/dataset" xsi:type="string">custom</data>
+            <data name="secondStore/dataset" xsi:type="string">custom</data>
+            <data name="configData" xsi:type="string">category_flat</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Indexer\Test\Constraint\AssertIndexerStatus" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+        </variation>
+    </testCase>
+</config>

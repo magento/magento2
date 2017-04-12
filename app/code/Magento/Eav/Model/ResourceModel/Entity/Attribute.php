@@ -1,22 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
-use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Eav\Model\Entity\AttributeCache;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV attribute resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -42,11 +40,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var Config
      */
     private $config;
-
-    /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
 
     /**
      * Class constructor
@@ -211,7 +204,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object
         );
         $this->getConfig()->clear();
-        $this->getAttributeCache()->clear();
         return parent::_afterSave($object);
     }
 
@@ -225,20 +217,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->getConfig()->clear();
-        $this->getAttributeCache()->clear();
         return $this;
-    }
-
-    /**
-     * @return AttributeCache
-     * @deprecated
-     */
-    private function getAttributeCache()
-    {
-        if (!$this->attributeCache) {
-            $this->attributeCache = ObjectManager::getInstance()->get(Config::class);
-        }
-        return $this->attributeCache;
     }
 
     /**
@@ -464,7 +443,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $table = $this->getTable('eav_attribute_option');
-        $intOptionId = (int)$optionId;
+        // ignore strings that start with a number
+        $intOptionId = is_numeric($optionId) ? (int)$optionId : 0;
 
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {

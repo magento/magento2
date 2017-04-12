@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
@@ -61,17 +61,15 @@ class Date extends AbstractDataType
     {
         $config = $this->getData('config');
 
-        if (!isset($config['timeOffset'])) {
-            $config['timeOffset'] = (new \DateTime(
-                'now',
-                new \DateTimeZone(
-                    $this->localeDate->getConfigTimezone()
-                )
-            ))->getOffset();
+        if (!isset($config['storeTimeZone'])) {
+            $storeTimeZone = $this->localeDate->getConfigTimezone();
+            $config['storeTimeZone'] = $storeTimeZone;
         }
-
+        // Set date format pattern by current locale
+        $localeDateFormat = $this->localeDate->getDateFormat();
+        $config['options']['dateFormat'] = $localeDateFormat;
+        $config['options']['storeLocale'] = $this->locale;
         $this->setData('config', $config);
-
         parent::prepare();
     }
 

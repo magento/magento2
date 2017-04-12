@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,6 +10,7 @@
         <variation name="DeleteProductEntityTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />

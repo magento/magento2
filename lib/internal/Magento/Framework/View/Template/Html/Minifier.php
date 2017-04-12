@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -74,7 +74,7 @@ class Minifier implements MinifierInterface
         Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->filesystem = $filesystem;
-        $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
+        $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TMP_MATERIALIZATION_DIR);
         $this->readFactory = $readFactory;
     }
 

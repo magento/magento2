@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * System configuration structure
  */
 namespace Magento\Config\Model\Config;
 
+/**
+ * System configuration structure.
+ */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {
     /**
@@ -249,6 +248,82 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
                 $result[] = $parentPath . '/' . $field['id'];
             }
         }
+        return $result;
+    }
+
+    /**
+     * Collects config paths and their structure paths from configuration files.
+     * Returns the map of config paths and their structure paths.
+     *
+     * All paths are declared in module's system.xml.
+     *
+     * ```xml
+     * <section id="section_id">
+     *      <group id="group_id" ...>
+     *          <field id="field_one_id" ...>
+     *              <label>Field One</label>
+     *              ...
+     *          </field>
+     *          <field id="field_two_id" ...>
+     *              <label>Field Two</label>
+     *              <config_path>section/group/field</config_path>
+     *              ...
+     *          </field>
+     *      </group>
+     * </section>
+     * ```
+     * If <config_path> node does not exist, then config path duplicates structure path.
+     * The result of this example will be:
+     *
+     * ```php
+     * [
+     *  'section_id/group_id/field_one_id' => [
+     *      'section_id/group_id/field_one_id'
+     *  ],
+     * 'section/group/field' => [
+     *      'section_id/group_id/field_two_id'
+     * ]
+     *```
+     *
+     * @return array An array of config path to config structure path map
+     */
+    public function getFieldPaths()
+    {
+        $sections = !empty($this->_data['sections']) ? $this->_data['sections'] : [];
+
+        return $this->getFieldsRecursively($sections);
+    }
+
+    /**
+     * Iteration that collects config field paths recursively from config files.
+     *
+     * @param array $elements The elements to be parsed
+     * @return array An array of config path to config structure path map
+     */
+    private function getFieldsRecursively(array $elements = [])
+    {
+        $result = [];
+
+        foreach ($elements as $element) {
+            if (isset($element['children'])) {
+                $result = array_replace_recursive(
+                    $result,
+                    $this->getFieldsRecursively($element['children'])
+                );
+            } else {
+                if ($element['_elementType'] === 'field' && isset($element['label'])) {
+                    $structurePath = (isset($element['path']) ? $element['path'] . '/' : '') . $element['id'];
+                    $configPath = isset($element['config_path']) ? $element['config_path'] : $structurePath;
+
+                    if (!isset($result[$configPath])) {
+                        $result[$configPath] = [];
+                    }
+
+                    $result[$configPath][] = $structurePath;
+                }
+            }
+        }
+
         return $result;
     }
 }

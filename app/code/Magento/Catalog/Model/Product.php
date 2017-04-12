@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Catalog product model
@@ -22,7 +21,6 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method Product setHasError(bool $value)
  * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
- * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
@@ -58,12 +56,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Product cache tag
      */
-    const CACHE_TAG = 'catalog_product';
+    const CACHE_TAG = 'cat_p';
 
     /**
      * Category product relation cache tag
      */
-    const CACHE_PRODUCT_CATEGORY_TAG = 'catalog_category_product';
+    const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
 
     /**
      * Product Store Id
@@ -542,6 +540,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_getData(self::NAME);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -620,6 +619,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_getData(self::TYPE_ID);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1617,6 +1617,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isSalable()
     {
+        if ($this->hasData('salable') && !$this->_catalogProduct->getSkipSaleableCheck()) {
+            return $this->getData('salable');
+        }
         $this->_eventManager->dispatch('catalog_product_is_salable_before', ['product' => $this]);
 
         $salable = $this->isAvailable();
@@ -1626,6 +1629,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             'catalog_product_is_salable_after',
             ['product' => $this, 'salable' => $object]
         );
+        $this->setData('salable', $object->getIsSalable());
         return $object->getIsSalable();
     }
 
@@ -1909,10 +1913,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getOptionById($optionId)
     {
-        /** @var \Magento\Catalog\Model\Product\Option $option */
-        foreach ($this->getOptions() as $option) {
-            if ($option->getId() == $optionId) {
-                return $option;
+        if (is_array($this->getOptions())) {
+            /** @var \Magento\Catalog\Model\Product\Option $option */
+            foreach ($this->getOptions() as $option) {
+                if ($option->getId() == $optionId) {
+                    return $option;
+                }
             }
         }
 
@@ -2272,7 +2278,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        
+
         if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
@@ -2287,7 +2293,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * Check whether stock status changed
-     * 
+     *
      * @return bool
      */
     private function isStockStatusChanged()
@@ -2305,7 +2311,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             && ($stockItem->getIsInStock() != $stockData['is_in_stock'])
         );
     }
-    
+
     /**
      * Reload PriceInfo object
      *
@@ -2515,6 +2521,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -2563,7 +2570,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                     ->convertFrom($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
-
         }
         return $this;
     }
@@ -2611,5 +2617,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 ->get(\Magento\Catalog\Model\Product\Gallery\Processor::class);
         }
         return $this->mediaGalleryProcessor;
+    }
+
+    /**
+     * Set the associated products
+     *
+     * @param array $productIds
+     * @return $this
+     */
+    public function setAssociatedProductIds(array $productIds)
+    {
+        $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+        return $this;
     }
 }

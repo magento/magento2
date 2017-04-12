@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
@@ -156,7 +156,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($profileData);
-        $this->profile->expects($this->at(0))->method('setData')->with($profileData);
+        $this->profile->expects($this->at(1))->method('setData')->with($profileData);
         $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }
 }

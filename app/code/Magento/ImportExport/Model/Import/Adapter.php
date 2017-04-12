@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import;
@@ -56,7 +56,7 @@ class Adapter
      * @param string $source Source file path.
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     *                       
+     *
      * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory, $options = null)

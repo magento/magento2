@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Order actions block.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Actions extends Block
 {
@@ -58,6 +61,13 @@ class Actions extends Block
     protected $hold = '[id$=hold-button]';
 
     /**
+     * 'Unhold' button.
+     *
+     * @var string
+     */
+    protected $unhold = '[id$=unhold-button]';
+
+    /**
      * 'Invoice' button.
      *
      * @var string
@@ -84,6 +94,13 @@ class Actions extends Block
      * @var string
      */
     protected $orderCreditMemo = '#order_creditmemo';
+
+    /**
+     * 'Get Payment Update' button on the order page.
+     *
+     * @var string
+     */
+    private $getPaymentUpdate = '#get_review_payment_update';
 
     /**
      * 'Credit Memo' button on the order invoice page.
@@ -141,6 +158,16 @@ class Actions extends Block
     }
 
     /**
+     * Click 'Get Payment Update' button to fetch updates from 3rd party payment solution.
+     *
+     * @return void
+     */
+    public function paymentUpdate()
+    {
+        $this->_rootElement->find($this->getPaymentUpdate)->click();
+    }
+
+    /**
      * Reorder order.
      *
      * @return void
@@ -178,10 +205,7 @@ class Actions extends Block
     public function cancel()
     {
         $this->_rootElement->find($this->cancel)->click();
-        $element = $this->browser->find($this->confirmModal);
-        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
-        $modal->acceptAlert();
+        $this->acceptAlert();
     }
 
     /**
@@ -202,6 +226,7 @@ class Actions extends Block
     public function void()
     {
         $this->_rootElement->find($this->void)->click();
+        $this->acceptAlert();
     }
 
     /**
@@ -212,6 +237,16 @@ class Actions extends Block
     public function hold()
     {
         $this->_rootElement->find($this->hold)->click();
+    }
+
+    /**
+     * Unhold order.
+     *
+     * @return void
+     */
+    public function unhold()
+    {
+        $this->_rootElement->find($this->unhold)->click();
     }
 
     /**
@@ -266,27 +301,36 @@ class Actions extends Block
     }
 
     /**
-     * Accept order
+     * Accept order.
+     *
      * @return void
      */
     public function accept()
     {
         $acceptPayment = '#accept_payment';
         $this->_rootElement->find($acceptPayment)->click();
-        $element = $this->browser->find($this->confirmModal);
-        /** @var Modal $modal */
-        $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
-        $modal->acceptAlert();
+        $this->acceptAlert();
     }
 
     /**
-     * Deny order
+     * Deny order.
+     *
      * @return void
      */
     public function deny()
     {
         $denyPayment = '#deny_payment';
         $this->_rootElement->find($denyPayment)->click();
+        $this->acceptAlert();
+    }
+
+    /**
+     * Accept alert.
+     *
+     * @return void
+     */
+    private function acceptAlert()
+    {
         $element = $this->browser->find($this->confirmModal);
         /** @var Modal $modal */
         $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);

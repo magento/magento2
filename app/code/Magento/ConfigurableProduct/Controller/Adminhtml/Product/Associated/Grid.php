@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Associated;
@@ -28,6 +28,7 @@ class Grid extends Action
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }
+
     /**
      * Index action
      *

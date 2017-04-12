@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getCacheManager', 'getEventDispatcher', 'getLogger', 'getAppState', 'getActionValidator'],
+            [],
             [],
             '',
             false
@@ -201,6 +201,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
         $resourceModel->save($model);
     }
@@ -250,7 +251,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'beginTransaction',
                 'commit',
                 'rollback',
-                'select'
+                'select',
+                'getTransactionLevel'
             ],
             [],
             '',
@@ -336,9 +338,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
         $configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()->getMock();
-        $attributeCacheMock = $this->getMockBuilder(
-            \Magento\Eav\Model\Entity\AttributeCache::class
-        )->disableOriginalConstructor()->getMock();
         $arguments = [
             'context' => $contextMock,
             'storeManager' => $storeManager,
@@ -350,11 +349,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $resourceModel,
             'config',
             $configMock
-        );
-        $helper->setBackwardCompatibleProperty(
-            $resourceModel,
-            'attributeCache',
-            $attributeCacheMock
         );
 
         return [$connectionMock, $resourceModel];

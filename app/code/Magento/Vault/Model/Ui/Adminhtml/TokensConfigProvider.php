@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui\Adminhtml;
@@ -26,8 +26,10 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * Class ConfigProvider
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
-final class TokensConfigProvider
+class TokensConfigProvider
 {
     /**
      * @var PaymentTokenRepositoryInterface
@@ -221,9 +223,11 @@ final class TokensConfigProvider
      */
     private function getPaymentTokenEntityId()
     {
-        return $this->getPaymentTokenManagement()
-            ->getByPaymentId($this->getOrderPaymentEntityId())
-            ->getEntityId();
+        $paymentToken = $this->getPaymentTokenManagement()->getByPaymentId($this->getOrderPaymentEntityId());
+        if ($paymentToken === null) {
+            throw new NoSuchEntityException(__('No available payment tokens for specified order payment.'));
+        }
+        return $paymentToken->getEntityId();
     }
 
     /**

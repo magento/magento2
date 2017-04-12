@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,13 @@
             <div class="field qty">
                 <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
                 <div class="control">
-                    <input type="number" name="qty" id="qty" maxlength="12" value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>" title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty" data-validate="{'required-number':true,digits:true}"/>
+                    <input type="number"
+                           name="qty"
+                           id="qty"
+                           value=""
+                           title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
+                           class="input-text qty"
+                           data-validate="{'required-number':true,digits:true}"/>
                 </div>
             </div>
             <?php endif; ?>

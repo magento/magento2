@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller;
@@ -18,6 +18,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('id', $product->getId());
         $this->dispatch('review/product/listAction');
         $result = $this->getResponse()->getBody();
-        $this->assertContains("static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico", $result);
+        $this->assertNotContains("/frontend/Magento/luma/en_US/", $result);
     }
 }

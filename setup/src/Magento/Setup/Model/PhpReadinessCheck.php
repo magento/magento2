@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
 
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Framework\Convert\DataSize;
+use Magento\Setup\Controller\ResponseTypeInterface;
 
 /**
  * Checks for PHP readiness. It is used by both Cron and Setup wizard.
@@ -102,7 +102,8 @@ class PhpReadinessCheck
 
         $settings = array_merge(
             $this->checkXDebugNestedLevel(),
-            $this->checkPopulateRawPostSetting()
+            $this->checkPopulateRawPostSetting(),
+            $this->checkFunctionsExistence()
         );
 
         foreach ($settings as $setting) {
@@ -193,8 +194,7 @@ class PhpReadinessCheck
 
         $currentMemoryInteger = intval($currentMemoryLimit);
 
-        if (
-            $currentMemoryInteger > 0
+        if ($currentMemoryInteger > 0
             && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
             < $this->dataSize->convertSizeToBytes($minimumRequiredMemoryLimit)
         ) {
@@ -208,8 +208,7 @@ class PhpReadinessCheck
                 $currentMemoryLimit,
                 $minimumRequiredMemoryLimit
             );
-        } elseif (
-            $currentMemoryInteger > 0
+        } elseif ($currentMemoryInteger > 0
             && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
             < $this->dataSize->convertSizeToBytes($recommendedForUpgradeMemoryLimit)
         ) {
@@ -245,7 +244,6 @@ class PhpReadinessCheck
 
         $currentExtensions = $this->phpInformation->getCurrent();
         if (in_array('xdebug', $currentExtensions)) {
-
             $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
@@ -312,6 +310,33 @@ class PhpReadinessCheck
             'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
             'error' => $error
         ];
+
+        return $data;
+    }
+
+    /**
+     * Check whether all special functions exists
+     *
+     * @return array
+     */
+    private function checkFunctionsExistence()
+    {
+        $data = [];
+        $requiredFunctions = [
+            [
+                'name' => 'imagecreatefromjpeg',
+                'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+            ],
+        ];
+
+        foreach ($requiredFunctions as $function) {
+            $data['missed_function_' . $function['name']] = [
+                'message' => $function['message'],
+                'helpUrl' => $function['helpUrl'],
+                'error' => !function_exists($function['name']),
+            ];
+        }
 
         return $data;
     }

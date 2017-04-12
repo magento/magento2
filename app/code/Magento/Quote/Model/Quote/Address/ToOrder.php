@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Model\Quote\Address;
 
 use Magento\Framework\DataObject\Copy;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 
 /**
  * Class ToOrder converter
@@ -90,6 +90,5 @@ class ToOrder
             ['order' => $order, 'quote' => $object->getQuote()]
         );
         return $order;
-
     }
 }

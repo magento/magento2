@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,7 +104,7 @@ class Pattern
         foreach ($this->getHeaders() as $key) {
             if (isset($row[$key])) {
                 if (is_callable($row[$key])) {
-                    $row[$key] = call_user_func($row[$key], $index);
+                    $row[$key] = call_user_func($row[$key], $index, $generatorKey);
                 } else {
                     $row[$key] = str_replace('%s', $index, $row[$key]);
                 }

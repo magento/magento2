@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
@@ -11,6 +11,8 @@ use Psr\Log\LoggerInterface;
  * Class Logger for payment related information (request, response, etc.) which is used for debug
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Logger
 {

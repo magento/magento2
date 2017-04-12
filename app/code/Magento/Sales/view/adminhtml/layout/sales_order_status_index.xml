@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,7 +15,7 @@
                         <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Status\Collection</argument>
                         <argument name="default_sort" xsi:type="string">state</argument>
                         <argument name="default_dir" xsi:type="string">desc</argument>
-                        <argument name="pager_visibility" xsi:type="string">0</argument>
+                        <argument name="pager_visibility" xsi:type="string">1</argument>
                     </arguments>
                     <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="sales_order_status.grid.columnSet">
                         <arguments>

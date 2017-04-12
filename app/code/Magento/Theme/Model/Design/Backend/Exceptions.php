@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class Exceptions extends ArraySerialized
 {
@@ -27,6 +28,7 @@ class Exceptions extends ArraySerialized
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -36,10 +38,20 @@ class Exceptions extends ArraySerialized
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_design = $design;
-        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $config,
+            $cacheTypeList,
+            $resource,
+            $resourceCollection,
+            $data,
+            $serializer
+        );
     }
 
     /**

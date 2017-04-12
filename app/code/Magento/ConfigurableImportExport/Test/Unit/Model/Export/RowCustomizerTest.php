@@ -1,53 +1,62 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ConfigurableImportExport\Model\Export\RowCustomizer as ExportRowCustomizer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\ImportExport\Model\Import;
 
 class RowCustomizerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test existing product id.
-     *
+     * @var ExportRowCustomizer
+     */
+    private $exportRowCustomizer;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @var ProductCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productCollectionMock;
+
+    /**
+     * @var ConfigurableProductType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configurableProductTypeMock;
+
+    /**
      * @var int
      */
-    protected $initiatedProductId = 11;
-
-    /**
-     * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
-     */
-    protected $_model;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_collectionMock;
+    private $productId = 11;
 
     protected function setUp()
     {
-        $this->_collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            ['addAttributeToFilter', 'fetchItem', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->_model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer();
-    }
+        $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configurableProductTypeMock = $this->getMockBuilder(ConfigurableProductType::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-    public function testPrepareData()
-    {
-        $this->_initConfigurableData();
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->exportRowCustomizer = $this->objectManagerHelper->getObject(ExportRowCustomizer::class);
     }
 
     public function testAddHeaderColumns()
     {
-        $this->_initConfigurableData();
+        $this->initConfigurableData();
+
         $this->assertEquals(
             [
                 'column_1',
@@ -56,37 +65,80 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 'configurable_variations',
                 'configurable_variation_labels',
             ],
-            $this->_model->addHeaderColumns(
-                ['column_1', 'column_2', 'column_3']
-            )
+            $this->exportRowCustomizer->addHeaderColumns(['column_1', 'column_2', 'column_3'])
         );
     }
 
     /**
      * @param array $expected
      * @param array $data
+     *
      * @dataProvider addDataDataProvider
      */
     public function testAddData(array $expected, array $data)
     {
-        $this->_initConfigurableData();
-        $this->assertEquals(
-            $expected,
-            $this->_model->addData($data['data_row'], $data['product_id'])
-        );
+        $this->initConfigurableData();
+
+        $this->assertEquals($expected, $this->exportRowCustomizer->addData($data['data_row'], $data['product_id']));
+    }
+
+    /**
+     * @return array
+     */
+    public function addDataDataProvider()
+    {
+        $expectedConfigurableData = $this->getExpectedConfigurableData();
+        $data = $expectedConfigurableData[$this->productId];
+
+        return [
+            [
+                '$expected' => [
+                    'key_1' => 'value_1',
+                    'key_2' => 'value_2',
+                    'key_3' => 'value_3'
+                ],
+                '$data' => [
+                    'data_row' => [
+                        'key_1' => 'value_1',
+                        'key_2' => 'value_2',
+                        'key_3' => 'value_3'
+                    ],
+                    'product_id' => 1
+                ]
+            ],
+            [
+                '$expected' => [
+                    'key_1' => 'value_1',
+                    'key_2' => 'value_2',
+                    'key_3' => 'value_3',
+                    'configurable_variations' => $data['configurable_variations'],
+                    'configurable_variation_labels' => $data['configurable_variation_labels']
+                ],
+                '$data' => [
+                    'data_row' => [
+                        'key_1' => 'value_1',
+                        'key_2' => 'value_2',
+                        'key_3' => 'value_3'
+                    ],
+                    'product_id' => $this->productId
+                ]
+            ]
+        ];
     }
 
     /**
      * @param array $expected
      * @param array $data
+     *
      * @dataProvider getAdditionalRowsCountDataProvider
      */
     public function testGetAdditionalRowsCount(array $expected, array $data)
     {
-        $this->_initConfigurableData();
+        $this->initConfigurableData();
+
         $this->assertEquals(
             $expected,
-            $this->_model->getAdditionalRowsCount($data['row_count'], $data['product_id'])
+            $this->exportRowCustomizer->getAdditionalRowsCount($data['row_count'], $data['product_id'])
         );
     }
 
@@ -101,7 +153,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 [
                     'row_count' => [1, 2, 3],
                     'product_id' => 1
-                ],
+                ]
             ],
             [
                 [1, 2, 3],
@@ -120,130 +172,66 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function addDataDataProvider()
-    {
-        $expectedConfigurableData = $this->getExpectedConfigurableData();
-        $data = $expectedConfigurableData[$this->initiatedProductId];
-
-        return [
-            [
-                '$expected' => [
-                    'key_1' => 'value_1',
-                    'key_2' => 'value_2',
-                    'key_3' => 'value_3',
-                ],
-                '$data' => [
-                    'data_row' => [
-                        'key_1' => 'value_1',
-                        'key_2' => 'value_2',
-                        'key_3' => 'value_3',
-                    ],
-                    'product_id' => 1
-                ],
-            ],
-            [
-                '$expected' => [
-                    'key_1' => 'value_1',
-                    'key_2' => 'value_2',
-                    'key_3' => 'value_3',
-                    'configurable_variations' => $data['configurable_variations'],
-                    'configurable_variation_labels' => $data['configurable_variation_labels'],
-                ],
-                '$data' => [
-                    'data_row' => [
-                        'key_1' => 'value_1',
-                        'key_2' => 'value_2',
-                        'key_3' => 'value_3',
-                    ],
-                    'product_id' => $this->initiatedProductId
-                ]
-            ]
-        ];
-    }
-
-    protected function _initConfigurableData()
+    private function initConfigurableData()
     {
         $productIds = [1, 2, 3];
+        $expectedConfigurableData = $this->getExpectedConfigurableData();
+        $productMock = $this->createProductMock();
         $productAttributesOptions = [
-            [//1 $productAttributeOption
-                [//1opt $optValue
+            [
+                [
                     'pricing_is_percent'    => true,
                     'sku'                   => '_sku_',
                     'attribute_code'        => 'code_of_attribute',
                     'option_title'          => 'Option Title',
                     'pricing_value'         => 112345,
-                    'super_attribute_label' => 'Super attribute label',
+                    'super_attribute_label' => 'Super attribute label'
                 ],
-                [//2opt $optValue
+                [
                     'pricing_is_percent'    => false,
                     'sku'                   => '_sku_',
                     'attribute_code'        => 'code_of_attribute',
                     'option_title'          => 'Option Title',
                     'pricing_value'         => 212345,
-                    'super_attribute_label' => '',
+                    'super_attribute_label' => ''
                 ],
-                [//3opt $optValue
+                [
                     'pricing_is_percent'    => false,
                     'sku'                   => '_sku_2',
                     'attribute_code'        => 'code_of_attribute_2',
                     'option_title'          => 'Option Title 2',
                     'pricing_value'         => 312345,
-                    'super_attribute_label' => 'Super attribute label 2',
-                ],
-            ],
+                    'super_attribute_label' => 'Super attribute label 2'
+                ]
+            ]
         ];
 
-        $expectedConfigurableData = $this->getExpectedConfigurableData();
-
-        $productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getId', 'getTypeInstance', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $productMock->expects($this->any())
+        $productMock->expects(static::any())
             ->method('getId')
-            ->will($this->returnValue($this->initiatedProductId));
-
-        $typeInstanceMock = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $typeInstanceMock->expects($this->any())
-            ->method('getConfigurableOptions')
-            ->will($this->returnValue($productAttributesOptions));
-
-        $productMock->expects($this->any())
+            ->willReturn($this->productId);
+        $productMock->expects(static::any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstanceMock));
-
-        $this->_collectionMock->expects($this->at(0))
+            ->willReturn($this->configurableProductTypeMock);
+        $this->configurableProductTypeMock->expects(static::any())
+            ->method('getConfigurableOptions')
+            ->willReturn($productAttributesOptions);
+        $this->productCollectionMock->expects(static::atLeastOnce())
             ->method('addAttributeToFilter')
-            ->with('entity_id', ['in' => $productIds])
-            ->will($this->returnSelf());
-        $this->_collectionMock->expects($this->at(1))
-            ->method('addAttributeToFilter')
-            ->with('type_id', ['eq' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE])
-            ->will($this->returnSelf());
-        $this->_collectionMock->expects($this->at(2))
+            ->willReturnMap(
+                [
+                    ['entity_id', ['in' => $productIds], 'inner', $this->productCollectionMock],
+                    ['type_id', ['eq' => ConfigurableProductType::TYPE_CODE], 'inner', $this->productCollectionMock]
+                ]
+            );
+        $this->productCollectionMock->expects(static::atLeastOnce())
             ->method('fetchItem')
-            ->will($this->returnValue($productMock));
-        $this->_collectionMock->expects($this->at(3))
-            ->method('fetchItem')
-            ->will($this->returnValue(false));
+            ->willReturnOnConsecutiveCalls($productMock, false);
 
-        $this->_model->prepareData($this->_collectionMock, $productIds);
-
-        $configurableData = $this->getPropertyValue($this->_model, 'configurableData');
-
-        $this->assertEquals($expectedConfigurableData, $configurableData);
+        $this->exportRowCustomizer->prepareData($this->productCollectionMock, $productIds);
+        $this->assertEquals(
+            $expectedConfigurableData,
+            $this->getPropertyValue($this->exportRowCustomizer, 'configurableData')
+        );
     }
 
     /**
@@ -251,49 +239,56 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function getExpectedConfigurableData()
+    private function getExpectedConfigurableData()
     {
         return [
-            $this->initiatedProductId => [
-                'configurable_variations' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, [
-                    '_sku_' => 'sku=_sku_'  . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
-                            'code_of_attribute=Option Title',
-                            'code_of_attribute=Option Title',
-                        ]),
-                    '_sku_2' => 'sku=_sku_2' . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
-                            'code_of_attribute_2=Option Title 2',
-                        ])
-                ]),
-                'configurable_variation_labels' => implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, [
-                    'code_of_attribute' => 'code_of_attribute=Super attribute label',
-                    'code_of_attribute_2' => 'code_of_attribute_2=Super attribute label 2',
-                ]),
-            ],
+            $this->productId => [
+                'configurable_variations' => implode(
+                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                    [
+                        '_sku_' => 'sku=_sku_' . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                            . implode(
+                                Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                                ['code_of_attribute=Option Title', 'code_of_attribute=Option Title']
+                            ),
+                        '_sku_2' => 'sku=_sku_2' . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                            . implode(
+                                Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                                ['code_of_attribute_2=Option Title 2']
+                            )
+                    ]
+                ),
+                'configurable_variation_labels' => implode(
+                    Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                    [
+                        'code_of_attribute' => 'code_of_attribute=Super attribute label',
+                        'code_of_attribute_2' => 'code_of_attribute_2=Super attribute label 2'
+                    ]
+                )
+            ]
         ];
     }
 
     /**
-     * @param $object
-     * @param $property
-     * @param $value
+     * Create product mock object
+     *
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function setPropertyValue(&$object, $property, $value)
+    private function createProductMock()
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($object, $value);
-        return $object;
+        return $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
-     * @param $object
-     * @param $property
+     * Get value of protected property
+     *
+     * @param object $object
+     * @param string $property
      * @return mixed
      */
-    protected function getPropertyValue(&$object, $property)
+    private function getPropertyValue($object, $property)
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);

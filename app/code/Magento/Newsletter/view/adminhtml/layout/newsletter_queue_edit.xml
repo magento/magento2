@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Newsletter\Block\Adminhtml\Queue\Edit" name="queue_edit" template="queue/edit.phtml"/>
+            <block class="Magento\Newsletter\Block\Adminhtml\Queue\Edit" name="queue_edit" template="Magento_Newsletter::queue/edit.phtml"/>
         </referenceContainer>
     </body>
 </page>

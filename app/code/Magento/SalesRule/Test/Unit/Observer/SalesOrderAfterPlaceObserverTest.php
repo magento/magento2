@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Observer;
@@ -121,10 +121,10 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
     {
         $observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $order = $this->initOrderFromEvent($observer);
-        $discountAmount = 10;
+        $ruleIds = null;
         $order->expects($this->once())
-            ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
+            ->method('getAppliedRuleIds')
+            ->will($this->returnValue($ruleIds));
 
         $this->ruleFactory->expects($this->never())
             ->method('create');
@@ -158,14 +158,10 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
         $ruleId = 1;
         $couponId = 1;
         $customerId = 1;
-        $discountAmount = 10;
 
-        $order->expects($this->once())
+        $order->expects($this->exactly(2))
             ->method('getAppliedRuleIds')
             ->will($this->returnValue($ruleId));
-        $order->expects($this->once())
-            ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
         $order->expects($this->once())
             ->method('getCustomerId')
             ->will($this->returnValue($customerId));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Export;
@@ -33,6 +33,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
+        $parsedAdditionalAttributes = 'text_attribute=!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/'
+            . ',text_attribute2=,';
+        $allAdditionalAttributes = $parsedAdditionalAttributes . ',weight_type=0,price_type=1';
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $select = $collection->getConnection()->select()
@@ -42,7 +45,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, array_values($ids));
         $this->assertEquals($select, (string)$collection->getSelect());
-        $result = $this->model->addData([], $ids['bundle-product']);
+        $result = $this->model->addData(['additional_attributes' => $allAdditionalAttributes], $ids['bundle-product']);
         $this->assertArrayHasKey('bundle_price_type', $result);
         $this->assertArrayHasKey('bundle_shipment_type', $result);
         $this->assertArrayHasKey('bundle_sku_type', $result);
@@ -51,5 +54,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('bundle_values', $result);
         $this->assertContains('sku=simple,', $result['bundle_values']);
         $this->assertEquals([], $this->model->addData([], $ids['simple']));
+        $this->assertEquals($parsedAdditionalAttributes, $result['additional_attributes']);
     }
 }

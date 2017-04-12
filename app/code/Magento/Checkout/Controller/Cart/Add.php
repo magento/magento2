@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
@@ -84,6 +84,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         }
 
         $params = $this->getRequest()->getParams();
+
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
@@ -151,7 +152,6 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
 
             return $this->goBack($url);
-
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

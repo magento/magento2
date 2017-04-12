@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Config\Source\Product\Options;
+
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 
 /**
  * Price types mode source
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Price implements \Magento\Framework\Option\ArrayInterface
+class Price implements ProductPriceOptionsInterface
 {
     /**
      * {@inheritdoc}
@@ -20,8 +22,8 @@ class Price implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => 'fixed', 'label' => __('Fixed')],
-            ['value' => 'percent', 'label' => __('Percent')]
+            ['value' => self::VALUE_FIXED, 'label' => __('Fixed')],
+            ['value' => self::VALUE_PERCENT, 'label' => __('Percent')],
         ];
     }
 }

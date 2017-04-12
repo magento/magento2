@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,9 +46,9 @@
                 <td data-th="<?php echo $block->escapeHtml(__('Qty')); ?>" class="col qty">
                 <?php if ($_item->isSaleable()) : ?>
                     <div class="control qty">
-                        <input type="number" name="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
+                        <input type="number"
+                               name="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
                                data-selector="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
-                               maxlength="12"
                                value="<?php /* @escapeNotVerified */ echo $_item->getQty() * 1 ?>"
                                title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
                                class="input-text qty"

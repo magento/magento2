@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Converter;
@@ -9,6 +9,7 @@ use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class ToDataModel
 {
@@ -38,24 +39,32 @@ class ToDataModel
     protected $ruleLabelFactory;
 
     /**
+     * @var Json $serializer
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory
      * @param \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory
      * @param \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory $ruleLabelFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param Json $serializer Optional parameter for backward compatibility
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         \Magento\SalesRule\Api\Data\RuleInterfaceFactory $ruleDataFactory,
         \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory,
         \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory $ruleLabelFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        Json $serializer = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleDataFactory = $ruleDataFactory;
         $this->conditionDataFactory = $conditionDataFactory;
         $this->ruleLabelFactory = $ruleLabelFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -81,7 +90,7 @@ class ToDataModel
     {
         $conditionSerialized = $ruleModel->getConditionsSerialized();
         if ($conditionSerialized) {
-            $conditionArray = unserialize($conditionSerialized);
+            $conditionArray = $this->serializer->unserialize($conditionSerialized);
             $conditionDataModel = $this->arrayToConditionDataModel($conditionArray);
             $dataModel->setCondition($conditionDataModel);
         } else {
@@ -99,7 +108,7 @@ class ToDataModel
     {
         $actionConditionSerialized = $ruleModel->getActionsSerialized();
         if ($actionConditionSerialized) {
-            $actionConditionArray = unserialize($actionConditionSerialized);
+            $actionConditionArray = $this->serializer->unserialize($actionConditionSerialized);
             $actionConditionDataModel = $this->arrayToConditionDataModel($actionConditionArray);
             $dataModel->setActionCondition($actionConditionDataModel);
         } else {

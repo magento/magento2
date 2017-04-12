@@ -1,37 +1,39 @@
 <?php
 /**
- * Mysql PDO DB adapter
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\DB\Adapter\Pdo;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\ExpressionConverter;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Profiler;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 
 /**
+ * MySQL database adapter
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
@@ -200,23 +202,38 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $exceptionMap;
 
     /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param SelectFactory $selectFactory
      * @param array $config
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         StringUtils $string,
         DateTime $dateTime,
         LoggerInterface $logger,
         SelectFactory $selectFactory,
-        array $config = []
+        array $config = [],
+        SerializerInterface $serializer = null
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
         $this->selectFactory = $selectFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->exceptionMap = [
             // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2006 => ConnectionException::class,
@@ -226,6 +243,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             1205 => LockWaitException::class,
             // SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock
             1213 => DeadlockException::class,
+            // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry
+            1062 => DuplicateException::class,
         ];
         try {
             parent::__construct($config);
@@ -332,6 +351,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Creates a PDO object and connects to the database.
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
@@ -362,6 +384,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
         }
 
+        if (!isset($this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS])) {
+            $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
+        }
+
         $this->logger->startTimer();
         parent::_connect();
         $this->logger->logStats(LoggerInterface::TYPE_CONNECT, '');
@@ -378,7 +404,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if (!$this->_connectionFlagsSet) {
             $this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-            $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            if (isset($this->_config['use_buffered_query']) && $this->_config['use_buffered_query'] === false) {
+                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+            } else {
+                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            }
             $this->_connectionFlagsSet = true;
         }
     }
@@ -459,7 +489,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
-     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @throws \Zend_Db_Statement_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _query($sql, $bind = [])
@@ -520,7 +550,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } while ($retry);
     }
 
-
     /**
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
@@ -553,6 +582,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -719,6 +749,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+
+     * @deprecated
      */
     protected function _splitMultiQuery($sql)
     {
@@ -1368,7 +1400,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function select()
     {
-//        return new Select($this);
         return $this->selectFactory->create($this);
     }
 
@@ -1441,7 +1472,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $cacheId = $this->_getCacheId($tableCacheKey, $ddlType);
             $data = $this->_cacheAdapter->load($cacheId);
             if ($data !== false) {
-                $data = unserialize($data);
+                $data = $this->serializer->unserialize($data);
                 $this->_ddlCache[$ddlType][$tableCacheKey] = $data;
             }
             return $data;
@@ -1467,7 +1498,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if ($this->_cacheAdapter) {
             $cacheId = $this->_getCacheId($tableCacheKey, $ddlType);
-            $data = serialize($data);
+            $data = $this->serializer->serialize($data);
             $this->_cacheAdapter->save($data, $cacheId, [self::DDL_CACHE_TAG]);
         }
 
@@ -1861,6 +1892,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($k);
                 if ($v instanceof \Zend_Db_Expr) {
                     $value = $v->__toString();
+                } elseif ($v instanceof \Zend\Db\Sql\Expression) {
+                    $value = $v->getExpression();
                 } elseif (is_string($v)) {
                     $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));
                 } elseif (is_numeric($v)) {
@@ -2350,6 +2383,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     }
                 }
                 $cType .= sprintf('(%d,%d)', $precision, $scale);
+                if (!empty($options['UNSIGNED'])) {
+                    $cUnsigned = true;
+                }
                 break;
             case Table::TYPE_TEXT:
             case Table::TYPE_BLOB:
@@ -2476,7 +2512,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function truncateTable($tableName, $schemaName = null)
     {
         if (!$this->isTableExists($tableName, $schemaName)) {
-            throw new \Zend_Db_Exception(sprintf('Table "%s" is not exists', $tableName));
+            throw new \Zend_Db_Exception(sprintf('Table "%s" does not exist', $tableName));
         }
 
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
@@ -2510,7 +2546,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function renameTable($oldTableName, $newTableName, $schemaName = null)
     {
         if (!$this->isTableExists($oldTableName, $schemaName)) {
-            throw new \Zend_Db_Exception(sprintf('Table "%s" is not exists', $oldTableName));
+            throw new \Zend_Db_Exception(sprintf('Table "%s" does not exist', $oldTableName));
         }
         if ($this->isTableExists($newTableName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Table "%s" already exists', $newTableName));
@@ -3224,7 +3260,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return string
      * @codeCoverageIgnore
      */
-
     public function getTriggerName($tableName, $time, $event)
     {
         $triggerName = 'trg_' . $tableName . '_' . $time . '_' . $event;
@@ -3362,55 +3397,30 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
+     * @deprecated
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
-        $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
-        if (empty($fromSelect)) {
-            throw new LocalizedException(
-                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
-            );
-        }
-
-        $tableName = [];
-        $correlationName = '';
-        foreach ($fromSelect as $correlationName => $formPart) {
-            if ($formPart['joinType'] == \Magento\Framework\DB\Select::FROM) {
-                $tableName = $formPart['tableName'];
-                break;
-            }
-        }
-
-        $selectRange = $this->select()
-            ->from(
-                $tableName,
-                [
-                    new \Zend_Db_Expr('MIN(' . $this->quoteIdentifier($rangeField) . ') AS min'),
-                    new \Zend_Db_Expr('MAX(' . $this->quoteIdentifier($rangeField) . ') AS max'),
-                ]
-            );
-
-        $rangeResult = $this->fetchRow($selectRange);
-        $min = $rangeResult['min'];
-        $max = $rangeResult['max'];
-
+        $iterator = $this->getQueryGenerator()->generate($rangeField, $select, $stepCount);
         $queries = [];
-        while ($min <= $max) {
-            $partialSelect = clone $select;
-            $partialSelect->where(
-                $this->quoteIdentifier($correlationName) . '.'
-                . $this->quoteIdentifier($rangeField) . ' >= ?',
-                $min
-            )
-                ->where(
-                    $this->quoteIdentifier($correlationName) . '.'
-                    . $this->quoteIdentifier($rangeField) . ' < ?',
-                    $min + $stepCount
-                );
-            $queries[] = $partialSelect;
-            $min += $stepCount;
+        foreach ($iterator as $query) {
+            $queries[] = $query;
         }
         return $queries;
+    }
+
+    /**
+     * Get query generator
+     *
+     * @return QueryGenerator
+     * @deprecated
+     */
+    private function getQueryGenerator()
+    {
+        if ($this->queryGenerator === null) {
+            $this->queryGenerator = \Magento\Framework\App\ObjectManager::getInstance()->create(QueryGenerator::class);
+        }
+        return $this->queryGenerator;
     }
 
     /**

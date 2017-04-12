@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -194,5 +194,65 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $map['attribute_code_' . $k] = 'attribute_code_value_' . $k;
         }
         return $map[$key];
+    }
+
+    public function testGetGalleryImages()
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->setMethods(['getMediaGalleryImages'])
+            ->getMockForAbstractClass();
+        $productMock->expects($this->once())
+            ->method('getMediaGalleryImages')
+            ->willReturn($this->getImagesCollection());
+
+        $this->_imageHelperMock->expects($this->exactly(3))
+            ->method('init')
+            ->willReturnMap([
+                [$productMock, 'product_page_image_small', [], $this->_imageHelperMock],
+                [$productMock, 'product_page_image_medium_no_frame', [], $this->_imageHelperMock],
+                [$productMock, 'product_page_image_large_no_frame', [], $this->_imageHelperMock],
+            ])
+            ->willReturnSelf();
+        $this->_imageHelperMock->expects($this->exactly(3))
+            ->method('setImageFile')
+            ->with('test_file')
+            ->willReturnSelf();
+        $this->_imageHelperMock->expects($this->at(0))
+            ->method('getUrl')
+            ->willReturn('product_page_image_small_url');
+        $this->_imageHelperMock->expects($this->at(1))
+            ->method('getUrl')
+            ->willReturn('product_page_image_medium_url');
+        $this->_imageHelperMock->expects($this->at(2))
+            ->method('getUrl')
+            ->willReturn('product_page_image_large_url');
+
+        $this->assertInstanceOf(
+            \Magento\Framework\Data\Collection::class,
+            $this->_model->getGalleryImages($productMock)
+        );
+
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection
+     */
+    private function getImagesCollection()
+    {
+        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $items = [
+            new \Magento\Framework\DataObject([
+                'file' => 'test_file'
+            ]),
+        ];
+
+        $collectionMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($items));
+
+        return $collectionMock;
     }
 }

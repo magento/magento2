@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,5 +10,6 @@
     <block name="searchResultBlock" class="Magento\CatalogSearch\Test\Block\Advanced\Result" locator=".column.main" strategy="css selector"/>
     <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath"/>
     <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".search.results" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Cms\Test\Block\Messages" locator=".page.messages" strategy="css selector"/>
   </page>
 </config>

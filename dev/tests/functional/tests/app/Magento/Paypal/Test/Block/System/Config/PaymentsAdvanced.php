@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,8 +20,6 @@ class PaymentsAdvanced extends Block
      * @var array
      */
     private $fields = [
-        'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_group_all_in_one_payflow_advanced_' .
-            'required_settings_payments_advanced_business_account',
         'Partner' => '#payment_us_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_partner',
         'Vendor' => '#payment_us_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_vendor',
         'User' => '#payment_us_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_user',
@@ -54,8 +52,6 @@ class PaymentsAdvanced extends Block
      */
     public function specifyCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])
-            ->setValue('test@test.com');
         $this->_rootElement->find($this->fields['Partner'])->setValue('1');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('1');
         $this->_rootElement->find($this->fields['User'])->setValue('1');
@@ -69,7 +65,6 @@ class PaymentsAdvanced extends Block
      */
     public function clearCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])->setValue('');
         $this->_rootElement->find($this->fields['Partner'])->setValue('');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('');
         $this->_rootElement->find($this->fields['User'])->setValue('');

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="customer_form_template_handle"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="Magento_Customer::address/edit.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

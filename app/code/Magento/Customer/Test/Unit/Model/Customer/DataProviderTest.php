@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Customer;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -103,6 +105,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributesMetaWithOptions(array $expected)
     {
         $helper = new ObjectManager($this);
+        /** @var \Magento\Customer\Model\Customer\DataProvider $dataProvider */
         $dataProvider = $helper->getObject(
             \Magento\Customer\Model\Customer\DataProvider::class,
             [
@@ -227,6 +230,29 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     ],
                                 ],
                             ],
+                            'country_id' => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'options' => 'test-options',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => __('frontend_label'),
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                            'filterBy' => [
+                                                'target' => '${ $.provider }:data.customer.website_id',
+                                                'field' => 'website_ids'
+                                            ]
+                                        ],
+                                    ],
+                                ],
+                            ]
                         ],
                     ],
                 ]
@@ -298,7 +324,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $typeAddressMock->expects($this->once())
             ->method('getAttributeCollection')
-            ->willReturn($this->getAttributeMock());
+            ->willReturn($this->getAttributeMock('address'));
 
         return $typeAddressMock;
     }
@@ -306,7 +332,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return AbstractAttribute[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
-    protected function getAttributeMock()
+    protected function getAttributeMock($type = 'customer')
     {
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
@@ -365,10 +391,66 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 [$attributeMock, $this->logicalNot($this->isEmpty()), []],
                 [$attributeBooleanMock, $this->logicalNot($this->isEmpty()), []],
             ]);
+        $mocks = [$attributeMock, $attributeBooleanMock];
 
-        return [$attributeMock, $attributeBooleanMock];
+        if ($type == "address") {
+            $mocks[] = $this->getCountryAttrMock();
+        }
+        return $mocks;
     }
 
+    private function getCountryAttrMock()
+    {
+        $countryByWebsiteMock = $this->getMockBuilder(CountryWithWebsites::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $countryByWebsiteMock->expects($this->any())
+            ->method('getAllOptions')
+            ->willReturn('test-options');
+        $shareMock = $this->getMockBuilder(Share::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                [CountryWithWebsites::class, $countryByWebsiteMock],
+                [Share::class, $shareMock],
+            ]);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        $countryAttrMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $countryAttrMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn('country_id');
+
+        $countryAttrMock->expects($this->any())
+            ->method('getDataUsingMethod')
+            ->willReturnCallback(
+                function ($origName) {
+                    return $origName;
+                }
+            );
+        $countryAttrMock->expects($this->any())
+            ->method('getLabel')
+            ->willReturn(__('frontend_label'));
+        $countryAttrMock->expects($this->any())
+            ->method('usesSource')
+            ->willReturn(true);
+        $countryAttrMock->expects($this->any())
+            ->method('getSource')
+            ->willReturn(null);
+
+        return $countryAttrMock;
+    }
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetData()
     {
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
@@ -478,6 +560,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetDataWithCustomerFormData()
     {
         $customerId = 11;
@@ -591,6 +677,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     public function testGetDataWithCustomAttributeImage()
     {
         $customerId = 1;
@@ -598,6 +688,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $filename = '/filename.ext1';
         $viewUrl = 'viewUrl';
+        $mime = 'image/png';
 
         $expectedData = [
             $customerId => [
@@ -609,6 +700,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                             'size' => 1,
                             'url' => $viewUrl,
                             'name' => 'filename.ext1',
+                            'type' => $mime,
                         ],
                     ],
                 ],
@@ -688,6 +780,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getViewUrl')
             ->with('/filename.ext1', 'image')
             ->willReturn($viewUrl);
+        $this->fileProcessor->expects($this->once())
+            ->method('getMimeType')
+            ->with($filename)
+            ->willReturn($mime);
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
@@ -812,6 +908,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $dataProvider->getData());
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetAttributesMetaWithCustomAttributeImage()
     {
         $maxFileSize = 1000;

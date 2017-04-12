@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated since 2.2.0
+ * @see \Magento\Deploy\Service\Bundle
  */
 class Manager
 {

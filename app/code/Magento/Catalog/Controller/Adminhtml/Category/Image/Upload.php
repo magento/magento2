@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category\Image;
@@ -50,8 +50,10 @@ class Upload extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        $imageId = $this->_request->getParam('param_name', 'image');
+
         try {
-            $result = $this->imageUploader->saveFileToTmpDir('image');
+            $result = $this->imageUploader->saveFileToTmpDir($imageId);
 
             $result['cookie'] = [
                 'name' => $this->_getSession()->getName(),

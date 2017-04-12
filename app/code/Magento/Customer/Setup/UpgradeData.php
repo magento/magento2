@@ -1,17 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * @codeCoverageIgnore
@@ -27,6 +34,11 @@ class UpgradeData implements UpgradeDataInterface
     protected $customerSetupFactory;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @var IndexerRegistry
      */
     protected $indexerRegistry;
@@ -37,18 +49,34 @@ class UpgradeData implements UpgradeDataInterface
     protected $eavConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var FieldDataConverterFactory
+     */
+    private $fieldDataConverterFactory;
+
+    /**
      * @param CustomerSetupFactory $customerSetupFactory
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param FieldDataConverterFactory|null $fieldDataConverterFactory
      */
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
         IndexerRegistry $indexerRegistry,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        FieldDataConverterFactory $fieldDataConverterFactory = null
     ) {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
+
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory ?: ObjectManager::getInstance()->get(
+            FieldDataConverterFactory::class
+        );
     }
 
     /**
@@ -106,10 +134,147 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.9', '<')) {
+            $setup->getConnection()->beginTransaction();
+
+            try {
+                $this->migrateStoresAllowedCountriesToWebsite($setup);
+                $setup->getConnection()->commit();
+            } catch (\Exception $e) {
+                $setup->getConnection()->rollBack();
+                throw $e;
+            }
+        }
+        if (version_compare($context->getVersion(), '2.0.11', '<')) {
+            $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
+            $fieldDataConverter->convert(
+                $setup->getConnection(),
+                $setup->getTable('customer_eav_attribute'),
+                'attribute_id',
+                'validate_rules'
+            );
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
         $setup->endSetup();
+    }
+
+    /**
+     * Retrieve Store Manager
+     *
+     * @deprecated
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if (!$this->storeManager) {
+            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        }
+
+        return $this->storeManager;
+    }
+
+    /**
+     * Retrieve Allowed Countries Reader
+     *
+     * @deprecated
+     * @return AllowedCountries
+     */
+    private function getAllowedCountriesReader()
+    {
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
+    }
+
+    /**
+     * Merge allowed countries between different scopes
+     *
+     * @param array $countries
+     * @param array $newCountries
+     * @param string $identifier
+     * @return array
+     */
+    private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)
+    {
+        if (!isset($countries[$identifier])) {
+            $countries[$identifier] = $newCountries;
+        } else {
+            $countries[$identifier] =
+                array_replace($countries[$identifier], $newCountries);
+        }
+
+        return $countries;
+    }
+
+    /**
+     * Retrieve countries not depending on global scope
+     *
+     * @param string $scope
+     * @param int $scopeCode
+     * @return array
+     */
+    private function getAllowedCountries($scope, $scopeCode)
+    {
+        $reader = $this->getAllowedCountriesReader();
+        return $reader->makeCountriesUnique($reader->getCountriesFromConfig($scope, $scopeCode));
+    }
+
+    /**
+     * Merge allowed countries from stores to websites
+     *
+     * @param SetupInterface $setup
+     * @return void
+     */
+    private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
+    {
+        $allowedCountries = [];
+        //Process Websites
+        foreach ($this->getStoreManager()->getStores() as $store) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
+                $store->getWebsiteId()
+            );
+        }
+        //Process stores
+        foreach ($this->getStoreManager()->getWebsites() as $website) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
+                $website->getId()
+            );
+        }
+
+        $connection = $setup->getConnection();
+
+        //Remove everything from stores scope
+        $connection->delete(
+            $setup->getTable('core_config_data'),
+            [
+                'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                'scope = ?' => ScopeInterface::SCOPE_STORES
+            ]
+        );
+
+        //Update websites
+        foreach ($allowedCountries as $scopeId => $countries) {
+            $connection->update(
+                $setup->getTable('core_config_data'),
+                [
+                    'value' => implode(',', $countries)
+                ],
+                [
+                    'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                    'scope_id = ?' => $scopeId,
+                    'scope = ?' => ScopeInterface::SCOPE_WEBSITES
+                ]
+            );
+        }
     }
 
     /**

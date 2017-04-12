@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,13 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertGrandTotalOrderReview extends AbstractConstraint
 {
     /**
+     * Wait element.
+     *
+     * @var string
+     */
+    protected $waitElement = '.loading-mask';
+
+    /**
      * Assert that Order Grand Total is correct on checkoutOnePage
      *
      * @param CheckoutOnepage $checkoutOnepage
@@ -23,6 +30,7 @@ class AssertGrandTotalOrderReview extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage, $grandTotal)
     {
+        $checkoutOnepage->getReviewBlock()->waitForElementNotVisible($this->waitElement);
         $checkoutReviewGrandTotal = $checkoutOnepage->getReviewBlock()->getGrandTotal();
 
         \PHPUnit_Framework_Assert::assertEquals(

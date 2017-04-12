@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class UrnResolver
             //urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd
             $package = $componentRegistrar
                 ->getPath(ComponentRegistrar::MODULE, $matches['module']);
-        } else if (preg_match($frameworkPattern, $schema, $matches)) {
+        } elseif (preg_match($frameworkPattern, $schema, $matches)) {
             //urn:magento:framework:Module/etc/module.xsd
             //urn:magento:framework-amqp:Module/etc/module.xsd
             $package = $componentRegistrar

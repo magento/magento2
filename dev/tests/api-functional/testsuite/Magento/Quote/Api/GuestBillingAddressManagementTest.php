@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -88,8 +88,9 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @dataProvider setAddressDataProvider
      */
-    public function testSetAddress()
+    public function testSetAddress($useForShipping)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
@@ -125,8 +126,9 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             'fax' => '44332255',
         ];
         $requestData = [
-            "cartId" => $cartId,
+            'cartId' => $cartId,
             'address' => $addressData,
+            'useForShipping' => $useForShipping
         ];
 
         $addressId = $this->_webApiCall($serviceInfo, $requestData);
@@ -149,5 +151,27 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         foreach ($addressData as $key => $value) {
             $this->assertEquals($value, $savedData[$key]);
         }
+        $address = $quote->getShippingAddress();
+        $address->getRegionCode();
+        $savedData = $address->getData();
+        if ($useForShipping) {
+            //check that shipping address set
+            $this->assertEquals('shipping', $savedData['address_type']);
+            $this->assertEquals(1, $savedData['same_as_billing']);
+            //check the rest of fields
+            foreach ($addressData as $key => $value) {
+                $this->assertEquals($value, $savedData[$key]);
+            }
+        } else {
+            $this->assertEquals(0, $savedData['same_as_billing']);
+        }
+    }
+
+    public function setAddressDataProvider()
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }

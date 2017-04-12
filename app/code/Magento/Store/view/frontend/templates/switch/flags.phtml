@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+// @deprecated
 ?>
 <?php if (count($block->getStores())>1): ?>
 <div class="form-language">
-    <label for="select-language"><?php /* @escapeNotVerified */ echo __('Your Language:') ?></label>
-    <select id="select-language" title="<?php /* @escapeNotVerified */ echo __('Your Language') ?>" onchange="window.location.href=this.value" class="flags">
+    <label for="select-language"><?php echo $block->escapeHtml(__('Your Language:')) ?></label>
+    <select id="select-language" title="<?php echo $block->escapeHtmlAttr(__('Your Language')) ?>" onchange="window.location.href=this.value" class="flags">
     <?php foreach ($block->getStores() as $_lang): ?>
         <?php $_selected = ($_lang->getId() == $block->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
-        <option value="<?php /* @escapeNotVerified */ echo $_lang->getCurrentUrl() ?>" style="background-image:url('<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif') ?>');"<?php /* @escapeNotVerified */ echo $_selected ?>><?php echo $block->escapeHtml($_lang->getName()) ?></option>
+        <option value="<?php echo $block->escapeUrl($_lang->getCurrentUrl()) ?>" style="background-image:url('<?php echo $block->escapeUrl($block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif')); ?>');"<?php /* @noEscape */ echo $_selected ?>><?php echo $block->escapeHtml($_lang->getName()) ?></option>
     <?php endforeach; ?>
     </select>
 </div>

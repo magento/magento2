@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
@@ -8,8 +8,11 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -17,6 +20,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -60,9 +64,19 @@ class Preprocessor implements PreprocessorInterface
     private $metadataPool;
 
     /**
-     * @var TableMapper
+     * @var ScopeConfigInterface
      */
-    private $tableMapper;
+    private $scopeConfig;
+
+    /**
+     * @var AliasResolver
+     */
+    private $aliasResolver;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
 
     /**
      * @param ConditionManager $conditionManager
@@ -71,6 +85,10 @@ class Preprocessor implements PreprocessorInterface
      * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param AliasResolver|null $aliasResolver
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ConditionManager $conditionManager,
@@ -78,7 +96,10 @@ class Preprocessor implements PreprocessorInterface
         Config $config,
         ResourceConnection $resource,
         TableMapper $tableMapper,
-        $attributePrefix
+        $attributePrefix,
+        ScopeConfigInterface $scopeConfig = null,
+        AliasResolver $aliasResolver = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
     ) {
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
@@ -86,7 +107,18 @@ class Preprocessor implements PreprocessorInterface
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->attributePrefix = $attributePrefix;
-        $this->tableMapper = $tableMapper;
+
+        if (null === $scopeConfig) {
+            $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        }
+        if (null === $aliasResolver) {
+            $aliasResolver = ObjectManager::getInstance()->get(AliasResolver::class);
+        }
+        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
+        $this->scopeConfig = $scopeConfig;
+        $this->aliasResolver = $aliasResolver;
+
     }
 
     /**
@@ -117,19 +149,17 @@ class Preprocessor implements PreprocessorInterface
         } elseif ($filter->getField() === 'category_ids') {
             return 'category_ids_index.category_id = ' . (int) $filter->getValue();
         } elseif ($attribute->isStatic()) {
-            $alias = $this->tableMapper->getMappingAlias($filter);
+            $alias = $this->aliasResolver->getAlias($filter);
             $resultQuery = str_replace(
                 $this->connection->quoteIdentifier($attribute->getAttributeCode()),
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-        } elseif (
-            $filter->getType() === FilterInterface::TYPE_TERM &&
+        } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
             in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
             $resultQuery = $this->processTermSelect($filter, $isNegation);
-        } elseif (
-            $filter->getType() === FilterInterface::TYPE_RANGE &&
+        } elseif ($filter->getType() === FilterInterface::TYPE_RANGE &&
             in_array($attribute->getBackendType(), ['decimal', 'int'], true)
         ) {
             $resultQuery = $this->processRangeNumeric($filter, $query, $attribute);
@@ -176,7 +206,10 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
     {
-        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
+        $indexerSuffix = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
+        )->getTableSuffix();
+        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' . $indexerSuffix : '' . $indexerSuffix;
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
         $entityField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
@@ -208,7 +241,7 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processTermSelect(FilterInterface $filter, $isNegation)
     {
-        $alias = $this->tableMapper->getMappingAlias($filter);
+        $alias = $this->aliasResolver->getAlias($filter);
         if (is_array($filter->getValue())) {
             $value = sprintf(
                 '%s IN (%s)',
@@ -224,7 +257,29 @@ class Preprocessor implements PreprocessorInterface
             $value
         );
 
+        if ($this->isAddStockFilter()) {
+            $resultQuery = sprintf(
+                '%1$s AND %2$s%3$s.stock_status = %4$s',
+                $resultQuery,
+                $alias,
+                AliasResolver::STOCK_FILTER_SUFFIX,
+                Stock::STOCK_IN_STOCK
+            );
+        }
+
         return $resultQuery;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isAddStockFilter()
+    {
+        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
+            'cataloginventory/options/show_out_of_stock',
+            ScopeInterface::SCOPE_STORE
+        );
+        return false === $isShowOutOfStock;
     }
 
     /**

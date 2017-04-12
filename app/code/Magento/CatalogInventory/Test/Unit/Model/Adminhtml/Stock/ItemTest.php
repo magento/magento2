@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Adminhtml\Stock;
@@ -62,6 +62,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $this->_model->setProductId(1);
-        $this->assertEquals(['catalog_product_1'], $this->_model->getIdentities());
+        $this->assertEquals(['cat_p_1'], $this->_model->getIdentities());
     }
 }

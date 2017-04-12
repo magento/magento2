@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,6 +31,9 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
@@ -53,13 +56,7 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $eventManager->expects($this->once())->method('dispatch')->will($this->returnValue(true));
-
-        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()->getMock();
-        $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
-            ->will($this->returnValue(false));
+        $eventManager->expects($this->exactly(2))->method('dispatch')->will($this->returnValue(true));
 
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['setStoreId', 'load', 'getId', '__wakeup', '__sleep'])
@@ -93,8 +90,6 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
 
         $this->context->expects($this->once())->method('getEventManager')
             ->will($this->returnValue($eventManager));
-        $this->context->expects($this->once())->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfig));
         $this->context->expects($this->once())->method('getLayout')
             ->will($this->returnValue($layout));
         $this->context->expects($this->once())->method('getRequest')

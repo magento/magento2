@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Some_For_Name" type="Some_Type_Name" />
-    <virtualType name="" type="" shared="true">
+    <virtualType name="Php\Namespace\VirtualClassName" type="Php\Namespace\ConcreteClassName" shared="true">
         <arguments>
             <argument name="object" xsi:type="object" shared="true">Object</argument>
             <argument name="init_parameter" xsi:type="init_parameter">INIT_PARAMETER</argument>
@@ -57,6 +57,12 @@
                 </item>
             </argument>
             <argument name="baseController" xsi:type="string">some_value</argument>
+            <argument name="sortedList" xsi:type="array">
+                <item name="itemTwo" xsi:type="object" sortOrder="20">Instance_test_name_two</item>
+                <item name="itemOne" xsi:type="object">Instance_test_name_one</item>
+                <item name="itemThree" xsi:type="object" sortOrder="30">Instance_test_name_three</item>
+            </argument>
         </arguments>
     </type>
+    <virtualType name="\BackslashPrefix\IsAllowed" type="TypeName" shared="true"/>
 </config>

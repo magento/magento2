@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -87,35 +87,47 @@ class CustomOptionsTest extends AbstractModifierTest
 
         $originalData = [
             $productId => [
-                \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::DATA_SOURCE_DEFAULT => [
+                CustomOptions::DATA_SOURCE_DEFAULT => [
                     'title' => 'original'
                 ]
             ]
         ];
 
         $options = [
-            $this->getProductOptionMock(['title' => 'option1']),
+            $this->getProductOptionMock(['title' => 'option1', 'store_title' => 'Option Store Title']),
             $this->getProductOptionMock(
-                ['title' => 'option2'],
+                ['title' => 'option2', 'store_title' => null],
                 [
-                    $this->getProductOptionMock(['title' => 'value1']),
-                    $this->getProductOptionMock(['title' => 'value2'])
+                    $this->getProductOptionMock(['title' => 'value1', 'store_title' => 'Option Value Store Title']),
+                    $this->getProductOptionMock(['title' => 'value2', 'store_title' => null])
                 ]
             )
         ];
 
         $resultData = [
             $productId => [
-                \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::DATA_SOURCE_DEFAULT => [
-                    'title' => 'original',
-                    \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::FIELD_ENABLE => 1,
-                    \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::GRID_OPTIONS_NAME => [
-                        ['title' => 'option1'],
+                CustomOptions::DATA_SOURCE_DEFAULT => [
+                    CustomOptions::FIELD_TITLE_NAME => 'original',
+                    CustomOptions::FIELD_ENABLE => 1,
+                    CustomOptions::GRID_OPTIONS_NAME => [
                         [
-                            'title' => 'option2',
+                            CustomOptions::FIELD_TITLE_NAME => 'option1',
+                            CustomOptions::FIELD_STORE_TITLE_NAME => 'Option Store Title',
+                            CustomOptions::FIELD_IS_USE_DEFAULT => false
+                        ], [
+                            CustomOptions::FIELD_TITLE_NAME => 'option2',
+                            CustomOptions::FIELD_STORE_TITLE_NAME => null,
+                            CustomOptions::FIELD_IS_USE_DEFAULT => true,
                             CustomOptions::GRID_TYPE_SELECT_NAME => [
-                                ['title' => 'value1'],
-                                ['title' => 'value2']
+                                [
+                                    CustomOptions::FIELD_TITLE_NAME => 'value1',
+                                    CustomOptions::FIELD_STORE_TITLE_NAME => 'Option Value Store Title',
+                                    CustomOptions::FIELD_IS_USE_DEFAULT => false
+                                ], [
+                                    CustomOptions::FIELD_TITLE_NAME => 'value2',
+                                    CustomOptions::FIELD_STORE_TITLE_NAME => null,
+                                    CustomOptions::FIELD_IS_USE_DEFAULT => true
+                                ]
                             ]
                         ]
                     ]
@@ -154,13 +166,13 @@ class CustomOptionsTest extends AbstractModifierTest
      */
     protected function getProductOptionMock(array $data, array $values = [])
     {
+        /** @var ProductOption|\PHPUnit_Framework_MockObject_MockObject $productOptionMock */
         $productOptionMock = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getValues'])
             ->getMock();
 
-        $productOptionMock->expects($this->any())
-            ->method('getData')
-            ->willReturn($data);
+        $productOptionMock->setData($data);
         $productOptionMock->expects($this->any())
             ->method('getValues')
             ->willReturn($values);

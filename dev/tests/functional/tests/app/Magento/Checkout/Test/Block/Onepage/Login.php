@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Block\Onepage;
 
 use Magento\Checkout\Test\Fixture\Checkout;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -87,6 +88,20 @@ class Login extends Form
     {
         $this->fill($customer);
         $this->_rootElement->find($this->login)->click();
+        $this->waitForElementNotVisible($this->loadingMask);
+    }
+
+    /**
+     * Fill required fields for guest checkout.
+     *
+     * @param Customer $customer
+     * @return void
+     */
+    public function fillGuestFields(Customer $customer)
+    {
+        $mapping = $this->dataMapping();
+        $this->_rootElement->find($mapping['email']['selector'], $mapping['email']['strategy'])
+            ->setValue($customer->getEmail());
         $this->waitForElementNotVisible($this->loadingMask);
     }
 

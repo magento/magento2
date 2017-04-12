@@ -1,26 +1,32 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="billing-address-same-as-shipping-block field choice" data-bind="visible: canUseShippingAddress()">
-    <input type="checkbox" name="billing-address-same-as-shipping" data-bind="checked: isAddressSameAsShipping, click: useShippingAddress, attr: {id: 'billing-address-same-as-shipping-' + $parent.getCode()}"/>
-    <label data-bind="attr: {for: 'billing-address-same-as-shipping-' + $parent.getCode()}"><span data-bind="i18n: 'My billing and shipping address are the same'"></span></label>
-</div>
+<div class="checkout-billing-address">
 
-<!-- ko template: 'Magento_Checkout/billing-address/details' --><!-- /ko -->
-<fieldset class="fieldset" data-bind="visible: !isAddressDetailsVisible()">
-    <!-- ko template: 'Magento_Checkout/billing-address/list' --><!-- /ko -->
-    <!-- ko template: 'Magento_Checkout/billing-address/form' --><!-- /ko -->
-    <div class="actions-toolbar">
-        <div class="primary">
-            <button class="action action-update" type="button" data-bind="click: updateAddress">
-                <span data-bind="i18n: 'Update'"></span>
-            </button>
-            <button class="action action-cancel" type="button" data-bind="click: cancelAddressEdit">
-                <span data-bind="i18n: 'Cancel'"></span>
-            </button>
-        </div>
+    <div class="billing-address-same-as-shipping-block field choice" data-bind="visible: canUseShippingAddress()">
+        <input type="checkbox" name="billing-address-same-as-shipping"
+               data-bind="checked: isAddressSameAsShipping, click: useShippingAddress, attr: {id: 'billing-address-same-as-shipping-' + getCode($parent)}"/>
+        <label data-bind="attr: {for: 'billing-address-same-as-shipping-' + getCode($parent)}"><span
+                data-bind="i18n: 'My billing and shipping address are the same'"></span></label>
     </div>
-</fieldset>
+
+    <!-- ko template: 'Magento_Checkout/billing-address/details' --><!-- /ko -->
+    <fieldset class="fieldset" data-bind="visible: !isAddressDetailsVisible()">
+        <!-- ko template: 'Magento_Checkout/billing-address/list' --><!-- /ko -->
+        <!-- ko template: 'Magento_Checkout/billing-address/form' --><!-- /ko -->
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action action-update" type="button" data-bind="click: updateAddress">
+                    <span data-bind="i18n: 'Update'"></span>
+                </button>
+                <button class="action action-cancel" type="button" data-bind="click: cancelAddressEdit">
+                    <span data-bind="i18n: 'Cancel'"></span>
+                </button>
+            </div>
+        </div>
+    </fieldset>
+
+</div>

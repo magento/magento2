@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,22 +11,22 @@
         <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View" name="sales_creditmemo_view">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form" name="form" template="order/creditmemo/view/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="order/view/info.phtml"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Form" name="form" template="Magento_Sales::order/creditmemo/view/form.phtml">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Items" name="creditmemo_items" template="order/creditmemo/view/items.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="order/creditmemo/view/items/renderer/default.phtml"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="items/column/qty.phtml" group="column"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="items/column/name.phtml" group="column"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Items" name="creditmemo_items" template="Magento_Sales::order/creditmemo/view/items.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/creditmemo/view/items/renderer/default.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
                         <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
                     </block>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="order/comments/view.phtml">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="Magento_Sales::order/comments/view.phtml">
                         <action method="setParentType">
                             <argument name="type" xsi:type="string">creditmemo</argument>
                         </action>
                     </block>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Totals" name="creditmemo_totals" template="order/totals.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="order/totals/tax.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Totals" name="creditmemo_totals" template="Magento_Sales::order/totals.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="Magento_Sales::order/totals/tax.phtml"/>
                     </block>
                 </block>
             </block>

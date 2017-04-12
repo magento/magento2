@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Model\Test\Unit;
-
 
 class AbstractModelTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,7 +92,6 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->connectionMock));
-
     }
 
     public function testDelete()

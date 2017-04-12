@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\PriceBox;
+use Magento\Framework\Pricing\Render\PriceBox;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\PriceBox
@@ -133,7 +133,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
                 'data' => ['css_classes' => 'some_css_class'],
                 'price_code' => 'test_price',
                 'css_classes' => 'some_css_class price-test_price'
-        ]];
+            ]];
     }
 
     public function testGetSaleableItem()
@@ -240,5 +240,18 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     public function testGetRendererPool()
     {
         $this->assertEquals($this->rendererPool, $this->model->getRendererPool());
+    }
+
+    /**
+     * This tests ensures that protected method getCacheLifetime() returns a null value when cacheLifeTime is not
+     * explicitly set in the parent block
+     */
+    public function testCacheLifetime()
+    {
+        $reflectionClass = new \ReflectionClass(get_class($this->model));
+        $methodReflection = $reflectionClass->getMethod('getCacheLifetime');
+        $methodReflection->setAccessible(true);
+        $cacheLifeTime = $methodReflection->invoke($this->model);
+        $this->assertNull($cacheLifeTime, 'Expected null cache lifetime');
     }
 }

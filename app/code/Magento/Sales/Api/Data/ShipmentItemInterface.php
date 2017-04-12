@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -12,8 +12,9 @@ namespace Magento\Sales\Api\Data;
  * document lists the products and their quantities in the delivery package. A product is an item in a shipment.
  * @api
  */
-interface ShipmentItemInterface extends \Magento\Sales\Api\Data\LineItemInterface,
-\Magento\Framework\Api\ExtensibleDataInterface
+interface ShipmentItemInterface extends
+    \Magento\Sales\Api\Data\LineItemInterface,
+    \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case

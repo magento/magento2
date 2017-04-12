@@ -1,31 +1,48 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
-
+/** Create category */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
+/** Create fixture store */
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
+/** Create product with multiselect attribute and values */
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
+/** Create dummy text attribute */
+require dirname(dirname(__DIR__)) . '/Catalog/_files/product_text_attribute.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+/** @var \Magento\Catalog\Model\Product $productModel */
 $productModel = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $customOptions = [
     [
-        'id' => 'test_option_code_1',
-        'option_id' => '0',
+        'option_id' => null,
         'sort_order' => '0',
         'title' => 'Option 1',
         'type' => 'drop_down',
         'is_require' => 1,
         'values' => [
-            1 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 1"', 'price' => '1.00', 'price_type' => 'fixed'],
-            2 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 2"', 'price' => '2.00', 'price_type' => 'fixed'],
-            3 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 3"', 'price' => '3.00', 'price_type' => 'fixed']
+            1 => [
+                'option_type_id' => null,
+                'title' => 'Option 1 & Value 1"',
+                'price' => '1.00',
+                'price_type' => 'fixed'
+            ],
+            2 => [
+                'option_type_id' => null,
+                'title' => 'Option 1 & Value 2"',
+                'price' => '2.00',
+                'price_type' => 'fixed'
+            ],
+            3 => [
+                'option_type_id' => null,
+                'title' => 'Option 1 & Value 3"',
+                'price' => '3.00',
+                'price_type' => 'fixed'
+            ]
         ]
     ],
     [
@@ -52,6 +69,8 @@ $productModel->setTypeId(
     'simple'
 )->setPrice(
     10
+)->addData(
+    ['text_attribute' => '!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/']
 )->setTierPrice(
     [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
 )->setVisibility(

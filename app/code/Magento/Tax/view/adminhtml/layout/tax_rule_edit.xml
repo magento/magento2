@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,8 +13,8 @@
     <body>
         <referenceContainer name="content">
             <block class="Magento\Tax\Block\Adminhtml\Rule\Edit"/>
-            <block class="Magento\Tax\Block\Adminhtml\Rule\Edit\Form" name="tax-rule-edit" template="rule/edit.phtml"/>
-            <block class="Magento\Tax\Block\Adminhtml\Rate\Form" name="tax-rate-form" template="rule/rate/form.phtml"/>
+            <block class="Magento\Tax\Block\Adminhtml\Rule\Edit\Form" name="tax-rule-edit" template="Magento_Tax::rule/edit.phtml"/>
+            <block class="Magento\Tax\Block\Adminhtml\Rate\Form" name="tax-rate-form" template="Magento_Tax::rule/rate/form.phtml"/>
         </referenceContainer>
     </body>
 </page>

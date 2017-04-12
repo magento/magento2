@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -37,13 +37,14 @@
         <step name="selectStore" module="Magento_Sales" next="addProducts" />
         <step name="addProducts" module="Magento_Sales" next="fillAccountInformation" />
         <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="saveCreditCardOnBackend" />
         <step name="saveCreditCardOnBackend" module="Magento_Vault" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" next="reorder" />
         <step name="reorder" module="Magento_Sales" next="useVaultPaymentToken" />
         <step name="useVaultPaymentToken" module="Magento_Vault" next="submitOrderWithVault" />
-        <step name="submitOrderWithVault" alias="submitOrder" module="Magento_Sales" />
+        <step name="submitOrderWithVault" module="Magento_Vault" />
     </scenario>
     <scenario name="ReorderUsingVaultTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
@@ -55,12 +56,16 @@
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
-        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="checkSaveCreditCardOption" />
+        <step name="checkSaveCreditCardOption" module="Magento_Vault" next="fillBillingInformation" />
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="openOrder" />
         <step name="openOrder" module="Magento_Sales" next="reorder" />
         <step name="reorder" module="Magento_Sales" next="useVaultPaymentToken" />
         <step name="useVaultPaymentToken" module="Magento_Vault" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
+    </scenario>
+    <scenario name="OnePageCheckoutTest">
+        <step name="checkSaveCreditCardOption" module="Magento_Vault" prev="selectPaymentMethod" next="placeOrder" />
     </scenario>
 </config>

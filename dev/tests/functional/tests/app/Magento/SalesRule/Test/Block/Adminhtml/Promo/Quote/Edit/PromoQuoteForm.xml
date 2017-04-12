@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -40,8 +40,8 @@
     </rule_information>
     <conditions>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::div[@class='rule-tree']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="conditions"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <conditions_serialized>
                 <selector>.fieldset[id^="sales_rule_formrule_conditions_fieldset_"]</selector>
@@ -51,8 +51,8 @@
     </conditions>
     <actions>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::select[@name='simple_action']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="actions"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <simple_action>
                 <input>select</input>
@@ -77,7 +77,12 @@
     </actions>
     <labels>
         <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\Labels</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='store_labels[0]']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="labels"]</selector>
+        <strategy>css selector</strategy>
     </labels>
+    <manage_coupon_code>
+        <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode</class>
+        <selector>[data-index="block_promo_sales_rule_edit_tab_coupons"]</selector>
+        <strategy>css selector</strategy>
+    </manage_coupon_code>
 </sections>
