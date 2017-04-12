@@ -8,6 +8,11 @@ namespace Magento\Framework\Code\Reader;
 class ClassReader implements ClassReaderInterface
 {
     /**
+     * @var array
+     */
+     protected $classNameParents;
+     
+    /**
      * Read class constructor signature
      *
      * @param string $className
@@ -56,27 +61,32 @@ class ClassReader implements ClassReaderInterface
      */
     public function getParents($className)
     {
-        $parentClass = get_parent_class($className);
-        if ($parentClass) {
-            $result = [];
-            $interfaces = class_implements($className);
-            if ($interfaces) {
-                $parentInterfaces = class_implements($parentClass);
-                if ($parentInterfaces) {
-                    $result = array_values(array_diff($interfaces, $parentInterfaces));
+        if (isset($this->classNameParents[$className])) {
+            return $this->classNameParents[$className];
+        } else {
+            $parentClass = get_parent_class($className);
+            if ($parentClass) {
+                $result = [];
+                $interfaces = class_implements($className);
+                if ($interfaces) {
+                    $parentInterfaces = class_implements($parentClass);
+                    if ($parentInterfaces) {
+                        $result = array_values(array_diff($interfaces, $parentInterfaces));
+                    } else {
+                        $result = array_values($interfaces);
+                    }
+                }
+                array_unshift($result, $parentClass);
+            } else {
+                $result = array_values(class_implements($className));
+                if ($result) {
+                    array_unshift($result, null);
                 } else {
-                    $result = array_values($interfaces);
+                    $result = [];
                 }
             }
-            array_unshift($result, $parentClass);
-        } else {
-            $result = array_values(class_implements($className));
-            if ($result) {
-                array_unshift($result, null);
-            } else {
-                $result = [];
-            }
+            $this->classNameParents[$className] = $result;
+            return $result;
         }
-        return $result;
     }
 }
