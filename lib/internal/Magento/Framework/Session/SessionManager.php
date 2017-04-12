@@ -8,6 +8,7 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 
 /**
  * Session Manager
@@ -188,6 +189,7 @@ class SessionManager implements SessionManagerInterface
             $this->setSessionId($this->sidResolver->getSid($this));
             session_start();
             $this->validator->validate($this);
+            $this->renewCookie();
 
             register_shutdown_function([$this, 'writeClose']);
 
@@ -195,6 +197,32 @@ class SessionManager implements SessionManagerInterface
             \Magento\Framework\Profiler::stop('session_start');
         }
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
+        return $this;
+    }
+
+    /**
+     * Renew session cookie to prolong session
+     *
+     * @return $this
+     */
+    private function renewCookie()
+    {
+        if (!$this->getCookieLifetime()) {
+            return $this;
+        }
+        $this->cookieManager->setPublicCookie(
+            $this->getName(),
+            $this->getSessionId(),
+            $this->cookieMetadataFactory->createPublicCookieMetadata(
+                [
+                    CookieMetadata::KEY_DURATION => $this->getCookieLifetime(),
+                    CookieMetadata::KEY_DOMAIN => $this->sessionConfig->getCookieDomain(),
+                    CookieMetadata::KEY_PATH => $this->sessionConfig->getCookiePath(),
+                    CookieMetadata::KEY_SECURE => $this->sessionConfig->getCookieSecure(),
+                    CookieMetadata::KEY_HTTP_ONLY => $this->sessionConfig->getCookieHttpOnly()
+                ]
+            )
+        );
         return $this;
     }
 

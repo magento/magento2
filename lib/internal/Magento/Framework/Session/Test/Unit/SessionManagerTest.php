@@ -52,7 +52,6 @@ namespace Magento\Framework\Session\Test\Unit {
 
         protected function setUp()
         {
-            $this->markTestSkipped('To be fixed in MAGETWO-34751');
             global $mockPHPFunctions;
             require_once __DIR__ . '/_files/mock_ini_set.php';
             require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
