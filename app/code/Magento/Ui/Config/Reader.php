@@ -130,7 +130,6 @@ class Reader implements ReaderInterface
         }
 
         $definitionData = $this->definitionReader->read();
-        $output = $this->mergeDefinition($output, $definitionData);
 
         if (isset($output['attributes']['extends'])) {
             $extendsReader = $this->readerFactory->create(
@@ -144,6 +143,8 @@ class Reader implements ReaderInterface
             $extendsData = $extendsReader->read();
             $output = array_replace_recursive($extendsData, $output);
         }
+
+        $output = $this->mergeDefinition($output, $definitionData);
 
         return $output;
     }

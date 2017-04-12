@@ -6,7 +6,7 @@
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <htmlContent name="video_gallery" sortOrder="22">
+    <htmlContent name="gallery" sortOrder="22">
         <argument name="data" xsi:type="array">
             <item name="wrapper" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Images And Videos</item>
