@@ -134,16 +134,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * Return copy of DOM
-     *
-     * @return \Magento\Framework\Config\Dom
-     */
-    public function getDomConfigCopy()
-    {
-        return clone $this->_getDomConfigModel();
-    }
-
-    /**
      * Variables are identified by module and name
      *
      * @return array
