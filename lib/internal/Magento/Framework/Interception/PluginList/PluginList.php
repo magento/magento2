@@ -1,8 +1,6 @@
 <?php
 /**
- * Plugin configuration storage. Provides list of plugins configured for type.
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\PluginList;
@@ -17,8 +15,12 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
+ * Plugin config, provides list of plugins for a type
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PluginList extends Scoped implements InterceptionPluginList
@@ -81,6 +83,13 @@ class PluginList extends Scoped implements InterceptionPluginList
     private $logger;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param ReaderInterface $reader
      * @param ScopeInterface $configScope
      * @param CacheInterface $cache
@@ -90,7 +99,8 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param ObjectManagerInterface $objectManager
      * @param ClassDefinitions $classDefinitions
      * @param array $scopePriorityScheme
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -103,9 +113,11 @@ class PluginList extends Scoped implements InterceptionPluginList
         ObjectManagerInterface $objectManager,
         ClassDefinitions $classDefinitions,
         array $scopePriorityScheme = ['global'],
-        $cacheId = 'plugins'
+        $cacheId = 'plugins',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $configScope, $cache, $cacheId);
+        $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
+        parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;
         $this->_definitions = $definitions;
@@ -275,9 +287,9 @@ class PluginList extends Scoped implements InterceptionPluginList
             $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
             $data = $this->_cache->load($cacheId);
             if ($data) {
-                list($this->_data, $this->_inherited, $this->_processed) = unserialize($data);
-                foreach ($this->_scopePriorityScheme as $scope) {
-                    $this->_loadedScopes[$scope] = true;
+                list($this->_data, $this->_inherited, $this->_processed) = $this->serializer->unserialize($data);
+                foreach ($this->_scopePriorityScheme as $scopeCode) {
+                    $this->_loadedScopes[$scopeCode] = true;
                 }
             } else {
                 $virtualTypes = [];
@@ -285,18 +297,17 @@ class PluginList extends Scoped implements InterceptionPluginList
                     if (false == isset($this->_loadedScopes[$scopeCode])) {
                         $data = $this->_reader->read($scopeCode);
                         unset($data['preferences']);
-                        if (!count($data)) {
-                            continue;
-                        }
-                        $this->_inherited = [];
-                        $this->_processed = [];
-                        $this->merge($data);
-                        $this->_loadedScopes[$scopeCode] = true;
-                        foreach ($data as $class => $config) {
-                            if (isset($config['type'])) {
-                                $virtualTypes[] = $class;
+                        if (count($data) > 0) {
+                            $this->_inherited = [];
+                            $this->_processed = [];
+                            $this->merge($data);
+                            foreach ($data as $class => $config) {
+                                if (isset($config['type'])) {
+                                    $virtualTypes[] = $class;
+                                }
                             }
                         }
+                        $this->_loadedScopes[$scopeCode] = true;
                     }
                     if ($this->isCurrentScope($scopeCode)) {
                         break;
@@ -308,7 +319,10 @@ class PluginList extends Scoped implements InterceptionPluginList
                 foreach ($this->getClassDefinitions() as $class) {
                     $this->_inheritPlugins($class);
                 }
-                $this->_cache->save(serialize([$this->_data, $this->_inherited, $this->_processed]), $cacheId);
+                $this->_cache->save(
+                    $this->serializer->serialize([$this->_data, $this->_inherited, $this->_processed]),
+                    $cacheId
+                );
             }
             $this->_pluginInstances = [];
         }
@@ -372,10 +386,10 @@ class PluginList extends Scoped implements InterceptionPluginList
     }
 
     /**
-     * Returns logger instance
+     * Get logger
      *
-     * @deprecated
      * @return \Psr\Log\LoggerInterface
+     * @deprecated
      */
     private function getLogger()
     {

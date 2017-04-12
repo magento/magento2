@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Asset\Repository
      */
     private $repository;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
 
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -72,6 +77,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManagerMock = $this->getMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ['create', 'get'],
+            [],
+            '',
+            false
+        );
         $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -102,6 +114,19 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $repositoryMapMock = $this->getMock(
+            \Magento\Framework\View\Asset\File::class,
+            ['getMap'],
+            [],
+            '',
+            false
+        );
+        $repositoryMapMock->method('getMap')->willReturn([]);
+        $this->objectManagerMock->method('get')
+            ->with(\Magento\Framework\View\Asset\RepositoryMap::class)
+            ->willReturn($repositoryMapMock);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->repository = (new ObjectManager($this))->getObject(Repository::class, [
             'baseUrl' => $this->urlMock,
@@ -185,8 +210,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'baseUrl' => '',
                     'areaType' => '',
                     'themePath' => 'Default',
-                    'localeCode' => '',
-                    'isSecure' => '',
+                    'localeCode' => ''
                 ]
             )
             ->willReturn($fallbackContextMock);
@@ -251,8 +275,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'baseUrl' => '',
                     'areaType' => 'area',
                     'themePath' => '',
-                    'localeCode' => 'locale',
-                    'isSecure' => '',
+                    'localeCode' => 'locale'
                 ]
             )
             ->willReturn($fallbackContextMock);

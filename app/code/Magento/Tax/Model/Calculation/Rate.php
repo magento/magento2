@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -400,6 +400,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->getData(self::KEY_ZIP_IS_RANGE);
     }
+
     /**
      * Set country id
      *
@@ -509,6 +510,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->setData(self::KEY_TITLES, $titles);
     }
+
     // @codeCoverageIgnoreEnd
 
     /**

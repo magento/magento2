@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Helper;
@@ -8,6 +8,12 @@ namespace Magento\Payment\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Framework\DataObject;
 
+/**
+ * This class encapsulates implicit interfaces (array structures) used in payments implementation.
+ * This class was introduced for backward compatibility with legacy implementation.
+ *
+ * @api
+ */
 class SubjectReader
 {
     /**

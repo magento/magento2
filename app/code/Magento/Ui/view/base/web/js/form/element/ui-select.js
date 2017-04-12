@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     './abstract',
@@ -254,7 +257,13 @@ define([
             if (!data.hasOwnProperty(this.separator)) {
                 !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
 
-                if (!_.findWhere(this.cacheOptions.lastOptions, {value: data.value})) {
+                if (!_.findWhere(
+                    this.cacheOptions.lastOptions,
+                        {
+                            value: data.value
+                        }
+                    )
+                ) {
                     this.cacheOptions.lastOptions.push(data);
                 }
 
@@ -302,7 +311,9 @@ define([
                 'filterOptionsFocus'
             ]);
 
-            this.filterInputValue.extend({rateLimit: this.filterRateLimit});
+            this.filterInputValue.extend({
+                rateLimit: this.filterRateLimit
+            });
 
             return this;
         },
@@ -375,7 +386,7 @@ define([
             options = options || this.cacheOptions.tree;
 
             _.each(options, function (opt) {
-                if (opt.value == option.parent) { /* eslint eqeqeq:0 */
+                if (opt.value == option.parent) { //eslint-disable-line eqeqeq
                     delete  option.parent;
                     opt[this.separator] ? opt[this.separator].push(option) : opt[this.separator] = [option];
                     copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
@@ -393,8 +404,8 @@ define([
         outerClick: function () {
             this.listVisible() ? this.listVisible(false) : false;
 
-            if(isTouchDevice) {
-               this.multiselectFocus(false);
+            if (isTouchDevice) {
+                this.multiselectFocus(false);
             }
         },
 
@@ -614,7 +625,7 @@ define([
             return this.cacheOptions.plain.filter(function (opt) {
                 return _.isArray(selected) ?
                     _.contains(selected, opt.value) :
-                selected == opt.value;
+                selected == opt.value;//eslint-disable-line eqeqeq
             });
         },
 
@@ -847,7 +858,7 @@ define([
          * Find current hovered element
          * and change scroll position
          *
-         * @param {Number} index - element index
+         * @param {Number} element - element index
          */
         _scrollTo: function (element) {
             var curEl = $(element).children(this.actionTargetSelector),
@@ -972,12 +983,10 @@ define([
 
             previousElement = $(currentElement).prev()[0];
 
-            return (
-                this._getLastIn(previousElement) ||
+            return this._getLastIn(previousElement) ||
                 previousElement ||
                 this._getFirstParentOf(currentElement) ||
-                lastElement
-            );
+                lastElement;
         },
 
         /**
@@ -994,12 +1003,10 @@ define([
                 return firstElement;
             }
 
-            return (
-                this._getFirstIn(currentElement) ||
+            return this._getFirstIn(currentElement) ||
                 $(currentElement).next()[0] ||
                 this._getParentsOf(currentElement).next()[0] ||
-                firstElement
-            );
+                firstElement;
         },
 
         /**
@@ -1047,7 +1054,7 @@ define([
          *
          * @param {Element} element
          */
-        _hoverTo: function(element) {
+        _hoverTo: function (element) {
             if (this.hoveredElement) {
                 $(this.hoveredElement)
                     .children(this.actionTargetSelector)

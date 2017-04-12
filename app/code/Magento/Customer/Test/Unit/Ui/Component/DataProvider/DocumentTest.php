@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\DataProvider;
@@ -13,14 +13,13 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Ui\Component\DataProvider\Document;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Sales\Model\Order\Invoice;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class DocumentTest
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DocumentTest extends \PHPUnit_Framework_TestCase
@@ -53,9 +52,9 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->initAttributeValueFactoryMock();
-        
+
         $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
-        
+
         $this->customerMetadata = $this->getMockForAbstractClass(CustomerMetadataInterface::class);
 
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);

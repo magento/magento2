@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -151,7 +151,7 @@ class PackagesData
         $timezone = $this->timeZoneProvider->get();
         return [
             'date' => $timezone->formatDateTime(
-                new \DateTime('@'.$syncDate),
+                new \DateTime('@' . $syncDate),
                 \IntlDateFormatter::MEDIUM,
                 \IntlDateFormatter::NONE,
                 null,
@@ -159,7 +159,7 @@ class PackagesData
                 'd MMM Y'
             ),
             'time' => $timezone->formatDateTime(
-                new \DateTime('@'.$syncDate),
+                new \DateTime('@' . $syncDate),
                 \IntlDateFormatter::NONE,
                 \IntlDateFormatter::MEDIUM,
                 null,
@@ -209,7 +209,7 @@ class PackagesData
                 $packagesForUpdate[$package['name']] = $package;
             }
         }
-        
+
         return $packagesForUpdate;
     }
 
@@ -309,7 +309,7 @@ class PackagesData
         $packagesJson = $this->getPackagesJson();
 
         return isset($packagesJson[$packageName][$packageVersion]['extra']) ?
-            $packagesJson[$packageName][$packageVersion]['extra'] : [] ;
+            $packagesJson[$packageName][$packageVersion]['extra'] : [];
     }
 
     /**
@@ -479,8 +479,7 @@ class PackagesData
         $magentoRepositories = $this->composerInformation->getRootRepositories();
 
         // Check we have only one repo.magento.com repository
-        if (
-            count($magentoRepositories) === 1
+        if (count($magentoRepositories) === 1
             && strpos($magentoRepositories[0], $this->packagesAuth->getCredentialBaseUrl())
         ) {
             $packagesJson = $this->getPackagesJson();

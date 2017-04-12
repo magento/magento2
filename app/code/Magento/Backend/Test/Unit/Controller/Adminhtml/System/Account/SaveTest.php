@@ -2,7 +2,7 @@
 /**
  * Unit test for \Magento\Backend\Controller\Adminhtml\System\Account controller
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\System\Account;

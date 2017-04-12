@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,6 +61,13 @@ class SuggestElement extends SimpleElement
     protected $closeButton = '[data-action="close-advanced-select"]';
 
     /**
+     * Searched count.
+     *
+     * @var string
+     */
+    protected $searchedCount = '[class*=search-count]';
+
+    /**
      * Set value.
      *
      * @param string $value
@@ -77,6 +84,12 @@ class SuggestElement extends SimpleElement
         }
         $this->keys([$value]);
         $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+        $searchedCountElements = $this->find($this->searchedCount);
+        $this->waitUntil(
+            function () use ($searchedCountElements) {
+                return $searchedCountElements->isVisible() ? true : null;
+            }
+        );
         $searchedItem->click();
         $closeButton = $this->find($this->closeButton);
         if ($closeButton->isVisible()) {

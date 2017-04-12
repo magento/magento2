@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="styles" />
     <body>
         <referenceContainer name="content">
-            <block class="Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol" name="mage.system.currencysymbol" template="grid.phtml"/>
+            <block class="Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol" name="mage.system.currencysymbol" template="Magento_CurrencySymbol::grid.phtml"/>
         </referenceContainer>
     </body>
 </page>

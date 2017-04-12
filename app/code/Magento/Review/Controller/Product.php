@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller;
@@ -155,7 +155,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
             if (!$this->customerSession->isLoggedIn()) {
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
                 $this->customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', ['_current' => true]));
-                $this->_reviewSession->setFormData(
+                $this->reviewSession->setFormData(
                     $request->getPostValue()
                 )->setRedirectUrl(
                     $this->_redirect->getRefererUrl()

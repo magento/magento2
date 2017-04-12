@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\MassOrdersUpdateTest" summary="Mass Update Orders" ticketId="MAGETWO-27897">
         <variation name="MassOrdersUpdateTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">cancel orders in status Pending and Processing</data>
             <data name="steps" xsi:type="string">-</data>
             <data name="action" xsi:type="string">Cancel</data>
@@ -44,6 +45,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrdersInOrdersGrid" />
         </variation>
         <variation name="MassOrdersUpdateTestVariation5">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Try to put order in status Complete on Hold</data>
             <data name="steps" xsi:type="string">invoice, shipment</data>
             <data name="action" xsi:type="string">Hold</data>

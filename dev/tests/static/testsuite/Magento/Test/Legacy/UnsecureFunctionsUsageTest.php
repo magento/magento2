@@ -1,17 +1,33 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Legacy;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\TestFramework\Utility\FunctionDetector;
 
 /**
  * Tests to detect unsecure functions usage
  */
 class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Php unsecure functions
+     *
+     * @var array
+     */
+    private static $phpUnsecureFunctions = [];
+
+    /**
+     * JS unsecure functions
+     *
+     * @var array
+     */
+    private static $jsUnsecureFunctions = [];
+
     /**
      * File extensions pattern to search for
      *
@@ -20,25 +36,54 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     private $fileExtensions = '/\.(php|phtml|js)$/';
 
     /**
-     * Php unsecure functions to detect
+     * Read fixtures into memory as arrays
      *
-     * @var array
+     * @return void
      */
-    private $phpUnsecureFunctions = [
-        'unserialize',
-        'serialize',
-        'eval',
-        'md5',
-        'srand',
-        'mt_srand'
-    ];
+    public static function setUpBeforeClass()
+    {
+        self::loadData(self::$phpUnsecureFunctions, 'unsecure_php_functions*.php');
+        self::loadData(self::$jsUnsecureFunctions, 'unsecure_js_functions*.php');
+    }
 
     /**
-     * JS unsecure functions to detect
+     * Loads and merges data from fixtures
      *
-     * @var array
+     * @param array $data
+     * @param string $filePattern
+     * @return void
      */
-    private $jsUnsecureFunctions = [];
+    private static function loadData(array &$data, $filePattern)
+    {
+        foreach (glob(__DIR__ . '/_files/security/' . $filePattern) as $file) {
+            $data = array_merge_recursive($data, self::readList($file));
+        }
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($data as $key => $value) {
+            $excludes = $value['exclude'];
+            $excludePaths = [];
+            foreach ($excludes as $exclude) {
+                if ('setup' == $exclude['type']) {
+                    $excludePaths[] = BP . '/setup/' . $exclude['path'];
+                } else {
+                    $excludePaths[] = $componentRegistrar->getPath($exclude['type'], $exclude['name'])
+                        . '/' . $exclude['path'];
+                }
+            }
+            $data[$key]['exclude'] = $excludePaths;
+        }
+    }
+
+    /**
+     * Isolate including a file into a method to reduce scope
+     *
+     * @param string $file
+     * @return array
+     */
+    private static function readList($file)
+    {
+        return include $file;
+    }
 
     /**
      * Detect unsecure functions usage for changed files in whitelist with the exception of blacklist
@@ -48,46 +93,69 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     public function testUnsecureFunctionsUsage()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $functionDetector = new FunctionDetector();
         $invoker(
-            function ($fileName) {
-                $result = '';
-                $errorMessage = 'The following functions are non secure and should be avoided: '
-                    . implode(', ', $this->phpUnsecureFunctions)
-                    . ' for PHP';
-                if (!empty($this->jsUnsecureFunctions)) {
-                    $errorMessage .= ', and '
-                        . implode(', ', $this->jsUnsecureFunctions)
-                        . ' for JavaScript';
+            function ($fileFullPath) use ($functionDetector) {
+                $functions = $this->getFunctions($fileFullPath);
+                $lines = $functionDetector->detect($fileFullPath, array_keys($functions));
+
+                $message = '';
+                if (!empty($lines)) {
+                    $message = $this->composeMessage($fileFullPath, $lines, $functions);
                 }
-                $errorMessage .= ".\n";
-                $regexp = $this->getRegexpByFileExtension(pathinfo($fileName, PATHINFO_EXTENSION));
-                if ($regexp) {
-                    $matches = preg_grep(
-                        $regexp,
-                        file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                    );
-                    if (!empty($matches)) {
-                        foreach (array_keys($matches) as $line) {
-                            $result .= $fileName . ':' . ($line + 1) . "\n";
-                        }
-                    }
-                    $this->assertEmpty($result, $errorMessage . $result);
-                }
+                $this->assertEmpty(
+                    $lines,
+                    $message
+                );
             },
-            $this->unsecureFunctionsUsageDataProvider()
+            $this->getFilesToVerify()
         );
     }
 
     /**
-     * Data provider for test
+     * Compose message
+     *
+     * @param string $fileFullPath
+     * @param array $lines
+     * @param array $functionRules
+     * @return string
+     */
+    private function composeMessage($fileFullPath, $lines, $functionRules)
+    {
+        $result = '';
+        foreach ($lines as $lineNumber => $detectedFunctions) {
+            $detectedFunctionRules = array_intersect_key($functionRules, array_flip($detectedFunctions));
+            $replacementString = '';
+            foreach ($detectedFunctionRules as $function => $functionRule) {
+                $replacement = $functionRule['replacement'];
+                if (is_array($replacement)) {
+                    $replacement = array_unique($replacement);
+                    $replacement = count($replacement) > 1 ?
+                        "[\n\t\t\t" . implode("\n\t\t\t", $replacement) . "\n\t\t]" :
+                        $replacement[0];
+                }
+                $replacement = empty($replacement) ? 'No suggested replacement at this time' : $replacement;
+                $replacementString .= "\t\t'$function' => '$replacement'\n";
+            }
+            $result .= sprintf(
+                "Functions '%s' are not secure in %s. \n\tSuggested replacement:\n%s",
+                implode(', ', $detectedFunctions),
+                $fileFullPath . ':' . $lineNumber,
+                $replacementString
+            );
+        }
+        return $result;
+    }
+
+    /**
+     * Get files to be verified
      *
      * @return array
      */
-    public function unsecureFunctionsUsageDataProvider()
+    private function getFilesToVerify()
     {
         $fileExtensions = $this->fileExtensions;
         $directoriesToScan = Files::init()->readLists(__DIR__ . '/_files/security/whitelist.txt');
-        $blackListFiles = include __DIR__ . '/_files/security/blacklist.php';
 
         $filesToVerify = [];
         foreach (glob(__DIR__ . '/../_files/changed_files*') as $listFile) {
@@ -104,7 +172,7 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
         );
         $filesToVerify = array_filter(
             $filesToVerify,
-            function ($path) use ($directoriesToScan, $fileExtensions, $blackListFiles) {
+            function ($path) use ($directoriesToScan, $fileExtensions) {
                 if (!file_exists($path[0])) {
                     return false;
                 }
@@ -113,10 +181,9 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
                     $directory = realpath($directory);
                     if (strpos($path, $directory) === 0) {
                         if (preg_match($fileExtensions, $path)) {
-                            foreach ($blackListFiles as $blackListFile) {
-                                if (preg_match($blackListFile, $path)) {
-                                    return false;
-                                }
+                            // skip unit tests
+                            if (preg_match('#' . preg_quote('Test/Unit', '#') . '#', $path)) {
+                                return false;
                             }
                             return true;
                         }
@@ -129,39 +196,27 @@ class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get regular expression by file extension
+     * Get functions for the given file
      *
-     * @param string $fileExtension
-     * @return string|bool
+     * @param string $fileFullPath
+     * @return array
      */
-    private function getRegexpByFileExtension($fileExtension)
+    private function getFunctions($fileFullPath)
     {
-        $regexp = false;
+        $fileExtension = pathinfo($fileFullPath, PATHINFO_EXTENSION);
+        $functions = [];
         if ($fileExtension == 'php') {
-            $regexp = $this->prepareRegexp($this->phpUnsecureFunctions);
+            $functions = self::$phpUnsecureFunctions;
         } elseif ($fileExtension == 'js') {
-            $regexp = $this->prepareRegexp($this->jsUnsecureFunctions);
+            $functions = self::$jsUnsecureFunctions;
         } elseif ($fileExtension == 'phtml') {
-            $regexp = $this->prepareRegexp($this->phpUnsecureFunctions + $this->jsUnsecureFunctions);
+            $functions = array_merge_recursive(self::$phpUnsecureFunctions, self::$jsUnsecureFunctions);
         }
-        return $regexp;
-    }
-
-    /**
-     * Prepare regular expression for unsecure function names
-     *
-     * @param array $functions
-     * @return string
-     */
-    private function prepareRegexp(array $functions)
-    {
-        if (empty($functions)) {
-            return '';
+        foreach ($functions as $function => $functionRules) {
+            if (in_array($fileFullPath, $functionRules['exclude'])) {
+                unset($functions[$function]);
+            }
         }
-        $regexArray = [];
-        foreach ($functions as $function) {
-            $regexArray[] = '\b' . $function . '\b\(';
-        }
-        return '/' . implode('|', $regexArray) . '/i';
+        return $functions;
     }
 }

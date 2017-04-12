@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
@@ -44,7 +44,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $childCategory->method('getId')->will($this->returnValue(self::CHILD_CATEGORY_ID));
-        $childCategory->method('getName')->will($this->returnValue('Child'));
+        $childCategory->method('getName')->will($this->returnValue(self::CHILD_CATEGORY_NAME));
         $childCategory->method('getPath')->will($this->returnValue(
             self::PARENT_CATEGORY_ID . CategoryProcessor::DELIMITER_CATEGORY
             . self::CHILD_CATEGORY_ID
@@ -113,6 +113,22 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
         $categoriesSeparator = ',';
         $categoryIds = $this->categoryProcessor->upsertCategories(self::CHILD_CATEGORY_NAME, $categoriesSeparator);
         $this->assertArrayHasKey(self::CHILD_CATEGORY_ID, array_flip($categoryIds));
+    }
+
+    public function testClearFailedCategories()
+    {
+        $dummyFailedCategory = [
+            [
+                'category' => 'dummy category',
+                'exception' => 'dummy exception',
+            ]
+        ];
+
+        $this->setPropertyValue($this->categoryProcessor, 'failedCategories', $dummyFailedCategory);
+        $this->assertCount(count($dummyFailedCategory), $this->categoryProcessor->getFailedCategories());
+
+        $this->categoryProcessor->clearFailedCategories();
+        $this->assertEmpty($this->categoryProcessor->getFailedCategories());
     }
 
     /**

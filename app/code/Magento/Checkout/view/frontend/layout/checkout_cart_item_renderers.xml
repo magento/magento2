@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,13 +9,13 @@
     <update handle="checkout_item_price_renderers"/>
     <body>
         <referenceBlock name="checkout.cart.item.renderers">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="cart/item/default.phtml">
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="Magento_Checkout::cart/item/default.phtml">
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.default.actions" as="actions">
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.default.actions.edit" template="Magento_Checkout::cart/item/renderer/actions/edit.phtml"/>
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.default.actions.remove" template="Magento_Checkout::cart/item/renderer/actions/remove.phtml"/>
                 </block>
             </block>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/item/default.phtml">
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="Magento_Checkout::cart/item/default.phtml">
                 <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.simple.actions" as="actions">
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.simple.actions.edit" template="Magento_Checkout::cart/item/renderer/actions/edit.phtml"/>
                     <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.simple.actions.remove" template="Magento_Checkout::cart/item/renderer/actions/remove.phtml"/>

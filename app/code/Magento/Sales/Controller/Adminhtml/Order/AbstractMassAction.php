@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Ui\Component\MassAction\Filter;
 
 /**
@@ -69,8 +69,9 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      */
     protected function getComponentRefererUrl()
     {
-        return $this->filter->getComponentRefererUrl()?: 'sales/*/';
+        return $this->filter->getComponentRefererUrl() ?: 'sales/*/';
     }
+
     /**
      * Set status to collection items
      *

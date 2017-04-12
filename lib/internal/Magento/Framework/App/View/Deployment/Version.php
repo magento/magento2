@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\View\Deployment;
 
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Deployment version of static files
@@ -67,23 +66,16 @@ class Version
      */
     protected function readValue($appMode)
     {
-        if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            $result = $this->generateVersion();
-        } else {
-            try {
-                $result = $this->versionStorage->load();
-            } catch (\UnexpectedValueException $e) {
-                $result = $this->generateVersion();
-                if ($appMode == \Magento\Framework\App\State::MODE_DEFAULT) {
-                    try {
-                        $this->versionStorage->save($result);
-                    } catch (FileSystemException $e) {
-                        $this->getLogger()->critical('Can not save static content version.');
-                    }
-                } else {
-                    $this->getLogger()->critical('Can not load static content version.');
-                }
+        $result = $this->versionStorage->load();
+        if (!$result) {
+            if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
+                $this->getLogger()->critical('Can not load static content version.');
+                throw new \UnexpectedValueException(
+                    "Unable to retrieve deployment version of static files from the file system."
+                );
             }
+            $result = $this->generateVersion();
+            $this->versionStorage->save($result);
         }
         return $result;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block\Form;
@@ -13,7 +13,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
  *
  * @method \Magento\Quote\Model\Quote getQuote()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Container extends \Magento\Framework\View\Element\Template
 {

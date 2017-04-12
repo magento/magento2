@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -12,6 +12,11 @@ use Magento\Framework\View\Asset\Repository;
 use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Config as PaymentConfig;
 
+/**
+ * Credit card configuration model
+ *
+ * @api
+ */
 class CcConfig
 {
     /** @var PaymentConfig */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,8 @@ use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFacto
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

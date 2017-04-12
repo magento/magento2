@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** @var \Magento\Framework\Registry $registry */
@@ -16,7 +16,6 @@ $collection->addAttributeToSelect('id')->load();
 if ($collection->count() > 0) {
     $collection->delete();
 }
-
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

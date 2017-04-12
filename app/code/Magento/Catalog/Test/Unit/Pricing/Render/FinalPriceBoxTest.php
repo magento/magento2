@@ -1,10 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
+
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Class FinalPriceBoxTest
@@ -58,11 +64,21 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     protected $price;
 
+    /**
+     * @var SalableResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $salableResolverMock;
+
+    /**
+     * @var MinimalPriceCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minimalPriceCalculator;
+
     protected function setUp()
     {
         $this->product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
-            ['getPriceInfo', '__wakeup', 'getCanShowPrice'],
+            ['getPriceInfo', '__wakeup', 'getCanShowPrice', 'isSalable'],
             [],
             '',
             false
@@ -78,9 +94,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->priceBox = $this->getMock(\Magento\Framework\Pricing\Render\PriceBox::class, [], [], '', false);
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
-        $this->layout->expects($this->any())
-            ->method('getBlock')
-            ->will($this->returnValue($this->priceBox));
+        $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
         $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
             ->getMockForAbstractClass();
@@ -93,12 +107,9 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
 
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->getMockForAbstractClass();
-
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMockForAbstractClass();
         $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore', 'getCode'])
             ->getMockForAbstractClass();
@@ -144,6 +155,11 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->salableResolverMock = $this->getMockBuilder(SalableResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
         $this->object = $objectManager->getObject(
             \Magento\Catalog\Pricing\Render\FinalPriceBox::class,
             [
@@ -151,7 +167,9 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
                 'saleableItem' => $this->product,
                 'rendererPool' => $this->rendererPool,
                 'price' => $this->price,
-                'data' => ['zone' => 'test_zone', 'list_category_page' => true]
+                'data' => ['zone' => 'test_zone', 'list_category_page' => true],
+                'salableResolver' => $this->salableResolverMock,
+                'minimalPriceCalculator' => $this->minimalPriceCalculator
             ]
         );
     }
@@ -169,12 +187,26 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->product))
             ->will($this->returnValue(false));
 
+        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
         $this->assertStringStartsWith('<div', $result);
         //assert css_selector
         $this->assertRegExp('/[final_price]/', $result);
+    }
+
+    public function testNotSalableItem()
+    {
+        $this->salableResolverMock
+            ->expects($this->once())
+            ->method('isSalable')
+            ->with($this->product)
+            ->willReturn(false);
+        $result = $this->object->toHtml();
+
+        $this->assertEmpty($result);
     }
 
     public function testRenderMsrpEnabled()
@@ -211,6 +243,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with('msrp_price', $this->product, $arguments)
             ->will($this->returnValue($priceBoxRender));
 
+        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
@@ -230,6 +264,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('msrp_price'))
             ->will($this->throwException(new \InvalidArgumentException()));
 
+        $this->salableResolverMock->expects($this->once())->method('isSalable')->with($this->product)->willReturn(true);
+
         $result = $this->object->toHtml();
 
         //assert price wrapper
@@ -240,11 +276,17 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderAmountMinimal()
     {
-        $priceType = $this->getMock(\Magento\Catalog\Pricing\Price\FinalPrice::class, [], [], '', false);
-        $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $priceId = 'price_id';
         $html = 'html';
+
         $this->object->setData('price_id', $priceId);
+        $this->product->expects($this->never())->method('getId');
+
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
+
+        $this->minimalPriceCalculator->expects($this->once())->method('getAmount')
+            ->with($this->product)
+            ->willReturn($amount);
 
         $arguments = [
             'zone' => 'test_zone',
@@ -255,24 +297,15 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             'skip_adjustments' => true,
         ];
 
-        $amountRender = $this->getMock(\Magento\Framework\Pricing\Render\Amount::class, ['toHtml'], [], '', false);
+        $amountRender = $this->getMock(Amount::class, ['toHtml'], [], '', false);
         $amountRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
-
-        $this->priceInfo->expects($this->once())
-            ->method('getPrice')
-            ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($priceType));
-
-        $priceType->expects($this->once())
-            ->method('getMinimalPrice')
-            ->will($this->returnValue($amount));
+            ->willReturn($html);
 
         $this->rendererPool->expects($this->once())
             ->method('createAmountRender')
             ->with($amount, $this->product, $this->price, $arguments)
-            ->will($this->returnValue($amountRender));
+            ->willReturn($amountRender);
 
         $this->assertEquals($html, $this->object->renderAmountMinimal());
     }
@@ -327,36 +360,29 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testShowMinimalPrice()
     {
-        $finalPrice = 10.0;
         $minimalPrice = 5.0;
-        $displayMininmalPrice = 2.0;
+        $finalPrice = 10.0;
+        $displayMininmalPrice = true;
 
-        $this->object->setDisplayMinimalPrice($displayMininmalPrice);
+        $this->minimalPriceCalculator->expects($this->once())->method('getValue')->with($this->product)
+            ->willReturn($minimalPrice);
 
-        $finalPriceType = $this->getMock(\Magento\Catalog\Pricing\Price\FinalPrice::class, [], [], '', false);
-
-        $finalPriceAmount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
-        $minimalPriceAmount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
-
+        $finalPriceAmount = $this->getMockForAbstractClass(AmountInterface::class);
         $finalPriceAmount->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($finalPrice));
-        $minimalPriceAmount->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue($minimalPrice));
 
-        $finalPriceType->expects($this->at(0))
+        $finalPriceType = $this->getMock(FinalPrice::class, [], [], '', false);
+        $finalPriceType->expects($this->once())
             ->method('getAmount')
             ->will($this->returnValue($finalPriceAmount));
-        $finalPriceType->expects($this->at(1))
-            ->method('getMinimalPrice')
-            ->will($this->returnValue($minimalPriceAmount));
 
         $this->priceInfo->expects($this->once())
             ->method('getPrice')
-            ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->will($this->returnValue($finalPriceType));
+            ->with(FinalPrice::PRICE_CODE)
+            ->willReturn($finalPriceType);
 
+        $this->object->setDisplayMinimalPrice($displayMininmalPrice);
         $this->assertTrue($this->object->showMinimalPrice());
     }
 
@@ -375,8 +401,63 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith('list-category-page', $result);
     }
 
-    public function testGetCacheKeyInfo()
+    public function testGetCacheKeyInfoContainsDisplayMinimalPrice()
     {
         $this->assertArrayHasKey('display_minimal_price', $this->object->getCacheKeyInfo());
+    }
+
+    /**
+     * Test when is_product_list flag is not specified
+     */
+    public function testGetCacheKeyInfoContainsIsProductListFlagByDefault()
+    {
+        $cacheInfo = $this->object->getCacheKeyInfo();
+        self::assertArrayHasKey('is_product_list', $cacheInfo);
+        self::assertFalse($cacheInfo['is_product_list']);
+    }
+
+    /**
+     * Test when is_product_list flag is specified
+     *
+     * @param bool $flag
+     * @dataProvider isProductListDataProvider
+     */
+    public function testGetCacheKeyInfoContainsIsProductListFlag($flag)
+    {
+        $this->object->setData('is_product_list', $flag);
+        $cacheInfo = $this->object->getCacheKeyInfo();
+        self::assertArrayHasKey('is_product_list', $cacheInfo);
+        self::assertEquals($flag, $cacheInfo['is_product_list']);
+    }
+
+    /**
+     * Test when is_product_list flag is not specified
+     */
+    public function testIsProductListByDefault()
+    {
+        self::assertFalse($this->object->isProductList());
+    }
+
+    /**
+     * Test when is_product_list flag is specified
+     *
+     * @param bool $flag
+     * @dataProvider isProductListDataProvider
+     */
+    public function testIsProductList($flag)
+    {
+        $this->object->setData('is_product_list', $flag);
+        self::assertEquals($flag, $this->object->isProductList());
+    }
+
+    /**
+     * @return array
+     */
+    public function isProductListDataProvider()
+    {
+        return [
+            'is_not_product_list' => [false],
+            'is_product_list' => [true],
+        ];
     }
 }

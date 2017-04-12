@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model;
@@ -203,7 +203,6 @@ class Config extends \Magento\Framework\DataObject
         /** @var $group \Magento\Config\Model\Config\Structure\Element\Group */
         $group = $this->_configStructure->getElement($groupPath);
 
-
         // set value for group field entry by fieldname
         // use extra memory
         $fieldsetData = [];
@@ -396,7 +395,6 @@ class Config extends \Magento\Framework\DataObject
         if ($this->getStore() === null) {
             $this->setStore('');
         }
-
 
         if ($this->getStore()) {
             $scope = 'stores';

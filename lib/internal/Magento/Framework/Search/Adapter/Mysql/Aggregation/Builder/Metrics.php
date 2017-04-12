@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
@@ -14,7 +14,7 @@ class Metrics
      *
      * @var string[]
      */
-    private $mapMetrics = ['count', 'sum', 'min', 'max', 'avg'];
+    private $allowedMetrics = ['count', 'sum', 'min', 'max', 'avg'];
 
     /**
      * Build metrics for Select->columns
@@ -30,7 +30,7 @@ class Metrics
 
         foreach ($metrics as $metric) {
             $metricType = $metric->getType();
-            if (in_array($metricType, $this->mapMetrics)) {
+            if (in_array($metricType, $this->allowedMetrics, true)) {
                 $selectAggregations[$metricType] = "$metricType(main_table.value)";
             }
         }

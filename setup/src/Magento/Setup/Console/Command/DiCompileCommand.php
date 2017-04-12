@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -132,7 +132,7 @@ class DiCompileCommand extends Command
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
+        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATED_CODE);
 
         $this->objectManager->get(\Magento\Framework\App\Cache::class)->clean();
         $compiledPathsList = [
@@ -152,7 +152,7 @@ class DiCompileCommand extends Command
             $this->cleanupFilesystem(
                 [
                     DirectoryList::CACHE,
-                    DirectoryList::DI,
+                    DirectoryList::GENERATED_METADATA,
                 ]
             );
             foreach ($operations as $operationCode => $arguments) {
@@ -284,9 +284,6 @@ class DiCompileCommand extends Command
                             'InterceptionPreferencesResolving' =>
                                 ['instance' =>
                                     \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
-                            'ArgumentsSerialization' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization::class],
                         ]
                     ]
                 ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [

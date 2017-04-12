@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Perform all assertions.
  *
  * @group Search_Frontend
- * @ZephyrId MAGETWO-25095
+ * @ZephyrId MAGETWO-25095, MAGETWO-36542, MAGETWO-43235
  */
 class SearchEntityResultsTest extends Injectable
 {
@@ -51,11 +51,12 @@ class SearchEntityResultsTest extends Injectable
      * Run searching result test.
      *
      * @param CatalogSearchQuery $catalogSearch
+     * @param string|null $queryLength
      * @return void
      */
-    public function test(CatalogSearchQuery $catalogSearch)
+    public function test(CatalogSearchQuery $catalogSearch, $queryLength = null)
     {
         $this->cmsIndex->open();
-        $this->cmsIndex->getSearchBlock()->search($catalogSearch->getQueryText());
+        $this->cmsIndex->getSearchBlock()->search($catalogSearch->getQueryText(), $queryLength);
     }
 }

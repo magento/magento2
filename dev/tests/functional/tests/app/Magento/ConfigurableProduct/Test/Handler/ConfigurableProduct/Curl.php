@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -172,7 +172,7 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
                 $keyIds[] = $attribute['options'][$optionKey]['id'];
                 $configurableAttribute[] = sprintf(
                     '"%s":"%s"',
-                    $attribute['attribute_code'],
+                    isset($attribute['attribute_code']) ? $attribute['attribute_code'] : $attribute['frontend_label'],
                     $attribute['options'][$optionKey]['id']
                 );
             }

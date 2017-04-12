@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -418,33 +418,123 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $groupWebsiteId,
         $expectedTierPrices
     ) {
-        $this->advancedPricing
+        $skuProduct = 'product1';
+        $sku = $data[0][AdvancedPricing::COL_SKU];
+        $advancedPricing = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'validateRow',
+                'addRowError',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'deleteProductTierPrices',
+                'getBehavior',
+                'saveAndReplaceAdvancedPrices',
+                'processCountExistingPrices',
+                'processCountNewPrices'
+            ]
+        );
+        $advancedPricing
             ->expects($this->any())
             ->method('getBehavior')
             ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
-        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
+        $advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
 
-        $this->advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
+        $advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
             [
                 [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
             ]
         );
 
-        $this->advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap(
+        $advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap(
             [
                 [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
             ]
         );
 
-        $this->advancedPricing->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
+        $oldSkus = [$sku => $skuProduct];
+        $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
+        $advancedPricing->expects($this->once())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->connection->expects($this->once())
+            ->method('insertOnDuplicate')
+            ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
 
-        $this->advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
-        $this->advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
+        $advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
+        $advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
 
-        $result = $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+        $result = $this->invokeMethod($advancedPricing, 'saveAndReplaceAdvancedPrices');
 
-        $this->assertEquals($this->advancedPricing, $result);
+        $this->assertEquals($advancedPricing, $result);
+    }
+
+    /**
+     * Test method saveAndReplaceAdvancedPrices with append import behaviour.
+     */
+    public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCallsWithoutTierPrice()
+    {
+        $data = [
+            0 => [
+                AdvancedPricing::COL_SKU => 'sku value',
+                AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
+                AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
+                AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
+                AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
+            ],
+        ];
+        $tierCustomerGroupId = 'tier customer group id value';
+        $tierWebsiteId = 'tier website id value';
+        $expectedTierPrices = [];
+
+        $skuProduct = 'product1';
+        $sku = $data[0][AdvancedPricing::COL_SKU];
+        $advancedPricing = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'validateRow',
+                'addRowError',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'deleteProductTierPrices',
+                'getBehavior',
+                'saveAndReplaceAdvancedPrices',
+                'processCountExistingPrices',
+                'processCountNewPrices'
+            ]
+        );
+        $advancedPricing
+            ->expects($this->any())
+            ->method('getBehavior')
+            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
+        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
+
+        $advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
+            [
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
+            ]
+        );
+
+        $advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap(
+            [
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
+            ]
+        );
+
+        $oldSkus = [$sku => $skuProduct];
+        $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
+        $advancedPricing->expects($this->never())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->connection->expects($this->never())
+            ->method('insertOnDuplicate')
+            ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
+
+        $advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
+        $advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
+
+        $result = $this->invokeMethod($advancedPricing, 'saveAndReplaceAdvancedPrices');
+
+        $this->assertEquals($advancedPricing, $result);
     }
 
     /**
@@ -575,6 +665,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups ',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -585,11 +676,39 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                     'sku value' => [
                         [
                             'all_groups' => false,
-                            //$rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS
                             'customer_group_id' => 'tier customer group id value',
-                            //$tierCustomerGroupId
                             'qty' => 'tier price qty value',
                             'value' => 'tier price value',
+                            'website_id' => 'tier website id value',
+                            'percentage_value' => null
+                        ],
+                    ],
+                ],
+            ],
+            [
+                '$data' => [
+                    0 => [
+                        AdvancedPricing::COL_SKU => 'sku value',
+                        //tier
+                        AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier price website value',
+                        AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups ',
+                        AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
+                        AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_PERCENT
+                    ],
+                ],
+                '$tierCustomerGroupId' => 'tier customer group id value',
+                '$groupCustomerGroupId' => 'group customer group id value',
+                '$tierWebsiteId' => 'tier website id value',
+                '$groupWebsiteId' => 'group website id value',
+                '$expectedTierPrices' => [
+                    'sku value' => [
+                        [
+                            'all_groups' => false,
+                            'customer_group_id' => 'tier customer group id value',
+                            'qty' => 'tier price qty value',
+                            'value' => 0,
+                            'percentage_value' => 'tier price value',
                             'website_id' => 'tier website id value',
                         ],
                     ],
@@ -604,6 +723,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => AdvancedPricing::VALUE_ALL_GROUPS,
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -614,32 +734,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                     'sku value' => [
                         [
                             'all_groups' => true,
-                            //$rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS
                             'customer_group_id' => 'tier customer group id value',
-                            //$tierCustomerGroupId
                             'qty' => 'tier price qty value',
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
+                            'percentage_value' => null
                         ],
                     ],
                 ],
-            ],
-            [
-                '$data' => [
-                    0 => [
-                        AdvancedPricing::COL_SKU => 'sku value',
-                        //tier
-                        AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
-                        AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
-                        AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
-                        AdvancedPricing::COL_TIER_PRICE => 'tier price value',
-                    ],
-                ],
-                '$tierCustomerGroupId' => 'tier customer group id value',
-                '$groupCustomerGroupId' => 'group customer group id value',
-                '$tierWebsiteId' => 'tier website id value',
-                '$groupWebsiteId' => 'group website id value',
-                '$expectedTierPrices' => [],
             ],
             [
                 '$data' => [
@@ -650,6 +752,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -660,12 +763,11 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                     'sku value' => [
                         [
                             'all_groups' => false,
-                            //$rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS
                             'customer_group_id' => 'tier customer group id value',
-                            //$tierCustomerGroupId
                             'qty' => 'tier price qty value',
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
+                            'percentage_value' => null
                         ],
                     ]
                 ],
@@ -746,7 +848,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $this->connection->expects($this->exactly($callNum))
             ->method('insertOnDuplicate')
-            ->with(self::TABLE_NAME, $priceIn, ['value']);
+            ->with(self::TABLE_NAME, $priceIn, ['value', 'percentage_value']);
 
         $this->invokeMethod($this->advancedPricing, 'saveProductPrices', [$priceData, 'table']);
     }

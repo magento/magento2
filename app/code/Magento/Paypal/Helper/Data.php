@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Helper;
@@ -15,7 +15,7 @@ use Magento\Paypal\Model\Billing\Agreement\MethodInterface;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const HTML_TRANSACTION_ID =
-        '<a target="_blank" href="https://www.%1$s.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=%2$s">%2$s</a>';
+        '<a target="_blank" href="https://www%1$s.paypal.com/cgi-bin/webscr?cmd=_view-a-trans&id=%2$s">%2$s</a>';
 
     /**
      * Cache for shouldAskToCreateBillingAgreement()
@@ -133,7 +133,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (in_array($methodCode, $this->methodCodes)) {
             /** @var \Magento\Paypal\Model\Config $config */
             $config = $this->configFactory->create()->setMethod($methodCode);
-            $sandboxFlag = ($config->getValue('sandboxFlag') ? 'sandbox' : '');
+            $sandboxFlag = ($config->getValue('sandboxFlag') ? '.sandbox' : '');
             return sprintf(self::HTML_TRANSACTION_ID, $sandboxFlag, $txnId);
         }
         return $txnId;

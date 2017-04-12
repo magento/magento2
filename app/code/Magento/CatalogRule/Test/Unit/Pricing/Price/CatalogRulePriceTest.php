@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
 
-use \Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
+use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -208,12 +208,20 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueFromData()
     {
+        $catalogRulePrice = 7.1;
+        $convertedPrice = 5.84;
+
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('convertAndRound')
+            ->with($catalogRulePrice)
+            ->will($this->returnValue($convertedPrice));
+
         $this->saleableItemMock->expects($this->once())->method('hasData')
             ->with('catalog_rule_price')->willReturn(true);
         $this->saleableItemMock->expects($this->once())->method('getData')
-            ->with('catalog_rule_price')->willReturn('7.1');
+            ->with('catalog_rule_price')->willReturn($catalogRulePrice);
 
-        $this->assertEquals(7.1, $this->object->getValue());
+        $this->assertEquals($convertedPrice, $this->object->getValue());
     }
 
     public function testGetAmountNoBaseAmount()

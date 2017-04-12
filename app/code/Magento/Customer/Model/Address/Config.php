@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Address;
 
 use Magento\Framework\Config\Data as ConfigData;
 use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Customer address config
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Customer address configuration
  */
 class Config extends ConfigData
 {
@@ -23,7 +22,7 @@ class Config extends ConfigData
     const DEFAULT_ADDRESS_FORMAT = 'oneline';
 
     /**
-     * Customer Address Templates per store
+     * Customer address templates per store
      *
      * @var array
      */
@@ -37,8 +36,7 @@ class Config extends ConfigData
     protected $_store = null;
 
     /**
-     * Default types per store
-     * Using for invalid code
+     * Default types per store, used for invalid code
      *
      * @var array
      */
@@ -60,12 +58,15 @@ class Config extends ConfigData
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\Customer\Model\Address\Config\Reader $reader
+     * Constructor
+     *
+     * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
@@ -73,9 +74,10 @@ class Config extends ConfigData
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        $cacheId = 'address_format'
+        $cacheId = 'address_format',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
         $this->_storeManager = $storeManager;
         $this->_addressHelper = $addressHelper;
         $this->_scopeConfig = $scopeConfig;

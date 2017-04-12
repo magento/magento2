@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* These are the modules that have not been refactored from @escapeNotVerified yet. */
@@ -13,10 +13,8 @@ return [
     'Magento_CatalogInventory',
     'Magento_CatalogRule',
     'Magento_CatalogSearch',
-    'Magento_CatalogWidget',
     'Magento_Checkout',
     'Magento_CheckoutAgreements',
-    'Magento_Cms',
     'Magento_Config',
     'Magento_ConfigurableProduct',
     'Magento_CurrencySymbol',
@@ -47,8 +45,6 @@ return [
     'Magento_Theme',
     'Magento_Translation',
     'Magento_Ui',
-    'Magento_UrlRewrite',
     'Magento_User',
     'Magento_Weee',
-    'Magento_Widget',
 ];

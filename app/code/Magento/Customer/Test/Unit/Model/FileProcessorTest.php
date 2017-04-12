@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -37,6 +37,11 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $mediaDirectory;
 
+    /**
+     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mime;
+
     protected function setUp()
     {
         $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
@@ -60,6 +65,10 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
             ->getMockForAbstractClass();
+
+        $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private function getModel($entityTypeCode, array $allowedExtensions = [])
@@ -70,6 +79,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             $this->urlBuilder,
             $this->urlEncoder,
             $entityTypeCode,
+            $this->mime,
             $allowedExtensions
         );
         return $model;
@@ -375,5 +385,27 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $model->moveTemporaryFile($filePath);
+    }
+
+    public function testGetMimeType()
+    {
+        $fileName = '/filename.ext1';
+        $absoluteFilePath = '/absolute_path/customer/filename.ext1';
+
+        $expected = 'ext1';
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . ltrim($fileName, '/'))
+            ->willReturn($absoluteFilePath);
+
+        $this->mime->expects($this->once())
+            ->method('getMimeType')
+            ->with($absoluteFilePath)
+            ->willReturn($expected);
+
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $this->assertEquals($expected, $model->getMimeType($fileName));
     }
 }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 //"swatchRenderer": {
 ?>
 <?php /** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */ ?>
@@ -16,8 +17,8 @@
                 "jsonSwatchConfig": <?php /* @escapeNotVerified */
                     echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>",
-                "onlyMainImg": <?php /* @escapeNotVerified */ echo $block->getVar('change_only_base_image',
-                    'Magento_Swatches') ?: 'false'; ?>
+                "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
+                    'Magento_ConfigurableProduct') ?: 'replace'; ?>"
             }
         }
     }

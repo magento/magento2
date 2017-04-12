@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
@@ -9,6 +9,8 @@ namespace Magento\OfflinePayments\Model;
  * Bank Transfer payment method model
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * @api
  */
 class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
 {

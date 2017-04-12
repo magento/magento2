@@ -1,12 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Helper;
 
 use Magento\Payment\Model\InfoInterface;
 
+/**
+ * Shortcut for methods that can be used to verify payment context.
+ * Usage of this class should be avoided. This class introduced for supporting backward compatibility.
+ *
+ * @api
+ */
 class ContextHelper
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -12,6 +12,7 @@ class ConditionManager
 {
     const CONDITION_PATTERN_SIMPLE = '%s %s %s';
     const CONDITION_PATTERN_ARRAY = '%s %s (%s)';
+
     /**
      * @var AdapterInterface
      */

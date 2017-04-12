@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
@@ -85,6 +85,7 @@ class Decimal extends AbstractEav
                 'pdd.attribute_id',
                 'cs.store_id',
                 'value' => $productValueExpression,
+                'source_id' => 'cpe.entity_id',
             ]
         );
 
@@ -116,7 +117,7 @@ class Decimal extends AbstractEav
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('cpe.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -15,107 +15,132 @@ namespace Magento\Sales\Api\Data;
  */
 interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /*
+    /**
      * Entity ID.
      */
     const ENTITY_ID = 'entity_id';
-    /*
+
+    /**
      * Parent ID.
      */
     const PARENT_ID = 'parent_id';
-    /*
+
+    /**
      * Customer address ID.
      */
     const CUSTOMER_ADDRESS_ID = 'customer_address_id';
-    /*
+
+    /**
      * Region ID.
      */
     const REGION_ID = 'region_id';
+
     /**
      * Region code.
      */
     const KEY_REGION_CODE = 'region_code';
-    /*
+
+    /**
      * Customer ID.
      */
     const CUSTOMER_ID  = 'customer_id';
-    /*
+
+    /**
      * Fax.
      */
     const FAX = 'fax';
-    /*
+
+    /**
      * Region.
      */
     const REGION = 'region';
-    /*
+
+    /**
      * Postal code.
      */
     const POSTCODE = 'postcode';
-    /*
+
+    /**
      * Last name.
      */
     const LASTNAME = 'lastname';
-    /*
+
+    /**
      * Street.
      */
     const STREET = 'street';
-    /*
+
+    /**
      * City.
      */
     const CITY = 'city';
-    /*
+
+    /**
      * Email address.
      */
     const EMAIL = 'email';
-    /*
+
+    /**
      * Telephone number.
      */
     const TELEPHONE = 'telephone';
-    /*
+
+    /**
      * Country ID.
      */
     const COUNTRY_ID = 'country_id';
-    /*
+
+    /**
      * First name.
      */
     const FIRSTNAME = 'firstname';
-    /*
+
+    /**
      * Address type.
      */
     const ADDRESS_TYPE = 'address_type';
-    /*
+
+    /**
      * Prefix.
      */
     const PREFIX = 'prefix';
-    /*
+
+    /**
      * Middle name.
      */
     const MIDDLENAME = 'middlename';
-    /*
+
+    /**
      * Suffix.
      */
     const SUFFIX = 'suffix';
-    /*
+
+    /**
      * Company.
      */
     const COMPANY = 'company';
-    /*
+
+    /**
      * Value-added tax (VAT) ID.
      */
     const VAT_ID = 'vat_id';
-    /*
+
+    /**
      * VAT-is-valid flag.
      */
     const VAT_IS_VALID = 'vat_is_valid';
-    /*
+
+    /**
      * VAT request ID.
      */
     const VAT_REQUEST_ID = 'vat_request_id';
-    /*
+
+    /**
      * VAT request date.
      */
     const VAT_REQUEST_DATE = 'vat_request_date';
-    /*
+
+    /**
      * VAT-request-success flag.
      */
     const VAT_REQUEST_SUCCESS = 'vat_request_success';

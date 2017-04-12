@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config;
 
+/**
+ * @package Magento\Config\Test\Unit\Model\Config
+ */
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,7 +35,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_model = new \Magento\Config\Model\Config\Loader($this->_configValueFactory);
-
         $this->_configCollection = $this->getMock(
             \Magento\Config\Model\ResourceModel\Config\Data\Collection::class,
             [],

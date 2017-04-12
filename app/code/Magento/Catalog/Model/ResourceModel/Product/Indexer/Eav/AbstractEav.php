@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer
 {
@@ -22,22 +24,39 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     protected $_eventManager = null;
 
     /**
-     * Construct
-     *
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
+
+    /**
+     * @var mixed
+     */
+    private $frontendResource;
+
+    /**
+     * AbstractEav constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string $connectionName
+     * @param null $connectionName
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null
     ) {
         $this->_eventManager = $eventManager;
+        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
+        $this->frontendResource = $frontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\EavDecimal\FrontendResource::class);
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
@@ -100,10 +119,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         try {
             // remove old index
             $where = $connection->quoteInto('entity_id IN(?)', $processIds);
-            $connection->delete($this->getMainTable(), $where);
+            $mainTable = $this->frontendResource->getMainTable();
+            $connection->delete($this->frontendResource->getMainTable(), $where);
 
             // insert new index
-            $this->insertFromTable($this->getIdxTable(), $this->getMainTable());
+            $this->insertFromTable($this->getIdxTable(), $mainTable);
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -197,7 +217,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         )->joinLeft(
             ['e' => $this->getTable('catalog_product_entity')],
             'e.' . $linkField .' = l.parent_id',
-            ['e.entity_id as parent_id']
+            []
         )->join(
             ['cs' => $this->getTable('store')],
             '',
@@ -205,9 +225,17 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         )->join(
             ['i' => $idxTable],
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
-            ['attribute_id', 'store_id', 'value']
+            []
         )->group(
-            ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
+            ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
+        )->columns(
+            [
+                'parent_id' => 'e.entity_id',
+                'attribute_id' => 'i.attribute_id',
+                'store_id' => 'i.store_id',
+                'value' => 'i.value',
+                'source_id' => 'l.child_id'
+            ]
         );
         if ($parentIds !== null) {
             $select->where('e.entity_id IN(?)', $parentIds);
@@ -222,7 +250,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('l.parent_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
 
@@ -316,5 +344,23 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             throw $e;
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * Returns main table name in depends of the suffix stored in the 'indexer_state' table
+     *
+     * @return string
+     */
+    public function getMainTable()
+    {
+        $table = parent::getMainTable();
+        $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
+        );
+        $destinationTableSuffix = ($indexerState->getTableSuffix() === '')
+            ? \Magento\Framework\Indexer\StateInterface::ADDITIONAL_TABLE_SUFFIX
+            : '';
+        return $table . $destinationTableSuffix;
     }
 }

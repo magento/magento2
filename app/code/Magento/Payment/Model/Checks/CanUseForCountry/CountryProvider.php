@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Checks\CanUseForCountry;
@@ -8,6 +8,13 @@ namespace Magento\Payment\Model\Checks\CanUseForCountry;
 use Magento\Quote\Model\Quote;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 
+/**
+ * Select country which will be used for payment.
+ *
+ * This class may be extended if logic fo country selection should be modified.
+ *
+ * @api
+ */
 class CountryProvider
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,9 +80,9 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
-            ->disableOriginalConstructor()->setMethods(['addToCollection'])
+            ->disableOriginalConstructor()->setMethods(['collectValidatedAttributes'])
             ->getMock();
-        $condition->expects($this->any())->method('addToCollection')->with($collection)
+        $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)
             ->will($this->returnSelf());
 
         $this->condition->setConditions([$condition]);

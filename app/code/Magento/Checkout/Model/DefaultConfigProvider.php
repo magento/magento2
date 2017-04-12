@@ -1,29 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Model\Context as CustomerContext;
-use Magento\Customer\Model\Registration as CustomerRegistration;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url as CustomerUrlManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Data\Form\FormKey;
-use Magento\Framework\Locale\CurrencyInterface as CurrencyManager;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
-use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
-use Magento\Catalog\Helper\Product\ConfigurationPool;
-use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\UrlInterface;
+use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -308,10 +305,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function isAutocompleteEnabled()
     {
-         return $this->scopeConfig->getValue(
-             \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
-             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-         ) ? 'on' : 'off';
+        return $this->scopeConfig->getValue(
+            \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) ? 'on' : 'off';
     }
 
     /**
@@ -368,7 +365,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
                     'quote_id'
                 )->getMaskedId();
             }
-
         }
         return $quoteData;
     }

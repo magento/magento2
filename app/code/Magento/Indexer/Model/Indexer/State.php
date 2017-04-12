@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Indexer;
@@ -119,6 +119,27 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
     public function setStatus($status)
     {
         return parent::setStatus($status);
+    }
+
+    /**
+     * Get suffix for indexer table.
+     *
+     * @return string
+     */
+    public function getTableSuffix()
+    {
+        return $this->getData('table_suffix');
+    }
+
+    /**
+     * Get suffix for indexer table.
+     *
+     * @param string $tableSuffix
+     * @return $this
+     */
+    public function setTableSuffix($tableSuffix)
+    {
+        return $this->setData('table_suffix', $tableSuffix);
     }
 
     /**

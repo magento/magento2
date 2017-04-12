@@ -1,17 +1,32 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page\Config;
-
 
 /**
  * Page config structure model
  */
 class Structure
 {
+    /**
+     * Map of class properties.
+     *
+     * @var array
+     */
+    private $serializableProperties = [
+        'assets',
+        'removeAssets',
+        'title',
+        'metadata',
+        'elementAttributes',
+        'removeElementAttributes',
+        'bodyClasses',
+        'isBodyClassesDeleted',
+    ];
+
     /**
      * Information assets elements on page
      *
@@ -193,5 +208,45 @@ class Structure
     public function getAssets()
     {
         return $this->assets;
+    }
+
+    /**
+     * Reformat 'Page config structure' to array.
+     *
+     * @return array
+     */
+    public function __toArray()
+    {
+        $result = [];
+        foreach ($this->serializableProperties as $property) {
+            $result[$property] = $this->{$property};
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update 'Page config structure' data.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function populateWithArray(array $data)
+    {
+        foreach ($this->serializableProperties as $property) {
+            $this->{$property} = $this->getArrayValueByKey($property, $data);
+        }
+    }
+
+    /**
+     * Get value from array by key.
+     *
+     * @param string $key
+     * @param array $array
+     * @return array
+     */
+    private function getArrayValueByKey($key, array $array)
+    {
+        return isset($array[$key]) ? $array[$key] : [];
     }
 }

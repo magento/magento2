@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
@@ -22,6 +22,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /** @var File */
     protected $fileBackend;
+
+    /**
+     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mime;
 
     public function setUp()
     {
@@ -46,6 +51,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
 
+        $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->fileBackend = new File(
             $context,
             $registry,
@@ -55,6 +64,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
             $requestData,
             $filesystem,
             $this->urlBuilder
+        );
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->fileBackend,
+            'mime',
+            $this->mime
         );
     }
 
@@ -91,6 +107,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testAfterLoad()
     {
         $value = 'filename.jpg';
+        $mime = 'image/jpg';
+
+        $absoluteFilePath = '/absolute_path/' . $value;
+
         $this->fileBackend->setValue($value);
         $this->fileBackend->setFieldConfig(
             [
@@ -109,6 +129,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('value/' . $value)
             ->willReturn(true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('value/' . $value)
+            ->willReturn($absoluteFilePath);
+
         $this->urlBuilder->expects($this->once())
             ->method('getBaseUrl')
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
@@ -122,6 +147,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->with('value/' . $value)
             ->willReturn(['size' => 234234]);
 
+        $this->mime->expects($this->once())
+            ->method('getMimeType')
+            ->with($absoluteFilePath)
+            ->willReturn($mime);
+
         $this->fileBackend->afterLoad();
         $this->assertEquals(
             [
@@ -130,6 +160,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,
+                    'name' => $value,
+                    'type' => $mime,
                 ]
             ],
             $this->fileBackend->getValue()

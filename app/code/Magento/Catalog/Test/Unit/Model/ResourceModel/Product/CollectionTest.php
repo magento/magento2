@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
- * Class CollectionTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -55,6 +57,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
@@ -145,27 +148,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->entityMock->expects($this->once())->method('getDefaultAttributes')->willReturn([]);
         $this->entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
-        $helper = new ObjectManager($this);
 
-        $this->prepareObjectManager([
-            [
-                \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
-                $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-            ],
-            [
-                \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
-                $this->galleryResourceMock
-            ],
-            [
-                \Magento\Framework\EntityManager\MetadataPool::class,
-                $this->metadataPoolMock
-            ],
-            [
-                \Magento\Catalog\Model\Product\Gallery\ReadHandler::class,
-                $this->galleryReadHandlerMock
-            ]
-        ]);
-        $this->collection = $helper->getObject(
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $productLimitationFactoryMock = $this->getMockBuilder(
+            ProductLimitationFactory::class
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
+        $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
                 'entityFactory' => $entityFactory,
@@ -187,10 +180,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $customerSession,
                 'dateTime' => $dateTime,
                 'groupManagement' => $groupManagement,
-                'connection' => $this->connectionMock
+                'connection' => $this->connectionMock,
+                'productLimitationFactory' => $productLimitationFactoryMock,
+                'metadataPool' => $this->metadataPoolMock,
             ]
         );
         $this->collection->setConnection($this->connectionMock);
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->collection,
+            'mediaGalleryResource',
+            $this->galleryResourceMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->collection,
+            'productGalleryReadHandler',
+            $this->galleryReadHandlerMock
+        );
     }
 
     public function testAddProductCategoriesFilter()
@@ -222,11 +227,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddMediaGalleryData()
     {
         $attributeId = 42;
-        $itemId = 4242;
-        $linkField = 'entity_id';
-        $mediaGalleriesMock = [[$linkField => $itemId]];
+        $rowId = 4;
+        $linkField = 'row_id';
+        $mediaGalleriesMock = [[$linkField => $rowId]];
         $itemMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -246,33 +252,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->galleryResourceMock->expects($this->once())->method('createBatchBaseSelect')->willReturn($selectMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
         $this->entityMock->expects($this->once())->method('getAttribute')->willReturn($attributeMock);
-        $itemMock->expects($this->atLeastOnce())->method('getId')->willReturn($itemId);
-        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$itemId]);
+        $itemMock->expects($this->atLeastOnce())->method('getData')->willReturn($rowId);
+        $selectMock->expects($this->once())->method('where')->with('entity.' . $linkField . ' IN (?)', [$rowId]);
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkField);
 
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
-            [['entity_id' => $itemId]]
+            [['row_id' => $rowId]]
         );
         $this->galleryReadHandlerMock->expects($this->once())->method('addMediaDataToProduct')
             ->with($itemMock, $mediaGalleriesMock);
 
         $this->assertSame($this->collection, $this->collection->addMediaGalleryData());
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

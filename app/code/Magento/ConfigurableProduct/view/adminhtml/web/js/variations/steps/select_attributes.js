@@ -1,8 +1,8 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// jscs:disable jsDoc
+
 define([
     'uiComponent',
     'jquery',
@@ -11,6 +11,9 @@ define([
 ], function (Component, $, _) {
     'use strict';
 
+    /**
+     * @param {Function} provider
+     */
     var initNewAttributeListener = function (provider) {
         $('[data-role=product-variations-matrix]').on('add', function () {
             provider().reload();
@@ -35,21 +38,33 @@ define([
             },
             selectedAttributes: []
         },
+
+        /** @inheritdoc */
         initialize: function () {
             this._super();
             this.selected = [];
 
             initNewAttributeListener(this.attributeProvider);
         },
+
+        /** @inheritdoc */
         initObservable: function () {
             this._super().observe(['selectedAttributes']);
 
             return this;
         },
+
+        /**
+         * @param {Object} wizard
+         */
         render: function (wizard) {
             this.wizard = wizard;
             this.setNotificationMessage();
         },
+
+        /**
+         * Set notification message.
+         */
         setNotificationMessage: function () {
             /*eslint-disable max-len*/
             var msg = $.mage.__('When you remove or add an attribute, we automatically update all configurations and you will need to recreate current configurations manually.');
@@ -60,6 +75,10 @@ define([
                 this.wizard.setNotificationMessage(msg);
             }
         },
+
+        /**
+         * Do select saved attributes.
+         */
         doSelectSavedAttributes: function () {
             if (this.stepInitialized === false) {
                 this.stepInitialized = true;
@@ -70,6 +89,10 @@ define([
                 this.multiselect().selected(_.pluck(this.initData.attributes, 'id'));
             }
         },
+
+        /**
+         * @param {*} selected
+         */
         doSelectedAttributesLabels: function (selected) {
             var labels = [];
 
@@ -79,17 +102,21 @@ define([
 
                 if (!this.attributesLabels[attributeId]) {
                     attribute = _.findWhere(this.multiselect().rows(), {
-                        attribute_id: attributeId
+                        'attribute_id': attributeId
                     });
 
                     if (attribute) {
-                        this.attributesLabels[attribute.attribute_id] = attribute.frontend_label;
+                        this.attributesLabels[attribute['attribute_id']] = attribute['frontend_label'];
                     }
                 }
                 labels.push(this.attributesLabels[attributeId]);
             }.bind(this));
             this.selectedAttributes(labels.join(', '));
         },
+
+        /**
+         * @param {Object} wizard
+         */
         force: function (wizard) {
             wizard.data.attributesIds = this.multiselect().selected;
 
@@ -98,6 +125,10 @@ define([
             }
             this.setNotificationMessage();
         },
+
+        /**
+         * Back.
+         */
         back: function () {
         }
     });

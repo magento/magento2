@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,5 +22,8 @@
         </country_id>
         <telephone />
         <postcode />
+        <custom_attribute>
+            <selector>[name="custom_attributes[%attribute_code%]"]</selector>
+        </custom_attribute>
     </fields>
 </mapping>

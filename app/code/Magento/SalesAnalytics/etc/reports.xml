@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
+    <report name="orders" connection="sales">
+        <source name="sales_order">
+            <attribute name="entity_id"/>
+            <attribute name="created_at"/>
+            <attribute name="customer_id"/>
+            <attribute name="status"/>
+            <attribute name="base_grand_total"/>
+            <attribute name="base_tax_amount"/>
+            <attribute name="base_shipping_amount"/>
+            <attribute name="coupon_code" function="sha1"/>
+            <attribute name="store_id"/>
+            <attribute name="store_name"/>
+            <attribute name="base_discount_amount"/>
+            <attribute name="base_subtotal"/>
+            <attribute name="base_total_refunded"/>
+            <attribute name="shipping_method"/>
+            <attribute name="shipping_address_id"/>
+            <attribute name="customer_email" function="sha1"/>
+            <attribute name="base_total_online_refunded"/>
+            <attribute name="base_total_offline_refunded"/>
+            <attribute name="base_currency_code"/>
+            <attribute name="billing_address_id"/>
+        </source>
+    </report>
+    <report name="order_items" connection="sales">
+        <source name="sales_order_item">
+            <attribute name="item_id"/>
+            <attribute name="created_at"/>
+            <attribute name="name"/>
+            <attribute name="base_price"/>
+            <attribute name="qty_ordered"/>
+            <attribute name="order_id"/>
+            <attribute name="sku"/>
+            <attribute name="product_id"/>
+            <attribute name="store_id"/>
+        </source>
+    </report>
+    <report name="order_addresses" connection="sales">
+        <source name="sales_order_address">
+            <attribute name="entity_id"/>
+            <attribute name="customer_id"/>
+            <attribute name="city"/>
+            <attribute name="region"/>
+            <attribute name="country_id"/>
+        </source>
+    </report>
+</config>

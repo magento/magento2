@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,13 +10,15 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\DB\Select;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
 
 /**
  * Product collection
@@ -261,6 +263,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $metadataPool;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
+     */
+    private $categoryProductIndexerFrontend;
+
+    /**
+     * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -280,9 +294,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -304,7 +323,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -316,7 +339,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $this->_productLimitationFilters = $this->createLimitationFilters();
+        $productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class
+        );
+        $this->_productLimitationFilters = $productLimitationFactory->create();
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->indexerFrontendResource = $indexerFrontendResource ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class);
+        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(CategoryProductFrontend::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -852,6 +883,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Filter Product by Categories
      *
      * @param array $categoriesFilter
+     * @return $this
      */
     public function addCategoriesFilter(array $categoriesFilter)
     {
@@ -863,8 +895,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $selectCondition = [
                 $this->mapConditionType($conditionType) => $categorySelect
             ];
-            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id' , $selectCondition));
+            $this->getSelect()->where($this->getConnection()->prepareSqlCondition('e.entity_id', $selectCondition));
         }
+        return $this;
     }
 
     /**
@@ -1168,7 +1201,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->distinct(
                 false
             )->join(
-                ['count_table' => $this->getTable('catalog_category_product_index')],
+                ['count_table' => $this->categoryProductIndexerFrontend->getMainTable()],
                 'count_table.product_id = e.entity_id',
                 [
                     'count_table.category_id',
@@ -1813,7 +1846,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         if (!isset($fromPart['store_cat_index'])) {
             $this->getSelect()->joinLeft(
-                ['store_cat_index' => $this->getTable('catalog_category_product_index')],
+                ['store_cat_index' => $this->categoryProductIndexerFrontend->getMainTable()],
                 join(
                     ' AND ',
                     [
@@ -1906,7 +1939,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'max_price',
                 'tier_price',
             ];
-            $tableName = ['price_index' => $this->getTable('catalog_product_index_price')];
+            $tableName = ['price_index' => $this->indexerFrontendResource->getMainTable()];
             if ($joinLeft) {
                 $select->joinLeft($tableName, $joinCond, $colls);
             } else {
@@ -1984,7 +2017,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         } else {
             $this->getSelect()->join(
-                ['cat_index' => $this->getTable('catalog_category_product_index')],
+                ['cat_index' => $this->categoryProductIndexerFrontend->getMainTable()],
                 $joinCond,
                 ['cat_index_position' => 'position']
             );
@@ -2113,7 +2146,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $select = $backend->getResource()->getSelect($websiteId);
         $select->columns(['product_id' => $linkField])->where(
-            $linkField .' IN(?)',
+            $linkField . ' IN(?)',
             $productIds
         )->order(
             $linkField
@@ -2181,19 +2214,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
 
         $mediaGalleries = [];
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
         $items = $this->getItems();
 
-        $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
-            return $item->getId();
-        }, $items));
-
+        $select->where(
+            'entity.' . $linkField . ' IN (?)',
+            array_map(
+                function ($item) use ($linkField) {
+                    return $item->getData($linkField);
+                },
+                $items
+            )
+        );
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row[$linkField]][] = $row;
         }
 
         foreach ($items as $item) {
-            $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
+            $mediaEntries = isset($mediaGalleries[$item->getData($linkField)]) ?
+                $mediaGalleries[$item->getData($linkField)] : [];
             $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
         }
 
@@ -2202,15 +2241,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * Get MetadataPool instance
-     * @return MetadataPool
+     * Get product entity metadata
+     *
+     * @return \Magento\Framework\EntityManager\EntityMetadataInterface
      */
-    private function getMetadataPool()
+    public function getProductEntityMetadata()
     {
-        if (!$this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
+        return $this->metadataPool->getMetadata(ProductInterface::class);
     }
 
     /**
@@ -2333,14 +2370,5 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this->_pricesCount;
-    }
-
-    /**
-     * @return Collection\ProductLimitation
-     */
-    private function createLimitationFilters()
-    {
-        return \Magento\Framework\App\ObjectManager::getInstance()
-                ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class);
     }
 }

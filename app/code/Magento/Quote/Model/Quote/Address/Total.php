@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
@@ -16,6 +16,28 @@ class Total extends \Magento\Framework\DataObject
      * @var array
      */
     protected $baseTotalAmounts;
+
+    /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
+    public function __construct(
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        parent::__construct($data);
+    }
 
     /**
      * Set total amount value
@@ -159,7 +181,7 @@ class Total extends \Magento\Framework\DataObject
     {
         $fullInfo = $this->getData('full_info');
         if (is_string($fullInfo)) {
-            $fullInfo = unserialize($fullInfo);
+            $fullInfo = $this->serializer->unserialize($fullInfo);
         }
         return $fullInfo;
     }

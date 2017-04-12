@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,8 @@
 
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
-
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * @magentoAppArea adminhtml
@@ -23,13 +22,6 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-    }
-
-    public function tearDown()
-    {
-        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
-        $category->load(3);
-        $category->delete();
     }
 
     /**
@@ -97,6 +89,37 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @param string $urlKey
+     * @dataProvider incorrectUrlRewritesDataProvider
+     */
+    public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
+    {
+        $this->setExpectedException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            'Invalid URL key'
+        );
+        /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $repository */
+        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $category = $repository->get(3);
+        $category->setUrlKey($urlKey);
+        $repository->save($category);
+    }
+
+    /**
+     * @return array
+     */
+    public function incorrectUrlRewritesDataProvider()
+    {
+        return [
+            ['#'],
+            ['//']
+        ];
+    }
+
+    /**
      * @param array $filter
      * @return array
      */
@@ -129,6 +152,5 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'Expected: ' . var_export($row, true) . "\nIn Actual: " . var_export($actual, true)
             );
         }
-
     }
 }

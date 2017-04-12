@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -19,7 +19,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Backend\Block\Template" name="adminhtml.user.roles.users.grid.js" template="Magento_User::role/users_grid_js.phtml"/>
-            <block class="Magento\User\Block\Buttons" name="adminhtml.user.role.buttons" template="role/info.phtml"/>
+            <block class="Magento\User\Block\Buttons" name="adminhtml.user.role.buttons" template="Magento_User::role/info.phtml"/>
         </referenceContainer>
     </body>
 </page>

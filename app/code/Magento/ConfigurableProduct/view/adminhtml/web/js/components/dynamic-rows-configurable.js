@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,6 +32,7 @@ define([
             identificationProperty: 'id',
             'attribute_set_id': '',
             attributesTmp: [],
+            changedFlag: 'was_changed',
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -391,9 +392,9 @@ define([
                     'small_image': row['small_image'],
                     image: row.image,
                     'thumbnail': row.thumbnail,
-                    'attributes': attributesText,
-                    'was_changed': true
+                    'attributes': attributesText
                 };
+                product[this.changedFlag] = true;
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
                 tmpArray.push(product);
@@ -515,6 +516,7 @@ define([
                 tmpArray[rowIndex].status = 1;
             }
 
+            tmpArray[rowIndex][this.changedFlag] = true;
             this.unionInsertData(tmpArray);
         }
     });

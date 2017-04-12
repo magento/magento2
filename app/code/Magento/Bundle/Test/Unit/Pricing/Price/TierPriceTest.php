@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -188,9 +188,17 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSavePercent($baseAmount, $savePercent)
     {
+        $basePrice = 10.;
         $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $amount->expects($this->once())->method('getBaseAmount')->willReturn($baseAmount);
+        $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $price->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($basePrice));
 
+        $this->priceInfo->expects($this->any())
+            ->method('getPrice')
+            ->will($this->returnValue($price));
         $this->assertEquals($savePercent, $this->model->getSavePercent($amount));
     }
 
@@ -200,10 +208,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     public function providerForTestGetSavePercent()
     {
         return [
-            'no fraction' => [10.0000, 10],
-            'lower half'  => [10.1234, 10],
-            'half way'    => [10.5000, 11],
-            'upper half'  => [10.6789, 11],
+            'no fraction' => [9.0000, 10],
+            'lower half'  => [9.1234, 9],
         ];
     }
 }

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save
@@ -364,7 +364,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         } else {
             $path = 'catalog/*/edit';
             $params['id'] = $categoryId;
-
         }
         return ['path' => $path, 'params' => $params];
     }

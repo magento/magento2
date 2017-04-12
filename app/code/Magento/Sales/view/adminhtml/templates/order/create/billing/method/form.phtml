@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@
 
             <label class="admin__field-label" for="p_method_<?php /* @escapeNotVerified */ echo $_code ?>"><?php echo $block->escapeHtml($_method->getTitle()) ?></label>
         </dt>
-        <dd class="admin__payment-method-wapper">
+        <dd class="admin__payment-method-wrapper">
             <?php /* @escapeNotVerified */ echo $block->getChildHtml('payment.method.' . $_code) ?>
         </dd>
     <?php endforeach; ?>
@@ -40,9 +40,7 @@
 </div>
     <script>
         require(["Magento_Sales/order/create/form"], function(){
-        <?php if($_methodsCount == 1):?>
-            order.switchPaymentMethod('<?php /* @escapeNotVerified */ echo $block->getSelectedMethodCode(); ?>');
-        <?php else: ?>
+        <?php if ($_methodsCount != 1):?>
             order.setPaymentMethod('<?php /* @escapeNotVerified */ echo $block->getSelectedMethodCode(); ?>');
         <?php endif; ?>
         });

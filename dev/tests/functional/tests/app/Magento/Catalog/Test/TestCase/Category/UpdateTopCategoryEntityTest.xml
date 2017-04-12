@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateTopCategoryEntityTest" summary="Update top category url" ticketId="MAGETWO-27327">
+        <variation name="UpdateCategoryEntityTestVariation1" summary="Update top category url and do not create redirect">
+            <data name="initialCategory/dataset" xsi:type="string">three_nested_categories</data>
+            <data name="nestingLevel" xsi:type="number">3</data>
+            <data name="category/data/url_key" xsi:type="string">cat1-rewrite%isolation%</data>
+            <data name="category/data/url_key_create_redirect" xsi:type="string">No</data>
+            <data name="filterByPath" xsi:type="string">request_path</data>
+            <data name="redirectType" xsi:type="string">No</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesCategoriesInGrid" />
+        </variation>
+        <variation name="UpdateCategoryEntityTestVariation2" summary="Update top category url and create redirect">
+            <data name="initialCategory/dataset" xsi:type="string">three_nested_categories</data>
+            <data name="nestingLevel" xsi:type="number">3</data>
+            <data name="category/data/url_key" xsi:type="string">cat1-rewrite%isolation%</data>
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesCategoriesInGrid" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewritesRedirectInGrid" />
+        </variation>
+    </testCase>
+</config>

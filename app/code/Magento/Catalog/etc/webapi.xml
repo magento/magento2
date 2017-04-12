@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -242,6 +242,78 @@
     </route>
     <route url="/V1/products/:sku/group-prices/:customerGroupId/tiers/:qty" method="DELETE">
         <service class="Magento\Catalog\Api\ProductTierPriceManagementInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices-information" method="POST">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices" method="POST">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices" method="PUT">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="replace"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices-delete" method="POST">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/base-prices-information" method="POST">
+        <service class="Magento\Catalog\Api\BasePriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/base-prices" method="POST">
+        <service class="Magento\Catalog\Api\BasePriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/cost-information" method="POST">
+        <service class="Magento\Catalog\Api\CostStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/cost" method="POST">
+        <service class="Magento\Catalog\Api\CostStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/cost-delete" method="POST">
+        <service class="Magento\Catalog\Api\CostStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-information" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-delete" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="delete"/>
         <resources>
             <resource ref="Magento_Catalog::catalog"/>
         </resources>

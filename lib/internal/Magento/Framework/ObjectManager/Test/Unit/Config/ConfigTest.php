@@ -1,14 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use \Magento\Framework\ObjectManager\Config\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManagerHelper;
+
+    protected function setUp()
+    {
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    }
+
     public function testGetArgumentsEmpty()
     {
         $config = new Config();
@@ -42,6 +51,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->once())->method('get')->will($this->returnValue(false));
 
         $config = new Config(null, $definitions);
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->expects($this->exactly(2))
+            ->method('serialize');
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $config,
+            'serializer',
+            $serializerMock
+        );
         $config->setCache($cache);
 
         $this->_assertFooTypeArguments($config);

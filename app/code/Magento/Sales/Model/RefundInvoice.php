@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
@@ -13,9 +13,9 @@ use Magento\Sales\Api\RefundInvoiceInterface;
 use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
-use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface as RefundInvoiceValidator;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\Order\RefundAdapterInterface;
+use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface as RefundInvoiceValidator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -50,9 +50,9 @@ class RefundInvoice implements RefundInvoiceInterface
     private $creditmemoRepository;
 
     /**
-     * @var PaymentAdapterInterface
+     * @var RefundAdapterInterface
      */
-    private $paymentAdapter;
+    private $refundAdapter;
 
     /**
      * @var CreditmemoDocumentFactory
@@ -88,7 +88,7 @@ class RefundInvoice implements RefundInvoiceInterface
      * @param InvoiceRepositoryInterface $invoiceRepository
      * @param RefundInvoiceValidator $validator
      * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @param PaymentAdapterInterface $paymentAdapter
+     * @param RefundAdapterInterface $refundAdapter
      * @param CreditmemoDocumentFactory $creditmemoDocumentFactory
      * @param NotifierInterface $notifier
      * @param OrderConfig $config
@@ -102,7 +102,7 @@ class RefundInvoice implements RefundInvoiceInterface
         InvoiceRepositoryInterface $invoiceRepository,
         RefundInvoiceValidator $validator,
         CreditmemoRepositoryInterface $creditmemoRepository,
-        PaymentAdapterInterface $paymentAdapter,
+        RefundAdapterInterface $refundAdapter,
         CreditmemoDocumentFactory $creditmemoDocumentFactory,
         NotifierInterface $notifier,
         OrderConfig $config,
@@ -114,7 +114,7 @@ class RefundInvoice implements RefundInvoiceInterface
         $this->invoiceRepository = $invoiceRepository;
         $this->validator = $validator;
         $this->creditmemoRepository = $creditmemoRepository;
-        $this->paymentAdapter = $paymentAdapter;
+        $this->refundAdapter = $refundAdapter;
         $this->creditmemoDocumentFactory = $creditmemoDocumentFactory;
         $this->notifier = $notifier;
         $this->config = $config;
@@ -164,7 +164,7 @@ class RefundInvoice implements RefundInvoiceInterface
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order->setCustomerNoteNotify($notify);
-            $order = $this->paymentAdapter->refund($creditmemo, $order, $isOnline);
+            $order = $this->refundAdapter->refund($creditmemo, $order, $isOnline);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [])
             );

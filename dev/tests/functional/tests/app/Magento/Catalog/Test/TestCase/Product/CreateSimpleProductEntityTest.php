@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Perform appropriate assertions.
  *
  * @group Products
- * @ZephyrId MAGETWO-23414
+ * @ZephyrId MAGETWO-23414, MAGETWO-17475, MAGETWO-43376
  */
 class CreateSimpleProductEntityTest extends Injectable
 {

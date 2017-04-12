@@ -1,14 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
@@ -31,6 +31,16 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     private $dataObjectHelper;
+
+    /**
+     * @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory;
+     */
+    private $optionsFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     */
+    private $attributeFactory;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -72,7 +82,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             foreach ($child->getAttributes() as $attribute) {
                 $attrCode = $attribute->getAttributeCode();
                 $value = $child->getDataUsingMethod($attrCode) ?: $child->getData($attrCode);
-                if (null !== $value && $attrCode != 'entity_id') {
+                if (null !== $value) {
                     $attributes[$attrCode] = $value;
                 }
             }
@@ -102,9 +112,28 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             throw new StateException(__('Product has been already attached'));
         }
 
+        $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        if (empty($configurableProductOptions)) {
+            throw new StateException(__('Parent product does not have configurable product options'));
+        }
+
+        $attributeIds = [];
+        foreach ($configurableProductOptions as $configurableProductOption) {
+            $attributeCode = $configurableProductOption->getProductAttribute()->getAttributeCode();
+            if (!$child->getData($attributeCode)) {
+                throw new StateException(__('Child product does not have attribute value %1', $attributeCode));
+            }
+            $attributeIds[] = $configurableProductOption->getAttributeId();
+        }
+        $configurableOptionData = $this->getConfigurableAttributesData($attributeIds);
+
+        /** @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionFactory */
+        $optionFactory = $this->getOptionsFactory();
+        $options = $optionFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
+        $product->getExtensionAttributes()->setConfigurableProductOptions($options);
         $product->getExtensionAttributes()->setConfigurableProductLinks($childrenIds);
-        $product->save();
+        $this->productRepository->save($product);
         return true;
     }
 
@@ -133,7 +162,75 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
         $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
-        $product->save();
+        $this->productRepository->save($product);
         return true;
+    }
+
+    /**
+     * Get Options Factory
+     *
+     * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
+     *
+     * @deprecated
+     */
+    private function getOptionsFactory()
+    {
+        if (!$this->optionsFactory) {
+            $this->optionsFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
+        }
+        return $this->optionsFactory;
+    }
+
+    /**
+     * Get Attribute Factory
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     *
+     * @deprecated
+     */
+    private function getAttributeFactory()
+    {
+        if (!$this->attributeFactory) {
+            $this->attributeFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
+        }
+        return $this->attributeFactory;
+    }
+
+    /**
+     * Get Configurable Attribute Data
+     *
+     * @param int[] $attributeIds
+     * @return array
+     */
+    private function getConfigurableAttributesData($attributeIds)
+    {
+        $configurableAttributesData = [];
+        $attributeValues = [];
+        $attributes = $this->getAttributeFactory()->create()
+            ->getCollection()
+            ->addFieldToFilter('attribute_id', $attributeIds)
+            ->getItems();
+        foreach ($attributes as $attribute) {
+            foreach ($attribute->getOptions() as $option) {
+                if ($option->getValue()) {
+                    $attributeValues[] = [
+                        'label' => $option->getLabel(),
+                        'attribute_id' => $attribute->getId(),
+                        'value_index' => $option->getValue(),
+                    ];
+                }
+            }
+            $configurableAttributesData[] =
+                [
+                    'attribute_id' => $attribute->getId(),
+                    'code' => $attribute->getAttributeCode(),
+                    'label' => $attribute->getStoreLabel(),
+                    'values' => $attributeValues,
+                ];
+        }
+
+        return $configurableAttributesData;
     }
 }

@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
@@ -195,7 +194,6 @@ class Image extends AbstractHelper
     protected function setImageProperties()
     {
         $this->_getModel()->setDestinationSubdir($this->getType());
-
         $this->_getModel()->setWidth($this->getWidth());
         $this->_getModel()->setHeight($this->getHeight());
 
@@ -241,25 +239,25 @@ class Image extends AbstractHelper
     {
         $this->setWatermark(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
+                "design/watermark/{$this->getType()}_image",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkImageOpacity(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
+                "design/watermark/{$this->getType()}_imageOpacity",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkPosition(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
+                "design/watermark/{$this->getType()}_position",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkSize(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
+                "design/watermark/{$this->getType()}_size",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
@@ -433,7 +431,7 @@ class Image extends AbstractHelper
      *
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
@@ -500,10 +498,7 @@ class Image extends AbstractHelper
     protected function isScheduledActionsAllowed()
     {
         $model = $this->_getModel();
-        if ($model->isBaseFilePlaceholder()
-            && $model->getNewFile() === true
-            || $model->isCached()
-        ) {
+        if ($model->isBaseFilePlaceholder() || $model->isCached()) {
             return false;
         }
         return true;
@@ -547,7 +542,7 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */

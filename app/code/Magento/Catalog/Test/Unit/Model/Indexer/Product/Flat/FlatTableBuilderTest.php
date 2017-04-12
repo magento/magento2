@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
@@ -107,44 +107,42 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        list($storeId, $changedIds, $valueFieldSuffix, $tableDropSuffix, $fillTmpTables) = [1, [], '', '', true];
+        $storeId = 1;
+        $changedIds = [];
+        $valueFieldSuffix = '_value';
+        $tableDropSuffix = '';
+        $fillTmpTables = true;
         $tableName = 'catalog_product_entity';
         $attributeTable = 'catalog_product_entity_int';
         $temporaryTableName = 'catalog_product_entity_int_tmp_indexer';
-        $temporaryValueTableName = 'catalog_product_entity_int_tmp_indexer';
+        $temporaryValueTableName = 'catalog_product_entity_int_tmp_indexer_value';
         $linkField = 'entity_id';
         $statusId = 22;
+        $eavCustomField = 'space_weight';
+        $eavCustomValueField = $eavCustomField . $valueFieldSuffix;
         $this->flatIndexerMock->expects($this->once())->method('getAttributes')->willReturn([]);
         $this->flatIndexerMock->expects($this->exactly(3))->method('getFlatColumns')
-            ->willReturnOnConsecutiveCalls(
-                [],
-                [$linkField => []],
-                [$linkField => []]
-            );
+            ->willReturnOnConsecutiveCalls([], [$eavCustomValueField => []], [$eavCustomValueField => []]);
         $this->flatIndexerMock->expects($this->once())->method('getFlatIndexes')->willReturn([]);
         $statusAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $eavCustomAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->flatIndexerMock->expects($this->once())->method('getTablesStructure')
             ->willReturn(
                 [
-                    'catalog_product_entity' => [
-                        $linkField => $statusAttributeMock
-                    ],
+                    'catalog_product_entity' => [$linkField => $statusAttributeMock],
                     'catalog_product_entity_int' => [
-                        $linkField => $statusAttributeMock
+                        $linkField => $statusAttributeMock,
+                        $eavCustomField => $eavCustomAttributeMock
                     ]
                 ]
             );
         $this->flatIndexerMock->expects($this->atLeastOnce())->method('getTable')
-            ->withConsecutive(
-                [$tableName],
-                ['catalog_product_website']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $tableName,
-                'catalog_product_website'
-            );
+            ->withConsecutive([$tableName], ['catalog_product_website'])
+            ->willReturnOnConsecutiveCalls($tableName, 'catalog_product_website');
         $this->flatIndexerMock->expects($this->once())->method('getAttribute')
             ->with('status')
             ->willReturn($statusAttributeMock);
@@ -153,6 +151,9 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $backendMock->expects($this->atLeastOnce())->method('getTable')->willReturn($attributeTable);
         $statusAttributeMock->expects($this->atLeastOnce())->method('getBackend')->willReturn(
+            $backendMock
+        );
+        $eavCustomAttributeMock->expects($this->atLeastOnce())->method('getBackend')->willReturn(
             $backendMock
         );
         $statusAttributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($statusId);
@@ -185,12 +186,12 @@ class FlatTableBuilderTest extends \PHPUnit_Framework_TestCase
                 [
                     $temporaryTableName,
                     "e.{$linkField} = {$temporaryTableName}.{$linkField}",
-                    [$linkField]
+                    [$linkField, $eavCustomField]
                 ],
                 [
                     $temporaryValueTableName,
-                    "e.{$linkField} = " . $temporaryValueTableName . ".{$linkField}",
-                    [$linkField]
+                    "e.{$linkField} = {$temporaryValueTableName}.{$linkField}",
+                    [$eavCustomValueField]
                 ]
             )->willReturnSelf();
         $this->metadataPoolMock->expects($this->atLeastOnce())->method('getMetadata')->with(ProductInterface::class)

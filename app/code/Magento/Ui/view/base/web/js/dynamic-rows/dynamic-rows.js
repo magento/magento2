@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'ko',
     'mageUtils',
@@ -538,7 +541,8 @@ define([
                         label: cell.config.label,
                         name: cell.name,
                         required: !!cell.config.validation,
-                        columnsHeaderClasses: cell.config.columnsHeaderClasses
+                        columnsHeaderClasses: cell.config.columnsHeaderClasses,
+                        sortOrder: cell.config.sortOrder
                     });
 
                     this.labels.push(data);

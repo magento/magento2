@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,6 @@
                 </item>
             </field>
         </dataset>
-
         <dataset name="config_currency_symbols_usd_and_uah_rollback">
             <field name="currency/options/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">currency</item>
@@ -48,6 +47,40 @@
                     <item name="US Dollar" xsi:type="string">USD</item>
                 </item>
             </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_currency_custom_website_eur">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="Euro" xsi:type="string">EUR</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Euro</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">EUR</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Euro</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">EUR</item>
+            </field>
         </dataset>
 
         <dataset name="config_base_currency_ch">
@@ -71,7 +104,6 @@
                 <item name="value" xsi:type="string">CHF</item>
             </field>
         </dataset>
-
         <dataset name="config_base_currency_ch_rollback">
             <field name="currency/options/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">currency</item>
@@ -115,8 +147,50 @@
                 <item name="value" xsi:type="string">GBP</item>
             </field>
         </dataset>
-
         <dataset name="config_base_currency_gb_rollback">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_base_currency_aud">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="Australian Dollar" xsi:type="string">AUD</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Australian Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">AUD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Australian Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">AUD</item>
+            </field>
+        </dataset>
+        <dataset name="config_base_currency_aud_rollback">
             <field name="currency/options/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">currency</item>
                 <item name="scope_id" xsi:type="number">1</item>
@@ -156,6 +230,17 @@
                 <item name="value" xsi:type="array">
                     <item name="US Dollar" xsi:type="string">USD</item>
                     <item name="British Pound Sterling" xsi:type="string">GBP</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="config_allowed_currency_usd_and_uah">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                    <item name="Ukrainian Hryvnia" xsi:type="string">UAH</item>
                 </item>
             </field>
         </dataset>

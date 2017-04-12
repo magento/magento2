@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -65,6 +65,18 @@
             <data name="displayContent" xsi:type="string">bla bla bla</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
+        </variation>
+        <variation name="CreateCmsPageEntityTestVariation6" summary="Create CMS page with single store mode" ticketId="MAGETWO-59654">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="configData" xsi:type="string">enable_single_store_mode</data>
+            <data name="fixtureType" xsi:type="string">cmsPage</data>
+            <data name="data/is_active" xsi:type="string">Yes</data>
+            <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>
+            <data name="data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageFormSingleStoreMode" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageOnFrontend" />
         </variation>
     </testCase>

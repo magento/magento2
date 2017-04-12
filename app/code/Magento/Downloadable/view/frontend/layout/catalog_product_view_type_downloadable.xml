@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,15 +9,15 @@
     <body>
         <attribute name="class" value="page-product-downloadable"/>
         <referenceContainer name="product.info.main">
-            <block class="Magento\Downloadable\Block\Catalog\Product\Samples" name="product.info.downloadable.samples" as="samples" template="catalog/product/samples.phtml" after="product.price.tier" />
+            <block class="Magento\Downloadable\Block\Catalog\Product\Samples" name="product.info.downloadable.samples" as="samples" template="Magento_Downloadable::catalog/product/samples.phtml" after="product.price.tier" />
         </referenceContainer>
         <referenceContainer name="product.info.type">
-            <block class="Magento\Downloadable\Block\Catalog\Product\View\Type" name="product.info.downloadable" as="product_type_data" template="catalog/product/type.phtml">
-                <block class="Magento\CatalogInventory\Block\Stockqty\DefaultStockqty" name="product.info.downloadable.extra" as="product_type_data_extra" template="stockqty/default.phtml"/>
+            <block class="Magento\Downloadable\Block\Catalog\Product\View\Type" name="product.info.downloadable" as="product_type_data" template="Magento_Downloadable::catalog/product/type.phtml">
+                <block class="Magento\CatalogInventory\Block\Stockqty\DefaultStockqty" name="product.info.downloadable.extra" as="product_type_data_extra" template="Magento_CatalogInventory::stockqty/default.phtml"/>
             </block>
         </referenceContainer>
         <referenceBlock name="product.info.options.wrapper">
-            <block class="Magento\Downloadable\Block\Catalog\Product\Links" name="product.info.downloadable.options" as="type_downloadable_options" before="-" template="catalog/product/links.phtml">
+            <block class="Magento\Downloadable\Block\Catalog\Product\Links" name="product.info.downloadable.options" as="type_downloadable_options" before="-" template="Magento_Downloadable::catalog/product/links.phtml">
                 <block class="Magento\Catalog\Pricing\Render" name="product.price.link" after="product.info.downloadable.options">
                     <arguments>
                         <argument name="price_render" xsi:type="string">product.price.render.default</argument>

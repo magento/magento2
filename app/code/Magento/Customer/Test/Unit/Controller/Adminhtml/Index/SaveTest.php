@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
@@ -304,33 +304,28 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ],
             'subscription' => $subscription,
         ];
-        $filteredData = [
+        $extractedData = [
             'entity_id' => $customerId,
             'code' => 'value',
             'coolness' => false,
             'disable_auto_group_change' => 'false',
         ];
-        $dataToCompact = [
+        $compactedData = [
             'entity_id' => $customerId,
             'code' => 'value',
             'coolness' => false,
             'disable_auto_group_change' => 'false',
-            CustomerInterface::DEFAULT_BILLING => false,
-            CustomerInterface::DEFAULT_SHIPPING => false,
-            'confirmation' => false,
-            'sendemail_store_id' => false,
-            'extension_attributes' => false,
+            CustomerInterface::DEFAULT_BILLING => 2,
+            CustomerInterface::DEFAULT_SHIPPING => 2
         ];
-        $addressFilteredData = [
+        $addressExtractedData = [
             'entity_id' => $addressId,
-            'default_billing' => 'true',
-            'default_shipping' => 'true',
             'code' => 'value',
             'coolness' => false,
             'region' => 'region',
             'region_id' => 'region_id',
         ];
-        $addressDataToCompact = [
+        $addressCompactedData = [
             'entity_id' => $addressId,
             'default_billing' => 'true',
             'default_shipping' => 'true',
@@ -368,8 +363,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => true,
             'default_shipping' => true,
             'code' => 'value',
-            'region' =>
-                [
+            'region' => [
                     'region' => 'region',
                     'region_id' => 'region_id',
                 ],
@@ -430,11 +424,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
-            ->willReturn($filteredData);
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('compactData')
-            ->with($dataToCompact)
-            ->willReturn($filteredData);
+            ->with($extractedData)
+            ->willReturn($compactedData);
         $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -445,11 +439,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerAddressFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'address/' . $addressId)
-            ->willReturn($addressFilteredData);
+            ->willReturn($addressExtractedData);
         $customerAddressFormMock->expects($this->once())
             ->method('compactData')
-            ->with($addressDataToCompact)
-            ->willReturn($addressFilteredData);
+            ->with($addressExtractedData)
+            ->willReturn($addressCompactedData);
         $customerAddressFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -615,7 +609,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $customerId = 22;
         $addressId = 11;
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -625,8 +619,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 '_template_' => '_template_',
                 $addressId => [
                     'entity_id' => $addressId,
-                    'default_billing' => 'false',
-                    'default_shipping' => 'false',
                     'code' => 'value',
                     'coolness' => false,
                     'region' => 'region',
@@ -635,32 +627,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ],
             'subscription' => $subscription,
         ];
-        $filteredData = [
+        $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
         ];
-        $dataToCompact = [
-            'coolness' => false,
-            'disable_auto_group_change' => 'false',
-            CustomerInterface::DEFAULT_BILLING => false,
-            CustomerInterface::DEFAULT_SHIPPING => false,
-            'confirmation' => false,
-            'sendemail_store_id' => false,
-            'extension_attributes' => false,
-        ];
-        $addressFilteredData = [
+        $addressExtractedData = [
             'entity_id' => $addressId,
-            'default_billing' => 'false',
-            'default_shipping' => 'false',
-            'code' => 'value',
-            'coolness' => false,
-            'region' => 'region',
-            'region_id' => 'region_id',
-        ];
-        $addressDataToCompact = [
-            'entity_id' => $addressId,
-            'default_billing' => 'false',
-            'default_shipping' => 'false',
             'code' => 'value',
             'coolness' => false,
             'region' => 'region',
@@ -677,8 +649,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => false,
             'default_shipping' => false,
             'code' => 'value',
-            'region' =>
-                [
+            'region' => [
                     'region' => 'region',
                     'region_id' => 'region_id',
                 ],
@@ -739,11 +710,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
-            ->willReturn($filteredData);
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('compactData')
-            ->with($dataToCompact)
-            ->willReturn($filteredData);
+            ->with($extractedData)
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -754,11 +725,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerAddressFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'address/' . $addressId)
-            ->willReturn($addressFilteredData);
+            ->willReturn($addressExtractedData);
         $customerAddressFormMock->expects($this->once())
             ->method('compactData')
-            ->with($addressDataToCompact)
-            ->willReturn($addressFilteredData);
+            ->with($addressExtractedData)
+            ->willReturn($addressExtractedData);
         $customerAddressFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -902,7 +873,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndValidationException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -910,18 +881,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ],
             'subscription' => $subscription,
         ];
-        $filteredData = [
+        $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
-        ];
-        $dataToCompact = [
-            'coolness' => false,
-            'disable_auto_group_change' => 'false',
-            CustomerInterface::DEFAULT_BILLING => false,
-            CustomerInterface::DEFAULT_SHIPPING => false,
-            'confirmation' => false,
-            'sendemail_store_id' => false,
-            'extension_attributes' => false,
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
@@ -971,11 +933,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
-            ->willReturn($filteredData);
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('compactData')
-            ->with($dataToCompact)
-            ->willReturn($filteredData);
+            ->with($extractedData)
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -1054,7 +1016,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndLocalizedException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -1062,18 +1024,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ],
             'subscription' => $subscription,
         ];
-        $filteredData = [
+        $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
-        ];
-        $dataToCompact = [
-            'coolness' => false,
-            'disable_auto_group_change' => 'false',
-            CustomerInterface::DEFAULT_BILLING => false,
-            CustomerInterface::DEFAULT_SHIPPING => false,
-            'confirmation' => false,
-            'sendemail_store_id' => false,
-            'extension_attributes' => false,
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
@@ -1124,11 +1077,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
-            ->willReturn($filteredData);
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('compactData')
-            ->with($dataToCompact)
-            ->willReturn($filteredData);
+            ->with($extractedData)
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);
@@ -1206,7 +1159,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithNewCustomerAndException()
     {
-        $subscription = 'false';
+        $subscription = '0';
         $postValue = [
             'customer' => [
                 'coolness' => false,
@@ -1214,18 +1167,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ],
             'subscription' => $subscription,
         ];
-        $filteredData = [
+        $extractedData = [
             'coolness' => false,
             'disable_auto_group_change' => 'false',
-        ];
-        $dataToCompact = [
-            'coolness' => false,
-            'disable_auto_group_change' => 'false',
-            CustomerInterface::DEFAULT_BILLING => false,
-            CustomerInterface::DEFAULT_SHIPPING => false,
-            'confirmation' => false,
-            'sendemail_store_id' => false,
-            'extension_attributes' => false,
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
@@ -1275,11 +1219,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $customerFormMock->expects($this->once())
             ->method('extractData')
             ->with($this->requestMock, 'customer')
-            ->willReturn($filteredData);
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('compactData')
-            ->with($dataToCompact)
-            ->willReturn($filteredData);
+            ->with($extractedData)
+            ->willReturn($extractedData);
         $customerFormMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn($attributes);

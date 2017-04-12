@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -106,6 +106,8 @@
 
     .box-billing-address,
     .box-shipping-address,
+    .box-address-billing,
+    .box-address-shipping,
     .box-information,
     .box-newsletter {
         .box-content {
@@ -319,6 +321,11 @@
 
     .order-products-toolbar {
         position: relative;
+
+        .toolbar-amount {
+            position: relative;
+            text-align: center;
+        }
     }
 }
 
@@ -432,14 +439,22 @@
     .block-addresses-list {
         .items.addresses {
             &:extend(.abs-add-clearfix-desktop all);
+            font-size: 0;
 
             > .item {
-                &:extend(.abs-blocks-2columns all);
+                display: inline-block;
+                font-size: @font-size__base;
                 margin-bottom: @indent__base;
+                vertical-align: top;
+                width: 48%;
 
                 &:nth-last-child(1),
                 &:nth-last-child(2) {
                     margin-bottom: 0;
+                }
+
+                &:nth-child(even) {
+                    margin-left: 4%;
                 }
             }
         }
@@ -474,6 +489,8 @@
 
     .box-billing-address,
     .box-shipping-address,
+    .box-address-billing,
+    .box-address-shipping,
     .box-information {
         .box-content {
             &:extend(.abs-account-block-font-size all);

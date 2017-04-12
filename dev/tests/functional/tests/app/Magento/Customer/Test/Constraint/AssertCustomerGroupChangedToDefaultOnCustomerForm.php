@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class AssertCustomerGroupChangedToDefaultOnCustomerForm extends AbstractConstrai
         CustomerIndexNew $customerIndexEdit
     ) {
         $customerIndexEdit->open(['id' => $customer->getId()]);
-        $customerFormData = $customerIndexNew->getCustomerForm()->getData();
+        $customerFormData = $customerIndexNew->getCustomerForm()->getData($customer);
         \PHPUnit_Framework_Assert::assertTrue(
             $customerFormData['group_id'] == $defaultCustomerGroup->getCustomerGroupCode(),
             "Customer group not set to default after group was deleted."

@@ -2,14 +2,14 @@
 /**
  * Catalog Configurable Product Attribute Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @method Attribute _getResource()
@@ -266,6 +266,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->setData(self::KEY_PRODUCT_ID, $value);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

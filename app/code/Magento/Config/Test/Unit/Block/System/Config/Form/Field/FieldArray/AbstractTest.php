@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\FieldArray;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetArrayRows()
+    /**
+     * @var \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+     */
+    private $model;
+
+    protected function setUp()
     {
-        /** @var $block \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray */
-        $block = $this->getMockForAbstractClass(
+        $this->model = $this->getMockForAbstractClass(
             \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray::class,
             [],
             '',
@@ -19,12 +23,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             true,
             ['escapeHtml']
         );
-        $block->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
+    }
 
+    public function testGetArrayRows()
+    {
+        $this->model->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $element = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Multiselect::class);
         $element->setValue([['te<s>t' => 't<e>st', 'data&1' => 'da&ta1']]);
-        $block->setElement($element);
+        $this->model->setElement($element);
         $this->assertEquals(
             [
                 new \Magento\Framework\DataObject(
@@ -36,7 +43,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
             ],
-            $block->getArrayRows()
+            $this->model->getArrayRows()
         );
+    }
+
+    public function testGetAddButtonLabel()
+    {
+        $contextMock = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model->__construct($contextMock);
+
+        $this->assertEquals("Add", $this->model->getAddButtonLabel());
     }
 }

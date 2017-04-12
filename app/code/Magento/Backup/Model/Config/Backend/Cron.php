@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model\Config\Backend;
@@ -23,10 +23,8 @@ class Cron extends \Magento\Framework\App\Config\Value
     /** @var \Magento\Framework\App\Config\ValueFactory */
     protected $_configValueFactory;
 
-
     /** @var string */
     protected $_runModelPath = '';
-
 
     /**
      * @param \Magento\Framework\Model\Context $context

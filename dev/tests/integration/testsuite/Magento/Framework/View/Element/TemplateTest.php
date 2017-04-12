@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
 
-use \Magento\Framework\App\Area;
+use Magento\Framework\App\Area;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,11 +14,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $_block;
 
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var string
+     */
+    private $origMode;
+
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $params = ['layout' => $objectManager->create(\Magento\Framework\View\Layout::class, [])];
-        $context = $objectManager->create(\Magento\Framework\View\Element\Template\Context::class, $params);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $params = ['layout' => $this->objectManager->create(\Magento\Framework\View\Layout::class, [])];
+        $context = $this->objectManager->create(\Magento\Framework\View\Element\Template\Context::class, $params);
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
@@ -26,6 +36,21 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             '',
             ['context' => $context]
         );
+
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
+        $this->origMode = $appState->getMode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown()
+    {
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
+        $appState->setMode($this->origMode);
+        parent::tearDown();
     }
 
     public function testConstruct()
@@ -70,6 +95,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode(Area::AREA_GLOBAL);
+        /** @var \Magento\TestFramework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);
+        $appState->setMode(\Magento\TestFramework\App\State::MODE_DEFAULT);
         $this->assertEmpty($this->_block->toHtml());
         $this->_block->setTemplate(uniqid('invalid_filename.phtml'));
         $this->assertEmpty($this->_block->toHtml());

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CurrencySymbol\Test\TestCase\EditCurrencyCustomWebsiteTest" summary="Using different currencies on main and custom websites" ticketId="MAGETWO-12941">
+        <variation name="EditCurrencyCustomWebsiteTestVariation1" summary="Using default USD currency on default website and EUR currency on custom website" ticketId="MAGETWO-12941">
+            <data name="configData" xsi:type="string">price_scope_website</data>
+            <data name="product" xsi:type="array">
+                <item name="fixture" xsi:type="string">catalogProductSimple</item>
+                <item name="dataset" xsi:type="string">default</item>
+            </data>
+            <data name="store/dataset" xsi:type="string">custom_store</data>
+            <data name="currencies" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="allowedCurrencies" xsi:type="array">
+                        <item name="0" xsi:type="string">EUR</item>
+                    </item>
+                    <item name="defaultCurrency" xsi:type="string">EUR</item>
+                    <item name="baseCurrency" xsi:type="string">EUR</item>
+                </item>
+            </data>
+            <data name="currencySymbol" xsi:type="array">
+                <item name="mainWebsite" xsi:type="string">$</item>
+                <item name="customWebsite" xsi:type="string">€</item>
+            </data>
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPageMainWebsite" />
+            <constraint name="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolOnProductPageCustomWebsite" />
+        </variation>
+    </testCase>
+</config>
