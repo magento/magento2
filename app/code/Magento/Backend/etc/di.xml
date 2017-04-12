@@ -92,7 +92,7 @@
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
         <arguments>
             <argument name="searchModules" xsi:type="array" />
-            <argument name="prevideModules" xsi:type="array" />
+            <argument name="previewModules" xsi:type="array" />
         </arguments>
     </type>
     <virtualType name="Magento\Backend\Model\Auth\Session\Storage" type="Magento\Framework\Session\Storage">
