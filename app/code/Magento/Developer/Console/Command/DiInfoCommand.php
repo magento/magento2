@@ -152,11 +152,15 @@ class DiInfoCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $className = $input->getArgument(self::CLASS_NAME);
+        $output->setDecorated(true);
         $output->writeln('');
-        $output->writeln(sprintf('DI configuration for the class %s', $className));
-        $output->writeln(
-            sprintf('It is Virtual Type for the Class %s', $this->diInformation->getVirtualTypeBase($className))
-        );
+        $output->writeln(sprintf('DI configuration for the class %s in the GLOBAL area', $className));
+
+        if ($this->diInformation->isVirtualType($className)) {
+            $output->writeln(
+                sprintf('It is Virtual Type for the Class %s', $this->diInformation->getVirtualTypeBase($className))
+            );
+        }
         $this->printPreference($className, $output);
         $this->printConstructorArguments($className, $output);
         $preference = $this->diInformation->getPreference($className);
