@@ -94,6 +94,8 @@ class DataProvider implements DataProviderInterface
         );
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        $this->stateFactory = $stateFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
     }
 
     /**
