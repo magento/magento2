@@ -64,7 +64,6 @@ class DataProvider implements DataProviderInterface
      */
     private $indexerStockFrontendResource;
 
-
     /**
      * @param Config $eavConfig
      * @param ResourceConnection $resource

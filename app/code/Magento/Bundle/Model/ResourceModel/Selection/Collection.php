@@ -103,6 +103,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         parent::__construct(
@@ -128,7 +129,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection,
             $productLimitationFactory,
             $metadataPool,
-            $indexerFrontendResource
+            $indexerFrontendResource,
+            $categoryProductIndexerFrontend
         );
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
