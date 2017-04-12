@@ -49,8 +49,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $indexerStockFrontendResource;
 
     /**
-     * Collection constructor
-     *
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -73,8 +72,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerStockFrontendResource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(Magento.TypeDuplication)
