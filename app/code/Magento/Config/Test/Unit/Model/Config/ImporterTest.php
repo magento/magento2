@@ -205,9 +205,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->valueMock->expects($this->exactly(2))
-            ->method('setData')
-            ->with('force_changed_value', true);
-        $this->valueMock->expects($this->exactly(2))
             ->method('beforeSave');
         $this->valueMock->expects($this->exactly(2))
             ->method('afterSave');

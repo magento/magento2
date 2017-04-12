@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\FlagManager;
 
 /**
  * Manage saving and loading FileInfo object.
