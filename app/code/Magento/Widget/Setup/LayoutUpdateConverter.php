@@ -75,6 +75,7 @@ class LayoutUpdateConverter extends SerializedToJson
      */
     protected function unserializeValue($value)
     {
+        $value = htmlspecialchars_decode($value);
         $value = $this->restoreReservedCharactersInSerializedContent($value);
         return parent::unserializeValue($value);
     }
@@ -84,7 +85,9 @@ class LayoutUpdateConverter extends SerializedToJson
      */
     protected function encodeJson($value)
     {
-        return $this->normalizer->replaceReservedCharacters(parent::encodeJson($value));
+        return htmlspecialchars(
+            $this->normalizer->replaceReservedCharacters(parent::encodeJson($value))
+        );
     }
 
     /**
