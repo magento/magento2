@@ -770,7 +770,7 @@ class ConfigurableProductsFixture extends Fixture
      */
     private function getAdditionalAttributesClosure(array $attributes, $variationCount)
     {
-        $optionsPerAttribute = array_map(function($attr) {
+        $optionsPerAttribute = array_map(function ($attr) {
             return count($attr['values']);
         }, $attributes);
         $variationsMatrix = $this->generateVariationsMatrix(count($attributes), $optionsPerAttribute);
