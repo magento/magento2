@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -25,9 +25,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rootDirectory;
+    protected $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
@@ -67,13 +67,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rootDirectory = $this->getMockBuilder(ReadInterface::class)
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
+            ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA, DriverPool::FILE)
-            ->willReturn($this->rootDirectory);
+            ->willReturn($this->mediaDirectory);
 
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
@@ -95,7 +95,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $this->coreFileStorageDatabase = $this->getMock(
             \Magento\MediaStorage\Helper\File\Storage\Database::class,
-            ['copyFile'],
+            ['copyFile', 'checkDbUsage'],
             [],
             '',
             false
@@ -166,7 +166,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCopyQuoteToOrder()
+    public function testCopyQuoteToOrderWithDbUsage()
     {
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
@@ -187,27 +187,87 @@ class FileTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $optionMock->expects($this->any())
+        $optionMock->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($quoteValue));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->once())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->once())
             ->method('isReadable')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->exactly(2))
             ->method('getAbsolutePath')
             ->will($this->returnValue('/file.path'));
 
-        $this->coreFileStorageDatabase->expects($this->any())
+        $this->coreFileStorageDatabase->expects($this->once())
+            ->method('checkDbUsage')
+            ->willReturn(true);
+
+        $this->coreFileStorageDatabase->expects($this->once())
             ->method('copyFile')
             ->will($this->returnValue('true'));
+
+        $fileObject = $this->getFileObject();
+        $fileObject->setData('configuration_item_option', $optionMock);
+
+        $this->assertInstanceOf(
+            \Magento\Catalog\Model\Product\Option\Type\File::class,
+            $fileObject->copyQuoteToOrder()
+        );
+    }
+
+    public function testCopyQuoteToOrderWithoutUsage()
+    {
+        $optionMock = $this->getMockBuilder(OptionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
+
+        $quotePath = '/quote/path/path/uploaded.file';
+        $orderPath = '/order/path/path/uploaded.file';
+
+        $quoteValue = "{\"quote_path\":\"$quotePath\",\"order_path\":\"$orderPath\"}";
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($quoteValue)
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
+        $optionMock->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($quoteValue));
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('isFile')
+            ->with($this->equalTo($quotePath))
+            ->will($this->returnValue(true));
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('isReadable')
+            ->with($this->equalTo($quotePath))
+            ->will($this->returnValue(true));
+
+        $this->mediaDirectory->expects($this->never())
+            ->method('getAbsolutePath')
+            ->will($this->returnValue('/file.path'));
+
+        $this->coreFileStorageDatabase->expects($this->once())
+            ->method('checkDbUsage')
+            ->willReturn(false);
+
+        $this->coreFileStorageDatabase->expects($this->any())
+            ->method('copyFile')
+            ->willReturn(false);
 
         $fileObject = $this->getFileObject();
         $fileObject->setData('configuration_item_option', $optionMock);
