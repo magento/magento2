@@ -7,6 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Mtf\Block\Block;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock;
 
 /**
  * Order information tab block.
@@ -21,6 +22,13 @@ class Info extends Block
     protected $orderStatus = '#order_status';
 
     /**
+     * Selector for 'Payment Information' block.
+     *
+     * @var string
+     */
+    private $paymentInfoBlockSelector = '.order-payment-method';
+
+    /**
      * Get order status from info block
      *
      * @return array|string
@@ -28,5 +36,18 @@ class Info extends Block
     public function getOrderStatus()
     {
         return $this->_rootElement->find($this->orderStatus)->getText();
+    }
+
+    /**
+     * Returns Payment Information block.
+     *
+     * @return PaymentInfoBlock
+     */
+    public function getPaymentInfoBlock()
+    {
+        return $this->blockFactory->create(
+            PaymentInfoBlock::class,
+            ['element' => $this->_rootElement->find($this->paymentInfoBlockSelector)]
+        );
     }
 }
