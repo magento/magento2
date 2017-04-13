@@ -11,7 +11,7 @@ class ClassReader implements ClassReaderInterface
      * @var array
      */
      private $classNameParents;
-     
+
     /**
      * Read class constructor signature
      *
