@@ -74,6 +74,8 @@ class PackageInfo
      * Load the packages information
      *
      * @return void
+     * @throws \Zend_Json_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function load()
     {
@@ -239,7 +241,7 @@ class PackageInfo
                 $requiredBy[] = $moduleName;
             }
         }
-       
+
         return $requiredBy;
     }
 
