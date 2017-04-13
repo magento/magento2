@@ -32,9 +32,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\ProductVideo\Helper\Media $mediaHelper,
-        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory,
-        array $galleryImagesConfig = [],
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory = null,
+        array $galleryImagesConfig = []
     ) {
         parent::__construct(
             $context,

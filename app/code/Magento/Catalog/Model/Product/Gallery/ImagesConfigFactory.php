@@ -14,16 +14,16 @@ class ImagesConfigFactory implements ImagesConfigFactoryInterface
     /**
      * @var \Magento\Framework\Data\CollectionFactory
      */
-    protected $_dataCollectionFactory;
+    protected $dataCollectionFactory;
 
     /**
      * ImagesConfigFactory constructor.
      *
-     * @param CollectionFactory $_dataCollectionFactory
+     * @param CollectionFactory $dataCollectionFactory
      */
-    public function __construct(CollectionFactory $_dataCollectionFactory)
+    public function __construct(CollectionFactory $dataCollectionFactory)
     {
-        $this->_dataCollectionFactory = $_dataCollectionFactory;
+        $this->dataCollectionFactory = $dataCollectionFactory;
     }
 
     /**
@@ -37,7 +37,7 @@ class ImagesConfigFactory implements ImagesConfigFactoryInterface
     public function create(array $imagesConfig, array $data = [])
     {
         /** @var \Magento\Framework\Data\Collection $collection */
-        $collection = $this->_dataCollectionFactory->create($data);
+        $collection = $this->dataCollectionFactory->create($data);
         array_map(function($imageConfig) use ($collection) {
             $collection->addItem(new DataObject($imageConfig));
         }, $imagesConfig);

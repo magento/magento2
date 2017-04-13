@@ -11,12 +11,18 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\ArrayUtils;
 
-class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
+class Gallery extends AbstractView
 {
     /**
      * @var \Magento\Framework\Config\View
@@ -24,7 +30,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $configView;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $jsonEncoder;
 
@@ -34,24 +40,30 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $galleryImagesConfig;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context                              $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils                                $arrayUtils
-     * @param \Magento\Framework\Json\EncoderInterface                            $jsonEncoder
-     * @param \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory
-     * @param array                                                               $galleryImagesConfig
-     * @param array                                                               $data
+     * @var ImagesConfigFactoryInterface
+     */
+    private $galleryImagesConfigFactory;
+
+    /**
+     * @param Context                      $context
+     * @param ArrayUtils                   $arrayUtils
+     * @param EncoderInterface             $jsonEncoder
+     * @param ImagesConfigFactoryInterface $imagesConfigFactory
+     * @param array                        $galleryImagesConfig
+     * @param array                        $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory,
-        array $galleryImagesConfig = [],
-        array $data = []
+        Context $context,
+        ArrayUtils $arrayUtils,
+        EncoderInterface $jsonEncoder,
+        array $data = [],
+        ImagesConfigFactoryInterface $imagesConfigFactory = null,
+        array $galleryImagesConfig = []
     ) {
-        $this->jsonEncoder = $jsonEncoder;
         parent::__construct($context, $arrayUtils, $data);
-        $this->galleryImagesConfig = $imagesConfigFactory->create($galleryImagesConfig);
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
+        $this->galleryImagesConfigFactory = $imagesConfigFactory ?: ObjectManager::getInstance()->get(ImagesConfigFactoryInterface::class);
+        $this->galleryImagesConfig = $galleryImagesConfig;
     }
 
     /**
@@ -65,7 +77,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
             foreach ($images as $image) {
-                foreach($this->galleryImagesConfig->getItems() as $imageConfig) {
+                foreach($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                     /** @var Product $product */
                     $image->setData(
                         $imageConfig->getData('data_object_key'),
@@ -116,7 +128,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'position' => $image->getData('position'),
                 'isMain'   => $this->isMainImage($image),
             ]);
-            foreach($this->galleryImagesConfig->getItems() as $imageConfig) {
+            foreach($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                 $imageItem->setData(
                     $imageConfig->getData('json_object_key'),
                     $image->getData($imageConfig->getData('data_object_key'))
@@ -188,5 +200,17 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $this->configView = $this->_viewConfig->getViewConfig();
         }
         return $this->configView;
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getGalleryImagesConfig()
+    {
+        if (false === $this->hasData('gallery_images_config')) {
+            $this->setData('gallery_images_config', $this->galleryImagesConfigFactory->create($this->galleryImagesConfig));
+        }
+
+        return $this->getData('gallery_images_config');
     }
 }
