@@ -44,6 +44,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      */
     public function error($line, $label = null)
     {
+        FirePHP::send(unserialize($line));
+
+        $this->_sendResponseHeaders();
     }
 
     /**
@@ -55,6 +58,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      */
     public function warn($line, $label = null)
     {
+        FirePHP::send(unserialize($line));
+
+        $this->_sendResponseHeaders();
     }
 
     /**
@@ -68,6 +74,16 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
     {
         FirePHP::send(unserialize($line));
 
+        $this->_sendResponseHeaders();
+    }
+
+    /**
+     * Send the response headers
+     *
+     * @return void
+     */
+    protected function _sendResponseHeaders()
+    {
         // setup the wildfire channel
         $firebugChannel = HttpHeaders::getInstance();
         $firebugChannel->setRequest($this->getRequest());
@@ -88,6 +104,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      */
     public function trace($line)
     {
+        FirePHP::send(unserialize($line));
+
+        $this->_sendResponseHeaders();
     }
 
     /**
@@ -99,6 +118,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      */
     public function log($line, $label = null)
     {
+        FirePHP::send(unserialize($line));
+
+        $this->_sendResponseHeaders();
     }
 
     /**

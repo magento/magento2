@@ -36,6 +36,12 @@ class Firebug extends AbstractOutput
         ob_start();
     }
 
+    /**
+     * Display profiling results
+     *
+     * @param Stat $stat
+     * @return void
+     */
     public function display(Stat $stat)
     {
         $writer = new FirePhp(new FirebugBridge());
