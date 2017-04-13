@@ -11,6 +11,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * This class is to be used as a container for new generated url rewrites by adding new ones using merge method
  * Removes duplicates for a set/array of Url Rewrites based on the unique key of the url_rewrites table
  *
+ * @api
  */
 class MergeDataProvider
 {
