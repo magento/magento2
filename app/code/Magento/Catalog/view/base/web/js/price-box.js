@@ -38,9 +38,9 @@ define([
          * Widget creating.
          */
         _create: function createPriceBox() {
-            this.cache = {};
             var box = this.element;
 
+            this.cache = {};
             this._setDefaultsFromPriceConfig();
             this._setDefaultsFromDataSet();
 
