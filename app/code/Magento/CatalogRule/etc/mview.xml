@@ -18,7 +18,6 @@
             <table name="catalog_product_entity_decimal" entity_column="entity_id" />
             <table name="catalog_product_entity_gallery" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />
-            <table name="catalog_product_entity_media_gallery" entity_column="value_id" />
             <table name="catalog_product_entity_media_gallery_value" entity_column="entity_id" />
             <table name="catalog_product_entity_text" entity_column="entity_id" />
             <table name="catalog_product_entity_tier_price" entity_column="entity_id" />
