@@ -122,6 +122,27 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
     }
 
     /**
+     * Get suffix for indexer table.
+     *
+     * @return string
+     */
+    public function getTableSuffix()
+    {
+        return $this->getData('table_suffix');
+    }
+
+    /**
+     * Get suffix for indexer table.
+     *
+     * @param string $tableSuffix
+     * @return $this
+     */
+    public function setTableSuffix($tableSuffix)
+    {
+        return $this->setData('table_suffix', $tableSuffix);
+    }
+
+    /**
      * Processing object before save data
      *
      * @return $this

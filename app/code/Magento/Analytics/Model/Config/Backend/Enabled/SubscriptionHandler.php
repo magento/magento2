@@ -7,9 +7,10 @@ namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\NotificationTime;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\FlagManager;
 
 /**
  * Class for processing of activation/deactivation MBI subscription.
@@ -62,21 +63,29 @@ class SubscriptionHandler
     private $notificationTime;
 
     /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitableConfig;
+
+    /**
      * @param WriterInterface $configWriter
      * @param FlagManager $flagManager
      * @param AnalyticsToken $analyticsToken
      * @param NotificationTime $notificationTime
+     * @param ReinitableConfigInterface $reinitableConfig
      */
     public function __construct(
         WriterInterface $configWriter,
         FlagManager $flagManager,
         AnalyticsToken $analyticsToken,
-        NotificationTime $notificationTime
+        NotificationTime $notificationTime,
+        ReinitableConfigInterface $reinitableConfig
     ) {
         $this->configWriter = $configWriter;
         $this->flagManager = $flagManager;
         $this->analyticsToken = $analyticsToken;
         $this->notificationTime = $notificationTime;
+        $this->reinitableConfig = $reinitableConfig;
     }
 
     /**
@@ -92,6 +101,7 @@ class SubscriptionHandler
             $this->setCronSchedule();
             $this->setAttemptsFlag();
             $this->notificationTime->unsetLastTimeNotificationValue();
+            $this->reinitableConfig->reinit();
         }
 
         return true;

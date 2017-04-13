@@ -13,36 +13,16 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Grouped extends DefaultPrice implements GroupedInterface
 {
     /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @throws \Exception
-     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
+     * Prefix for temporary table support.
      */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->_prepareGroupedProductPriceData();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-        return $this;
-    }
+    const TRANSIT_PREFIX = 'transit_';
 
     /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
+     * @inheritdoc
      */
-    public function reindexEntity($entityIds)
+    protected function reindex($entityIds = null)
     {
         $this->_prepareGroupedProductPriceData($entityIds);
-
-        return $this;
     }
 
     /**
@@ -50,13 +30,51 @@ class Grouped extends DefaultPrice implements GroupedInterface
      * Use calculated price for relation products
      *
      * @param int|array $entityIds  the parent entity ids limitation
-     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
+     * @return $this
      */
     protected function _prepareGroupedProductPriceData($entityIds = null)
     {
         if (!$this->hasEntity() && empty($entityIds)) {
             return $this;
         }
+
+        $connection = $this->getConnection();
+        $table = $this->getIdxTable();
+
+        if (!$this->tableStrategy->getUseIdxTable()) {
+            $additionalIdxTable = $connection->getTableName(self::TRANSIT_PREFIX . $this->getIdxTable());
+            $connection->createTemporaryTableLike($additionalIdxTable, $table);
+            $query = $connection->insertFromSelect(
+                $this->_prepareGroupedProductPriceDataSelect($entityIds),
+                $additionalIdxTable,
+                []
+            );
+            $connection->query($query);
+
+            $select = $connection->select()->from($additionalIdxTable);
+            $query = $connection->insertFromSelect(
+                $select,
+                $table,
+                [],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            );
+            $connection->query($query);
+            $connection->dropTemporaryTable($additionalIdxTable);
+        } else {
+            $query = $this->_prepareGroupedProductPriceDataSelect($entityIds)->insertFromSelect($table);
+            $connection->query($query);
+        }
+        return $this;
+    }
+
+    /**
+     * Prepare data index select for Grouped products prices
+     *
+     * @param int|array $entityIds  the parent entity ids limitation
+     * @return \Magento\Framework\DB\Select
+     */
+    protected function _prepareGroupedProductPriceDataSelect($entityIds = null)
+    {
         $connection = $this->getConnection();
         $table = $this->getIdxTable();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
@@ -123,10 +141,6 @@ class Grouped extends DefaultPrice implements GroupedInterface
                 'store_field' => new \Zend_Db_Expr('cs.store_id')
             ]
         );
-
-        $query = $select->insertFromSelect($table);
-        $connection->query($query);
-
-        return $this;
+        return $select;
     }
 }
