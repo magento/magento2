@@ -7,6 +7,8 @@ namespace Magento\SalesRule\Model\Spi;
 
 /**
  * Interface ResourceInterface
+ *
+ * @api
  */
 interface CouponResourceInterface
 {
