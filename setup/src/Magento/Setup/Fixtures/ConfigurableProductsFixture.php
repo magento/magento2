@@ -481,6 +481,7 @@ class ConfigurableProductsFixture extends Fixture
      *
      * @return array
      * @throws ValidatorException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getConfigurableProductConfig()
     {
@@ -653,6 +654,12 @@ class ConfigurableProductsFixture extends Fixture
         );
     }
 
+    /**
+     * Provide attribute set based on attributes configuration
+     *
+     * @param array $attributes
+     * @return array
+     */
     private function getCustomAttributeSet(array $attributes)
     {
         $attributeSetName = $this->getAttributeSetName(
@@ -697,6 +704,13 @@ class ConfigurableProductsFixture extends Fixture
         return $this->attributeSetsFixture->createAttributeSet($pattern);
     }
 
+    /**
+     * Provide attribute set name based on amount of attributes and options per attribute set
+     *
+     * @param int $attributesCount
+     * @param int $optionsCount
+     * @return string
+     */
     private function getAttributeSetName($attributesCount, $optionsCount)
     {
         return sprintf('Dynamic Attribute Set %s-%s', $attributesCount, $optionsCount);
