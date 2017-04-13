@@ -10,8 +10,8 @@ class ClassReader implements ClassReaderInterface
     /**
      * @var array
      */
-     protected $_classNameParents;
-     
+    protected $_classNameParents;
+    
     /**
      * Read class constructor signature
      *
