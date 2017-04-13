@@ -28,6 +28,7 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
     /**
      * Determine whether or not FirePHP is enabled
      *
+     * @return boolean Returns TRUE if logging is enabled.
      */
     public function getEnabled()
     {
