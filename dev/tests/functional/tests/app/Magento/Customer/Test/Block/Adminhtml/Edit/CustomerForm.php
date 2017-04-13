@@ -22,7 +22,7 @@ class CustomerForm extends FormTabs
      *
      * @var string
      */
-    protected $spinner = '[data-role="spinner"]';
+    protected $spinner = '#container [data-role="spinner"]';
 
     /**
      * Customer form to load.
@@ -46,7 +46,7 @@ class CustomerForm extends FormTabs
     protected $fieldWrapperControl = './/*[contains(@class, "admin__field")]/*[contains(@class,"control")]';
 
     /**
-     * Selector for wainting tab content to load.
+     * Selector for waiting tab content to load.
      *
      * @var string
      */
@@ -179,6 +179,8 @@ class CustomerForm extends FormTabs
      */
     public function getPersonalInformation($title)
     {
-        return $this->_rootElement->find(sprintf($this->information, $title), Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement
+            ->find(sprintf($this->information, $title), Locator::SELECTOR_XPATH)
+            ->getText();
     }
 }
