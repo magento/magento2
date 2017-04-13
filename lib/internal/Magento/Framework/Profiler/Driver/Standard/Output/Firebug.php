@@ -2,7 +2,7 @@
 /**
  * Class that uses Firebug for output profiling results
  *
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Driver\Standard\Output;
@@ -10,6 +10,8 @@ namespace Magento\Framework\Profiler\Driver\Standard\Output;
 use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\Driver\Standard\AbstractOutput;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
+use Magento\Framework\Profiler\Driver\Standard\Output\Firebug\FirebugBridge;
+use Zend\Log\Writer\FirePhp;
 
 class Firebug extends AbstractOutput
 {
@@ -34,14 +36,12 @@ class Firebug extends AbstractOutput
         ob_start();
     }
 
-    /**
-     * Display profiling results and flush output buffer
-     *
-     * @param Stat $stat
-     * @return void
-     */
     public function display(Stat $stat)
     {
+        $writer = new FirePhp(new FirebugBridge());
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+
         $firebugMessage = new \Zend_Wildfire_Plugin_FirePhp_TableMessage($this->_renderCaption());
         $firebugMessage->setHeader(array_keys($this->_columns));
 
@@ -53,18 +53,7 @@ class Firebug extends AbstractOutput
             $firebugMessage->addRow($row);
         }
 
-        \Zend_Wildfire_Plugin_FirePhp::send($firebugMessage);
-
-        // setup the wildfire channel
-        $firebugChannel = \Zend_Wildfire_Channel_HttpHeaders::getInstance();
-        $firebugChannel->setRequest($this->getRequest());
-        $firebugChannel->setResponse($this->getResponse());
-
-        // flush the wildfire headers into the response object
-        $firebugChannel->flush();
-
-        // send the response headers
-        $firebugChannel->getResponse()->sendHeaders();
+        $logger->info(serialize($firebugMessage));
 
         ob_end_flush();
     }
@@ -84,6 +73,7 @@ class Firebug extends AbstractOutput
     /**
      * Request setter
      *
+     * @deprecated
      * @param \Zend_Controller_Request_Abstract $request
      * @return void
      */
@@ -95,6 +85,7 @@ class Firebug extends AbstractOutput
     /**
      * Request getter
      *
+     * @deprecated
      * @return \Zend_Controller_Request_Abstract
      */
     public function getRequest()
@@ -108,6 +99,7 @@ class Firebug extends AbstractOutput
     /**
      * Response setter
      *
+     * @deprecated
      * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response
      * @return void
      */
@@ -119,6 +111,7 @@ class Firebug extends AbstractOutput
     /**
      * Request getter
      *
+     * @deprecated
      * @return \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function getResponse()
