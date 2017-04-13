@@ -39,10 +39,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      * Log an error message
      *
      * @param  string      $line
-     * @param  string|null $label
      * @return void
      */
-    public function error($line, $label = null)
+    public function error($line)
     {
         FirePHP::send(unserialize($line));
 
@@ -53,10 +52,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      * Log a warning
      *
      * @param  string      $line
-     * @param  string|null $label
      * @return void
      */
-    public function warn($line, $label = null)
+    public function warn($line)
     {
         FirePHP::send(unserialize($line));
 
@@ -67,10 +65,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      * Log informational message
      *
      * @param  string      $line
-     * @param  string|null $label
      * @return void
      */
-    public function info($line, $label = null)
+    public function info($line)
     {
         FirePHP::send(unserialize($line));
 
@@ -113,10 +110,9 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      * Log a message
      *
      * @param  string      $line
-     * @param  string|null $label
      * @return void
      */
-    public function log($line, $label = null)
+    public function log($line)
     {
         FirePHP::send(unserialize($line));
 
