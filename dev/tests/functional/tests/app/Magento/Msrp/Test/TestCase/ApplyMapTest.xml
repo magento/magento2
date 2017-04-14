@@ -24,7 +24,7 @@
             <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
         </variation>
-        <variation name="ApplyMapTestVariation3" summary="Apply Minimum Advertised Price to Simple Product with Quotes in product name" ticketId="MAGETWO-12430">
+        <variation name="ApplyMapTestVariation3" summary="Apply Minimum Advertised Price to Simple Product with Quotes in product name" ticketId="MAGETWO-67491">
             <data name="product" xsi:type="string">catalogProductSimple::msrp_display_actual_price_in_cart_with_quotes_in_product_name</data>
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
