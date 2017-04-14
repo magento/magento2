@@ -9,6 +9,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class MessageLockException to be thrown when a message being processed is already in the lock table.
+ *
+ * @api
  */
 class MessageLockException extends LocalizedException
 {
