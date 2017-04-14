@@ -9,7 +9,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\Reader\Block;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,7 +95,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @param string $literal
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $scheduleStructureCount
      * @param string $ifconfigValue
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $ifconfigCondition
+     * @param array $expectedConditions
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
      * @param string $aclKey
@@ -105,7 +107,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $literal,
         $scheduleStructureCount,
         $ifconfigValue,
-        $ifconfigCondition,
+        $expectedConditions,
         $getCondition,
         $setCondition,
         $aclKey,
@@ -113,10 +115,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
-
-        $this->scheduledStructure->expects($ifconfigCondition)
-            ->method('setElementToIfconfigList')
-            ->with($literal, $ifconfigValue, 'scope');
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
@@ -136,7 +134,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                         Block::ATTRIBUTE_TEMPLATE => '',
                         Block::ATTRIBUTE_TTL => '',
                         Block::ATTRIBUTE_DISPLAY => '',
-                        Block::ATTRIBUTE_ACL => $aclValue
+                        Block::ATTRIBUTE_ACL => $aclValue,
+                        'visibilityConditions' => $expectedConditions,
                     ],
                     'actions' => [
                         ['someMethod', [], 'action_config_path', 'scope'],
@@ -154,12 +153,14 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             . '</' . $literal . '>',
             $literal
         );
-
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
         $block = $this->getBlock(
             [
                 'helper' => $helper,
                 'readerPool' => $this->readerPool,
+                'conditionReader' => $condition,
                 'scopeType' => 'scope',
             ]
         );
@@ -176,7 +177,14 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 'block',
                 $this->once(),
                 '',
-                $this->never(),
+                [
+                    'acl' => [
+                        'name' => 'Magento\Framework\View\Layout\AclCondition',
+                        'arguments' => [
+                            'acl' => 'test'
+                        ],
+                    ],
+                ],
                 $this->once(),
                 $this->once(),
                 'acl',
@@ -186,7 +194,20 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 'block',
                 $this->once(),
                 'config_path',
-                $this->once(),
+                [
+                    'acl' => [
+                        'name' => 'Magento\Framework\View\Layout\AclCondition',
+                        'arguments' => [
+                            'acl' => 'test'
+                        ],
+                    ],
+                    'ifconfig' => [
+                        'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                        'arguments' => [
+                            'configPath' => 'config_path'
+                        ],
+                    ],
+                ],
                 $this->once(),
                 $this->once(),
                 'aclResource',
@@ -196,7 +217,20 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 'page',
                 $this->never(),
                 '',
-                $this->never(),
+                [
+                    'acl' => [
+                        'name' => 'Magento\Framework\View\Layout\AclCondition',
+                        'arguments' => [
+                            'acl' => 'test'
+                        ],
+                    ],
+                    'ifconfig' => [
+                        'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                        'arguments' => [
+                            'configPath' => 'config_path'
+                        ],
+                    ],
+                ],
                 $this->never(),
                 $this->never(),
                 'aclResource',
@@ -267,11 +301,13 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             . '</' . $literal . '>',
             $literal
         );
-
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
         $block = $this->getBlock(
             [
                 'readerPool' => $this->readerPool,
+                'conditionReader' => $condition,
                 'scopeType' => 'scope',
             ]
         );

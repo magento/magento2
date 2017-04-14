@@ -25,7 +25,7 @@ class UiComponent implements ReaderInterface
      *
      * @var array
      */
-    protected $attributes = ['group', 'component', 'aclResource', 'visibilityCondition'];
+    protected $attributes = ['group', 'component', 'aclResource'];
 
     /**
      * @var Helper

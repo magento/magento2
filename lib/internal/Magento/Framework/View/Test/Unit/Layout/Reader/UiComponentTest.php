@@ -9,7 +9,11 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use \Magento\Framework\View\Layout\Reader\UiComponent;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\Reader\UiComponent;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 
 class UiComponentTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,26 +23,28 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
     protected function setUp()
     {
-        $this->helper = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class)
+        $this->helper = $this->getMockBuilder(Helper::class)
             ->setMethods(['scheduleStructure'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->setMethods(['getScheduledStructure', 'setElementToIfconfigList'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new UiComponent($this->helper, 'scope');
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
+        $this->model = new UiComponent($this->helper, $condition);
     }
 
     public function testGetSupportedNodes()
@@ -77,15 +83,23 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
                 'attributes' => [
                     'group' => '',
                     'component' => 'listing',
-                    'aclResource' => 'test',
-                    'visibilityCondition' => 'test',
+                    'aclResource' => 'test_acl',
+                    'visibilityConditions' => [
+                        'ifconfig' => [
+                            'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                            'arguments' => [
+                                'configPath' => 'config_path'
+                            ],
+                        ],
+                        'acl' => [
+                            'name' => 'Magento\Framework\View\Layout\AclCondition',
+                            'arguments' => [
+                                'acl' => 'test_acl'
+                            ],
+                        ],
+                    ],
                 ],
             ]
-        );
-        $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
-            $element->getAttribute('name'),
-            'config_path',
-            'scope'
         );
         $this->model->interpret($this->context, $element);
     }
@@ -97,10 +111,10 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
                 $this->getElement(
                     '<uiComponent
                         name="cms_block_listing"
-                        aclResource="test" visibilityCondition="test"
+                        aclResource="test_acl"
                         component="listing"
                         ifconfig="config_path"
-                    />',
+                    ><visibilityCondition name="test_name" className="name"></visibilityCondition></uiComponent>',
                     'uiComponent'
                 ),
             ]

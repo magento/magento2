@@ -119,10 +119,7 @@ class GeneratorPool
         }
         foreach ($scheduledStructure->getElements() as $name => $data) {
             list(, $data) = $data;
-            if (
-                array_key_exists('visibilityConditions', $data['attributes']) &&
-                !empty($data['attributes']['visibilityConditions'])
-            ) {
+            if ($this->visibilityConditionsExistsIn($data)) {
                 $condition = $this->conditionFactory->create($data['attributes']['visibilityConditions']);
                 if (!$condition->isVisible($data['attributes']['visibilityConditions'])) {
                     $this->removeElement($scheduledStructure, $structure, $name);
@@ -226,5 +223,17 @@ class GeneratorPool
         }
         $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    protected function visibilityConditionsExistsIn(array $data)
+    {
+        return isset($data['attributes']) &&
+            array_key_exists('visibilityConditions', $data['attributes']) &&
+            !empty($data['attributes']['visibilityConditions']);
     }
 }
