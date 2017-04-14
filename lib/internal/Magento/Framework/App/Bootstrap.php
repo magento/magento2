@@ -204,6 +204,7 @@ class Bootstrap
         $this->factory = $factory;
         $this->rootDir = $rootDir;
         $this->server = $initParams;
+        $this->objectManager = $this->factory->create($this->server);
     }
 
     /**
@@ -227,7 +228,6 @@ class Bootstrap
     public function createApplication($type, $arguments = [])
     {
         try {
-            $this->initObjectManager();
             $application = $this->objectManager->create($type, $arguments);
             if (!($application instanceof AppInterface)) {
                 throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
@@ -250,7 +250,6 @@ class Bootstrap
             try {
                 \Magento\Framework\Profiler::start('magento');
                 $this->initErrorHandler();
-                $this->initObjectManager();
                 $this->assertMaintenance();
                 $this->assertInstalled();
                 $response = $application->launch();
@@ -279,7 +278,6 @@ class Bootstrap
         if (null === $isExpected) {
             return;
         }
-        $this->initObjectManager();
         /** @var \Magento\Framework\App\MaintenanceMode $maintenance */
         $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
 
@@ -312,7 +310,6 @@ class Bootstrap
         if (null === $isExpected) {
             return;
         }
-        $this->initObjectManager();
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
@@ -351,7 +348,6 @@ class Bootstrap
      */
     private function isInstalled()
     {
-        $this->initObjectManager();
         /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(\Magento\Framework\App\DeploymentConfig::class);
         return $deploymentConfig->isAvailable();
@@ -364,7 +360,6 @@ class Bootstrap
      */
     public function getObjectManager()
     {
-        $this->initObjectManager();
         return $this->objectManager;
     }
 
@@ -378,20 +373,7 @@ class Bootstrap
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
     }
-
-    /**
-     * Initializes object manager
-     *
-     * @return void
-     */
-    private function initObjectManager()
-    {
-        if (!$this->objectManager) {
-            $this->objectManager = $this->factory->create($this->server);
-            $this->maintenance = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
-        }
-    }
-
+    
     /**
      * Getter for error code
      *

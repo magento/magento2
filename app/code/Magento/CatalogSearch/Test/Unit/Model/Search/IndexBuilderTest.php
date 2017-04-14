@@ -59,6 +59,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     private $scopeInterface;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
      */
@@ -150,6 +155,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
             ->getMock();
 
+        $this->indexerStockFrontendResource = $this
+            ->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->indexerStockFrontendResource->expects($this->any())
+            ->method('getMainTable')
+            ->willReturn('cataloginventory_stock_status');
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->target = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Search\IndexBuilder::class,
@@ -160,7 +173,8 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver,
                 'tableMapper' => $this->tableMapper,
-                'dimensionScopeResolver' => $this->dimensionScopeResolver
+                'dimensionScopeResolver' => $this->dimensionScopeResolver,
+                'indexerStockFrontendResource' => $this->indexerStockFrontendResource
             ]
         );
 
