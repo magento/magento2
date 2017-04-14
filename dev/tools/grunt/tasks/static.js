@@ -20,17 +20,15 @@ module.exports = function (grunt) {
         var currentTarget = target || 'file',
             file = grunt.option('file'),
             tasks = [
+                'continue:on',
                 'eslint:' + currentTarget,
-                'jscs:' + currentTarget
+                'jscs:' + currentTarget,
+                'continue:off',
+                'continue:fail-on-warning'
             ];
 
         setConfig('eslint', currentTarget, cvf.getFiles(file));
         setConfig('jscs', currentTarget, cvf.getFiles(file));
-
-        if (grunt.option('force') !== false) {
-            grunt.option('force', false);
-        }
-
         grunt.task.run(tasks);
 
         if (!grunt.option('file')) {

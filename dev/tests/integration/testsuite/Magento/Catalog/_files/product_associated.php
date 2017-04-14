@@ -34,5 +34,5 @@ $product->setTypeId(
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setStockData(
-    ['use_config_manage_stock' => 0]
+    ['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1]
 )->save();
