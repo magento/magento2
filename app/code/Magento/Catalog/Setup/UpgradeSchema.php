@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -57,7 +58,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $setup->getConnection()->modifyColumn(
                     $setup->getTable($table),
                     'customer_group_id',
-                    ['type' => 'integer', 'nullable' => false]
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'nullable' => false,
+                        'unsigned' => true,
+                        'default' => '0',
+                        'comment' => 'Customer Group ID',
+                    ]
                 );
             }
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
