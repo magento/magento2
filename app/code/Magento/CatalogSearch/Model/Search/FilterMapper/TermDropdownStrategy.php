@@ -53,12 +53,19 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $frontendResource;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
      * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -66,7 +73,8 @@ class TermDropdownStrategy implements FilterStrategyInterface
         EavConfig $eavConfig,
         ScopeConfigInterface $scopeConfig,
         AliasResolver $aliasResolver,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->storeManager = $storeManager;
         $this->resourceConnection = $resourceConnection;
@@ -75,6 +83,8 @@ class TermDropdownStrategy implements FilterStrategyInterface
         $this->aliasResolver = $aliasResolver;
         $this->frontendResource = $frontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource::class);
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -102,7 +112,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
             $stockAlias = $alias . AliasResolver::STOCK_FILTER_SUFFIX;
             $select->joinLeft(
                 [
-                    $stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status'),
+                    $stockAlias => $this->indexerStockFrontendResource->getMainTable(),
                 ],
                 sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
                 []

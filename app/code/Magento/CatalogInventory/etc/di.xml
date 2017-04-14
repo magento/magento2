@@ -86,4 +86,59 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator" type="Magento\Framework\Indexer\IndexTableRowSizeEstimator">
+        <arguments>
+            <argument name="rowMemorySize" xsi:type="number">100</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <arguments>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="default" xsi:type="number">200</item>
+            </argument>
+            <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
+        <arguments>
+            <argument name="indexerId" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</argument>
+            <argument name="indexerBaseTable" xsi:type="string">cataloginventory_stock_status</argument>
+            <argument name="idFieldName" xsi:type="string">product_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
 </config>
