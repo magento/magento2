@@ -1,8 +1,7 @@
 {
     "legacy": {
         "options": {
-            "type": "yui-js",
-            "tempPath": "pub/static/"
+            "compressor": "yui-js"
         },
         "files": {
             "<%= path.uglify.legacy %>": [

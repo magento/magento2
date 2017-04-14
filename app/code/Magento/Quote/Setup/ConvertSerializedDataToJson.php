@@ -74,6 +74,12 @@ class ConvertSerializedDataToJson
         );
         $fieldDataConverter->convert(
             $this->quoteSetup->getConnection(),
+            $this->quoteSetup->getTable('quote_payment'),
+            'payment_id',
+            'additional_data'
+        );
+        $fieldDataConverter->convert(
+            $this->quoteSetup->getConnection(),
             $this->quoteSetup->getTable('quote_address'),
             'address_id',
             'applied_taxes'

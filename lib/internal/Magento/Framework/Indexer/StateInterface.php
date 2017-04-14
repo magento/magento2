@@ -14,6 +14,8 @@ interface StateInterface
     const STATUS_VALID = 'valid';
     const STATUS_INVALID = 'invalid';
 
+    const ADDITIONAL_TABLE_SUFFIX = '_replica';
+
     /**
      * Return indexer id
      *
