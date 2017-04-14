@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable max-nested-callbacks */
 define([
     'Magento_Ui/js/timeline/timeline'
 ], function (Timeline) {

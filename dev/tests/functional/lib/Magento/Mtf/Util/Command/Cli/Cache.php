@@ -11,8 +11,24 @@ use Magento\Mtf\Util\Command\Cli;
 /**
  * Handle cache for tests executions.
  */
-class Cache extends Cli
+class Cache
 {
+    /**
+     * Perform bin/magento commands from command line for functional tests executions.
+     *
+     * @var Cli
+     */
+    private $cli;
+
+    /**
+     * Cache constructor.
+     * @param Cli $cli
+     */
+    public function __construct(Cli $cli)
+    {
+        $this->cli = $cli;
+    }
+
     /**
      * Parameter for flush cache command.
      */
@@ -38,7 +54,7 @@ class Cache extends Cli
     public function flush(array $cacheTypes = [])
     {
         $options = empty($cacheTypes) ? '' : ' ' . implode(' ', $cacheTypes);
-        parent::execute(Cache::PARAM_CACHE_FLUSH . $options);
+        $this->cli->execute(Cache::PARAM_CACHE_FLUSH . $options);
     }
 
     /**
@@ -49,7 +65,7 @@ class Cache extends Cli
      */
     public function disableCache($cacheType = null)
     {
-        parent::execute(Cache::PARAM_CACHE_DISABLE . ($cacheType ? " $cacheType" : ''));
+        $this->cli->execute(Cache::PARAM_CACHE_DISABLE . ($cacheType ? " $cacheType" : ''));
     }
 
     /**
@@ -60,6 +76,6 @@ class Cache extends Cli
      */
     public function enableCache($cacheType = null)
     {
-        parent::execute(Cache::PARAM_CACHE_ENABLE . ($cacheType ? " $cacheType" : ''));
+        $this->cli->execute(Cache::PARAM_CACHE_ENABLE . ($cacheType ? " $cacheType" : ''));
     }
 }
