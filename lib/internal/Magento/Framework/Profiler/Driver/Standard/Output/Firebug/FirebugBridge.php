@@ -78,7 +78,7 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
      */
     public function info($line)
     {
-        call_user_func(array($this->firePhp, 'send'), unserialize($line));
+        call_user_func([$this->firePhp, 'send'], unserialize($line));
 
         $this->sendResponseHeaders();
     }
@@ -91,7 +91,7 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
     protected function sendResponseHeaders()
     {
         // setup the wildfire channel
-        $firebugChannel = call_user_func(array($this->httpHeaders, 'getInstance'));
+        $firebugChannel = call_user_func([$this->httpHeaders, 'getInstance']);
         $firebugChannel->setRequest($this->getRequest());
         $firebugChannel->setResponse($this->getResponse());
 
