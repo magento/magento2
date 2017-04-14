@@ -1,16 +1,12 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
+ * Firebug bridge
  *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Profiler\Driver\Standard\Output\Firebug;
-
-use \Zend_Wildfire_Plugin_FirePhp as FirePHP;
-use \Zend_Wildfire_Channel_HttpHeaders as HttpHeaders;
 
 class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
 {
@@ -18,50 +14,73 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
     /**
      * @var \Zend_Controller_Request_Abstract
      */
-    protected $_request;
+    protected $request;
 
     /**
      * @var \Zend\Http\PhpEnvironment\Response
      */
-    protected $_response;
+    protected $response;
+
+    /**
+     * @var \Zend_Wildfire_Plugin_FirePhp
+     */
+    protected $firePhp;
+
+    /**
+     * @var \Zend_Wildfire_Channel_HttpHeaders
+     */
+    protected $httpHeaders;
+
+    /**
+     * FirebugBridge constructor.
+     *
+     * @param object $httpHeaders
+     * @param object $firePhp
+     */
+    public function __construct(
+        $httpHeaders = '\Zend_Wildfire_Channel_HttpHeaders',
+        $firePhp = '\Zend_Wildfire_Plugin_FirePhp'
+    ) {
+        $this->firePhp = $firePhp;
+        $this->httpHeaders = $httpHeaders;
+    }
 
     /**
      * Log an error message
      *
-     * @param  string      $line
+     * @param  string $line
+     *
      * @return void
      */
     public function error($line)
     {
-        FirePHP::send(unserialize($line));
-
-        $this->_sendResponseHeaders();
+        $this->info($line);
     }
 
     /**
      * Log a warning
      *
-     * @param  string      $line
+     * @param  string $line
+     *
      * @return void
      */
     public function warn($line)
     {
-        FirePHP::send(unserialize($line));
-
-        $this->_sendResponseHeaders();
+        $this->info($line);
     }
 
     /**
      * Log informational message
      *
-     * @param  string      $line
+     * @param  string $line
+     *
      * @return void
      */
     public function info($line)
     {
-        FirePHP::send(unserialize($line));
+        call_user_func(array($this->firePhp, 'send'), unserialize($line));
 
-        $this->_sendResponseHeaders();
+        $this->sendResponseHeaders();
     }
 
     /**
@@ -69,10 +88,10 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
      *
      * @return void
      */
-    protected function _sendResponseHeaders()
+    protected function sendResponseHeaders()
     {
         // setup the wildfire channel
-        $firebugChannel = HttpHeaders::getInstance();
+        $firebugChannel = call_user_func(array($this->httpHeaders, 'getInstance'));
         $firebugChannel->setRequest($this->getRequest());
         $firebugChannel->setResponse($this->getResponse());
 
@@ -87,37 +106,36 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
      * Log a trace
      *
      * @param  string $line
+     *
      * @return void
      */
     public function trace($line)
     {
-        FirePHP::send(unserialize($line));
-
-        $this->_sendResponseHeaders();
+        $this->info($line);
     }
 
     /**
      * Log a message
      *
-     * @param  string      $line
+     * @param  string $line
+     *
      * @return void
      */
     public function log($line)
     {
-        FirePHP::send(unserialize($line));
-
-        $this->_sendResponseHeaders();
+        $this->info($line);
     }
 
     /**
      * Request setter
      *
      * @param \Zend_Controller_Request_Abstract $request
+     *
      * @return void
      */
     public function setRequest(\Zend_Controller_Request_Abstract $request)
     {
-        $this->_request = $request;
+        $this->request = $request;
     }
 
     /**
@@ -127,21 +145,22 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
      */
     public function getRequest()
     {
-        if (!$this->_request) {
-            $this->_request = new \Zend_Controller_Request_Http();
+        if (!$this->request) {
+            $this->request = new \Zend_Controller_Request_Http();
         }
-        return $this->_request;
+        return $this->request;
     }
 
     /**
      * Response setter
      *
      * @param \Zend_Controller_Response_Abstract $response
+     *
      * @return void
      */
     public function setResponse(\Zend_Controller_Response_Abstract $response)
     {
-        $this->_response = $response;
+        $this->response = $response;
     }
 
     /**
@@ -151,9 +170,9 @@ class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
      */
     public function getResponse()
     {
-        if (!$this->_response) {
-            $this->_response = new \Zend_Controller_Response_Http();
+        if (!$this->response) {
+            $this->response = new \Zend_Controller_Response_Http();
         }
-        return $this->_response;
+        return $this->response;
     }
 }
