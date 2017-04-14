@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Flag;
+use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\FlagFactory;
 
 /**
  * Saves and Retrieves deployment configuration hash.
@@ -17,7 +16,7 @@ use Magento\Framework\Exception\FileSystemException;
  * This hash keeps version of last imported data. Hash is used to define whether data was updated
  * and import is required.
  *
- * @see \Magento\Deploy\Model\DeploymentConfig\Validator::isValid()
+ * @see \Magento\Deploy\Model\DeploymentConfig\ChangeDetector::hasChanges()
  */
 class Hash
 {
@@ -25,20 +24,6 @@ class Hash
      * Name of the section where deployment configuration hash is stored.
      */
     const CONFIG_KEY = 'config_hash';
-
-    /**
-     * Application deployment configuration.
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * Deployment configuration writer to files.
-     *
-     * @var Writer
-     */
-    private $writer;
 
     /**
      * Hash generator.
@@ -55,49 +40,92 @@ class Hash
     private $dataConfigCollector;
 
     /**
-     * @param DeploymentConfig $deploymentConfig the application deployment configuration
-     * @param Writer $writer the configuration writer that writes to files
+     * Flag Resource model.
+     *
+     * @var FlagResource
+     */
+    private $flagResource;
+
+    /**
+     * Factory class for \Magento\Framework\Flag
+     *
+     * @var FlagFactory
+     */
+    private $flagFactory;
+
+    /**
      * @param Hash\Generator $configHashGenerator the hash generator
      * @param DataCollector $dataConfigCollector the config data collector
+     * @param FlagResource $flagResource
+     * @param FlagFactory $flagFactory
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
-        Writer $writer,
         Hash\Generator $configHashGenerator,
-        DataCollector $dataConfigCollector
+        DataCollector $dataConfigCollector,
+        FlagResource $flagResource,
+        FlagFactory $flagFactory
     ) {
-        $this->deploymentConfig = $deploymentConfig;
-        $this->writer = $writer;
         $this->configHashGenerator = $configHashGenerator;
         $this->dataConfigCollector = $dataConfigCollector;
+        $this->flagResource = $flagResource;
+        $this->flagFactory = $flagFactory;
     }
 
     /**
      * Updates hash in the storage.
      *
-     * The hash is generated based on data from configuration files
+     * If the specific section name is set, then hash will be updated only for this section,
+     * in another case hash will be updated for all sections which defined in di.xml
+     * The hash is generated based on data from configuration files.
      *
+     * @param string $sectionName the specific section name
      * @return void
      * @throws LocalizedException is thrown when hash was not saved
      */
-    public function regenerate()
+    public function regenerate($sectionName = null)
     {
         try {
-            $config = $this->dataConfigCollector->getConfig();
-            $hash = $this->configHashGenerator->generate($config);
-            $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hash]]);
-        } catch (FileSystemException $exception) {
-            throw new LocalizedException(__('Hash has not been saved'), $exception);
+            $hashes = $this->get();
+            $configs = $this->dataConfigCollector->getConfig($sectionName);
+
+            foreach ($configs as $section => $config) {
+                $hashes[$section] = $this->configHashGenerator->generate($config);
+            }
+
+            /** @var Flag $flag */
+            $flag = $this->getFlagObject();
+            $flag->setFlagData($hashes);
+            $this->flagResource->save($flag);
+        } catch (\Exception $exception) {
+            throw new LocalizedException(__('Hash has not been saved.'), $exception);
         }
     }
 
     /**
-     * Retrieves saved hash from storage.
+     * Retrieves saved hashes from storage.
      *
-     * @return string|null
+     * @return array
      */
     public function get()
     {
-        return $this->deploymentConfig->getConfigData(self::CONFIG_KEY);
+        /** @var Flag $flag */
+        $flag = $this->getFlagObject();
+        return (array) ($flag->getFlagData() ?: []);
+    }
+
+    /**
+     * Returns flag object.
+     *
+     * We use it for saving hashes of sections in the DB.
+     *
+     * @return Flag
+     */
+    private function getFlagObject()
+    {
+        /** @var Flag $flag */
+        $flag = $this->flagFactory
+            ->create(['data' => ['flag_code' => self::CONFIG_KEY]]);
+        $this->flagResource->load($flag, self::CONFIG_KEY, 'flag_code');
+        return $flag;
     }
 }

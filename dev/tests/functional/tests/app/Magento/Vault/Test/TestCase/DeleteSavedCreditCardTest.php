@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\TestCase;
@@ -96,7 +96,8 @@ class DeleteSavedCreditCardTest extends Injectable
             if ($key >= 2) { // if this order will be placed via stored credit card
                 $this->useSavedCreditCard($payment['vault']);
             } else {
-                $this->selectPaymentMethod($payment, $payment['creditCard']);
+                $arguments = isset($payment['arguments']) ? $payment['arguments'] : [];
+                $this->selectPaymentMethod($payment, $payment['creditCard'], $arguments);
                 $this->saveCreditCard($payment, $creditCardSave);
             }
             $this->placeOrder();
@@ -249,16 +250,20 @@ class DeleteSavedCreditCardTest extends Injectable
      *
      * @param array $payment
      * @param array $creditCard
+     * @param array $arguments
      * @return void
      */
-    protected function selectPaymentMethod(array $payment, array $creditCard)
+    protected function selectPaymentMethod(array $payment, array $creditCard, array $arguments)
     {
         $selectPaymentMethodStep = ObjectManager::getInstance()->create(
             \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,
-            [
-                'payment' => $payment,
-                'creditCard' => $creditCard,
-            ]
+            array_merge(
+                [
+                    'payment' => $payment,
+                    'creditCard' => $creditCard,
+                ],
+                $arguments
+            )
         );
         $selectPaymentMethodStep->run();
     }

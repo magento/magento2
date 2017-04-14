@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,7 +57,7 @@ class ExtensionGeneratorAutoloader
                 if ($this->isExtension($className)) {
                     $content = "namespace $namespace;\n\nclass $justTypeName implements "
                         . "{$justTypeName}Interface\n{\n\n}";
-                } else if ($this->isExtensionInterface($className)) {
+                } elseif ($this->isExtensionInterface($className)) {
                     $content = "namespace $namespace;\n\ninterface $justTypeName extends "
                         . "\\Magento\\Framework\\Api\\ExtensionAttributesInterface \n{\n\n}";
                 }

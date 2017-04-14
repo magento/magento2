@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Setup;
@@ -71,6 +71,12 @@ class ConvertSerializedDataToJson
             $this->quoteSetup->getTable('quote_payment'),
             'payment_id',
             'additional_information'
+        );
+        $fieldDataConverter->convert(
+            $this->quoteSetup->getConnection(),
+            $this->quoteSetup->getTable('quote_payment'),
+            'payment_id',
+            'additional_data'
         );
         $fieldDataConverter->convert(
             $this->quoteSetup->getConnection(),

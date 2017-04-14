@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 module.exports = function (grunt) {
@@ -17,8 +17,8 @@ module.exports = function (grunt) {
      */
     function getConfig(options, file) {
         return _.extend({
-            fileIn: file.src,
-            fileOut: file.dest
+            input: file.src,
+            output: file.dest
         }, options);
     }
 
@@ -43,7 +43,7 @@ module.exports = function (grunt) {
                 }
             };
 
-            new compressor.minify(config);
+            compressor.minify(config);
         });
     });
 };

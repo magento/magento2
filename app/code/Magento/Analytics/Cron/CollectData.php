@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Cron;
 
-use Magento\Analytics\Model\ExportDataHandler;
+use Magento\Analytics\Model\ExportDataHandlerInterface;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 
 /**
@@ -16,7 +16,7 @@ class CollectData
     /**
      * Resource for the handling of a new data collection.
      *
-     * @var ExportDataHandler
+     * @var ExportDataHandlerInterface
      */
     private $exportDataHandler;
 
@@ -28,11 +28,11 @@ class CollectData
     private $subscriptionStatus;
 
     /**
-     * @param ExportDataHandler $exportDataHandler
+     * @param ExportDataHandlerInterface $exportDataHandler
      * @param SubscriptionStatusProvider $subscriptionStatus
      */
     public function __construct(
-        ExportDataHandler $exportDataHandler,
+        ExportDataHandlerInterface $exportDataHandler,
         SubscriptionStatusProvider $subscriptionStatus
     ) {
         $this->exportDataHandler = $exportDataHandler;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Report\Row;
@@ -119,7 +119,7 @@ class TransactionMap implements DocumentInterface
         $output = [];
         foreach ($this->getMappedValues() as $key => $value) {
             $attribute = $this->attributeValueFactory->create();
-            if(in_array($key, $shouldBeLocalized)) {
+            if (in_array($key, $shouldBeLocalized)) {
                 $value = __($value);
             }
             $output[] = $attribute->setAttributeCode($key)->setValue($value);

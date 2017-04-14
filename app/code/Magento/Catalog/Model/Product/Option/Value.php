@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Catalog product option select type model
@@ -172,6 +172,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $this->_product = $product;
         return $this;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -366,6 +367,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->_getData(self::KEY_OPTION_TYPE_ID);
     }
+
     /**
      * Set option title
      *
@@ -431,5 +433,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\View\Layout;
@@ -19,7 +19,7 @@ namespace Magento\Backend\Model\View\Layout;
  *         </argument>
  *     </arguments>
  * </type>
- * 
+ *
  * Registered condition can be used by ui component declaration in layout
  *
  * <uiComponent name="form" condition="condition::identifier" />

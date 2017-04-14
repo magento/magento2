@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
  * Catalog Layer Price Filter resource model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -40,12 +41,18 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $storeManager;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string $connectionName
+     * @param null $connectionName
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $stateFactory
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -53,12 +60,15 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Customer\Model\Session $session,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $stateFactory = null
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;
         $this->storeManager = $storeManager;
         $this->_eventManager = $eventManager;
+        $this->indexerFrontendResource = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -117,10 +127,10 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // remove join with main table
         $fromPart = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (!isset(
-                $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS]
-            ) || !isset(
-                $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS]
-            )
+            $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::INDEX_TABLE_ALIAS]
+        ) || !isset(
+            $fromPart[\Magento\Catalog\Model\ResourceModel\Product\Collection::MAIN_TABLE_ALIAS]
+        )
         ) {
             return $select;
         }
@@ -382,5 +392,13 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getIndexTableAlias()
     {
         return 'price_index';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMainTable()
+    {
+        return $this->indexerFrontendResource->getMainTable();
     }
 }

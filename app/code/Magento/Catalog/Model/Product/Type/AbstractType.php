@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -576,7 +576,7 @@ abstract class AbstractType
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
-        $transport = new \StdClass();
+        $transport = new \stdClass();
         $transport->options = [];
         $options = null;
         if ($product->getHasOptions()) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -50,6 +50,8 @@
             <constraint name="Magento\Install\Test\Constraint\AssertSecureUrlEnabled" />
         </variation>
         <variation name="InstallTestVariation6" summary="Install with default values and check DI compile" ticketId="MAGETWO-62817">
+            <data name="issue" xsi:type="string">MAGETWO-63314: Magento\Install\Test\TestCase\InstallTest test with data set "InstallTestVariation6" fails on Bamboo SampleData and Functional Acceptance Tests plan</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="diCompile" xsi:type="boolean">true</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />

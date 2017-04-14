@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -242,7 +242,7 @@ class Manager implements ManagerInterface
         );
 
         $this->logger->critical($message);
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
+        $this->addError($alternativeText, $group);
         return $this;
     }
 

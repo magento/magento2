@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\ReportXml\DB;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Sql\Expression;
 
 /**
  * Class ConditionResolver
@@ -87,7 +88,7 @@ class ConditionResolver
                 $value = $this->getConnection()->quote($argument);
                 break;
             case "variable":
-                $value = new \Zend_Db_Expr($argument);
+                $value = new Expression($argument);
                 break;
             case "identifier":
                 $value = $this->getConnection()->quoteIdentifier(
@@ -110,7 +111,9 @@ class ConditionResolver
     private function getCondition(SelectBuilder $selectBuilder, $tableName, $condition, $referencedEntity = null)
     {
         $columns = $selectBuilder->getColumns();
-        if (isset($columns[$condition['attribute']]) && $columns[$condition['attribute']] instanceof \Zend_Db_Expr) {
+        if (isset($columns[$condition['attribute']])
+            && $columns[$condition['attribute']] instanceof Expression
+        ) {
             $expression = $columns[$condition['attribute']];
         } else {
             $expression = $tableName . '.' . $condition['attribute'];

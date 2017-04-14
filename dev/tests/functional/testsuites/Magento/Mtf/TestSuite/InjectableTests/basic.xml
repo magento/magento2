@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="variation">
         <deny>
-            <tag group="test_type" value="3rd_party_test" />
+            <tag group="test_type" value="3rd_party_test, 3rd_party_test_single_flow" />
         </deny>
     </rule>
 </config>

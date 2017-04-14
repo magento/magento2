@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,6 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTranslationFileTimestamp()
     {
-
         $path = 'path';
         $contextMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Asset\ContextInterface::class,
@@ -121,6 +120,5 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($contextMock);
         $contextMock->expects($this->atLeastOnce())->method('getPath')->willReturn($path);
         $this->assertEquals($path, $this->model->getTranslationFilePath());
-
     }
 }

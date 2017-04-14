@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\InvoiceIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertInvoiceInInvoicesGrid
@@ -31,7 +31,7 @@ class AssertInvoiceInInvoicesGrid extends AbstractConstraint
     public function processAssert(InvoiceIndex $invoiceIndex, OrderInjectable $order, array $ids)
     {
         $invoiceIndex->open();
-        $amount = $order->getPrice();
+        $amount = $order->getPrice()['invoice'];
         $orderId = $order->getId();
         foreach ($ids['invoiceIds'] as $key => $invoiceId) {
             $filter = [

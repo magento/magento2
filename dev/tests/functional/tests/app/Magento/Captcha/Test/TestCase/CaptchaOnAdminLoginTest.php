@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Captcha\Test\TestCase;
 
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
+use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\User\Test\Fixture\User;
-use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
-use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
  * Check CAPTCHA on Admin Login Page.

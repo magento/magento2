@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Cron;
 
 use Magento\Analytics\Model\Connector;
-use Magento\Analytics\Model\FlagManager;
+use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
+use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
-use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 
 /**
  * Class Update

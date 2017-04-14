@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Validator\DbValidator;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
@@ -164,7 +164,6 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertCount(0, $result);
         }
-
     }
 
     public function validateCacheHostsDataProvider()

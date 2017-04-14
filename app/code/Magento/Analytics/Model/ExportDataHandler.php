@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Archive;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Archive;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class for the handling of a new data collection for MBI.
  */
-class ExportDataHandler
+class ExportDataHandler implements ExportDataHandlerInterface
 {
     /**
      * Subdirectory path for all temporary files.
@@ -84,9 +84,7 @@ class ExportDataHandler
     }
 
     /**
-     * Execute collecting new data for MBI.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function prepareExportData()
     {

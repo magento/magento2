@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 namespace Magento\Catalog\Model\Product;
 
@@ -13,9 +12,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product option model
@@ -912,5 +911,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
         return $this->metadataPool;
     }
+
     //@codeCoverageIgnoreEnd
 }

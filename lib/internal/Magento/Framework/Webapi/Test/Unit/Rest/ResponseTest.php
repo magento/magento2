@@ -2,7 +2,7 @@
 /**
  * Test Rest response controller.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
@@ -212,6 +212,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $hasException = $this->responseRest->hasExceptionOfType('Exception');
         $this->assertTrue($hasException);
     }
+
     public function testHasExceptionOfTypeIfExceptionsIsEmpty()
     {
         $this->responseRest->setException(new \Exception());

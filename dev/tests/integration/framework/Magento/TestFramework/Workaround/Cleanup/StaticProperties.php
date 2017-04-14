@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,8 @@
  */
 namespace Magento\TestFramework\Workaround\Cleanup;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class StaticProperties
 {
@@ -109,7 +109,7 @@ class StaticProperties
     /**
      * @var \ReflectionClass[]
      */
-    static protected $classes = [];
+    protected static $classes = [];
 
     /**
      * @param string $class
@@ -186,7 +186,6 @@ class StaticProperties
                     self::$backupStaticVariables[$className][$staticProperty->getName()] = $value;
                 }
             }
-
         }
     }
 

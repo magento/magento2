@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,9 +84,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testSendVary()
     {
-        $data = ['some-vary-key' => 'some-vary-value'];
         $expectedCookieName = Http::COOKIE_VARY_STRING;
-        $expectedCookieValue = sha1(serialize($data));
+        $expectedCookieValue = 'SHA1 Serialized String';
         $sensitiveCookieMetadataMock = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class)
             ->disableOriginalConstructor()

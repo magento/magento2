@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend;
@@ -76,7 +76,6 @@ class CollectionTimeTest extends \PHPUnit_Framework_TestCase
             Value::class,
             $this->collectionTime->afterSave()
         );
-
     }
 
     /**

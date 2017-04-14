@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
             <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml" cacheable="false">
+            <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="Magento_Checkout::cart.phtml" cacheable="false">
                 <container name="checkout.cart.items" as="with-items">
                     <container name="checkout.cart.container" htmlTag="div" htmlClass="cart-container" before="-">
                         <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards"/>
@@ -24,7 +24,7 @@
                                     <argument name="css_class" xsi:type="string">summary title</argument>
                                 </arguments>
                             </block>
-                            <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml" after="checkout.cart.summary.title">
+                            <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="Magento_Checkout::cart/shipping.phtml" after="checkout.cart.summary.title">
                                 <arguments>
                                     <argument name="jsLayout" xsi:type="array">
                                         <item name="types" xsi:type="array">
@@ -131,7 +131,7 @@
                                 </arguments>
                             </block>
                             <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">
-                                <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="cart/totals.phtml">
+                                <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="Magento_Checkout::cart/totals.phtml">
                                     <arguments>
                                         <argument name="jsLayout" xsi:type="array">
                                             <item name="components" xsi:type="array">
@@ -172,15 +172,15 @@
                                     </arguments>
                                 </block>
                             </container>
-                            <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="cart/coupon.phtml"/>
-                            <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="cart/methods.phtml">
+                            <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="Magento_Checkout::cart/coupon.phtml"/>
+                            <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="Magento_Checkout::cart/methods.phtml">
                                 <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
-                                    <block class="Magento\Checkout\Block\Onepage\Link" name="checkout.cart.methods.onepage.bottom" template="onepage/link.phtml" />
+                                    <block class="Magento\Checkout\Block\Onepage\Link" name="checkout.cart.methods.onepage.bottom" template="Magento_Checkout::onepage/link.phtml" />
                                     <block class="Magento\Checkout\Block\QuoteShortcutButtons" name="checkout.cart.shortcut.buttons" />
                                 </container>
                             </block>
                         </container>
-                        <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form" as="cart-items" template="cart/form.phtml" after="cart.summary">
+                        <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form" as="cart-items" template="Magento_Checkout::cart/form.phtml" after="cart.summary">
                             <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
                             <block class="Magento\Framework\View\Element\Text\ListText" name="checkout.cart.order.actions"/>
                         </block>
@@ -198,12 +198,12 @@
                     </block>
                 </container>
                 <container name="checkout.cart.noitems" as="no-items">
-                    <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml">
+                    <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="Magento_Checkout::cart/noItems.phtml">
                         <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
                     </block>
                 </container>
             </block>
         </referenceContainer>
-        <block class="Magento\Checkout\Block\Cart\Additional\Info" name="additional.product.info" template="cart/additional/info.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Additional\Info" name="additional.product.info" template="Magento_Checkout::cart/additional/info.phtml"/>
     </body>
 </page>

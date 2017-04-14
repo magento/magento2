@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,7 +55,7 @@ class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
     protected function prepareExpectedResult(array $expectedOrderData)
     {
         ++$expectedOrderData['orders_count'];
-        $expectedOrderData['refunded'] += $this->order->getPrice()[0]['grand_order_total'];
+        $expectedOrderData['refunded'] += $this->order->getPrice()['invoice'][0]['grand_order_total'];
         return $expectedOrderData;
     }
 

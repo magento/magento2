@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -396,7 +396,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Product Option
      */
     const KEY_PRODUCT_OPTION = 'product_option';
-
 
     /**
      * Gets the additional data for the order item.

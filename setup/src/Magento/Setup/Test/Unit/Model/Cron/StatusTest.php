@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -108,6 +108,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->varReaderWriter->expects($this->at(1))->method('delete');
         $this->status->toggleUpdateInProgress(false);
     }
+
     public function testToggleUpdateInProgressFalseFlagNotExist()
     {
         $this->varReaderWriter->expects($this->at(0))->method('isExist')->willReturn(false);
@@ -139,6 +140,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->varReaderWriter->expects($this->at(1))->method('delete');
         $this->status->toggleUpdateError(false);
     }
+
     public function testToggleUpdateErrorFalseFlagNotExist()
     {
         $this->varReaderWriter->expects($this->at(0))->method('isExist')->willReturn(false);
