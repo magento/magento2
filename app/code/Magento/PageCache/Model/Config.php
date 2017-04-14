@@ -13,8 +13,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Model is responsible for replacing default vcl template
  * file configuration with user-defined from configuration
- *
- * @api
  */
 class Config
 {
