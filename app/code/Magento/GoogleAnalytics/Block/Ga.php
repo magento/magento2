@@ -86,7 +86,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         }
 
         return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
-           . ", 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
+           . "', 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**

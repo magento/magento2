@@ -8,6 +8,9 @@ namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote as QuoteEntity;
 
+/**
+ * @api
+ */
 class QuoteValidator
 {
     /**

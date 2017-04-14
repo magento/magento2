@@ -239,7 +239,6 @@ define([
 
         switch (optionType) {
             case 'radio':
-
             case 'select-one':
 
                 if (optionType === 'radio' && !element.is(':checked')) {
