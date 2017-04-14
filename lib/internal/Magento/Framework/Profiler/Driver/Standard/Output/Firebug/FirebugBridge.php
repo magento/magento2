@@ -12,7 +12,7 @@ namespace Magento\Framework\Profiler\Driver\Standard\Output\Firebug;
 use \Zend_Wildfire_Plugin_FirePhp as FirePHP;
 use \Zend_Wildfire_Channel_HttpHeaders as HttpHeaders;
 
-class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
+class FirebugBridge implements \Zend\Log\Writer\ChromePhp\ChromePhpInterface
 {
 
     /**
@@ -24,16 +24,6 @@ class FirebugBridge implements \Zend\Log\Writer\FirePhp\FirePhpInterface
      * @var \Zend\Http\PhpEnvironment\Response
      */
     protected $_response;
-
-    /**
-     * Determine whether or not FirePHP is enabled
-     *
-     * @return boolean Returns TRUE if logging is enabled.
-     */
-    public function getEnabled()
-    {
-        return FirePHP::getInstance()->getEnabled();
-    }
 
     /**
      * Log an error message

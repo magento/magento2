@@ -11,7 +11,7 @@ use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\Driver\Standard\AbstractOutput;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\Output\Firebug\FirebugBridge;
-use Zend\Log\Writer\FirePhp;
+use Zend\Log\Writer\ChromePhp;
 
 class Firebug extends AbstractOutput
 {
@@ -44,7 +44,7 @@ class Firebug extends AbstractOutput
      */
     public function display(Stat $stat)
     {
-        $writer = new FirePhp(new FirebugBridge());
+        $writer = new ChromePhp(new FirebugBridge());
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
 
