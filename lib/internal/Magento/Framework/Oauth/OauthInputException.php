@@ -9,7 +9,7 @@ namespace Magento\Framework\Oauth;
 use Magento\Framework\Exception\InputException;
 
 /**
- * OAuth \OAuthInputException
+ * @api
  */
 class OauthInputException extends InputException
 {

@@ -11,6 +11,8 @@ use Magento\Framework\Phrase;
 
 /**
  * CouldNotSaveException caused by recoverable error
+ *
+ * @api
  */
 class CouldNotSaveException extends LocalizedCouldNotSaveException implements TemporaryStateExceptionInterface
 {

@@ -7,6 +7,9 @@ namespace Magento\Framework\Exception\State;
 
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * @api
+ */
 class UserLockedException extends AuthenticationException
 {
 }

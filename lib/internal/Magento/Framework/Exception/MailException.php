@@ -7,6 +7,8 @@ namespace Magento\Framework\Exception;
 
 /**
  * Magento mail exception
+ *
+ * @api
  */
 class MailException extends LocalizedException
 {

@@ -10,6 +10,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Exception class for merge conflict during inserting and updating synonym groups
+ *
+ * @api
  */
 class MergeConflictException extends LocalizedException
 {

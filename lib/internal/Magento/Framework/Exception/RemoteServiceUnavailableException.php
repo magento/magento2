@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Exception;
 
+/**
+ * @api
+ */
 class RemoteServiceUnavailableException extends AuthenticationException
 {
 }

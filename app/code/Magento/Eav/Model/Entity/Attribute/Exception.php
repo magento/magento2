@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 /**
  * EAV entity attribute exception
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Exception extends \Magento\Framework\Exception\LocalizedException
 {
