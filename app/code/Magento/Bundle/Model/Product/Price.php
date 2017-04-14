@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Bundle Price Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
