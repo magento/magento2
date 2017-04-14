@@ -9,6 +9,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Common exception for Signifyd message generators.
+ *
+ * @api
  */
 class GeneratorException extends LocalizedException
 {
