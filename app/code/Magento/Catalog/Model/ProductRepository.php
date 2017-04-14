@@ -539,6 +539,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->resourceModel->getLinkField(),
                 $existingProduct->getData($this->resourceModel->getLinkField())
             );
+            if (!$product->hasData(Product::STATUS)) {
+                $product->setStatus($existingProduct->getStatus());
+            }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
         }

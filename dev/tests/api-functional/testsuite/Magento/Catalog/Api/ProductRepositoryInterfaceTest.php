@@ -1140,4 +1140,34 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(0, count(array_intersect($attributeCodes, $missingAttributes)));
         $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
     }
+
+    public function testUpdateStatus()
+    {
+        // Create simple product
+        $productData = [
+            ProductInterface::SKU => "product_simple_502",
+            ProductInterface::NAME => "Product Simple 502",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 0,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+        ];
+
+        // Save product with status disabled
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertEquals(0, $response['status']);
+
+        // Update the product
+        $productData[ProductInterface::PRICE] = 200;
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        // Status should still be disabled
+        $this->assertEquals(0, $response['status']);
+        // Price should be updated
+        $this->assertEquals(200, $response['price']);
+    }
 }
