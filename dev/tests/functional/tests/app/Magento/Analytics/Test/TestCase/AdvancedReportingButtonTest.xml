@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Analytics\Test\TestCase\AdvancedReportingButtonTest" summary="Navigate through Advanced Reporting button on dashboard to Sign Up page" ticketId="MAGETWO-63715">
+        <variation name="AdvancedReportingButtonTest">
+            <data name="advancedReportingLink" xsi:type="string">https://advancedreporting.rjmetrics.com/report</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPage" />
+        </variation>
+    </testCase>
+</config>

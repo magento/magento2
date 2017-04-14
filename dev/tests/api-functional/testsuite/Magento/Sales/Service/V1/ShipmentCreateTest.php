@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,7 @@ class ShipmentCreateTest extends WebapiAbstract
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
+
     /**
      * @magentoApiDataFixture Magento/Sales/_files/order.php
      */

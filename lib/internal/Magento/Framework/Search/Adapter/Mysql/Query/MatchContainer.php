@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Search\Adapter\Mysql\Query;
-
 
 use Magento\Framework\Search\Request\QueryInterface;
 
@@ -17,6 +16,7 @@ class MatchContainer
      * @var QueryInterface
      */
     private $request;
+
     /**
      * @var string
      */

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Page\BackendPage;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Class AbstractAssertSalesReportResult
@@ -53,8 +53,8 @@ abstract class AbstractAssertSalesReportResult extends AbstractConstraint
     protected function prepareExpectedResult(array $expectedSalesData)
     {
         $salesItems = 0;
-        $invoice = $this->order->getPrice()[0]['grand_invoice_total'];
-        $salesTotal = $this->order->getPrice()[0]['grand_order_total'];
+        $invoice = $this->order->getPrice()['invoice'][0]['grand_invoice_total'];
+        $salesTotal = $this->order->getPrice()['invoice'][0]['grand_order_total'];
         foreach ($this->order->getEntityId()['products'] as $product) {
             $salesItems += $product->getCheckoutData()['qty'];
         }

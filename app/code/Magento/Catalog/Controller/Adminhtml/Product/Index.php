@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -37,7 +37,7 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Product
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
-        $resultPage->getConfig()->getTitle()->prepend(__('Catalog'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Products'));
         return $resultPage;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
@@ -636,6 +636,7 @@ class Application
             DirectoryList::VAR_DIR => [$path => $var],
             DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
+            DirectoryList::TMP_MATERIALIZATION_DIR => [$path => "{$var}/view_preprocessed/pub/static"],
             DirectoryList::GENERATED_CODE => [$path => "{$generated}/code"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],

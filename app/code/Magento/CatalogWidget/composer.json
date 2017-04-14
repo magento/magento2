@@ -11,6 +11,7 @@
         "magento/module-customer": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/module-wishlist": "100.2.*",
+        "magento/module-indexer": "100.2.*",
         "magento/framework": "100.2.*"
     },
     "type": "magento2-module",

@@ -2,7 +2,7 @@
 /**
  * Scheduled jobs entry point
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Store\Model\StoreManager;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
-if (php_sapi_name() === 'cli'){
+if (php_sapi_name() === 'cli') {
     echo "You cannot run this from the command line." . PHP_EOL .
         "Run \"php bin/magento cron:run\" instead." . PHP_EOL;
     exit(1);

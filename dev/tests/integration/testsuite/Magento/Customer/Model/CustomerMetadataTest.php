@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
 
-use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
 {

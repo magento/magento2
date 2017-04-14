@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,8 +84,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' =>
-                                '\\' . JoinProcessorInterface::class,
+                            'description' => '\\' . JoinProcessorInterface::class,
                         ],
                     ],
                 ]
@@ -98,8 +97,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' =>
-                                '\\' . CollectionProcessorInterface::class,
+                            'description' => '\\' . CollectionProcessorInterface::class,
                         ],
                     ],
                 ]
@@ -137,6 +135,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         return
             str_replace('Interface', '', $this->getSourceClassName()) . 'SearchResultInterfaceFactory';
     }
+
     /**
      * Returns source persistor class name
      *

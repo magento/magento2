@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\ReportXml;
@@ -56,6 +56,11 @@ class ReportProviderTest extends \PHPUnit_Framework_TestCase
     private $connectionFactoryMock;
 
     /**
+     * @var \Magento\Analytics\ReportXml\IteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $iteratorFactoryMock;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -102,6 +107,16 @@ class ReportProviderTest extends \PHPUnit_Framework_TestCase
         ->disableOriginalConstructor()
         ->getMock();
 
+        $this->iteratorFactoryMock = $this->getMockBuilder(
+            \Magento\Analytics\ReportXml\IteratorFactory::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
+        $this->iteratorMock = $this->getMockBuilder(
+            \IteratorIterator::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
         $this->objectManagerHelper =
             new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -115,7 +130,8 @@ class ReportProviderTest extends \PHPUnit_Framework_TestCase
             \Magento\Analytics\ReportXml\ReportProvider::class,
             [
                 'queryFactory' => $this->queryFactoryMock,
-                'connectionFactory' => $this->connectionFactoryMock
+                'connectionFactory' => $this->connectionFactoryMock,
+                'iteratorFactory' => $this->iteratorFactoryMock
             ]
         );
     }
@@ -142,14 +158,23 @@ class ReportProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getConnectionName')
             ->willReturn($connectionName);
 
+        $this->queryMock->expects($this->once())
+            ->method('getConfig')
+            ->willReturn(
+                [
+                    'connection' => $connectionName
+                ]
+            );
+
         $this->connectionMock->expects($this->once())
             ->method('query')
             ->with($this->selectMock)
             ->willReturn($this->statementMock);
 
-        $this->assertInstanceOf(
-            \IteratorIterator::class,
-            $this->subject->getReport($reportName)
-        );
+        $this->iteratorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->statementMock, null)
+            ->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->subject->getReport($reportName));
     }
 }

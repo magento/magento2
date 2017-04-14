@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model;
@@ -65,7 +65,7 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($config);
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_CONFIG => $config]);
+            ->with([ConfigFilePool::APP_ENV => $config]);
 
         $this->model->save($values, 'scope', 'scope_code');
     }
@@ -89,7 +89,7 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($config);
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_CONFIG => $config]);
+            ->with([ConfigFilePool::APP_ENV => $config]);
 
         $this->model->save($values);
     }

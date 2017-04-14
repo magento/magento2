@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,38 @@
             <reportProvider name="modules" class="Magento\Analytics\ReportXml\ReportProvider">
                 <parameters>
                     <name>modules</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
+    <file name="store_config">
+        <providers>
+            <customProvider name="store_config" class="Magento\Analytics\Model\StoreConfigurationProvider"/>
+        </providers>
+    </file>
+    <file name="stores">
+        <providers>
+            <reportProvider name="stores" class="Magento\Analytics\ReportXml\ReportProvider">
+                <parameters>
+                    <name>stores</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
+    <file name="websites">
+        <providers>
+            <reportProvider name="websites" class="Magento\Analytics\ReportXml\ReportProvider">
+                <parameters>
+                    <name>websites</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
+    <file name="groups">
+        <providers>
+            <reportProvider name="groups" class="Magento\Analytics\ReportXml\ReportProvider">
+                <parameters>
+                    <name>groups</name>
                 </parameters>
             </reportProvider>
         </providers>

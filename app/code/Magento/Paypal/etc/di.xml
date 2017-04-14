@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -56,7 +56,7 @@
         </arguments>
     </type>
     <virtualType name="Magento\Paypal\Block\WpsBml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut"></virtualType>
-    <type name="\Magento\Paypal\Helper\Data">
+    <type name="Magento\Paypal\Helper\Data">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="expressCheckout" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</item>
@@ -182,31 +182,65 @@
             <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+    <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
-            <argument name="configs" xsi:type="array">
+            <argument name="sensitive" xsi:type="array">
+                <item name="payment/payflow_advanced/proxy_host" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/pwd" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/user" xsi:type="string">1</item>
+                <item name="payment/payflow_link/proxy_host" xsi:type="string">1</item>
+                <item name="payment/payflow_link/pwd" xsi:type="string">1</item>
+                <item name="payment/payflowpro/partner" xsi:type="string">1</item>
+                <item name="payment/payflowpro/proxy_host" xsi:type="string">1</item>
+                <item name="payment/payflowpro/pwd" xsi:type="string">1</item>
+                <item name="payment/payflowpro/user" xsi:type="string">1</item>
+                <item name="payment/paypal_express/merchant_id" xsi:type="string">1</item>
+                <item name="payment/paypal_express_bml/publisher_id" xsi:type="string">1</item>
+                <item name="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/express_checkout_settlement_report/heading_sftp" xsi:type="string">1</item>
+                <item name="payment_all_paypal/payflow_link/settings_payflow_link/settings_payflow_link_advanced/payflow_link_settlement_report/heading_sftp" xsi:type="string">1</item>
+                <item name="payment_all_paypal/payments_pro_hosted_solution/pphs_settings/pphs_settings_advanced/pphs_settlement_report/heading_sftp" xsi:type="string">1</item>
+                <item name="payment_all_paypal/paypal_payflowpro/settings_paypal_payflow/heading_cc" xsi:type="string">1</item>
+                <item name="payment_all_paypal/paypal_payflowpro/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_settlement_report/heading_sftp" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_ip" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_login" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_password" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_path" xsi:type="string">1</item>
                 <item name="paypal/general/business_account" xsi:type="string">1</item>
+                <item name="paypal/general/merchant_country" xsi:type="string">1</item>
+                <item name="paypal/wpp/api_cert" xsi:type="string">1</item>
                 <item name="paypal/wpp/api_password" xsi:type="string">1</item>
                 <item name="paypal/wpp/api_signature" xsi:type="string">1</item>
                 <item name="paypal/wpp/api_username" xsi:type="string">1</item>
-                <item name="paypal/wpp/api_cert" xsi:type="string">1</item>
                 <item name="paypal/wpp/proxy_host" xsi:type="string">1</item>
-                <item name="paypal/wpp/proxy_port" xsi:type="string">1</item>
-                <item name="payment/paypal_express/merchant_id" xsi:type="string">1</item>
-                <item name="payment/paypal_express_bml/publisher_id" xsi:type="string">1</item>
-                <item name="paypal/fetch_reports/ftp_password" xsi:type="string">1</item>
-                <item name="paypal/fetch_reports/ftp_login" xsi:type="string">1</item>
-                <item name="paypal/fetch_reports/ftp_path" xsi:type="string">1</item>
-                <item name="paypal/fetch_reports/ftp_ip" xsi:type="string">1</item>
-                <item name="payment/payflow_advanced/user" xsi:type="string">1</item>
-                <item name="payment/payflow_advanced/pwd" xsi:type="string">1</item>
-                <item name="payment/payflow_link/user" xsi:type="string">1</item>
-                <item name="payment/payflow_link/pwd" xsi:type="string">1</item>
-                <item name="payment/payflowpro/user" xsi:type="string">1</item>
-                <item name="payment/payflowpro/pwd" xsi:type="string">1</item>
-                <item name="payment/payflowpro/partner" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="payment/hosted_pro/debug" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/debug" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/proxy_host" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/proxy_port" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/sandbox_flag" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/url_method" xsi:type="string">1</item>
+                <item name="payment/payflow_express/debug" xsi:type="string">1</item>
+                <item name="payment/payflow_link/debug" xsi:type="string">1</item>
+                <item name="payment/payflow_link/proxy_host" xsi:type="string">1</item>
+                <item name="payment/payflow_link/proxy_port" xsi:type="string">1</item>
+                <item name="payment/payflow_link/sandbox_flag" xsi:type="string">1</item>
+                <item name="payment/payflow_link/url_method" xsi:type="string">1</item>
+                <item name="payment/payflow_link/use_proxy" xsi:type="string">1</item>
+                <item name="payment/payflowpro/debug" xsi:type="string">1</item>
                 <item name="payment/payflowpro/proxy_host" xsi:type="string">1</item>
                 <item name="payment/payflowpro/proxy_port" xsi:type="string">1</item>
+                <item name="payment/payflowpro/pwd" xsi:type="string">1</item>
+                <item name="payment/payflowpro/sandbox_flag" xsi:type="string">1</item>
+                <item name="payment/paypal_billing_agreement/debug" xsi:type="string">1</item>
+                <item name="payment/paypal_express/debug" xsi:type="string">1</item>
+                <item name="payment_all_paypal/paypal_payflowpro/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_settlement_report/heading_sftp" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_ip" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_path" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_sandbox" xsi:type="string">1</item>
+                <item name="paypal/wpp/proxy_host" xsi:type="string">1</item>
+                <item name="paypal/wpp/proxy_port" xsi:type="string">1</item>
+                <item name="paypal/wpp/sandbox_flag" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

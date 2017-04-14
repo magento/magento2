@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class InstallData implements InstallDataInterface
     {
         $installer = $setup->createMigrationSetup();
         $setup->startSetup();
-        
+
         $installer->appendClassAliasReplace(
             'salesrule',
             'conditions_serialized',
@@ -37,10 +37,9 @@ class InstallData implements InstallDataInterface
             \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
             ['rule_id']
         );
-        
+
         $installer->doUpdateClassAliases();
-        
+
         $setup->endSetup();
-        
     }
 }

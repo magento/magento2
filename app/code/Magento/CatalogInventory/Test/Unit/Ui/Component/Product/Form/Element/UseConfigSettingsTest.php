@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Ui\Component\Product\Form\Element;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings;
 use Magento\Framework\Data\ValueSourceInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
@@ -15,16 +16,23 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
-     * @return void
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
+    private $serializerMock;
+
+    /**
+     * @var UseConfigSettings
+     */
+    private $useConfigSettings;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -43,51 +51,70 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getProcessor')
             ->willReturn($processorMock);
+        $this->serializerMock = $this->getMock(Json::class);
+        $this->useConfigSettings = $this->objectManagerHelper->getObject(
+            UseConfigSettings::class,
+            [
+                'context' => $this->contextMock,
+                'serializer' => $this->serializerMock
+            ]
+        );
     }
 
-    /**
-     * @return void
-     */
     public function testPrepare()
     {
         $config = ['valueFromConfig' => 123];
-        $element = $this->getTestedElement($config);
-        $element->prepare();
-        $this->assertEquals($config, $element->getData('config'));
+        $this->useConfigSettings->setData('config', $config);
+        $this->useConfigSettings->prepare();
+        $this->assertEquals($config, $this->useConfigSettings->getData('config'));
     }
 
     /**
-     * @return void
+     * @param array $expectedResult
+     * @param string|int $sourceValue
+     * @param int $serializedCallCount
+     * @dataProvider prepareSourceDataProvider
      */
-    public function testPrepareSource()
+    public function testPrepareSource(array $expectedResult, $sourceValue, $serializedCallCount = 0)
     {
         /** @var ValueSourceInterface|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMock(ValueSourceInterface::class);
         $source->expects($this->once())
             ->method('getValue')
-            ->with('someKey')
-            ->willReturn('someData');
+            ->with($expectedResult['keyInConfiguration'])
+            ->willReturn($sourceValue);
 
-        $config = ['valueFromConfig' => $source, 'keyInConfiguration' => 'someKey'];
-        $element = $this->getTestedElement($config);
-        $element->prepare();
+        $this->serializerMock->expects($this->exactly($serializedCallCount))
+            ->method('unserialize')
+            ->with($sourceValue)
+            ->willReturn($expectedResult['valueFromConfig']);
 
-        $expectedResult =['valueFromConfig' => 'someData', 'keyInConfiguration' => 'someKey'];
-        $this->assertEquals($expectedResult, $element->getData('config'));
+        $config = array_replace($expectedResult, ['valueFromConfig' => $source]);
+        $this->useConfigSettings->setData('config', $config);
+        $this->useConfigSettings->prepare();
+
+        $this->assertEquals($expectedResult, $this->useConfigSettings->getData('config'));
     }
 
-    /**
-     * @param array $config
-     * @return UseConfigSettings
-     */
-    protected function getTestedElement(array $config = [])
+    public function prepareSourceDataProvider()
     {
-        return $this->objectManagerHelper->getObject(
-            UseConfigSettings::class,
-            [
-                'context' => $this->contextMock,
-                'data' => ['config' => $config]
+        return [
+            'valid' => [
+                'expectedResult' => [
+                    'valueFromConfig' => 2,
+                    'keyInConfiguration' => 'validKey'
+                ],
+                'sourceValue' => 2
+            ],
+            'serialized' => [
+                'expectedResult' => [
+                    'valueFromConfig' => ['32000' => 3],
+                    'keyInConfiguration' => 'serializedKey',
+                    'unserialized' => true
+                ],
+                'sourceValue' => '{"32000":3}',
+                'serialziedCallCount' => 1
             ]
-        );
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,7 +34,6 @@ foreach ($properties as $key => $value) {
         $reflectionProperty->setValue($categoryLinkManagement, $value);
     }
 }
-
 
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2

@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CommentTest extends \PHPUnit_Framework_TestCase
@@ -22,6 +24,11 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $placeholderMock;
+
+    /**
+     * @var TypePool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $typePoolMock;
 
     /**
      * @var Comment
@@ -40,6 +47,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $placeholderFactoryMock->expects($this->once())
             ->method('create')
             ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
@@ -49,40 +57,146 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->typePoolMock = $this->getMockBuilder(TypePool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $objectManager->getObject(
             Comment::class,
             [
                 'placeholderFactory' => $placeholderFactoryMock,
-                'source' => $this->configSourceMock
+                'source' => $this->configSourceMock,
+                'typePool' => $this->typePoolMock,
             ]
         );
     }
 
-    public function testGetEmpty()
-    {
+    /**
+     * @param array $sensitive
+     * @param array $notSensitive
+     * @param array $expectedMocks
+     * @param $expectedMessage
+     * @dataProvider dataProviderForTestGet
+     */
+    public function testGet(
+        array $sensitive,
+        array $notSensitive,
+        array $expectedMocks,
+        $expectedMessage
+    ) {
         $this->configSourceMock->expects($this->once())
             ->method('getExcludedFields')
-            ->willReturn([]);
-        $this->assertEmpty($this->model->get());
+            ->willReturn(array_unique(array_merge($sensitive, $notSensitive)));
+        $this->typePoolMock->expects($expectedMocks['typePoolMock']['isPresent']['expects'])
+            ->method('isPresent')
+            ->willReturnMap($expectedMocks['typePoolMock']['isPresent']['returnMap']);
+        $this->placeholderMock->expects($expectedMocks['placeholderMock']['generate']['expects'])
+            ->method('generate')
+            ->willReturnMap($expectedMocks['placeholderMock']['generate']['returnMap']);
+
+        $this->assertEquals($expectedMessage, $this->model->get());
     }
 
-    public function testGet()
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function dataProviderForTestGet()
     {
-        $path = 'one/two';
-        $placeholder = 'one__two';
-        $expectedResult = 'The configuration file doesn\'t contain sensitive data for security reasons. '
-            . 'Sensitive data can be stored in the following environment variables:'
-            . "\n$placeholder for $path";
-
-        $this->configSourceMock->expects($this->once())
-            ->method('getExcludedFields')
-            ->willReturn([$path]);
-
-        $this->placeholderMock->expects($this->once())
-            ->method('generate')
-            ->with($path)
-            ->willReturn($placeholder);
-
-        $this->assertEquals($expectedResult, $this->model->get());
+        return [
+            [
+                'sensitive' => [],
+                'notSensitive' => [],
+                'expectedMocks' => [
+                    'typePoolMock' => [
+                        'isPresent' => [
+                            'expects' => $this->never(),
+                            'returnMap' => [],
+                        ]
+                    ],
+                    'placeholderMock' => [
+                        'generate' => [
+                            'expects' => $this->never(),
+                            'returnMap' => [],
+                        ],
+                    ],
+                ],
+                'expectedMessage' => '',
+            ],
+            [
+                'sensitive' => [],
+                'notSensitive' => [
+                    'some/notSensitive/field1',
+                    'some/notSensitive/field2',
+                ],
+                'expectedMocks' => [
+                    'typePoolMock' => [
+                        'isPresent' => [
+                            'expects' => $this->exactly(2),
+                            'returnMap' => [
+                                ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
+                                ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
+                            ]
+                        ],
+                    ],
+                    'placeholderMock' => [
+                        'generate' => [
+                            'expects' => $this->never(),
+                            'returnMap' => [],
+                        ],
+                    ],
+                ],
+                'expectedMessage' => ''
+            ],
+            [
+                'sensitive' => ['some/sensitive/field1', 'some/sensitive/field2', 'some/sensitive_and_env/field'],
+                'notSensitive' => ['some/notSensitive/field1', 'some/notSensitive/field2'],
+                'expectedMocks' => [
+                    'typePoolMock' => [
+                        'isPresent' => [
+                            'expects' => $this->exactly(5),
+                            'returnMap' => [
+                                ['some/sensitive/field1', TypePool::TYPE_SENSITIVE, true],
+                                ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, true],
+                                ['some/sensitive_and_env/field', TypePool::TYPE_SENSITIVE, true],
+                                ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
+                            ]
+                        ],
+                    ],
+                    'placeholderMock' => [
+                        'generate' => [
+                            'expects' => $this->exactly(3),
+                            'returnMap' => [
+                                [
+                                    'some/sensitive/field1',
+                                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                                    null,
+                                    'CONFIG__SOME__SENSITIVE__FIELD1'
+                                ],
+                                [
+                                    'some/sensitive/field2',
+                                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                                    null,
+                                    'CONFIG__SOME__SENSITIVE__FIELD2'
+                                ],
+                                [
+                                    'some/sensitive_and_env/field',
+                                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                                    null,
+                                    'CONFIG__SOME__SENSITIVE_AND_ENV__FIELD'
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'expectedMessage' => implode(PHP_EOL, [
+                    'Shared configuration was written to config.php and system-specific configuration to env.php.',
+                    'Shared configuration file (config.php) doesn\'t contain sensitive data for security reasons.',
+                    'Sensitive data can be stored in the following environment variables:',
+                    'CONFIG__SOME__SENSITIVE__FIELD1 for some/sensitive/field1',
+                    'CONFIG__SOME__SENSITIVE__FIELD2 for some/sensitive/field2',
+                    'CONFIG__SOME__SENSITIVE_AND_ENV__FIELD for some/sensitive_and_env/field'
+                ])
+            ],
+        ];
     }
 }

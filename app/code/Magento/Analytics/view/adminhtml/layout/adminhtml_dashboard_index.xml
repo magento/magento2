@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,11 +11,10 @@
         <referenceContainer name="content">
             <uiComponent name="analytics_subscription_form" acl="Magento_Analytics::analytics_settings"
                          condition="analytics::can-view-notification"/>
-        </referenceContainer>
-        <referenceContainer name="refresh_statistics">
-            <block template="Magento_Analytics::dashboard/link.phtml"
+            <block template="Magento_Analytics::dashboard/section.phtml"
                    class="Magento\Backend\Block\Template"
-                   name="analytics_service_external_link"/>
+                   name="analytics_service_external_link"
+                   before="-"/>
         </referenceContainer>
     </body>
 </page>

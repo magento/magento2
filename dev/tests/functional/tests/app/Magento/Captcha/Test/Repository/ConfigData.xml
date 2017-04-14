@@ -1,50 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
-        <dataset name="captcha_backend_login">
-            <field name="admin/captcha/enable" xsi:type="array">
-                <item name="scope_id" xsi:type="number">0</item>
-                <item name="label" xsi:type="string">Yes</item>
-                <item name="value" xsi:type="number">1</item>
-            </field>
-            <field name="admin/captcha/forms" xsi:type="array">
-                <item name="scope_id" xsi:type="number">0</item>
-                <item name="label" xsi:type="string">Admin Login</item>
-                <item name="value" xsi:type="string">backend_login</item>
-            </field>
-            <field name="admin/captcha/mode" xsi:type="array">
-                <item name="scope_id" xsi:type="number">0</item>
-                <item name="label" xsi:type="string">Always</item>
-                <item name="value" xsi:type="string">always</item>
-            </field>
-            <field name="admin/captcha/length" xsi:type="array">
-                <item name="scope" xsi:type="string">admin</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string"/>
-                <item name="value" xsi:type="number">3</item>
-            </field>
-            <field name="admin/captcha/symbols" xsi:type="array">
-                <item name="scope" xsi:type="string">admin</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string"/>
-                <item name="value" xsi:type="number">1</item>
-            </field>
-        </dataset>
-        <dataset name="captcha_backend_login_rollback">
-            <field name="admin/captcha/enable" xsi:type="array">
-                <item name="scope" xsi:type="string">default</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">No</item>
-                <item name="value" xsi:type="number">0</item>
-            </field>
-        </dataset>
-
         <dataset name="captcha_storefront_login">
             <field name="customer/captcha/enable" xsi:type="array">
                 <item name="scope_id" xsi:type="number">0</item>
@@ -76,6 +38,208 @@
         </dataset>
         <dataset name="captcha_storefront_login_rollback">
             <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="captcha_storefront_register">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="customer/captcha/forms" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Create user</item>
+                <item name="value" xsi:type="string">user_create</item>
+            </field>
+            <field name="customer/captcha/mode" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Always</item>
+                <item name="value" xsi:type="string">always</item>
+            </field>
+            <field name="customer/captcha/length" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="customer/captcha/symbols" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="captcha_storefront_register_rollback">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="captcha_storefront_contact_us">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="customer/captcha/forms" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Contact Us</item>
+                <item name="value" xsi:type="string">contact_us</item>
+            </field>
+            <field name="customer/captcha/mode" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Always</item>
+                <item name="value" xsi:type="string">always</item>
+            </field>
+            <field name="customer/captcha/length" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="customer/captcha/symbols" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="captcha_storefront_contact_us_rollback">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="captcha_storefront_login_failures_number">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="customer/captcha/forms" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Login</item>
+                <item name="value" xsi:type="string">user_login</item>
+            </field>
+            <field name="customer/captcha/mode" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">After number of attempts to login</item>
+                <item name="value" xsi:type="string">after_fail</item>
+            </field>
+            <field name="customer/captcha/failed_attempts_login" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">3</item>
+            </field>
+            <field name="customer/captcha/length" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="customer/captcha/symbols" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="captcha_storefront_login_failures_number_rollback">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="captcha_storefront_user_edit_failures_number">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="customer/captcha/forms" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Change password</item>
+                <item name="value" xsi:type="string">user_edit</item>
+            </field>
+            <field name="customer/captcha/mode" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">After number of attempts to login</item>
+                <item name="value" xsi:type="string">after_fail</item>
+            </field>
+            <field name="customer/captcha/failed_attempts_login" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">3</item>
+            </field>
+            <field name="customer/captcha/length" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="customer/captcha/symbols" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="captcha_storefront_user_edit_failures_number_rollback">
+            <field name="customer/captcha/enable" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="captcha_backend_login">
+            <field name="admin/captcha/enable" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="admin/captcha/forms" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Admin Login</item>
+                <item name="value" xsi:type="string">backend_login</item>
+            </field>
+            <field name="admin/captcha/mode" xsi:type="array">
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Always</item>
+                <item name="value" xsi:type="string">always</item>
+            </field>
+            <field name="admin/captcha/length" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">3</item>
+            </field>
+            <field name="admin/captcha/symbols" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="captcha_backend_login_rollback">
+            <field name="admin/captcha/enable" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>

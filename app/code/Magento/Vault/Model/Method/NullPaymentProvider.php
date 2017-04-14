@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Method;
 
 use Magento\Framework\DataObject;
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -17,7 +16,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve payment method code
      *
      * @return string
-     * 
+     *
      */
     public function getCode()
     {
@@ -28,7 +27,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve block type for method form generation
      *
      * @return string
-     * 
+     *
      * @deprecated
      */
     public function getFormBlockType()
@@ -40,7 +39,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve payment method title
      *
      * @return string
-     * 
+     *
      */
     public function getTitle()
     {
@@ -70,7 +69,7 @@ class NullPaymentProvider implements MethodInterface
      * Check order availability
      *
      * @return bool
-     * 
+     *
      */
     public function canOrder()
     {
@@ -81,7 +80,7 @@ class NullPaymentProvider implements MethodInterface
      * Check authorize availability
      *
      * @return bool
-     * 
+     *
      */
     public function canAuthorize()
     {
@@ -92,7 +91,7 @@ class NullPaymentProvider implements MethodInterface
      * Check capture availability
      *
      * @return bool
-     * 
+     *
      */
     public function canCapture()
     {
@@ -103,7 +102,7 @@ class NullPaymentProvider implements MethodInterface
      * Check partial capture availability
      *
      * @return bool
-     * 
+     *
      */
     public function canCapturePartial()
     {
@@ -114,7 +113,7 @@ class NullPaymentProvider implements MethodInterface
      * Check whether capture can be performed once and no further capture possible
      *
      * @return bool
-     * 
+     *
      */
     public function canCaptureOnce()
     {
@@ -125,7 +124,7 @@ class NullPaymentProvider implements MethodInterface
      * Check refund availability
      *
      * @return bool
-     * 
+     *
      */
     public function canRefund()
     {
@@ -136,7 +135,7 @@ class NullPaymentProvider implements MethodInterface
      * Check partial refund availability for invoice
      *
      * @return bool
-     * 
+     *
      */
     public function canRefundPartialPerInvoice()
     {
@@ -146,7 +145,7 @@ class NullPaymentProvider implements MethodInterface
     /**
      * Check void availability
      * @return bool
-     * 
+     *
      */
     public function canVoid()
     {
@@ -178,7 +177,7 @@ class NullPaymentProvider implements MethodInterface
      * Can be edit order (renew order)
      *
      * @return bool
-     * 
+     *
      */
     public function canEdit()
     {
@@ -189,7 +188,7 @@ class NullPaymentProvider implements MethodInterface
      * Check fetch transaction info availability
      *
      * @return bool
-     * 
+     *
      */
     public function canFetchTransactionInfo()
     {
@@ -203,7 +202,7 @@ class NullPaymentProvider implements MethodInterface
      * @param string $transactionId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * 
+     *
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
@@ -214,7 +213,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve payment system relation flag
      *
      * @return bool
-     * 
+     *
      */
     public function isGateway()
     {
@@ -225,7 +224,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve payment method online/offline flag
      *
      * @return bool
-     * 
+     *
      */
     public function isOffline()
     {
@@ -236,7 +235,7 @@ class NullPaymentProvider implements MethodInterface
      * Flag if we need to run payment initialize while order place
      *
      * @return bool
-     * 
+     *
      */
     public function isInitializeNeeded()
     {
@@ -270,7 +269,7 @@ class NullPaymentProvider implements MethodInterface
      * Retrieve block type for display method information
      *
      * @return string
-     * 
+     *
      * @deprecated
      */
     public function getInfoBlockType()
@@ -283,7 +282,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * 
+     *
      * @deprecated
      */
     public function getInfoInstance()
@@ -296,7 +295,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $info
      * @return void
-     * 
+     *
      * @deprecated
      */
     public function setInfoInstance(InfoInterface $info)
@@ -309,7 +308,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * 
+     *
      */
     public function validate()
     {
@@ -322,7 +321,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @param float $amount
      * @return $this
-     * 
+     *
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -335,7 +334,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @param float $amount
      * @return $this
-     * 
+     *
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -348,7 +347,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @param float $amount
      * @return $this
-     * 
+     *
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -361,7 +360,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @param float $amount
      * @return $this
-     * 
+     *
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -373,7 +372,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $payment
      * @return $this
-     * 
+     *
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -385,7 +384,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param InfoInterface $payment
      * @return $this
-     * 
+     *
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -395,7 +394,7 @@ class NullPaymentProvider implements MethodInterface
     /**
      * Whether this method can accept or deny payment
      * @return bool
-     * 
+     *
      */
     public function canReviewPayment()
     {
@@ -408,7 +407,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
-     * 
+     *
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -421,7 +420,7 @@ class NullPaymentProvider implements MethodInterface
      * @param InfoInterface $payment
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
-     * 
+     *
      */
     public function denyPayment(InfoInterface $payment)
     {
@@ -446,7 +445,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @param DataObject $data
      * @return $this
-     * 
+     *
      */
     public function assignData(DataObject $data)
     {
@@ -484,7 +483,7 @@ class NullPaymentProvider implements MethodInterface
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * 
+     *
      * @deprecated
      */
     public function initialize($paymentAction, $stateObject)
@@ -497,7 +496,7 @@ class NullPaymentProvider implements MethodInterface
      * Used to universalize payment actions when processing payment place
      *
      * @return string
-     * 
+     *
      */
     public function getConfigPaymentAction()
     {

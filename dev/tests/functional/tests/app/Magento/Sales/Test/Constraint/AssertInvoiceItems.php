@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,6 @@ class AssertInvoiceItems extends AbstractAssertItems
      * @param SalesInvoiceView $salesInvoiceView
      * @param OrderInjectable $order
      * @param array $ids
-     * @param array|null $data [optional]
      * @param Cart|null $cart [optional]
      * @return void
      */
@@ -32,11 +31,12 @@ class AssertInvoiceItems extends AbstractAssertItems
         SalesInvoiceView $salesInvoiceView,
         OrderInjectable $order,
         array $ids,
-        array $data = null,
         Cart $cart = null
     ) {
         $orderId = $order->getId();
-        $productsData = $this->prepareOrderProducts($order, $data['items_data'], $cart);
+        $invoicesData = $order->getInvoice();
+        $data = isset($invoicesData[0]['items_data']) ? $invoicesData[0]['items_data'] : [];
+        $productsData = $this->prepareOrderProducts($order, $data, $cart);
         foreach ($ids['invoiceIds'] as $invoiceId) {
             $filter = [
                 'order_id' => $orderId,

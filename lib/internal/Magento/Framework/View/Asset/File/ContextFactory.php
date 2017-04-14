@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset\File;
@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Asset\File;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory class for \Magento\Framework\View\Asset\File\Context
+ * Factory class for @see \Magento\Framework\View\Asset\File\Context
  */
 class ContextFactory
 {

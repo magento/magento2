@@ -1,41 +1,36 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
+use Magento\Analytics\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\NotificationTime;
-use Magento\Analytics\Model\Subscription;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Config\Model\Config\Source\Enabledisable;
+use Magento\Config\Model\PreparedValueFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Activate
- *
- * Activates subscription with Free Tier program
+ * Activates subscription to Magento BI Advanced Reporting.
  */
 class Activate extends Action
 {
-    /**
-     * Resource for managing subscription to Magento Analytics.
-     *
-     * @var Subscription
-     */
-    private $subscription;
-
     /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * Resource for managing last notification time about subscription to Magento Analytics.
+     * Resource for managing last notification time about subscription to Magento BI.
      *
      * @var NotificationTime
      */
@@ -49,22 +44,35 @@ class Activate extends Action
     private $subscriptionApprovedField = 'analytics_subscription_checkbox';
 
     /**
+     * @var AbstractDb
+     */
+    private $configValueResource;
+
+    /**
+     * @var PreparedValueFactory
+     */
+    private $preparedValueFactory;
+
+    /**
      * Activate constructor.
      *
      * @param Context $context
-     * @param Subscription $subscription
      * @param LoggerInterface $logger
      * @param NotificationTime $notificationTime
+     * @param AbstractDb $configValueResource
+     * @param PreparedValueFactory $preparedValueFactory
      */
     public function __construct(
         Context $context,
-        Subscription $subscription,
         LoggerInterface $logger,
-        NotificationTime $notificationTime
+        NotificationTime $notificationTime,
+        AbstractDb $configValueResource,
+        PreparedValueFactory $preparedValueFactory
     ) {
-        $this->subscription = $subscription;
         $this->logger = $logger;
         $this->notificationTime = $notificationTime;
+        $this->configValueResource = $configValueResource;
+        $this->preparedValueFactory = $preparedValueFactory;
         parent::__construct($context);
     }
 
@@ -79,7 +87,7 @@ class Activate extends Action
     }
 
     /**
-     * Activate subscription to Magento Analytics via AJAX.
+     * Activate subscription to Magento BI via AJAX.
      *
      * @return Json
      */
@@ -87,7 +95,14 @@ class Activate extends Action
     {
         try {
             if ($this->getRequest()->getParam($this->subscriptionApprovedField)) {
-                $this->subscription->enable();
+                $configValue = $this->preparedValueFactory->create(
+                    Enabled::XML_ENABLED_CONFIG_STRUCTURE_PATH,
+                    Enabledisable::ENABLE_VALUE,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                );
+
+                $this->configValueResource
+                    ->save($configValue);
             } else {
                 $this->notificationTime->unsetLastTimeNotificationValue();
             }

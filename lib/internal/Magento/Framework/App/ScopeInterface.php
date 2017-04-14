@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -10,6 +10,11 @@ namespace Magento\Framework\App;
  */
 interface ScopeInterface
 {
+    /**
+     * Default scope reference code
+     */
+    const SCOPE_DEFAULT = 'default';
+
     /**
      * Retrieve scope code
      *
