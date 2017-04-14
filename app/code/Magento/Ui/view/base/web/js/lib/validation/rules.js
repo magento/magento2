@@ -428,7 +428,7 @@ define([
         ],
         'validate-emailSender': [
             function (value) {
-                return utils.isEmptyNoTrim(value) || value.indexOf('@') !== -1;
+                return utils.isEmptyNoTrim(value) || /^[\S ]+$/.test(value);
             },
             $.mage.__('Please enter a valid email address (Ex: johndoe@domain.com).')
         ],
