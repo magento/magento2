@@ -112,7 +112,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode($messages),
+                json_encode($messages),
                 $cookieMetadataMock
             );
         $this->cookieManagerMock->expects($this->once())
@@ -411,7 +411,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with(
                 MessagePlugin::MESSAGES_COOKIES_NAME,
-                \Zend_Json::encode($messages),
+                json_encode($messages),
                 $cookieMetadataMock
             );
         $this->cookieManagerMock->expects($this->once())
