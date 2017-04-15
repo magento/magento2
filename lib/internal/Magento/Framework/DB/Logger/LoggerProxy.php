@@ -9,9 +9,14 @@ namespace Magento\Framework\DB\Logger;
 class LoggerProxy extends LoggerAbstract
 {
     /**
-     * Logger alias
+     * Logger alias param name
      */
     const PARAM_ALIAS = 'db_logger_alias';
+
+    /**
+     * File logger alias
+     */
+    const FILE_LOGGER_ALIAS = 'file';
 
     /**
      * @var LoggerAbstract
@@ -37,7 +42,7 @@ class LoggerProxy extends LoggerAbstract
     )
     {
         switch ($loggerAlias) {
-            case "file":
+            case self::FILE_LOGGER_ALIAS:
                 $this->logger = $loggerFileFactory->create();
                 break;
             default:
