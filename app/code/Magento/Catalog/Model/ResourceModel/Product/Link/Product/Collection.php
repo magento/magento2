@@ -369,20 +369,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _afterLoad()
     {
-        if($this->getLinkModel()) {
+        if ($this->getLinkModel()) {
             $attributes = $this->getLinkAttributes();
-            foreach($this as $item) {
+            foreach ($this as $item) {
                 foreach ($attributes as $attribute) {
                     $code = $attribute['code'];
                     $value = $item->getData($code);
-                    if($value !== null) {
-                        if($attribute['type'] == 'decimal') {
-                            $item->setData($code,(float)$value);
+                    if ($value !== null) {
+                        if ($attribute['type'] == 'decimal') {
+                            $item->setData($code, (float)$value);
                         }
                     }
                 }
             }
         }
         return parent::_afterLoad();
-    }    
+    }
 }
