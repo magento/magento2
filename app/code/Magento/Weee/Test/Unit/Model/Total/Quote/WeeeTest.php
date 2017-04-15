@@ -298,7 +298,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $addressMock = $this->setupAddressMock($items);
-        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total(
+            [],
+            $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock()
+        );
         $shippingAssignmentMock = $this->setupShippingAssignmentMock($addressMock, $items);
 
         $taxHelper = $this->setupTaxHelper($taxConfig);
