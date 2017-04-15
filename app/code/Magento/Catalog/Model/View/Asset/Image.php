@@ -12,6 +12,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\OsInfo;
 
 /**
  * A locally available image file asset that can be referred with a file path
@@ -63,6 +64,11 @@ class Image implements LocalInterface
     private $assetRepo;
 
     /**
+     * @var OsInfo
+     */
+    private $osInfo;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
@@ -70,6 +76,7 @@ class Image implements LocalInterface
      * @param EncryptorInterface $encryptor
      * @param string $filePath
      * @param Repository $assetRepo
+     * @param OsInfo $osInfo
      * @param array $miscParams
      */
     public function __construct(
@@ -78,6 +85,7 @@ class Image implements LocalInterface
         EncryptorInterface $encryptor,
         $filePath,
         Repository $assetRepo,
+        OsInfo $osInfo,
         array $miscParams = []
     ) {
         $this->mediaConfig = $mediaConfig;
@@ -86,6 +94,7 @@ class Image implements LocalInterface
         $this->miscParams = $miscParams;
         $this->encryptor = $encryptor;
         $this->assetRepo = $assetRepo;
+        $this->osInfo = $osInfo;
     }
 
     /**
@@ -97,7 +106,7 @@ class Image implements LocalInterface
             return $this->getDefaultPlaceHolderUrl();
         }
 
-        return $this->context->getBaseUrl() . $this->getRelativePath(DIRECTORY_SEPARATOR);
+        return $this->context->getBaseUrl() . '/' . $this->getRelativePath('/');
     }
 
     /**
@@ -117,7 +126,11 @@ class Image implements LocalInterface
             $asset = $this->assetRepo->createAsset($this->getPlaceHolder());
             return $asset->getSourceFile();
         }
-        return $this->getRelativePath($this->context->getPath());
+        $relativePath = $this->getRelativePath($this->context->getPath());
+        if ($this->osInfo->isWindows()) {
+            return $relativePath;
+        }
+        return '/' . $relativePath;
     }
 
     /**
@@ -129,10 +142,7 @@ class Image implements LocalInterface
      */
     private function join($path, $item)
     {
-        return trim(
-            $path . ($item ? DIRECTORY_SEPARATOR . ltrim($item, DIRECTORY_SEPARATOR) : ''),
-            DIRECTORY_SEPARATOR
-        );
+        return trim($path . ($item ? '/' . ltrim($item, '/') : ''), '/');
     }
 
     /**
@@ -140,8 +150,7 @@ class Image implements LocalInterface
      */
     public function getSourceFile()
     {
-        return $this->mediaConfig->getBaseMediaPath()
-            . DIRECTORY_SEPARATOR . ltrim($this->filePath, DIRECTORY_SEPARATOR);
+        return $this->mediaConfig->getBaseMediaPath() . '/' . ltrim($this->filePath, '/');
     }
 
     /**
@@ -228,6 +237,6 @@ class Image implements LocalInterface
         $result = $this->join($result, $this->getModule());
         $result = $this->join($result, $this->getMiscPath());
         $result = $this->join($result, $this->getFilePath());
-        return DIRECTORY_SEPARATOR . $result;
+        return $result;
     }
 }
