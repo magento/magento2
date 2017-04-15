@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
 case $TEST_SUITE in
     static)
         TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
