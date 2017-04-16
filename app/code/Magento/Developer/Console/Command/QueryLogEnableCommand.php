@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\DB\Logger\LoggerProxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,24 +37,22 @@ class QueryLogEnableCommand extends Command
     const COMMAND_NAME = 'dev:query-log:enable';
 
     /**
-     * File logger alias
-     */
-    const FILE_LOGGER_ALIAS = 'file';
-
-    /**
      * @var Writer
      */
-    private $deploymentConfigWriter;
+    private $deployConfigWriter;
 
+    /**
+     * QueryLogEnableCommand constructor.
+     * @param Writer $deployConfigWriter
+     * @param null $name
+     */
     public function __construct(
-        Writer $deploymentConfigWriter,
+        Writer $deployConfigWriter,
         $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
-        $this->deploymentConfigWriter = $deploymentConfigWriter;
+        $this->deployConfigWriter = $deployConfigWriter;
     }
-
 
     /**
      * {@inheritdoc}
@@ -66,22 +65,22 @@ class QueryLogEnableCommand extends Command
         $this->addArgument(
             self::INPUT_ARG_LOG_ALL_QUERIES,
             InputArgument::OPTIONAL,
-            'Log all queries.',
-            'false'
+            'Log all queries. Options: "true" or "false"',
+            'true'
         );
 
         $this->addArgument(
             self::INPUT_ARG_LOG_QUERY_TIME,
             InputArgument::OPTIONAL,
-            'Query time.',
-            '0.05'
+            'Log query time.',
+            '0.001'
         );
 
         $this->addArgument(
             self::INPUT_ARG_LOG_CALL_STACK,
             InputArgument::OPTIONAL,
-            'Log call stack.',
-            'false'
+            'Log call stack. Options: "true" or "false"',
+            'true'
         );
 
         parent::configure();
@@ -93,18 +92,17 @@ class QueryLogEnableCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $data = ['db_logger_alias' => 'file'];
-        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
+        $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_FILE];
 
-//        $data = [
-//            'db_logger' => [
-//                'logger_alias' => 'file',
-//                'log_all_queries' => false,
-//                'log_query_time' => '0.05',
-//                'log_call_stack' => false,
-//            ]
-//        ];
-//        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
+        $logAllQueries = $input->getArgument(self::INPUT_ARG_LOG_ALL_QUERIES);
+        $logQueryTime = $input->getArgument(self::INPUT_ARG_LOG_QUERY_TIME);
+        $logCallStack = $input->getArgument(self::INPUT_ARG_LOG_CALL_STACK);
+
+        $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
+        $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime,3);
+        $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack != 'false');
+
+        $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
 
         $output->writeln("<info>DB query logging enabled.</info>");
     }

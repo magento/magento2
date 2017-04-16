@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\DB\Logger;
 
 class LoggerProxy extends LoggerAbstract
@@ -11,12 +10,32 @@ class LoggerProxy extends LoggerAbstract
     /**
      * Logger alias param name
      */
-    const PARAM_ALIAS = 'db_logger_alias';
+    const PARAM_ALIAS = 'db_logger_mode';
+
+    /**
+     * Logger log all param name
+     */
+    const PARAM_LOG_ALL = 'db_logger_all';
+
+    /**
+     * Logger query time param name
+     */
+    const PARAM_QUERY_TIME = 'db_logger_query_time';
+
+    /**
+     * Logger call stack param name
+     */
+    const PARAM_CALL_STACK = 'db_logger_stack';
 
     /**
      * File logger alias
      */
-    const FILE_LOGGER_ALIAS = 'file';
+    const LOGGER_ALIAS_FILE = 'file';
+
+    /**
+     * Quiet logger alias
+     */
+    const LOGGER_ALIAS_DISABLED = 'disabled';
 
     /**
      * @var LoggerAbstract
@@ -25,28 +44,27 @@ class LoggerProxy extends LoggerAbstract
 
     /**
      * LoggerProxy constructor.
-     * @param FileFactory $loggerFileFactory
-     * @param QuietFactory $loggerQuietFactory
+     * @param File $file
+     * @param Quiet $quiet
      * @param bool $loggerAlias
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
      */
     public function __construct(
-        FileFactory $loggerFileFactory,
-        QuietFactory $loggerQuietFactory,
+        File $file,
+        Quiet $quiet,
         $loggerAlias,
-        $logAllQueries = false,
-        $logQueryTime = 0.05,
-        $logCallStack = false
-    )
-    {
+        $logAllQueries = true,
+        float $logQueryTime = 0.001,
+        $logCallStack = true
+    ) {
         switch ($loggerAlias) {
-            case self::FILE_LOGGER_ALIAS:
-                $this->logger = $loggerFileFactory->create();
+            case self::LOGGER_ALIAS_FILE:
+                $this->logger = $file;
                 break;
             default:
-                $this->logger = $loggerQuietFactory->create();
+                $this->logger = $quiet;
                 break;
         }
 

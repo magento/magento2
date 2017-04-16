@@ -7,11 +7,11 @@
 namespace Magento\Developer\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\DB\Logger\LoggerProxy;
 
 class QueryLogDisableCommand extends Command
 {
@@ -21,22 +21,21 @@ class QueryLogDisableCommand extends Command
     const COMMAND_NAME = 'dev:query-log:disable';
 
     /**
-     * File logger alias
-     */
-    const QUIET_LOGGER_ALIAS = 'quiet';
-
-    /**
      * @var Writer
      */
-    private $deploymentConfigWriter;
+    private $deployConfigWriter;
 
+    /**
+     * QueryLogDisableCommand constructor.
+     * @param Writer $deployConfigWriter
+     * @param null $name
+     */
     public function __construct(
-        Writer $deploymentConfigWriter,
+        Writer $deployConfigWriter,
         $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
-        $this->deploymentConfigWriter = $deploymentConfigWriter;
+        $this->deployConfigWriter = $deployConfigWriter;
     }
 
     /**
@@ -56,8 +55,8 @@ class QueryLogDisableCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $data = ['db_logger_alias' => 'quiet'];
-        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
+        $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_DISABLED];
+        $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
 
         $output->writeln("<info>DB query logging disabled.</info>");
     }
