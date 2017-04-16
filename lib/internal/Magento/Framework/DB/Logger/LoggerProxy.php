@@ -56,7 +56,7 @@ class LoggerProxy extends LoggerAbstract
         Quiet $quiet,
         $loggerAlias,
         $logAllQueries = true,
-        float $logQueryTime = 0.001,
+        $logQueryTime = 0.001,
         $logCallStack = true
     ) {
         switch ($loggerAlias) {

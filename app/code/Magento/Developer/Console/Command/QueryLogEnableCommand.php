@@ -99,7 +99,7 @@ class QueryLogEnableCommand extends Command
         $logCallStack = $input->getArgument(self::INPUT_ARG_LOG_CALL_STACK);
 
         $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
-        $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime,3);
+        $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime, 3);
         $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack != 'false');
 
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
