@@ -365,6 +365,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * After the collection has been loaded
      *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @return $this
      */
     protected function _afterLoad()
