@@ -37,6 +37,11 @@ class QueryLogEnableCommand extends Command
     const COMMAND_NAME = 'dev:query-log:enable';
 
     /**
+     * Success message
+     */
+    const SUCCESS_MESSAGE = "DB query logging enabled.";
+
+    /**
      * @var Writer
      */
     private $deployConfigWriter;
@@ -104,6 +109,6 @@ class QueryLogEnableCommand extends Command
 
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
 
-        $output->writeln("<info>DB query logging enabled.</info>");
+        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
     }
 }

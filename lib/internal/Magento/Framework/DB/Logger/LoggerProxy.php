@@ -72,6 +72,14 @@ class LoggerProxy extends LoggerAbstract
     }
 
     /**
+     * @return LoggerAbstract|Quiet
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
      * Adds log record
      *
      * @param string $str

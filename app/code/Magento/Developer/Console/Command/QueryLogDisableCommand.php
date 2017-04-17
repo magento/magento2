@@ -21,6 +21,11 @@ class QueryLogDisableCommand extends Command
     const COMMAND_NAME = 'dev:query-log:disable';
 
     /**
+     * Success message
+     */
+    const SUCCESS_MESSAGE = "DB query logging disabled.";
+
+    /**
      * @var Writer
      */
     private $deployConfigWriter;
@@ -58,6 +63,6 @@ class QueryLogDisableCommand extends Command
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_DISABLED];
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
 
-        $output->writeln("<info>DB query logging disabled.</info>");
+        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
     }
 }
