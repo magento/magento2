@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global WeakMap */
 define([
     'es6-collections'
 ], function () {

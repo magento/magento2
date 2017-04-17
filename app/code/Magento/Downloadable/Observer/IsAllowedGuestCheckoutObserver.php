@@ -42,8 +42,6 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
         $store = $observer->getEvent()->getStore();
         $result = $observer->getEvent()->getResult();
 
-        $result->setIsAllowed(true);
-
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,
             ScopeInterface::SCOPE_STORE,

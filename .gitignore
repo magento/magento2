@@ -41,6 +41,7 @@ atlassian*
 !/pub/media/customer/.htaccess
 /pub/media/downloadable/*
 !/pub/media/downloadable/.htaccess
+/pub/media/favicon/*
 /pub/media/import/*
 !/pub/media/import/.htaccess
 /pub/media/theme/*

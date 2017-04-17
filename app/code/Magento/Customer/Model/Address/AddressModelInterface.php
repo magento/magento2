@@ -8,6 +8,8 @@ namespace Magento\Customer\Model\Address;
 
 /**
  * Interface AddressInterface
+ *
+ * @api
  */
 interface AddressModelInterface
 {

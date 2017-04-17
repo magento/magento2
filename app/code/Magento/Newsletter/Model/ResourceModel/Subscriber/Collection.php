@@ -11,6 +11,8 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  * Newsletter subscribers collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
