@@ -258,7 +258,7 @@ class Builder
             $result = new \Magento\Framework\Validator\Constraint\Property(
                 $validator,
                 $data['property'],
-                ['alias']
+                $data['alias']
             );
         } else {
             $result = $this->_constraintFactory->create(['validator' => $validator, 'alias' => $data['alias']]);
