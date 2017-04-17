@@ -15,6 +15,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Widget\Setup\LayoutUpdateConverter;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -96,7 +97,22 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             ]
         );
-
+        $layoutUpdateXmlFieldQueryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'layout_update_xml' => '%conditions_encoded%'
+                ]
+            ]
+        );
+        $customLayoutUpdateXmlFieldQueryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'custom_layout_update_xml' => '%conditions_encoded%'
+                ]
+            ]
+        );
         $blockMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
         $pageMetadata = $this->metadataPool->getMetadata(PageInterface::class);
         $this->aggregatedFieldConverter->convert(
@@ -114,6 +130,20 @@ class UpgradeData implements UpgradeDataInterface
                     $pageMetadata->getIdentifierField(),
                     'content',
                     $queryModifier
+                ),
+                new FieldToConvert(
+                    LayoutUpdateConverter::class,
+                    $setup->getTable('cms_page'),
+                    $pageMetadata->getIdentifierField(),
+                    'layout_update_xml',
+                    $layoutUpdateXmlFieldQueryModifier
+                ),
+                new FieldToConvert(
+                    LayoutUpdateConverter::class,
+                    $setup->getTable('cms_page'),
+                    $pageMetadata->getIdentifierField(),
+                    'custom_layout_update_xml',
+                    $customLayoutUpdateXmlFieldQueryModifier
                 ),
             ],
             $setup->getConnection()

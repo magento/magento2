@@ -7,7 +7,7 @@ namespace Magento\Widget\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 
@@ -22,7 +22,7 @@ class LayoutUpdateConverter extends SerializedToJson
     private $normalizer;
 
     /**
-     * LayoutUpdateConverter constructor.
+     * Constructor
      *
      * @param Serialize $serialize
      * @param Json $json

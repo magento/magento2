@@ -5,9 +5,11 @@
  */
 namespace Magento\Widget\Setup;
 
-class LayoutUpdateConverterTest extends \Magento\TestFramework\TestCase\AbstractController
+class LayoutUpdateConverterTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var LayoutUpdateConverter */
+    /**
+     * @var LayoutUpdateConverter
+     */
     private $converter;
 
     protected function setUp()

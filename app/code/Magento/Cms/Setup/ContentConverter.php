@@ -5,11 +5,12 @@
  */
 namespace Magento\Cms\Setup;
 
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Filter\Template\Tokenizer\ParameterFactory;
 
 /**
  * Convert conditions_encoded part of cms block content data from serialized to JSON format
@@ -17,7 +18,7 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 class ContentConverter extends SerializedToJson
 {
     /**
-     * @var \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory
+     * @var ParameterFactory
      */
     private $parameterFactory;
 
@@ -31,13 +32,13 @@ class ContentConverter extends SerializedToJson
      *
      * @param Serialize $serialize
      * @param Json $json
-     * @param \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory
+     * @param ParameterFactory $parameterFactory
      * @param Normalizer $normalizer
      */
     public function __construct(
         Serialize $serialize,
         Json $json,
-        \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory,
+        ParameterFactory $parameterFactory,
         Normalizer $normalizer
     ) {
         $this->parameterFactory = $parameterFactory;

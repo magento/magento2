@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Widget\Wysiwyg;
+namespace Magento\Framework\Data\Wysiwyg;
 
 /**
  * Normalize widget content in Wysiwyg editor
