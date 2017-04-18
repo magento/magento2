@@ -503,13 +503,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
+            $params = $args;
             if ($useItemCallback) {
                 $cb = [$item, $callback];
             } else {
                 $cb = $callback;
-                array_unshift($args, $item);
+                array_unshift($params, $item);
             }
-            $results[$id] = call_user_func_array($cb, $args);
+            $results[$id] = call_user_func_array($cb, $params);
         }
         return $results;
     }

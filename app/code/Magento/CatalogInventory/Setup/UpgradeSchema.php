@@ -29,6 +29,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->upgradeProductCompositeKey($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.3.0', '<')) {
+            $this->addReplicaTable($setup, 'cataloginventory_stock_status', 'cataloginventory_stock_status_replica');
+        }
         $setup->endSetup();
     }
 
@@ -119,5 +122,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         return $foreignKeys;
+    }
+
+    /**
+     * Add replica table for existing one.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param string $existingTable
+     * @param string $replicaTable
+     * @return void
+     */
+    private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
+    {
+        $setup->getConnection()->createTable(
+            $setup->getConnection()->createTableByDdl(
+                $setup->getTable($existingTable),
+                $setup->getTable($replicaTable)
+            )
+        );
     }
 }
