@@ -50,6 +50,36 @@ class LoggerProxy implements LoggerInterface
     private $logger;
 
     /**
+     * @var FileFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @var QuietFactory
+     */
+    private $quietFactory;
+
+    /**
+     * @var bool
+     */
+    private $loggerAlias;
+
+    /**
+     * @var bool
+     */
+    private $logAllQueries;
+
+    /**
+     * @var float
+     */
+    private $logQueryTime;
+
+    /**
+     * @var bool
+     */
+    private $logCallStack;
+
+    /**
      * LoggerProxy constructor.
      * @param FileFactory $fileFactory
      * @param QuietFactory $quietFactory
@@ -66,27 +96,36 @@ class LoggerProxy implements LoggerInterface
         $logQueryTime = 0.001,
         $logCallStack = true
     ) {
-        switch ($loggerAlias) {
-            case self::LOGGER_ALIAS_FILE:
-                $this->logger = $fileFactory->create(
-                    [
-                        'logAllQueries' => $logAllQueries,
-                        'logQueryTime' => $logQueryTime,
-                        'logCallStack' => $logCallStack,
-                    ]
-                );
-                break;
-            default:
-                $this->logger = $quietFactory->create();
-                break;
-        }
+        $this->fileFactory = $fileFactory;
+        $this->quietFactory = $quietFactory;
+        $this->loggerAlias = $loggerAlias;
+        $this->logAllQueries = $logAllQueries;
+        $this->logQueryTime = $logQueryTime;
+        $this->logCallStack = $logCallStack;
     }
 
     /**
+     * Get logger object. Initialize if needed.
      * @return LoggerInterface
      */
     public function getLogger()
     {
+        if($this->logger === null) {
+            switch ($this->loggerAlias) {
+                case self::LOGGER_ALIAS_FILE:
+                    $this->logger = $this->fileFactory->create(
+                        [
+                            'logAllQueries' => $this->logAllQueries,
+                            'logQueryTime' => $this->logQueryTime,
+                            'logCallStack' => $this->logCallStack,
+                        ]
+                    );
+                    break;
+                default:
+                    $this->logger = $this->quietFactory->create();
+                    break;
+            }
+        }
         return $this->logger;
     }
 
@@ -98,7 +137,7 @@ class LoggerProxy implements LoggerInterface
      */
     public function log($str)
     {
-        $this->logger->log($str);
+        $this->getLogger()->log($str);
     }
 
     /**
@@ -110,7 +149,7 @@ class LoggerProxy implements LoggerInterface
      */
     public function logStats($type, $sql, $bind = [], $result = null)
     {
-        $this->logger->logStats($type, $sql, $bind, $result);
+        $this->getLogger()->logStats($type, $sql, $bind, $result);
     }
 
     /**
@@ -119,7 +158,7 @@ class LoggerProxy implements LoggerInterface
      */
     public function critical(\Exception $exception)
     {
-        $this->logger->critical($exception);
+        $this->getLogger()->critical($exception);
     }
 
     /**
@@ -127,6 +166,6 @@ class LoggerProxy implements LoggerInterface
      */
     public function startTimer()
     {
-        $this->logger->startTimer();
+        $this->getLogger()->startTimer();
     }
 }
