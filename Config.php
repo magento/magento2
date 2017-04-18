@@ -8,6 +8,7 @@ namespace Magento\Framework\Amqp;
 use Magento\Framework\App\DeploymentConfig;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AMQPSSLConnection;
 
 /**
  * Reads the Amqp config in the deployed environment configuration
@@ -30,6 +31,7 @@ class Config
     const PASSWORD = 'password';
     const VIRTUALHOST = 'virtualhost';
     const SSL = 'ssl';
+    const SSL_OPTIONS = 'ssl_options';
 
     /**
      * Deployment configuration
@@ -64,6 +66,22 @@ class Config
 
     /**
      * Initialize dependencies.
+     *
+     * Example environment config:
+     * <code>
+     * 'queue' =>
+     *     [
+     *         'amqp' => [
+     *             'host' => 'localhost',
+     *             'port' => 5672,
+     *             'username' => 'guest',
+     *             'password' => 'guest',
+     *             'virtual_host' => '/',
+     *             'ssl' => false,
+     *             'ssl_options' => [],
+     *         ],
+     *     ],
+     * </code>
      *
      * @param DeploymentConfig $config
      * @param string $connectionName
@@ -106,13 +124,9 @@ class Config
     public function getChannel()
     {
         if (!isset($this->connection) || !isset($this->channel)) {
-            $this->connection = new AMQPStreamConnection(
-                $this->getValue(Config::HOST),
-                $this->getValue(Config::PORT),
-                $this->getValue(Config::USERNAME),
-                $this->getValue(Config::PASSWORD),
-                $this->getValue(Config::VIRTUALHOST)
-            );
+            $this->connection = $this->getValue(self::SSL) ? $this->createSecureConnection() :
+                $this->createUnsecureConnection();
+
             $this->channel = $this->connection->channel();
         }
         return $this->channel;
@@ -157,5 +171,44 @@ class Config
             $this->connection->close();
             unset($this->connection);
         }
+    }
+
+    /**
+     * @return AMQPStreamConnection
+     */
+    private function createUnsecureConnection()
+    {
+        return new AMQPStreamConnection(
+            $this->getValue(self::HOST),
+            $this->getValue(self::PORT),
+            $this->getValue(self::USERNAME),
+            $this->getValue(self::PASSWORD),
+            $this->getValue(self::VIRTUALHOST)
+        );
+    }
+
+    /**
+     * Create secure connection to AMQP server.
+     *
+     * Note: when you are passing empty array of SSL options PHP-AMQPLIB will actually create unsecure connection.
+     *
+     * @return AMQPSSLConnection
+     */
+    private function createSecureConnection()
+    {
+        $sslOptions = $this->getValue(self::SSL_OPTIONS);
+
+        if (empty($sslOptions)) {
+            $sslOptions = ['verify_peer' => true];
+        }
+
+        return new AMQPSSLConnection(
+            $this->getValue(self::HOST),
+            $this->getValue(self::PORT),
+            $this->getValue(self::USERNAME),
+            $this->getValue(self::PASSWORD),
+            $this->getValue(self::VIRTUALHOST),
+            $sslOptions
+        );
     }
 }

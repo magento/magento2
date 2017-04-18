@@ -76,7 +76,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedUsername = 'guest_username';
         $expectedPassword = 'guest_password';
         $expectedVirtualHost = '/';
-        $expectedSsl = ['some' => 'value'];
+        $expectedSsl = false;
+        $expectedSslOptions = ['some' => 'value'];
 
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
@@ -90,6 +91,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'password' => $expectedPassword,
                         'virtualhost' => $expectedVirtualHost,
                         'ssl' => $expectedSsl,
+                        'ssl_options' => $expectedSslOptions,
                         'randomKey' => 'randomValue',
                     ]
                 ]
@@ -101,6 +103,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPassword, $this->amqpConfig->getValue(Config::PASSWORD));
         $this->assertEquals($expectedVirtualHost, $this->amqpConfig->getValue(Config::VIRTUALHOST));
         $this->assertEquals($expectedSsl, $this->amqpConfig->getValue(Config::SSL));
+        $this->assertEquals($expectedSslOptions, $this->amqpConfig->getValue(Config::SSL_OPTIONS));
         $this->assertEquals('randomValue', $this->amqpConfig->getValue('randomKey'));
     }
 
