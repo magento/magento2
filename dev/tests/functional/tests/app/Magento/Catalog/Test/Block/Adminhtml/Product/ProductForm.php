@@ -73,6 +73,13 @@ class ProductForm extends FormSections
     protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
 
     /**
+     * Website checkbox xpath selector.
+     *
+     * @var string
+     */
+    protected $websiteCheckbox = '//label[text()="%s"]/../input';
+
+    /**
      * Fill the product form.
      *
      * @param FixtureInterface $product
@@ -136,6 +143,17 @@ class ProductForm extends FormSections
             parent::openSection($sectionName);
         }
         return $this;
+    }
+
+    /**
+     * Unassign product from website by website name.
+     *
+     * @param string $name
+     */
+    public function unassignFromWebsite($name)
+    {
+        $this->openSection('websites');
+        $this->_rootElement->find(sprintf($this->websiteCheckbox, $name), Locator::SELECTOR_XPATH)->click();
     }
 
     /**
