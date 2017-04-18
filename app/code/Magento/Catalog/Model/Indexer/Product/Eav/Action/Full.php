@@ -77,7 +77,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
                 );
 
                 foreach ($batches as $batch) {
-                    /** @var  $select */
+                    /** @var \Magento\Framework\DB\Select $select */
                     $select = $connection->select();
                     $select->distinct(true);
                     $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
