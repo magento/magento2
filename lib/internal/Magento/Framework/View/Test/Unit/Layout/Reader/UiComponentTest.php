@@ -10,6 +10,8 @@
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\AclCondition;
+use Magento\Framework\View\Layout\ConfigCondition;
 use Magento\Framework\View\Layout\Reader\Context;
 use Magento\Framework\View\Layout\Reader\UiComponent;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
@@ -86,13 +88,13 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
                     'aclResource' => 'test_acl',
                     'visibilityConditions' => [
                         'ifconfig' => [
-                            'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                            'name' => ConfigCondition::class,
                             'arguments' => [
                                 'configPath' => 'config_path'
                             ],
                         ],
                         'acl' => [
-                            'name' => 'Magento\Framework\View\Layout\AclCondition',
+                            'name' => AclCondition::class,
                             'arguments' => [
                                 'acl' => 'test_acl'
                             ],

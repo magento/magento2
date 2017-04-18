@@ -7,7 +7,9 @@ namespace Magento\Framework\View\Layout\Reader\Visibility;
 
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Simplexml\Element;
+use Magento\Framework\View\Layout\AclCondition;
 use Magento\Framework\View\Layout\Argument\Parser;
+use Magento\Framework\View\Layout\ConfigCondition;
 
 /**
  * Parse conditions from element.
@@ -41,7 +43,6 @@ class Condition
         $this->argumentInterpreter = $argumentInterpreter;
     }
 
-
     /**
      * @param Element $element
      *
@@ -53,7 +54,7 @@ class Condition
         $configPath = (string)$element->getAttribute('ifconfig');
         if (!empty($configPath)) {
             $visibilityConditions['ifconfig'] = [
-                'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                'name' => ConfigCondition::class,
                 'arguments' => [
                     'configPath' => $configPath
                 ],
@@ -63,7 +64,7 @@ class Condition
         $aclResource = (string)$element->getAttribute('aclResource');
         if (!empty($aclResource)) {
             $visibilityConditions['acl'] = [
-                'name' => 'Magento\Framework\View\Layout\AclCondition',
+                'name' => AclCondition::class,
                 'arguments' => [
                     'acl' => $aclResource
                 ],

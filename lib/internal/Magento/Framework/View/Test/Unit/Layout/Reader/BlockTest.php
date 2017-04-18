@@ -10,6 +10,8 @@
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\AclCondition;
+use Magento\Framework\View\Layout\ConfigCondition;
 use Magento\Framework\View\Layout\Reader\Block;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
@@ -179,7 +181,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 '',
                 [
                     'acl' => [
-                        'name' => 'Magento\Framework\View\Layout\AclCondition',
+                        'name' => AclCondition::class,
                         'arguments' => [
                             'acl' => 'test'
                         ],
@@ -196,13 +198,13 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 'config_path',
                 [
                     'acl' => [
-                        'name' => 'Magento\Framework\View\Layout\AclCondition',
+                        'name' => AclCondition::class,
                         'arguments' => [
                             'acl' => 'test'
                         ],
                     ],
                     'ifconfig' => [
-                        'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                        'name' => ConfigCondition::class,
                         'arguments' => [
                             'configPath' => 'config_path'
                         ],
@@ -219,13 +221,13 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 '',
                 [
                     'acl' => [
-                        'name' => 'Magento\Framework\View\Layout\AclCondition',
+                        'name' => AclCondition::class,
                         'arguments' => [
                             'acl' => 'test'
                         ],
                     ],
                     'ifconfig' => [
-                        'name' => 'Magento\Framework\View\Layout\ConfigCondition',
+                        'name' => ConfigCondition::class,
                         'arguments' => [
                             'configPath' => 'config_path'
                         ],
