@@ -86,7 +86,13 @@ class QueryLogEnableCommandTest extends \PHPUnit_Framework_TestCase
             ->with([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['false', '0.05', 'false']);
+        $commandTester->execute(
+            [
+                '--include-all-queries' => 'false',
+                '--include-call-stack' => 'false',
+                '--query-time-threshold' => '0.05',
+            ]
+        );
         $this->assertSame(
             QueryLogEnableCommand::SUCCESS_MESSAGE . PHP_EOL,
             $commandTester->getDisplay()

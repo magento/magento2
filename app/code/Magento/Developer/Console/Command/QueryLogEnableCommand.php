@@ -8,8 +8,8 @@ namespace Magento\Developer\Console\Command;
 
 use Magento\Framework\DB\Logger\LoggerProxy;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -19,17 +19,17 @@ class QueryLogEnableCommand extends Command
     /**
      * input parameter log-all-queries
      */
-    const INPUT_ARG_LOG_ALL_QUERIES = 'log-all-queries';
+    const INPUT_ARG_LOG_ALL_QUERIES = 'include-all-queries';
 
     /**
      * input parameter log-query-time
      */
-    const INPUT_ARG_LOG_QUERY_TIME = 'log-query-time';
+    const INPUT_ARG_LOG_QUERY_TIME = 'query-time-threshold';
 
     /**
      * input parameter log-call-stack
      */
-    const INPUT_ARG_LOG_CALL_STACK = 'log-call-stack';
+    const INPUT_ARG_LOG_CALL_STACK = 'include-call-stack';
 
     /**
      * command name
@@ -65,28 +65,32 @@ class QueryLogEnableCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Enable DB query logging');
-
-        $this->addArgument(
-            self::INPUT_ARG_LOG_ALL_QUERIES,
-            InputArgument::OPTIONAL,
-            'Log all queries. Options: "true" or "false"',
-            'true'
-        );
-
-        $this->addArgument(
-            self::INPUT_ARG_LOG_QUERY_TIME,
-            InputArgument::OPTIONAL,
-            'Log query time.',
-            '0.001'
-        );
-
-        $this->addArgument(
-            self::INPUT_ARG_LOG_CALL_STACK,
-            InputArgument::OPTIONAL,
-            'Log call stack. Options: "true" or "false"',
-            'true'
-        );
+            ->setDescription('Enable DB query logging')
+            ->setDefinition(
+                [
+                    new InputOption(
+                        self::INPUT_ARG_LOG_ALL_QUERIES,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Log all queries. [true|false]',
+                        "true"
+                    ),
+                    new InputOption(
+                        self::INPUT_ARG_LOG_QUERY_TIME,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Query time thresholds.',
+                        "0.001"
+                    ),
+                    new InputOption(
+                        self::INPUT_ARG_LOG_CALL_STACK,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Include call stack. [true|false]',
+                        "true"
+                    ),
+                ]
+            );
 
         parent::configure();
     }
@@ -99,9 +103,9 @@ class QueryLogEnableCommand extends Command
     {
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_FILE];
 
-        $logAllQueries = $input->getArgument(self::INPUT_ARG_LOG_ALL_QUERIES);
-        $logQueryTime = $input->getArgument(self::INPUT_ARG_LOG_QUERY_TIME);
-        $logCallStack = $input->getArgument(self::INPUT_ARG_LOG_CALL_STACK);
+        $logAllQueries = $input->getOption(self::INPUT_ARG_LOG_ALL_QUERIES);
+        $logQueryTime = $input->getOption(self::INPUT_ARG_LOG_QUERY_TIME);
+        $logCallStack = $input->getOption(self::INPUT_ARG_LOG_CALL_STACK);
 
         $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
         $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime, 3);
