@@ -5,11 +5,12 @@
  */
 namespace Magento\Config\Model;
 
+use Magento\Config\Model\Config\BackendFactory;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\StructureFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
@@ -39,23 +40,33 @@ class PreparedValueFactory
      * The factory for configuration value objects.
      *
      * @see ValueInterface
-     * @var ValueFactory
+     * @var BackendFactory
      */
     private $valueFactory;
 
     /**
+     * The scope configuration.
+     *
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
      * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
      * @param StructureFactory $structureFactory The manager for system configuration structure
-     * @param ValueFactory $valueFactory The factory for configuration value objects
+     * @param BackendFactory $valueFactory The factory for configuration value objects
+     * @param ScopeConfigInterface $config The scope configuration
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,
         StructureFactory $structureFactory,
-        ValueFactory $valueFactory
+        BackendFactory $valueFactory,
+        ScopeConfigInterface $config
     ) {
         $this->scopeResolverPool = $scopeResolverPool;
         $this->structureFactory = $structureFactory;
         $this->valueFactory = $valueFactory;
+        $this->config = $config;
     }
 
     /**
@@ -77,10 +88,19 @@ class PreparedValueFactory
             $structure = $this->structureFactory->create();
             /** @var Structure\ElementInterface $field */
             $field = $structure->getElement($path);
+            $configPath = $path;
+            /** @var string $backendModelName */
+            if ($field instanceof Structure\Element\Field && $field->hasBackendModel()) {
+                $backendModelName = $field->getData()['backend_model'];
+                $configPath = $field->getConfigPath() ?: $path;
+            } else {
+                $backendModelName = ValueInterface::class;
+            }
             /** @var ValueInterface $backendModel */
-            $backendModel = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-                ? $field->getBackendModel()
-                : $this->valueFactory->create();
+            $backendModel = $this->valueFactory->create(
+                $backendModelName,
+                ['config' => $this->config]
+            );
 
             if ($backendModel instanceof Value) {
                 $scopeId = 0;
@@ -90,7 +110,7 @@ class PreparedValueFactory
                     $scopeId = $scopeResolver->getScope($scopeCode)->getId();
                 }
 
-                $backendModel->setPath($path);
+                $backendModel->setPath($configPath);
                 $backendModel->setScope($scope);
                 $backendModel->setScopeId($scopeId);
                 $backendModel->setValue($value);
