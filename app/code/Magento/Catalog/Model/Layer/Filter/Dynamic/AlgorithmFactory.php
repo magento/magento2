@@ -49,8 +49,8 @@ class AlgorithmFactory
     public function __construct(
         ObjectManagerInterface $objectManager,
         ScopeConfigInterface $scopeConfig,
-        array $algorithms)
-    {
+        array $algorithms
+    ) {
         $this->objectManager = $objectManager;
         $this->scopeConfig = $scopeConfig;
         $this->algorithms = $algorithms;
