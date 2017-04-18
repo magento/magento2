@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\DB\Logger;
+namespace Magento\Framework\DB\Test\Unit\DB\Logger;
 
 use Magento\Framework\DB\Logger\FileFactory;
 use Magento\Framework\DB\Logger\QuietFactory;
