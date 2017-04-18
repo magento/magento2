@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'Magento_Checkout/js/model/shipping-save-processor/default'
 ], function (defaultProcessor) {

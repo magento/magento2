@@ -111,7 +111,7 @@ class Links extends Block
         $linksData = [];
 
         $choiceLinks = $this->_rootElement->getElements($this->choiceLink, Locator::SELECTOR_XPATH);
-        foreach ($choiceLinks as $choiceLink) {
+        foreach ($choiceLinks as $key => $choiceLink) {
             $link = $choiceLink->find($this->linkForChoice);
             $sample = $choiceLink->find($this->sampleLinkForChoice);
             $price = $choiceLink->find($this->priceForChoice);
@@ -129,7 +129,7 @@ class Links extends Block
                     : null,
             ];
 
-            $linksData[] = array_filter($linkData);
+            $linksData[$key + 1] = array_filter($linkData);
         }
 
         return $linksData;
