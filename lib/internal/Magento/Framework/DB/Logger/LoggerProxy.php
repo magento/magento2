@@ -114,12 +114,12 @@ class LoggerProxy implements LoggerInterface
     }
 
     /**
-     * @param \Exception $e
+     * @param \Exception $exception
      * @return void
      */
-    public function critical(\Exception $e)
+    public function critical(\Exception $exception)
     {
-        $this->logger->critical($e);
+        $this->logger->critical($exception);
     }
 
     /**
