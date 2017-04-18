@@ -13,12 +13,12 @@ use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
- * Assert product MSRP related data on category page.
+ * Assert product MAP related data on category page.
  */
-class AssertMsrpOnCategoryPage extends AbstractConstraint
+class AssertMapOnCategoryPage extends AbstractConstraint
 {
     /**
-     * Assert product MSRP related data on category page.
+     * Assert product MAP related data on category page.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
@@ -35,20 +35,19 @@ class AssertMsrpOnCategoryPage extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
 
         $productBlock = $catalogCategoryView->getMsrpListProductBlock()->getProductItem($product);
-        \PHPUnit_Framework_Assert::assertTrue(
-            $productBlock->isVisible(),
-            'Product is invisible on Category page.'
-        );
-
-        $priceBlock = $productBlock->getPriceBlock();
+        $productBlock->openMapBlock();
+        $mapBlock = $productBlock->getMapBlock();
         \PHPUnit_Framework_Assert::assertEquals(
             $product->getMsrp(),
-            $priceBlock->getOldPrice(),
-            'Displayed on Category page MSRP is incorrect.'
+            $mapBlock->getOldPrice(),
+            'Displayed on Category page MAP is incorrect.'
         );
-        \PHPUnit_Framework_Assert::assertFalse(
-            $priceBlock->isRegularPriceVisible(),
-            'Regular price on Category page is visible and not expected.'
+        $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
+        $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
+        \PHPUnit_Framework_Assert::assertEquals(
+            $price,
+            $mapBlock->getActualPrice(),
+            'Displayed on Category page price is incorrect.'
         );
     }
 
@@ -59,6 +58,6 @@ class AssertMsrpOnCategoryPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MSRP data on category page is correct.";
+        return "Displayed Product MAP data on category page is correct.";
     }
 }
