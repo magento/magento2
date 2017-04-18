@@ -12,6 +12,8 @@ use Magento\Framework\EntityManager\MetadataPool;
  * Wishlist item collection
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
