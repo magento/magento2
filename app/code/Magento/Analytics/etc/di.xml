@@ -141,4 +141,54 @@
     <type name="Magento\Config\Model\Config\Backend\Baseurl">
         <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
     </type>
+    <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">\Magento\Analytics\Model\Connector\ResponseHandler\SignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UpdateResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\Update</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OtpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\OTP</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="NotifyDataChangedResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Analytics\Model\Connector\SignUpCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">SignUpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\UpdateCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\OTPRequest">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">OtpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\NotifyDataChangedCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">NotifyDataChangedResponseResolver</argument>
+        </arguments>
+    </type>
 </config>
