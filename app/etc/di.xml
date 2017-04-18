@@ -1320,10 +1320,10 @@
     </type>
     <type name="Magento\Framework\DB\Logger\LoggerProxy">
         <arguments>
-            <argument name="loggerAlias" xsi:type="init_parameter">\Magento\Framework\DB\Logger\LoggerProxy::PARAM_ALIAS</argument>
-            <argument name="logAllQueries" xsi:type="init_parameter">\Magento\Framework\DB\Logger\LoggerProxy::PARAM_LOG_ALL</argument>
-            <argument name="logQueryTime" xsi:type="init_parameter">\Magento\Framework\DB\Logger\LoggerProxy::PARAM_QUERY_TIME</argument>
-            <argument name="logCallStack" xsi:type="init_parameter">\Magento\Framework\DB\Logger\LoggerProxy::PARAM_CALL_STACK</argument>
+            <argument name="loggerAlias" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_OUTPUT</argument>
+            <argument name="logAllQueries" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING</argument>
+            <argument name="logQueryTime" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD</argument>
+            <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
 

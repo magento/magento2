@@ -51,7 +51,7 @@ class QueryLogDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->configWriter
             ->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => $data]);
+            ->with([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);

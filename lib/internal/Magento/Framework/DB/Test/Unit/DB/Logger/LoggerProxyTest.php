@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Test\Unit\DB\Logger;
 
+use Magento\Framework\DB\Logger\FileFactory;
+use Magento\Framework\DB\Logger\QuietFactory;
 use Magento\Framework\DB\Logger\LoggerProxy;
 use Magento\Framework\DB\Logger\File;
 use Magento\Framework\DB\Logger\Quiet;
@@ -36,9 +38,23 @@ class LoggerProxyTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewWithAliasFile()
     {
+        $fileLoggerMock = $this->getMockBuilder(File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $fileLoggerFactoryMock = $this->getMockBuilder(FileFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $fileLoggerFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($fileLoggerMock);
+
         $this->loggerProxy = $this->objectManager->getObject(
             LoggerProxy::class,
             [
+                'fileFactory' => $fileLoggerFactoryMock,
                 'loggerAlias' => LoggerProxy::LOGGER_ALIAS_FILE,
             ]
         );
@@ -51,9 +67,23 @@ class LoggerProxyTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewWithAliasDisabled()
     {
+        $quietLoggerMock = $this->getMockBuilder(Quiet::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $quietLoggerFactoryMock = $this->getMockBuilder(QuietFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $quietLoggerFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($quietLoggerMock);
+
         $this->loggerProxy = $this->objectManager->getObject(
             LoggerProxy::class,
             [
+                'quietFactory' => $quietLoggerFactoryMock,
                 'loggerAlias' => LoggerProxy::LOGGER_ALIAS_DISABLED,
             ]
         );

@@ -5,27 +5,34 @@
  */
 namespace Magento\Framework\DB\Logger;
 
-class LoggerProxy extends LoggerAbstract
+use Magento\Framework\DB\LoggerInterface;
+
+class LoggerProxy implements LoggerInterface
 {
+    /**
+     * Configuration group name
+     */
+    const CONF_GROUP_NAME = 'db_logger';
+
     /**
      * Logger alias param name
      */
-    const PARAM_ALIAS = 'db_logger_mode';
+    const PARAM_ALIAS = 'output';
 
     /**
      * Logger log all param name
      */
-    const PARAM_LOG_ALL = 'db_logger_all';
+    const PARAM_LOG_ALL = 'log_everything';
 
     /**
      * Logger query time param name
      */
-    const PARAM_QUERY_TIME = 'db_logger_query_time';
+    const PARAM_QUERY_TIME = 'query_time_threshold';
 
     /**
      * Logger call stack param name
      */
-    const PARAM_CALL_STACK = 'db_logger_stack';
+    const PARAM_CALL_STACK = 'include_stacktrace';
 
     /**
      * File logger alias
@@ -38,22 +45,22 @@ class LoggerProxy extends LoggerAbstract
     const LOGGER_ALIAS_DISABLED = 'disabled';
 
     /**
-     * @var LoggerAbstract
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
      * LoggerProxy constructor.
-     * @param File $file
-     * @param Quiet $quiet
+     * @param FileFactory $fileFactory
+     * @param QuietFactory $quietFactory
      * @param bool $loggerAlias
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
      */
     public function __construct(
-        File $file,
-        Quiet $quiet,
+        FileFactory $fileFactory,
+        QuietFactory $quietFactory,
         $loggerAlias,
         $logAllQueries = true,
         $logQueryTime = 0.001,
@@ -61,18 +68,22 @@ class LoggerProxy extends LoggerAbstract
     ) {
         switch ($loggerAlias) {
             case self::LOGGER_ALIAS_FILE:
-                $this->logger = $file;
+                $this->logger = $fileFactory->create(
+                    [
+                        'logAllQueries' => $logAllQueries,
+                        'logQueryTime' => $logQueryTime,
+                        'logCallStack' => $logCallStack,
+                    ]
+                );
                 break;
             default:
-                $this->logger = $quiet;
+                $this->logger = $quietFactory->create();
                 break;
         }
-
-        parent::__construct($logAllQueries, $logQueryTime, $logCallStack);
     }
 
     /**
-     * @return LoggerAbstract|Quiet
+     * @return LoggerInterface
      */
     public function getLogger()
     {
@@ -109,5 +120,13 @@ class LoggerProxy extends LoggerAbstract
     public function critical(\Exception $e)
     {
         $this->logger->critical($e);
+    }
+
+    /**
+     * @return void
+     */
+    public function startTimer()
+    {
+        $this->logger->startTimer();
     }
 }

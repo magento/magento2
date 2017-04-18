@@ -61,7 +61,7 @@ class QueryLogDisableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_DISABLED];
-        $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $data]);
+        $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
     }

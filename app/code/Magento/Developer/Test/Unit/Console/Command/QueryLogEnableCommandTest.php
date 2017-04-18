@@ -57,7 +57,7 @@ class QueryLogEnableCommandTest extends \PHPUnit_Framework_TestCase
         $this->configWriter
             ->expects($this->any())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => $data]);
+            ->with([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
@@ -83,7 +83,7 @@ class QueryLogEnableCommandTest extends \PHPUnit_Framework_TestCase
         $this->configWriter
             ->expects($this->any())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => $data]);
+            ->with([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['false', '0.05', 'false']);
