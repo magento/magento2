@@ -7,8 +7,6 @@ namespace Magento\Weee\Model\Sales\Pdf;
 
 /**
  * Sales order total for PDF, taking into account WEEE tax
- *
- * @api
  */
 class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 {
