@@ -7,6 +7,7 @@ namespace Magento\UrlRewrite\Model;
 
 /**
  * Url Finder Interface
+ * @api
  */
 interface UrlFinderInterface
 {
