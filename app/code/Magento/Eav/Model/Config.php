@@ -410,7 +410,7 @@ class Config
     /**
      * Initialize all attributes for entity type
      *
-     * @param   string $entityType
+     * @param string $entityType
      * @return $this
      */
     protected function _initAttributes($entityType)
@@ -466,21 +466,7 @@ class Config
      */
     public function getAttributes($entityType)
     {
-        $this->_initAttributes($entityType);
-
-        $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();
-
-        $attributes = $this->loadAttributes($entityTypeCode);
-        if (!$attributes) {
-            $attributeCodes = $this->getEntityAttributeCodes($entityTypeCode);
-            foreach ($attributeCodes as $code) {
-                $attribute = $this->createAttributeByAttributeCode($entityType, $code);
-                $this->_addAttributeReference($code, $code, $entityTypeCode);
-                $this->saveAttribute($attribute, $entityTypeCode, $code);
-            }
-            $attributes = $this->loadAttributes($entityTypeCode);
-        }
-        return $attributes;
+        return $this->getEntityAttributes($entityType);
     }
 
     /**

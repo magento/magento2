@@ -142,7 +142,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
                     ->getLinkField();
 
                 $select = $this->getConnection()->select()->from(
-                    $attribute->getEntityType()->getEntityTable(),
+                    $attribute->getEntity()->getEntityTable(),
                     $linkField
                 )->where(
                     'attribute_set_id = ?',
