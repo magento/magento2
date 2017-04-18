@@ -108,9 +108,9 @@ class LoggerProxy implements LoggerInterface
      * Get logger object. Initialize if needed.
      * @return LoggerInterface
      */
-    public function getLogger()
+    private function getLogger()
     {
-        if($this->logger === null) {
+        if ($this->logger === null) {
             switch ($this->loggerAlias) {
                 case self::LOGGER_ALIAS_FILE:
                     $this->logger = $this->fileFactory->create(
