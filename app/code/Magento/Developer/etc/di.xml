@@ -98,6 +98,8 @@
                 <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
                 <item name="xml_catalog_generator" xsi:type="object">Magento\Developer\Console\Command\XmlCatalogGenerateCommand</item>
                 <item name="dev_di_info" xsi:type="object">Magento\Developer\Console\Command\DiInfoCommand</item>
+                <item name="dev_query_log_enable" xsi:type="object">Magento\Developer\Console\Command\QueryLogEnableCommand</item>
+                <item name="dev_query_log_disable" xsi:type="object">Magento\Developer\Console\Command\QueryLogDisableCommand</item>
             </argument>
         </arguments>
     </type>
