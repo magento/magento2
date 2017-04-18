@@ -74,6 +74,6 @@ class DecimalRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
         );
         $maxRowsPerStore = $connection->fetchOne($maxSelect);
 
-        return ceil($maxRowsPerStore * $this->storeManagement->getCount() * 90);
+        return ceil($maxRowsPerStore * $this->storeManagement->getCount() * 500);
     }
 }

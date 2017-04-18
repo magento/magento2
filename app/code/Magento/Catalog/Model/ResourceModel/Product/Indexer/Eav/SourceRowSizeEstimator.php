@@ -74,7 +74,7 @@ class SourceRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
             )
         );
 
-        return ceil($maxRowsPerStore * $this->storeManagement->getCount() * 90);
+        return ceil($maxRowsPerStore * $this->storeManagement->getCount() * 500);
     }
 
     /**

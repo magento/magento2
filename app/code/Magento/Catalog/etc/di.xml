@@ -1050,8 +1050,8 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator">
         <arguments>
             <argument name="batchSizes" xsi:type="array">
-                <item name="decimal" xsi:type="number">5000</item>
-                <item name="source" xsi:type="number">5000</item>
+                <item name="decimal" xsi:type="number">1000</item>
+                <item name="source" xsi:type="number">1000</item>
             </argument>
             <argument name="batchSizeManagers" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalBatchSizeManagement</item>

@@ -75,6 +75,6 @@ class SourceRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->at(2))->method('fetchOne')->willReturn($maxRowsPerStoreVarchar);
         $this->storeManagementMock->expects($this->any())->method('getCount')->willReturn($storeCount);
 
-        $this->assertEquals($maxRowsPerStoreVarchar * $storeCount * 90, $this->model->estimateRowSize());
+        $this->assertEquals($maxRowsPerStoreVarchar * $storeCount * 500, $this->model->estimateRowSize());
     }
 }
