@@ -6,26 +6,24 @@
 
 namespace Magento\Msrp\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Assert product MAP related data in Shopping Cart.
+ * Assert product MAP related data on product view page.
  */
-class AssertMsrpInShoppingCart extends AbstractConstraint
+class AssertMapOnProductView extends AbstractConstraint
 {
     /**
-     * Assert product MAP related data in Shopping Cart.
+     * Assert product MAP related data on product view page.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
      * @param CatalogProductView $catalogProductView
-     * @param CheckoutCart $checkoutCart
      * @param InjectableFixture $product
      * @return void
      */
@@ -33,7 +31,6 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
         CatalogProductView $catalogProductView,
-        CheckoutCart $checkoutCart,
         InjectableFixture $product
     ) {
         /** @var CatalogProductSimple $product */
@@ -41,20 +38,21 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
         $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
 
-        if ($product->hasData('checkout_data') || $product->getMsrpDisplayActualPriceType() === 'In Cart') {
-            $catalogProductView->getViewBlock()->addToCart($product);
-        } else {
-            $catalogProductView->getMsrpViewBlock()->openMapBlock();
-            $catalogProductView->getMsrpViewBlock()->getMapBlock()->addToCart();
-        }
-        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
-
-        $checkoutCart->open();
-
+        $viewBlock = $catalogProductView->getMsrpViewBlock();
+        $viewBlock->openMapBlock();
+        $mapBlock = $viewBlock->getMapBlock();
+        \PHPUnit_Framework_Assert::assertContains(
+            $product->getMsrp(),
+            $mapBlock->getOldPrice(),
+            'Displayed on Product view page MAP is incorrect.'
+        );
         $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
-        $productPrice = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
-        $unitPrice = $checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
-        \PHPUnit_Framework_Assert::assertEquals($productPrice, $unitPrice, 'Incorrect unit price is displayed in Cart');
+        $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
+        \PHPUnit_Framework_Assert::assertEquals(
+            $price,
+            $mapBlock->getActualPrice(),
+            'Displayed on Product view page price is incorrect.'
+        );
     }
 
     /**
@@ -64,6 +62,6 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
      */
     public function toString()
     {
-        return "Displayed Product MAP data in Shopping Cart is correct.";
+        return "Displayed Product MAP data on product view page is correct.";
     }
 }
