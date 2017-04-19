@@ -54,6 +54,8 @@ class UiComponent implements ReaderInterface
      *
      * @param Helper $helper
      * @param Condition $conditionReader
+     * @param DataInterfaceFactory $uiConfigFactory
+     * @param ReaderPool $readerPool
      */
     public function __construct(
         Helper $helper,
