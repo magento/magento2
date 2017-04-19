@@ -8,7 +8,7 @@ namespace Magento\Cron\Model\ResourceModel;
 /**
  * Schedule resource
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -9,8 +9,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Store Contact Information source model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Variables implements \Magento\Framework\Option\ArrayInterface
 {
