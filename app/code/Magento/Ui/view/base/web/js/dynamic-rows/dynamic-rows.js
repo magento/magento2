@@ -156,7 +156,7 @@ define([
                 dnd: '${ $.dndConfig.name }'
             },
             pages: 1,
-            pageSize: 2,
+            pageSize: 20,
             relatedData: [],
             currentPage: 1,
             recordDataCache: [],
