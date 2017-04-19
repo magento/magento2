@@ -569,7 +569,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return string[]
      */
-    private function getPriceTypes()
+    public function getPriceTypes()
     {
         return [
             \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD,
