@@ -302,7 +302,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAppliedSimple()
     {
         $testArray = ['key' => 'value'];
-        $itemProductSimple = $this->getMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied'], [], '', false);
+        $itemProductSimple = $this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getWeeeTaxApplied'],
+            [],
+            '',
+            false
+        );
         $itemProductSimple->expects($this->any())
             ->method('getHasChildren')
             ->will($this->returnValue(false));
