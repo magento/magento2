@@ -441,6 +441,7 @@ class Config
             }
             // attributes should be reloaded via model to be processed by custom resource model
             $attributeObject = $this->_createAttribute($entityType, $attribute);
+            $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
             $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->toArray();
         }
         if ($this->isCacheEnabled()) {
@@ -482,8 +483,13 @@ class Config
         if ($code instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             return $code;
         }
+
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
         $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();
+
+        if (isset($this->attributes[$entityTypeCode][$code])) {
+            return $this->attributes[$entityTypeCode][$code];
+        }
 
         if (is_numeric($code)) { // if code is numeric, try to map attribute id to code
             $code = $this->_getAttributeReference($code, $entityTypeCode) ?: $code;
@@ -550,7 +556,7 @@ class Config
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
             $storeId = $object->getStoreId() ?: $storeId;
         }
-        $cacheKey = self::ATTRIBUTES_CODES_CACHE_ID . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
 
         $attributesData = $this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attributes)
