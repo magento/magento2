@@ -742,7 +742,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
 
         $isResultValid = false;
-        foreach ($skus as $sku){
+        foreach ($skus as $sku) {
             foreach ($response['items'] as $item) {
                 if ($item['sku'] == $sku) {
                     $isResultValid = true;
@@ -779,6 +779,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [
                 [
                     'searchCriteria' => [
+                        'filter_groups' => [],
                         'current_page' => 1,
                         'page_size' => 10,
                     ],
