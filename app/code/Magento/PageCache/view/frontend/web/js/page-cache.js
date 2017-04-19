@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,9 +41,11 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
+            var iframeHostName;
+
             // prevent cross origin iframe content reading
             if ($(element).prop('tagName') === 'IFRAME') {
-                var iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                iframeHostName = $('<a>').prop('href', $(element).prop('src'))
                                              .prop('hostname');
 
                 if (window.location.hostname !== iframeHostName) {

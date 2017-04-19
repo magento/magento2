@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Service;
@@ -9,9 +9,7 @@ use Magento\Framework\View\Template\Html\MinifierInterface;
 use Magento\Framework\App\Utility\Files;
 
 /**
- * Minify Templates
- *
- * @api
+ * Minify PHTML templates service
  */
 class MinifyTemplates
 {

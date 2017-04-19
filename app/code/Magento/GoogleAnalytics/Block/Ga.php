@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -82,11 +82,11 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         $anonymizeIp = "";
         if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
-          $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
+            $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }
 
         return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
-           . ", 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
+           . "', 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Component;
@@ -46,6 +46,8 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public static function register($type, $componentName, $path)
     {
+        $path = str_replace("magento2ee", "magento2ce", $path);
+        $path = str_replace("magento2b2b", "magento2ce", $path);
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
             throw new \LogicException(

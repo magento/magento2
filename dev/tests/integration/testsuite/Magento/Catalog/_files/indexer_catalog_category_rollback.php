@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,18 +12,6 @@ $registry = $objectManager->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
-
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-
-foreach (['simple 01', 'simple 02', 'simple 03'] as $sku) {
-    try {
-        $product = $productRepository->get($sku, false, null, true);
-        $productRepository->delete($product);
-    } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
-        //Product already removed
-    }
-}
 
 /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
 $collection = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);

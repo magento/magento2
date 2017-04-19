@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     const NO_SUCH_ENTITY_EXCEPTION = '\\Magento\Framework\Exception\NoSuchEntityException';
     const INPUT_EXCEPTION = '\\Magento\Framework\Exception\InputException';
-    const SEARCH_CRITERIA = '\\Magento\Framework\Api\SearchCriteria';
+    const SEARCH_CRITERIA = '\\Magento\Framework\Api\SearchCriteriaInterface';
 
     /**
      * Retrieve class properties
@@ -84,8 +84,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' =>
-                                '\\' . JoinProcessorInterface::class,
+                            'description' => '\\' . JoinProcessorInterface::class,
                         ],
                     ],
                 ]
@@ -98,8 +97,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' =>
-                                '\\' . CollectionProcessorInterface::class,
+                            'description' => '\\' . CollectionProcessorInterface::class,
                         ],
                     ],
                 ]

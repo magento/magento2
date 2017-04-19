@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\ResourceModel\Indexer;
@@ -14,37 +14,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
  */
 class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
-    /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @throws \Exception
-     * @return $this
-     */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->reindex();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-        return $this;
-    }
-
-    /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return $this
-     */
-    public function reindexEntity($entityIds)
-    {
-        return $this->reindex($entityIds);
-    }
-
     /**
      * @param null|int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice

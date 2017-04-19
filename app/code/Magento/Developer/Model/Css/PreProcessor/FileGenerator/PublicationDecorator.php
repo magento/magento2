@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Css\PreProcessor\FileGenerator;
@@ -16,9 +16,7 @@ use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Class PublicationDecorator
- *
- * Decorates generator of related assets and publishes them
+ * Decorator for publishing of related assets
  */
 class PublicationDecorator extends RelatedGenerator
 {

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector;
+use Magento\Deploy\Console\Command\App\SensitiveConfigSet\SensitiveConfigSetFacade;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
@@ -210,7 +211,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $command = $this->objectManager->create(
             SensitiveConfigSetCommand::class,
             [
-                'collectorFactory' => $collectorFactoryMock
+                'facade' => $this->objectManager->create(
+                    SensitiveConfigSetFacade::class,
+                    [
+                        'collectorFactory' => $collectorFactoryMock
+                    ]
+                )
             ]
         );
         $command->run($inputMock, $outputMock);

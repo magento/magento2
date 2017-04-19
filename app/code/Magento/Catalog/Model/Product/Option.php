@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,9 +12,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product option model
@@ -215,6 +215,17 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
 
         return null;
+    }
+
+    /**
+     * Whether or not the option type contains sub-values
+     *
+     * @param string $type
+     * @return bool
+     */
+    public function hasValues($type = null)
+    {
+        return $this->getGroupByType($type) == self::OPTION_GROUP_SELECT;
     }
 
     /**

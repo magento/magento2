@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

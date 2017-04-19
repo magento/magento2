@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="advanced_fieldset">
-        <field name="is_unique">
+        <field name="is_unique" component="Magento_Catalog/js/components/visible-on-option/yesno">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
                     <item name="valuesForOptions" xsi:type="array">
                         <item name="weee" xsi:type="string">weee</item>
                     </item>

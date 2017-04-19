@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,6 +81,11 @@ class Dom
      * @var \Magento\Framework\Config\Dom\UrnResolver
      */
     private static $urnResolver;
+
+    /**
+     * @var array
+     */
+    private static $resolvedSchemaPaths = [];
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
@@ -305,7 +310,11 @@ class Dom
         if (!self::$urnResolver) {
             self::$urnResolver = new UrnResolver();
         }
-        $schema = self::$urnResolver->getRealPath($schema);
+        if (!isset(self::$resolvedSchemaPaths[$schema])) {
+            self::$resolvedSchemaPaths[$schema] = self::$urnResolver->getRealPath($schema);
+        }
+        $schema = self::$resolvedSchemaPaths[$schema];
+
         libxml_use_internal_errors(true);
         libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
         $errors = [];

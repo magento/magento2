@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
 
-use Magento\Framework\App;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout;
 
@@ -123,11 +122,9 @@ class Block implements Layout\ReaderInterface
             case self::TYPE_BLOCK:
                 $this->scheduleBlock($scheduledStructure, $currentElement);
                 break;
-
             case self::TYPE_REFERENCE_BLOCK:
                 $this->scheduleReference($scheduledStructure, $currentElement);
                 break;
-
             default:
                 break;
         }
@@ -156,7 +153,6 @@ class Block implements Layout\ReaderInterface
         $this->updateScheduledData($currentElement, $data);
         $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
-
         $configPath = (string)$currentElement->getAttribute('ifconfig');
         if (!empty($configPath)) {
             $scheduledStructure->setElementToIfconfigList($elementName, $configPath, $this->scopeType);

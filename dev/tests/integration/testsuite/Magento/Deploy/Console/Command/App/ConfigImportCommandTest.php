@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App;
@@ -20,7 +20,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Symfony\Component\Console\Application;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -124,13 +123,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->hash->get());
 
-        $application = $this->objectManager->create(Application::class);
-
         $command = $this->objectManager->create(ConfigImportCommand::class);
-        $command->setApplication($application);
-
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['-n' => true]);
+        $commandTester->execute([], ['interactive' => false]);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Nothing to import.', $commandTester->getDisplay());
@@ -143,6 +138,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportStores()
     {
+        $this->markTestSkipped('MAGETWO-67125');
         $this->assertEmpty($this->hash->get());
 
         $dumpCommand = $this->objectManager->create(ApplicationDumpCommand::class);
@@ -155,11 +151,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             require __DIR__ . '/../../../_files/scopes/config_with_stores.php'
         );
 
-        $application = $this->objectManager->create(Application::class);
         $command = $this->objectManager->create(ConfigImportCommand::class);
-        $command->setApplication($application);
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['-n' => true]);
+        $commandTester->execute([], ['interactive' => false]);
 
         $this->assertContains(
             'Processing configurations data from configuration file...',
@@ -195,7 +189,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             require __DIR__ . '/../../../_files/scopes/config_with_changed_stores.php'
         );
 
-        $commandTester->execute(['-n' => true]);
+        $commandTester->execute([], ['interactive' => false]);
 
         $this->assertContains(
             'Processing configurations data from configuration file...',
@@ -225,7 +219,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             require __DIR__ . '/../../../_files/scopes/config_with_removed_stores.php'
         );
 
-        $commandTester->execute(['-n' => true]);
+        $commandTester->execute([], ['interactive' => false]);
 
         $this->assertContains(
             'Processing configurations data from configuration file...',
@@ -276,11 +270,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->writeConfig($this->config, $correctData);
 
-        $application = $this->objectManager->create(Application::class);
         $command = $this->objectManager->create(ConfigImportCommand::class);
-        $command->setApplication($application);
         $commandTester = new CommandTester($command);
-        $commandTester->execute([]);
+        $commandTester->execute([], ['interactive' => false]);
 
         $this->assertContains('System config was processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
@@ -292,7 +284,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains('Import is failed: Invalid value. Value must be', $commandTester->getDisplay());
+        $this->assertContains('Import failed: Invalid value. Value must be', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
 
         $this->writeConfig(

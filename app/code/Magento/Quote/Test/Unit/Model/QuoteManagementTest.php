@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\CustomerManagement;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\CustomerManagement;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

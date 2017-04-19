@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogWidget\Model;
@@ -9,7 +9,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
- * Class Rule
+ * Rule for catalog widget
+ *
+ * @api
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {

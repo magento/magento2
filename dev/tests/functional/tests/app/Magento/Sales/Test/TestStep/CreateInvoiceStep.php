@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
 
 use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
@@ -15,7 +15,6 @@ use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceView;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 use Magento\Shipping\Test\Page\Adminhtml\OrderShipmentView;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Create invoice from order on backend.

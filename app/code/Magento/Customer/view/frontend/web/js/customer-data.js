@@ -1,8 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
@@ -344,7 +347,7 @@ define([
         var sections,
             redirects;
 
-        if (settings.type.match(/post|put/i)) {
+        if (settings.type.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(settings.url);
 
             if (sections) {
@@ -365,7 +368,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put/i)) {
+        if (event.target.method.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

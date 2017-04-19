@@ -1,14 +1,18 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'uiElement',
     'uiRegistry',
     'uiLayout',
-    'mageUtils'
-], function (Element, registry, layout, utils) {
+    'mageUtils',
+    'underscore'
+], function (Element, registry, layout, utils, _) {
     'use strict';
 
     return Element.extend({
