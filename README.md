@@ -18,34 +18,34 @@ The Magento_Signifyd module does not add own Events, Layouts, and UI Components 
 
 The following interfaces (marked with the `@api` annotation) provide methods that allow to:
 
-`CaseInterface` (common abstraction for the Signifyd case entity):
+`Magento\Signifyd\Api\Data\CaseInterface` (common abstraction for the Signifyd case entity):
 
 - set or retrieve all case data fields
 
-`CaseManagementInterface`:
+`Magento\Signifyd\Api\CaseManagementInterface`:
 
 - create a new case entity
 - retrieve the existing case entity for a specified order
 
-`CaseCreationServiceInterface`:
+`Magento\Signifyd\Api\CaseCreationServiceInterface`:
 
 - create a case entity for a specified order
 - send a request through the Signifyd API to create a new case
 
-`CaseRepositoryInterface`:
+`Magento\Signifyd\Api\CaseRepositoryInterface`:
 
 - describe methods to work with a case entity
 
-`GuaranteeCreationServiceInterface`:
+`Magento\Signifyd\Api\GuaranteeCreationServiceInterface`:
 
 - send a request through the Signifyd API to create a new case guarantee
 
-`GuaranteeCancelingServiceInterface`:
+`Magento\Signifyd\Api\GuaranteeCancelingServiceInterface`:
 - send a request through the Signifyd API to cancel the Signifyd case guarantee
 
-`CaseSearchResultsInterface`:
+`Magento\Signifyd\Api\Data\CaseSearchResultsInterface`:
 
-- might be used by `CaseRepositoryInterface` to retrieve a list of case entities by specific conditions
+- might be used by `Magento\Signifyd\Api\CaseRepositoryInterface` to retrieve a list of case entities by specific conditions
 
 For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.1/extension-dev-guide/api-concepts.html).
 
