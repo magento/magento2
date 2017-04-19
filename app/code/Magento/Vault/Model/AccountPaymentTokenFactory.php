@@ -9,7 +9,7 @@ namespace Magento\Vault\Model;
  * Class AccountPaymentTokenFactory
  * @api
  */
-class AccountPaymentTokenFactory extends AbstractPaymentTokenFactoryInterface
+class AccountPaymentTokenFactory extends AbstractPaymentTokenFactory
 {
     /**
      * @var string
