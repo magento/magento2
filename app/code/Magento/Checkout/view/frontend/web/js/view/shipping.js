@@ -60,7 +60,11 @@ define([
             template: 'Magento_Checkout/shipping',
             shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
             shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
-            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
+            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item',
+            saveInAddressBook: 1,
+            links: {
+                saveInAddressBook: '${ $.provider }:shippingAddress.save_in_address_book'
+            }
         },
         visible: ko.observable(!quote.isVirtual()),
         errorValidationMessage: ko.observable(false),
@@ -68,7 +72,6 @@ define([
         isFormPopUpVisible: formPopUpState.isVisible,
         isFormInline: addressList().length === 0,
         isNewAddressAdded: ko.observable(false),
-        saveInAddressBook: 1,
         quoteIsVirtual: quote.isVirtual(),
 
         /**
@@ -122,6 +125,14 @@ define([
                 });
                 shippingRatesValidator.initFields(fieldsetName);
             });
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super()
+                .observe('saveInAddressBook');
 
             return this;
         },
@@ -189,7 +200,7 @@ define([
             if (!this.source.get('params.invalid')) {
                 addressData = this.source.get('shippingAddress');
                 // if user clicked the checkbox, its value is true or false. Need to convert.
-                addressData['save_in_address_book'] = this.saveInAddressBook ? 1 : 0;
+                addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
 
                 // New address must be selected as a shipping address
                 newShippingAddress = createShippingAddress(addressData);
