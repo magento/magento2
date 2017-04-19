@@ -31,7 +31,7 @@ class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
                 $renderer->setItem($item);
                 $renderer->setField(self::COLUMN_NAME);
                 return $renderer->toHtml();
-            }   
+            }
             return '&nbsp;';
         }
         return parent::_toHtml();
