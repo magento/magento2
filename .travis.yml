@@ -11,6 +11,7 @@ language: php
 php:
   - 5.6.29
   - 7.0
+  - 7.1 # Experimental, forward compatible (allowed to fail, see matrix: allow_failures: below)
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
@@ -31,13 +32,15 @@ cache:
     - $HOME/node_modules
     - $HOME/yarn.lock
 matrix:
+  allow_failures:
+    - php: 7.1
   exclude:
     - php: 5.6.29
       env: TEST_SUITE=static
     - php: 5.6.29
       env: TEST_SUITE=js
 before_install: ./dev/travis/before_install.sh
-install: composer install --no-interaction --prefer-dist
+install: test ${TRAVIS_PHP_VERSION:0:3} = "7.1" && composer install --no-interaction --prefer-dist --ignore-platform-reqs || composer install --no-interaction --prefer-dist
 before_script: ./dev/travis/before_script.sh
 script:
   - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
