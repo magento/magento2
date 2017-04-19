@@ -177,21 +177,21 @@ class GenerateVclCommand extends Command
                 self::BACKEND_HOST_OPTION,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Backend host for configuration',
+                'Host of the web backend',
                 'localhost'
             ),
             new InputOption(
                 self::BACKEND_PORT_OPTION,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Backend post for configuration',
+                'Port of the web backend',
                 8080
             ),
             new InputOption(
                 self::EXPORT_VERSION_OPTION,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Varnish configuration version to export',
+                'The version of Varnish file',
                 VclTemplateLocator::VARNISH_SUPPORTED_VERSION_4
             ),
             new InputOption(
@@ -205,7 +205,7 @@ class GenerateVclCommand extends Command
                 self::OUTPUT_FILE_OPTION,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Save output to target file'
+                'Path to the file to write vcl'
             ),
         ];
     }
