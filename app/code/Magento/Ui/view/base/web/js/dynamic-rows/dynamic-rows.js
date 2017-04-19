@@ -156,7 +156,7 @@ define([
                 dnd: '${ $.dndConfig.name }'
             },
             pages: 1,
-            pageSize: 20,
+            pageSize: 2,
             relatedData: [],
             currentPage: 1,
             recordDataCache: [],
@@ -167,8 +167,7 @@ define([
          * Sets record data to cache
          */
         setRecordDataToCache: function (data) {
-            this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
-                data : this.recordDataCache;
+            this.recordDataCache = data;
         },
 
         /**
@@ -626,6 +625,19 @@ define([
         },
 
         /**
+         * Reinit record data in order to remove deleted values
+         *
+         * @return void
+         */
+        reinitRecordData: function () {
+            this.recordData(
+                _.filter(this.recordData(), function (elem) {
+                    return elem && elem[this.deleteProperty] !== this.deleteValue;
+                }, this)
+            );
+        },
+
+        /**
          * Get items to rendering on current page
          *
          * @returns {Array} data
@@ -827,8 +839,7 @@ define([
         deleteRecord: function (index, recordId) {
             var recordInstance,
                 lastRecord,
-                recordsData,
-                childs;
+                recordsData;
 
             if (this.deleteProperty) {
                 recordInstance = _.find(this.elems(), function (elem) {
@@ -840,11 +851,8 @@ define([
                 this.removeMaxPosition();
                 this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
                 this.recordData.valueHasMutated();
-                childs = this.getChildItems();
-
-                if (childs.length > this.elems().length) {
-                    this.addChild(false, childs[childs.length - 1][this.identificationProperty], false);
-                }
+                this.reinitRecordData();
+                this.reload();
             } else {
                 this.update = true;
 
