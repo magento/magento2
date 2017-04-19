@@ -569,15 +569,15 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return string[]
      */
-    public function getPriceTypes()
+    private function getPriceTypes()
     {
         return [
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FIELD,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FILE,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME,
-            \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FILE,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME,
         ];
     }
 
