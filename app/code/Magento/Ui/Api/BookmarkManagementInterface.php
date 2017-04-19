@@ -6,7 +6,8 @@
 namespace Magento\Ui\Api;
 
 /**
- * Interface for managing bookmarks.
+ * Interface for managing bookmarks
+ *
  * @api
  */
 interface BookmarkManagementInterface
