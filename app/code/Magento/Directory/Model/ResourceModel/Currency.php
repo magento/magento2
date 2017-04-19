@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Directory Currency Resource Model
- */
 namespace Magento\Directory\Model\ResourceModel;
 
+/**
+ * Currency Resource Model
+ *
+ * @api
+ */
 class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

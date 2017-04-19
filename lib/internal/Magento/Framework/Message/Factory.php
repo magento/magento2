@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Message;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -63,7 +61,9 @@ class Factory
 
         $message = $this->objectManager->create($className, $text === null ? [] : ['text' => $text]);
         if (!$message instanceof MessageInterface) {
-            throw new \InvalidArgumentException($className . ' doesn\'t implement \Magento\Framework\Message\MessageInterface');
+            throw new \InvalidArgumentException(
+                $className . ' doesn\'t implement \Magento\Framework\Message\MessageInterface'
+            );
         }
 
         return $message;
