@@ -30,6 +30,8 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Price setStatus(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Price extends \Magento\Framework\Model\AbstractModel
 {
