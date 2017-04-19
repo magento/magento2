@@ -75,7 +75,7 @@ abstract class AbstractSchemaGenerator
     }
 
     /**
-     * Retrieve a list of services visible to current user.
+     * Retrieve a list of all services.
      *
      * @return string[]
      */
