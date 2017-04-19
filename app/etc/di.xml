@@ -102,7 +102,7 @@
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
-    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Quiet"/>
+    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\LoggerProxy"/>
     <preference for="Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface" type="Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
@@ -490,6 +490,7 @@
     <type name="Magento\Framework\View\Layout\ConfigCondition">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -1312,4 +1313,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\DB\Logger\LoggerProxy">
+        <arguments>
+            <argument name="loggerAlias" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_OUTPUT</argument>
+            <argument name="logAllQueries" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING</argument>
+            <argument name="logQueryTime" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD</argument>
+            <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
+        </arguments>
+    </type>
+
 </config>

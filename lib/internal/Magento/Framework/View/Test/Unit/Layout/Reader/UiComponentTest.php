@@ -16,6 +16,11 @@ use Magento\Framework\View\Layout\Reader\Context;
 use Magento\Framework\View\Layout\Reader\UiComponent;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Framework\Config\DataInterfaceFactory;
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 class UiComponentTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +33,21 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
      * @var Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $helper;
+
+    /**
+     * @var DataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataConfigFactory;
+
+    /**
+     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataConfig;
+
+    /**
+     * @var ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readerPool;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -44,32 +64,37 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getScheduledStructure', 'setElementToIfconfigList'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->dataConfigFactory = $this->getMockBuilder(DataInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->dataConfig = $this->getMockBuilder(DataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->readerPool = $this->getMockBuilder(ReaderPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $condition = $objectManager->getObject(Condition::class);
-        $this->model = new UiComponent($this->helper, $condition);
+        $this->model = new UiComponent($this->helper, $condition, $this->dataConfigFactory, $this->readerPool);
     }
 
     public function testGetSupportedNodes()
     {
-        $data[] = \Magento\Framework\View\Layout\Reader\UiComponent::TYPE_UI_COMPONENT;
+        $data[] = UiComponent::TYPE_UI_COMPONENT;
         $this->assertEquals($data, $this->model->getSupportedNodes());
     }
 
     /**
-     *
-     * @param \Magento\Framework\View\Layout\Element $element
+     * @param Element $element
      *
      * @dataProvider interpretDataProvider
      */
     public function testInterpret($element)
     {
-        $scheduleStructure = $this->getMock(
-            \Magento\Framework\View\Layout\ScheduledStructure::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $scheduleStructure = $this->getMockBuilder(ScheduledStructure::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->any())->method('getScheduledStructure')->will(
             $this->returnValue($scheduleStructure)
         );
@@ -103,6 +128,33 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         );
+        $this->dataConfigFactory->expects($this->once())
+            ->method('create')
+            ->with(['componentName' => $element->getAttribute('name')])
+            ->willReturn($this->dataConfig);
+        $xml = '<?xml version="1.0"?>'
+            . '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+            . '<block/>'
+            . '</layout>';
+        $this->dataConfig->expects($this->once())
+            ->method('get')
+            ->with($element->getAttribute('name'))
+            ->willReturn([
+                'children' => [
+                    'testComponent' => [
+                        'arguments' => [
+                            'block' => [
+                                'layout' => $xml
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+
+        $this->readerPool->expects($this->once())
+            ->method('interpret')
+            ->with($this->context, $this->isInstanceOf(Element::class));
+
         $this->model->interpret($this->context, $element);
     }
 
@@ -126,13 +178,13 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $xml
      * @param string $elementType
-     * @return \Magento\Framework\View\Layout\Element
+     * @return Element
      */
     protected function getElement($xml, $elementType)
     {
         $xml = simplexml_load_string(
             '<parent_element>' . $xml . '</parent_element>',
-            \Magento\Framework\View\Layout\Element::class
+            Element::class
         );
         return $xml->{$elementType};
     }

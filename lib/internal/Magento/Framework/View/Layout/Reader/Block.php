@@ -139,11 +139,9 @@ class Block implements Layout\ReaderInterface
             case self::TYPE_BLOCK:
                 $this->scheduleBlock($scheduledStructure, $currentElement);
                 break;
-
             case self::TYPE_REFERENCE_BLOCK:
                 $this->scheduleReference($scheduledStructure, $currentElement);
                 break;
-
             default:
                 break;
         }

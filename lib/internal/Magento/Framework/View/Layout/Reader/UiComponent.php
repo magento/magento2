@@ -9,6 +9,9 @@ use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use Magento\Framework\View\Layout\ReaderInterface;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\Config\DataInterfaceFactory;
+
 
 /**
  * Class UiComponent
@@ -38,6 +41,16 @@ class UiComponent implements ReaderInterface
     private $conditionReader;
 
     /**
+     * @var DataInterfaceFactory
+     */
+    private $uiConfigFactory;
+
+    /**
+     * @var ReaderPool
+     */
+    private $readerPool;
+
+    /**
      * Constructor
      *
      * @param Helper $helper
@@ -45,10 +58,14 @@ class UiComponent implements ReaderInterface
      */
     public function __construct(
         Helper $helper,
-        Condition $conditionReader
+        Condition $conditionReader,
+        DataInterfaceFactory $uiConfigFactory,
+        ReaderPool $readerPool
     ) {
         $this->layoutHelper = $helper;
         $this->conditionReader = $conditionReader;
+        $this->uiConfigFactory = $uiConfigFactory;
+        $this->readerPool = $readerPool;
     }
 
     /**
@@ -78,7 +95,33 @@ class UiComponent implements ReaderInterface
         );
         $scheduledStructure->setStructureElementData($referenceName, ['attributes' => $attributes]);
 
+        foreach ($this->getLayoutElementsFromUiConfiguration($referenceName) as $layoutElement) {
+            $layoutElement = simplexml_load_string(
+                $layoutElement,
+                Element::class
+            );
+            $this->readerPool->interpret($readerContext, $layoutElement);
+        }
+
         return $this;
+    }
+
+    /**
+     * Find layout elements in UI configuration for correct layout generation
+     *
+     * @param string $uiConfigName
+     * @return array
+     */
+    private function getLayoutElementsFromUiConfiguration($uiConfigName)
+    {
+        $elements = [];
+        $config = $this->uiConfigFactory->create(['componentName' => $uiConfigName])->get($uiConfigName);
+        foreach ($config['children'] as $name => $data) {
+            if (isset($data['arguments']['block']['layout'])) {
+                $elements[$name] = $data['arguments']['block']['layout'];
+            }
+        }
+        return $elements;
     }
 
     /**

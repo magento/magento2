@@ -27,20 +27,8 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $processorMock->expects($this->once())
-            ->method('register');
         $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
-        $this->contextMock->expects($this->once())
-            ->method('getProcessor')
-            ->willReturn($processorMock);
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $this->abstractComponent = $this->getMockBuilder(\Magento\Ui\Component\AbstractComponent::class)
             ->enableOriginalConstructor()
             ->setMethods(['getComponentName'])

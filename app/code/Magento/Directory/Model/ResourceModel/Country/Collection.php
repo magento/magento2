@@ -6,16 +6,16 @@
 
 // @codingStandardsIgnoreFile
 
-/**
- * Directory Country Resource Collection
- */
 namespace Magento\Directory\Model\ResourceModel\Country;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Collection
+ * Country Resource Collection
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
