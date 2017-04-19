@@ -10,7 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\PageCache\Api\VclTemplateLocatorInterface;
+use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 
 class VclTemplateLocator implements VclTemplateLocatorInterface

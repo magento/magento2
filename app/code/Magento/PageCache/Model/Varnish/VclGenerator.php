@@ -6,8 +6,8 @@
 
 namespace Magento\PageCache\Model\Varnish;
 
-use Magento\PageCache\Api\VclGeneratorInterface;
-use Magento\PageCache\Api\VclTemplateLocatorInterface;
+use Magento\PageCache\Model\VclGeneratorInterface;
+use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
 class VclGenerator implements VclGeneratorInterface
 {
@@ -154,10 +154,14 @@ class VclGenerator implements VclGeneratorInterface
     private function getTransformedAccessList()
     {
         $tpl = "    \"%s\";";
-        $result = array_reduce($this->getAccessList(), function ($ips, $ip) use ($tpl) {
-            return $ips.sprintf($tpl, trim($ip))."\n";
-        }, '');
-
+        $result = array_reduce(
+            $this->getAccessList(),
+            function ($ips, $ip) use ($tpl) {
+                return $ips.sprintf($tpl, trim($ip)) . "\n";
+            },
+            ''
+        );
+        $result = rtrim($result, "\n");
         return $result;
     }
 

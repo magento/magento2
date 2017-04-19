@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\PageCache\Api;
+namespace Magento\PageCache\Model;
 
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 

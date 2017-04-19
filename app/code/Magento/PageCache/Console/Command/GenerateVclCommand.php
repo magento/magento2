@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\PageCache\Api\VclGeneratorInterfaceFactory;
+use Magento\PageCache\Model\VclGeneratorInterfaceFactory;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Varnish\VclTemplateLocator;
 use Magento\Store\Model\ScopeInterface;
