@@ -331,6 +331,7 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <!-- @api -->
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
@@ -340,6 +341,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- @api -->
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
@@ -352,6 +354,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- @api -->
     <virtualType name="Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -383,6 +386,18 @@
                     <item name="entityTableName" xsi:type="string">customer_entity</item>
                     <item name="eavEntityType" xsi:type="string">customer</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Ui\Component\MassAction\Group\Options">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="urlPath" xsi:type="string">customer/index/massAssignGroup</item>
+                <item name="paramName" xsi:type="string">group</item>
+                <item name="confirm" xsi:type="array">
+                    <item name="title" xsi:type="string">Assign a Customer Group</item>
+                    <item name="message" xsi:type="string">Are you sure to assign selected customers to new group?</item>
                 </item>
             </argument>
         </arguments>

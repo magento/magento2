@@ -7,6 +7,8 @@ namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 
 /**
  * Password reset request event collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

@@ -14,6 +14,9 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Contact base helper
+ *
+ * @deprecated
+ * @see \Magento\Contact\Model\ConfigInterface
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

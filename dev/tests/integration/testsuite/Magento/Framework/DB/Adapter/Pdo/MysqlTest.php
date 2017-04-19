@@ -7,6 +7,7 @@ namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\Framework\DB\Ddl\Table;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -156,5 +157,71 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             $this->getDbAdapter()->describeTable($tableName),
             $this->getDbAdapter()->describeTable($tableName)
         );
+    }
+
+    /**
+     * Test that Zend_Db_Expr can be used as a column default value.
+     * @see https://github.com/magento/magento2/pull/9131
+     */
+    public function testCreateTableColumnWithExpressionAsColumnDefaultValue()
+    {
+        $adapter = $this->getDbAdapter();
+        $tableName = 'table_column_with_expression_as_column_default_value';
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn(
+                'row_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Row Id'
+            )
+            ->addColumn(
+                'created_at',
+                Table::TYPE_DATETIME,
+                null,
+                ['default' => new \Zend_Db_Expr('CURRENT_TIMESTAMP')]
+            )
+            ->addColumn(
+                'integer_column',
+                Table::TYPE_INTEGER,
+                11,
+                ['default' => 123456]
+            )->addColumn(
+                'string_column',
+                Table::TYPE_TEXT,
+                255,
+                ['default' => 'default test text']
+            )
+            ->setComment('Test table column with expression as column default value');
+        $adapter->createTable($table);
+
+        $tableDescription = $adapter->describeTable($tableName);
+
+        //clean up database from test table
+        $adapter->dropTable($tableName);
+
+        $this->assertArrayHasKey('created_at', $tableDescription, 'Column created_at does not exists');
+        $this->assertArrayHasKey('integer_column', $tableDescription, 'Column integer_column does not exists');
+        $this->assertArrayHasKey('string_column', $tableDescription, 'Column string_column does not exists');
+        $dateColumn = $tableDescription['created_at'];
+        $intColumn = $tableDescription['integer_column'];
+        $stringColumn = $tableDescription['string_column'];
+
+        //Test default value with expression
+        $this->assertEquals('created_at', $dateColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertEquals(Table::TYPE_DATETIME, $dateColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertEquals('CURRENT_TIMESTAMP', $dateColumn['DEFAULT'], 'Incorrect column default expression value');
+
+        //Test default value with integer value
+        $this->assertEquals('integer_column', $intColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertEquals('int', $intColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertEquals(123456, $intColumn['DEFAULT'], 'Incorrect column default integer value');
+
+        //Test default value with string value
+        $this->assertEquals('string_column', $stringColumn['COLUMN_NAME'], 'Incorrect column name');
+        $this->assertEquals('varchar', $stringColumn['DATA_TYPE'], 'Incorrect column type');
+        $this->assertEquals('default test text', $stringColumn['DEFAULT'], 'Incorrect column default string value');
     }
 }

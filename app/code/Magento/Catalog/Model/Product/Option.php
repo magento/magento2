@@ -190,6 +190,17 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     }
 
     /**
+     * Whether or not the option type contains sub-values
+     *
+     * @param string $type
+     * @return bool
+     */
+    public function hasValues($type = null)
+    {
+        return $this->getGroupByType($type) == self::OPTION_GROUP_SELECT;
+    }
+
+    /**
      * @return ProductCustomOptionValuesInterface[]|null
      */
     public function getValues()
