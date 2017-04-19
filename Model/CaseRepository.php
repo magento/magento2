@@ -5,7 +5,7 @@
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
@@ -118,7 +118,7 @@ class CaseRepository implements CaseRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteria $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
