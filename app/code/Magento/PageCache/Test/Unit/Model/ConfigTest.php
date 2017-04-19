@@ -9,6 +9,10 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Config;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
