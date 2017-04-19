@@ -62,8 +62,8 @@ define([
             var elems,
                 recordInstanceMock = new ElementMock(1),
                 elem2 = new ElementMock(2);
-
-            spyOn(recordInstanceMock, "destroy").toHaveBeenCalled();
+            spyOn(recordInstanceMock, "destroy");
+            model.recordData({1: {}});
             elems = [
                 recordInstanceMock,
                 elem2
@@ -71,6 +71,7 @@ define([
             model.elems(elems);
             model.deleteProperty = true;
             model.deleteRecord(1, 1);
+            expect(model.recordData()).toEqual([]);
         });
     });
 });

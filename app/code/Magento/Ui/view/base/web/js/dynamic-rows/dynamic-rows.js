@@ -839,6 +839,7 @@ define([
                 recordsData;
 
             if (this.deleteProperty) {
+                recordsData = this.recordData();
                 recordInstance = _.find(this.elems(), function (elem) {
                     return elem.index === index;
                 });
@@ -846,8 +847,8 @@ define([
                 this.elems([]);
                 this._updateCollection();
                 this.removeMaxPosition();
-                this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
-                this.recordData.valueHasMutated();
+                recordsData[recordInstance.index][this.deleteProperty] = this.deleteValue;
+                this.recordData(recordsData);
                 this.reinitRecordData();
                 this.reload();
             } else {
