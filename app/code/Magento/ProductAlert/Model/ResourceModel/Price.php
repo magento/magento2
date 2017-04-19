@@ -10,6 +10,8 @@ namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
  * Product alert for changed price resource model
+ *
+ * @api
  */
 class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
 {

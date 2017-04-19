@@ -24,7 +24,7 @@ interface ConfigurableProductManagementInterface
     /**
      * Provide the number of product count
      *
-     * @param null|int $status
+     * @param int|null $status
      * @return int
      */
     public function getCount($status = null);
