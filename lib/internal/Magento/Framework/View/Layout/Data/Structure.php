@@ -119,7 +119,7 @@ class Structure extends DataStructure
                 $siblingParentName = $this->getParentId($sibling);
                 if ($parentName !== $siblingParentName) {
                     if ($this->state->getMode() === State::MODE_DEVELOPER) {
-                        $this->logger->critical(
+                        $this->logger->info(
                             "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but " .
                             "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively."
                         );
