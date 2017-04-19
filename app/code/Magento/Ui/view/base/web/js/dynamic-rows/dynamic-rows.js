@@ -156,7 +156,7 @@ define([
                 dnd: '${ $.dndConfig.name }'
             },
             pages: 1,
-            pageSize: 20,
+            pageSize: 2,
             relatedData: [],
             currentPage: 1,
             recordDataCache: [],
@@ -269,10 +269,12 @@ define([
          * @param {Number|String} id
          */
         deleteHandler: function (index, id) {
+            var defaultState;
             this.setDefaultState();
+            defaultState = this.defaultPagesState[this.currentPage()];
             this.processingDeleteRecord(index, id);
             this.pagesChanged[this.currentPage()] =
-                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                !compareArrays(defaultState, this.arrayFilter(this.getChildItems()));
             this.changed(_.some(this.pagesChanged));
         },
 
@@ -326,7 +328,7 @@ define([
         },
 
         /**
-         * Set default dynamic-rows state
+         * Set default dynamic-rows state or state before changing data
          *
          * @param {Array} data - defaultState data
          */
@@ -700,11 +702,6 @@ define([
          */
         processingDeleteRecord: function (index, recordId) {
             this.deleteRecord(index, recordId);
-
-            if (this.getChildItems().length <= 0 && this.pages() !== 1) {
-                this.pages(this.pages() - 1);
-                this.currentPage(this.pages());
-            }
         },
 
         /**
@@ -874,11 +871,14 @@ define([
                 this.update = false;
             }
 
+            this._reducePages();
+            this._sort();
+        },
+
+        _reducePages: function() {
             if (this.pages() < ~~this.currentPage()) {
                 this.currentPage(this.pages());
             }
-
-            this._sort();
         },
 
         /**

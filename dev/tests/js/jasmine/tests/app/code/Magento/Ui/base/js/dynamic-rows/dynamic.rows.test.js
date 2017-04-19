@@ -9,7 +9,13 @@ define([
 ], function (DynamicRows) {
     'use strict';
 
-    var model;
+    var model,
+        ElementMock = function (index) {
+            return {
+                destroy: function () {},
+                index: index
+            };
+        };
 
     beforeEach(function(done) {
         model = new DynamicRows({});
@@ -53,11 +59,14 @@ define([
         });
 
         it ('deleteRecord with Delete Property', function () {
-            var elems, recordInstanceMock;
+            var elems,
+                recordInstanceMock = new ElementMock(1),
+                elem2 = new ElementMock(2);
 
+            spyOn(recordInstanceMock, "destroy").toHaveBeenCalled();
             elems = [
-                {index: 1, label: "a"},
-                {index: 2, label: "b"}
+                recordInstanceMock,
+                elem2
             ];
             model.elems(elems);
             model.deleteProperty = true;
