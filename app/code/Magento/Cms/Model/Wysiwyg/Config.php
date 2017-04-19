@@ -11,6 +11,8 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
  * Wysiwyg Config for Editor HTML Element
+ *
+ * @api
  */
 class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
