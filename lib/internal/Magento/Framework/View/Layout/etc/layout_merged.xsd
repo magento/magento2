@@ -37,7 +37,7 @@
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="container" type="containerType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>

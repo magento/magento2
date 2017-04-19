@@ -141,7 +141,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->taxRuleSearchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);

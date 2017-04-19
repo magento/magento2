@@ -7,8 +7,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -24,9 +25,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rootDirectory;
+    protected $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
@@ -53,6 +54,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     private $escaper;
 
+    /**
+     * @var \Magento\Quote\Model\Quote\Item\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemOptionFactoryMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -61,16 +67,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rootDirectory = $this->getMockBuilder(ReadInterface::class)
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
+            ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA, DriverPool::FILE)
-            ->willReturn($this->rootDirectory);
+            ->willReturn($this->mediaDirectory);
 
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
+            ->setMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $this->urlBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\UrlBuilder::class)
@@ -81,13 +88,38 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->itemOptionFactoryMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\OptionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->coreFileStorageDatabase = $this->getMock(
             \Magento\MediaStorage\Helper\File\Storage\Database::class,
-            ['copyFile'],
+            ['copyFile', 'checkDbUsage'],
             [],
             '',
             false
         );
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
     }
 
     /**
@@ -102,7 +134,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
                 'coreFileStorageDatabase' => $this->coreFileStorageDatabase,
                 'serializer' => $this->serializer,
                 'urlBuilder' => $this->urlBuilder,
-                'escaper' => $this->escaper
+                'escaper' => $this->escaper,
+                'itemOptionFactory' => $this->itemOptionFactoryMock,
             ]
         );
     }
@@ -133,7 +166,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCopyQuoteToOrder()
+    public function testCopyQuoteToOrderWithDbUsage()
     {
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
@@ -154,27 +187,87 @@ class FileTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $optionMock->expects($this->any())
+        $optionMock->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($quoteValue));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->once())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->once())
             ->method('isReadable')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->exactly(2))
             ->method('getAbsolutePath')
             ->will($this->returnValue('/file.path'));
 
-        $this->coreFileStorageDatabase->expects($this->any())
+        $this->coreFileStorageDatabase->expects($this->once())
+            ->method('checkDbUsage')
+            ->willReturn(true);
+
+        $this->coreFileStorageDatabase->expects($this->once())
             ->method('copyFile')
             ->will($this->returnValue('true'));
+
+        $fileObject = $this->getFileObject();
+        $fileObject->setData('configuration_item_option', $optionMock);
+
+        $this->assertInstanceOf(
+            \Magento\Catalog\Model\Product\Option\Type\File::class,
+            $fileObject->copyQuoteToOrder()
+        );
+    }
+
+    public function testCopyQuoteToOrderWithoutUsage()
+    {
+        $optionMock = $this->getMockBuilder(OptionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMockForAbstractClass();
+
+        $quotePath = '/quote/path/path/uploaded.file';
+        $orderPath = '/order/path/path/uploaded.file';
+
+        $quoteValue = "{\"quote_path\":\"$quotePath\",\"order_path\":\"$orderPath\"}";
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($quoteValue)
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
+        $optionMock->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($quoteValue));
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('isFile')
+            ->with($this->equalTo($quotePath))
+            ->will($this->returnValue(true));
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('isReadable')
+            ->with($this->equalTo($quotePath))
+            ->will($this->returnValue(true));
+
+        $this->mediaDirectory->expects($this->never())
+            ->method('getAbsolutePath')
+            ->will($this->returnValue('/file.path'));
+
+        $this->coreFileStorageDatabase->expects($this->once())
+            ->method('checkDbUsage')
+            ->willReturn(false);
+
+        $this->coreFileStorageDatabase->expects($this->any())
+            ->method('copyFile')
+            ->willReturn(false);
 
         $fileObject = $this->getFileObject();
         $fileObject->setData('configuration_item_option', $optionMock);
@@ -222,17 +315,134 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $fileObject->getFormattedOptionValue($optionValue);
     }
 
-    public function testPrepareOptionValueForRequest()
+    public function testGetFormattedOptionValueInvalid()
     {
-        $optionValue = 'string';
-        $resultValue = ['result'];
-        $fileObject = $this->getFileObject();
+        $optionValue = 'invalid json option value...';
+        $this->assertEquals($optionValue, $this->getFileObject()->getFormattedOptionValue($optionValue));
+    }
 
+    public function testGetEditableOptionValue()
+    {
+        $configurationItemOption = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods(['getId', 'getValue'])
+            ->getMock();
+        $configurationItemOption->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(2));
+        $fileObject = $this->getFileObject()->setData('configuration_item_option', $configurationItemOption);
+        $optionTitle = 'Option Title';
+        $optionValue = json_encode(['title' => $optionTitle]);
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($optionValue)
-            ->willReturn($resultValue);
+            ->willReturn(json_decode($optionValue, true));
+        $this->escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->with($optionTitle)
+            ->will($this->returnValue($optionTitle));
 
+        $this->assertEquals('Option Title [2]', $fileObject->getEditableOptionValue($optionValue));
+    }
+
+    public function testGetEditableOptionValueInvalid()
+    {
+        $fileObject = $this->getFileObject();
+        $optionValue = '#invalid jSoN*(&@#^$(*&';
+        $this->escaper->expects($this->never())
+            ->method('escapeHtml');
+
+        $this->assertEquals($optionValue, $fileObject->getEditableOptionValue($optionValue));
+    }
+
+    public function testParseOptionValue()
+    {
+        $optionTitle = 'Option Title';
+        $optionValue = json_encode(['title' => $optionTitle]);
+
+        $userInput = 'Option [2]';
+        $fileObject = $this->getFileObject();
+
+        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getValue'])
+            ->getMock();
+
+        $itemMock->expects($this->any())
+            ->method('load')
+            ->will($this->returnSelf());
+
+        $itemMock->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($optionValue));
+
+        $this->itemOptionFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($itemMock));
+
+        $this->assertEquals($optionValue, $fileObject->parseOptionValue($userInput, []));
+    }
+
+    public function testParseOptionValueNoId()
+    {
+        $optionValue = 'value';
+
+        $userInput = 'Option [xx]';
+        $fileObject = $this->getFileObject();
+
+        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getValue'])
+            ->getMock();
+
+        $itemMock->expects($this->any())
+            ->method('load')
+            ->will($this->returnSelf());
+
+        $itemMock->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($optionValue));
+
+        $this->itemOptionFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($itemMock));
+
+        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+    }
+
+    public function testParseOptionValueInvalid()
+    {
+        $optionValue = 'Invalid json serialized value...';
+
+        $userInput = 'Option [2]';
+        $fileObject = $this->getFileObject();
+
+        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getValue'])
+            ->getMock();
+
+        $itemMock->expects($this->any())
+            ->method('load')
+            ->will($this->returnSelf());
+
+        $itemMock->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($optionValue));
+
+        $this->itemOptionFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($itemMock));
+
+        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+    }
+
+    public function testPrepareOptionValueForRequest()
+    {
+        $resultValue = ['result'];
+        $optionValue = json_encode($resultValue);
+        $fileObject = $this->getFileObject();
         $this->assertEquals($resultValue, $fileObject->prepareOptionValueForRequest($optionValue));
     }
 }
