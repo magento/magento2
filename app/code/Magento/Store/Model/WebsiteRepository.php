@@ -12,8 +12,6 @@ use Magento\Framework\App\Config;
 
 /**
  * Information Expert in store websites handling
- *
- * @package Magento\Store\Model
  */
 class WebsiteRepository implements \Magento\Store\Api\WebsiteRepositoryInterface
 {

@@ -17,35 +17,34 @@ define([
         },
         obj;
 
-    beforeEach(function (done) {
-        injector.mock(mocks);
-        injector.require(['Magento_Analytics/js/modal/modal-component'], function (Constr) {
-            obj = new Constr({
-                provider: 'provName',
-                name: '',
-                index: '',
-                links: '',
-                listens: '',
-
-                /**
-                 * @return {Object} source - mock for form data
-                 */
-                form: function () {
-                    return {
-                        source: {
-                            data: {}
-                        }
-                    };
-                }
-            });
-            done();
-        });
-    });
-
     describe('Magento_Analytics/js/modal/modal-component', function () {
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require(['Magento_Analytics/js/modal/modal-component'], function (Constr) {
+                obj = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    links: '',
+                    listens: '',
+
+                    /**
+                     * @return {Object} source - mock for form data
+                     */
+                    form: function () {
+                        return {
+                            source: {
+                                data: {}
+                            }
+                        };
+                    }
+                });
+                done();
+            });
+        });
         describe('"sendPostponeRequest" method', function () {
             it('should send a ajax request', function () {
-                spyOn(jQuery, 'ajax').and.callFake(function () {
+                jQuery.ajax = jasmine.createSpy().and.callFake(function () {
                     var d = $.Deferred();
 
                     d.resolve({
@@ -62,7 +61,7 @@ define([
 
             it('should call "onError" method if ajax received error', function () {
                 spyOn(obj, 'onError');
-                spyOn(jQuery, 'ajax').and.callFake(function () {
+                jQuery.ajax = jasmine.createSpy().and.callFake(function () {
                     var d = $.Deferred();
 
                     d.resolve({
@@ -80,7 +79,7 @@ define([
 
             it('should call "onError" method if request failed', function () {
                 spyOn(obj, 'onError');
-                spyOn(jQuery, 'ajax').and.callFake(function () {
+                jQuery.ajax = jasmine.createSpy().and.callFake(function () {
                     var d = $.Deferred();
 
                     d.reject();

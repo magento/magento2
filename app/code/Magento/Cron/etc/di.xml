@@ -16,6 +16,7 @@
     <type name="Magento\Framework\App\Config\Initial\Converter">
         <plugin name="cron_system_config_initial_converter_plugin" type="Magento\Cron\Model\System\Config\Initial\Converter" />
     </type>
+    <!-- @api -->
     <virtualType name="shellBackground" type="Magento\Framework\Shell">
         <arguments>
             <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
