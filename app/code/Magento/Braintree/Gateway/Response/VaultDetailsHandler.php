@@ -13,7 +13,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 
 /**
  * Vault Details Handler
@@ -22,7 +22,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 class VaultDetailsHandler implements HandlerInterface
 {
     /**
-     * @var PaymentTokenInterfaceFactory
+     * @var PaymentTokenFactoryInterface
      */
     protected $paymentTokenFactory;
 
@@ -49,7 +49,7 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * VaultDetailsHandler constructor.
      *
-     * @param PaymentTokenInterfaceFactory $paymentTokenFactory
+     * @param PaymentTokenFactoryInterface $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
@@ -57,7 +57,7 @@ class VaultDetailsHandler implements HandlerInterface
      * @throws \RuntimeException
      */
     public function __construct(
-        PaymentTokenInterfaceFactory $paymentTokenFactory,
+        PaymentTokenFactoryInterface $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
         SubjectReader $subjectReader,

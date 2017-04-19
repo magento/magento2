@@ -9,7 +9,7 @@ namespace Magento\Vault\Model;
  * Class CreditCardTokenFactory
  * @api
  */
-class CreditCardTokenFactory extends AbstractPaymentTokenFactory
+class CreditCardTokenFactory extends AbstractPaymentTokenFactoryInterface
 {
     /**
      * @var string

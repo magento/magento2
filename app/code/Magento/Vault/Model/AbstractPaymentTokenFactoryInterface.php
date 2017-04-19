@@ -7,13 +7,13 @@ namespace Magento\Vault\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 
 /**
- * Class AbstractPaymentTokenFactory
+ * Class AbstractPaymentTokenFactoryInterface
  * @api
  */
-abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFactory
+abstract class AbstractPaymentTokenFactoryInterface implements PaymentTokenFactoryInterface
 {
     /**
      * @var ObjectManagerInterface

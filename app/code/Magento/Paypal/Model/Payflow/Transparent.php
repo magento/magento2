@@ -19,7 +19,7 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 
 /**
  * Payflow Pro payment gateway model
@@ -50,7 +50,7 @@ class Transparent extends Payflowpro implements TransparentInterface
     private $responseValidator;
 
     /**
-     * @var PaymentTokenInterfaceFactory
+     * @var PaymentTokenFactoryInterface
      */
     private $paymentTokenFactory;
 
@@ -74,7 +74,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param Gateway $gateway
      * @param HandlerInterface $errorHandler
      * @param ResponseValidator $responseValidator
-     * @param PaymentTokenInterfaceFactory $paymentTokenFactory
+     * @param PaymentTokenFactoryInterface $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -96,7 +96,7 @@ class Transparent extends Payflowpro implements TransparentInterface
         Gateway $gateway,
         HandlerInterface $errorHandler,
         ResponseValidator $responseValidator,
-        PaymentTokenInterfaceFactory $paymentTokenFactory,
+        PaymentTokenFactoryInterface $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,

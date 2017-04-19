@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
+
 namespace Magento\Vault\Api\Data;
 
 /**
- * Interface PaymentTokenInterfaceFactory
+ * Interface PaymentTokenFactoryInterface
  * @api
  */
-interface PaymentTokenInterfaceFactory
+interface PaymentTokenFactoryInterface
 {
     /**
      * Create payment token entity
