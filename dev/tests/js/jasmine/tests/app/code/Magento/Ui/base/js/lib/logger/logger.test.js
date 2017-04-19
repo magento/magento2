@@ -138,7 +138,7 @@ define([
             it('removes previously applied filter criteria', function () {
                 var logger = createLogger(),
                     criteria = function () {
-                        return false
+                        return false;
                     };
 
                 spyOn(entryHandler, 'show');

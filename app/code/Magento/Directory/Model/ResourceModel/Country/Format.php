@@ -6,9 +6,9 @@
 namespace Magento\Directory\Model\ResourceModel\Country;
 
 /**
- * \Directory country format resource model
+ * Directory country format resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Format extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

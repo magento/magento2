@@ -39,5 +39,14 @@
                 <item name="dataset" xsi:type="string">custom_store</item>
             </field>
         </dataset>
+
+        <dataset name="notify_stock_quantity_2">
+            <field name="cataloginventory/item_options/notify_stock_qty" xsi:type="array">
+                <item name="scope" xsi:type="string">catalog</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">2</item>
+            </field>
+        </dataset>
     </repository>
 </config>

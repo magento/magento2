@@ -8,6 +8,9 @@ namespace Magento\Store\Model;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class StoreIsInactiveException extends LocalizedException
 {
     /**
