@@ -34,10 +34,11 @@ class ThemePackageInfo
     private $serializer;
 
     /**
-     * Constructor
+     * Initialize dependencies.
      *
      * @param ComponentRegistrar $componentRegistrar
      * @param ReadFactory $readDirFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
