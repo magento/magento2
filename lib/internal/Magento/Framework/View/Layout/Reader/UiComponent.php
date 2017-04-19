@@ -12,7 +12,6 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\Config\DataInterfaceFactory;
 
-
 /**
  * Class UiComponent
  */
