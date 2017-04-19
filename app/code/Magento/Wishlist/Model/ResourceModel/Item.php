@@ -11,6 +11,9 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel;
 
+/**
+ * @api
+ */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

@@ -48,9 +48,15 @@
     right: 0;
     top: 0;
     visibility: hidden;
+    opacity: 0;
+    -webkit-transition: visibility 0s .3s, opacity .3s ease;
+            transition: visibility 0s .3s, opacity .3s ease;
 
     &._show {
         visibility: visible;
+        opacity: 1;
+        -webkit-transition: opacity .3s ease;
+                transition: opacity .3s ease;
 
         .modal-inner-wrap {
             -webkit-transform: translate(0, 0);
@@ -83,10 +89,8 @@
         position: static;
         -webkit-transform: translateX(100%);
                 transform: translateX(100%);
-        transition-duration: .3s;
-        -webkit-transition-property: -webkit-transform, visibility;
-                transition-property:         transform, visibility;
-        transition-timing-function: ease-in-out;
+        -webkit-transition: -webkit-transform .3s ease-in-out;
+                transition:         transform .3s ease-in-out;
         width: auto;
     }
 }
@@ -115,10 +119,8 @@
         right: 0;
         -webkit-transform: translateY(-200%);
                 transform: translateY(-200%);
-        transition-duration: .2s;
-        -webkit-transition-property: -webkit-transform, visibility;
-                transition-property:         transform, visibility;
-        transition-timing-function: ease;
+        -webkit-transition: -webkit-transform .2s ease;
+                transition:         transform .2s ease;
 
     }
 }
@@ -246,7 +248,7 @@
 //  _____________________________________________
 
 //  Mobile transform to modal-slide
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .modal-popup {
         &.modal-slide {
             .lib-modal-slide();
