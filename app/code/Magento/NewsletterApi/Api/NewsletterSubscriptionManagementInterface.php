@@ -26,11 +26,4 @@ interface NewsletterSubscriptionManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function unsubscribe($email);
-
-    /**
-     * @param int $id
-     * @return bool true on success
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function unsubscribeById($id);
 }
