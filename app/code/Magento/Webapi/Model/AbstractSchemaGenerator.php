@@ -84,10 +84,8 @@ abstract class AbstractSchemaGenerator
         $listOfAllowedServices = [];
         foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
             foreach ($service[ServiceMetadata::KEY_SERVICE_METHODS] as $method) {
-                if ($this->authorization->isAllowed($method[ServiceMetadata::KEY_ACL_RESOURCES])) {
-                    $listOfAllowedServices[] = $serviceName;
-                    break;
-                }
+                $listOfAllowedServices[] = $serviceName;
+                break;
             }
         }
         return $listOfAllowedServices;
