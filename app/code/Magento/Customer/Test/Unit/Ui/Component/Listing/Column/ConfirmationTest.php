@@ -49,7 +49,7 @@ class ConfirmationTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
 
-        $this->context->expects($this->once())
+        $this->context->expects($this->never())
             ->method('getProcessor')
             ->willReturn($this->processor);
 
