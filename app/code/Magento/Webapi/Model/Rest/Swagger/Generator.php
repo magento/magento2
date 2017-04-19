@@ -897,4 +897,23 @@ class Generator extends AbstractSchemaGenerator
 
         return $responses;
     }
+
+    /**
+     * Retrieve a list of services visible to current user.
+     *
+     * @return string[]
+     */
+    public function getListOfServices()
+    {
+        $listOfAllowedServices = [];
+        foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
+            foreach ($service[$this->serviceMetadata::KEY_SERVICE_METHODS] as $method) {
+                if ($this->authorization->isAllowed($method[$this->serviceMetadata::KEY_ACL_RESOURCES])) {
+                    $listOfAllowedServices[] = $serviceName;
+                    break;
+                }
+            }
+        }
+        return $listOfAllowedServices;
+    }
 }
