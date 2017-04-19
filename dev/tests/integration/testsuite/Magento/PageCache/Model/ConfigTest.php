@@ -43,7 +43,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
         );
 
-
         /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
