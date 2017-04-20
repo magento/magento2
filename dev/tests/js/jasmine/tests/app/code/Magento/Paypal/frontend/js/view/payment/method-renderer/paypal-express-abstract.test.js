@@ -3,12 +3,12 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable max-nested-callbacks */
 define([
     'jquery',
     'squire',
     'ko',
-    'mage/translate',
-    'Magento_Ui/js/lib/knockout/bootstrap'
+    'mage/translate'
 ], function ($, Squire, ko, $t) {
     'use strict';
 
@@ -31,9 +31,7 @@ define([
          * @param {Function} expectation
          */
         function clickOnHelpLink(expectation) {
-            var anchorElement = document.querySelector('div.payment-method-title.field.choice > label > a');
-
-            $(anchorElement).add('span').find('span').trigger('click');
+            $('div.payment-method-title.field.choice > label > a > span').trigger('click');
             expectation();
         }
 
@@ -56,7 +54,6 @@ define([
 
                     $(document.body).append(templateElement);
                     ko.applyBindings(paypalExpressAbstract, templateElement);
-
                     done();
                 });
         });
@@ -87,7 +84,6 @@ define([
 
         afterAll(function (done) {
             templateElement.remove();
-
             done();
         });
     });
