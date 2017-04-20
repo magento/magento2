@@ -42,7 +42,7 @@
         "composer/composer": "1.0.0-beta1",
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
-        "pelago/emogrifier": "0.1.1",
+        "pelago/emogrifier": "^1.2.0",
         "tubalmartin/cssmin": "3.0.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "braintree/braintree_php": "3.7.0",
