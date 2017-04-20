@@ -712,6 +712,58 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @return void
+     */
+    public function testGetListWithFilteringByWebsite()
+    {
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Website::class);
+        $website->load('test', 'code');
+        $searchCriteria = [
+            'searchCriteria' => [
+                'filter_groups' => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'website_id',
+                                'value' => $website->getId(),
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
+                'current_page' => 1,
+                'page_size' => 10,
+            ],
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+        $this->assertTrue(count($response['items']) == 1);
+
+        $isSkuExists = false;
+        foreach ($response['items'] as $item) {
+            if ($item['sku'] == 'simple-2') {
+                $isSkuExists = true;
+            }
+        }
+        $this->assertTrue($isSkuExists);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
      * @dataProvider testGetListWithFilteringByStoreDataProvider
      *
      * @param array $searchCriteria
