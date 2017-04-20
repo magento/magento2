@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Controller\Webhooks;
@@ -23,6 +23,13 @@ use Psr\Log\LoggerInterface;
  */
 class Handler extends Action
 {
+    /**
+     * Event topic of test webhook request.
+     *
+     * @var string
+     */
+    private static $eventTopicTest = 'cases/test';
+
     /**
      * @var WebhookRequest
      */
@@ -95,18 +102,21 @@ class Handler extends Action
      */
     public function execute()
     {
+        if ($this->config->isDebugModeEnabled()) {
+            $this->logger->debug($this->webhookRequest->getEventTopic() . '|' . $this->webhookRequest->getBody());
+        }
+
         if (!$this->webhookRequestValidator->validate($this->webhookRequest)) {
             $this->_redirect('noroute');
             return;
         }
 
         $webhookMessage = $this->webhookMessageReader->read($this->webhookRequest);
-
-        $data = $webhookMessage->getData();
-        if ($this->config->isDebugModeEnabled()) {
-            $this->logger->debug(json_encode($data));
+        if ($webhookMessage->getEventTopic() === self::$eventTopicTest) {
+            return;
         }
 
+        $data = $webhookMessage->getData();
         if (empty($data['caseId'])) {
             $this->_redirect('noroute');
             return;

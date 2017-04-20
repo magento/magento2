@@ -1,23 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event;
-use Magento\Sales\Api\Data\OrderInterface;
-
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Api\CaseCreationServiceInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Signifyd\Api\CaseCreationServiceInterface;
+use Magento\Signifyd\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
- * Place Order observer.
- *
  * Observer should be triggered when new order is created and placed.
  * If Signifyd integration enabled in configuration then new case will be created.
  */
@@ -39,8 +36,6 @@ class PlaceOrder implements ObserverInterface
     private $logger;
 
     /**
-     * PlaceOrder constructor.
-     *
      * @param Config $signifydIntegrationConfig
      * @param CaseCreationServiceInterface $caseCreationService
      * @param LoggerInterface $logger
@@ -78,7 +73,7 @@ class PlaceOrder implements ObserverInterface
     }
 
     /**
-     * Creates signifyd case for single order
+     * Creates Signifyd case for single order with online payment method.
      *
      * @param OrderInterface $order
      * @return void
@@ -86,7 +81,7 @@ class PlaceOrder implements ObserverInterface
     private function createCaseForOrder($order)
     {
         $orderId = $order->getEntityId();
-        if (null === $orderId) {
+        if (null === $orderId || $order->getPayment()->getMethodInstance()->isOffline()) {
             return;
         }
 

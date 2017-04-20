@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model\CaseServices;
@@ -8,6 +8,8 @@ namespace Magento\Signifyd\Model\CaseServices;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
+use Magento\Signifyd\Model\OrderStateService;
+use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Psr\Log\LoggerInterface;
@@ -40,23 +42,39 @@ class CreationService implements CaseCreationServiceInterface
     private $caseRepository;
 
     /**
+     * @var OrderGridUpdater
+     */
+    private $orderGridUpdater;
+
+    /**
+     * @var OrderStateService
+     */
+    private $orderStateService;
+
+    /**
      * CreationService constructor.
      *
      * @param CaseManagementInterface $caseManagement
      * @param Gateway $signifydGateway
      * @param LoggerInterface $logger
      * @param CaseRepositoryInterface $caseRepository
+     * @param OrderGridUpdater $orderGridUpdater
+     * @param OrderStateService $orderStateService
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
         Gateway $signifydGateway,
         LoggerInterface $logger,
-        CaseRepositoryInterface $caseRepository
+        CaseRepositoryInterface $caseRepository,
+        OrderGridUpdater $orderGridUpdater,
+        OrderStateService $orderStateService
     ) {
         $this->caseManagement = $caseManagement;
         $this->signifydGateway = $signifydGateway;
         $this->logger = $logger;
         $this->caseRepository = $caseRepository;
+        $this->orderGridUpdater = $orderGridUpdater;
+        $this->orderStateService = $orderStateService;
     }
 
     /**
@@ -65,6 +83,7 @@ class CreationService implements CaseCreationServiceInterface
     public function createForOrder($orderId)
     {
         $case = $this->caseManagement->create($orderId);
+        $this->orderGridUpdater->update($orderId);
 
         try {
             $caseId = $this->signifydGateway->createCase($orderId);
@@ -75,6 +94,7 @@ class CreationService implements CaseCreationServiceInterface
 
         $case->setCaseId($caseId);
         $this->caseRepository->save($case);
+        $this->orderStateService->updateByCase($case);
 
         return true;
     }

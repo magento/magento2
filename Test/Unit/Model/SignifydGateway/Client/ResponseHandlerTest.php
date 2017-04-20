@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Test\Unit\Model\SignifydGateway\Client;
@@ -70,7 +70,6 @@ class ResponseHandlerTest extends \PHPUnit_Framework_TestCase
         $this->responseHandler = $this->objectManager->getObject(ResponseHandler::class, [
             'dataDecoder' => $this->dataDecoder
         ]);
-
     }
 
     /**

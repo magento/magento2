@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Test\Unit\Model\Guarantee;
@@ -8,10 +8,9 @@ namespace Magento\Signifyd\Test\Unit\Model\Guarantee;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Model\CaseEntity;
+use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Model\Guarantee\CancelGuaranteeAbility;
 
 /**
@@ -65,10 +64,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
-
-        $case->expects($this->once())
             ->method('getGuaranteeDisposition')
             ->willReturn(CaseEntity::GUARANTEE_APPROVED);
 
@@ -80,10 +75,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         /** @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject $order */
         $order = $this->getMockBuilder(OrderInterface::class)
             ->getMockForAbstractClass();
-
-        $order->expects($this->once())
-            ->method('getState')
-            ->willReturn(Order::STATE_COMPLETE);
 
         $this->orderRepository->expects($this->once())
             ->method('get')
@@ -109,12 +100,9 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests case when GuaranteeEligible for Case is true or null
-     *
-     * @param mixed $guaranteeEligible
-     * @dataProvider isAvailableWithGuarantyIsEligibleDataProvider
+     * Tests case when Guarantee Disposition has Canceled states.
      */
-    public function testIsAvailableWithGuarantyIsEligible($guaranteeEligible)
+    public function testIsAvailableWithCanceledGuarantee()
     {
         $orderId = 123;
 
@@ -122,48 +110,10 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn($guaranteeEligible);
-
-        $this->caseManagement->expects($this->once())
-            ->method('getByOrderId')
-            ->with($orderId)
-            ->willReturn($case);
-
-        $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
-    }
-
-    public function isAvailableWithGuarantyIsEligibleDataProvider()
-    {
-        return [
-            [null], [true]
-        ];
-    }
-
-    /**
-     * Tests case when Guarantee Disposition has Declined or Canceled states.
-     *
-     * @param string $guaranteeDisposition
-     * @dataProvider isAvailableWithCanceledGuaranteeDataProvider
-     */
-    public function testIsAvailableWithCanceledGuarantee($guaranteeDisposition)
-    {
-        $orderId = 123;
-
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
-        $case = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
 
         $case->expects($this->once())
             ->method('getGuaranteeDisposition')
-            ->willReturn($guaranteeDisposition);
+            ->willReturn(CaseEntity::GUARANTEE_CANCELED);
 
         $this->caseManagement->expects($this->once())
             ->method('getByOrderId')
@@ -173,15 +123,8 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
     }
 
-    public function isAvailableWithCanceledGuaranteeDataProvider()
-    {
-        return [
-            [CaseEntity::GUARANTEE_DECLINED], [CaseEntity::GUARANTEE_CANCELED]
-        ];
-    }
-
     /**
-     * Tests case when order doesn't not exist.
+     * Tests case when order does not exist.
      */
     public function testIsAvailableWithNullOrder()
     {
@@ -191,10 +134,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
 
         $case->expects($this->once())
             ->method('getGuaranteeDisposition')
@@ -209,47 +148,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($orderId)
             ->willThrowException(new NoSuchEntityException());
-
-        $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
-    }
-
-    /**
-     * Tests case when order has Canceled state.
-     */
-    public function testIsAvailableWithCanceledOrder()
-    {
-        $orderId = 123;
-
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
-        $case = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
-
-        $case->expects($this->once())
-            ->method('getGuaranteeDisposition')
-            ->willReturn(CaseEntity::GUARANTEE_APPROVED);
-
-        $this->caseManagement->expects($this->once())
-            ->method('getByOrderId')
-            ->with($orderId)
-            ->willReturn($case);
-
-        /** @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject $order */
-        $order = $this->getMockBuilder(OrderInterface::class)
-            ->getMockForAbstractClass();
-
-        $order->expects($this->once())
-            ->method('getState')
-            ->willReturn(Order::STATE_CANCELED);
-
-        $this->orderRepository->expects($this->once())
-            ->method('get')
-            ->with($orderId)
-            ->willReturn($order);
 
         $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
     }

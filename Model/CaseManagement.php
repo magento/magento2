@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model;
@@ -64,9 +64,11 @@ class CaseManagement implements CaseManagementInterface
      */
     public function create($orderId)
     {
+        /** @var \Magento\Signifyd\Api\Data\CaseInterface $case */
         $case = $this->caseFactory->create();
         $case->setOrderId($orderId)
-            ->setStatus(CaseInterface::STATUS_PENDING);
+            ->setStatus(CaseInterface::STATUS_PENDING)
+            ->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING);
         try {
             return $this->caseRepository->save($case);
         } catch (DuplicateException $e) {

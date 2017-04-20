@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Test\Unit\Model\CaseServices;
@@ -12,6 +12,8 @@ use Magento\Signifyd\Model\CaseServices\UpdatingService;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorException;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
+use Magento\Signifyd\Model\OrderStateService;
+use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -45,6 +47,16 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
     private $commentsHistoryUpdater;
 
     /**
+     * @var OrderGridUpdater|MockObject
+     */
+    private $orderGridUpdater;
+
+    /**
+     * @var OrderStateService|MockObject
+     */
+    private $orderStateService;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -66,10 +78,20 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['addComment'])
             ->getMock();
 
+        $this->orderGridUpdater = $this->getMockBuilder(OrderGridUpdater::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->orderStateService = $this->getMockBuilder(OrderStateService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->service = $this->objectManager->getObject(UpdatingService::class, [
             'messageGenerator' => $this->messageGenerator,
             'caseRepository' => $this->caseRepository,
-            'commentsHistoryUpdater' => $this->commentsHistoryUpdater
+            'commentsHistoryUpdater' => $this->commentsHistoryUpdater,
+            'orderGridUpdater' => $this->orderGridUpdater,
+            'orderStateService' => $this->orderStateService
         ]);
     }
 
@@ -171,7 +193,8 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
     {
         $caseId = 123;
         $data = [
-            'caseId' => $caseId
+            'caseId' => $caseId,
+            'orderId' => 1
         ];
 
         $caseEntity = $this->withCaseEntity(1, $caseId, $data);
@@ -180,6 +203,10 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($caseEntity)
             ->willReturn($caseEntity);
+
+        $this->orderGridUpdater->expects(self::once())
+            ->method('update')
+            ->with($data['orderId']);
 
         $message = __('Message is generated.');
         $this->messageGenerator->expects(self::once())
@@ -204,15 +231,21 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
     {
         $caseId = 123;
         $data = [
-            'caseId' => $caseId
+            'caseId' => $caseId,
+            'orderId' => 1
         ];
 
         $caseEntity = $this->withCaseEntity(21, $caseId, $data);
 
+        $caseEntitySaved = clone $caseEntity;
+        $caseEntitySaved->expects(self::once())
+            ->method('getGuaranteeDisposition')
+            ->willReturn('APPROVED');
+
         $this->caseRepository->expects(self::once())
             ->method('save')
             ->with($caseEntity)
-            ->willReturn($caseEntity);
+            ->willReturn($caseEntitySaved);
 
         $message = __('Message is generated.');
         $this->messageGenerator->expects(self::once())
@@ -220,9 +253,17 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->with($data)
             ->willReturn($message);
 
+        $this->orderGridUpdater->expects(self::once())
+            ->method('update')
+            ->with($data['orderId']);
+
         $this->commentsHistoryUpdater->expects(self::once())
             ->method('addComment')
-            ->with($caseEntity, $message);
+            ->with($caseEntitySaved, $message);
+
+        $this->orderStateService->expects(self::once())
+            ->method('updateByCase')
+            ->with($caseEntitySaved);
 
         $this->service->update($caseEntity, $data);
     }
@@ -240,7 +281,10 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var CaseInterface|MockObject $caseEntity */
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getCaseId', 'setCaseId', 'setStatus', 'setOrderId', 'setScore'])
+            ->setMethods([
+                'getEntityId', 'getCaseId', 'getOrderId',
+                'setCaseId', 'setStatus', 'setOrderId', 'setScore'
+            ])
             ->getMockForAbstractClass();
 
         $caseEntity->expects(self::any())
@@ -260,6 +304,11 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
                 ->method($method)
                 ->with(self::equalTo($value))
                 ->willReturnSelf();
+
+            $method = 'get' . ucfirst($property);
+            $caseEntity->expects(self::any())
+                ->method($method)
+                ->willReturn($value);
         }
 
         return $caseEntity;

@@ -1,19 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Test\Unit\Block\Adminhtml;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Model\CaseManagement;
-use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
 use Magento\Signifyd\Block\Adminhtml\CaseInfo;
+use Magento\Signifyd\Model\CaseManagement;
+use Magento\Signifyd\Model\Config;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests for Signifyd block information.
@@ -33,27 +32,22 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     private $caseInfo;
 
     /**
-     * @var Context
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var Config
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var CaseManagement
+     * @var CaseManagement|MockObject
      */
     private $caseManagement;
 
     /**
-     * @var CreateGuaranteeAbility
-     */
-    private $createGuaranteeAbility;
-
-    /**
-     * @var RequestInterface
+     * @var RequestInterface|MockObject
      */
     private $request;
 
@@ -83,10 +77,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->createGuaranteeAbility = $this->getMockBuilder(CreateGuaranteeAbility::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getScore'])
@@ -95,56 +85,50 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
         $this->caseInfo = $objectManager->getObject(CaseInfo::class, [
             'context' => $this->context,
             'config' => $this->config,
-            'caseManagement' => $this->caseManagement,
-            'createGuaranteeAbility' => $this->createGuaranteeAbility
+            'caseManagement' => $this->caseManagement
         ]);
     }
 
     /**
-     * Checks css class according to case entity score value.
+     * Checks label according to Signifyd Guarantee Disposition.
      *
-     * @param integer $score
-     * @param string $expectedClassName
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getScoreClass
-     * @dataProvider getScoreClassDataProvider
+     * @param string $guaranteeDisposition
+     * @param string $expectedLabel
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseGuaranteeDisposition()
+     * @dataProvider getGuaranteeLabelDataProvider
      */
-    public function testGetScoreClass($score, $expectedClassName)
+    public function testGetGuaranteeDisposition($guaranteeDisposition, $expectedLabel)
     {
-        $this->caseEntity->expects($this->once())
-            ->method('getScore')
-            ->willReturn($score);
-
         $this->caseManagement->expects(self::once())
             ->method('getByOrderId')
             ->willReturn($this->caseEntity);
 
+        $this->caseEntity->expects(self::atLeastOnce())
+            ->method('getGuaranteeDisposition')
+            ->willReturn($guaranteeDisposition);
+
         self::assertEquals(
-            $expectedClassName,
-            $this->caseInfo->getScoreClass()
+            $expectedLabel,
+            $this->caseInfo->getCaseGuaranteeDisposition()
         );
     }
 
     /**
-     * Checks case property getter with real case.
+     * Case Guarantee Disposition and corresponding label data provider.
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseProperty
+     * @return array
      */
-    public function testCasePropertyWithCaseExists()
+    public function getGuaranteeLabelDataProvider()
     {
-        $score = 575;
-
-        $this->caseEntity->expects($this->once())
-            ->method('getScore')
-            ->willReturn($score);
-
-        $this->caseManagement->expects(self::once())
-            ->method('getByOrderId')
-            ->willReturn($this->caseEntity);
-
-        self::assertEquals(
-            $score,
-            $this->caseInfo->getCaseScore()
-        );
+        return [
+            [CaseInterface::GUARANTEE_APPROVED, __('Approved')],
+            [CaseInterface::GUARANTEE_DECLINED, __('Declined')],
+            [CaseInterface::GUARANTEE_PENDING, __('Pending')],
+            [CaseInterface::GUARANTEE_CANCELED, __('Canceled')],
+            [CaseInterface::GUARANTEE_IN_REVIEW, __('In Review')],
+            [CaseInterface::GUARANTEE_UNREQUESTED, __('Unrequested')],
+            ['Unregistered', '']
+        ];
     }
 
     /**
@@ -159,22 +143,8 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         self::assertEquals(
-            0,
-            $this->caseInfo->getCaseScore()
+            '',
+            $this->caseInfo->getCaseGuaranteeDisposition()
         );
-    }
-
-    /**
-     * Case scores and corresponding class name data provider
-     *
-     * @return array
-     */
-    public function getScoreClassDataProvider()
-    {
-        return [
-            [300, 'red'],
-            [400, 'yellow'],
-            [500, 'green'],
-        ];
     }
 }
