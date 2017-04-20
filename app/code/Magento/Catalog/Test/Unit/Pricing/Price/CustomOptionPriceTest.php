@@ -180,7 +180,7 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         $option2Id = 2;
         $option2MaxPrice = 200;
         $option2MinPrice = 20;
-        $option2Type = Option::OPTION_TYPE_CHECKBOX;
+        $option2Type = \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX;
 
         $optionsData = [
             [

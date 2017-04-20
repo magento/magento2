@@ -146,6 +146,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                     'web/test2/test_value_3' => ['value3.config.default.test'],
                     'web/test2/test_value_4' => ['value4.env.default.test'],
                     'carriers/fedex/account' => ['******'],
+                    'paypal/fetch_reports/ftp_password' => ['******'],
                     'web/test' => [
                         'web/test/test_value_1 - value1.db.default.test',
                         'web/test/test_value_2 - value2.local_config.default.test',
@@ -166,6 +167,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                         'web/test2/test_value_3 - value3.config.default.test',
                         'web/test2/test_value_4 - value4.env.default.test',
                         'carriers/fedex/account - ******',
+                        'paypal/fetch_reports/ftp_password - ******',
                     ],
                 ]
             ],
