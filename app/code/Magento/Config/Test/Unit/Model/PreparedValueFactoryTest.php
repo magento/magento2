@@ -13,12 +13,14 @@ use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * @inheritdoc
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -149,7 +151,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->structureMock);
         $this->structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
@@ -202,6 +204,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                 '/custom/config_path',
                 'someValue',
                 'someScope',
+                'someScope',
                 'someScopeCode',
                 1,
             ],
@@ -210,6 +213,39 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 'someValue',
                 ScopeInterface::SCOPE_DEFAULT,
+                ScopeInterface::SCOPE_DEFAULT,
+                null,
+                0,
+            ],
+            'website scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_WEBSITE,
+                StoreScopeInterface::SCOPE_WEBSITES,
+                null,
+                0,
+            ],
+            'websites scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_WEBSITES,
+                StoreScopeInterface::SCOPE_WEBSITES,
+                null,
+                0,
+            ],
+            'store scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_STORE,
+                StoreScopeInterface::SCOPE_STORES,
+                null,
+                0,
+            ],
+            'stores scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_STORES,
+                StoreScopeInterface::SCOPE_STORES,
                 null,
                 0,
             ],
@@ -240,7 +276,7 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->structureMock);
         $this->structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
