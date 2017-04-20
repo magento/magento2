@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Downloadable Products File Helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {

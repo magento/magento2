@@ -5,6 +5,9 @@
 
 /* global $break $ $$ FORM_KEY */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'mage/template',
