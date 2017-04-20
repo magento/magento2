@@ -13,8 +13,8 @@ use Magento\Security\Model\SecurityCookie;
  */
 class SecurityCookieTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager */
-    protected $phpCookieManagerMock;
+    /** @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster */
+    protected $phpCookieMonsterMock;
 
     /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory */
     protected $cookieMetadataFactoryMock;
@@ -37,8 +37,8 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->phpCookieManagerMock = $this->getMock(
-            \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
+        $this->phpCookieMonsterMock = $this->getMock(
+            \Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class,
             ['setPublicCookie'],
             [],
             '',
@@ -81,7 +81,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             SecurityCookie::class,
             [
-                'phpCookieManager' => $this->phpCookieManagerMock,
+                'phpCookieManager' => $this->phpCookieMonsterMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
                 'cookieReader' => $this->cookieReaderMock,
                 'backendData' => $this->backendDataMock
@@ -128,7 +128,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
             ->with('/' . $frontName)
             ->willReturnSelf();
 
-        $this->phpCookieManagerMock->expects($this->once())
+        $this->phpCookieMonsterMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
                 SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
@@ -164,7 +164,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
             ->with(-1)
             ->willReturnSelf();
 
-        $this->phpCookieManagerMock->expects($this->once())
+        $this->phpCookieMonsterMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
                 SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,

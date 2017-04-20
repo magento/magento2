@@ -62,7 +62,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $this->config = $this->getMock(\Magento\Backend\App\Config::class, ['getValue'], [], '', false);
         $this->cookieManager = $this->getMock(
-            \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
+            \Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class,
             ['getCookie', 'setPublicCookie'],
             [],
             '',

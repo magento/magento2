@@ -49,7 +49,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     private $cookieMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
      */
     private $cookieMetadataManager;
 
@@ -98,13 +98,13 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      * Retrieve cookie manager
      *
      * @deprecated
-     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
      */
     private function getCookieManager()
     {
         if (!$this->cookieMetadataManager) {
             $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
+                \Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class
             );
         }
         return $this->cookieMetadataManager;

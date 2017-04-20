@@ -28,7 +28,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->cookieManMock = $this->getMock(
-            \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
+            \Magento\Framework\Stdlib\Cookie\PhpCookieMonster::class,
             [],
             [],
             '',

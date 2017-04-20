@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework;
 
-class CookieManager extends \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+class CookieManager extends \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
 {
     /**
      * Dummy function, which sets value directly to $_COOKIE super-global array instead of calling setcookie()

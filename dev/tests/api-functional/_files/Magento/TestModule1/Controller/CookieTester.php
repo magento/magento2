@@ -7,7 +7,7 @@ namespace Magento\TestModule1\Controller;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PhpCookieMonster;
 
 /**
  * Controller for testing the CookieManager.
@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
  */
 abstract class CookieTester implements \Magento\Framework\App\ActionInterface
 {
-    /** @var PhpCookieManager */
+    /** @var PhpCookieMonster */
     protected $cookieManager;
 
     /** @var  CookieMetadataFactory */
@@ -33,12 +33,12 @@ abstract class CookieTester implements \Magento\Framework\App\ActionInterface
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param PhpCookieManager $cookieManager
+     * @param PhpCookieMonster $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        PhpCookieManager $cookieManager,
+        PhpCookieMonster $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory
     ) {
         $this->cookieManager = $cookieManager;

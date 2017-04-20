@@ -20,9 +20,9 @@ class SecurityCookie
     const LOGOUT_REASON_CODE_COOKIE_NAME = 'loggedOutReasonCode';
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieMonster
      */
-    private $phpCookieManager;
+    private $phpCookieMonster;
 
     /**
      * @var \Magento\Backend\Helper\Data
@@ -40,18 +40,18 @@ class SecurityCookie
     private $cookieReader;
 
     /**
-     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieMonster $phpCookieMonster
      * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
      * @param CookieReaderInterface $cookieReader
      * @param \Magento\Backend\Helper\Data $backendData
      */
     public function __construct(
-        \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,
+        \Magento\Framework\Stdlib\Cookie\PhpCookieMonster $phpCookieMonster,
         \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory,
         CookieReaderInterface $cookieReader,
         \Magento\Backend\Helper\Data $backendData
     ) {
-        $this->phpCookieManager = $phpCookieManager;
+        $this->phpCookieMonster = $phpCookieMonster;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->cookieReader = $cookieReader;
         $this->backendData = $backendData;
@@ -78,7 +78,7 @@ class SecurityCookie
         $metaData = $this->createCookieMetaData();
         $metaData->setPath('/' . $this->backendData->getAreaFrontName());
 
-        $this->phpCookieManager->setPublicCookie(
+        $this->phpCookieMonster->setPublicCookie(
             self::LOGOUT_REASON_CODE_COOKIE_NAME,
             (int) $status,
             $metaData
@@ -97,7 +97,7 @@ class SecurityCookie
         $metaData = $this->createCookieMetaData();
         $metaData->setPath('/' . $this->backendData->getAreaFrontName())->setDuration(-1);
 
-        $this->phpCookieManager->setPublicCookie(
+        $this->phpCookieMonster->setPublicCookie(
             self::LOGOUT_REASON_CODE_COOKIE_NAME,
             '',
             $metaData
