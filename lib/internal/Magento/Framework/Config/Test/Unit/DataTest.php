@@ -8,7 +8,7 @@ namespace Magento\Framework\Config\Test\Unit;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
-   /**
+    /**
      * @var \Magento\Framework\Config\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $readerMock;
