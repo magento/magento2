@@ -39,7 +39,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->localeResolverMock = $this->getMock(ResolverInterface::class, [], [], '', false);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->processorMock = $this->getMock(Processor::class, [], [], '', false);
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($this->processorMock);
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
     }
 
     public function testPrepareWithTimeOffset()

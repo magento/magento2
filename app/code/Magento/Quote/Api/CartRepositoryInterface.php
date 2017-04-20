@@ -28,10 +28,10 @@ interface CartRepositoryInterface
      * which call to use to get detailed information about all attributes for an object.
      *
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Quote\Api\Data\CartSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Get quote by customer Id
