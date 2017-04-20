@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Session;
 
-interface SaveHandlerInterface extends \Zend_Session_SaveHandler_Interface
+interface SaveHandlerInterface extends \SessionHandlerInterface
 {
     /**
      * Default session save handler
