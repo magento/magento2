@@ -7,9 +7,8 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiClass',
-    'mage/translate'
-], function ($, _, utils, Class, $t) {
+    'uiClass'
+], function ($, _, utils, Class) {
     'use strict';
 
     /**
@@ -74,48 +73,6 @@ define([
              */
             complete: function () {
                 $('body').trigger('processStop');
-            },
-
-            /**
-             * Error callback.
-             */
-            error: function (request, type, errorThrown) {
-                var message;
-
-                switch (type) {
-                    case 'timeout':
-                        message = $t('The request timed out.');
-                        break;
-                    case 'notmodified':
-                        message = $t('The request was not modified but was not retrieved from the cache.');
-                        break;
-                    case 'parsererror':
-                        message = $t('XML/Json format is bad.');
-                        break;
-                    case 'abort':
-                        message = $t('The request was aborted by the server.');
-                        break;
-                    default:
-                        message = $t('HTTP Error') + ' (' + request.status + ' ' + request.statusText + ').';
-                }
-
-                $('body').notification('clear');
-                $('body').notification('add', {
-                    error: true,
-                    message: message,
-
-                    /**
-                     * Insert method.
-                     *
-                     * @param {String} msg
-                     */
-                    insertMethod: function (msg) {
-                        var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
-
-                        $('.page-main-actions', selectorPrefix).after($wrapper);
-                    }
-                });
-
             }
         });
 
