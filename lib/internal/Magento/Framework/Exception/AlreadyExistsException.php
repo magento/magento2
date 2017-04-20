@@ -8,7 +8,7 @@ namespace Magento\Framework\Exception;
 use Magento\Framework\Phrase;
 
 /**
- * Class AlreadyExistsException
+ * @api
  */
 class AlreadyExistsException extends LocalizedException
 {
