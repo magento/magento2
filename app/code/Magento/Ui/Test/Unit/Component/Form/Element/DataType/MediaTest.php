@@ -27,12 +27,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->any())
-            ->method('getProcessor')
-            ->willReturn($this->processor);
 
         $this->media = new Media($this->context);
         $this->media->setData(
@@ -48,6 +42,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepare()
     {
+        $this->processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processor);
         $url = 'http://magento2.com/module/actionPath/path/key/34523456234523trdg';
         $this->context->expects($this->once())
             ->method('getUrl')

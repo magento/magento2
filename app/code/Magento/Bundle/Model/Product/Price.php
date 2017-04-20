@@ -339,8 +339,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                             }
 
                             $multiTypes = [
-                                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX,
-                                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE,
+                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX,
+                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE,
                             ];
 
                             if (in_array($customOption->getType(), $multiTypes)) {
