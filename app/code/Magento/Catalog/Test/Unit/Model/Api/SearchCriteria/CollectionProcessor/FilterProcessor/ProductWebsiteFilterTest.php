@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
 
-class ProductCategoryFilterTest extends \PHPUnit_Framework_TestCase
+class ProductWebsiteFilterTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ProductWebsiteFilter */
     private $model;
