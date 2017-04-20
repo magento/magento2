@@ -47,6 +47,21 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     protected $state;
 
     /**
+     * @var array
+     */
+    protected $changelogBatchSize = [
+        'default_size' => 1000,
+        'catalog_category_product' => 1000,
+        'catalog_product_category' => 1000,
+        'catalog_product_price' => 1000,
+        'catalog_product_attribute' => 1000,
+        'cataloginventory_stock' => 1000,
+        'catalogrule_rule' => 1000,
+        'catalogrule_product' => 1000,
+        'catalogsearch_fulltext' => 1000,
+    ];
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
@@ -253,26 +268,36 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
             } catch (ChangelogTableNotExistsException $e) {
                 return;
             }
-            $lastVersionId = $this->getState()->getVersionId();
-            $ids = $this->getChangelog()->getList($lastVersionId, $currentVersionId);
-            if ($ids) {
-                $action = $this->actionFactory->get($this->getActionClass());
+            $lastVersionId = (int) $this->getState()->getVersionId();
+            $action = $this->actionFactory->get($this->getActionClass());
+
+            try {
                 $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
-                try {
-                    $action->execute($ids);
-                    $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
-                        ? View\StateInterface::STATUS_SUSPENDED
-                        : View\StateInterface::STATUS_IDLE;
-                    $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
-                } catch (\Exception $exception) {
-                    $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
-                        ? View\StateInterface::STATUS_SUSPENDED
-                        : View\StateInterface::STATUS_IDLE;
-                    $this->getState()->setStatus($statusToRestore)->save();
-                    throw $exception;
+
+                $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
+                    ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+                    : $this->changelogBatchSize['default_size'];
+
+                for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $batchSize) {
+                    $ids = $this->getChangelog()->getList($versionFrom, $versionFrom + $batchSize);
+
+                    if (!empty($ids)) {
+                        $action->execute($ids);
+                    }
                 }
+
+                $this->getState()->loadByView($this->getId());
+                $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
+                    ? View\StateInterface::STATUS_SUSPENDED
+                    : View\StateInterface::STATUS_IDLE;
+                $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
+            } catch (\Exception $exception) {
+                $this->getState()->loadByView($this->getId());
+                $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
+                    ? View\StateInterface::STATUS_SUSPENDED
+                    : View\StateInterface::STATUS_IDLE;
+                $this->getState()->setStatus($statusToRestore)->save();
+                throw $exception;
             }
         }
     }
