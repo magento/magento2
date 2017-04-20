@@ -260,9 +260,9 @@ class Editor extends Textarea
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Widget...'),
-                    'onclick' => "widgetTools.openDialog('" . $this->getConfig(
-                            'widget_window_url'
-                        ) . "widget_target_id/" . $this->getHtmlId() . "')",
+                    'onclick' => "widgetTools.openDialog('"
+                        . $this->getConfig('widget_window_url')
+                        . "widget_target_id/" . $this->getHtmlId() . "')",
                     'class' => 'action-add-widget plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -274,13 +274,12 @@ class Editor extends Textarea
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Image...'),
-                    'onclick' => "MediabrowserUtility.openDialog('" . $this->getConfig(
-                            'files_browser_window_url'
-                        ) . "target_element_id/" . $this->getHtmlId() . "/" . (null !== $this->getConfig(
-                            'store_id'
-                        ) ? 'store/' . $this->getConfig(
-                                'store_id'
-                            ) . '/' : '') . "')",
+                    'onclick' => "MediabrowserUtility.openDialog('"
+                        . $this->getConfig('files_browser_window_url')
+                        . "target_element_id/" . $this->getHtmlId() . "/"
+                        . (null !== $this->getConfig('store_id') ? 'store/'
+                            . $this->getConfig('store_id') . '/' : '')
+                        . "')",
                     'class' => 'action-add-image plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -395,13 +394,11 @@ class Editor extends Textarea
             return '<div class="admin__control-wysiwig">' .$html . '</div>';
         }
 
-        $html = '<div id="editor' . $this->getHtmlId() . '"' . ($this->getConfig(
-                'no_display'
-            ) ? ' style="display:none;"' : '') . ($this->getConfig(
-                'container_class'
-            ) ? ' class="admin__control-wysiwig ' . $this->getConfig(
-                    'container_class'
-                ) . '"' : '') . '>' . $html . '</div>';
+        $html = '<div id="editor' . $this->getHtmlId() . '"'
+            . ($this->getConfig('no_display') ? ' style="display:none;"' : '')
+            . ($this->getConfig('container_class') ? ' class="admin__control-wysiwig '
+                . $this->getConfig('container_class') . '"' : '')
+            . '>' . $html . '</div>';
 
         return $html;
     }
