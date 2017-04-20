@@ -7,6 +7,8 @@ namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Store group resource model
+ *
+ * @api
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

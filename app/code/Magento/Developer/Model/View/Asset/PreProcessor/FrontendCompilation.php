@@ -15,6 +15,8 @@ use Magento\Framework\View\Asset\Source;
 
 /**
  * Class FrontendCompilation
+ *
+ * @api
  */
 class FrontendCompilation implements PreProcessorInterface
 {

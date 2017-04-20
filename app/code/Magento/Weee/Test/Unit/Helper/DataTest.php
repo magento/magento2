@@ -42,6 +42,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $helperData;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
@@ -57,10 +60,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+
         $arguments = [
             'weeeConfig' => $weeeConfig,
             'weeeTax' => $this->weeeTax,
-            'taxData' => $this->taxData
+            'taxData' => $this->taxData,
+            'serializer'  => $this->serializerMock
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
@@ -84,33 +91,38 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__wakeup'])
             ->getMock();
 
+        $weeeTaxApplied = [
+            [
+                WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,
+                WeeeHelper::KEY_BASE_WEEE_AMOUNT_INVOICED => self::BASE_ROW_AMOUNT_INVOICED,
+                WeeeHelper::KEY_WEEE_TAX_AMOUNT_INVOICED => self::TAX_AMOUNT_INVOICED,
+                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED => self::BASE_TAX_AMOUNT_INVOICED,
+                WeeeHelper::KEY_WEEE_AMOUNT_REFUNDED => self::ROW_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED => self::BASE_ROW_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_WEEE_TAX_AMOUNT_REFUNDED => self::TAX_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED,
+            ],
+            [
+                WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,
+                WeeeHelper::KEY_BASE_WEEE_AMOUNT_INVOICED => self::BASE_ROW_AMOUNT_INVOICED,
+                WeeeHelper::KEY_WEEE_TAX_AMOUNT_INVOICED => self::TAX_AMOUNT_INVOICED,
+                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED => self::BASE_TAX_AMOUNT_INVOICED,
+                WeeeHelper::KEY_WEEE_AMOUNT_REFUNDED => self::ROW_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED => self::BASE_ROW_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_WEEE_TAX_AMOUNT_REFUNDED => self::TAX_AMOUNT_REFUNDED,
+                WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED,
+            ],
+        ];
+
         $orderItem->setData(
             'weee_tax_applied',
-            \Zend_Json::encode(
-                [
-                    [
-                        WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_BASE_WEEE_AMOUNT_INVOICED => self::BASE_ROW_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_WEEE_TAX_AMOUNT_INVOICED => self::TAX_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED => self::BASE_TAX_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_WEEE_AMOUNT_REFUNDED => self::ROW_AMOUNT_REFUNDED,
-                        WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED => self::BASE_ROW_AMOUNT_REFUNDED,
-                        WeeeHelper::KEY_WEEE_TAX_AMOUNT_REFUNDED => self::TAX_AMOUNT_REFUNDED,
-                        WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED,
-                    ],
-                    [
-                        WeeeHelper::KEY_WEEE_AMOUNT_INVOICED => self::ROW_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_BASE_WEEE_AMOUNT_INVOICED => self::BASE_ROW_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_WEEE_TAX_AMOUNT_INVOICED => self::TAX_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED => self::BASE_TAX_AMOUNT_INVOICED,
-                        WeeeHelper::KEY_WEEE_AMOUNT_REFUNDED => self::ROW_AMOUNT_REFUNDED,
-                        WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED => self::BASE_ROW_AMOUNT_REFUNDED,
-                        WeeeHelper::KEY_WEEE_TAX_AMOUNT_REFUNDED => self::TAX_AMOUNT_REFUNDED,
-                        WeeeHelper::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED => self::BASE_TAX_AMOUNT_REFUNDED,
-                    ],
-                ]
-            )
+            json_encode($weeeTaxApplied)
         );
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will($this->returnValue($weeeTaxApplied));
+
         return $orderItem;
     }
 
@@ -290,14 +302,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAppliedSimple()
     {
         $testArray = ['key' => 'value'];
-        $itemProductSimple=$this->getMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied'], [], '', false);
+        $itemProductSimple = $this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getWeeeTaxApplied'],
+            [],
+            '',
+            false
+        );
         $itemProductSimple->expects($this->any())
             ->method('getHasChildren')
             ->will($this->returnValue(false));
 
         $itemProductSimple->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(\Zend_Json::encode($testArray)));
+            ->will($this->returnValue(json_encode($testArray)));
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will($this->returnValue($testArray));
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductSimple));
     }
@@ -326,11 +348,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(\Zend_Json::encode($testArray1)));
+            ->will($this->returnValue(json_encode($testArray1)));
 
         $itemProductSimple2->expects($this->any())
             ->method('getWeeeTaxApplied')
-            ->will($this->returnValue(\Zend_Json::encode($testArray2)));
+            ->will($this->returnValue(json_encode($testArray2)));
 
         $itemProductBundle=$this->getMock(
             \Magento\Quote\Model\Quote\Item::class,
@@ -348,6 +370,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $itemProductBundle->expects($this->any())
             ->method('getChildren')
             ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will($this->returnValue($testArray));
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
     }
