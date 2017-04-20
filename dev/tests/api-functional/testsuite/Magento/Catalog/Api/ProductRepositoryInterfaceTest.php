@@ -751,9 +751,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey('search_criteria', $response);
         $this->assertArrayHasKey('total_count', $response);
         $this->assertArrayHasKey('items', $response);
+        $this->assertTrue(count($response['items']) == 1);
         $this->assertTrue(isset($response['items'][0]['sku']));
         $this->assertEquals('simple-2', $response['items'][0]['sku']);
-        $this->assertTrue(count($response['items']) == 1);
     }
 
     /**
