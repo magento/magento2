@@ -88,25 +88,7 @@ class Filter
      */
     public function getCollection(AbstractDb $collection)
     {
-        $selected = $this->request->getParam(static::SELECTED_PARAM);
-        $excluded = $this->request->getParam(static::EXCLUDED_PARAM);
-
-        $isExcludedIdsValid = (is_array($excluded) && !empty($excluded));
-        $isSelectedIdsValid = (is_array($selected) && !empty($selected));
-
-        if ('false' !== $excluded) {
-            if (!$isExcludedIdsValid && !$isSelectedIdsValid) {
-                throw new LocalizedException(__('Please select item(s).'));
-            }
-        }
-        $idsArray = $this->getFilterIds();
-        if (!empty($idsArray)) {
-            $collection->addFieldToFilter(
-                $collection->getIdFieldName(),
-                ['in' => $idsArray]
-            );
-        }
-        return $collection;
+        return $this->applySelection($collection);
     }
 
     /**
