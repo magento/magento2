@@ -462,6 +462,9 @@ class Config
     /**
      * Get attributes by entity type
      *
+     * @deprecated
+     *  @see \Magento\Eav\Model\Config::getEntityAttributes
+     *
      * @param string $entityType
      * @return AbstractAttribute[]
      */
@@ -528,6 +531,9 @@ class Config
     /**
      * Get codes of all entity type attributes
      *
+     * @deprecated
+     *  @see \Magento\Eav\Model\Config::getEntityAttributes
+     *
      * @param  mixed $entityType
      * @param  \Magento\Framework\DataObject $object
      * @return array
@@ -539,6 +545,8 @@ class Config
         $attributes = array_keys($this->getEntityAttributes($entityType, $object));
         return $attributes;
     }
+
+    private $attributesPerSet = [];
 
     /**
      * Get all entity type attributes
@@ -557,6 +565,11 @@ class Config
             $storeId = $object->getStoreId() ?: $storeId;
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
+
+
+        if (isset($this->attributesPerSet[$cacheKey])) {
+            return $this->attributesPerSet[$cacheKey];
+        }
 
         $attributesData = $this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attributes)
@@ -594,6 +607,8 @@ class Config
         foreach ($attributesData as $attributeData) {
             $attributes[$attributeData['attribute_code']] = $this->_createAttribute($entityType, $attributeData);
         }
+
+        $this->attributesPerSet[$cacheKey] = $attributes;
 
         return $attributes;
     }
