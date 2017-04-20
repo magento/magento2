@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue;
@@ -97,7 +97,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
                 . 'Use \Magento\Framework\MessageQueue\ConsumerConfiguration::getConsumerType instead. '
                 . "Multiple topics declared for consumer '{$this->getConsumerName()}'"
             );
-        } else if (count($topics) < 1) {
+        } elseif (count($topics) < 1) {
             throw new \LogicException(
                 "There must be at least one topic declared for consumer '{$this->getConsumerName()}'."
             );

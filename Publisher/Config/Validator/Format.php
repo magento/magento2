@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\Validator;
@@ -22,7 +22,6 @@ class Format implements ValidatorInterface
 
         $errors = [];
         foreach ($configData as $name => $publisherData) {
-
             $diff = array_diff($requiredPublisherFields, array_keys($publisherData));
             foreach ($diff as $field) {
                 $errors[] = sprintf('Missing %s field for publisher %s.', $field, $name);

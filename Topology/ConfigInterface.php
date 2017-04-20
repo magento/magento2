@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue\Topology;
@@ -29,7 +29,7 @@ interface ConfigInterface
 
     /**
      * Get list of all exchanges declared in the system.
-     * 
+     *
      * @return ExchangeConfigItemInterface[]
      * @throws \LogicException
      */

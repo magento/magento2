@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue;
@@ -115,7 +115,7 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } else if ($realType == 'array' && count($message) > 0) {
+        } elseif ($realType == 'array' && count($message) > 0) {
             $realType = $this->getRealType($message[0]);
             $compareType = preg_replace('/\[\]/', '', $messageType);
         }
@@ -147,7 +147,7 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } else if ($realType == 'array' && count($message) > 0) {
+        } elseif ($realType == 'array' && count($message) > 0) {
             $message = $message[0];
             $compareType = preg_replace('/\[\]/', '', $messageType);
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Xml;
@@ -40,7 +40,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
         $this->configParserMock = $this->getMock(ConfigParser::class, [], [], '', false, false);
         $this->converter = new Converter($this->configParserMock, $this->defaultConfigProviderMock);
-
     }
 
     public function testConvert()
