@@ -6,12 +6,13 @@
 
 namespace Magento\Captcha\Test\TestCase;
 
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
-use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
-use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
+use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\User\Test\Fixture\User;
+use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
+use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
  * Check CAPTCHA on Admin Login Page.
@@ -30,25 +31,11 @@ use Magento\User\Test\Fixture\User;
 class CaptchaOnAdminLoginTest extends Injectable
 {
     /**
-     * Step factory.
-     *
-     * @var TestStepFactory
-     */
-    private $stepFactory;
-
-    /**
-     * Assert Captcha.
-     *
-     * @var AssertCaptchaFieldOnBackend
-     */
-    private $assertCaptcha;
-
-    /**
-     * Admin login page.
+     * Admin login page with Captcha.
      *
      * @var AdminAuthLoginWithCaptcha
      */
-    protected $adminAuthWithCaptcha;
+    private $adminAuthWithCaptcha;
 
     /**
      * System configuration page.
@@ -58,54 +45,67 @@ class CaptchaOnAdminLoginTest extends Injectable
     private $systemConfigEditPage;
 
     /**
-     * Configuration setting.
+     * Login page for Admin.
      *
-     * @var string
+     * @var AdminAuthLogin
      */
-    private $configData;
+    private $adminAuthLogin;
+
+    /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $stepFactory;
+
+    /**
+     * Assert captcha on backend login page.
+     *
+     * @var AssertCaptchaFieldOnBackend
+     */
+    private $assertCaptcha;
 
     /**
      * Injection data.
      *
+     * @param SystemConfigEdit $systemConfigEditPage
      * @param AdminAuthLoginWithCaptcha $adminAuthWithCaptcha
      * @param TestStepFactory $stepFactory
+     * @param AdminAuthLogin $adminAuthLogin
      * @param AssertCaptchaFieldOnBackend $assertCaptcha
-     * @param SystemConfigEdit $systemConfigEditPage
      * @return void
      */
     public function __inject(
+        SystemConfigEdit $systemConfigEditPage,
         AdminAuthLoginWithCaptcha $adminAuthWithCaptcha,
         TestStepFactory $stepFactory,
-        AssertCaptchaFieldOnBackend $assertCaptcha,
-        SystemConfigEdit $systemConfigEditPage
+        AdminAuthLogin $adminAuthLogin,
+        AssertCaptchaFieldOnBackend $assertCaptcha
     ) {
-        $this->stepFactory = $stepFactory;
-        $this->adminAuthWithCaptcha = $adminAuthWithCaptcha;
-        $this->assertCaptcha = $assertCaptcha;
         $this->systemConfigEditPage = $systemConfigEditPage;
+        $this->adminAuthWithCaptcha = $adminAuthWithCaptcha;
+        $this->stepFactory = $stepFactory;
+        $this->adminAuthLogin = $adminAuthLogin;
+        $this->assertCaptcha = $assertCaptcha;
     }
 
     /**
-     * Login user on backend.
+     * Log in user to Admin.
      *
      * @param User $customAdmin
      * @param string $configData
      * @return void
      */
-    public function test(
-        User $customAdmin,
-        $configData
-    ) {
-        $this->configData = $configData;
+    public function test(User $customAdmin, $configData)
+    {
         $customAdmin->persist();
 
         // Preconditions
         $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData]
+            ['configData' => $configData]
         )->run();
-
-        $this->adminAuthWithCaptcha->open();
+        $this->adminAuthLogin->open();
         $this->adminAuthWithCaptcha->getLoginBlockWithCaptcha()->fill($customAdmin);
         $this->assertCaptcha->processAssert($this->adminAuthWithCaptcha);
         $this->adminAuthWithCaptcha->getLoginBlockWithCaptcha()->submit();

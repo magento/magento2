@@ -9,6 +9,8 @@ namespace Magento\Newsletter\Model\ResourceModel;
  * Newsletter subscriber resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
