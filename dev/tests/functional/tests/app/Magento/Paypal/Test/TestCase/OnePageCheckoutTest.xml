@@ -22,10 +22,14 @@
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">payflowpro</data>
+            <data name="paymentInfo" xsi:type="array">
+                <item name="Credit Card Type" xsi:type="string">Visa</item>
+            </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
         </variation>
         <variation name="OnePageCheckoutPayflowProWithInternationalAVSFilter" summary="Place order via Payflow Pro with fraud filters triggering" ticketId="MAGETWO-37476">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
