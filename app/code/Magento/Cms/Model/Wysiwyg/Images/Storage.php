@@ -14,6 +14,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Storage extends \Magento\Framework\DataObject
 {

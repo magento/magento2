@@ -8,6 +8,8 @@ namespace Magento\Developer\Model\XmlCatalog\Format;
 
 /**
  * Interface FormatInterface is implemented by custom URN catalog generators
+ *
+ * @api
  */
 interface FormatInterface
 {

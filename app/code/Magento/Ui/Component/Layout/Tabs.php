@@ -85,7 +85,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
             if ($childComponent instanceof DataSourceInterface) {
                 continue;
             }
-            if ($childComponent instanceof \Magento\Ui\Component\Wrapper\Block) {
+            if ($childComponent instanceof BlockWrapperInterface) {
                 $this->addWrappedBlock($childComponent, $childrenAreas);
                 continue;
             }
@@ -183,13 +183,16 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
         if (!$block->canShowTab()) {
             return;
         }
+        if (!$block instanceof TabInterface) {
+            parent::addWrappedBlock($childComponent, $areas);
+        }
         $block->setData('target_form', $this->namespace);
 
         $config = [];
         if ($block->isAjaxLoaded()) {
             $config['url'] = $block->getTabUrl();
         } else {
-            $config['content'] = $block->toHtml();
+            $config['content'] = $childComponent->getData('config/content') ?: $block->toHtml();
         }
 
         $tabComponent = $this->createTabComponent($childComponent, $name);

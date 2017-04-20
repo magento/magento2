@@ -12,7 +12,7 @@
             <data name="customAdmin/data/captcha" xsi:type="string">111</data>
             <data name="pageTitle" xsi:type="string">Dashboard</data>
             <data name="configData" xsi:type="string">captcha_backend_login</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
     </testCase>
 </config>

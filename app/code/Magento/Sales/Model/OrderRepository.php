@@ -96,10 +96,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
