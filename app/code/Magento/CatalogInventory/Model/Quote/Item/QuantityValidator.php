@@ -18,7 +18,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class QuantityValidator
+ * @api
  */
 class QuantityValidator
 {

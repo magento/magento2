@@ -9,6 +9,7 @@ namespace Magento\Swatches\Model\ResourceModel;
 /**
  * @codeCoverageIgnore
  * Swatch Resource Model
+ * @api
  */
 class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

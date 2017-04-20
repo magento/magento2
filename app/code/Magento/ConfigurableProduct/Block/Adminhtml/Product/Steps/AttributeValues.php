@@ -7,6 +7,9 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 
+/**
+ * @api
+ */
 class AttributeValues extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
     /**
