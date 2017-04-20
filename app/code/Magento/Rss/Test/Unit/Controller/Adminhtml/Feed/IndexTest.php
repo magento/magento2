@@ -102,15 +102,28 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue(true));
         $dataProvider = $this->getMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
         $dataProvider->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $dataProvider->expects($this->once())->method('getRssData')->will($this->returnValue([]));
 
-        $rssModel = $this->getMock(\Magento\Rss\Model\Rss::class, ['setDataProvider'], [], '', false);
-        $rssModel->expects($this->once())->method('setDataProvider')->will($this->returnSelf());
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $feedImporter = $objectManagerHelper->getObject(
+            \Magento\Framework\App\Feed\Importer::class,
+            [
+                'feedProcessor' => $objectManagerHelper->getObject(\Zend_Feed::class),
+            ]
+        );
+
+        $rssModel = $objectManagerHelper->getObject(
+            \Magento\Rss\Model\Rss::class,
+            [
+                'feedImporter' => $feedImporter,
+            ]
+        );
 
         $this->response->expects($this->once())->method('setHeader')->will($this->returnSelf());
         $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
         $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
 
-        $this->setExpectedException('\Zend_Feed_Builder_Exception');
+        $this->setExpectedException('\Magento\Framework\Exception\FeedImporterException');
         $this->controller->execute();
     }
 }

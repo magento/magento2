@@ -22,6 +22,11 @@ class Rss
     protected $cache;
 
     /**
+     * @var \Magento\Framework\App\FeedImporterInterface
+     */
+    private $feedImporter;
+
+    /**
      * @var SerializerInterface
      */
     private $serializer;
@@ -30,13 +35,16 @@ class Rss
      * Rss constructor
      *
      * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Framework\App\FeedImporterInterface $feedImporter
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Framework\App\FeedImporterInterface $feedImporter,
         SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
+        $this->feedImporter = $feedImporter;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
@@ -86,7 +94,7 @@ class Rss
      */
     public function createRssXml()
     {
-        $rssFeedFromArray = \Zend_Feed::importArray($this->getFeeds(), 'rss');
-        return $rssFeedFromArray->saveXML();
+        $rssFeed = $this->feedImporter->importArray($this->getFeeds(), 'rss');
+        return $rssFeed->asXML();
     }
 }
