@@ -5,13 +5,12 @@
  */
 namespace Magento\Framework\View\Layout\Generator;
 
-use Magento\Framework\View\Layout;
 use Magento\Framework\View\Element\BlockFactory;
 use Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\GeneratorInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Element\UiComponent\ContainerInterface;
 use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 use Magento\Framework\View\Layout\Generator\Context as GeneratorContext;
@@ -89,7 +88,12 @@ class UiComponent implements GeneratorInterface
         /** @var $blocks \Magento\Framework\View\Element\AbstractBlock[] */
         $blocks = [];
         foreach ($scheduledElements as $elementName => $element) {
-            list(, $data) = $element;
+            list($elementType, $data) = $element;
+
+            if ($elementType !== Element::TYPE_UI_COMPONENT) {
+                continue;
+            }
+
             $block = $this->generateComponent($structure, $elementName, $data, $layout);
             $blocks[$elementName] = $block;
             $layout->setBlock($elementName, $block);
@@ -122,10 +126,13 @@ class UiComponent implements GeneratorInterface
             ]
         );
 
+        /**
+         * Structure is required for custom component factory like a 'htmlContent'
+         */
         $component = $this->uiComponentFactory->create(
             $elementName,
             null,
-            ['context' => $context]
+            ['context' => $context, 'structure' => $structure]
         );
         $this->prepareComponent($component);
 

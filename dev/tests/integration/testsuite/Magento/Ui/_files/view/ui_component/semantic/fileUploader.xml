@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fileUploader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+              name="string"
+              template="string"
+              component="string"
+              class="string"
+              provider="string"
+              sortOrder="0"
+              displayArea="string">
+    <settings>
+
+        <!-- uiElementSettings -->
+        <statefull>
+            <property xsi:type="boolean" name="anySimpleType">true</property>
+        </statefull>
+        <imports>
+            <link active="false" name="string">string</link>
+        </imports>
+        <exports>
+            <link active="false" name="string">string</link>
+        </exports>
+        <links>
+            <link active="false" name="string">string</link>
+        </links>
+        <listens>
+            <link active="false" name="string">string</link>
+        </listens>
+        <deps>
+            <dep active="false">string</dep>
+        </deps>
+        <ns>string</ns>
+        <componentType>string</componentType>
+        <dataScope>string</dataScope>
+        <storageConfig>
+            <provider>string</provider>
+            <namespace>string</namespace>
+            <path path="string">
+                <param name="string">string</param>
+            </path>
+        </storageConfig>
+        <!-- /uiElementSettings -->
+
+        <!-- abstractSettings-->
+        <additionalClasses>
+            <class name="string">false</class>
+        </additionalClasses>
+        <label translate="false">string</label>
+        <addBefore translate="false">string</addBefore>
+        <addAfter translate="false">string</addAfter>
+        <dataType>string</dataType>
+        <elementTmpl>string</elementTmpl>
+        <visible>false</visible>
+        <disabled>false</disabled>
+        <notice translate="false">string</notice>
+        <focused>false</focused>
+        <tooltipTpl>string</tooltipTpl>
+        <fallbackResetTpl>string</fallbackResetTpl>
+        <placeholder translate="true">text</placeholder>
+        <labelVisible>false</labelVisible>
+        <showFallbackReset>false</showFallbackReset>
+        <required>false</required>
+        <validation>
+            <rule xsi:type="boolean" active="false" name="anySimpleType">true</rule>
+        </validation>
+        <switcherConfig>
+            <component>string</component>
+            <name>string</name>
+            <target>string</target>
+            <property>string</property>
+            <enabled>true</enabled>
+            <argument name="string" xsi:type="array">
+                <item name="string" xsi:type="string">string</item>
+            </argument>
+            <rules>
+                <rule name="string">
+                    <value>string</value>
+                    <actions>
+                        <action name="string">
+                            <target>string</target>
+                            <callback>string</callback>
+                            <params>
+                                <param name="string" active="true" xsi:type="string"/>
+                            </params>
+                        </action>
+                    </actions>
+                </rule>
+            </rules>
+        </switcherConfig>
+        <tooltip>
+            <link>string</link>
+            <description translate="true">string</description>
+        </tooltip>
+
+        <!-- /abstractSettings-->
+        <isMultipleFiles>false</isMultipleFiles>
+        <maxFileSize>0</maxFileSize>
+        <placeholderType>string</placeholderType>
+        <allowedExtensions>string</allowedExtensions>
+        <previewTmpl>string</previewTmpl>
+        <dropZone>string</dropZone>
+        <uploaderConfig>
+            <param xsi:type="string" active="false" name="anySimpleType">
+                string
+            </param>
+        </uploaderConfig>
+
+    </settings>
+</fileUploader>

@@ -16,9 +16,7 @@ use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Class PublicationDecorator
- *
- * Decorates generator of related assets and publishes them
+ * Decorator for publishing of related assets
  */
 class PublicationDecorator extends RelatedGenerator
 {

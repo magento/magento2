@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest" summary="Create Credit Memo for Offline Payment Methods" ticketId="MAGETWO-29116">
         <variation name="CreateCreditMemoEntityTestVariation1" summary="Assert items return to stock (partial refund)">
+            <data name="issue" xsi:type="string">MAGETWO-65659: [FT] Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest fails randomly on Jenkins</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>

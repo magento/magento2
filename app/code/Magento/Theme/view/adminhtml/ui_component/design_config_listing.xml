@@ -9,23 +9,24 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">design_config_listing.design_config_listing_data_source</item>
-            <item name="deps" xsi:type="string">design_config_listing.design_config_listing_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">design_config_columns</item>
     </argument>
-    <dataSource name="design_config_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Theme\Ui\Component\Design\Config\DataProvider</argument>
-            <argument name="name" xsi:type="string">design_config_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <spinner>design_config_columns</spinner>
+        <deps>
+            <dep>design_config_listing.design_config_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="design_config_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Theme\Ui\Component\Design\Config\DataProvider" name="design_config_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
@@ -34,72 +35,57 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="design_config_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns_editor</item>
-                        <item name="target" xsi:type="string">startEdit</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                            <item name="1" xsi:type="boolean">true</item>
-                        </item>
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">design_config_listing.design_config_listing.design_config_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
                     </item>
-                </item>
-            </item>
-        </argument>
-        <column name="default">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="label" xsi:type="string" translate="true">Default</item>
-                    <item name="sortOrder" xsi:type="number">0</item>
-                </item>
-            </argument>
+                </param>
+            </childDefaults>
+        </settings>
+        <column name="default" sortOrder="0">
+            <settings>
+                <label translate="true">Default</label>
+                <sortable>false</sortable>
+            </settings>
         </column>
-        <column name="store_website_id">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Theme\Model\Scope\WebsiteSource</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="label" xsi:type="string" translate="true">Website</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
+        <column name="store_website_id" component="Magento_Ui/js/grid/columns/select" sortOrder="10">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Theme\Model\Scope\WebsiteSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Website</label>
+            </settings>
         </column>
-        <column name="store_group_id">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Theme\Model\Scope\GroupSource</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="label" xsi:type="string" translate="true">Store</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                </item>
-            </argument>
+        <column name="store_group_id" component="Magento_Ui/js/grid/columns/select" sortOrder="20">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Theme\Model\Scope\GroupSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Store</label>
+            </settings>
         </column>
-        <column name="store_id">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Theme\Model\Scope\StoreSource</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="label" xsi:type="string" translate="true">Store View</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                </item>
-            </argument>
+        <column name="store_id" component="Magento_Ui/js/grid/columns/select" sortOrder="30">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Theme\Model\Scope\StoreSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Store View</label>
+            </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Theme\Ui\Component\Listing\Column\EditAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="editUrlPath" xsi:type="string">theme/design_config/edit</item>
                 </item>
             </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
         </actionsColumn>
     </columns>
 </listing>
