@@ -32,6 +32,31 @@ class RendererPool extends AbstractBlock
      * Default amount renderer
      */
     const AMOUNT_RENDERER_DEFAULT = \Magento\Framework\Pricing\Render\Amount::class;
+    
+    /**
+     * @var array
+     */
+    private $renderClassNames;
+    
+    /**
+     * @var array
+     */
+    private $renderBlockTemplates;
+    
+    /**
+     * @var array
+     */
+    private $amountRenderClassNames;
+    
+    /**
+     * @var array
+     */
+    private $amountRenderBlockTemplates;
+    
+    /**
+     * @var array
+     */
+    private $renders;
 
     /**
      * Create amount renderer
@@ -48,7 +73,9 @@ class RendererPool extends AbstractBlock
         array $data = []
     ) {
         $type = $saleableItem->getTypeId();
-
+        if(isset($this->renderClassNames[$type][$priceCode])){
+            $renderClassName=$this->renderClassNames[$type][$priceCode];            
+        } else{
         // implement class resolving fallback
         $pattern = [
             $type . '/prices/' . $priceCode . '/render_class',
@@ -62,14 +89,15 @@ class RendererPool extends AbstractBlock
                 'Class name for price code "' . $priceCode . '" not registered'
             );
         }
-
+        $this->renderClassNames[$type][$priceCode]=$renderClassName;
+        }
         $price = $saleableItem->getPriceInfo()->getPrice($priceCode);
         if (!$price) {
             throw new \InvalidArgumentException(
                 'Price model for price code "' . $priceCode . '" not registered'
             );
         }
-
+        
         $arguments['data'] = $data;
         $arguments['rendererPool'] = $this;
         $arguments['price'] = $price;
@@ -82,7 +110,13 @@ class RendererPool extends AbstractBlock
                 'Block "' . $renderClassName . '" must implement \Magento\Framework\Pricing\Render\PriceBoxRenderInterface'
             );
         }
-        $renderBlock->setTemplate($this->getRenderBlockTemplate($type, $priceCode));
+        if(isset($this->renderBlockTemplates[$type][$priceCode])){
+            $renderBlockTemplate=  $this->renderBlockTemplates[$type][$priceCode];
+        } else{
+            $renderBlockTemplate=$this->getRenderBlockTemplate($type, $priceCode);
+            $this->renderBlockTemplates[$type][$priceCode]=$renderBlockTemplate;           
+        }
+        $renderBlock->setTemplate($renderBlockTemplate);
         return $renderBlock;
     }
 
@@ -112,6 +146,9 @@ class RendererPool extends AbstractBlock
 
         if ($price) {
             $priceCode = $price->getPriceCode();
+            if(isset($this->amountRenderClassNames[$type][$priceCode])){
+                $renderClassName=$this->amountRenderClassNames[$type][$priceCode];
+            } else {
             // implement class resolving fallback
             $pattern = [
                 $type . '/prices/' . $priceCode . '/amount_render_class',
@@ -124,6 +161,8 @@ class RendererPool extends AbstractBlock
                 throw new \InvalidArgumentException(
                     'There is no amount render class for price code "' . $priceCode . '"'
                 );
+            }
+            $this->amountRenderClassNames[$type][$priceCode]=$renderClassName;
             }
         }
 
@@ -145,7 +184,13 @@ class RendererPool extends AbstractBlock
                 'Block "' . $renderClassName . '" must implement \Magento\Framework\Pricing\Render\AmountRenderInterface'
             );
         }
-        $amountBlock->setTemplate($this->getAmountRenderBlockTemplate($type, $priceCode));
+        if(isset($this->amountRenderBlockTemplates[$type][$priceCode])){
+            $amountRenderBlockTemplate=$this->amountRenderBlockTemplates[$type][$priceCode];
+        } else {
+            $amountRenderBlockTemplate=$this->getAmountRenderBlockTemplate($type, $priceCode);
+            $this->amountRenderBlockTemplates[$type][$priceCode]=$amountRenderBlockTemplate;
+        }
+        $amountBlock->setTemplate($amountRenderBlockTemplate);
         return $amountBlock;
     }
 
@@ -158,7 +203,9 @@ class RendererPool extends AbstractBlock
     {
         $itemType = is_null($saleableItem) ? 'default' : $saleableItem->getTypeId();
         $priceType = is_null($price) ? 'default' : $price->getPriceCode();
-
+        if(isset($this->renders[$itemType][$priceType])){
+           return $this->renders[$itemType][$priceType]; 
+        } 
         $fallbackPattern = [
             "{$itemType}/adjustments/{$priceType}",
             "{$itemType}/adjustments/default",
@@ -174,7 +221,8 @@ class RendererPool extends AbstractBlock
                 $renders[$code] = $render;
             }
         }
-
+        $this->renders[$itemType][$priceType]=$renders;
+        
         return $renders;
     }
 
