@@ -405,17 +405,4 @@ class Source extends AbstractEav
         }
         return $this;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function clearTemporaryIndexTable()
-    {
-        if (!$this->tableStrategy->getUseIdxTable()) {
-            // Drop temporary index table
-            $this->getConnection()->dropTable($this->getIdxTable());
-        } else {
-            parent::clearTemporaryIndexTable();
-        }
-    }
 }
