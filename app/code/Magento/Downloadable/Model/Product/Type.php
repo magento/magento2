@@ -11,7 +11,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 /**
  * Downloadable product type model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Type extends \Magento\Catalog\Model\Product\Type\Virtual
