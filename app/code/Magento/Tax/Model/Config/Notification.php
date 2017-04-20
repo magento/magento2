@@ -14,6 +14,11 @@ use Magento\Tax\Model\Config;
 class Notification extends \Magento\Framework\App\Config\Value
 {
     /**
+     * @var string
+     */
+    protected $_eventPrefix = 'tax_config_notification';
+
+    /**
      * @var \Magento\Config\Model\ResourceModel\Config
      */
     protected $resourceConfig;

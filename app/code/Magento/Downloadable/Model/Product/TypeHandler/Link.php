@@ -11,6 +11,7 @@ use Magento\Downloadable\Model\ComponentInterface;
 
 /**
  * Class Link
+ * @api
  */
 class Link extends AbstractTypeHandler
 {

@@ -7,6 +7,7 @@ namespace Magento\Swatches\Block\Product\Renderer\Listing;
 
 /**
  * Swatch renderer block in Category page
+ * @api
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
