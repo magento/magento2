@@ -73,6 +73,7 @@ class StockItem
             $rowQty = $qty;
             $qtyForCheck = $this->quoteItemQtyList->getQty(
                 $quoteItem->getProduct()->getId(),
+                $quoteItem->getProduct(),
                 $quoteItem->getId(),
                 $quoteItem->getQuoteId(),
                 $increaseQty
@@ -91,6 +92,7 @@ class StockItem
 
         $result = $this->stockState->checkQuoteItemQty(
             $quoteItem->getProduct()->getId(),
+            $quoteItem->getProduct(),
             $rowQty,
             $qtyForCheck,
             $qty,

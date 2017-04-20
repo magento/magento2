@@ -27,13 +27,14 @@ interface StockStateInterface
 
     /**
      * @param int $productId
+     * @parem $product
      * @param float $itemQty
      * @param float $qtyToCheck
      * @param float $origQty
      * @param int $scopeId
      * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null);
+    public function checkQuoteItemQty($productId, $product, $itemQty, $qtyToCheck, $origQty, $scopeId = null);
 
     /**
      * Check quantity

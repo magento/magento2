@@ -75,6 +75,12 @@ interface StockItemInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setProductId($productId);
+    
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return mixed
+     */
+    public function setProduct(\Magento\Catalog\Model\Product $product);
 
     /**
      * Retrieve stock identifier
