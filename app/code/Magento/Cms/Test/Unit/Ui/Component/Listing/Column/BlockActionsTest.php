@@ -42,7 +42,7 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects(static::once())
+        $context->expects(static::never())
             ->method('getProcessor')
             ->willReturn($processor);
 
