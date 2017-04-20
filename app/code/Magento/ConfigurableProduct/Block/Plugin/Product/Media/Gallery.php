@@ -12,7 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class Gallery
  */
-class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
+class Gallery
 {
     /**
      * @var Json
@@ -20,37 +20,29 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     private $json;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param Json $json
-     * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        Json $json,
-        array $data = []
+        Json $json
     ) {
         $this->json = $json;
-        parent::__construct($context, $arrayUtils, $data);
     }
 
     /**
      * @param \Magento\Catalog\Block\Product\View\Gallery $subject
      * @param string $result
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetOptionsMediaGalleryDataJson(
         \Magento\Catalog\Block\Product\View\Gallery $subject,
         $result
     ) {
         $result = $this->json->unserialize($result);
-        if ($this->getProduct()->getTypeId() == 'configurable') {
+        $parentProduct = $subject->getProduct();
+        if ($parentProduct->getTypeId() == Configurable::TYPE_CODE) {
             /** @var Configurable $productType */
-            $productType = $this->getProduct()->getTypeInstance();
-            $products = $productType->getUsedProducts($this->getProduct());
+            $productType = $parentProduct->getTypeInstance();
+            $products = $productType->getUsedProducts($parentProduct);
             /** @var Product $product */
             foreach ($products as $product) {
                 $key = $product->getId();
