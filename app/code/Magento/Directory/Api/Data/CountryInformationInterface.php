@@ -67,7 +67,7 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Set the country full name (in store locale) for the store.
      *
-     * @param string $abbreviation
+     * @param string $fullNameLocale
      * @return $this
      */
     public function setFullNameLocale($fullNameLocale);
@@ -82,7 +82,7 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Set the country full name (in English) for the store.
      *
-     * @param string $abbreviation
+     * @param string $fullNameEnglish
      * @return $this
      */
     public function setFullNameEnglish($fullNameEnglish);

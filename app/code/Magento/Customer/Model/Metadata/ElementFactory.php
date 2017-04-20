@@ -1,27 +1,21 @@
 <?php
 /**
- * Customer Form Element Factory
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/**
+ * Customer Form Element Factory
+ */
 namespace Magento\Customer\Model\Metadata;
 
 class ElementFactory
 {
     const OUTPUT_FORMAT_JSON = 'json';
-
     const OUTPUT_FORMAT_TEXT = 'text';
-
     const OUTPUT_FORMAT_HTML = 'html';
-
     const OUTPUT_FORMAT_PDF = 'pdf';
-
     const OUTPUT_FORMAT_ONELINE = 'oneline';
-
     const OUTPUT_FORMAT_ARRAY = 'array';
 
     // available only for multiply attributes
@@ -40,8 +34,10 @@ class ElementFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, \Magento\Framework\Stdlib\StringUtils $string)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\Stdlib\StringUtils $string
+    ) {
         $this->_objectManager = $objectManager;
         $this->_string = $string;
     }
@@ -64,7 +60,7 @@ class ElementFactory
         $dataModelClass = $attribute->getDataModel();
         $params = [
             'entityTypeCode' => $entityTypeCode,
-            'value' => is_null($value) ? false : $value,
+            'value' => $value === null ? false : $value,
             'isAjax' => $isAjax,
             'attribute' => $attribute,
         ];

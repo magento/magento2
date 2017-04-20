@@ -14,6 +14,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory
 
 /**
  * Class Factory
+ * @api
  */
 class Factory
 {
