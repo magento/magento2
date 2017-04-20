@@ -7,6 +7,9 @@ namespace Magento\Customer\Model\Customer\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * @api
+ */
 interface GroupSourceInterface extends OptionSourceInterface
 {
 

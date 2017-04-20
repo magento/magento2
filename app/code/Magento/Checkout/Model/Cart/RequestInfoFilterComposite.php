@@ -8,6 +8,7 @@ namespace Magento\Checkout\Model\Cart;
 
 /**
  * Class RequestInfoFilterComposite
+ * @api
  */
 class RequestInfoFilterComposite implements RequestInfoFilterInterface
 {
