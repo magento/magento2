@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Webapi\Test\Unit;
 
 use Magento\Framework\Serialize\SerializerInterface;
@@ -68,7 +66,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->any())->method('load')->willReturn(false);
 
         $this->customAttributeTypeLocator = $this->getMockBuilder(
-            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class)
+            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -472,7 +471,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $customAttributeValue = null;
-        switch($type) {
+        switch ($type) {
             case 'integer':
                 $customAttributeValue = $value;
                 break;
