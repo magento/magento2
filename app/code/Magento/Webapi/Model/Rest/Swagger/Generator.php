@@ -20,6 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\App\ProductMetadataInterface;
 use \Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * REST Swagger schema generator.
@@ -901,5 +902,24 @@ class Generator extends AbstractSchemaGenerator
         $responses[$httpCode]['schema']['$ref'] = self::ERROR_SCHEMA;
 
         return $responses;
+    }
+
+    /**
+     * Retrieve a list of services visible to current user.
+     *
+     * @return string[]
+     */
+    public function getListOfServices()
+    {
+        $listOfAllowedServices = [];
+        foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
+            foreach ($service[ServiceMetadata::KEY_SERVICE_METHODS] as $method) {
+                if ($this->authorization->isAllowed($method[ServiceMetadata::KEY_ACL_RESOURCES])) {
+                    $listOfAllowedServices[] = $serviceName;
+                    break;
+                }
+            }
+        }
+        return $listOfAllowedServices;
     }
 }
