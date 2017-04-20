@@ -165,6 +165,7 @@ class Config
         $this->attributes = null;
         $this->_references = null;
         $this->_attributeCodes = null;
+        $this->attributesPerSet = [];
         $this->_cache->clean(
             [
                 \Magento\Eav\Model\Cache\Type::CACHE_TAG,
