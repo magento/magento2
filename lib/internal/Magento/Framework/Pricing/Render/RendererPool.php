@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Pricing\Render;
 
 use Magento\Framework\Pricing\Amount\AmountInterface;
@@ -107,7 +105,9 @@ class RendererPool extends AbstractBlock
         $renderBlock = $this->getLayout()->createBlock($renderClassName, '', $arguments);
         if (!$renderBlock instanceof PriceBoxRenderInterface) {
             throw new \InvalidArgumentException(
-                'Block "' . $renderClassName . '" must implement \Magento\Framework\Pricing\Render\PriceBoxRenderInterface'
+                'Block "' .
+                $renderClassName .
+                '" must implement \Magento\Framework\Pricing\Render\PriceBoxRenderInterface'
             );
         }
         if(isset($this->renderBlockTemplates[$type][$priceCode])){
@@ -181,7 +181,9 @@ class RendererPool extends AbstractBlock
         $amountBlock = $this->getLayout()->createBlock($renderClassName, '', $arguments);
         if (!$amountBlock instanceof AmountRenderInterface) {
             throw new \InvalidArgumentException(
-                'Block "' . $renderClassName . '" must implement \Magento\Framework\Pricing\Render\AmountRenderInterface'
+                'Block "' .
+                $renderClassName .
+                '" must implement \Magento\Framework\Pricing\Render\AmountRenderInterface'
             );
         }
         if(isset($this->amountRenderBlockTemplates[$type][$priceCode])){
@@ -201,8 +203,8 @@ class RendererPool extends AbstractBlock
      */
     public function getAdjustmentRenders(SaleableInterface $saleableItem = null, PriceInterface $price = null)
     {
-        $itemType = is_null($saleableItem) ? 'default' : $saleableItem->getTypeId();
-        $priceType = is_null($price) ? 'default' : $price->getPriceCode();
+        $itemType = $saleableItem === null ? 'default' : $saleableItem->getTypeId();
+        $priceType = $price === null ? 'default' : $price->getPriceCode();
         if(isset($this->renders[$itemType][$priceType])){
            return $this->renders[$itemType][$priceType]; 
         } 
@@ -211,7 +213,7 @@ class RendererPool extends AbstractBlock
             "{$itemType}/adjustments/default",
             "default/adjustments/{$priceType}",
             "default/adjustments/default",
-            ];
+        ];
         $renders = $this->findDataByPattern($fallbackPattern);
         if ($renders) {
             foreach ($renders as $code => $configuration) {
