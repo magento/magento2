@@ -26,7 +26,7 @@ try {
 
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
         $filesystem = new \Magento\Framework\Filesystem\Driver\File();
-        $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception();
+        $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
         $loggerHandlers = [
             'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
             'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
