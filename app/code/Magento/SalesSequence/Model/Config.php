@@ -7,6 +7,8 @@ namespace Magento\SalesSequence\Model;
 
 /**
  * Class Config - configuration container for sequence
+ *
+ * @api
  */
 class Config
 {
