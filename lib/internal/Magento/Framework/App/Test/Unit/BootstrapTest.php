@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Bootstrap;
@@ -99,7 +97,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             [\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class, $this->remoteAddress],
             [\Magento\Framework\Filesystem::class, $filesystem],
             [\Magento\Framework\App\DeploymentConfig::class, $this->deploymentConfig],
-            ['Psr\Log\LoggerInterface', $this->logger],
+            [\Psr\Log\LoggerInterface::class, $this->logger],
         ];
 
         $this->objectManager->expects($this->any())->method('get')
@@ -211,7 +209,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             [State::MODE_DEVELOPER, State::MODE_PRODUCTION, true],
             [State::MODE_PRODUCTION, State::MODE_DEVELOPER, false],
             [null, State::MODE_DEVELOPER, true],
-            [null, State::MODE_PRODUCTION, false],
+            [null, State::MODE_PRODUCTION, false]
         ];
     }
 
@@ -280,7 +278,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, false],
-            [false, true],
+            [false, true]
         ];
     }
 

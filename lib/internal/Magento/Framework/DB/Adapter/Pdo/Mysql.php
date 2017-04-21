@@ -33,7 +33,6 @@ use Magento\Framework\Stdlib\StringUtils;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
