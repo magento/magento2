@@ -83,9 +83,27 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, ['isOn'], [], '', false);
-        $this->remoteAddress = $this->getMock('Magento\Framework\HTTP\PhpEnvironment\RemoteAddress', [], [], '', false);
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->maintenanceMode = $this->getMock(
+            \Magento\Framework\App\MaintenanceMode::class,
+            ['isOn'],
+            [],
+            '',
+            false
+        );
+        $this->remoteAddress = $this->getMock(
+            \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $filesystem = $this->getMock(
+            \Magento\Framework\Filesystem::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
