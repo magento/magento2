@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Locale;
 
 use Magento\Framework\Locale\Bundle\CurrencyBundle;
@@ -26,6 +24,7 @@ class TranslatedLists implements ListsInterface
     protected $localeResolver;
 
     /**
+     * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $locale
      */
