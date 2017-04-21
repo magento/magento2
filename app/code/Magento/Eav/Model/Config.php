@@ -498,12 +498,12 @@ class Config
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
         $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();
 
-        if (isset($this->attributes[$entityTypeCode][$code])) {
-            return $this->attributes[$entityTypeCode][$code];
-        }
-
         if (is_numeric($code)) { // if code is numeric, try to map attribute id to code
             $code = $this->_getAttributeReference($code, $entityTypeCode) ?: $code;
+        }
+
+        if (isset($this->attributes[$entityTypeCode][$code])) {
+            return $this->attributes[$entityTypeCode][$code];
         }
 
         $attributes = $this->loadAttributes($entityTypeCode);
