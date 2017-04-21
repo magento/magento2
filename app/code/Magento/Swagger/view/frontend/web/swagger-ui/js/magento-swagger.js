@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 $(function () {
     var url = $('#input_baseUrl').val();
 

@@ -11,6 +11,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Captcha image model
+ *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

@@ -14,6 +14,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Test for ValueProcessor.
@@ -38,6 +39,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
     private $structureFactoryMock;
 
     /**
+     * @var JsonSerializer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonSerializerMock;
+
+    /**
      * @var ValueProcessor
      */
     private $valueProcessor;
@@ -53,11 +59,15 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->jsonSerializerMock = $this->getMockBuilder(JsonSerializer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->valueProcessor = new ValueProcessor(
             $this->scopeMock,
             $this->structureFactoryMock,
-            $this->valueFactoryMock
+            $this->valueFactoryMock,
+            $this->jsonSerializerMock
         );
     }
 
@@ -71,9 +81,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetScopeId
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetValue
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsAfterLoad
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSerialize
      * @param string $expectsValue
      * @param string $className
      * @param string $value
+     * @param string|array $processedValue
      * @dataProvider processDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,9 +99,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $expectsSetScopeId,
         $expectsSetValue,
         $expectsAfterLoad,
+        $expectsSerialize,
         $expectsValue,
         $className,
-        $value
+        $value,
+        $processedValue
     ) {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
@@ -140,7 +154,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $backendModelMock->expects($expectsGetValue)
             ->method('getValue')
-            ->willReturn($value);
+            ->willReturn($processedValue);
 
         /** @var Field|\PHPUnit_Framework_MockObject_MockObject $fieldMock */
         $fieldMock = $this->getMockBuilder(Field::class)
@@ -155,9 +169,13 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $this->valueFactoryMock->expects($expectsCreate)
             ->method('create')
             ->willReturn($backendModelMock);
+        $this->jsonSerializerMock->expects($expectsSerialize)
+            ->method('serialize')
+            ->with($processedValue)
+            ->willReturn($expectsValue);
 
         $structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->with($path)
             ->willReturn($fieldMock);
 
@@ -181,9 +199,27 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsSetScopeId' => $this->once(),
                 'expectsSetValue' => $this->once(),
                 'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->once(),
+                'expectsValue' => '{value:someValue}',
+                'className' => Value::class,
+                'value' => '{value:someValue}',
+                'processedValue' => ['someValue']
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->once(),
+                'expectsSetPath' => $this->once(),
+                'expectsSetScope' => $this->once(),
+                'expectsSetScopeId' => $this->once(),
+                'expectsSetValue' => $this->once(),
+                'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->never(),
                 'expectsValue' => 'someValue',
                 'className' => Value::class,
-                'value' => 'someValue'
+                'value' => 'someValue',
+                'processedValue' => 'someValue'
             ],
             [
                 'hasBackendModel' => false,
@@ -195,9 +231,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsSetScopeId' => $this->once(),
                 'expectsSetValue' => $this->once(),
                 'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->never(),
                 'expectsValue' => 'someValue',
                 'className' => Value::class,
-                'value' => 'someValue'
+                'value' => 'someValue',
+                'processedValue' => 'someValue'
             ],
             [
                 'hasBackendModel' => true,
@@ -209,9 +247,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsSetScopeId' => $this->never(),
                 'expectsSetValue' => $this->never(),
                 'expectsAfterLoad' => $this->never(),
+                'expectsSerialize' => $this->never(),
                 'expectsValue' => ValueProcessor::SAFE_PLACEHOLDER,
                 'className' => Encrypted::class,
-                'value' => 'someValue'
+                'value' => 'someValue',
+                'processedValue' => 'someValue'
             ],
             [
                 'hasBackendModel' => true,
@@ -223,9 +263,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsSetScopeId' => $this->once(),
                 'expectsSetValue' => $this->once(),
                 'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->never(),
                 'expectsValue' => null,
                 'className' => Value::class,
-                'value' => null
+                'value' => null,
+                'processedValue' => null
             ],
             [
                 'hasBackendModel' => true,
@@ -237,9 +279,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsSetScopeId' => $this->never(),
                 'expectsSetValue' => $this->never(),
                 'expectsAfterLoad' => $this->never(),
+                'expectsSerialize' => $this->never(),
                 'expectsValue' => null,
                 'className' => Encrypted::class,
-                'value' => null
+                'value' => null,
+                'processedValue' => null
             ],
         ];
     }

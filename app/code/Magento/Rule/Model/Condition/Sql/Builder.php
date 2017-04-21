@@ -12,8 +12,6 @@ use Magento\Rule\Model\Condition\Combine;
 
 /**
  * Class SQL Builder
- *
- * @package Magento\Rule\Model\Condition\Sql
  */
 class Builder
 {
