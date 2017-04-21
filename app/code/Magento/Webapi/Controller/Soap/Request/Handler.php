@@ -5,6 +5,8 @@
  */
 namespace Magento\Webapi\Controller\Soap\Request;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
@@ -155,7 +157,11 @@ class Handler
         } elseif (is_array($data)) {
             $dataType = substr($dataType, 0, -2);
             foreach ($data as $key => $value) {
-                if ($value instanceof $dataType) {
+                if ($value instanceof $dataType
+                    // the following two options are supported for backward compatibility
+                    || $value instanceof ExtensibleDataInterface
+                    || $value instanceof MetadataObjectInterface
+                ) {
                     $result[] = $this->_dataObjectConverter
                         ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($value, $dataType));
                 } else {
