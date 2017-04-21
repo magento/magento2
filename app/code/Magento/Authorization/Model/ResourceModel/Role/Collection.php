@@ -9,6 +9,8 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
 /**
  * Admin role collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

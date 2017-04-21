@@ -10,6 +10,8 @@ use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Factory class to create Setup
+ *
+ * @api
  */
 class SetupFactory
 {
