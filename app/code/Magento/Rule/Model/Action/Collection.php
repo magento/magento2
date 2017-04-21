@@ -5,6 +5,9 @@
  */
 namespace Magento\Rule\Model\Action;
 
+/**
+ * @api
+ */
 class Collection extends AbstractAction
 {
     /**

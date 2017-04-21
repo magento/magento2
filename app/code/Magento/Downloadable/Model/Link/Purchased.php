@@ -29,7 +29,7 @@ namespace Magento\Downloadable\Model\Link;
  * @method string getLinkSectionTitle()
  * @method \Magento\Downloadable\Model\Link\Purchased setLinkSectionTitle(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Purchased extends \Magento\Framework\Model\AbstractModel
 {

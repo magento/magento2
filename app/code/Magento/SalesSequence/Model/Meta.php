@@ -9,6 +9,8 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Meta
+ *
+ * @api
  */
 class Meta extends AbstractModel
 {

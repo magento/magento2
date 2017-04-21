@@ -64,4 +64,5 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="\BackslashPrefix\IsAllowed" type="TypeName" shared="true"/>
 </config>

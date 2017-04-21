@@ -23,7 +23,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Swatch renderer block
- *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements

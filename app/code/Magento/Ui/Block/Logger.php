@@ -8,6 +8,11 @@ namespace Magento\Ui\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Ui\Model\Config;
 
+/**
+ * Logger block
+ *
+ * @api
+ */
 class Logger extends Template
 {
     /**

@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable max-nested-callbacks */
 define([
     'Magento_Ui/js/grid/columns/expandable'
 ], function (Expandable) {

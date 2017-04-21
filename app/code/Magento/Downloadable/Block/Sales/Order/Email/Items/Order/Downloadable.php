@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Downloadable Sales Order Email items renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {
