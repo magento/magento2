@@ -5,6 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
+/**
+ * @api
+ */
 class VariationMatrix
 {
     /**

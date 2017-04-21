@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
+
 define([
     'ko',
     'Magento_Checkout/js/view/summary/abstract-total',

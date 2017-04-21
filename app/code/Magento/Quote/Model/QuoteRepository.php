@@ -223,7 +223,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $this->quoteCollection = $this->getQuoteCollection();
         /** @var \Magento\Quote\Api\Data\CartSearchResultsInterface $searchData */

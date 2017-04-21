@@ -12,7 +12,10 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -77,12 +80,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $cacheProductWeeeAmount = '_cache_product_weee_amount';
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Weee\Model\Config $weeeConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -90,13 +102,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Weee\Model\Config $weeeConfig,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_weeeTax = $weeeTax;
         $this->_coreRegistry = $coreRegistry;
         $this->_taxData = $taxData;
         $this->_weeeConfig = $weeeConfig;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context);
     }
 
@@ -373,7 +388,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (empty($data)) {
             return [];
         }
-        return \Zend_Json::decode($item->getWeeeTaxApplied());
+        return $this->serializer->unserialize($item->getWeeeTaxApplied());
     }
 
     /**
@@ -385,7 +400,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function setApplied($item, $value)
     {
-        $item->setWeeeTaxApplied(\Zend_Json::encode($value));
+        $item->setWeeeTaxApplied($this->serializer->serialize($value));
         return $this;
     }
 
