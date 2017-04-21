@@ -9,6 +9,7 @@ use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceSequenceMeta;
 
 /**
  * Class Manager
+ * @api
  */
 class Manager
 {
