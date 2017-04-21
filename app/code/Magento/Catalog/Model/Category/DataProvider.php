@@ -28,6 +28,8 @@ use Magento\Ui\DataProvider\EavValidationRules;
 /**
  * Class DataProvider
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider

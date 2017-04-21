@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Asset;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class ContentProcessorException
+ * @api
  */
 class ContentProcessorException extends LocalizedException
 {

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\MediaStorage\Helper\File;
+
 /**
  * File storage helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\MediaStorage\Helper\File;
-
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
