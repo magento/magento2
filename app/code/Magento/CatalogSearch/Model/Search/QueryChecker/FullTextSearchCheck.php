@@ -28,7 +28,7 @@ class FullTextSearchCheck
      * @return bool
      * @throws \InvalidArgumentException
      */
-    public function check(QueryInterface $query)
+    public function isRequiredForQuery(QueryInterface $query)
     {
         return $this->processQuery($query);
     }

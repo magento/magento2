@@ -28,7 +28,7 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
     public function testPositiveCheck($query, $errorMsg)
     {
         $this->assertTrue(
-            $this->fullTextSearchCheck->check($query),
+            $this->fullTextSearchCheck->isRequiredForQuery($query),
             $errorMsg
         );
     }
@@ -42,7 +42,7 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
     public function testNegativeCheck($query, $errorMsg)
     {
         $this->assertFalse(
-            $this->fullTextSearchCheck->check($query),
+            $this->fullTextSearchCheck->isRequiredForQuery($query),
             $errorMsg
         );
     }
@@ -61,7 +61,7 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
             ->method('getType')
             ->willReturn('42');
 
-        $this->fullTextSearchCheck->check($matchQueryMock);
+        $this->fullTextSearchCheck->isRequiredForQuery($matchQueryMock);
     }
 
     /**

@@ -132,7 +132,7 @@ class IndexBuilder implements IndexBuilderInterface
                 ['entity_id' => 'entity_id']
             );
 
-        if ($this->fullTextSearchCheck->check($request->getQuery())) {
+        if ($this->fullTextSearchCheck->isRequiredForQuery($request->getQuery())) {
             $select->joinLeft(
                 ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
                 'search_index.attribute_id = cea.attribute_id',
