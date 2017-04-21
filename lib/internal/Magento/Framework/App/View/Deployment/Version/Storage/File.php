@@ -41,7 +41,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     public function load()
     {
         if ($this->directory->isReadable($this->fileName)) {
-            return $this->directory->readFile($this->fileName);
+            return trim($this->directory->readFile($this->fileName));
         }
         return false;
     }
