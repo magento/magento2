@@ -82,7 +82,7 @@ class Post extends \Magento\Contact\Controller\Index
             $this->logger->addError('An error occurred processing a posted message to contact us in Controller\\Index\\Post: ' . $e->getMessage());
             $this->logger->critical($e);
             $this->messageManager->addErrorMessage(
-                __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                __('An error occurred while processing your form. Please try again later.')
             );
             $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         }
