@@ -7,7 +7,7 @@
 namespace Magento\Framework\Exception;
 
 /**
- * Class ConfigurationException
+ * @api
  */
 class ConfigurationMismatchException extends LocalizedException
 {
