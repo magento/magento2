@@ -8,6 +8,9 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @api
+ */
 class RowException extends LocalizedException
 {
 }
