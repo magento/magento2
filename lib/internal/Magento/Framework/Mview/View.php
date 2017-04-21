@@ -17,6 +17,11 @@ use Magento\Framework\Mview\View\SubscriptionFactory;
 class View extends \Magento\Framework\DataObject implements ViewInterface
 {
     /**
+     * Default batch size for partial reindex
+     */
+    const DEFAULT_BATCH_SIZE = 1000;
+
+    /**
      * @var string
      */
     protected $_idFieldName = 'view_id';
@@ -49,17 +54,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     /**
      * @var array
      */
-    protected $changelogBatchSize = [
-        'default_size' => 1000,
-        'catalog_category_product' => 1000,
-        'catalog_product_category' => 1000,
-        'catalog_product_price' => 1000,
-        'catalog_product_attribute' => 1000,
-        'cataloginventory_stock' => 1000,
-        'catalogrule_rule' => 1000,
-        'catalogrule_product' => 1000,
-        'catalogsearch_fulltext' => 1000,
-    ];
+    private $changelogBatchSize;
 
     /**
      * @param ConfigInterface $config
@@ -68,6 +63,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      * @param View\ChangelogInterface $changelog
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
+     * @param array $changelogBatchSize
      */
     public function __construct(
         ConfigInterface $config,
@@ -75,13 +71,15 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
         View\StateInterface $state,
         View\ChangelogInterface $changelog,
         SubscriptionFactory $subscriptionFactory,
-        array $data = []
+        array $data = [],
+        array $changelogBatchSize = []
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
         $this->state = $state;
         $this->changelog = $changelog;
         $this->subscriptionFactory = $subscriptionFactory;
+        $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
     }
 
@@ -276,7 +274,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
 
                 $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
-                    : $this->changelogBatchSize['default_size'];
+                    : self::DEFAULT_BATCH_SIZE;
 
                 for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $batchSize) {
                     $ids = $this->getChangelog()->getList($versionFrom, $versionFrom + $batchSize);
