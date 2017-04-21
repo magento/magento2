@@ -5,6 +5,9 @@
 
 /* global $break $ FORM_KEY */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'Magento_Ui/js/lib/view/utils/async',

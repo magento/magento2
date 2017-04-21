@@ -8,6 +8,9 @@ namespace Magento\Framework\Exception;
 
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 abstract class AbstractAggregateException extends LocalizedException
 {
     /**

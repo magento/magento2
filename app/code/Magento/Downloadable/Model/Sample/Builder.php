@@ -15,6 +15,7 @@ use Magento\Framework\DataObject\Copy;
 
 /**
  * Class Builder
+ * @api
  */
 class Builder
 {

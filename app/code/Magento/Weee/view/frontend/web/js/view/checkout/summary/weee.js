@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
+
 define([
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',

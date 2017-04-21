@@ -13,6 +13,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
