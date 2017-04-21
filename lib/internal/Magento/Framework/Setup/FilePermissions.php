@@ -263,6 +263,31 @@ class FilePermissions
     }
 
     /**
+     * Checks writable paths for database upgrade, returns array of directory paths that requires write permission
+     *
+     * @return array List of directories that requires write permission for database upgrade
+     */
+    public function getMissingWritableDirectoriesForDbUpgrade()
+    {
+        $writableDirectories = [
+            DirectoryList::CONFIG,
+            DirectoryList::VAR_DIR
+        ];
+
+        $requireWritePermission = [];
+        foreach ($writableDirectories as $code) {
+            if (!$this->isWritable($code)) {
+                $path = $this->directoryList->getPath($code);
+                if (!$this->checkRecursiveDirectories($path)) {
+                    $requireWritePermission[] = $path;
+                }
+            }
+        }
+
+        return $requireWritePermission;
+    }
+
+    /**
      * Checks writable directories for installation
      *
      * @deprecated Use getMissingWritablePathsForInstallation() to get all missing writable paths required for install

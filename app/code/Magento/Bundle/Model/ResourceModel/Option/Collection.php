@@ -7,6 +7,7 @@ namespace Magento\Bundle\Model\ResourceModel\Option;
 
 /**
  * Bundle Options Resource Collection
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
