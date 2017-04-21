@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale\Deployed;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Locale\AvailableLocalesInterface;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
-use Magento\Framework\Filesystem;
 
 /**
  * Returns array of deployed locale codes for the theme.

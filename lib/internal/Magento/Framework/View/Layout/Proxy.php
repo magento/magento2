@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -509,161 +509,9 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
     /**
      * {@inheritdoc}
      */
-    public function setCache($cache)
-    {
-        return $this->_getSubject()->setCache($cache);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCache()
-    {
-        return $this->_getSubject()->getCache();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCacheSaved($flag)
-    {
-        return $this->_getSubject()->setCacheSaved($flag);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheSaved()
-    {
-        return $this->_getSubject()->getCacheSaved();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCacheId($id)
-    {
-        return $this->_getSubject()->setCacheId($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheId()
-    {
-        return $this->_getSubject()->getCacheId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCacheTags($tags)
-    {
-        return $this->_getSubject()->setCacheTags($tags);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheTags()
-    {
-        return $this->_getSubject()->getCacheTags();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCacheLifetime($lifetime)
-    {
-        return $this->_getSubject()->setCacheLifetime($lifetime);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheLifetime()
-    {
-        return $this->_getSubject()->getCacheLifetime();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCacheChecksum($data)
-    {
-        return $this->_getSubject()->setCacheChecksum($data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateCacheChecksum($data)
-    {
-        return $this->_getSubject()->updateCacheChecksum($data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheChecksum()
-    {
-        return $this->_getSubject()->getCacheChecksum();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheChecksumId()
-    {
-        return $this->_getSubject()->getCacheChecksumId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetchCacheChecksum()
-    {
-        return $this->_getSubject()->fetchCacheChecksum();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateCacheChecksum()
-    {
-        return $this->_getSubject()->validateCacheChecksum();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadCache()
-    {
-        return $this->_getSubject()->loadCache();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function saveCache($tags = null)
-    {
-        return $this->_getSubject()->saveCache($tags);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getXmlString()
     {
         return $this->_getSubject()->getXmlString();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function removeCache()
-    {
-        return $this->_getSubject()->removeCache();
     }
 
     /**

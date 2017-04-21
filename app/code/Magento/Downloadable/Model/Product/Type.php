@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product;
@@ -11,7 +11,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 /**
  * Downloadable product type model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Type extends \Magento\Catalog\Model\Product\Type\Virtual

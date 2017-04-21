@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,6 +26,16 @@
             </field>
             <field name="assigned_attributes" xsi:type="array">
                 <item name="dataset" xsi:type="string">attribute_type_fpt</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_with_textarea">
+            <field name="attribute_set_name" xsi:type="string">Custom_textarea_attribute_set%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">attribute_type_textarea</item>
             </field>
         </dataset>
 

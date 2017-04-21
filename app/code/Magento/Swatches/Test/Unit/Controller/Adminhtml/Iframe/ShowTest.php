@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Controller\Adminhtml\Iframe;
@@ -102,7 +102,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->controller->execute();
     }
 

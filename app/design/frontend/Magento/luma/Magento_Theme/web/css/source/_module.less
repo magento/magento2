@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -576,6 +576,12 @@
                         content: attr(data-label);
                         display: inline-block;
                         margin: 0 -@indent__xs 0 @indent__xs;
+                    }
+
+                    &:last-child {
+                        &:after {
+                            display: none;
+                        }
                     }
                 }
 

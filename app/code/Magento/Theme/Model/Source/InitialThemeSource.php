@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
-use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
 /**
  * Class InitialThemeSource.
@@ -66,7 +66,7 @@ class InitialThemeSource implements ConfigSourceInterface
      * Example:
      *
      *  ```php
-     *  ['Magento/backend' =>
+     *  ['adminhtml/Magento/backend' =>
      *      [
      *          'parent_id' => NULL,
      *          'theme_path' => 'Magento/backend',
@@ -94,11 +94,11 @@ class InitialThemeSource implements ConfigSourceInterface
 
             foreach ($rawThemes as $themeRow) {
                 unset($themeRow['theme_id'], $themeRow['preview_image']);
-
-                $themes[$themeRow['code']] = $themeRow;
+                $themePath = $themeRow['area'] . '/' . $themeRow['theme_path'];
+                $themes[$themePath] = $themeRow;
 
                 if (isset($rawThemes[$themeRow['parent_id']]['code'])) {
-                    $themes[$themeRow['code']]['parent_id'] = $rawThemes[$themeRow['parent_id']]['code'];
+                    $themes[$themePath]['parent_id'] = $rawThemes[$themeRow['parent_id']]['code'];
                 }
             }
 

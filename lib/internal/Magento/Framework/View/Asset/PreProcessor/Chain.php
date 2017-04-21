@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,8 @@ use Magento\Framework\View\Asset\LocalInterface;
 /**
  * An object that's passed to preprocessors to carry current and original information for processing
  * Encapsulates complexity of all necessary context and parameters
+ *
+ * @api
  */
 class Chain
 {

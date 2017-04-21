@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Connector;
@@ -14,7 +14,8 @@ interface CommandInterface
     /**
      * Execute call to external service
      * Information about destination and arguments appears from config
-     * @return void
+     *
+     * @return bool
      */
     public function execute();
 }

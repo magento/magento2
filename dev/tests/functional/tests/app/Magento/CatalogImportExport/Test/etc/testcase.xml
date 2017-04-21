@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="ImportProductsTest" firstStep="openImportIndex">
+        <step name="openImportIndex" module="Magento_ImportExport" next="fillImportForm" />
+        <step name="fillImportForm" module="Magento_ImportExport" next="clickCheckData" />
+        <step name="clickCheckData" module="Magento_ImportExport" next="checkResultMessage" />
+        <step name="checkResultMessage" module="Magento_ImportExport" next="clickImportData" />
+        <step name="clickImportData" module="Magento_ImportExport" />
+    </scenario>
+</config>

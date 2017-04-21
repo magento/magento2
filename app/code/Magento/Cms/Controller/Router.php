@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller;
 
 /**
- * Cms Controller Router
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
@@ -87,7 +85,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * Validate and Match Cms Page and modify request
      *
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return bool
+     * @return \Magento\Framework\App\ActionInterface|null
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {

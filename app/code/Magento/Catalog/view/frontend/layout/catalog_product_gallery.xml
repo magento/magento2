@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Catalog\Block\Product\Gallery" name="catalog_product_gallery" template="product/gallery.phtml"/>
+            <block class="Magento\Catalog\Block\Product\Gallery" name="catalog_product_gallery" template="Magento_Catalog::product/gallery.phtml"/>
         </referenceContainer>
     </body>
 </page>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -123,13 +123,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         ];
         $leftJoinTables = [
             0 => [
-                0 =>
-                    [
+                0 => [
                         'store_value' => 'catalog_product_entity_media_gallery_value_video',
                     ],
                 1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                2 =>
-                    [
+                2 => [
                         'video_provider' => 'provider',
                         'video_url' => 'url',
                         'video_title' => 'title',
@@ -214,15 +212,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $storeId = 0;
         $cols = null;
         $leftJoinTables = [
-            0 =>
-                [
-                    0 =>
-                        [
+            0 => [
+                    0 => [
                             'store_value' => 'catalog_product_entity_media_gallery_value_video',
                         ],
                     1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                    2 =>
-                        [
+                    2 => [
                             'video_provider' => 'provider',
                             'video_url' => 'url',
                             'video_title' => 'title',
@@ -317,7 +312,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $attributeId = 6;
         $getTableReturnValue = 'table';
         $quoteInfoReturnValue =
-            'main.value_id = value.value_id AND value.store_id = ' . $storeId;
+            'main.value_id = value.value_id AND value.store_id = ' . $storeId
+            . ' AND value.entity_id = entity.entity_id';
+        $quoteDefaultInfoReturnValue =
+            'main.value_id = default_value.value_id AND default_value.store_id = 0'
+            . ' AND default_value.entity_id = entity.entity_id';
+
         $positionCheckSql = 'testchecksql';
         $resultRow = [
             [
@@ -373,7 +373,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->select->expects($this->at(3))->method('joinLeft')->with(
             ['default_value' => $getTableReturnValue],
-            'main.value_id = default_value.value_id AND default_value.store_id = 0',
+            $quoteDefaultInfoReturnValue,
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->willReturnSelf();
         $this->select->expects($this->at(4))->method('where')->with(

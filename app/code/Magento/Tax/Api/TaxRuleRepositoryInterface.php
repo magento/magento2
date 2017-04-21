@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,9 +57,9 @@ interface TaxRuleRepositoryInterface
      * included. See http://devdocs.magento.com/codelinks/attributes.html#TaxRuleRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Tax\Api\Data\TaxRuleSearchResultsInterface containing TaxRuleInterface objects
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 }

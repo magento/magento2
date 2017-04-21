@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Mtf\Util\Import\File;
@@ -18,6 +18,13 @@ class CsvTemplate implements TemplateInterface
      * @var array
      */
     private $config;
+
+    /**
+     * Csv data.
+     *
+     * @var string
+     */
+    private $csv;
 
     /**
      * @param array $config
@@ -44,36 +51,13 @@ class CsvTemplate implements TemplateInterface
             throw new \Exception('File "' . $filename . '" does not exist.');
         }
 
-        $data = include $filename;
-        $count = abs($this->config['count']);
-
-        $placeholders = [];
-        if (!empty($this->config['placeholders'])) {
-            $placeholders = $this->config['placeholders'];
-        }
-
         $fh = fopen('php://temp', 'rw');
-        fputcsv($fh, array_keys($data));
-
-        for ($i = 0; $i < $count; ++$i) {
-            $row = array_map(
-                function ($value) use ($placeholders, $i) {
-                    if (is_string($value) && isset($placeholders[$i])) {
-                        return strtr($value, $placeholders[$i]);
-                    }
-
-                    return $value;
-                },
-                $data
-            );
-            fputcsv($fh, $row);
-        }
-
+        $fh = $this->addEntitiesData($fh);
         rewind($fh);
-        $csv = stream_get_contents($fh);
+        $this->csv = stream_get_contents($fh);
         fclose($fh);
 
-        return $csv;
+        return $this->csv;
     }
 
     /**
@@ -86,5 +70,49 @@ class CsvTemplate implements TemplateInterface
             crc32(time()),
             basename($this->config['filename'])
         );
+    }
+
+    /**
+     * Replace placeholders in csv content.
+     *
+     * @param resource $stream
+     * @return resource
+     */
+    private function addEntitiesData($stream)
+    {
+        $filename = MTF_TESTS_PATH . $this->config['filename'] . '.php';
+        $entitiesData = include $filename;
+
+        $placeholders = [];
+        if (!empty($this->config['placeholders'])) {
+            $placeholders = $this->config['placeholders'];
+        }
+
+        fputcsv($stream, array_keys($entitiesData['entity_0']['data_0']));
+        foreach ($placeholders as $entityKey => $entityData) {
+            foreach ($entityData as $dataKey => $dataValue) {
+                $row = array_map(
+                    function ($value) use ($placeholders, $entityKey, $dataKey, $dataValue) {
+                        if (is_string($value) && isset($placeholders[$entityKey][$dataKey])) {
+                            return strtr($value, $dataValue);
+                        }
+                        return $value;
+                    },
+                    $entitiesData[$entityKey][$dataKey]
+                );
+                fputcsv($stream, $row);
+            }
+        }
+        return $stream;
+    }
+
+    /**
+     * Return csv data.
+     *
+     * @return string
+     */
+    public function getCsv()
+    {
+        return $this->csv;
     }
 }

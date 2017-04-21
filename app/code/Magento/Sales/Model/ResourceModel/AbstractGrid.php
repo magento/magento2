@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class AbstractGrid
+ * @api
  */
 abstract class AbstractGrid extends AbstractDb implements GridInterface
 {

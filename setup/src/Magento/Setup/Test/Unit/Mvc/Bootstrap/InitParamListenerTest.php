@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Mvc\Bootstrap;
@@ -302,10 +302,12 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $routeMatchMock->expects($this->once())
+        $routeMatchMock->expects($this->exactly(2))
             ->method('getParam')
-            ->with('controller')
-            ->willReturn('testController');
+            ->willReturnMap([
+                ['controller', null, 'testController'],
+                ['action', null, 'testAction']
+            ]);
         $eventMock->expects($this->once())
             ->method('getRouteMatch')
             ->willReturn($routeMatchMock);
@@ -401,6 +403,38 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $this->listener->authPreDispatch($eventMock),
             $responseMock
+        );
+    }
+
+    public function testAuthPreDispatchSkip()
+    {
+        $eventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $routeMatchMock = $this->getMockBuilder(\Zend\Mvc\Router\Http\RouteMatch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $deploymentConfigMock->expects($this->never())
+            ->method('isAvailable');
+        $routeMatchMock->expects($this->exactly(2))
+            ->method('getParam')
+            ->willReturnMap([
+                ['controller', null, \Magento\Setup\Controller\Session::class],
+                ['action', null, 'unlogin']
+            ]);
+        $eventMock->expects($this->once())
+            ->method('getRouteMatch')
+            ->willReturn($routeMatchMock);
+        $eventMock->expects($this->never())
+            ->method('getApplication');
+
+        $this->assertSame(
+            $this->listener->authPreDispatch($eventMock),
+            false
         );
     }
 }

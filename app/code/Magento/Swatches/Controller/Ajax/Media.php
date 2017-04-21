@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Controller\Ajax;
@@ -12,8 +12,6 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Class Media
- *
- * @package Magento\Swatches\Controller\Ajax
  */
 class Media extends \Magento\Framework\App\Action\Action
 {

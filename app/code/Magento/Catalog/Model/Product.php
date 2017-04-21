@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Catalog product model
@@ -1618,7 +1617,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isSalable()
     {
-        if ($this->hasData('salable') && !$this->_catalogProduct->getSkipSaleableCheck()) {
+        if ($this->_catalogProduct->getSkipSaleableCheck()) {
+            return true;
+        }
+        if (($this->getOrigData('status') != $this->getData('status'))
+            || $this->isStockStatusChanged()) {
+            $this->unsetData('salable');
+        }
+
+        if ($this->hasData('salable')) {
             return $this->getData('salable');
         }
         $this->_eventManager->dispatch('catalog_product_is_salable_before', ['product' => $this]);
@@ -1631,7 +1638,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             ['product' => $this, 'salable' => $object]
         );
         $this->setData('salable', $object->getIsSalable());
-        return $object->getIsSalable();
+        return $this->getData('salable');
     }
 
     /**
@@ -1641,7 +1648,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isAvailable()
     {
-        return $this->getTypeInstance()->isSalable($this) || $this->_catalogProduct->getSkipSaleableCheck();
+        return $this->_catalogProduct->getSkipSaleableCheck() || $this->getTypeInstance()->isSalable($this);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -34,6 +34,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Email\Model\Template setOrigTemplateCode(string $value)
  * @method string getOrigTemplateVariables()
  * @method \Magento\Email\Model\Template setOrigTemplateVariables(string $value)
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
         $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
 
-        if ($product->hasData('checkout_data')) {
+        if ($product->hasData('checkout_data') || $product->getMsrpDisplayActualPriceType() === 'In Cart') {
             $catalogProductView->getViewBlock()->addToCart($product);
         } else {
             $catalogProductView->getMsrpViewBlock()->openMapBlock();

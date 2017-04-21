@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
  * Catalog bundle product info block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {

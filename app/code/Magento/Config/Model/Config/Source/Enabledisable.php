@@ -1,17 +1,33 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Source;
 
+/**
+ * Source model for element with enable and disable variants.
+ */
 class Enabledisable implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * Value which equal Enable for Enabledisable dropdown.
+     */
+    const ENABLE_VALUE = 1;
+
+    /**
+     * Value which equal Disable for Enabledisable dropdown.
+     */
+    const DISABLE_VALUE = 0;
+
     /**
      * @return array
      */
     public function toOptionArray()
     {
-        return [['value' => 1, 'label' => __('Enable')], ['value' => 0, 'label' => __('Disable')]];
+        return [
+            ['value' => self::ENABLE_VALUE, 'label' => __('Enable')],
+            ['value' => self::DISABLE_VALUE, 'label' => __('Disable')],
+        ];
     }
 }

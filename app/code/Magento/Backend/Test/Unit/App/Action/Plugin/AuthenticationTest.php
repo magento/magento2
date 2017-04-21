@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\Action\Plugin\Authentication;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class AuthenticationTest

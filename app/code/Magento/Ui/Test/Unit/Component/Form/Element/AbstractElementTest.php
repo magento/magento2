@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
@@ -38,15 +38,7 @@ abstract class AbstractElementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->processorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->contextMock->expects($this->any())
-            ->method('getProcessor')
-            ->willReturn($this->processorMock);
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
     }
 
     /**

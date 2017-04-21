@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
@@ -74,14 +74,20 @@ class Preprocessor implements PreprocessorInterface
     private $aliasResolver;
 
     /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
+
+    /**
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
      * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
-     * @param ScopeConfigInterface $scopeConfig
-     * @param AliasResolver $aliasResolver
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param AliasResolver|null $aliasResolver
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -92,7 +98,8 @@ class Preprocessor implements PreprocessorInterface
         TableMapper $tableMapper,
         $attributePrefix,
         ScopeConfigInterface $scopeConfig = null,
-        AliasResolver $aliasResolver = null
+        AliasResolver $aliasResolver = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
     ) {
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
@@ -107,9 +114,11 @@ class Preprocessor implements PreprocessorInterface
         if (null === $aliasResolver) {
             $aliasResolver = ObjectManager::getInstance()->get(AliasResolver::class);
         }
-
+        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
         $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
+
     }
 
     /**
@@ -197,7 +206,10 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
     {
-        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
+        $indexerSuffix = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
+        )->getTableSuffix();
+        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' . $indexerSuffix : '' . $indexerSuffix;
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
         $entityField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();

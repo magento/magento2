@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -155,7 +155,7 @@
     </attributes>
     <gallery>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\BlockGallery</class>
-        <selector>[data-index='block_gallery']</selector>
+        <selector>[data-index='gallery']</selector>
         <strategy>css selector</strategy>
     </gallery>
     <search-engine-optimization>
