@@ -15,6 +15,8 @@ use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Data object processor for array serialization using class reflection
+ *
+ * @api
  */
 class DataObjectProcessor
 {

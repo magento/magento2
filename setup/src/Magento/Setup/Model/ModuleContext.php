@@ -9,6 +9,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 
 /**
  * Context of a module being installed/updated: version, user data, etc.
+ *
+ * @api
  */
 class ModuleContext implements ModuleContextInterface
 {

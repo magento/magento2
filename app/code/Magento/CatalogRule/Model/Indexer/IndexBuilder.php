@@ -16,6 +16,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class IndexBuilder
 {
