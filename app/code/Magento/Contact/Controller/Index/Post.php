@@ -14,6 +14,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Psr\Log\LoggerInterface;
 
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -33,21 +34,29 @@ class Post extends \Magento\Contact\Controller\Index
     private $mail;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Context $context
      * @param ConfigInterface $contactsConfig
      * @param MailInterface $mail
      * @param DataPersistorInterface $dataPersistor
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         ConfigInterface $contactsConfig,
         MailInterface $mail,
-        DataPersistorInterface $dataPersistor
+        DataPersistorInterface $dataPersistor,
+        LoggerInterface $logger
     ) {
         parent::__construct($context, $contactsConfig);
         $this->context = $context;
         $this->mail = $mail;
         $this->dataPersistor = $dataPersistor;
+        $this->logger = $logger;
     }
 
     /**
@@ -70,6 +79,8 @@ class Post extends \Magento\Contact\Controller\Index
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         } catch (\Exception $e) {
+            $this->logger->addError('An error occurred processing a posted message to contact us in Controller\\Index\\Post: ' . $e->getMessage());
+            $this->logger->critical($e);
             $this->messageManager->addErrorMessage(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
