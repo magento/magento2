@@ -55,7 +55,8 @@ class Post extends \Magento\Contact\Controller\Index
         parent::__construct($context, $contactsConfig);
         $this->context = $context;
         $this->mail = $mail;
-        $this->dataPersistor = $dataPersistor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(DataPersistorInterface::class);
+        $this->dataPersistor =
+            $dataPersistor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(DataPersistorInterface::class);
         $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
@@ -79,7 +80,7 @@ class Post extends \Magento\Contact\Controller\Index
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         } catch (\Exception $e) {
-            $this->logger->addError('An error occurred processing a posted message to contact us in Controller\\Index\\Post: ' . $e->getMessage());
+            $this->logger->addError('An error occurred in Controller\\Index\\Post: ' . $e->getMessage());
             $this->logger->critical($e);
             $this->messageManager->addErrorMessage(
                 __('An error occurred while processing your form. Please try again later.')
