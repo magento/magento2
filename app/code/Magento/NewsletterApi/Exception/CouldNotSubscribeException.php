@@ -6,9 +6,9 @@
 
 namespace Magento\NewsletterApi\Exception;
 
-use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
 
-class AlreadySubscribedException extends AlreadyExistsException
+class CouldNotSubscribeException extends LocalizedException
 {
 
 }

@@ -13,20 +13,20 @@ use Magento\Framework\Api\SearchResultsInterface;
  *
  * @api
  */
-interface NewsletterSubscriptionSearchResultsInterface extends SearchResultsInterface
+interface SubscriptionSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get newsletter subscription list.
      *
-     * @return \Magento\NewsletterApi\Api\Data\NewsletterSubscriptionInterface[]
+     * @return \Magento\NewsletterApi\Api\Data\SubscriptionInterface[]
      */
     public function getItems();
 
     /**
      * Set newsletter subscription list.
      *
-     * @param \Magento\NewsletterApi\Api\Data\NewsletterSubscriptionInterface[] $items
-     * @return \Magento\NewsletterApi\Api\Data\NewsletterSubscriptionSearchResultsInterface
+     * @param \Magento\NewsletterApi\Api\Data\SubscriptionInterface[] $items
+     * @return void
      */
     public function setItems(array $items);
 }
