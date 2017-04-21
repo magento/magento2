@@ -29,7 +29,7 @@ try {
         $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception();
         $loggerHandlers = [
             'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
-            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem, $exceptionHandler)
+            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
         ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),
