@@ -455,7 +455,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function addAttribute(AbstractAttribute $attribute)
     {
-        $attribute = $attribute; //we change state of attribute, so lets make copy
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 

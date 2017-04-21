@@ -117,6 +117,13 @@ class Config
     private $serializer;
 
     /**
+     * Cache of attributes per set
+     *
+     * @var array
+     */
+    private $attributesPerSet = [];
+
+    /**
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
@@ -547,8 +554,6 @@ class Config
         return $attributes;
     }
 
-    private $attributesPerSet = [];
-
     /**
      * Get all entity type attributes
      *
@@ -593,16 +598,17 @@ class Config
                 $this->_initAttributes($entityType);
                 $attributesData = $this->_attributeData[$entityType->getEntityTypeCode()];
             }
-        }
-        if ($this->isCacheEnabled()) {
-            $this->_cache->save(
-                $this->serializer->serialize($attributesData),
-                $cacheKey,
-                [
-                    \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
-                ]
-            );
+
+            if ($this->isCacheEnabled()) {
+                $this->_cache->save(
+                    $this->serializer->serialize($attributesData),
+                    $cacheKey,
+                    [
+                        \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    ]
+                );
+            }
         }
 
         foreach ($attributesData as $attributeData) {
