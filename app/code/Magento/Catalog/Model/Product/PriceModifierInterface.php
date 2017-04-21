@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * @api
+ */
 interface PriceModifierInterface
 {
     /**

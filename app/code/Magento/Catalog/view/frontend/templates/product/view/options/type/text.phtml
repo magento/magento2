@@ -12,7 +12,7 @@ $_option = $block->getOption();
 $class = ($_option->getIsRequire()) ? ' required' : '';
 ?>
 
-<div class="field<?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA) {
+<div class="field<?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA) {
     echo ' textarea';
 } ?><?php /* @escapeNotVerified */ echo $class ?>">
     <label class="label" for="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text">
@@ -21,7 +21,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
     </label>
 
     <div class="control">
-        <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FIELD): ?>
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
             <?php $_textValidate = null;
             if ($_option->getIsRequire()) {
                 $_textValidate['required'] = true;
@@ -39,7 +39,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
                    name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                    data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                    value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
-        <?php elseif ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA): ?>
+        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <?php $_textAreaValidate = null;
             if ($_option->getIsRequire()) {
                 $_textAreaValidate['required'] = true;

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing;
 
+/**
+ * @api
+ */
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**

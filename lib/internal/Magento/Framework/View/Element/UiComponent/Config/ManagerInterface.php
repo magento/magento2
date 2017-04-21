@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\UiComponent\Config;
 
 /**
  * Interface ManagerInterface
+ * @deprecated since 2.2.0
  */
 interface ManagerInterface
 {

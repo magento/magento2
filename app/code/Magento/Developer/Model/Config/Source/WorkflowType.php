@@ -5,13 +5,12 @@
  */
 namespace Magento\Developer\Model\Config\Source;
 
-use Magento\Framework\App\State;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class WorkflowType
  *
- * @package Magento\Developer\Model\Config\Source
+ * @api
  */
 class WorkflowType implements ArrayInterface
 {

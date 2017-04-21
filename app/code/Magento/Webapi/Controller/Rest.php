@@ -26,8 +26,6 @@ use Magento\Webapi\Model\Rest\Swagger\Generator;
 /**
  * Front controller for WebAPI REST area.
  *
- * TODO: Consider warnings suppression removal
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */

@@ -11,7 +11,7 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
- * Class Block
+ * @deprecated
  */
 class Block extends AbstractComponent implements BlockWrapperInterface
 {
