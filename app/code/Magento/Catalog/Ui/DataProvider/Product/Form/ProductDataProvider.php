@@ -12,6 +12,8 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * DataProvider for product edit form
+ *
+ * @api
  */
 class ProductDataProvider extends AbstractDataProvider
 {

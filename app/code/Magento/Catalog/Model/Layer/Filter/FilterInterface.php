@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Layer filter interface
+ *
+ * @api
  */
 interface FilterInterface
 {
