@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Class Gallery
+ * Provides a serialized media gallery data for configurable product options.
  */
 class Gallery
 {
