@@ -25,11 +25,14 @@ try {
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
-        $logWriter = new \Zend_Log_Writer_Stream('php://output');
-        $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
+        $filesystem = new \Magento\Framework\Filesystem\Driver\File();
+        $loggerHandlers = [
+            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem),
+            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+        ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),
-            new \Zend_Log($logWriter)
+            new \Monolog\Logger('main', $loggerHandlers)
         );
     } else {
         $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
