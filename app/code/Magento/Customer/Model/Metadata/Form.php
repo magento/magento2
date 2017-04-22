@@ -8,6 +8,12 @@ namespace Magento\Customer\Model\Metadata;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * @api
+ */
+/**
+ * @api
+ */
 class Form
 {
     /**#@+

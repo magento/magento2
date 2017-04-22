@@ -12,6 +12,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order PDF abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

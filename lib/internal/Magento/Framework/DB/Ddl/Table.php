@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Data Definition for table
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\DB\Ddl;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Data Definition for table
+ *
+ * @api
+ */
 class Table
 {
     /**

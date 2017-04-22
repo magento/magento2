@@ -14,6 +14,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action;
 use Magento\Catalog\Helper\Product\Edit\Action\Attribute as ActionAttribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
+/**
+ * @api
+ */
 class Attribute extends \Magento\Backend\Block\Widget
 {
     /**

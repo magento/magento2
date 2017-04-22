@@ -12,6 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Menu item. Should be used to create nested menu structures with \Magento\Backend\Model\Menu
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Item

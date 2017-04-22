@@ -8,6 +8,8 @@ namespace Magento\Wishlist\Block\Catalog\Product\View\AddTo;
 
 /**
  * Product view wishlist block
+ *
+ * @api
  */
 class Wishlist extends \Magento\Catalog\Block\Product\View
 {

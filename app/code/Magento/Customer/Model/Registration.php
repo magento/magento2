@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Model;
 
+/**
+ * @api
+ */
 class Registration
 {
     /**

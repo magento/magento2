@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Class for SQL SELECT generation and results.
  *
+ * @api
  * @method \Magento\Framework\DB\Select from($name, $cols = '*', $schema = null)
  * @method \Magento\Framework\DB\Select join($name, $cond, $cols = '*', $schema = null)
  * @method \Magento\Framework\DB\Select joinInner($name, $cond, $cols = '*', $schema = null)
@@ -27,8 +28,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * @method \Magento\Framework\DB\Select distinct($flag = true)
  * @method \Magento\Framework\DB\Select reset($part = null)
  * @method \Magento\Framework\DB\Select columns($cols = '*', $correlationName = null)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Zend_Db_Select
 {

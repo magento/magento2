@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Result Factory
+ *
+ * @api
  */
 class ResultFactory
 {

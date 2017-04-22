@@ -9,6 +9,7 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 /**
  * Wishlist block customer item column
  *
+ * @api
  * @method \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface getItem()
  */
 class Column extends \Magento\Wishlist\Block\AbstractBlock

@@ -12,6 +12,7 @@ use Magento\Backend\Block\Widget\Tabs as TabsWidget;
 /**
  * Integration activation tabs.
  *
+ * @api
  * @codeCoverageIgnore
  */
 class Tabs extends TabsWidget

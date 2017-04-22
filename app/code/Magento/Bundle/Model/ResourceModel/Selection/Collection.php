@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Bundle Selections Resource Collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection

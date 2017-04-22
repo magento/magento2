@@ -14,6 +14,7 @@
 namespace Magento\Config\Block\System\Config;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tabs extends \Magento\Backend\Block\Widget

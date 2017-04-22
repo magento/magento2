@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order Credit Memos grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface

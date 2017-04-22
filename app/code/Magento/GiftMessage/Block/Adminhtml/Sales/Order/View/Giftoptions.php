@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 /**
  * Adminhtml sales order view gift options block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */

@@ -26,6 +26,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Entity/Attribute/Model - entity abstract
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

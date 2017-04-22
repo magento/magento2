@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Block\Adminhtml;
 /**
  * Adminhtml import history page content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class History extends \Magento\Backend\Block\Widget\Grid\Container

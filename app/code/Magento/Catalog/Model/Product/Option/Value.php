@@ -15,6 +15,7 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Catalog product option select type model
  *
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value _getResource()
  * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value getResource()
  * @method int getOptionId()

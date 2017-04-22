@@ -385,21 +385,4 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
         return $plugins;
     }
-
-    /**
-     * Test DI compiler
-     *
-     * @depends testConfigurationOfInstanceParameters
-     * @depends testConstructorIntegrity
-     * @depends testPluginInterfaces
-     */
-    public function testCompiler()
-    {
-        $this->markTestSkipped('MAGETWO-52570');
-        try {
-            $this->_shell->execute($this->_command);
-        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            $this->fail($exception->getPrevious()->getMessage());
-        }
-    }
 }

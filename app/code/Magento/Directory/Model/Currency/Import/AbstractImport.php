@@ -9,6 +9,9 @@
  */
 namespace Magento\Directory\Model\Currency\Import;
 
+/**
+ * @api
+ */
 abstract class AbstractImport implements \Magento\Directory\Model\Currency\Import\ImportInterface
 {
     /**

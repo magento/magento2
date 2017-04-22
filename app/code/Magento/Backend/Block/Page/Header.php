@@ -11,6 +11,7 @@ namespace Magento\Backend\Block\Page;
 /**
  * Adminhtml header block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Header extends \Magento\Backend\Block\Template

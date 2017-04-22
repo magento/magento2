@@ -13,6 +13,8 @@ use Magento\Weee\Block\Item\Price\Renderer as ItemPriceRenderer;
 
 /**
  * Sales Order items price column renderer
+ *
+ * @api
  */
 class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
 {

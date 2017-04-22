@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

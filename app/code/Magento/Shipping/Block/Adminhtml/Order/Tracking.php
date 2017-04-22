@@ -8,6 +8,7 @@ namespace Magento\Shipping\Block\Adminhtml\Order;
 /**
  * Shipment tracking control form
  *
+ * @api
  */
 class Tracking extends \Magento\Backend\Block\Template
 {

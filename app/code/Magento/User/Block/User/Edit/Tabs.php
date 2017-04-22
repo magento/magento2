@@ -8,6 +8,7 @@ namespace Magento\User\Block\User\Edit;
 /**
  * User page left menu
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs

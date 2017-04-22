@@ -19,6 +19,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Catalog product option model
  *
+ * @api
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)

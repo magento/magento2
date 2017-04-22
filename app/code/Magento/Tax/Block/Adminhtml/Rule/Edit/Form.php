@@ -11,6 +11,9 @@ namespace Magento\Tax\Block\Adminhtml\Rule\Edit;
 
 use Magento\Tax\Api\TaxClassManagementInterface;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

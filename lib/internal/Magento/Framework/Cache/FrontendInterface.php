@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Cache;
 
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
+ *
+ * @api
  */
-namespace Magento\Framework\Cache;
-
 interface FrontendInterface
 {
     /**

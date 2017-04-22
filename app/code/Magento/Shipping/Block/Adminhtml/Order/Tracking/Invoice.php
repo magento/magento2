@@ -9,6 +9,9 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
+/**
+ * @api
+ */
 class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
     /**

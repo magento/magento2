@@ -10,6 +10,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Adminhtml sales order create sidebar recently compared block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar

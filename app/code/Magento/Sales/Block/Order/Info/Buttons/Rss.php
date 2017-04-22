@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Order\Info\Buttons;
 
 /**
  * Block of links in Order view page
+ *
+ * @api
  */
 class Rss extends \Magento\Framework\View\Element\Template
 {

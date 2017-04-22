@@ -9,6 +9,8 @@ use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 
 /**
  * Adminhtml order items grid
+ *
+ * @api
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

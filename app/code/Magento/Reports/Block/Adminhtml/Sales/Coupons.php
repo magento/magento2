@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
 /**
  * Adminhtml coupons report page content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Coupons extends \Magento\Backend\Block\Widget\Grid\Container

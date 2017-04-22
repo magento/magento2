@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Newsletter\Block\Adminhtml\Queue;
 
 /**
  * Newsletter template preview block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Newsletter\Block\Adminhtml\Queue;
-
 class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
 {
     /**

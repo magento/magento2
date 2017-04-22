@@ -17,6 +17,12 @@ namespace Magento\Eav\Model;
 
 use Magento\Store\Model\Website;
 
+/**
+ * @api
+ */
+/**
+ * @api
+ */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**

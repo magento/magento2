@@ -14,6 +14,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * EAV Attribute Abstract Data Model
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

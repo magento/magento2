@@ -9,6 +9,8 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
+ *
+ * @api
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {

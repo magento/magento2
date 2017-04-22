@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 /**
  * Adminhtml sales order create search block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Search extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

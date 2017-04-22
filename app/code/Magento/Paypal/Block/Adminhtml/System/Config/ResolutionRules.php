@@ -11,6 +11,8 @@ use Magento\Paypal\Model\Config\Rules\Reader;
 
 /**
  * Class ResolutionRules
+ *
+ * @api
  */
 class ResolutionRules extends Template
 {

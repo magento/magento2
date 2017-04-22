@@ -12,6 +12,8 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 /**
  * Class Select
  * Multishipping checkout select billing address
+ *
+ * @api
  */
 class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {

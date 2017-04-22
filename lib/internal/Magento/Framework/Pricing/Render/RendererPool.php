@@ -12,7 +12,7 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 
 /**
- * RenderPool
+ * @api
  */
 class RendererPool extends AbstractBlock
 {

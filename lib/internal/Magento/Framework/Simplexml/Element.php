@@ -8,6 +8,8 @@ namespace Magento\Framework\Simplexml;
 
 /**
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
+ *
+ * @api
  */
 class Element extends \SimpleXMLElement
 {

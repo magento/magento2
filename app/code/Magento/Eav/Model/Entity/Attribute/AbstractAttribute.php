@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

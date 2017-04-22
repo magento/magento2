@@ -13,6 +13,8 @@ use Magento\Backend\Model\UrlInterface;
 
 /**
  * Authorize.net Backend Data Helper
+ *
+ * @api
  */
 class Data extends FrontendDataHelper
 {

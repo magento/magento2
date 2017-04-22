@@ -8,6 +8,7 @@ namespace Magento\Persistent\Model;
 /**
  * Persistent Session Model
  *
+ * @api
  * @method int getCustomerId()
  * @method Session setCustomerId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

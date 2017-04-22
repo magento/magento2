@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
 /**
  * Adminhtml sales order create search products block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended

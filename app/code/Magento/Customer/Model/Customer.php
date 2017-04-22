@@ -22,6 +22,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Customer model
  *
+ * @api
  * @method int getWebsiteId() getWebsiteId()
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()

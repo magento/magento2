@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Block\Product;
 
 /**
+ * @api
  * @method string getImageUrl()
  * @method string getWidth()
  * @method string getHeight()

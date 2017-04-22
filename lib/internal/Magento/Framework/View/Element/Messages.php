@@ -9,6 +9,8 @@ use Magento\Framework\Message\MessageInterface;
 
 /**
  * Class Messages
+ *
+ * @api
  */
 class Messages extends Template
 {

@@ -9,6 +9,9 @@
  */
 namespace Magento\Tax\Block\Adminhtml\Rule;
 
+/**
+ * @api
+ */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

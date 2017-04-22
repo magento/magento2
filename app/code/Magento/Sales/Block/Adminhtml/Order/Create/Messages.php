@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 /**
  * Order create errors block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Messages extends \Magento\Framework\View\Element\Messages

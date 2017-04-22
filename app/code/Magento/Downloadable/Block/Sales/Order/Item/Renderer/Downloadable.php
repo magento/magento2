@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable order item render block
+ *
  * @api
  */
 class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer

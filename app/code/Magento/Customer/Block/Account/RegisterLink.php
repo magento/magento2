@@ -10,6 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * Customer register link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class RegisterLink extends \Magento\Framework\View\Element\Html\Link

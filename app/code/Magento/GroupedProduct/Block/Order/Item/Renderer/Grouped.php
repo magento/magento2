@@ -9,6 +9,9 @@ namespace Magento\GroupedProduct\Block\Order\Item\Renderer;
 
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
+/**
+ * @api
+ */
 class Grouped extends DefaultRenderer
 {
     /**

@@ -10,6 +10,8 @@ use Magento\Framework\App\RequestInterface;
 /**
  * EAV Entity Form Model
  *
+ * @api
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

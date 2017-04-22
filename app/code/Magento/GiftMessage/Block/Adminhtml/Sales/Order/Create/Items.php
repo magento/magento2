@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 /**
  * Gift message adminhtml sales order create items
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Items extends \Magento\Backend\Block\Template

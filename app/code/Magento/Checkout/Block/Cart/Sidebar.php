@@ -9,6 +9,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Cart sidebar block
+ *
+ * @api
  */
 class Sidebar extends AbstractCart
 {

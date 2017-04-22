@@ -11,6 +11,9 @@
  */
 namespace Magento\Multishipping\Block\Checkout\Billing;
 
+/**
+ * @api
+ */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**

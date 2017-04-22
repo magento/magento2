@@ -14,6 +14,8 @@ use Magento\Authorizenet\Model\Authorizenet;
 
 /**
  * Authorize.net Data Helper
+ *
+ * @api
  */
 class Data extends AbstractHelper
 {
