@@ -5,6 +5,9 @@
  */
 namespace Magento\AdvancedSearch\Block;
 
+/**
+ * @api
+ */
 class Suggestions extends SearchData
 {
 }

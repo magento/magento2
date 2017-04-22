@@ -8,6 +8,7 @@ namespace Magento\AdvancedSearch\Block\Adminhtml\Search;
 /**
  * Search queries relations grid container
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget\Grid\Container

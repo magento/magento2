@@ -8,6 +8,7 @@ namespace Magento\AdvancedSearch\Block\Adminhtml\Search;
 /**
  * Search query relations edit grid
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
