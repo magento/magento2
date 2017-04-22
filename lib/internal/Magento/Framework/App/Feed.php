@@ -30,3 +30,4 @@ class Feed implements \Magento\Framework\App\FeedInterface
         return $this->feed->saveXml();
     }
 }
+
