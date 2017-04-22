@@ -12,6 +12,8 @@ use Magento\Signifyd\Model\CaseManagement;
 
 /**
  * Get Signifyd Case Info
+ *
+ * @api
  */
 class CaseInfo extends Template
 {

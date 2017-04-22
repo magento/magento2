@@ -17,6 +17,7 @@ use Magento\Signifyd\Model\SignifydOrderSessionId;
  * Signifyd’s device fingerprinting solution uniquely tracks and identifies devices
  * used to transact on your site, increasing your protection from fraud.
  *
+ * @api
  * @see https://www.signifyd.com/docs/api/#/reference/device-fingerprint/create-a-case
  */
 class Fingerprint extends Template
