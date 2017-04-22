@@ -6,6 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\DataObject;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,27 +23,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_imageHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_productMock;
 
     protected function setUp()
     {
         $this->_imageHelperMock = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
-        $this->_productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->_productMock = $this->getMock(Product::class, [], [], '', false);
 
         $this->_model = new \Magento\ConfigurableProduct\Helper\Data($this->_imageHelperMock);
     }
 
     public function testGetAllowAttributes()
     {
-        $typeInstanceMock = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $typeInstanceMock = $this->getMock(Configurable::class, [], [], '', false);
         $typeInstanceMock->expects($this->once())
             ->method('getConfigurableAttributes')
             ->with($this->_productMock);
@@ -93,39 +91,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function getOptionsDataProvider()
     {
-        $currentProductMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getTypeInstance', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $provider = [];
-        $provider[] = [
-            [],
-            [
-                'allowed_products' => [],
-                'current_product_mock' => $currentProductMock,
-            ],
-        ];
+        $currentProductMock = $this->getMock(Product::class, ['getTypeInstance', '__wakeup'], [], '', false);
+        $provider = [[[], ['allowed_products' => [], 'current_product_mock' => $currentProductMock]]];
 
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
-            $attribute = $this->getMock(
-                \Magento\Framework\DataObject::class,
-                ['getProductAttribute'],
-                [],
-                '',
-                false
-            );
-            $productAttribute = $this->getMock(
-                \Magento\Framework\DataObject::class,
-                ['getId', 'getAttributeCode'],
-                [],
-                '',
-                false
-            );
+            $attribute = $this->getMock(DataObject::class, ['getProductAttribute'], [], '', false);
+            $productAttribute = $this->getMock(DataObject::class, ['getId', 'getAttributeCode'], [], '', false);
             $productAttribute->expects($this->any())
                 ->method('getId')
                 ->will($this->returnValue('attribute_id_' . $i));
@@ -137,13 +110,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($productAttribute));
             $attributes[] = $attribute;
         }
-        $typeInstanceMock = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $typeInstanceMock = $this->getMock(Configurable::class, [], [], '', false);
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableAttributes')
             ->will($this->returnValue($attributes));
@@ -153,7 +120,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->getMock(
-                \Magento\Catalog\Model\Product::class,
+                Product::class,
                 ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages'],
                 [],
                 '',
@@ -261,7 +228,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $items = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'file' => 'test_file'
             ]),
         ];

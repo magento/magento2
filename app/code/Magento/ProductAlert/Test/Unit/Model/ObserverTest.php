@@ -7,6 +7,10 @@ namespace Magento\ProductAlert\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**

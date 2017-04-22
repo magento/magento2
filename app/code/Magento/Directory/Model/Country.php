@@ -15,6 +15,7 @@ namespace Magento\Directory\Model;
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Country extends \Magento\Framework\Model\AbstractModel
 {

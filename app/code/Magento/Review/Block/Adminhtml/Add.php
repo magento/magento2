@@ -85,9 +85,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                             params.form_key = FORM_KEY;
                         }
                         new Ajax.Updater("rating_detail", "' .
-            $this->getUrl(
-                'review/product/ratingItems'
-            ) .
+            $this->getUrl('review/product/ratingItems') .
             '", {
                 parameters:params, 
                 evalScripts: true,  
@@ -101,9 +99,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                             $("product_id").value = response.id;
 
                             $("product_name").innerHTML = \'<a href="' .
-            $this->getUrl(
-                'catalog/product/edit'
-            ) .
+            $this->getUrl('catalog/product/edit') .
             'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
                         } else if ( response.message ) {
                             alert(response.message);

@@ -61,6 +61,7 @@ class Subtotal extends CommonTaxCollector
      * @param Address\Total $total
      * @return null
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\System\Config\Backend\Catalog\Url\Rewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SuffixTest extends \PHPUnit_Framework_TestCase
 {
     /**

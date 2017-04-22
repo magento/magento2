@@ -10,7 +10,7 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 
 /**
- * Data upgrade script
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {

@@ -46,6 +46,7 @@ class Validator
      *
      * @throws LocalizedException
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate(DesignConfigInterface $designConfig)
     {

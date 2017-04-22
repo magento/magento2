@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\AbstractComponent;
 
 /**
- * Class Column
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Column extends AbstractComponent implements ColumnInterface
 {

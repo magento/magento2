@@ -31,6 +31,7 @@ class ConcatHandler implements HandlerInterface
      * @param string $alias
      * @param array $fieldInfo
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {

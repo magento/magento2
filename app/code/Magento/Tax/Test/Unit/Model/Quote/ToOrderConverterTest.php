@@ -187,13 +187,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                     'IL' => [
                         'amount' => 0.36,
                         'percent' => 6,
-                        'rates' => [
-                            [
-                                'percent' => 6,
-                                'code' => 'IL',
-                                'title' => 'IL',
-                            ]
-                        ],
+                        'rates' => [['percent' => 6, 'code' => 'IL', 'title' => 'IL']],
                     ],
                 ],
                 'expected_applied_taxes' => [
@@ -201,13 +195,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                         'amount' => 0.36,
                         'percent' => 6,
                         'extension_attributes' => [
-                            'rates' => [
-                                [
-                                    'percent' => 6,
-                                    'code' => 'IL',
-                                    'title' => 'IL',
-                                ]
-                            ],
+                            'rates' => [['percent' => 6, 'code' => 'IL', 'title' => 'IL']],
                         ],
                     ],
                 ],
@@ -218,13 +206,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                             'item_id' => 146,
                             'item_type' => 'product',
                             'associated_item_id' => null,
-                            'rates' => [
-                                    [
-                                        'percent' => 6,
-                                        'code' => 'IL',
-                                        'title' => 'IL',
-                                    ],
-                                ],
+                            'rates' => [['percent' => 6, 'code' => 'IL', 'title' => 'IL']],
                         ],
                     ],
                     'shipping' => [
@@ -233,13 +215,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                             'item_id' => 146,
                             'item_type' => 'shipping',
                             'associated_item_id' => null,
-                            'rates' => [
-                                [
-                                    'percent' => 6,
-                                    'code' => 'IL',
-                                    'title' => 'IL',
-                                ],
-                            ],
+                            'rates' => [['percent' => 6, 'code' => 'IL', 'title' => 'IL']],
                         ]
                     ],
                 ],
@@ -248,23 +224,15 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                             'item_id' => 146,
                             'type' => 'product',
                             'associated_item_id' => null,
-                            'applied_taxes' => [
-                                [
+                            'applied_taxes' => [[
                                 'amount' => 0.06,
                                 'item_id' => 146,
                                 'item_type' => 'product',
                                 'associated_item_id' => null,
                                 'extension_attributes' => [
-                                    'rates' => [
-                                        [
-                                            'percent' => 6,
-                                            'code' => 'IL',
-                                            'title' => 'IL',
-                                        ]
-                                    ],
+                                    'rates' => [['percent' => 6, 'code' => 'IL', 'title' => 'IL']]
                                 ],
-                                ]
-                            ],
+                            ]],
                     ],
                     'shipping' => [
                         'item_id' => 146,
@@ -277,13 +245,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                                 'item_type' => 'shipping',
                                 'associated_item_id' => null,
                                 'extension_attributes' => [
-                                    'rates' => [
-                                        [
-                                            'percent' => 6,
-                                            'code' => 'IL',
-                                            'title' => 'IL',
-                                        ]
-                                    ],
+                                    'rates' => [['percent' => 6, 'code' => 'IL', 'title' => 'IL']],
                                 ],
                             ]
                         ],

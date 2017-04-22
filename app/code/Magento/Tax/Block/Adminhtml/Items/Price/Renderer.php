@@ -43,6 +43,7 @@ class Renderer extends \Magento\Backend\Block\Template
      * @param TaxHelper $taxHelper
      * @param ItemPriceRenderer $itemPriceRenderer
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

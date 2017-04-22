@@ -30,6 +30,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
