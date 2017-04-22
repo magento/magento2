@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Test\Unit;
+
 use Magento\Framework\Url\HostChecker;
 
 /**
@@ -125,7 +124,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         );
         if ($resolve) {
             $routeParamsResolverFactoryMock->expects($this->once())->method('create')
-                    ->will($this->returnValue($this->routeParamsResolverMock));
+                ->will($this->returnValue($this->routeParamsResolverMock));
         }
         return $routeParamsResolverFactoryMock;
     }
@@ -292,7 +291,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->urlModifier->expects($this->exactly(1))->method('execute');
 
-        $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
         $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
     }
 
@@ -650,7 +648,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'web/secure/base_url_secure_forced',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->scopeMock
             )
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')
