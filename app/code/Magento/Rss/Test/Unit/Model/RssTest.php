@@ -34,6 +34,27 @@ class RssTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
+     * @var string
+     */
+    protected $feedXml = '<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title><![CDATA[Feed Title]]></title>
+    <link>http://magento.com/rss/link</link>
+    <description><![CDATA[Feed Description]]></description>
+    <pubDate>Sat, 22 Apr 2017 13:21:12 +0200</pubDate>
+    <generator>Zend_Feed</generator>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <item>
+      <title><![CDATA[Feed 1 Title]]></title>
+      <link>http://magento.com/rss/link/id/1</link>
+      <description><![CDATA[Feed 1 Description]]></description>
+      <pubDate>Sat, 22 Apr 2017 13:21:12 +0200</pubDate>
+    </item>
+  </channel>
+</rss>';
+
+    /**
      * @var ObjectManagerHelper
      */
     protected $objectManagerHelper;
@@ -44,6 +65,16 @@ class RssTest extends \PHPUnit_Framework_TestCase
     private $cacheMock;
 
     /**
+     * @var \Magento\Framework\App\FeedImporterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $feedImporterMock;
+
+    /**
+     * @var \Magento\Framework\App\FeedInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $feedMock;
+
+    /**
      * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
@@ -52,11 +83,15 @@ class RssTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
         $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->feedImporterMock = $this->getMock(\Magento\Framework\App\FeedImporterInterface::class);
+        $this->feedMock = $this->getMock(\Magento\Framework\App\FeedInterface::class);
+        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rss = $this->objectManagerHelper->getObject(
             \Magento\Rss\Model\Rss::class,
             [
                 'cache' => $this->cacheMock,
+                'feedImporter' => $this->feedImporterMock,
                 'serializer' => $this->serializerMock
             ]
         );
@@ -115,6 +150,15 @@ class RssTest extends \PHPUnit_Framework_TestCase
         $dataProvider->expects($this->any())->method('getCacheKey')->will($this->returnValue('cache_key'));
         $dataProvider->expects($this->any())->method('getCacheLifetime')->will($this->returnValue(100));
         $dataProvider->expects($this->any())->method('getRssData')->will($this->returnValue($this->feedData));
+
+        $this->feedMock->expects($this->once())
+            ->method('asXml')
+            ->will($this->returnValue($this->feedXml));
+
+        $this->feedImporterMock->expects($this->once())
+            ->method('importArray')
+            ->with($this->feedData)
+            ->will($this->returnValue($this->feedMock));
 
         $this->rss->setDataProvider($dataProvider);
         $result = $this->rss->createRssXml();
