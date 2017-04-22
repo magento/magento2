@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\SomeModule\Model;
 
 use Magento\SomeModule\Model\Two\Test as TestTwo;
