@@ -230,12 +230,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     $column = $field;
                 }
 
-                if ($alias !== null && in_array(
-                        $alias,
-                        $columnsToSelect
-                    ) ||
+                if ($alias !== null &&
+                    in_array($alias, $columnsToSelect) ||
                     // If field already joined from another table
-                    $alias === null && isset($alias, $columnsToSelect)
+                    $alias === null &&
+                    isset($alias, $columnsToSelect)
                 ) {
                     continue;
                 }
