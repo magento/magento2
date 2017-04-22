@@ -15,6 +15,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class Queue
+ *
+ * @api
  */
 class Queue implements QueueInterface
 {

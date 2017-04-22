@@ -7,6 +7,8 @@ namespace Magento\Framework\Amqp;
 
 /**
  * Factory class for @see \Magento\Framework\Amqp\Queue
+ *
+ * @api
  */
 class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterface
 {

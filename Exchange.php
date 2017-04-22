@@ -15,6 +15,8 @@ use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 
 /**
  * Class message exchange.
+ *
+ * @api
  */
 class Exchange implements ExchangeInterface
 {

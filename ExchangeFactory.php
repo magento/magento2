@@ -7,6 +7,8 @@ namespace Magento\Framework\Amqp;
 
 /**
  * Factory class for @see \Magento\Framework\Amqp\Exchange
+ *
+ * @api
  */
 class ExchangeFactory implements \Magento\Framework\MessageQueue\ExchangeFactoryInterface
 {

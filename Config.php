@@ -12,6 +12,8 @@ use PhpAmqpLib\Connection\AMQPSSLConnection;
 
 /**
  * Reads the Amqp config in the deployed environment configuration
+ *
+ * @api
  */
 class Config
 {
