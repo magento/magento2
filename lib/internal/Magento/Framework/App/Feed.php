@@ -15,7 +15,7 @@ class Feed implements \Magento\Framework\App\FeedInterface
     /**
      * @param \Zend_Feed_Abstract $feed
      */
-    public function __construct(\Zend_Feed_Abstract $feed) 
+    public function __construct(\Zend_Feed_Abstract $feed)
     {
         $this->feed = $feed;
     }

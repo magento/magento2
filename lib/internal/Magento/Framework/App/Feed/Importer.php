@@ -42,11 +42,11 @@ class Importer implements \Magento\Framework\App\FeedImporterInterface
      */
     public function importArray(array $data, $format = 'atom')
     {
+
         try {
             $feed = $this->feedProcessor->importArray($data, $format);
-            return $this->feedFactory->create(['feed' => $feed]);   
-        }
-        catch (\Zend_Feed_Exception $e) {
+            return $this->feedFactory->create(['feed' => $feed]);
+        } catch (\Zend_Feed_Exception $e) {
             throw new \Magento\Framework\Exception\FeedImporterException(
                 new \Magento\Framework\Phrase($e->getMessage()),
                 $e
@@ -54,5 +54,3 @@ class Importer implements \Magento\Framework\App\FeedImporterInterface
         }
     }
 }
-
-
