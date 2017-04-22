@@ -85,13 +85,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function isInterceptedMethod(\ReflectionMethod $method)
     {
-        return !($method->isConstructor() ||
-                $method->isFinal() ||
-                $method->isStatic() ||
-                $method->isDestructor()) && !in_array(
-                $method->getName(),
-                ['__sleep', '__wakeup', '__clone']
-            );
+        return !($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor()) &&
+            !in_array($method->getName(), ['__sleep', '__wakeup', '__clone']);
     }
 
     /**
