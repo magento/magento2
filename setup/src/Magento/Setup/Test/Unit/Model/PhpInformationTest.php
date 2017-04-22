@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\PhpInformation;
+use Magento\Setup\Model\PhpInformation;
 
 /**
  * Tests Magento\Setup\Model\PhpInformation

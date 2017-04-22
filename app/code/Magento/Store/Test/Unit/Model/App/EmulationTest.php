@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Store\Test\Unit\Model\App;
 
 /**

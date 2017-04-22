@@ -5,10 +5,10 @@
  */
 namespace Magento\Store\Model\Config\Reader\Source\Dynamic;
 
-use Magento\Framework\App\Config\Scope\Converter;
-use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
+use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 
 /**
  * Class for retrieving configuration from DB by default scope

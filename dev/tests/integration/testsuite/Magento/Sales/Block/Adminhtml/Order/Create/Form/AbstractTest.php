@@ -9,10 +9,6 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
-use Magento\Customer\Api\Data\OptionInterfaceFactory;
-use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
-
 /**
  * Class AbstractTest
  *

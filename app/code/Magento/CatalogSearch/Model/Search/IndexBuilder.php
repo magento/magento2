@@ -6,20 +6,20 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Model\Stock;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Build base Query for Index

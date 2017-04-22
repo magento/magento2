@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Wishlist\Test\Unit\Model\Rss;
 
 use Magento\Directory\Helper\Data;

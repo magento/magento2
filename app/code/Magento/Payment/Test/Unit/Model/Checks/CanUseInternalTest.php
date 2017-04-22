@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\CanUseInternal;
+use Magento\Payment\Model\Checks\CanUseInternal;
 
 class CanUseInternalTest extends \PHPUnit_Framework_TestCase
 {

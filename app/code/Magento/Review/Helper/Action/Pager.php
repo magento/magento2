@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Review\Helper\Action;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -81,7 +80,7 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _loadItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
         }
     }

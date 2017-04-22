@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items\Order;
 
 use Magento\Downloadable\Model\Link;

@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Taxvat;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class TaxvatTest extends \PHPUnit_Framework_TestCase
 {

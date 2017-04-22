@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-use Magento\Framework\DB\SelectFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\FieldDataConverter;
+use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\QueryModifierInterface;
+use Magento\Framework\DB\SelectFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -143,7 +143,7 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
     public function convertDataProvider()
     {
         return [
-            [false, 0, ],
+            [false, 0],
             [true, 1]
         ];
     }

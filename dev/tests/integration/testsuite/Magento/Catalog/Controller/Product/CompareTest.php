@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Controller\Product;
+
 use Magento\Framework\Message\MessageInterface;
 
 /**

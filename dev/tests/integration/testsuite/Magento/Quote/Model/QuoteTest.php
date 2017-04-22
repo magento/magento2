@@ -394,8 +394,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\Data\Customer::EMAIL => 'qa@example.com',
             \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'Joe',
             \Magento\Customer\Model\Data\Customer::GENDER => 'Male',
-            \Magento\Customer\Model\Data\Customer::GROUP_ID =>
-                \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
+            \Magento\Customer\Model\Data\Customer::GROUP_ID => \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
             \Magento\Customer\Model\Data\Customer::ID => 1,
             \Magento\Customer\Model\Data\Customer::LASTNAME => 'Dou',
             \Magento\Customer\Model\Data\Customer::MIDDLENAME => 'Ivan',

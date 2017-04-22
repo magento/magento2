@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Validator\Constraint\OptionInterface;

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Model\ResourceModel\Order;
 
 use Magento\TestFramework\Helper\Bootstrap;

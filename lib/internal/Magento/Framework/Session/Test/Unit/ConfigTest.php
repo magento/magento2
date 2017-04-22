@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Session\Test\Unit;
 
-use \Magento\Framework\Session\Config;
+use Magento\Framework\Session\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -5,10 +5,10 @@
  */
 namespace Magento\UrlRewrite\Model\Storage;
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\Framework\Api\DataObjectHelper;
 
 class DbStorage extends AbstractStorage
 {

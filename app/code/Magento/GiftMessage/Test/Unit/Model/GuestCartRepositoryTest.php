@@ -6,10 +6,9 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-
 use Magento\GiftMessage\Api\Data\MessageInterface;
-use Magento\GiftMessage\Model\ItemRepository;
 use Magento\GiftMessage\Model\GuestItemRepository;
+use Magento\GiftMessage\Model\ItemRepository;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 

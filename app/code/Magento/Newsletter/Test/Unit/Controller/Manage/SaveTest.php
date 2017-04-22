@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Newsletter\Test\Unit\Controller\Manage;
 
 use Magento\Framework\Exception\NoSuchEntityException;

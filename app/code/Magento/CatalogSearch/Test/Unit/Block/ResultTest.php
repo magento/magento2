@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Block;
 
-use \Magento\CatalogSearch\Block\Result;
+use Magento\CatalogSearch\Block\Result;
 
 /**
  * Unit test for \Magento\CatalogSearch\Block\Result

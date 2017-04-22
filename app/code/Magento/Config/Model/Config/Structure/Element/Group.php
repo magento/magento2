@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Model\Config\Structure\Element;
 
 class Group extends AbstractComposite

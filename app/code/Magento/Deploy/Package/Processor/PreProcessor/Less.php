@@ -10,10 +10,10 @@ use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
 use Magento\Deploy\Service\DeployStaticFile;
-use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
-use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\NotationResolver;
+use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\View\Asset\Repository;
 
 /**

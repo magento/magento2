@@ -6,12 +6,12 @@
 
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * Cart Management class for guest carts.

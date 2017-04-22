@@ -4,10 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
 
-use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\AbstractServiceCollection;
@@ -15,6 +13,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Data\Collection\EntityFactory;
 
 /**
  * Customer group collection backed by services

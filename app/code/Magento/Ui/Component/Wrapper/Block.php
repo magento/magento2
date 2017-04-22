@@ -6,9 +6,9 @@
 namespace Magento\Ui\Component\Wrapper;
 
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
-use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
  * @deprecated

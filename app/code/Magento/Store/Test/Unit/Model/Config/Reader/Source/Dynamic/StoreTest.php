@@ -6,15 +6,15 @@
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Dynamic;
 
 use Magento\Framework\App\Config\Scope\Converter;
+use Magento\Framework\DataObject;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Config\Reader\Source\Dynamic\Store as StoreSource;
+use Magento\Store\Model\Config\Reader\Source\Dynamic\Website as WebsiteSource;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\WebsiteFactory;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\Config\Reader\Source\Dynamic\Website as WebsiteSource;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\DataObject;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
 
 /**
  * Class StoreTest

@@ -122,7 +122,7 @@ class Eaccelerator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Ex
                 break;
             case \Zend_Cache::CLEANING_MODE_OLD:
                 $this->_log(
-                    "Magento\Framework\Cache\Backend\Eaccelerator::clean() : ".
+                    "Magento\Framework\Cache\Backend\Eaccelerator::clean() : " .
                     "CLEANING_MODE_OLD is unsupported by the Eaccelerator backend"
                 );
                 break;

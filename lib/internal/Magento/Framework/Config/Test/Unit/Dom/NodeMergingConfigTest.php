@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
-use \Magento\Framework\Config\Dom\NodeMergingConfig;
+use Magento\Framework\Config\Dom\NodeMergingConfig;
 
 class NodeMergingConfigTest extends \PHPUnit_Framework_TestCase
 {

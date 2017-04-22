@@ -6,17 +6,17 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Dynamic;
 
+use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Dynamic\IntervalFactory;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Catalog\Model\Layer\Filter\Price\Range;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
+use Magento\Framework\Search\Dynamic\IntervalFactory;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {

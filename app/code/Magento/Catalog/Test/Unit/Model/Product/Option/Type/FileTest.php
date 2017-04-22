@@ -7,7 +7,6 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;

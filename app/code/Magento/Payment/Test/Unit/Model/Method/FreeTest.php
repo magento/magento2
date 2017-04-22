@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Payment\Test\Unit\Model\Method;
 
 /**

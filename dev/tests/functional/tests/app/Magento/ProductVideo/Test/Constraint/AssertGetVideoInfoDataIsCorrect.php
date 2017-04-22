@@ -6,10 +6,10 @@
 
 namespace Magento\ProductVideo\Test\Constraint;
 
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Constraint\AbstractAssertForm;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Assert that video data received from external service is correct.

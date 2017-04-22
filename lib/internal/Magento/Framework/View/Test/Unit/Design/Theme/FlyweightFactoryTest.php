@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
-use \Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
 
 class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
 {

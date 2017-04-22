@@ -86,7 +86,7 @@ class DbStatusCommand extends AbstractSetupCommand
                     $requiredVersion = $versionParser->parseConstraints('>' . $row[DbVersionInfo::KEY_REQUIRED]);
                     if ($requiredVersion->matches($currentVersion)) {
                         $codebaseUpdateNeeded = true;
-                    };
+                    }
                 }
                 $output->writeln(sprintf(
                     "<info>%20s %10s: %11s  ->  %-11s</info>",

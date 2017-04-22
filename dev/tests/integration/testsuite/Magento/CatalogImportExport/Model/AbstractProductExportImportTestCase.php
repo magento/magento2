@@ -6,7 +6,6 @@
 namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**

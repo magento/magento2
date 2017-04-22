@@ -6,11 +6,11 @@
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Response\PayPalDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

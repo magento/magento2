@@ -6,20 +6,20 @@
 namespace Magento\Ui\Test\Unit\Model\Export;
 
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Convert\ExcelFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\ConvertToXml;
 use Magento\Ui\Model\Export\MetadataProvider;
-use Magento\Ui\Model\Export\SearchResultIteratorFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Model\Export\SearchResultIterator;
-use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Ui\Model\Export\SearchResultIteratorFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

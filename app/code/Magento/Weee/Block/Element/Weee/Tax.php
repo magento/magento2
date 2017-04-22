@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Block\Element\Weee;
 
-use \Magento\Framework\Currency;
+use Magento\Framework\Currency;
 
 class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
 {

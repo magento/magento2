@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Observer\Backend;
 
 class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase

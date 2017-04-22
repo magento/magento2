@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\Compare;
 
-use \Magento\Catalog\Block\Product\Compare\ListCompare;
+use Magento\Catalog\Block\Product\Compare\ListCompare;
 
 /**
  * Class ListCompareTest

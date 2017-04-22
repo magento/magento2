@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
+use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\Serialize\SerializerInterface;
-use \Magento\Framework\ObjectManager\Config\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

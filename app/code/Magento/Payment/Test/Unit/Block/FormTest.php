@@ -4,10 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Payment\Test\Unit\Block;
-
-use Magento\Framework\DataObject;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {

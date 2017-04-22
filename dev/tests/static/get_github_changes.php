@@ -9,7 +9,6 @@
  * See COPYING.txt for license details.
  */
 
-
 define(
     'USAGE',
     <<<USAGE

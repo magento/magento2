@@ -8,10 +8,10 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Fill shipping address step.

@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Framework\DataObject as MagentoObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

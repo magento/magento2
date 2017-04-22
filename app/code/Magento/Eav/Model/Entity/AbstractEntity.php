@@ -4,23 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\App\Config\Element;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
-use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -1239,7 +1238,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $origData = $this->_getOrigObject($newObject)->getOrigData();
             }
 
-            if (is_null($origData)) {
+            if ($origData === null) {
                 $origData = [];
             }
 

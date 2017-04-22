@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
-use Magento\Payment\Model\Method\Substitution;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Model\Method\Substitution;
 
 /**
  * Class ToOrderPaymentTest tests converter to order payment

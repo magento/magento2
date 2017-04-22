@@ -24,7 +24,7 @@ if (!function_exists('rcopy')) {
         // If source is not a directory stop processing
         if (!is_dir($src)) {
             return false;
-        };
+        }
 
         // If the destination directory does not exist create it
         // If the destination directory could not be created stop processing
@@ -38,7 +38,7 @@ if (!function_exists('rcopy')) {
         foreach ($iterator as $file) {
             if ($file->isFile()) {
                 copy($file->getRealPath(), $destination . '/' . $file->getFilename());
-            } else if (!$file->isDot() && $file->isDir()) {
+            } elseif (!$file->isDot() && $file->isDir()) {
                 rcopy($file->getRealPath(), $destination . '/' . $file);
             }
         }

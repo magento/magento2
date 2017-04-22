@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;

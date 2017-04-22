@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;

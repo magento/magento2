@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Model\Config\Source\Dev;
 
 class Dbautoup implements \Magento\Framework\Option\ArrayInterface

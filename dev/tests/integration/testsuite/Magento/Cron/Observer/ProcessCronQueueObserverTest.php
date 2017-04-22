@@ -5,7 +5,7 @@
  */
 namespace Magento\Cron\Observer;
 
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 {

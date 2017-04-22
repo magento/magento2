@@ -7,9 +7,9 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing\OptionTier;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\Section;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
 
 /**
  * Product advanced pricing section.

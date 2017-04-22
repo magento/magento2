@@ -5,10 +5,10 @@
  */
 namespace Magento\SampleData\Model;
 
-use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Config\Composer\PackageFactory;
+use Magento\Framework\Filesystem;
 
 class DependencyTest extends \PHPUnit_Framework_TestCase
 {

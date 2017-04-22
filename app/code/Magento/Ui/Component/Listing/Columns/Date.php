@@ -6,9 +6,9 @@
 namespace Magento\Ui\Component\Listing\Columns;
 
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class Date

@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner;
 use Magento\Framework\App\ResourceConnection;
@@ -14,7 +15,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\Product;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 class CacheCleanerTest extends \PHPUnit_Framework_TestCase

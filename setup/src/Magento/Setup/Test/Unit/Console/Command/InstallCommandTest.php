@@ -6,12 +6,12 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\InstallCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Setup\Model\AdminAccount;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
+use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

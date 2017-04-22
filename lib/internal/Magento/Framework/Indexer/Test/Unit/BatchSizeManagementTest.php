@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
-use \Magento\Framework\Indexer\BatchSizeManagement;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\BatchSizeManagement;
 
 class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,7 +61,7 @@ class BatchSizeManagementTest extends \PHPUnit_Framework_TestCase
             ->method('warning')
             ->with(__(
                 'Memory size allocated for the temporary table is more than 20% of innodb_buffer_pool_size. ' .
-                'Please update innodb_buffer_pool_size or decrease batch size value '.
+                'Please update innodb_buffer_pool_size or decrease batch size value ' .
                 '(which decreases memory usages for the temporary table).'
             ));
 

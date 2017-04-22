@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Converter;
 
-use \Magento\Framework\Config\Converter\Dom;
+use Magento\Framework\Config\Converter\Dom;
 
 class DomTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['cdata.xml', 'cdata.php'],
-            ['attributes.xml', 'attributes.php',],
+            ['attributes.xml', 'attributes.php'],
         ];
     }
 }

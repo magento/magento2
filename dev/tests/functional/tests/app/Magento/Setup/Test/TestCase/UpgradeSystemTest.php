@@ -6,15 +6,15 @@
 
 namespace Magento\Setup\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Setup\Test\Fixture\Upgrade;
-use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
-use Magento\Setup\Test\Constraint\AssertVersionAndEditionCheck;
-use Magento\Setup\Test\Constraint\AssertSuccessMessage;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Setup\Test\Constraint\AssertApplicationVersion;
+use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Setup\Test\Constraint\AssertSuccessMessage;
+use Magento\Setup\Test\Constraint\AssertVersionAndEditionCheck;
+use Magento\Setup\Test\Fixture\Upgrade;
+use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 class UpgradeSystemTest extends Injectable
 {

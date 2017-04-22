@@ -10,7 +10,6 @@ use Magento\Config\Console\Command\ConfigSet\EmulatedProcessorFacade;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\SetupInfo;
+use Magento\Framework\App\SetupInfo;
 
 class SetupInfoTest extends \PHPUnit_Framework_TestCase
 {

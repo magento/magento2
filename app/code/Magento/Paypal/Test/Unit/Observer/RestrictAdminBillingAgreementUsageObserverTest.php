@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Test\Unit\Observer;
 
 use Magento\Framework\DataObject;

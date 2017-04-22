@@ -7,11 +7,11 @@
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
-use Magento\CatalogInventory\Model\Stock;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model

@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
 use Magento\Catalog\Model\Category\AttributeRepository;

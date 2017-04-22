@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
 
 /**
@@ -24,8 +23,7 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $outPut = "data";
         $resultRawMock = $this->getMock(
             \Magento\Framework\Controller\Result\Raw::class,
-            ['setContents'], [], '', false)
-        ;
+            ['setContents'], [], '', false);
         $resultRawFactoryMock = $this->getMock(
             \Magento\Framework\Controller\Result\RawFactory::class,
             ['create'], [], '', false

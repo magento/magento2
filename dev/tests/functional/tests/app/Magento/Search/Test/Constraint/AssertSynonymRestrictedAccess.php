@@ -6,9 +6,9 @@
 
 namespace Magento\Search\Test\Constraint;
 
-use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 
 /**
  * Assert that access to synonym group index page by direct url is restricted.

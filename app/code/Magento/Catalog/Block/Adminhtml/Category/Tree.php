@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Categories tree block
  */
@@ -225,7 +224,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getLoadTreeUrl($expanded = null)
     {
         $params = ['_current' => true, 'id' => null, 'store' => null];
-        if (is_null($expanded) && $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
+        if ($expanded === null&& $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
             $params['expand_all'] = true;
         }
         return $this->getUrl('*/*/categoriesJson', $params);

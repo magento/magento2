@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase

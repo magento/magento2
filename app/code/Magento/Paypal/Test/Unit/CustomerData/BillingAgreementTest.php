@@ -6,11 +6,11 @@
 namespace Magento\Paypal\Test\Unit\CustomerData;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\CustomerData\BillingAgreement;
 use Magento\Paypal\Helper\Data;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BillingAgreementTest extends \PHPUnit_Framework_TestCase
 {

@@ -9,7 +9,6 @@ use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\EmulatedProcessorFacade;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;

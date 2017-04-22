@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 
 class AbstractAction
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
-use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ObjectManager;
 
 /**

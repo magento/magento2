@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
-use Magento\Framework\Data\Argument\Interpreter\Composite;
 use Magento\Ui\Config\Converter\Deps;
 use Magento\Ui\Config\ConverterUtils;
 

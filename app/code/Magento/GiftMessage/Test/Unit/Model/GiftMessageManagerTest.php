@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\GiftMessageManager;

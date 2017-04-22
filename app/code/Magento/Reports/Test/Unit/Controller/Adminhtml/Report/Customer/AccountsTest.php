@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
-use Magento\Reports\Controller\Adminhtml\Report\Customer\Accounts;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Reports\Controller\Adminhtml\Report\Customer\Accounts;
 
 class AccountsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
 {

@@ -6,8 +6,8 @@
 
 namespace Magento\Swatches\Test\Block\Product\ProductList;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Catalog\Test\Block\Product\ProductList\ProductItem as CatalogProductItem;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product item block on frontend category view.

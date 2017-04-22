@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Mview\Test\Unit;
 
-use \Magento\Framework\Mview\View;
+use Magento\Framework\Mview\View;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {

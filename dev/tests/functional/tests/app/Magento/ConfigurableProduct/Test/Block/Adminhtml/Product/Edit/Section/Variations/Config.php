@@ -7,10 +7,10 @@
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations;
 
 use Magento\Backend\Test\Block\Template;
-use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
  * Adminhtml catalog super product configurable section.

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Data source to fill "Forms" field
  *

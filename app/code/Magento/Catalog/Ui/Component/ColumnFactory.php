@@ -67,16 +67,16 @@ class ColumnFactory
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
         }
-        
+
         $config['component'] = $this->getJsComponent($config['dataType']);
-        
+
         $arguments = [
             'data' => [
                 'config' => $config,
             ],
             'context' => $context,
         ];
-        
+
         return $this->componentFactory->create($columnName, 'column', $arguments);
     }
 

@@ -7,9 +7,7 @@
 namespace Magento\Setup\Test\Block;
 
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Create Backup block.

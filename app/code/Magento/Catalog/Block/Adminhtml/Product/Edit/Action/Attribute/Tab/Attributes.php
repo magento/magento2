@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Adminhtml catalog product edit action attributes update tab block
  *

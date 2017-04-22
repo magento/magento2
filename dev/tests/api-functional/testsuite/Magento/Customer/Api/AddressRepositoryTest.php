@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;

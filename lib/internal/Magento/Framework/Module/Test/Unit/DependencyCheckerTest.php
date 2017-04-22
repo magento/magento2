@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Module\DependencyChecker;
 
 class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
 {

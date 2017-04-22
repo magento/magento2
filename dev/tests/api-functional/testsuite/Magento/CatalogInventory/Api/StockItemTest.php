@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CatalogInventory\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;

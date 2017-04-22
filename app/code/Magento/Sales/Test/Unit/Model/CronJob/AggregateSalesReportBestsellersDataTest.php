@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
-use \Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
+use Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
 
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersDataTest

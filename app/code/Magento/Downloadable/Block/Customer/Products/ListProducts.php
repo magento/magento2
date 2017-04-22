@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Downloadable\Block\Customer\Products;
 
 use Magento\Downloadable\Model\Link\Purchased\Item;

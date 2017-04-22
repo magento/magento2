@@ -5,9 +5,6 @@
  */
 namespace Magento\Weee\Model\ResourceModel;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Condition\ConditionInterface;
-
 /**
  * Wee tax resource model
  *
@@ -105,7 +102,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['eavTable.attribute_code', 'eavTable.attribute_id', 'eavTable.frontend_label']
         )->joinLeft(
             ['eavLabel' => $this->getTable('eav_attribute_label')],
-            'eavLabel.attribute_id = eavTable.attribute_id and eavLabel.store_id = ' .((int) $storeId),
+            'eavLabel.attribute_id = eavTable.attribute_id and eavLabel.store_id = ' . ((int) $storeId),
             'eavLabel.value as label_value'
         )->joinInner(
             ['weeeTax' => $this->getTable('weee_tax')],

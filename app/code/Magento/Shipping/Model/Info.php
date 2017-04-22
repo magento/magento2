@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;

@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model\ResourceModel\History;
 
-use \Magento\ImportExport\Model\History;
+use Magento\ImportExport\Model\History;
 
 /**
  * Import history collection

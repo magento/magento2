@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filter\Test\Unit\Template\Tokenizer;
 
-use \Magento\Framework\Filter\Template\Tokenizer\Parameter;
+use Magento\Framework\Filter\Template\Tokenizer\Parameter;
 
 class ParameterTest extends \PHPUnit_Framework_TestCase
 {

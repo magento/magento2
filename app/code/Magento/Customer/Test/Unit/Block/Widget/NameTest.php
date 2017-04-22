@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Name;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Test class for \Magento\Customer\Block\Widget\Name.

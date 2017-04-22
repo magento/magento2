@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
 class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency

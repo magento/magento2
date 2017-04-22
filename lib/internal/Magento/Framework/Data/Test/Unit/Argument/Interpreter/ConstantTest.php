@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\Constant;
+use Magento\Framework\Data\Argument\Interpreter\Constant;
 
 class ConstantTest extends \PHPUnit_Framework_TestCase
 {

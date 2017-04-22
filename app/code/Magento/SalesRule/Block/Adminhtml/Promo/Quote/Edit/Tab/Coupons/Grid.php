@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
 
 /**

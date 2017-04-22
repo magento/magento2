@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
 /**

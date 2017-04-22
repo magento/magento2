@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;

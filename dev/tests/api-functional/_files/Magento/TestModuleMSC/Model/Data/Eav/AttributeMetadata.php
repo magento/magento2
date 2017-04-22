@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\TestModuleMSC\Model\Data\Eav;
 
 use Magento\Framework\Api\AbstractExtensibleObject;

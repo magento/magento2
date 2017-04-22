@@ -6,10 +6,10 @@
 
 namespace Magento\Variable\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Variable\Test\Fixture\SystemVariable;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

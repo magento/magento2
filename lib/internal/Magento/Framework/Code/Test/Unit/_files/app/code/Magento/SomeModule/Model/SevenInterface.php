@@ -4,10 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\SomeModule\Model;
 
-use Magento\SomeModule\Model\Two\Test as TestTwo;
 use Magento\SomeModule\Model\Three\Test as TestThree;
 
 /**
@@ -21,14 +19,13 @@ use Magento\SomeModule\Model\Three\Test as TestThree;
  */
 interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
-
     /**
      * Method short description
      *
      * @param array $data
      * @return TestThree
      */
-    public static function testMethod1(array &$data = array());
+    public static function testMethod1(array &$data = []);
 
     /**
      * Method short description
@@ -42,6 +39,4 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
     public function testMethod2($data = 'test_default', $flag = true);
 
     public function testMethod3();
-
-
 }

@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 class MoveTest extends \PHPUnit_Framework_TestCase
 {

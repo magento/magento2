@@ -4,10 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
-
-use Magento\Framework\Exception\NoSuchEntityException;
 
 class ManagementTest extends \PHPUnit_Framework_TestCase
 {

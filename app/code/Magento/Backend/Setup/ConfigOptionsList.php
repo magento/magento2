@@ -5,12 +5,12 @@
  */
 namespace Magento\Backend\Setup;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\BackendFrontnameGenerator;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\App\DeploymentConfig;
-use \Magento\Framework\Setup\BackendFrontnameGenerator;
 
 /*
  * Deployment configuration options needed for Backend module

@@ -5,8 +5,8 @@
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
 
-use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
-use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator as Validator;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

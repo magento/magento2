@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Api\Data\CustomerInterface;

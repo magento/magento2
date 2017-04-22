@@ -10,11 +10,10 @@
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\Message\Manager;
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
-use \Magento\Framework\View\Element\Messages;
-
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+
+use Magento\Framework\View\Element\Messages;
 
 class MessagesTest extends \PHPUnit_Framework_TestCase
 {

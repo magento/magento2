@@ -8,6 +8,5 @@ namespace {
 
     interface TInterface
     {
-
     }
 }

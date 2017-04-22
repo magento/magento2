@@ -5,13 +5,13 @@
  */
 namespace Magento\Braintree\Block\Paypal;
 
-use Magento\Checkout\Model\Session;
-use Magento\Catalog\Block\ShortcutInterface;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Braintree\Model\Ui\ConfigProvider;
-use Magento\Framework\View\Element\Template\Context;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Catalog\Block\ShortcutInterface;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\MethodInterface;
 
 /**

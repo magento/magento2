@@ -6,10 +6,10 @@
 
 namespace Magento\Wishlist\Test\Block\Customer\Wishlist;
 
-use Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product;
 
 /**
  * Customer wishlist items block on frontend.

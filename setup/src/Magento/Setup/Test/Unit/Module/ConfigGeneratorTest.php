@@ -5,9 +5,9 @@
  */
 namespace Magento\Setup\Test\Unit\Module;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Setup\Model\ConfigGenerator;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 {

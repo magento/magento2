@@ -6,10 +6,10 @@
 
 namespace Magento\Bundle\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Constraint\AssertProductInCategory;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

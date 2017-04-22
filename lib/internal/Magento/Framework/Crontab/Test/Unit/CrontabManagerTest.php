@@ -5,15 +5,15 @@
  */
 namespace Magento\Framework\Crontab\Test\Unit;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Crontab\CrontabManager;
 use Magento\Framework\Crontab\CrontabManagerInterface;
-use Magento\Framework\ShellInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Phrase;
+use Magento\Framework\ShellInterface;
 
 class CrontabManagerTest extends \PHPUnit_Framework_TestCase
 {

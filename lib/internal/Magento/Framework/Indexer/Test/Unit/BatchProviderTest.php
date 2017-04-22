@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
-use \Magento\Framework\DB\Select;
-use \Magento\Framework\Indexer\BatchProvider;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\BatchProvider;
 
 class BatchProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,16 +5,16 @@
  */
 namespace Magento\Deploy\Test\Unit\Process;
 
-use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Service\DeployPackage;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
-
 use PHPUnit_Framework_MockObject_MockObject as Mock;
+
+use Psr\Log\LoggerInterface;
 
 /**
  * Deployment Queue class unit tests

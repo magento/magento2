@@ -7,7 +7,6 @@
 
 namespace Magento\Mtf\Util\Generate\Factory;
 
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
 
 /**

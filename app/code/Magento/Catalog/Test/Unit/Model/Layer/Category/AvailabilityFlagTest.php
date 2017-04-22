@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
+use Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
 
 class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,8 @@
 namespace Magento\Quote\Setup;
 
 use Magento\Framework\DB\FieldDataConverterFactory;
-use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Select\QueryModifierFactory;
 
 /**
  * Convert serialized data in quote tables to JSON

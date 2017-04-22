@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
-use \Magento\Sales\Model\AdminOrder\EmailSender;
+use Magento\Sales\Model\AdminOrder\EmailSender;
 
 class EmailSenderTest extends \PHPUnit_Framework_TestCase
 {

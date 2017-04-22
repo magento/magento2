@@ -37,7 +37,9 @@ $suffix = $block->showSuffix();
 <?php endif; ?>
 
     <?php if ($prefix): ?>
-        <div class="field field-name-prefix<?php if ($block->isPrefixRequired()) echo ' required' ?>">
+        <div class="field field-name-prefix<?php if ($block->isPrefixRequired()) {
+    echo ' required';
+} ?>">
             <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getFieldId('prefix')) ?>">
                 <span><?php echo $block->escapeHtml($block->getStoreLabel('prefix')) ?></span>
             </label>
@@ -48,12 +50,16 @@ $suffix = $block->showSuffix();
                            name="<?php echo $block->escapeHtmlAttr($block->getFieldName('prefix')) ?>"
                            value="<?php echo $block->escapeHtmlAttr($block->getObject()->getPrefix()) ?>"
                            title="<?php echo $block->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
-                           class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?php if ($block->isPrefixRequired()) echo ' data-validate="{required:true}"' ?>>
+                           class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?php if ($block->isPrefixRequired()) {
+    echo ' data-validate="{required:true}"';
+} ?>>
                 <?php else: ?>
                     <select id="<?php echo $block->escapeHtmlAttr($block->getFieldId('prefix')) ?>"
                             name="<?php echo $block->escapeHtmlAttr($block->getFieldName('prefix')) ?>"
                             title="<?php echo $block->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
-                            class="<?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?php if ($block->isPrefixRequired()) echo ' data-validate="{required:true}"' ?> >
+                            class="<?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?php if ($block->isPrefixRequired()) {
+    echo ' data-validate="{required:true}"';
+} ?> >
                         <?php foreach ($block->getPrefixOptions() as $_option): ?>
                             <option value="<?php echo $block->escapeHtmlAttr($_option) ?>"<?php if ($block->getObject()->getPrefix() == $_option): ?> selected="selected"<?php endif; ?>>
                                 <?php echo $block->escapeHtml(__($_option)) ?>
@@ -74,7 +80,9 @@ $suffix = $block->showSuffix();
                        name="<?php echo $block->escapeHtmlAttr($block->getFieldName('firstname')) ?>"
                        value="<?php echo $block->escapeHtmlAttr($block->getObject()->getFirstname()) ?>"
                        title="<?php echo $block->escapeHtmlAttr($block->getStoreLabel('firstname')) ?>"
-                       class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('firstname')) ?>" <?php if ($block->getAttributeValidationClass('firstname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
+                       class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('firstname')) ?>" <?php if ($block->getAttributeValidationClass('firstname') == 'required-entry') {
+    echo ' data-validate="{required:true}"';
+} ?>>
             </div>
         </div>
     <?php if ($middle): ?>
@@ -103,11 +111,15 @@ $suffix = $block->showSuffix();
                        name="<?php echo $block->escapeHtmlAttr($block->getFieldName('lastname')) ?>"
                        value="<?php echo $block->escapeHtmlAttr($block->getObject()->getLastname()) ?>"
                        title="<?php echo $block->escapeHtmlAttr($block->getStoreLabel('lastname')) ?>"
-                       class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('lastname')) ?>" <?php if ($block->getAttributeValidationClass('lastname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
+                       class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('lastname')) ?>" <?php if ($block->getAttributeValidationClass('lastname') == 'required-entry') {
+    echo ' data-validate="{required:true}"';
+} ?>>
             </div>
         </div>
     <?php if ($suffix): ?>
-        <div class="field field-name-suffix<?php if ($block->isSuffixRequired()) echo ' required' ?>">
+        <div class="field field-name-suffix<?php if ($block->isSuffixRequired()) {
+    echo ' required';
+} ?>">
             <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getFieldId('suffix')) ?>">
                 <span><?php echo $block->escapeHtml($block->getStoreLabel('suffix')) ?></span>
             </label>
@@ -118,12 +130,16 @@ $suffix = $block->showSuffix();
                            name="<?php echo $block->escapeHtmlAttr($block->getFieldName('suffix')) ?>"
                            value="<?php echo $block->escapeHtmlAttr($block->getObject()->getSuffix()) ?>"
                            title="<?php echo $block->escapeHtmlAttr($block->getStoreLabel('suffix')) ?>"
-                           class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?php if ($block->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
+                           class="input-text <?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?php if ($block->isSuffixRequired()) {
+    echo ' data-validate="{required:true}"';
+} ?>>
                 <?php else: ?>
                     <select id="<?php echo $block->escapeHtmlAttr($block->getFieldId('suffix')) ?>"
                             name="<?php echo $block->escapeHtmlAttr($block->getFieldName('suffix')) ?>"
                             title="<?php echo $block->escapeHtmlAttr($block->getStoreLabel('suffix')) ?>"
-                            class="<?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?php if ($block->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
+                            class="<?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?php if ($block->isSuffixRequired()) {
+    echo ' data-validate="{required:true}"';
+} ?>>
                         <?php foreach ($block->getSuffixOptions() as $_option): ?>
                             <option value="<?php echo $block->escapeHtmlAttr($_option) ?>"<?php if ($block->getObject()->getSuffix() == $_option): ?> selected="selected"<?php endif; ?>>
                                 <?php echo $block->escapeHtml(__($_option)) ?>

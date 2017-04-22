@@ -7,14 +7,14 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

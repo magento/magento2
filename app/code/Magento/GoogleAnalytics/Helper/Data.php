@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\GoogleAnalytics\Helper;
 
 use Magento\Store\Model\Store;

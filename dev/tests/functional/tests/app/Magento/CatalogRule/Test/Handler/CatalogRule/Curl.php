@@ -7,7 +7,6 @@
 namespace Magento\CatalogRule\Test\Handler\CatalogRule;
 
 use Magento\Backend\Test\Handler\Conditions;
-use Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;

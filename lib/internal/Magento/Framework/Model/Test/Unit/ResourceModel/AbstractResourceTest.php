@@ -7,8 +7,8 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -164,7 +164,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-    
+
     public function testCommitZeroLevel()
     {
         /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */

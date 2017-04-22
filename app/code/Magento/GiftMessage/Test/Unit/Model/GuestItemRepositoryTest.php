@@ -6,7 +6,6 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-
 use Magento\GiftMessage\Model\ItemRepository;
 
 /**

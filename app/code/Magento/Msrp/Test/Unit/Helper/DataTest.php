@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Msrp\Test\Unit\Helper;
 
 /**

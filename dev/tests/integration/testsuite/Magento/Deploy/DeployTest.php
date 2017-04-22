@@ -5,18 +5,18 @@
  */
 namespace Magento\Deploy;
 
+use Magento\Deploy\Config\BundleConfig;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Deploy\Package\Processor\PreProcessor\Less;
 use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Deploy\Strategy\DeployStrategyFactory;
-use Magento\Framework\App\State;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Config\View;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Deploy\Console\DeployStaticOptions as Options;
-use Magento\Framework\Config\View;
-use Magento\Deploy\Config\BundleConfig;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class DeployTest

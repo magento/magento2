@@ -5,8 +5,7 @@
  */
 
 return [
-    'catalogsearch_fulltext' =>
-        [
+    'catalogsearch_fulltext' => [
             'indexer_id' => 'catalogsearch_fulltext',
             'shared_index' => null,
             'primary' => 'first',
@@ -14,35 +13,29 @@ return [
             'action_class' => \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
             'title' => __('Catalog Search'),
             'description' => __('Rebuild Catalog product fulltext search index'),
-            'fieldsets' =>
-                [
+            'fieldsets' => [
                     [
                         'source' => 'MagentoModule\\ServiceClassOrRepositoryClass',
                         'name' => 'first',
                         'provider' => \Magento\Indexer\Model\Fieldset\ProductFieldset::class,
-                        'fields' =>
-                            [
-                                'title_alias' =>
-                                    [
+                        'fields' => [
+                                'title_alias' => [
                                         'name' => 'title_alias',
                                         'handler' => null,
                                         'origin' => 'title',
                                         'dataType' => 'text',
                                         'type' => 'searchable',
-                                        'filters' =>
-                                            [
+                                        'filters' => [
                                                 0 => \Magento\Framework\Search\Index\Filter\LowercaseFilter::class,
                                             ],
                                     ],
-                                'identifier' =>
-                                    [
+                                'identifier' => [
                                         'name' => 'identifier',
                                         'handler' => \Magento\Framework\Search\Index\Handler::class,
                                         'origin' => 'identifier',
                                         'dataType' => null,
                                         'type' => 'filterable',
-                                        'filters' =>
-                                            [],
+                                        'filters' => [],
                                     ],
                             ],
                     ],
@@ -50,23 +43,18 @@ return [
                         'source' => 'MagentoModule\\ServiceClassOrRepositoryClass',
                         'name' => 'second',
                         'provider' => null,
-                        'fields' =>
-                            [
-                                'title' =>
-                                    [
+                        'fields' => [
+                                'title' => [
                                         'name' => 'title',
                                         'handler' => null,
                                         'origin' => 'title',
                                         'dataType' => null,
                                         'type' => 'searchable',
-                                        'filters' =>
-                                            [],
+                                        'filters' => [],
                                     ],
                             ],
-                        'references' =>
-                            [
-                                'first' =>
-                                    [
+                        'references' => [
+                                'first' => [
                                         'fieldset' => 'first',
                                         'from' => 'id_field',
                                         'to' => 'second_entity_id',

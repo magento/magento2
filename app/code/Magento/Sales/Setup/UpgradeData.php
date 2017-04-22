@@ -6,8 +6,8 @@
 namespace Magento\Sales\Setup;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverterFactory;
 
 /**
  * Data upgrade script

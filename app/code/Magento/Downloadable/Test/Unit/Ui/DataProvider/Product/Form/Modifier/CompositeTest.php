@@ -5,14 +5,14 @@
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite;
-use Magento\Ui\DataProvider\Modifier\ModifierFactory;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Downloadable\Model\Product\Type as DownloadableType;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Type as CatalogType;
+use Magento\Downloadable\Model\Product\Type as DownloadableType;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Ui\DataProvider\Modifier\ModifierFactory;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {

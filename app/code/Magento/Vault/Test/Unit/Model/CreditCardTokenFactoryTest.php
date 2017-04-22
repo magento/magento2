@@ -31,7 +31,7 @@ class CreditCardTokenFactoryTest extends \PHPUnit_Framework_TestCase
      * @var CreditCardTokenFactory
      */
     private $factory;
-    
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);

@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\EntityManager\Test\Unit\Db;
 
-use Magento\Framework\EntityManager\Db\UpdateRow;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\Db\UpdateRow;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class UpdateRowTest

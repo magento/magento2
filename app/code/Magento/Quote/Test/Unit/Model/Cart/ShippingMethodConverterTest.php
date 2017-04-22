@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
 use Magento\Quote\Model\Cart\ShippingMethodConverter;

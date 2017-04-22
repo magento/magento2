@@ -8,9 +8,9 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
-use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

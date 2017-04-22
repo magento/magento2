@@ -6,9 +6,9 @@
 
 namespace Magento\Deploy\Console\Command;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

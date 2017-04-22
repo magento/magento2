@@ -8,7 +8,6 @@
  * See COPYING.txt for license details.
  */
 
-
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
     ['BACKORDERS_BELOW'],

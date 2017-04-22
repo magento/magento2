@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Fedex\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -640,7 +639,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
 
-            if (is_null($amount)) {
+            if ($amount === null) {
                 $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
             }
         }

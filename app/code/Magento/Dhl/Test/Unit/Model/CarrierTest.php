@@ -5,8 +5,8 @@
  */
 namespace Magento\Dhl\Test\Unit\Model;
 
-use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\Xml\Security;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

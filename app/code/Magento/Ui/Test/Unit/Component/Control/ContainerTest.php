@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
 
-use \Magento\Ui\Component\Control\Container;
+use Magento\Ui\Component\Control\Container;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {

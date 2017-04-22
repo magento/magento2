@@ -8,8 +8,6 @@ namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Compiled implements ConfigLoaderInterface
 {
@@ -28,7 +26,7 @@ class Compiled implements ConfigLoaderInterface
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $diConfiguration = include(self::getFilePath($area));
+        $diConfiguration = include self::getFilePath($area);
         $this->configCache[$area] = $diConfiguration;
         return $this->configCache[$area];
     }

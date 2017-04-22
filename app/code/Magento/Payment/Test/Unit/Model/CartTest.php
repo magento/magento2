@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Model;
 
-use \Magento\Payment\Model\Cart;
+use Magento\Payment\Model\Cart;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {

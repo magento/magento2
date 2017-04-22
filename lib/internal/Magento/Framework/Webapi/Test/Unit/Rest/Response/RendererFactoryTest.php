@@ -77,7 +77,7 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
             $this->_factory->get();
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Framework\Webapi\Exception $e) {
-            $exceptionMessage = 'Server cannot match any of the given Accept HTTP header media type(s) '.
+            $exceptionMessage = 'Server cannot match any of the given Accept HTTP header media type(s) ' .
                 'from the request: "" with media types from the config of response renderer.';
             $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $e, 'Exception type is invalid');
             $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');

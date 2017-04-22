@@ -6,13 +6,13 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\DB\Logger\LoggerProxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 class QueryLogEnableCommand extends Command
 {
@@ -115,6 +115,6 @@ class QueryLogEnableCommand extends Command
 
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $configGroup]);
 
-        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        $output->writeln("<info>" . self::SUCCESS_MESSAGE . "</info>");
     }
 }

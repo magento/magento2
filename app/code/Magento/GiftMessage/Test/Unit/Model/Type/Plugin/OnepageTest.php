@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\GiftMessage\Test\Unit\Model\Type\Plugin;
 
 use Magento\GiftMessage\Model\Type\Plugin\Onepage;

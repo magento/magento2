@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
+use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 
 class NamedParamsTest extends \PHPUnit_Framework_TestCase
 {

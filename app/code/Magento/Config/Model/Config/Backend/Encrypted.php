@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Model\Config\Backend;
 
 class Encrypted extends \Magento\Framework\App\Config\Value implements

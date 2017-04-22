@@ -6,10 +6,10 @@
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
-use Magento\Framework\Xml\Security;
 
 /**
  * Abstract online shipping carrier model

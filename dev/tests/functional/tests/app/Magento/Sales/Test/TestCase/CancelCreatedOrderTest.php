@@ -6,11 +6,11 @@
 
 namespace Magento\Sales\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:

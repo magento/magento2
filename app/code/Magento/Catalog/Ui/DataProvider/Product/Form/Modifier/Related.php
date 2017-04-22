@@ -9,7 +9,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Phrase;
@@ -21,8 +23,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
-use Magento\Catalog\Helper\Image as ImageHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Class Related
@@ -153,8 +153,7 @@ class Related extends AbstractModifier
                                 'collapsible' => true,
                                 'componentType' => Fieldset::NAME,
                                 'dataScope' => static::DATA_SCOPE,
-                                'sortOrder' =>
-                                    $this->getNextGroupSortOrder(
+                                'sortOrder' => $this->getNextGroupSortOrder(
                                         $meta,
                                         self::$previousGroup,
                                         self::$sortOrder

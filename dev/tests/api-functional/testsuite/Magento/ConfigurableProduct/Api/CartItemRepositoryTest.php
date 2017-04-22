@@ -5,8 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CartItemRepositoryTest extends WebapiAbstract
 {

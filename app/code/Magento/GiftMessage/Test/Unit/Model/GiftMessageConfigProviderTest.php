@@ -5,11 +5,11 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
-use Magento\Store\Model\ScopeInterface as Scope;
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\UrlInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\Store\Model\ScopeInterface as Scope;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

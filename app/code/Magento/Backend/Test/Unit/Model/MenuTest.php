@@ -5,7 +5,6 @@
  */
 namespace Magento\Backend\Test\Unit\Model;
 
-use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Framework\Serialize\SerializerInterface;
 

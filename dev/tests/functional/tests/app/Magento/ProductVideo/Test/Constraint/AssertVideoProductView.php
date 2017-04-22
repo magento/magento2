@@ -6,10 +6,10 @@
 
 namespace Magento\ProductVideo\Test\Constraint;
 
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Assert that video is displayed on product page.

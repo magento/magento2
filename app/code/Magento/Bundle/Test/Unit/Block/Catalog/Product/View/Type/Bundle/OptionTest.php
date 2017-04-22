@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type\Bundle;
 
 class OptionTest extends \PHPUnit_Framework_TestCase

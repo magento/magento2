@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Model\Order\Email;
 
 use Magento\Sales\Model\Order;

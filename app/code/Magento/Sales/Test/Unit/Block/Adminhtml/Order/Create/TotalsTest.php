@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

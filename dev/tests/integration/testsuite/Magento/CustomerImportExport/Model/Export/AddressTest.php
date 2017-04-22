@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CustomerImportExport\Model\Export;
 
 use Magento\CustomerImportExport\Model\Import\Address as ImportAddress;
+
 /**
  * Test for customer address export model
  *
@@ -214,7 +214,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 $data['header'] = str_getcsv($line);
             } else {
                 $row = array_combine($data['header'], str_getcsv($line));
-                if (!is_null($entityId) && !empty($row[$entityId])) {
+                if ($entityId !== null&& !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
                     $data['data'][] = $row;

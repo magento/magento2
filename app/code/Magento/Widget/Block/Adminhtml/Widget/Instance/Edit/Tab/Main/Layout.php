@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;

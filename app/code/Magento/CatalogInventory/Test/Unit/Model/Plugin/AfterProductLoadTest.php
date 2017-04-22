@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
 class AfterProductLoadTest extends \PHPUnit_Framework_TestCase

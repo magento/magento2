@@ -5,9 +5,9 @@
  */
 namespace Magento\Downloadable\Test\Unit\Observer;
 
-use Magento\Downloadable\Observer\SaveDownloadableOrderItemObserver;
 use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
 use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
+use Magento\Downloadable\Observer\SaveDownloadableOrderItemObserver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

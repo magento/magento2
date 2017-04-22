@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection;

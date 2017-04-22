@@ -115,7 +115,7 @@ class DwstreeTest extends \PHPUnit_Framework_TestCase
             [
                 'default',
                 'website_' . $website['actual']['code'],
-                'store_'   . $store['actual']['code']
+                'store_' . $store['actual']['code']
             ],
             $this->object->getTabsIds()
         );

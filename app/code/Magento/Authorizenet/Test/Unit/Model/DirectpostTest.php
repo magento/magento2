@@ -5,12 +5,12 @@
  */
 namespace Magento\Authorizenet\Test\Unit\Model;
 
+use Magento\Authorizenet\Model\Directpost;
+use Magento\Authorizenet\Model\Directpost\Request\Factory;
+use Magento\Authorizenet\Model\Request;
+use Magento\Authorizenet\Model\TransactionService;
 use Magento\Framework\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Authorizenet\Model\Directpost;
-use Magento\Authorizenet\Model\TransactionService;
-use Magento\Authorizenet\Model\Request;
-use Magento\Authorizenet\Model\Directpost\Request\Factory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 

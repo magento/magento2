@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Shipping\Block\Tracking;
 
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;

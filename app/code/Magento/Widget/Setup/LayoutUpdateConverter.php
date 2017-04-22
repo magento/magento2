@@ -5,11 +5,11 @@
  */
 namespace Magento\Widget\Setup;
 
+use Magento\Framework\DB\DataConverter\DataConversionException;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
-use Magento\Framework\DB\DataConverter\DataConversionException;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * Convert conditions_encoded part of layout update data from serialized to JSON format

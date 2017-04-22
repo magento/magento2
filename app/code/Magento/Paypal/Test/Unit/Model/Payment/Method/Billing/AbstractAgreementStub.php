@@ -18,7 +18,7 @@ class AbstractAgreementStub extends AbstractAgreement
     {
         return static::STUB_CODE;
     }
-    
+
     /**
      * @param object $quote
      * @return bool

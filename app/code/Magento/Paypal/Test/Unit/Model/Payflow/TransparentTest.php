@@ -5,8 +5,8 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
-use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Paypal\Model\Payflowpro;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CreditCardTokenFactory;
 

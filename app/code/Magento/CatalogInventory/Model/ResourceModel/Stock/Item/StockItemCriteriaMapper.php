@@ -6,15 +6,15 @@
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\ObjectFactory;
 use Magento\Framework\DB\GenericMapper;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Data\ObjectFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Interface StockItemCriteriaMapper

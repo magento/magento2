@@ -94,10 +94,8 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
         $config->extend(
             [
                 'preferences' => [
-                    \Magento\Framework\Interception\PluginListInterface::class =>
-                        \Magento\Framework\Interception\PluginList\PluginList::class,
-                    \Magento\Framework\Interception\ChainInterface::class =>
-                        \Magento\Framework\Interception\Chain\Chain::class,
+                    \Magento\Framework\Interception\PluginListInterface::class => \Magento\Framework\Interception\PluginList\PluginList::class,
+                    \Magento\Framework\Interception\ChainInterface::class => \Magento\Framework\Interception\Chain\Chain::class,
                 ],
             ]
         );

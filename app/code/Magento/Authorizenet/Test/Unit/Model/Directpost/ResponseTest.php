@@ -5,8 +5,8 @@
  */
 namespace Magento\Authorizenet\Test\Unit\Model\Directpost;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorizenet\Model\Directpost;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class CleanStaticFilesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {

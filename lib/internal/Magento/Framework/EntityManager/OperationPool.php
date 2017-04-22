@@ -7,7 +7,6 @@
 namespace Magento\Framework\EntityManager;
 
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
-use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Class OperationPool

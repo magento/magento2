@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;

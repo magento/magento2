@@ -113,7 +113,6 @@ class ShowTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithException(\Exception $exception)
     {
-
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

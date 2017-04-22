@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CatalogInventory\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Website as ProductWebsite;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockIndexInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Class StockIndex
@@ -200,13 +198,13 @@ class StockIndex implements StockIndexInterface
      */
     protected function getWebsitesWithDefaultStores($websiteId = null)
     {
-        if (is_null($this->websites)) {
+        if ($this->websites === null) {
             /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status $resource */
             $resource = $this->getStockStatusResource();
             $this->websites = $resource->getWebsiteStores();
         }
         $websites = $this->websites;
-        if (!is_null($websiteId) && isset($this->websites[$websiteId])) {
+        if ($websiteId !== null&& isset($this->websites[$websiteId])) {
             $websites = [$websiteId => $this->websites[$websiteId]];
         }
         return $websites;

@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -394,7 +393,7 @@ class SetupUtil
                 ->save()
                 ->getId();
         } else {
-            foreach ($overrides[self::TAX_RULE_OVERRIDES] as $taxRuleOverrideData ) {
+            foreach ($overrides[self::TAX_RULE_OVERRIDES] as $taxRuleOverrideData) {
                 //convert code to id for productTaxClass, customerTaxClass and taxRate
                 $taxRuleOverrideData = $this->processTaxRuleOverrides($taxRuleOverrideData, $taxRateIds);
                 $mergedTaxRuleData = array_merge($taxRuleDefaultData, $taxRuleOverrideData);

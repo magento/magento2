@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config;
 
-use \Magento\Setup\Module\Di\Compiler\Config\ModificationChain;
+use Magento\Setup\Module\Di\Compiler\Config\ModificationChain;
 
 class ModificationChainTest extends \PHPUnit_Framework_TestCase
 {

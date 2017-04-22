@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Success;
+use Magento\Setup\Controller\Success;
 
 class SuccessTest extends \PHPUnit_Framework_TestCase
 {

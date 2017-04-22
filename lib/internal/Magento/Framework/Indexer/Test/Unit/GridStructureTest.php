@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Indexer\Test\Unit;
 
-use Magento\Framework\Indexer\GridStructure;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Indexer\GridStructure;
 
 class GridStructureTest extends \PHPUnit_Framework_TestCase
 {

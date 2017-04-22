@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Config;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -121,7 +121,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         foreach (['semantic', 'mixed', 'arbitrary'] as $filePath) {
             $realPaths[] = $this->fixturePath . '/' . $filePath . '/' . $componentName . '.xml';
         }
-        return new FileIterator(new ReadFactory(new DriverPool), $realPaths);
+        return new FileIterator(new ReadFactory(new DriverPool()), $realPaths);
     }
 
     /**
@@ -134,7 +134,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $filename = $this->fixturePath . '/expected/' . $componentName . '.php';
         if (is_file($filename)) {
-            return include($filename);
+            return include $filename;
         }
 
         return [];

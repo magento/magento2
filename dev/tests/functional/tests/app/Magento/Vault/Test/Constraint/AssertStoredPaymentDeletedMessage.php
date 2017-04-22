@@ -5,8 +5,8 @@
  */
 namespace Magento\Vault\Test\Constraint;
 
-use Magento\Vault\Test\Page\StoredPaymentMethods;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Vault\Test\Page\StoredPaymentMethods;
 
 /**
  * Assert that success message is correct.

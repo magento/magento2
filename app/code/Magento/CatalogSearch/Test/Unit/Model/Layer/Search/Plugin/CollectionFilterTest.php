@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Search\Plugin;
 
-use Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter as CollectionFilterPlugin;
-use Magento\Catalog\Model\Layer\Search\CollectionFilter;
 use Magento\Catalog\Model\Category;
-use Magento\Search\Model\QueryFactory;
+use Magento\Catalog\Model\Layer\Search\CollectionFilter;
+use Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter as CollectionFilterPlugin;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\Query;
+use Magento\Search\Model\QueryFactory;
 
 class CollectionFilterTest extends \PHPUnit_Framework_TestCase
 {

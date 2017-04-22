@@ -5,17 +5,17 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
+use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Framework\Exception\EmailNotConfirmedException;
-use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

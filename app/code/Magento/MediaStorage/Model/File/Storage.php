@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\MediaStorage\Model\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -169,7 +168,7 @@ class Storage extends AbstractModel
      */
     public function getStorageModel($storage = null, $params = [])
     {
-        if (is_null($storage)) {
+        if ($storage === null) {
             $storage = $this->_coreFileStorage->getCurrentStorageCode();
         }
 

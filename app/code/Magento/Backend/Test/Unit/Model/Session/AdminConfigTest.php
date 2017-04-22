@@ -9,8 +9,6 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Session;
 
-use Magento\TestFramework\ObjectManager;
-
 class AdminConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -60,12 +60,12 @@ endif; ?>
                         class="admin__control-select">
                     <option value=""><?php /* @escapeNotVerified */ echo __('Add New Address') ?></option>
                     <?php foreach ($block->getAddressCollection() as $_address): ?>
-                        <?php //if($block->getAddressAsString($_address)!=$block->getAddressAsString($block->getAddress())): ?>
+                        <?php //if($block->getAddressAsString($_address)!=$block->getAddressAsString($block->getAddress())):?>
                         <option
                             value="<?php /* @escapeNotVerified */ echo $_address->getId() ?>"<?php if ($_address->getId() == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
                             <?php /* @escapeNotVerified */ echo $block->getAddressAsString($_address) ?>
                         </option>
-                        <?php //endif; ?>
+                        <?php //endif;?>
                     <?php endforeach; ?>
                 </select>
             </div>

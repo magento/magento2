@@ -6,12 +6,12 @@
 namespace Magento\Ui\Component\MassAction;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Filter

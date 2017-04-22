@@ -5,10 +5,9 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

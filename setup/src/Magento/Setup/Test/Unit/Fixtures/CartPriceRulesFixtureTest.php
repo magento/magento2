@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CartPriceRulesFixture;
+use Magento\Setup\Fixtures\CartPriceRulesFixture;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

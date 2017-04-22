@@ -6,10 +6,10 @@
 namespace Magento\Framework\View\Element\UiComponent\ContentType;
 
 use Magento\Framework\Json\Encoder;
-use Magento\Framework\View\FileSystem;
-use Magento\Framework\View\TemplateEnginePool;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\FileSystem;
 use Magento\Framework\View\Layout\Generator\Structure;
+use Magento\Framework\View\TemplateEnginePool;
 
 /**
  * Class Json

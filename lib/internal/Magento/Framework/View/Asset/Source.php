@@ -7,8 +7,8 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
@@ -170,7 +170,7 @@ class Source
      */
     public function getSourceContentType(LocalInterface $asset)
     {
-        list(,,$type) = $this->preProcess($asset);
+        list(, , $type) = $this->preProcess($asset);
         return $type;
     }
 

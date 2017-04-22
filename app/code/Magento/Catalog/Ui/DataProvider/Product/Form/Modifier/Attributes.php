@@ -5,11 +5,11 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Framework\UrlInterface;
-use Magento\Framework\Registry;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Ui\Component;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
+use Magento\Ui\Component;
 use Magento\Ui\Component\Container;
 
 /**
@@ -176,8 +176,7 @@ class Attributes extends AbstractModifier
                                             'actionName' => 'toggleModal',
                                         ],
                                         [
-                                            'targetName'
-                                            => 'product_form.product_form.add_attribute_modal'
+                                            'targetName' => 'product_form.product_form.add_attribute_modal'
                                                 . '.create_new_attribute_modal.product_attribute_add_form',
                                             'actionName' => 'render'
                                         ]
@@ -302,8 +301,7 @@ class Attributes extends AbstractModifier
                         'groupCode' => static::GROUP_CODE,
                         'groupName' => static::GROUP_NAME,
                         'groupSortOrder' => static::GROUP_SORT_ORDER,
-                        'addAttributeUrl' =>
-                            $this->urlBuilder->getUrl('catalog/product/addAttributeToTemplate'),
+                        'addAttributeUrl' => $this->urlBuilder->getUrl('catalog/product/addAttributeToTemplate'),
                         'productId' => $this->locator->getProduct()->getId(),
                         'productType' => $this->locator->getProduct()->getTypeId(),
                         'loading' => false,

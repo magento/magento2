@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backend\Block\Page\System\Config\Robots;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;

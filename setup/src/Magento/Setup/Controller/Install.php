@@ -8,7 +8,6 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
-use Magento\SampleData;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\Installer\ProgressFactory;
 use Magento\Setup\Model\InstallerFactory;
@@ -87,7 +86,7 @@ class Install extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }
@@ -100,7 +99,7 @@ class Install extends AbstractActionController
     public function startAction()
     {
         $this->log->clear();
-        $json = new JsonModel;
+        $json = new JsonModel();
         try {
             $this->checkForPriorInstall();
             $content = $this->getRequest()->getContent();

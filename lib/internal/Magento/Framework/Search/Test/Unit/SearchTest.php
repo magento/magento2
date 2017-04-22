@@ -83,7 +83,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();

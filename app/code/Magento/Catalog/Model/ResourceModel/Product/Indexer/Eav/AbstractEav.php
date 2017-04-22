@@ -216,7 +216,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             []
         )->joinLeft(
             ['e' => $this->getTable('catalog_product_entity')],
-            'e.' . $linkField .' = l.parent_id',
+            'e.' . $linkField . ' = l.parent_id',
             []
         )->join(
             ['cs' => $this->getTable('store')],

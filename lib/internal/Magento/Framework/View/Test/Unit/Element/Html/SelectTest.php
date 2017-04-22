@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use \Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Html\Select;
 
 class SelectTest extends \PHPUnit_Framework_TestCase
 {
@@ -172,13 +172,13 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->select->setValue($selectedValues);
 
         $result = '<select name="testName" id="testId" class="testClass" title="testTitle" >'
-            .   '<option value="testValue"  paramKey="paramValue" >testLabel</option>'
-            .   '<option value="selectedValue" selected="selected"  paramKey="paramValue" '
-            .       ' paramKey2="paramValue2" >selectedLabel</option>'
-            .   '<optgroup label="groupLabel" data-optgroup-name="groupLabel">'
-            .       '<option value="groupElementValue" >GroupElementLabel</option>'
-            .       '<option value="selectedGroupElementValue" selected="selected" >SelectedGroupElementLabel</option>'
-            .   '</optgroup>'
+            . '<option value="testValue"  paramKey="paramValue" >testLabel</option>'
+            . '<option value="selectedValue" selected="selected"  paramKey="paramValue" '
+            . ' paramKey2="paramValue2" >selectedLabel</option>'
+            . '<optgroup label="groupLabel" data-optgroup-name="groupLabel">'
+            . '<option value="groupElementValue" >GroupElementLabel</option>'
+            . '<option value="selectedGroupElementValue" selected="selected" >SelectedGroupElementLabel</option>'
+            . '</optgroup>'
             . '</select>';
 
         $this->assertEquals($result, $this->select->getHtml());
@@ -199,12 +199,12 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         ];
 
         $expectedResult = '<select name="test[name]" id="testId" class="test class" title="ESCAPED" >'
-            .   '<option value="ESCAPED"  paramKey="ESCAPED" >ESCAPED</option>'
-            .   '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
-            .   '<optgroup label="ESCAPED" data-optgroup-name="ESCAPED">'
-            .       '<option value="ESCAPED" >ESCAPED</option>'
-            .       '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
-            .   '</optgroup>'
+            . '<option value="ESCAPED"  paramKey="ESCAPED" >ESCAPED</option>'
+            . '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
+            . '<optgroup label="ESCAPED" data-optgroup-name="ESCAPED">'
+            . '<option value="ESCAPED" >ESCAPED</option>'
+            . '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
+            . '</optgroup>'
             . '</select>';
 
         foreach ($optionsSets as $inOptions) {

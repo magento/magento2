@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\DB\Adapter;
 
-use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 
 /**
  * Cache segment for DDL operations in database adapter

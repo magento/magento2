@@ -22,7 +22,7 @@ class ImageExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $expectedArray = include(__DIR__ . '/_files/converted_view.php');
+        $expectedArray = include __DIR__ . '/_files/converted_view.php';
         $this->assertEquals($expectedArray, $this->model->process($this->getDomElement(), 'media'));
     }
 

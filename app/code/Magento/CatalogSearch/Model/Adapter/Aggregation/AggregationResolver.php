@@ -7,12 +7,12 @@ namespace Magento\CatalogSearch\Model\Adapter\Aggregation;
 
 use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 
 class AggregationResolver implements AggregationResolverInterface
 {
@@ -40,7 +40,7 @@ class AggregationResolver implements AggregationResolverInterface
      * @var AttributeCollection
      */
     private $attributeCollection;
-    
+
     /**
      * AggregationResolver constructor
      *

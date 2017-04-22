@@ -5,12 +5,12 @@
  */
 namespace Magento\Bundle\Model\ResourceModel\Selection;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Selections Resource Collection
@@ -326,10 +326,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             }
             $price = $connection->getCheckSql(
                 $priceType . ' = 1',
-                (float) $product->getPrice() . ' * '. $priceValue . ' / 100',
+                (float) $product->getPrice() . ' * ' . $priceValue . ' / 100',
                 $priceValue
             );
-            $orderByValue = new \Zend_Db_Expr('('. $price. ' * '. 'selection.selection_qty)');
+            $orderByValue = new \Zend_Db_Expr('(' . $price . ' * ' . 'selection.selection_qty)');
         }
 
         $this->getSelect()->reset(Select::ORDER);

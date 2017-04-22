@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
 class GroupTest extends \PHPUnit_Framework_TestCase

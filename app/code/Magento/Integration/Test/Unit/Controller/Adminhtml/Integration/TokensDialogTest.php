@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest

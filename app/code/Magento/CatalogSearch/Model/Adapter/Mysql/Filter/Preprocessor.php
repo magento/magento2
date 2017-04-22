@@ -118,7 +118,6 @@ class Preprocessor implements PreprocessorInterface
             ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
         $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
-
     }
 
     /**

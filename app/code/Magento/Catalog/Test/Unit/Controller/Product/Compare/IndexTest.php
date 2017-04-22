@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Controller\Product\Compare;
 
 use Magento\Catalog\Controller\Product\Compare\Index;

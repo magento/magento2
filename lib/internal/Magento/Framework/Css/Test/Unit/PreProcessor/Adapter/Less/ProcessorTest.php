@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Adapter\Less;
 
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
+use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Source;
-use Magento\Framework\Css\PreProcessor\File\Temporary;
-use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ProcessorTest

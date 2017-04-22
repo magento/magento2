@@ -6,16 +6,16 @@
 
 namespace Magento\CodeMessDetector\Test\Unit\Rule\Design;
 
-use PHPUnit_Framework_TestCase as TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use PHPUnit_Framework_MockObject_Matcher_InvokedRecorder as InvokedRecorder;
-use PHPUnit_Framework_MockObject_Builder_InvocationMocker as InvocationMocker;
+use BadMethodCallException;
 use Magento\CodeMessDetector\Rule\Design\FinalImplementation;
-use PHPMD\Report;
 use PHPMD\AbstractNode;
 use PHPMD\Node\ClassNode;
 use PHPMD\Node\MethodNode;
-use BadMethodCallException;
+use PHPMD\Report;
+use PHPUnit_Framework_MockObject_Builder_InvocationMocker as InvocationMocker;
+use PHPUnit_Framework_MockObject_Matcher_InvokedRecorder as InvokedRecorder;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_TestCase as TestCase;
 
 class FinalImplementationTest extends TestCase
 {

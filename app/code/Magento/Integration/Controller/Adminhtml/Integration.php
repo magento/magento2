@@ -6,7 +6,6 @@
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 
 /**
  * Controller for integrations management.

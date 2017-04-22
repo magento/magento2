@@ -6,9 +6,9 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
-use \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
-use \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
-use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
 
 /**
  * @SuppressWarnings(PHPMD)

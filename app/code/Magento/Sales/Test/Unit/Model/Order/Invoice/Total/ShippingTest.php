@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
 /**

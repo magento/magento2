@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\EntityManager\Sequence;
 
-use Psr\Log\LoggerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SequenceManager
@@ -66,7 +66,7 @@ class SequenceManager
         $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
 
         if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL . ' Sequence table doesnt exists');
         }
         try {
             $connection = $this->appResource->getConnectionByName($metadata->getEntityConnectionName());
@@ -91,7 +91,7 @@ class SequenceManager
         $metadata = $this->metadataPool->getMetadata($entityType);
         $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
         if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
+            throw new \Exception('TODO: use correct Exception class' . PHP_EOL . ' Sequence table doesnt exists');
         }
         try {
             $connection = $this->appResource->getConnectionByName($metadata->getEntityConnectionName());

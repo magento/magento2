@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

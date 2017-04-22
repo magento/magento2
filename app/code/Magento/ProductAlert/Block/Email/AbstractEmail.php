@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\ProductAlert\Block\Email;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -103,7 +102,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore();
         }
         return $this->_store;

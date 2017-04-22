@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Mview\Test\Unit;
 
-use \Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

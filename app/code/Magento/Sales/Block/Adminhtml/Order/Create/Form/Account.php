@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Framework\Api\ExtensibleDataObjectConverter;

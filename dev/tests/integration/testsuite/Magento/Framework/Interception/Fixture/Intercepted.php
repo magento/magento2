@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Interception\Fixture;
 
 class Intercepted extends InterceptedParent implements InterceptedInterface

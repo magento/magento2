@@ -4,17 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductExtensionFactory;
-use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
 /**
  * Product Test
@@ -644,11 +641,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function getProductReindexProvider()
     {
-        return array(
+        return [
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
             'set 3' => [false, false, 1, 0]
-        );
+        ];
     }
 
     public function testPriceReindexCallback()

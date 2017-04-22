@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Test class for \Magento\Weee\Model\Attribute\Backend\Weee\Tax
  */

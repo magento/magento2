@@ -5,12 +5,12 @@
  */
 namespace Magento\SalesRule\Setup;
 
-use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 class UpgradeData implements UpgradeDataInterface

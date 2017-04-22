@@ -45,7 +45,7 @@ class AssertGlobalSearchOrderId extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertContains(
             (string) $order->getId(),
             $orderIndex->getSalesOrderGrid()->getAllIds(),
-            'Order grid does not have ' . $order->getId()  . ' in search results'
+            'Order grid does not have ' . $order->getId() . ' in search results'
         );
     }
 

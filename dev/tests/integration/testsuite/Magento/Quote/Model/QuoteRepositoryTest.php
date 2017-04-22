@@ -5,17 +5,17 @@
  */
 namespace Magento\Quote\Model;
 
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResults;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Api\Data\CartExtension;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartSearchResultsInterface;
-use Magento\Quote\Api\Data\CartExtension;
-use Magento\User\Api\Data\UserInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use Magento\User\Api\Data\UserInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

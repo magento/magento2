@@ -6,9 +6,9 @@
 namespace Magento\Framework\ObjectManager\Test\Unit;
 
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Interception\DefinitionInterface as InterceptionDefinitionInterface;
 use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\ObjectManager\DefinitionInterface;
-use Magento\Framework\Interception\DefinitionInterface as InterceptionDefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
 class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase

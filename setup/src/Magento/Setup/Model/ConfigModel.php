@@ -7,10 +7,10 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Setup\Option\AbstractConfigOption;
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Setup\FilePermissions;
+use Magento\Framework\Setup\Option\AbstractConfigOption;
 
 class ConfigModel
 {

@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design;
 
-
 class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Theme\Model\Design\BackendModelFactory */
@@ -48,7 +47,7 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setValue'])
             ->getMock();
-        
+
         $this->model = new \Magento\Theme\Model\Design\BackendModelFactory(
             $this->objectManagerMock,
             $this->metadataProviderMock,

@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext\IndexSwitcher;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
-use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\IndexSwitcher;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

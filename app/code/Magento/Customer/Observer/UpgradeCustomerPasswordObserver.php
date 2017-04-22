@@ -6,10 +6,10 @@
 
 namespace Magento\Customer\Observer;
 
-use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Event\ObserverInterface;
 
 class UpgradeCustomerPasswordObserver implements ObserverInterface
 {

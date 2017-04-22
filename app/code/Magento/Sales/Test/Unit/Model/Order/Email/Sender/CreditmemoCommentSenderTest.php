@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 
 class CreditmemoCommentSenderTest extends AbstractSenderTest
 {

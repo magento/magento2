@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\App\Utility;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class FilesTest extends \PHPUnit_Framework_TestCase

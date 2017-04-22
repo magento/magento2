@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 /**

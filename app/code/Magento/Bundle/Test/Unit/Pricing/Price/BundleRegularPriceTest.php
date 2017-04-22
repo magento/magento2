@@ -6,9 +6,9 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BundleRegularPriceTest extends \PHPUnit_Framework_TestCase
 {

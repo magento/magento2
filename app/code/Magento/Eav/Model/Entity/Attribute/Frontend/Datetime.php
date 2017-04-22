@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend

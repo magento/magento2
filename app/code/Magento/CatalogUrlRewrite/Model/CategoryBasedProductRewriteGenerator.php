@@ -7,7 +7,6 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Product\Visibility;
 
 /**

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\HTTP\Test\Unit\Adapter;
 
-use \Magento\Framework\HTTP\Adapter\Curl;
+use Magento\Framework\HTTP\Adapter\Curl;
 
 class CurlTest extends \PHPUnit_Framework_TestCase
 {

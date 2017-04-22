@@ -116,8 +116,7 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'result' =>
-                    [
+                'result' => [
                         'label' => new \Magento\Framework\Phrase('Unlock'),
                         'class' => 'unlock unlock-customer',
                         'on_click' => "location.href = 'http://website.com/';",

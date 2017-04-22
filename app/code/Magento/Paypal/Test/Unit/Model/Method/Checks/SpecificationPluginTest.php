@@ -5,14 +5,14 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Method\Checks;
 
-use Magento\Paypal\Model\Method\Checks\SpecificationPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Paypal\Model\Billing\AgreementFactory as BillingAgreementFactory;
 use Magento\Payment\Model\Checks\SpecificationInterface;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection as BillingAgreementCollection;
 use Magento\Paypal\Model\Billing\Agreement as BillingAgreement;
+use Magento\Paypal\Model\Billing\AgreementFactory as BillingAgreementFactory;
+use Magento\Paypal\Model\Method\Checks\SpecificationPlugin;
+use Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection as BillingAgreementCollection;
+use Magento\Quote\Model\Quote;
 
 class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
 {

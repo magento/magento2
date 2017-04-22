@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Persistent\Test\Unit\Model;
 
 use Magento\Persistent\Model\QuoteManager;

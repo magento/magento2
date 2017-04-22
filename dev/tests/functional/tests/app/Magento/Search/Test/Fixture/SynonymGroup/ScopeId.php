@@ -6,9 +6,9 @@
 
 namespace Magento\Search\Test\Fixture\SynonymGroup;
 
-use Magento\Store\Test\Fixture\Store;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Class ScopeId

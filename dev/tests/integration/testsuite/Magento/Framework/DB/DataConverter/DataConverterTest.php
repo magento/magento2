@@ -7,13 +7,13 @@ namespace Magento\Framework\DB\DataConverter;
 
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\FieldDataConverter;
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Select\QueryModifierInterface;
-use Magento\Framework\DB\Select\InQueryModifier;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Query\BatchIterator;
+use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\InQueryModifier;
+use Magento\Framework\DB\Select\QueryModifierInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class DataConverterTest extends \PHPUnit_Framework_TestCase
 {

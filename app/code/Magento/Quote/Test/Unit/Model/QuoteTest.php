@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;

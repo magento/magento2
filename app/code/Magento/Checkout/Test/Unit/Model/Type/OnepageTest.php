@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Checkout\Test\Unit\Model\Type;
 
-use \Magento\Checkout\Model\Type\Onepage;
+use Magento\Checkout\Model\Type\Onepage;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

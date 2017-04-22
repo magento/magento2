@@ -5,14 +5,14 @@
  */
 namespace Magento\Eav\Test\Unit\Plugin\Model\ResourceModel\Entity;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Cache\StateInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
-use Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute as AttributeResourcePlugin;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
+use Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute as AttributeResourcePlugin;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {

@@ -9,7 +9,6 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form;
 
 class FormTest extends \PHPUnit_Framework_TestCase

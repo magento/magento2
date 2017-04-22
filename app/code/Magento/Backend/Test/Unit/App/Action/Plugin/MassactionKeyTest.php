@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\AbstractAction;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MassactionKeyTest extends \PHPUnit_Framework_TestCase
 {

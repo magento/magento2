@@ -6,9 +6,9 @@
 
 namespace Magento\Indexer\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * Upgrade the Indexer module DB scheme

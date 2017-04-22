@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\Acl\Test\Unit\Role;
 
-use \Magento\Framework\Acl\Role\Registry;
+use Magento\Framework\Acl\Role\Registry;
 
 class RegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +78,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
     {
         $roleId = 1;
         $parentRoleId = 2;
-        list($role,) = $this->initRoles($roleId, $parentRoleId);
+        list($role, ) = $this->initRoles($roleId, $parentRoleId);
 
         $this->model->addParent($role, 26);
     }

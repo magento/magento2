@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Communication;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Communication\Config\Data as ConfigData;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**

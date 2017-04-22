@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Framework\Controller\ResultFactory;
@@ -194,7 +193,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0, 'apply_to' => []];
 
-            if (is_null($model->getIsUserDefined()) || $model->getIsUserDefined() != 0) {
+            if ($model->getIsUserDefined() === null|| $model->getIsUserDefined() != 0) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
             }
 
@@ -251,7 +250,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         '_current' => true,
                         'product_tab' => $this->getRequest()->getParam('product_tab'),
                     ];
-                    if (!is_null($attributeSet)) {
+                    if ($attributeSet !== null) {
                         $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
                     return $this->returnResult('catalog/product/addAttribute', $requestParams, ['error' => false]);

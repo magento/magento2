@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -505,7 +504,7 @@ FIRST_PORT_TYPE;
             $secondPortType = <<< SECOND_PORT_TYPE
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
-        $this->assertContains(
+            $this->assertContains(
             $this->_convertXmlToString($secondPortType),
             $wsdlContent,
             'Port type declaration is missing or invalid'
@@ -968,7 +967,6 @@ WRAPPED_ERRORS_COMPLEX_TYPE;
     </xsd:sequence>
 </xsd:complexType>
 WRAPPED_ERRORS_COMPLEX_TYPE;
-
         }
         // @codingStandardsIgnoreEnd
         $this->assertContains(

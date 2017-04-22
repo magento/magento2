@@ -6,14 +6,14 @@
 namespace Magento\Setup\Test\Unit\Console;
 
 use Magento\Framework\Console\GenerationDirectoryAccess;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DiCompileCommand;
+use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\ArgvInput;
 use Zend\ServiceManager\ServiceManager;
-use Magento\Setup\Console\CompilerPreparation;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
 {

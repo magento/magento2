@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\MaintenanceMode;
 
 class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
 {

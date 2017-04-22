@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
 
-use Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization;
 
 /**
  * Unit test for the ArgumentsSerialization class.

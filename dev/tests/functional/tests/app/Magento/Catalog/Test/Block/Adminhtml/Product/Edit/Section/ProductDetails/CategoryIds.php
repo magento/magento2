@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails;
 
-use Magento\Mtf\Client\Element\MultisuggestElement;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\DriverInterface;
+use Magento\Mtf\Client\Element\MultisuggestElement;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**

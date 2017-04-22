@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
 class TreeTest extends \PHPUnit_Framework_TestCase

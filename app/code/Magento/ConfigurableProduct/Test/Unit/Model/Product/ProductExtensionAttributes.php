@@ -12,5 +12,4 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
  */
 abstract class ProductExtensionAttributes implements ProductExtensionInterface
 {
-
 }

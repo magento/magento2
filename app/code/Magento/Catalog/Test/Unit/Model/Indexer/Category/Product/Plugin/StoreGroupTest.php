@@ -5,13 +5,13 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
+use Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ResourceModel\Group;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Group as GroupModel;
-use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Store\Model\ResourceModel\Group;
 
 class StoreGroupTest extends \PHPUnit_Framework_TestCase
 {

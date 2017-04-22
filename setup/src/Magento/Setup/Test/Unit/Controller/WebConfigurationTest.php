@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\WebConfiguration;
+use Magento\Setup\Controller\WebConfiguration;
 
 class WebConfigurationTest extends \PHPUnit_Framework_TestCase
 {

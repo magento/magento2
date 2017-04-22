@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
@@ -148,7 +147,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     public function getCustomerGroupId()
     {
         $customerGroupId = $this->_getData('customer_group_id');
-        if (is_null($customerGroupId)) {
+        if ($customerGroupId === null) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
 
@@ -174,7 +173,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     public function getCurrencyRate()
     {
         $rate = $this->_getData('currency_rate');
-        if (is_null($rate)) {
+        if ($rate === null) {
             $rate = $this->_storeManager->getStore($this->getStoreId())
                 ->getCurrentCurrencyRate();
         }

@@ -11,10 +11,11 @@ namespace {
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie
 {
-    use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     use Magento\Framework\Exception\InputException;
-    use Magento\Framework\Stdlib\Cookie\FailureToSendException;
     use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+    use Magento\Framework\Stdlib\Cookie\FailureToSendException;
+    use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+
     // @codingStandardsIgnoreEnd
 
     /**

@@ -10,8 +10,8 @@ use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
-use Magento\SalesInventory\Model\Order\ReturnValidator;
 use Magento\Sales\Model\ValidatorResultInterface;
+use Magento\SalesInventory\Model\Order\ReturnValidator;
 
 /**
  * Class OrderRefundCreationArguments

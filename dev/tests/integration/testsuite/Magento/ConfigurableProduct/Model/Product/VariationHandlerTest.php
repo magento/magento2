@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\TestFramework\Helper\Bootstrap;

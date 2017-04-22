@@ -5,8 +5,8 @@
  */
 namespace Magento\GroupedImportExport\Test\Fixture\Import;
 
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Grouped product class file.

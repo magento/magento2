@@ -6,9 +6,9 @@
 
 namespace Magento\Widget\Test\Block;
 
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Widget block on the frontend.

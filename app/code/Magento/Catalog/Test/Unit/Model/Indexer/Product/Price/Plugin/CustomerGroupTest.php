@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
 class CustomerGroupTest extends \PHPUnit_Framework_TestCase

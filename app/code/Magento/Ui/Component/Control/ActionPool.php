@@ -8,8 +8,8 @@ namespace Magento\Ui\Component\Control;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class ActionPool

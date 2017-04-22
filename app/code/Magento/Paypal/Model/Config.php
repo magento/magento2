@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Helper\Formatter;
@@ -18,7 +17,6 @@ use Magento\Payment\Helper\Formatter;
  */
 class Config extends AbstractConfig
 {
-
     use Formatter;
 
     /**
@@ -1194,7 +1192,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null&& $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;

@@ -6,11 +6,11 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Check that after click on widget link on frontend system redirects you to Product page defined in widget.

@@ -6,12 +6,12 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
+use Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Fill billing information.

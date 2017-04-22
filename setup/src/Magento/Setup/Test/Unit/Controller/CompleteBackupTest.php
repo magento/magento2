@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\CompleteBackup;
+use Magento\Setup\Controller\CompleteBackup;
 
 class CompleteBackupTest extends \PHPUnit_Framework_TestCase
 {

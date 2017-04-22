@@ -5,12 +5,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Api;
 
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CategoryManagementTest extends WebapiAbstract
 {

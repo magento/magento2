@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Test\Unit\Model\Wysiwyg\Images;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection as StorageCollection;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)

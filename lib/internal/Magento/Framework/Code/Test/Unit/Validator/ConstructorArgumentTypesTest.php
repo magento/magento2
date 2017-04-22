@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
 class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase

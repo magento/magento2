@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Session\SaveHandler\Redis\Config;
+use Magento\Store\Model\ScopeInterface;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogImportExport\Test\Constraint;
 
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Constraint\AssertProductInGrid;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**

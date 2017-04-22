@@ -6,16 +6,16 @@
 namespace Magento\Config\Test\Unit\Model;
 
 use Magento\Config\Model\Config\BackendFactory;
-use Magento\Config\Model\PreparedValueFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\StructureFactory;
+use Magento\Config\Model\PreparedValueFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ScopeInterface;
-use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolver;
 use Magento\Framework\App\ScopeResolverPool;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

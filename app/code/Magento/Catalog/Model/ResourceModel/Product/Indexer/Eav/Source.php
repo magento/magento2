@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -182,7 +182,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['pis' => $this->getTable('catalog_product_entity_int')],
             "pis.{$productIdField} = pid.{$productIdField}"
-            .' AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
+            . ' AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
             []
         )->columns(
             [

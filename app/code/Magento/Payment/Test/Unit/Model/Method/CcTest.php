@@ -23,7 +23,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->ccModel = $objectManager->getObject(Cc::class);
     }
-    
+
     public function testAssignData()
     {
         $additionalData = [

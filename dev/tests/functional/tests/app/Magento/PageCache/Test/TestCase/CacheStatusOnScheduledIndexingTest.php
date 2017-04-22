@@ -6,13 +6,13 @@
 
 namespace Magento\PageCache\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
+use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
  * Steps:

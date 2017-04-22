@@ -12,7 +12,7 @@ $stores = $block->getStoresSortedBySortOrder();
 ?>
 <fieldset class="admin__fieldset fieldset">
     <legend class="legend">
-        <span><?php echo $block->escapeHtml( __('Manage Swatch (Values of Your Attribute)')); ?></span>
+        <span><?php echo $block->escapeHtml(__('Manage Swatch (Values of Your Attribute)')); ?></span>
     </legend><br />
     <div class="admin__control-table-wrapper" id="swatch-visual-options-panel">
         <table class="data-table clearfix" cellspacing="0">
@@ -67,7 +67,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <input class="input-radio" type="<%- data.intype %>" name="defaultvisual[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
             </td>
             <td class="swatches-visual-col col-default <%- data.empty_class %>">
-                <?php //@todo add logic getting swatch value from db */ ?>
+                <?php //@todo add logic getting swatch value from db */?>
                 <input id="swatch_visual_value_<%- data.id %>" type="hidden" name="swatchvisual[value][<%- data.id %>]" value="<%- data.defaultswatch0 %>" />
                 <div class="swatch_window" id="swatch_window_option_<%- data.id %>" style="<%- data.swatch0 %>"></div>
                 <div class="swatch_sub-menu_container" id="swatch_container_option_<%- data.id %>">

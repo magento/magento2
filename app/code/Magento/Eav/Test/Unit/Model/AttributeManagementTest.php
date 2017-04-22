@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeManagement;

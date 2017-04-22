@@ -104,7 +104,7 @@ class ConfirmationTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, $websiteId)
             ->willReturn($isConfirmationRequired);
-        
+
         $this->confirmation->setData('name', 'confirmation');
         $result = $this->confirmation->prepareDataSource($dataSource);
 

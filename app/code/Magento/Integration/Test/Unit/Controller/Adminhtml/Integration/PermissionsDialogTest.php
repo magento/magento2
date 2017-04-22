@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Framework\View\Layout\Element as LayoutElement;

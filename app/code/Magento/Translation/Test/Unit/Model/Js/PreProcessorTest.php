@@ -5,10 +5,10 @@
  */
 namespace Magento\Translation\Test\Unit\Model\Js;
 
-use Magento\Translation\Model\Js\PreProcessor;
-use Magento\Translation\Model\Js\Config;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
+use Magento\Translation\Model\Js\Config;
+use Magento\Translation\Model\Js\PreProcessor;
 
 class PreProcessorTest extends \PHPUnit_Framework_TestCase
 {

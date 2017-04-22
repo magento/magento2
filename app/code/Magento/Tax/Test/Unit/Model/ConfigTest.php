@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Test class for \Magento\Tax\Model\Config
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\Config;
+use Magento\Tax\Model\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

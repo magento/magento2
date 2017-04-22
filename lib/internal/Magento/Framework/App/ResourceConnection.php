@@ -7,10 +7,9 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
-use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
 class ResourceConnection
 {

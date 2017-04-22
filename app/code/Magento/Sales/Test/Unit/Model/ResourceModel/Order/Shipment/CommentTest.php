@@ -34,7 +34,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Shipment\Comment\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
-    
+
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */

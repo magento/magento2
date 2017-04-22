@@ -7,8 +7,8 @@
 namespace Magento\Store\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that store code is present in the url.

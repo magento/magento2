@@ -5,9 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\Collection;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SalableProcessorTest extends \PHPUnit_Framework_TestCase
 {

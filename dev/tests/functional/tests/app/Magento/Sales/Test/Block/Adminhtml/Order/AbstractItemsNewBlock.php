@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
-use Magento\Sales\Test\Block\Adminhtml\Order\AbstractForm\Product;
 use Magento\Mtf\Block\Block;
+use Magento\Sales\Test\Block\Adminhtml\Order\AbstractForm\Product;
 
 /**
  * Items block on Credit Memo, Invoice, Shipment new pages.

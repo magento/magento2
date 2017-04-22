@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\View\Asset\Placeholder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\Repository;
 

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Test class for \Magento\Email\Model\AbstractTemplate.
  */
@@ -243,7 +242,8 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetProcessedTemplateException() {
+    public function testGetProcessedTemplateException()
+    {
         $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setMethods([
                 'setUseSessionInUrl',
@@ -297,7 +297,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 
         $filterTemplate->expects($this->once())
             ->method('filter')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $model->getProcessedTemplate([]);
     }
 

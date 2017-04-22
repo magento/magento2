@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\GroupManagement;
 

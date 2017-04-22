@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
-use Magento\Framework\DB\Query\Generator as QueryGenerator;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AbstractAction

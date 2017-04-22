@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Weee\Block\Renderer\Weee;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\Invoice;
@@ -228,7 +227,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $store = $this->helperManager->getObject(\Magento\Store\Model\Store::class, []);
         $this->orderMock->expects($this->once())->method('getStore')->willReturn($store);
         $this->assertEquals($store, $this->model->getStore());
-
     }
 
     public function testGetShippingAddress()
@@ -236,7 +234,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $address = $this->helperManager->getObject(\Magento\Sales\Model\Order\Address::class, []);
         $this->orderMock->expects($this->once())->method('getShippingAddress')->willReturn($address);
         $this->assertEquals($address, $this->model->getShippingAddress());
-
     }
 
     /**

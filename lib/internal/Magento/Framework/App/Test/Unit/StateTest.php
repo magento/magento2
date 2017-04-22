@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\Area;
-use \Magento\Framework\App\AreaList;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {

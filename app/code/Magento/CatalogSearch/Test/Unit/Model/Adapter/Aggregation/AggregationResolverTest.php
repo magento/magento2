@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Aggregation;
 
-use Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver;
 use Magento\Catalog\Api\AttributeSetFinderInterface;
+use Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Config;

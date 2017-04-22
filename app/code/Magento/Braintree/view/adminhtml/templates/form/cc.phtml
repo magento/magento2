@@ -24,7 +24,7 @@ $ccType = $block->getInfoData('cc_type');
                     class="required-entry select admin__control-select validate-cc-type-select">
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
                     <option value="<?php echo $block->escapeHtml($typeCode); ?>"
-                        <?php if($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
+                        <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
                         <?php echo $block->escapeHtml($typeName); ?>
                     </option>
                 <?php endforeach; ?>
@@ -61,7 +61,7 @@ $ccType = $block->getInfoData('cc_type');
             </div>
         </div>
     </div>
-    <?php if($block->hasVerification()): ?>
+    <?php if ($block->hasVerification()): ?>
         <div class="admin__field _required">
             <label class="label admin__field-label">
                 <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
@@ -77,7 +77,7 @@ $ccType = $block->getInfoData('cc_type');
         </div>
     <?php endif; ?>
 
-    <?php if($block->isVaultEnabled()): ?>
+    <?php if ($block->isVaultEnabled()): ?>
         <div class="field-tooltip-content">
             <input type="checkbox"
                    id="<?php /* @noEscape */ echo $code; ?>_vault"

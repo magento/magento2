@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\View\Element\Text;
 
-use Magento\Framework\View\Element\Text;
-
 /**
  * Class ListText
  */

@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CategoryLinkTest extends \PHPUnit_Framework_TestCase
 {

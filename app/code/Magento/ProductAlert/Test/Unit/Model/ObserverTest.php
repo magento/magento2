@@ -202,7 +202,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
 
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willThrowException(new \Exception);
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -222,7 +222,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(true);
 
-        $this->priceColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->priceColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -254,7 +254,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -296,7 +296,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('getFinalPrice')->willReturn('655.99');
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
-        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception);
+        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -317,7 +317,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
         $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
 
-        $this->stockColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->stockColFactoryMock->expects($this->once())->method('create')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -351,7 +351,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerOrder')
             ->willReturn(new \ArrayIterator($items));
 
-        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception);
+        $this->customerRepositoryMock->expects($this->once())->method('getById')->willThrowException(new \Exception());
 
         $this->observer->process();
     }
@@ -395,7 +395,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('isSalable')->willReturn(false);
         $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($this->productMock);
 
-        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception);
+        $this->emailMock->expects($this->once())->method('send')->willThrowException(new \Exception());
 
         $this->observer->process();
     }

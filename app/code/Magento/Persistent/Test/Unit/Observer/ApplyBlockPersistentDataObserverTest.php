@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Persistent\Test\Unit\Observer;
 
 class ApplyBlockPersistentDataObserverTest extends \PHPUnit_Framework_TestCase

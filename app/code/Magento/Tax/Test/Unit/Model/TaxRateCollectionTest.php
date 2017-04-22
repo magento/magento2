@@ -5,15 +5,15 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\TaxRateCollection;
- 
+use Magento\Tax\Model\TaxRateCollection;
+
 class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TaxRateCollection
      */
     protected $model;
-    
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */

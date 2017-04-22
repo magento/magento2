@@ -43,7 +43,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         <?php foreach ($_productCollection as $_product): ?>
         <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product">' : '</li><li class="item product">' ?>
             <div class="product">
-                <?php // Product Image ?>
+                <?php // Product Image?>
                 <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo">
                     <?php echo $block->getImage($_product, $image)->toHtml(); ?>
                 </a>
@@ -64,7 +64,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                         . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $block->getAddToCartUrl($_product) . '"} }\'>'
                                         . '<span>' . __('Add to Cart') . '</span></button>';
                     } else {
-                        $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
+                        $info['button'] = $_product->getIsSalable() ? '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
                                                                         '<div class="stock unavailable"><span>' . __('Out of stock') . '</span></div>';
                     }
 

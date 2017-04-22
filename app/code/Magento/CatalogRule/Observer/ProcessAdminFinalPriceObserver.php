@@ -10,12 +10,9 @@
 namespace Magento\CatalogRule\Observer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {

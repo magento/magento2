@@ -5,11 +5,11 @@
  */
 namespace Magento\Developer\Test\Unit\Model\Di;
 
+use Magento\Developer\Model\Di\Information;
+use Magento\Developer\Model\Di\PluginList;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
-use Magento\Developer\Model\Di\PluginList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Developer\Model\Di\Information;
 
 class InformationTest extends \PHPUnit_Framework_TestCase
 {

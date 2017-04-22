@@ -7,11 +7,11 @@
  */
 namespace Magento\TestFramework\Authentication;
 
+use Magento\Integration\Model\Integration;
 use Magento\TestFramework\Authentication\Rest\OauthClient;
 use Magento\TestFramework\Helper\Bootstrap;
 use OAuth\Common\Consumer\Credentials;
 use Zend\Stdlib\Exception\LogicException;
-use Magento\Integration\Model\Integration;
 
 class OauthHelper
 {

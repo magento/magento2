@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
 /**
@@ -406,6 +405,5 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->execute($this->observerMock);
-
     }
 }

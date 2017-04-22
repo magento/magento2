@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\View\Test\Unit;
 
 class DesignLoaderTest extends \PHPUnit_Framework_TestCase

@@ -6,8 +6,8 @@
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 

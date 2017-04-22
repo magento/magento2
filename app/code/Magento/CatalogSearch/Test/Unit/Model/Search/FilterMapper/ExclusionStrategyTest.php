@@ -6,15 +6,15 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
 {

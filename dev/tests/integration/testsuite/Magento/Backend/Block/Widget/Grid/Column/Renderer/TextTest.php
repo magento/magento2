@@ -5,12 +5,12 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 class TextTest extends \PHPUnit_Framework_TestCase
 {

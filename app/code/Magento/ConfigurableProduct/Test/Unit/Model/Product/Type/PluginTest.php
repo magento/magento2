@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
 /**

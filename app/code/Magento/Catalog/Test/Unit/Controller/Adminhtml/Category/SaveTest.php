@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
-use \Magento\Catalog\Controller\Adminhtml\Category\Save as Model;
+use Magento\Catalog\Controller\Adminhtml\Category\Save as Model;
 
 /**
  * Class SaveTest

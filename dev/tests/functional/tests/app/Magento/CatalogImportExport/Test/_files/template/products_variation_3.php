@@ -5,10 +5,8 @@
  */
 
 return [
-    'entity_0' =>
-        [
-            'data_0' =>
-                [
+    'entity_0' => [
+            'data_0' => [
                     'sku' => '%sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "simple",
@@ -29,10 +27,8 @@ return [
                     'bundle_weight_type' => ''
                 ],
         ],
-    'entity_1' =>
-        [
-            'data_0' =>
-                [
+    'entity_1' => [
+            'data_0' => [
                     'sku' => '%configurable_attribute_sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "simple",
@@ -52,8 +48,7 @@ return [
                     'bundle_sku_type' => '',
                     'bundle_weight_type' => ''
                 ],
-            'data_1' =>
-                [
+            'data_1' => [
                     'sku' => '%sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "configurable",
@@ -64,8 +59,7 @@ return [
                     'additional_attributes' => '%configurable_additional_attributes%=black',
                     'weight' => '30',
                     'qty' => '50',
-                    'configurable_variations' =>
-                        "sku=%configurable_attribute_sku%,%configurable_additional_attributes%=black",
+                    'configurable_variations' => "sku=%configurable_attribute_sku%,%configurable_additional_attributes%=black",
                     'associated_skus' => '',
                     'bundle_shipment_type' => '',
                     'bundle_values' => '',
@@ -75,10 +69,8 @@ return [
                     'bundle_weight_type' => ''
                 ],
         ],
-    'entity_2' =>
-        [
-            'data_0' =>
-                [
+    'entity_2' => [
+            'data_0' => [
                     'sku' => '%grouped_attribute_sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "simple",
@@ -98,8 +90,7 @@ return [
                     'bundle_sku_type' => '',
                     'bundle_weight_type' => ''
                 ],
-            'data_1' =>
-                [
+            'data_1' => [
                     'sku' => '%sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "grouped",
@@ -120,10 +111,8 @@ return [
                     'bundle_weight_type' => ''
                 ],
         ],
-    'entity_3' =>
-        [
-            'data_0' =>
-                [
+    'entity_3' => [
+            'data_0' => [
                     'sku' => '%bundle_attribute_sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "simple",
@@ -143,8 +132,7 @@ return [
                     'bundle_sku_type' => '',
                     'bundle_weight_type' => ''
                 ],
-            'data_1' =>
-                [
+            'data_1' => [
                     'sku' => '%sku%',
                     'attribute_set_code' => 'Default',
                     'product_type' => "bundle",

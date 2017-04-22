@@ -6,8 +6,8 @@
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Customer\Api\AddressMetadataManagementInterface;
-use Magento\Customer\Model\Attribute;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Metadata\AddressMetadataManagement;
 
 class AddressMetadataManagementTest extends \PHPUnit_Framework_TestCase

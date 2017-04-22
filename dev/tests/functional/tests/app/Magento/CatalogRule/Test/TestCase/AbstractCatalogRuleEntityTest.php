@@ -6,11 +6,11 @@
 
 namespace Magento\CatalogRule\Test\TestCase;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 
 /**
  * Parent class for CatalogRule tests.

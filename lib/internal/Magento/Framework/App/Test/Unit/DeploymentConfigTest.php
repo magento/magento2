@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\DeploymentConfig;
-use \Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 {

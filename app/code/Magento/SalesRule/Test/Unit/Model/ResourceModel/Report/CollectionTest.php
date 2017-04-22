@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase

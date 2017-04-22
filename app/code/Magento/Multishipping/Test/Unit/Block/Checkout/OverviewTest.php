@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
 use Magento\Multishipping\Block\Checkout\Overview;

@@ -5,8 +5,8 @@
  */
 namespace Magento\Store\Url\Plugin;
 
-use \Magento\Store\Model\Store;
-use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Plugin for \Magento\Framework\Url\RouteParamsResolver

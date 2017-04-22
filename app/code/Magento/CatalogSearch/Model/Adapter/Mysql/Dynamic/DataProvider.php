@@ -7,6 +7,7 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
 
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -15,7 +16,6 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface as 
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**

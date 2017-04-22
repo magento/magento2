@@ -8,7 +8,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
-use Magento\Framework\App\ObjectManager;
 
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {

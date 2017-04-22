@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
+use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 
 class CreditmemoCommentIdentityTest extends \PHPUnit_Framework_TestCase
 {

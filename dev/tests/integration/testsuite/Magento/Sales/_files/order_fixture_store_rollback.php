@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/default_rollback.php';
 require __DIR__ . '/../../Catalog/_files/product_simple_duplicated_rollback.php';

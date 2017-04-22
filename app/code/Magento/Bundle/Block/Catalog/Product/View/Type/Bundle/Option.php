@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 /**
@@ -91,7 +90,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     public function showSingle()
     {
-        if (is_null($this->_showSingle)) {
+        if ($this->_showSingle === null) {
             $option = $this->getOption();
             $selections = $option->getSelections();
 
@@ -140,7 +139,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      */
     protected function _getSelectedOptions()
     {
-        if (is_null($this->_selectedOptions)) {
+        if ($this->_selectedOptions === null) {
             $this->_selectedOptions = [];
             $option = $this->getOption();
 

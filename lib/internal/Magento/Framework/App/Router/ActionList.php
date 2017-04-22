@@ -6,9 +6,9 @@
  */
 namespace Magento\Framework\App\Router;
 
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ActionList
 {

@@ -8,10 +8,9 @@
 namespace Magento\Tax\Model\Sales\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory as TaxDetailsDataObjectFactory;
-use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
-use Magento\Tax\Model\Sales\Order\Tax;
 use Magento\Sales\Model\Order\Tax\Item;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory as TaxDetailsDataObjectFactory;
 
 class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 {

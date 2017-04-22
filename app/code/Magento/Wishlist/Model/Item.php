@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
-use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Wishlist item model
@@ -344,12 +343,12 @@ class Item extends AbstractModel implements ItemInterface
         $this->validate();
 
         // set current store id if it is not defined
-        if (is_null($this->getStoreId())) {
+        if ($this->getStoreId() === null) {
             $this->setStoreId($this->_storeManager->getStore()->getId());
         }
 
         // set current date if added at data is not defined
-        if (is_null($this->getAddedAt())) {
+        if ($this->getAddedAt() === null) {
             $this->setAddedAt($this->_date->gmtDate());
         }
 
@@ -382,7 +381,7 @@ class Item extends AbstractModel implements ItemInterface
     public function getProduct()
     {
         $product = $this->_getData('product');
-        if (is_null($product)) {
+        if ($product === null) {
             if (!$this->getProductId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
             }

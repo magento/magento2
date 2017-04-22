@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Bootstrap;

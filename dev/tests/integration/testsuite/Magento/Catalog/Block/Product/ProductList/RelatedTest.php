@@ -45,7 +45,7 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($html);
         $this->assertContains('Simple Related Product', $html);
         /* name */
-        $this->assertContains('"product":"' . $product->getId() .'"', $html);
+        $this->assertContains('"product":"' . $product->getId() . '"', $html);
         /* part of url */
         $this->assertInstanceOf(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,

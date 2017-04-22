@@ -6,11 +6,11 @@
 
 namespace Magento\Customer\Test\Constraint;
 
+use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation;
 
 /**
  * Assert that customer group find on catalog price rule page.

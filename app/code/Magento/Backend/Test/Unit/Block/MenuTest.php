@@ -5,16 +5,16 @@
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Model\Menu as MenuModel;
-use Magento\Backend\Block\Menu;
-use Magento\Backend\Model\UrlInterface;
-use Magento\Backend\Model\Menu\Filter\IteratorFactory;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Backend\Model\Menu\Config;
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Backend\Block\MenuItemChecker;
 use Magento\Backend\Block\AnchorRenderer;
+use Magento\Backend\Block\Menu;
+use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Menu as MenuModel;
+use Magento\Backend\Model\Menu\Config;
+use Magento\Backend\Model\Menu\Filter\IteratorFactory;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class MenuTest extends \PHPUnit_Framework_TestCase

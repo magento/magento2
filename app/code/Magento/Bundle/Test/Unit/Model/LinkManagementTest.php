@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Bundle\Model\LinkManagement;

@@ -8,7 +8,6 @@
  * See COPYING.txt for license details.
  */
 
-
 return [
     '/config/global/fieldsets' => '',
     '/config/global/cache/betatypes' => '',

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Downloadable\Block\Catalog\Product;
 
 use Magento\Downloadable\Model\ResourceModel\Sample;

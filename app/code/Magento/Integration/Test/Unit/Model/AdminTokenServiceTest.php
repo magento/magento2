@@ -6,11 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Integration\Test\Unit\Model;
-
-use Magento\Integration\Model\Integration;
-use Magento\Integration\Model\Oauth\Token;
 
 class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 {

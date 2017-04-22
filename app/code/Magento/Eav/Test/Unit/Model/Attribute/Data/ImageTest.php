@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 class ImageTest extends \PHPUnit_Framework_TestCase
@@ -160,4 +159,4 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-};
+}

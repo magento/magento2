@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
-use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
 
 class ValidationRulesTest extends \PHPUnit_Framework_TestCase
 {

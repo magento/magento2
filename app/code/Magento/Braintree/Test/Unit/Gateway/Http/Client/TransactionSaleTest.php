@@ -90,8 +90,7 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
         $this->adapter->expects($this->once())
             ->method('sale')
             ->with($this->getTransferData())
-            ->willReturn($response)
-        ;
+            ->willReturn($response);
 
         $this->loggerMock->expects($this->once())
             ->method('debug')
@@ -127,7 +126,7 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
      */
     private function getResponseObject()
     {
-        $obj = new \stdClass;
+        $obj = new \stdClass();
         $obj->success = true;
 
         return $obj;

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
 
-use \Magento\CatalogRule\Model\Rule\Job;
+use Magento\CatalogRule\Model\Rule\Job;
 
 class JobTest extends \PHPUnit_Framework_TestCase
 {

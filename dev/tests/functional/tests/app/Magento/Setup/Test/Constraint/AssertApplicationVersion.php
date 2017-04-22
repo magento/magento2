@@ -8,7 +8,6 @@ namespace Magento\Setup\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Check application version

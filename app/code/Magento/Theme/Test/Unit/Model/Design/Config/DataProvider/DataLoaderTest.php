@@ -6,7 +6,6 @@
 namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\Design\Config\DataProvider\DataLoader;
 
 class DataLoaderTest extends \PHPUnit_Framework_TestCase

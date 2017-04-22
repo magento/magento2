@@ -8,9 +8,9 @@ namespace Magento\ConfigurableProduct\Test\Block\Product\View;
 
 use Magento\Catalog\Test\Block\Product\View\CustomOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ConfigurableOptions
@@ -189,7 +189,7 @@ class ConfigurableOptions extends CustomOptions
     {
         //Select all options specified in variation
         foreach ($variationOptions as $variationSelection) {
-            list ($attribute, $option) = explode(':', $variationSelection);
+            list($attribute, $option) = explode(':', $variationSelection);
             $attributeTitle = $attributesData[$attribute]['label'];
             $optionTitle = $attributesData[$attribute]['options'][$option]['label'];
             $this->selectOption($attributeTitle, $optionTitle);

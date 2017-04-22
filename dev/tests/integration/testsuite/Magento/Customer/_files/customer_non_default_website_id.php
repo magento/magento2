@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * @var \Magento\Store\Model\Website $website
  */

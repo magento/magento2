@@ -9,16 +9,16 @@ namespace Magento\Customer\Setup;
 use Magento\Customer\Model\Customer;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Setup\SetupInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\DB\FieldDataConverterFactory;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * @codeCoverageIgnore

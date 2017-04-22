@@ -7,14 +7,15 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
-use Magento\Directory\Helper\Data;
-use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Customer\Source\GroupSourceInterface;
+use Magento\Directory\Helper\Data;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form\Element\DataType\Number;
 use Magento\Ui\Component\Form\Element\DataType\Price;
@@ -23,11 +24,10 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AdvancedPricing
- * 
+ *
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -381,8 +381,7 @@ class AdvancedPricing extends AbstractModifier
                 'additionalForGroup' => true,
                 'provider' => false,
                 'source' => 'product_details',
-                'sortOrder' =>
-                    $this->arrayManager->get($pricePath . '/arguments/data/config/sortOrder', $this->meta) + 1,
+                'sortOrder' => $this->arrayManager->get($pricePath . '/arguments/data/config/sortOrder', $this->meta) + 1,
             ];
 
             $this->meta = $this->arrayManager->set(
@@ -419,8 +418,7 @@ class AdvancedPricing extends AbstractModifier
                         ],
                         'disabled' => false,
                         'required' => false,
-                        'sortOrder' =>
-                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
+                        'sortOrder' => $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
                 ],
             ],
@@ -554,8 +552,7 @@ class AdvancedPricing extends AbstractModifier
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' =>
-                        $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
+                    'scopeLabel' => $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
                 ]
             );
             $this->meta = $this->arrayManager->merge(

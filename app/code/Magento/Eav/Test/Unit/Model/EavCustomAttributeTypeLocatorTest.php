@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator;
-use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\ComplexType as ComplexTypeLocator;
+use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
 
 /**
  * Unit test class for \Magento\Eav\Model\EavCustomAttributeTypeLocator
@@ -186,10 +185,8 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'attributeRepositoryResponse' => $attributeNoBackendModel,
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => 'image'],
-                'serviceBackendModelDataInterfaceMapData' =>
-                    [
-                        $serviceInterface =>
-                            [\Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
+                'serviceBackendModelDataInterfaceMapData' => [
+                        $serviceInterface => [\Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
                             ]
                     ],
                 'expected' => $mediaAttributeDataInterface

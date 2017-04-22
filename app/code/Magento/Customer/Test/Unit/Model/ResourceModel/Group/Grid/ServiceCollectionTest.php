@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Group\Grid;
 
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 
 /**

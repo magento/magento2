@@ -6,10 +6,9 @@
 
 namespace Magento\Sitemap\Test\Unit\Helper;
 
-use \Magento\Sitemap\Helper\Data;
+use Magento\Sitemap\Helper\Data;
 
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

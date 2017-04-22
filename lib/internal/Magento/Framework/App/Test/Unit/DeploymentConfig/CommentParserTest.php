@@ -6,9 +6,9 @@
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig\CommentParser;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 class CommentParserTest extends \PHPUnit_Framework_TestCase

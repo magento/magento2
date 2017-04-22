@@ -6,8 +6,8 @@
 
 namespace Magento\Sitemap\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that robots.txt file is available and contains correct content.
@@ -41,7 +41,7 @@ class AssertSitemapSubmissionToRobotsTxt extends AbstractConstraint
             'File ' . $this->filename . ' is not readable or not exists.'
         );
 
-        $expectedRobotsContent = 'Sitemap: ' .  $_ENV['app_frontend_url'] . 'sitemap.xml';
+        $expectedRobotsContent = 'Sitemap: ' . $_ENV['app_frontend_url'] . 'sitemap.xml';
         \PHPUnit_Framework_Assert::assertTrue(
             strpos($browser->getHtmlSource(), $expectedRobotsContent) !== false,
             'File ' . $this->filename . ' contains incorrect data.'

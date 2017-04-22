@@ -6,13 +6,13 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
-use Psr\Log\LoggerInterface;
 use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
-use Magento\Analytics\Model\Connector\Http\ClientInterface;
+use Magento\Config\Model\Config;
+use Magento\Framework\HTTP\ZendClient;
+use Psr\Log\LoggerInterface;
 
 class NotifyDataChangedCommandTest extends \PHPUnit_Framework_TestCase
 {

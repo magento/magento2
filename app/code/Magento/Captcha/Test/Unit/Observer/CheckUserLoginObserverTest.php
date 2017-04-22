@@ -6,7 +6,6 @@
 namespace Magento\Captcha\Test\Unit\Observer;
 
 use Magento\Customer\Model\AuthenticationInterface;
-use Zend\Server\Reflection\ReflectionMethod;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

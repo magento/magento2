@@ -10,10 +10,10 @@ namespace Magento\Catalog\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Url
@@ -230,7 +230,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
             $select->from(
                 ['t1' => $attributeTable],
-                [$identifierFiled => 'e.'.$identifierFiled, 'value' => $valueExpr]
+                [$identifierFiled => 'e.' . $identifierFiled, 'value' => $valueExpr]
             )->joinLeft(
                 ['t2' => $attributeTable],
                 "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",

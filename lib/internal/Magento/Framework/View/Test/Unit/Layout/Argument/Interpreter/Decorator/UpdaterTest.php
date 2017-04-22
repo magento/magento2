@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\Decorator;
 
-use \Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
+use Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
 
 class UpdaterTest extends \PHPUnit_Framework_TestCase
 {

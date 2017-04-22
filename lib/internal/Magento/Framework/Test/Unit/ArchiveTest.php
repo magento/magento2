@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Archive;
+use Magento\Framework\Archive;
 
 class ArchiveTest extends \PHPUnit_Framework_TestCase
 {

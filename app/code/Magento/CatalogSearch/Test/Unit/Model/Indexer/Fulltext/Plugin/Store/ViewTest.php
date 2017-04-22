@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View as StoreViewIndexerPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
 use Magento\Store\Model\Store;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {

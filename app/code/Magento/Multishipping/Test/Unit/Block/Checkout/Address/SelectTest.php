@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Multishipping\Test\Unit\Block\Checkout\Address;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

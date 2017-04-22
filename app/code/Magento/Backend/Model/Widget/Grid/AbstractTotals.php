@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backend\Model\Widget\Grid;
 
 abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\TotalsInterface

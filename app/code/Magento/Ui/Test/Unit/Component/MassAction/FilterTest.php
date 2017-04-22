@@ -5,17 +5,17 @@
  */
 namespace Magento\Ui\Test\Unit\Component\MassAction;
 
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Framework\Api\Filter as ApiFilter;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\MassAction\Filter;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {

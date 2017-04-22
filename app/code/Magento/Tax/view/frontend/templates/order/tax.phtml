@@ -25,7 +25,7 @@
             <tr class="totals tax details details-<?php /* @escapeNotVerified */ echo $taxIter; ?> <?php echo($block->getIsPlaneMode()) ? ' plane' : '';?>">
                 <td <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?>>
                     <?php echo $block->escapeHtml($title); ?>
-                    <?php if (!is_null($percent)): ?>
+                    <?php if ($percent !== null): ?>
                         (<?php echo (float)$percent; ?>%)
                     <?php endif; ?>
                     <br />

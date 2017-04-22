@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Modules;
+use Magento\Setup\Controller\Modules;
 
 class ModulesTest extends \PHPUnit_Framework_TestCase
 {

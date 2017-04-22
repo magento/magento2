@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;

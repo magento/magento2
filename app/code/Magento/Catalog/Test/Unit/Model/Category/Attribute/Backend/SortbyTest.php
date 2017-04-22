@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
 class SortbyTest extends \PHPUnit_Framework_TestCase
@@ -276,8 +275,8 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => NULL,
-                    'default_sort_by' => NULL,
+                    'available_sort_by' => null,
+                    'default_sort_by' => null,
                     'use_post_data_config' => ['available_sort_by', 'default_sort_by', 'filter_price_range']
                 ]
             ],
@@ -304,14 +303,14 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => NULL,
+                    'available_sort_by' => null,
                     'use_post_data_config' => ['default_sort_by']
                 ],
             ],
             [
                 'default_sort_by',
                 [
-                    'available_sort_by' => NULL,
+                    'available_sort_by' => null,
                     'use_post_data_config' => []
                 ]
             ],

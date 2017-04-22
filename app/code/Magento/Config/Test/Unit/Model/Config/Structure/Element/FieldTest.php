@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

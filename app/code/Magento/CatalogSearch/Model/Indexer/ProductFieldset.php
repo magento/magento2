@@ -26,7 +26,7 @@ class ProductFieldset implements \Magento\Framework\Indexer\FieldsetInterface
      * @var Attribute[]
      */
     private $searchableAttributes;
-    
+
     /**
      * @param Config $eavConfig
      * @param CollectionFactory $collectionFactory

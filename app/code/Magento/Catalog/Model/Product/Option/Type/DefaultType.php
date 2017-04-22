@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option default type

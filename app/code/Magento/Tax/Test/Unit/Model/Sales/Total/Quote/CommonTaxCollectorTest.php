@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
 /**

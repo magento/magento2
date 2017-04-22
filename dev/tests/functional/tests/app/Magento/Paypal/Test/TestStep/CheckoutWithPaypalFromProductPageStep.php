@@ -6,10 +6,10 @@
 
 namespace Magento\Paypal\Test\TestStep;
 
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Checkout with PayPal from product page.

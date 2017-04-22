@@ -5,13 +5,13 @@
  */
 namespace Magento\Developer\Test\Unit\Console\Command;
 
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Developer\Console\Command\SourceThemeDeployCommand;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Developer\Console\Command\SourceThemeDeployCommand;
 
 /**
  * Class SourceThemeDeployCommandTest
@@ -194,7 +194,7 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
         $this->assetPublisherMock->expects(self::once())
             ->method('publish')
             ->with($assetMock)
-            ->willThrowException(new \Magento\Framework\View\Asset\File\NotFoundException);
+            ->willThrowException(new \Magento\Framework\View\Asset\File\NotFoundException());
 
         $valueMap = [
             ['area', self::AREA_TEST_VALUE],

@@ -5,8 +5,8 @@
  */
 namespace Magento\Payment\Gateway\Helper;
 
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Framework\DataObject;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * This class encapsulates implicit interfaces (array structures) used in payments implementation.

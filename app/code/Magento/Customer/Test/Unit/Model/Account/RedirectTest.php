@@ -6,15 +6,14 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Test\Unit\Model\Account;
 
 use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\HostChecker;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

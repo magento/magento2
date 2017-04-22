@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use \Magento\Tax\Model\Calculation\RowBaseCalculator;
+use Magento\Tax\Model\Calculation\RowBaseCalculator;
 
 /**
  * Class RowBaseCalculatorTest

@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Ui\DataProvider\Product\ProductCustomOptionsDataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\ProductCustomOptionsDataProvider;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DB\Select as DbSelect;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ProductCustomOptionsDataProviderTest extends \PHPUnit_Framework_TestCase
 {

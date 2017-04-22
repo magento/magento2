@@ -7,7 +7,6 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryRepository;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -220,7 +219,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $parentCategoryId = 15;
         $newCategoryId = 25;
         $categoryData = ['level' => '1', 'path' => '1/2', 'parent_id' => 1, 'name' => 'category'];
-        $dataForSave = ['store_id' => 1, 'name' => 'category', 'path' => 'path', 'parent_id' => 15,];
+        $dataForSave = ['store_id' => 1, 'name' => 'category', 'path' => 'path', 'parent_id' => 15];
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')

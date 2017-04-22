@@ -6,7 +6,7 @@
 namespace Magento\Security\Model;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
  * Admin Sessions Manager Model
@@ -171,7 +171,7 @@ class AdminSessionsManager
             case AdminSessionInfo::LOGGED_OUT_BY_LOGIN:
                 $reasonMessage = __(
                     'Someone logged into this account from another device or browser.'
-                    .' Your current session is terminated.'
+                    . ' Your current session is terminated.'
                 );
                 break;
             case AdminSessionInfo::LOGGED_OUT_MANUALLY:

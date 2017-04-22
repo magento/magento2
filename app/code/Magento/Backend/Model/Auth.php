@@ -176,7 +176,7 @@ class Auth
                 ['user_name' => $username, 'exception' => $e]
             );
             self::throwException(
-                __($e->getMessage()? : 'You did not sign in correctly or your account is temporarily disabled.')
+                __($e->getMessage() ?: 'You did not sign in correctly or your account is temporarily disabled.')
             );
         }
     }

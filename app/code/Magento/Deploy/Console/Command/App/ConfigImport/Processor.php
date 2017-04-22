@@ -5,17 +5,17 @@
  */
 namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Framework\Console\QuestionPerformer\YesNo;
+use Magento\Framework\Exception\RuntimeException;
+use Psr\Log\LoggerInterface as Logger;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
-use Magento\Framework\Console\QuestionPerformer\YesNo;
-use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Runs process of importing config data from deployment configuration files.

@@ -74,8 +74,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $appObjectManager->configure(
             [
                 'preferences' => [
-                    \Magento\Framework\Config\ValidationStateInterface::class =>
-                        \Magento\Framework\App\Arguments\ValidationState::class,
+                    \Magento\Framework\Config\ValidationStateInterface::class => \Magento\Framework\App\Arguments\ValidationState::class,
                 ],
                 \Magento\Framework\App\Arguments\ValidationState::class => [
                     'arguments' => [

@@ -8,7 +8,6 @@ namespace Magento\Wishlist\Test\Unit\CustomerData;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Wishlist\Block\Customer\Sidebar;

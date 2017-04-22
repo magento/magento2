@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Config\Reader;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class DomTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,7 +77,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
             $path . '/module_one/ui_component/' . $filename,
             $path . '/module_two/ui_component/' . $filename
         ];
-        return new FileIterator(new ReadFactory(new DriverPool), $paths);
+        return new FileIterator(new ReadFactory(new DriverPool()), $paths);
     }
 
     /**
@@ -86,6 +86,6 @@ class DomTest extends \PHPUnit_Framework_TestCase
      */
     private function getMergedFilePath($filename)
     {
-        return realpath(__DIR__ . '/../../_files/view/ui_component') . DIRECTORY_SEPARATOR. $filename;
+        return realpath(__DIR__ . '/../../_files/view/ui_component') . DIRECTORY_SEPARATOR . $filename;
     }
 }

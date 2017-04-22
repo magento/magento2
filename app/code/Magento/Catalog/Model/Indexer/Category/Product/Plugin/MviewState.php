@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
 class MviewState

@@ -6,10 +6,10 @@
 
 namespace Magento\Shipping\Test\Unit\Model;
 
-use \Magento\Shipping\Model\ShipmentNotifier;
-
 use Magento\Framework\Exception\MailException;
+
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use Magento\Shipping\Model\ShipmentNotifier;
 
 /**
  * Class ShipmentNotifierTest

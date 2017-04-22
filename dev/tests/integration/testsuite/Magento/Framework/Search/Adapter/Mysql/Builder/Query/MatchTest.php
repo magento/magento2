@@ -5,9 +5,8 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Builder\Query;
 
-use Magento\Framework\App\ResourceConnection\Config;
-use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class MatchTest extends \PHPUnit_Framework_TestCase

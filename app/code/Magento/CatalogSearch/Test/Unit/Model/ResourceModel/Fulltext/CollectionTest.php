@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,8 +6,8 @@
 
 namespace Magento\TaxImportExport\Test\Unit\Controller\Adminhtml\Rate;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ExportPostTest extends \PHPUnit_Framework_TestCase
 {

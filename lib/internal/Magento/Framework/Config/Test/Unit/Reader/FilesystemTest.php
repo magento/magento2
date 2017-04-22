@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Reader;
 
-use \Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\Reader\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {

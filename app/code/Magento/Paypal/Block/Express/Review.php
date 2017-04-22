@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;

@@ -8,11 +8,11 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Related;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Related\AbstractDataProvider;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Class AbstractDataProviderTest

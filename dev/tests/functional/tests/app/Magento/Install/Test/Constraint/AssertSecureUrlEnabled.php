@@ -6,10 +6,10 @@
 
 namespace Magento\Install\Test\Constraint;
 
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that Secure Urls Enabled.

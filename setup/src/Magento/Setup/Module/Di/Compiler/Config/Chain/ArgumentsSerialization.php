@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
-use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
 /**
  * Used for argument's array serialization and store to the DI configuration.

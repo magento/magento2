@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
 
 /**

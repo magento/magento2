@@ -5,12 +5,11 @@
  */
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate static files, compile
@@ -150,7 +149,7 @@ class Filesystem
                 DirectoryList::TMP_MATERIALIZATION_DIR
             ]
         );
-        
+
         // Trigger code generation
         $this->compile($output);
         // Trigger static assets compilation and deployment

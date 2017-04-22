@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-use Magento\Framework\DB\TemporaryTableService;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\TemporaryTableService;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
 {

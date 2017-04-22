@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 class CreateTest extends \PHPUnit_Framework_TestCase

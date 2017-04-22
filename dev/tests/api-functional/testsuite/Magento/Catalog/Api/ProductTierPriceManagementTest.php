@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;

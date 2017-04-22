@@ -7,7 +7,6 @@
 namespace Magento\Checkout\Test\Block\Cart;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Block for text of empty cart.

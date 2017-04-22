@@ -8,7 +8,6 @@
  * See COPYING.txt for license details.
  */
 
-
 return [
     ['_addresses', 'Magento\Customer\Model\Customer'],
     ['_addMinimalPrice', 'Magento\Catalog\Model\ResourceModel\Product\Collection'],

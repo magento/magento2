@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 

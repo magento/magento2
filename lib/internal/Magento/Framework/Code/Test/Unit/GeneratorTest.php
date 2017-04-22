@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Code\Test\Unit;
 
 use Magento\Framework\Code\Generator;

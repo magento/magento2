@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backend\Block\System\Design\Edit\Tab;
 
 class General extends \Magento\Backend\Block\Widget\Form\Generic

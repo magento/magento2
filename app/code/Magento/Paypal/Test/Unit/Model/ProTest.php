@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 /**
  * Test class for \Magento\Paypal\Model\Pro
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -25,7 +24,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
      */
     protected $pro;
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected  $apiMock;
+    protected $apiMock;
 
     protected function setUp()
     {

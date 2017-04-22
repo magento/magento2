@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\PaymentMethodInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Quote\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method abstract model

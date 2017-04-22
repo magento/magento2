@@ -6,7 +6,6 @@
 namespace Magento\Ui\Config;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Ui\Config\FileResolverStub;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {

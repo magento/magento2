@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Maintenance;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\Maintenance;
+use Magento\Setup\Controller\ResponseTypeInterface;
 
 class MaintenanceTest extends \PHPUnit_Framework_TestCase
 {

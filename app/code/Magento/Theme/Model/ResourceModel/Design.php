@@ -62,9 +62,7 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object->setDateTo(null);
         }
 
-        if (!is_null($object->getDateFrom())
-            && !is_null($object->getDateTo())
-            && (new \DateTime($object->getDateFrom()))->getTimestamp()
+        if ($object->getDateFrom() !== null&& $object->getDateTo() !== null&& (new \DateTime($object->getDateFrom()))->getTimestamp()
             > (new \DateTime($object->getDateTo()))->getTimestamp()
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -120,7 +118,7 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $dateConditions = ['date_to IS NULL AND date_from IS NULL'];
 
-        if (!is_null($dateFrom)) {
+        if ($dateFrom !== null) {
             $dateConditions[] = ':date_from BETWEEN date_from AND date_to';
             $dateConditions[] = ':date_from >= date_from and date_to IS NULL';
             $dateConditions[] = ':date_from <= date_to and date_from IS NULL';
@@ -128,7 +126,7 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $dateConditions[] = 'date_from IS NULL';
         }
 
-        if (!is_null($dateTo)) {
+        if ($dateTo !== null) {
             $dateConditions[] = ':date_to BETWEEN date_from AND date_to';
             $dateConditions[] = ':date_to >= date_from AND date_to IS NULL';
             $dateConditions[] = ':date_to <= date_to AND date_from IS NULL';
@@ -136,18 +134,18 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $dateConditions[] = 'date_to IS NULL';
         }
 
-        if (is_null($dateFrom) && !is_null($dateTo)) {
+        if ($dateFrom === null&& $dateTo !== null) {
             $dateConditions[] = 'date_to <= :date_to OR date_from <= :date_to';
         }
 
-        if (!is_null($dateFrom) && is_null($dateTo)) {
+        if ($dateFrom !== null&& $dateTo === null) {
             $dateConditions[] = 'date_to >= :date_from OR date_from >= :date_from';
         }
 
-        if (!is_null($dateFrom) && !is_null($dateTo)) {
+        if ($dateFrom !== null&& $dateTo !== null) {
             $dateConditions[] = 'date_from BETWEEN :date_from AND :date_to';
             $dateConditions[] = 'date_to BETWEEN :date_from AND :date_to';
-        } elseif (is_null($dateFrom) && is_null($dateTo)) {
+        } elseif ($dateFrom === null&& $dateTo === null) {
             $dateConditions = [];
         }
 
@@ -159,10 +157,10 @@ class Design extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $bind = ['store_id' => (int)$storeId, 'current_id' => (int)$currentId];
 
-        if (!is_null($dateTo)) {
+        if ($dateTo !== null) {
             $bind['date_to'] = $dateTo;
         }
-        if (!is_null($dateFrom)) {
+        if ($dateFrom !== null) {
             $bind['date_from'] = $dateFrom;
         }
 

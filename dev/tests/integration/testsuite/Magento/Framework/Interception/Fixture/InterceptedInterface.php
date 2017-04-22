@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Interception\Fixture;
 
 interface InterceptedInterface

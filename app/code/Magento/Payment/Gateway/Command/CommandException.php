@@ -14,5 +14,4 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class CommandException extends LocalizedException
 {
-
 }

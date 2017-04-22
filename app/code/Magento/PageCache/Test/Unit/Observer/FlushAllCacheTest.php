@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\PageCache\Test\Unit\Observer;
 
 class FlushAllCacheTest extends \PHPUnit_Framework_TestCase

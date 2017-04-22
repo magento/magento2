@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace ArgumentSequence;
 
 class ContextObject implements \Magento\Framework\ObjectManager\ContextInterface

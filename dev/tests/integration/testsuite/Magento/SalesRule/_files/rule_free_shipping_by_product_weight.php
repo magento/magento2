@@ -9,8 +9,7 @@ $row =
     [
         'name' => 'Free shipping if item weight <= 1',
         'conditions' => [
-            1 =>
-                [
+            1 => [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                     'attribute' => null,
                     'operator' => null,

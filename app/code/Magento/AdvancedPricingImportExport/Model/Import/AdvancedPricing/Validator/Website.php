@@ -6,8 +6,8 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
@@ -85,6 +85,6 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
      */
     public function getAllWebsitesValue()
     {
-        return AdvancedPricing::VALUE_ALL_WEBSITES . ' ['.$this->websiteModel->getBaseCurrency()->getCurrencyCode().']';
+        return AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $this->websiteModel->getBaseCurrency()->getCurrencyCode() . ']';
     }
 }

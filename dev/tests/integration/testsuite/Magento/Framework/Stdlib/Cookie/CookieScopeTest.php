@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\App\RequestInterface;

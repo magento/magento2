@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\AbstractSimpleObject;
-
 /**
  * Filter which can be used by any methods from service layer.
  * @codeCoverageIgnore

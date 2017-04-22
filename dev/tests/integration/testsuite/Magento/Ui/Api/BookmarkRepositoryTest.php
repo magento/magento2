@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Api;
 
-use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 
 /**
  * Class CarrierTest

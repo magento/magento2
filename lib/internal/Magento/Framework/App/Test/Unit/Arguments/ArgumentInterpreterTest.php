@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Arguments;
 
-use \Magento\Framework\App\Arguments\ArgumentInterpreter;
+use Magento\Framework\App\Arguments\ArgumentInterpreter;
 
 class ArgumentInterpreterTest extends \PHPUnit_Framework_TestCase
 {

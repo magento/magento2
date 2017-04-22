@@ -9,8 +9,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for @see \Magento\Framework\View\Asset\File\FallbackContext
- * 
- * 
+ *
+ *
  */
 class FallbackContextFactory
 {

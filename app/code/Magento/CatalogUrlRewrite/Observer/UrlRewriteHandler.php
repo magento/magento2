@@ -185,18 +185,14 @@ class UrlRewriteHandler
         foreach ($categoryIds as $categoryId) {
             $this->urlPersist->deleteByData(
                 [
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_ID =>
-                        $categoryId,
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE =>
-                        \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_ID => $categoryId,
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
             $this->urlPersist->deleteByData(
                 [
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA =>
-                        $this->serializer->serialize(['category_id' => $categoryId]),
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE =>
-                        \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
         }

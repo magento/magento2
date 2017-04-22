@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Model\Product\Visibility;
@@ -1160,9 +1159,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             : [];
                         foreach ($linkSkus as $linkedKey => $linkedSku) {
                             $linkedSku = trim($linkedSku);
-                            if ((!is_null(
-                                        $this->skuProcessor->getNewSku($linkedSku)
-                                    ) || isset(
+                            if (($this->skuProcessor->getNewSku($linkedSku) !== null|| isset(
                                         $this->_oldSku[$linkedSku]
                                     )) && $linkedSku != $sku
                             ) {
@@ -1691,7 +1688,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ? $this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
                     : 0;
                 $productType = isset($rowData[self::COL_TYPE]) ? $rowData[self::COL_TYPE] : null;
-                if (!is_null($productType)) {
+                if ($productType !== null) {
                     $previousType = $productType;
                 }
                 if (isset($rowData[self::COL_ATTR_SET])) {
@@ -1699,13 +1696,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
                 if (self::SCOPE_NULL == $rowScope) {
                     // for multiselect attributes only
-                    if (!is_null($prevAttributeSet)) {
+                    if ($prevAttributeSet !== null) {
                         $rowData[self::COL_ATTR_SET] = $prevAttributeSet;
                     }
-                    if (is_null($productType) && !is_null($previousType)) {
+                    if ($productType === null&& $previousType !== null) {
                         $productType = $previousType;
                     }
-                    if (is_null($productType)) {
+                    if ($productType === null) {
                         continue;
                     }
                 }
@@ -1916,7 +1913,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getUploader()
     {
-        if (is_null($this->_fileUploader)) {
+        if ($this->_fileUploader === null) {
             $this->_fileUploader = $this->_uploaderFactory->create();
 
             $this->_fileUploader->init();
@@ -2377,7 +2374,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 )
             ) {
                 $this->addRowError(ValidatorInterface::ERROR_INVALID_ATTR_SET, $rowNum);
-            } elseif (is_null($this->skuProcessor->getNewSku($sku))) {
+            } elseif ($this->skuProcessor->getNewSku($sku) === null) {
                 $this->skuProcessor->addNewSku(
                     $sku,
                     [

@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
-use \Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\Layer\FilterList;
 
 class FilterListTest extends \PHPUnit_Framework_TestCase
 {

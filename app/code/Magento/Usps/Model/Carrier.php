@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -1945,7 +1944,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             return $this->_getAllowedContainers();
         }
 

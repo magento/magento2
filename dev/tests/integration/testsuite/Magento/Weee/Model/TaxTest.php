@@ -4,10 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Weee\Model;
 
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

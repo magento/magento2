@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backend\App;
 
 use Magento\Config\App\Config\Type\System;

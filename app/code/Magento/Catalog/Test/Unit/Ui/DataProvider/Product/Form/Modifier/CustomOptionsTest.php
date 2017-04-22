@@ -5,13 +5,13 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
-use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
+use Magento\Catalog\Model\ProductOptions\ConfigInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class CustomOptionsTest

@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
+
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
 /**
  * Abstract Resource Collection
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
-    implements SourceProviderInterface
+abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb implements SourceProviderInterface
 {
     /**
      * Model name

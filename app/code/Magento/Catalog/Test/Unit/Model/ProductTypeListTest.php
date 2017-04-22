@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
-use \Magento\Catalog\Model\ProductTypeList;
+use Magento\Catalog\Model\ProductTypeList;
 
 class ProductTypeListTest extends \PHPUnit_Framework_TestCase
 {

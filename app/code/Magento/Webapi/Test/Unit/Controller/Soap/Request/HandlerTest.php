@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Webapi\Test\Unit\Controller\Soap\Request;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;

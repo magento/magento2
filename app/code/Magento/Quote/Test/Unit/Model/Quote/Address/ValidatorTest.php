@@ -6,9 +6,9 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
-use \Magento\Quote\Model\Quote\Address\Validator;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+use Magento\Quote\Model\Quote\Address\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

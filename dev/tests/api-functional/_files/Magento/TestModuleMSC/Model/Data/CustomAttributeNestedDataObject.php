@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\TestModuleMSC\Model\Data;
 
 use Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface;

@@ -54,10 +54,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $total = $this->getMockForAbstractClass(\Magento\Sales\Model\Order\Total\AbstractTotal::class);
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
             $this->returnValue([
-                'some_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
-                'other_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
+                'some_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
             ])
         );
 
@@ -88,10 +86,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
             $this->returnValue([
-                'some_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
-                'other_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
+                'some_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
             ])
         );
 
@@ -107,10 +103,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $total = $this->getMockForAbstractClass(\Magento\Sales\Model\Order\Total\AbstractTotal::class);
         $this->salesConfig->expects($this->any())->method('getGroupTotals')->will(
             $this->returnValue([
-                'some_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
-                'other_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
+                'some_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1723],
             ])
         );
 
@@ -139,12 +133,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $total = $this->getMockForAbstractClass(\Magento\Sales\Model\Order\Total\AbstractTotal::class);
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
             $this->returnValue([
-                'some_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
-                'other_code' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1112],
-                'big_order' =>
-                    ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 3000],
+                'some_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 1112],
+                'big_order' => ['instance' => \Magento\Sales\Model\Order\Total\AbstractTotal::class, 'sort_order' => 3000],
             ])
         );
 

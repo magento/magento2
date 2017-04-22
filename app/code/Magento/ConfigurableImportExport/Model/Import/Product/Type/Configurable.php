@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;

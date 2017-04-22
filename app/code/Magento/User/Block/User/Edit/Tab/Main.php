@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;

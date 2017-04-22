@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Downloadable\Controller\Customer;
 
 use Magento\Framework\App\RequestInterface;

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backup\Model\ResourceModel;
 
 class Helper extends \Magento\Framework\DB\Helper

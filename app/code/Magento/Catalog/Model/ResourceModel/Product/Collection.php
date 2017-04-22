@@ -4,20 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
 
 /**
  * Product collection
@@ -1113,7 +1112,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _getSelectCountSql($select = null, $resetLeftJoins = true)
     {
         $this->_renderFilters();
-        $countSelect = is_null($select) ? $this->_getClearSelect() : $this->_buildClearSelect($select);
+        $countSelect = $select === null ? $this->_getClearSelect() : $this->_buildClearSelect($select);
         $countSelect->columns('COUNT(DISTINCT e.entity_id)');
         if ($resetLeftJoins) {
             $countSelect->resetJoinLeft();
@@ -1456,7 +1455,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $ids = $this->_allIdsCache;
         }
 
-        if (is_null($ids)) {
+        if ($ids === null) {
             $ids = $this->getAllIds();
             $this->setAllIdsCache($ids);
         }
@@ -1487,17 +1486,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         $this->_productLimitationFilters->setUsePriceIndex(true);
 
-        if (!isset($this->_productLimitationFilters['customer_group_id']) && is_null($customerGroupId)) {
+        if (!isset($this->_productLimitationFilters['customer_group_id']) && $customerGroupId === null) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
-        if (!isset($this->_productLimitationFilters['website_id']) && is_null($websiteId)) {
+        if (!isset($this->_productLimitationFilters['website_id']) && $websiteId === null) {
             $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
 
-        if (!is_null($customerGroupId)) {
+        if ($customerGroupId !== null) {
             $this->_productLimitationFilters['customer_group_id'] = $customerGroupId;
         }
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             $this->_productLimitationFilters['website_id'] = $websiteId;
         }
 
@@ -2409,7 +2408,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getMaxPrice()
     {
-        if (is_null($this->_maxPrice)) {
+        if ($this->_maxPrice === null) {
             $this->_prepareStatisticsData();
         }
 
@@ -2423,7 +2422,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getMinPrice()
     {
-        if (is_null($this->_minPrice)) {
+        if ($this->_minPrice === null) {
             $this->_prepareStatisticsData();
         }
 
@@ -2437,7 +2436,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getPriceStandardDeviation()
     {
-        if (is_null($this->_priceStandardDeviation)) {
+        if ($this->_priceStandardDeviation === null) {
             $this->_prepareStatisticsData();
         }
 
@@ -2451,7 +2450,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getPricesCount()
     {
-        if (is_null($this->_pricesCount)) {
+        if ($this->_pricesCount === null) {
             $this->_prepareStatisticsData();
         }
 

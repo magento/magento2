@@ -8,6 +8,7 @@ namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
 use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\View;
 use Magento\Framework\App\ViewInterface;
@@ -15,13 +16,12 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
 use Magento\Paypal\Helper\Checkout;
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\PayflowlinkFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Psr\Log\LoggerInterface;
-use Magento\Paypal\Model\Config;
-use Magento\Framework\App\Action\Context;
 use Magento\Sales\Model\OrderFactory;
-use Magento\Paypal\Model\PayflowlinkFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ReturnUrlTest

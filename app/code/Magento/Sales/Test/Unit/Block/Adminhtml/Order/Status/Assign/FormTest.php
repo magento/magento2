@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
 
-use \Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form;
+use Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form;
 
 /**
  * Class FormTest

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Tax\Test\Unit\Helper;
 
 use Magento\Framework\DataObject as MagentoObject;
@@ -269,7 +268,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         foreach ($result as $index => $appliedTax) {
             $expectedTax = $expectedResults[$index];
             foreach ($appliedTax as $attr => $value) {
-                $this->assertEquals($expectedTax[$attr], $value, "The ".$attr." of tax does not match");
+                $this->assertEquals($expectedTax[$attr], $value, "The " . $attr . " of tax does not match");
             }
         }
     }

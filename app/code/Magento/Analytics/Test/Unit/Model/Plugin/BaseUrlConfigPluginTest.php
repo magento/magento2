@@ -8,8 +8,8 @@ namespace Magento\Analytics\Test\Unit\Model\Plugin;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Config\Model\Config\Backend\Baseurl;
-use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
 

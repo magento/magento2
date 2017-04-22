@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 require 'default_rollback.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 /** @var \Magento\Catalog\Model\Product $product */

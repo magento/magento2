@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\ResourceModel;
 
-use \Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Test class for \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator

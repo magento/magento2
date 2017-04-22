@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Session\SaveHandler;
 
-use Magento\Framework\App\ResourceConnection;
-
 class DbTableTest extends \PHPUnit_Framework_TestCase
 {
     /**

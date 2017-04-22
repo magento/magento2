@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**

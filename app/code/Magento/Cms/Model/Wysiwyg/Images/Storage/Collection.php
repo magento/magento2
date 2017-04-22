@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;

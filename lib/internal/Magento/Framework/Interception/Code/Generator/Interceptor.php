@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Interception\Code\Generator;
 
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract

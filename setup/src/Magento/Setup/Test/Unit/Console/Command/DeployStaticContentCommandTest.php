@@ -5,22 +5,22 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Deploy\Console\ConsoleLogger;
+use Magento\Deploy\Console\ConsoleLoggerFactory;
+
+use Magento\Deploy\Console\DeployStaticOptions;
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Service\DeployStaticContent;
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 
-use Magento\Deploy\Console\ConsoleLogger;
-use Magento\Deploy\Console\InputValidator;
-use Magento\Deploy\Console\ConsoleLoggerFactory;
-use Magento\Deploy\Console\DeployStaticOptions;
-use Magento\Deploy\Service\DeployStaticContent;
-
-use Magento\Framework\App\State;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 use Symfony\Component\Console\Tester\CommandTester;
-
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {

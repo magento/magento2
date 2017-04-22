@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Framework\Model\Entity\ScopeInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Model\Entity\ScopeInterface;
 
 class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersistor
 {

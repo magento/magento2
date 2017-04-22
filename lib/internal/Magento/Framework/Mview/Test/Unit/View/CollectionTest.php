@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Mview\Test\Unit\View;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase

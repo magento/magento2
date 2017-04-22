@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\TestModule4\Service\V1;
 
 use Magento\TestModule4\Service\V1\Entity\DataObjectRequest;

@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Item\Validation;
 
-use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
 use Magento\Sales\Model\Order\Item;
 
 /**

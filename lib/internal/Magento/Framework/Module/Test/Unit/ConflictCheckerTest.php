@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\ConflictChecker;
+use Magento\Framework\Module\ConflictChecker;
 
 class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
 {

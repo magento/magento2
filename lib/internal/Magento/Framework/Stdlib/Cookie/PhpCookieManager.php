@@ -7,8 +7,8 @@
 namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * CookieManager helps manage the setting, retrieving and deleting of cookies.

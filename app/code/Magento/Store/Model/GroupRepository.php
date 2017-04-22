@@ -5,9 +5,9 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\App\Config;
 
 /**
  * Information Expert in store groups handling

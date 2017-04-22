@@ -5,16 +5,15 @@
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel;
 
-use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Model\Page;
 use Magento\Cms\Model\ResourceModel\Page as PageResourceModel;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Cms\Model\Page;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class PageTest

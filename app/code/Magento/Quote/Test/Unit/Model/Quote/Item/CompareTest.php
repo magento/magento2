@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
 /**
@@ -223,7 +222,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
                 'non-empty-option' => 'test'
             ]))
         ]);
-        
+
         $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 }

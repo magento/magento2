@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Block\Adminhtml\Order\Create\Items;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Sales\Test\Block\Adminhtml\Order\Create\Items;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
  * Assert product was added to Items Ordered grid in customer account on Order creation page backend.

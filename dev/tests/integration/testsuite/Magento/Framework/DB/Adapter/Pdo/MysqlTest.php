@@ -6,8 +6,8 @@
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 use Magento\Framework\DataObject as MagentoObject;

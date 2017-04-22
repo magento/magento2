@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Code\Minifier\Adapter\Css;
 
-use tubalmartin\CssMin\Minifier as CssMinLibrary;
 use Magento\Framework\Code\Minifier\AdapterInterface;
+use tubalmartin\CssMin\Minifier as CssMinLibrary;
 
 /**
  * Adapter for CSSmin library

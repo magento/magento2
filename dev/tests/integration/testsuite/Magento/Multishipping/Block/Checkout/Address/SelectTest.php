@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Multishipping\Block\Checkout\Address;
 
 use Magento\TestFramework\Helper\Bootstrap;

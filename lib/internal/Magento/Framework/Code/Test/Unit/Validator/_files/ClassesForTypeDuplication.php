@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace TypeDuplication;
 
 interface ArgumentInterface

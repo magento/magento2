@@ -181,8 +181,7 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $sku = 'sku_1';
         $idsBySku = [
-            'sku_1' =>
-                [
+            'sku_1' => [
                     1 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
                 ]
         ];

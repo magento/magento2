@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;

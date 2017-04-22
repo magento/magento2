@@ -90,10 +90,10 @@ class Visual extends AbstractSwatch
         $newSwatch = '';
         foreach ($swatchStoreValue as $key => $value) {
             if ($value[0] == '#') {
-                $newSwatch[$key] = 'background: '.$value;
+                $newSwatch[$key] = 'background: ' . $value;
             } elseif ($value[0] == '/') {
                 $mediaUrl = $this->swatchHelper->getSwatchMediaUrl();
-                $newSwatch[$key] = 'background: url('.$mediaUrl.$value.'); background-size: cover;';
+                $newSwatch[$key] = 'background: url(' . $mediaUrl . $value . '); background-size: cover;';
             }
         }
         return $newSwatch;

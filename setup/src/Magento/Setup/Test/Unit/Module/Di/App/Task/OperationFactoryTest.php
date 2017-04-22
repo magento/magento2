@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\OperationException;

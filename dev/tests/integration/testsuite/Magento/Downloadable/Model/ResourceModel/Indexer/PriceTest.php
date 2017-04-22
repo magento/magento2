@@ -5,8 +5,8 @@
  */
 namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class PriceTest extends \PHPUnit_Framework_TestCase
 {

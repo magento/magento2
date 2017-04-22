@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Validator\Constraint;
 
 class Property extends \Magento\Framework\Validator\Constraint

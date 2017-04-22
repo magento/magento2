@@ -103,7 +103,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['load'])
             ->getMock();
 
-        $sitemapMock->expects($this->once())->method('load')->with($id)->willThrowException(new \Exception);
+        $sitemapMock->expects($this->once())->method('load')->with($id)->willThrowException(new \Exception());
         $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())

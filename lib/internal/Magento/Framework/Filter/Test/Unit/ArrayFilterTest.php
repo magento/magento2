@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-use \Magento\Framework\Filter\ArrayFilter;
+use Magento\Framework\Filter\ArrayFilter;
 
 class ArrayFilterTest extends \PHPUnit_Framework_TestCase
 {

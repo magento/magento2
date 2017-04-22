@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;

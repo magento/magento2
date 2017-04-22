@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Plugin;
 
-use Magento\Deploy\Model\Plugin\ConfigChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\Plugin\ConfigChangeDetector;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 

@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Model;
 
 use Exception;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Paypal\Model\Info;
 
 /**
  * PayPal Instant Payment Notification processor model

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Config\Test\Unit\Composer;
 
-use \Magento\Framework\Config\Composer\Package;
+use Magento\Framework\Config\Composer\Package;
 
 class PackageTest extends \PHPUnit_Framework_TestCase
 {

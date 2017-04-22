@@ -10,7 +10,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Cms\Model\Block;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Inspection\Exception;
 
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {

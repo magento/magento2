@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Developer\Model\TemplateEngine\Decorator;
 
 /**

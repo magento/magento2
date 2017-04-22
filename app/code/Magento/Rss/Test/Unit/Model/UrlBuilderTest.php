@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Rss\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

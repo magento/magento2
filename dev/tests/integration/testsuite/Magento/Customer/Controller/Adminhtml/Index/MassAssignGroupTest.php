@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml

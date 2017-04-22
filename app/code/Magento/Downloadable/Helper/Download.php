@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Filesystem;
 
 /**
  * Downloadable Products Download Helper
@@ -143,7 +142,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             throw new CoreException(__('Please set resource file and link type.'));
         }
 
-        if (is_null($this->_handle)) {
+        if ($this->_handle === null) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
                 $path = $this->_resourceFile;
                 $protocol = strtolower(parse_url($path, PHP_URL_SCHEME));

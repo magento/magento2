@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\UpdaterSuccess;
+use Magento\Setup\Controller\UpdaterSuccess;
 
 class UpdaterSuccessTest extends \PHPUnit_Framework_TestCase
 {

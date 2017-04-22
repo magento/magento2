@@ -7,9 +7,9 @@ namespace Magento\Braintree\Test\Unit\Model\Ui\PayPal;
 
 use Magento\Braintree\Model\Ui\PayPal\TokenUiComponentProvider;
 use Magento\Framework\UrlInterface;
-use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
-use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterface;
+use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -52,7 +52,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
         $this->tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
 
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        
+
         $this->paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $this->componentProvider = new TokenUiComponentProvider(
@@ -78,11 +78,11 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
         $this->componentFactory->expects(static::once())
             ->method('create')
             ->willReturn($this->tokenComponent);
-        
+
         $this->paymentToken->expects(static::once())
             ->method('getPublicHash')
             ->willReturn($hash);
-        
+
         $this->urlBuilder->expects(static::once())
             ->method('getUrl');
 

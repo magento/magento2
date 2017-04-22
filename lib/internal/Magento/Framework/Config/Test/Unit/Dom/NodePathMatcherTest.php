@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
-use \Magento\Framework\Config\Dom\NodePathMatcher;
+use Magento\Framework\Config\Dom\NodePathMatcher;
 
 class NodePathMatcherTest extends \PHPUnit_Framework_TestCase
 {

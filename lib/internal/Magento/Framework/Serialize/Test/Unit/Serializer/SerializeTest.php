@@ -6,9 +6,6 @@
 namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Serialize\Signer;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Serialize\InvalidSignatureException;
 
 class SerializeTest extends \PHPUnit_Framework_TestCase
 {

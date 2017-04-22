@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Theme\Test\Unit\Helper;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase

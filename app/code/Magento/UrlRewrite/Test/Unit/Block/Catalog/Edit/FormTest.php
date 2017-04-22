@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\UrlRewrite\Test\Unit\Block\Catalog\Edit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

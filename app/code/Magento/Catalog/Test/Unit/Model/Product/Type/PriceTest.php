@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Price Test

@@ -6,8 +6,6 @@
 
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Directory\Model\Country;
-
 class CountryTest extends \PHPUnit_Framework_TestCase
 {
     protected $country;

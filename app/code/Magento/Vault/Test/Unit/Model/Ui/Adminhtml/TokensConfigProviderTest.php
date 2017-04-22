@@ -146,7 +146,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        
+
         $this->objectManager = new ObjectManager($this);
 
         $this->initStoreMock();
@@ -197,7 +197,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
-        
+
         $this->vaultPayment->expects(static::once())
             ->method('isActive')
             ->with(self::STORE_ID)

@@ -6,8 +6,8 @@
 namespace Magento\ImportExport\Model\Export;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 
 /**
  * Export entity abstract model

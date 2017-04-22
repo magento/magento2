@@ -5,18 +5,18 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\ShippingAssignment;
 
-use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Quote\Model\ShippingAssignmentFactory;
-use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
-use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
-use Magento\Quote\Api\Data\ShippingInterface;
-use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Api\Data\ShippingInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\Quote\Item\CartItemPersister;
+use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
+use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
+use Magento\Quote\Model\ShippingAssignmentFactory;
 
 class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
 {

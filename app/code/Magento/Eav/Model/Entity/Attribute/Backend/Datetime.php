@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
@@ -44,7 +43,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid date'));
             }
 
-            if (is_null($value)) {
+            if ($value === null) {
                 $value = $object->getData($attributeName);
             }
 

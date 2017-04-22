@@ -6,12 +6,12 @@
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Shipping\Test\Page\Adminhtml\OrderShipmentNew;
 use Magento\Shipping\Test\Page\Adminhtml\OrderShipmentView;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Create shipping from order on backend.

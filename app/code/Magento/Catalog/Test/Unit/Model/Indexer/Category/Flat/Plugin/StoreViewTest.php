@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
-use \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
+use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
 
 class StoreViewTest extends \PHPUnit_Framework_TestCase
 {

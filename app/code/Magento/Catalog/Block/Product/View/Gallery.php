@@ -11,9 +11,9 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Catalog\Helper\Image;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Catalog\Helper\Image;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {

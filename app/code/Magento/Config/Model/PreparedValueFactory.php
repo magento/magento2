@@ -9,12 +9,12 @@ use Magento\Config\Model\Config\BackendFactory;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\ScopeInterface;
-use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Creates a prepared instance of Value.

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {

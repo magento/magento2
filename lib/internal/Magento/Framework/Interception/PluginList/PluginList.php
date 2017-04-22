@@ -10,13 +10,13 @@ use Magento\Framework\Config\Data\Scoped;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\DefinitionInterface;
-use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
+use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Plugin config, provides list of plugins for a type

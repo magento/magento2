@@ -7,10 +7,10 @@
 namespace Magento\Checkout\Test\Block\Onepage;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * One page checkout abstract review block.

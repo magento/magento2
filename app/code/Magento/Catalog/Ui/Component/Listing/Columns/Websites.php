@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -70,7 +70,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
         return $dataSource;
     }
-    
+
     /**
      * Prepare component configuration
      * @return void

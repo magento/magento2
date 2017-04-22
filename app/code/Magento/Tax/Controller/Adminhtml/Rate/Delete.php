@@ -6,8 +6,8 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
 {

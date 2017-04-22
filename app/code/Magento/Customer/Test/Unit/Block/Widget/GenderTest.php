@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Block\Widget\Gender;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class GenderTest extends \PHPUnit_Framework_TestCase

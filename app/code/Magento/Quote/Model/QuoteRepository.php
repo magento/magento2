@@ -5,20 +5,18 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Quote\Model\QuoteRepository\LoadHandler;
+use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Quote\Model\QuoteRepository\SaveHandler;
-use Magento\Quote\Model\QuoteRepository\LoadHandler;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class QuoteRepository

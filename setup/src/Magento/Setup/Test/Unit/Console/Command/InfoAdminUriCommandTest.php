@@ -5,9 +5,9 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\Setup\BackendFrontnameGenerator;
 use Magento\Setup\Console\Command\InfoAdminUriCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Setup\BackendFrontnameGenerator;
 
 class InfoAdminUriCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class InfoAdminUriCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([]);
 
         $regexp = '/' . BackendFrontnameGenerator::ADMIN_AREA_PATH_PREFIX
-            . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH .'}/';
+            . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH . '}/';
 
         $this->assertRegExp($regexp, $commandTester->getDisplay(), 'Unexpected Backend Frontname pattern.');
     }

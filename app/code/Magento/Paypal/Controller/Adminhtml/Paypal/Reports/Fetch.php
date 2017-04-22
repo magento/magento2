@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Paypal\Controller\Adminhtml\Paypal\Reports;
 
 use Magento\Framework\Controller\ResultFactory;

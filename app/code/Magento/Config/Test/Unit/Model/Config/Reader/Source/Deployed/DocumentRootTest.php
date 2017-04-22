@@ -5,12 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\Model\Config\Reader;
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 
 /**
  * Test class for checking settings that defined in config file

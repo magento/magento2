@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 

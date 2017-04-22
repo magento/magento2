@@ -6,12 +6,12 @@
 
 namespace Magento\Reports\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
 use Magento\Review\Test\Constraint\AssertProductReviewInGrid;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that review is visible in review grid for select product.

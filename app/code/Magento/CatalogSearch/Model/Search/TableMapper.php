@@ -14,11 +14,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Filter\BoolExpression;
+use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use Magento\Framework\Search\RequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

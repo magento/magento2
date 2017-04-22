@@ -6,7 +6,6 @@
 namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Downloadable\Api\Data\SampleInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\Sample;
 use Magento\Downloadable\Model\SampleFactory;
@@ -23,7 +22,7 @@ class Builder
      * @var Sample
      */
     private $component;
-    
+
     /**
      * @var File
      */

@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 return [
     ['__get', 'Magento\Framework\DataObject'],
     ['__set', 'Magento\Framework\DataObject'],
@@ -2250,8 +2249,8 @@ return [
         'Magento\Email\Block\Adminhtml\Template\Edit',
         'Magento\Email\Block\Adminhtml\Template\Edit::getCurrentlyUsedForPaths',
     ],
-    ['_implodeStreetValue', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayValues',],
-    ['_implodeStreetField', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayField',],
+    ['_implodeStreetValue', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayValues'],
+    ['_implodeStreetField', 'Magento\Customer\Model\Address\AbstractAddress', '_implodeArrayField'],
     ['_applyDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'applyDesignConfig'],
     ['_cancelDesignConfig', 'Magento\Email\Model\AbstractTemplate', 'cancelDesignConfig'],
     ['loadByCode', 'Magento\Newsletter\Model\ResourceModel'],

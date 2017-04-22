@@ -5,10 +5,10 @@
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\Store;
 
-use Magento\Paypal\Block\Adminhtml\Store\SwitcherPlugin as StoreSwitcherBlockPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Backend\Block\Store\Switcher as StoreSwitcherBlock;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Block\Adminhtml\Store\SwitcherPlugin as StoreSwitcherBlockPlugin;
 use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
 class SwitcherPluginTest extends \PHPUnit_Framework_TestCase

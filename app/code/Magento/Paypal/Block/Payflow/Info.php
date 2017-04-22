@@ -5,8 +5,6 @@
  */
 namespace Magento\Paypal\Block\Payflow;
 
-use Magento\Paypal\Model;
-
 /**
  * Payflow payment info
  */

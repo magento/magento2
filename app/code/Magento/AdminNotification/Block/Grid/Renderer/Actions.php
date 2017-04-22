@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer

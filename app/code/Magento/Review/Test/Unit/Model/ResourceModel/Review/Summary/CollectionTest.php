@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Summary;
 
-use \Magento\Review\Model\ResourceModel\Review\Summary\Collection;
+use Magento\Review\Model\ResourceModel\Review\Summary\Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

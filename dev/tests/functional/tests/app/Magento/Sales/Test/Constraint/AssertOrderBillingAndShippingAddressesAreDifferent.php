@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Assert that Order Billing Address different than Shipping Address on order page.

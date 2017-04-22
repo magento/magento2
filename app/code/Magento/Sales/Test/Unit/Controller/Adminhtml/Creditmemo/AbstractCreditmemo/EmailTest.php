@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
-use \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email;
-
 use Magento\Framework\App\Action\Context;
+
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email;
 
 /**
  * Class EmailTest

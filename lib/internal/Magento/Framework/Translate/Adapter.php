@@ -30,6 +30,7 @@ class Adapter extends AbstractAdapter
     }
 
     // @codingStandardsIgnoreStart
+
     /**
      * Translate message string.
      *
@@ -46,5 +47,6 @@ class Adapter extends AbstractAdapter
         }
         return $string;
     }
+
     // @codingStandardsIgnoreEnd
 }

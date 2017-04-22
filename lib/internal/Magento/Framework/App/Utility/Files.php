@@ -9,9 +9,9 @@ namespace Magento\Framework\App\Utility;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
-use Magento\Framework\Filesystem\Glob;
 
 /**
  * A helper to gather specific kind of files in Magento application

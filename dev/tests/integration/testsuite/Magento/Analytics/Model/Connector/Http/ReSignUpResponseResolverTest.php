@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Model\Connector\Http;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\FlagManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

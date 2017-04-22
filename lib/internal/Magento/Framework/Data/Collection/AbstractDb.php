@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Data\Collection;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -242,7 +242,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
-        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . implode(", ", $group) . ")")));
         return $countSelect;
     }
 

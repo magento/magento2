@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle\Manager;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
@@ -281,7 +281,7 @@ class Bundle
      */
     protected function fillContent($parts, $context)
     {
-        $index = count($this->content) > 0 ? count($this->content) - 1 : 0 ;
+        $index = count($this->content) > 0 ? count($this->content) - 1 : 0;
         foreach ($parts as $part) {
             if (!isset($this->content[$index])) {
                 $this->content[$index] = '';

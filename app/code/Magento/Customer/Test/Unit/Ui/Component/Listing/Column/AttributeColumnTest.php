@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Ui\Component\Listing\Column\AttributeColumn;
 
 class AttributeColumnTest extends \PHPUnit_Framework_TestCase

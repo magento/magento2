@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 
 class StoreGroup

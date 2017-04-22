@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\CustomerData\Section;
 
-use \Magento\Customer\CustomerData\Section\Identifier;
+use Magento\Customer\CustomerData\Section\Identifier;
 
 class IdentifierTest extends \PHPUnit_Framework_TestCase
 {

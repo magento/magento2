@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Product\Type;
-
 /**
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images getModel
  */

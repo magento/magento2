@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\View\Layout\Reader;
 
-use Magento\Framework\View\Layout\ScheduledStructure\Helper;
-use Magento\Framework\View\Layout\ReaderInterface;
+use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
+use Magento\Framework\View\Layout\ReaderInterface;
 use Magento\Framework\View\Layout\ReaderPool;
-use Magento\Framework\Config\DataInterfaceFactory;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 
 /**
  * Class UiComponent

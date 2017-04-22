@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;

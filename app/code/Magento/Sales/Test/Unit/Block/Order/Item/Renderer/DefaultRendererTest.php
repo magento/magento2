@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Sales\Test\Unit\Block\Order\Item\Renderer;
 
 class DefaultRendererTest extends \PHPUnit_Framework_TestCase

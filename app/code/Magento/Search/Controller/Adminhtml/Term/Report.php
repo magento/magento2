@@ -5,8 +5,8 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-use Magento\Reports\Controller\Adminhtml\Index as ReportsIndexController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Reports\Controller\Adminhtml\Index as ReportsIndexController;
 
 class Report extends ReportsIndexController
 {

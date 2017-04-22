@@ -5,10 +5,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Info;
+use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Payflowpro;
 
 class FraudHandlerTest extends \PHPUnit_Framework_TestCase
@@ -143,18 +142,12 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
     private function getRulesExpectedDictionary()
     {
         return [
-            'Total Purchase Price Ceiling' =>
-                'The purchase amount of 7501 is greater than the ceiling value set of 7500',
-            'Total ItemCeiling' =>
-                '16 items were ordered, which is overthe maximum allowed quantity of 15',
-            'Shipping/BillingMismatch' =>
-                'Thebilling and shipping addresses did not match',
-            'BIN Risk List Match' =>
-                'The card number is in a high risk bin list',
-            'Zip Risk List Match' =>
-                'High risk shipping zip',
-            'USPS Address Validation Failure' =>
-                'The billing address is not a valid USAddress'
+            'Total Purchase Price Ceiling' => 'The purchase amount of 7501 is greater than the ceiling value set of 7500',
+            'Total ItemCeiling' => '16 items were ordered, which is overthe maximum allowed quantity of 15',
+            'Shipping/BillingMismatch' => 'Thebilling and shipping addresses did not match',
+            'BIN Risk List Match' => 'The card number is in a high risk bin list',
+            'Zip Risk List Match' => 'High risk shipping zip',
+            'USPS Address Validation Failure' => 'The billing address is not a valid USAddress'
         ];
     }
 

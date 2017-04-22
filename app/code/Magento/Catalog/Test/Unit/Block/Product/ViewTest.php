@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
 class ViewTest extends \PHPUnit_Framework_TestCase

@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Customer\Model\EmailNotification;
 use Magento\Framework\App\Area;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class EmailNotificationTest

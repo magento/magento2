@@ -5,9 +5,9 @@
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
-use Magento\OfflinePayments\Model\CheckmoConfigProvider;
-use Magento\OfflinePayments\Model\Checkmo;
 use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Model\Checkmo;
+use Magento\OfflinePayments\Model\CheckmoConfigProvider;
 
 class CheckmoConfigProviderTest extends \PHPUnit_Framework_TestCase
 {

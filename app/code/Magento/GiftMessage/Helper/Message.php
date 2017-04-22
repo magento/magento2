@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\GiftMessage\Helper;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
@@ -326,7 +325,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     public function getGiftMessage($messageId = null)
     {
         $message = $this->_giftMessageFactory->create();
-        if (!is_null($messageId)) {
+        if ($messageId !== null) {
             $message->load($messageId);
         }
         return $message;

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Asset\MaterializationStrategy;
 
-use \Magento\Framework\App\View\Asset\MaterializationStrategy\Factory;
+use Magento\Framework\App\View\Asset\MaterializationStrategy\Factory;
 
 use Magento\Framework\ObjectManagerInterface;
 

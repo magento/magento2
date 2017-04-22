@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Directory\Model\ResourceModel\Country;
+
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;

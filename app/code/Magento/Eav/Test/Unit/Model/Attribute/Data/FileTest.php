@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
 class FileTest extends \PHPUnit_Framework_TestCase
@@ -263,7 +262,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-};
+}
 
 /**
  * Mocking of std function to test validation

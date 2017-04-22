@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

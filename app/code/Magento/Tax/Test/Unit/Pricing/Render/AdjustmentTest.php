@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Pricing\Render;
 
-use \Magento\Tax\Pricing\Render\Adjustment;
+use Magento\Tax\Pricing\Render\Adjustment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

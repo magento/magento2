@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
 use Magento\Backend\App\Action;

@@ -5,8 +5,6 @@
  */
 namespace Magento\TestModule1\Controller\CookieTester;
 
-use \Magento\Framework\App\RequestInterface;
-
 /**
  */
 class SetPublicCookie extends \Magento\TestModule1\Controller\CookieTester

@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Indexer\Attribute;
 
-use Magento\Customer\Model\Indexer\Attribute\Filter;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Model\Indexer\Attribute\Filter;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {

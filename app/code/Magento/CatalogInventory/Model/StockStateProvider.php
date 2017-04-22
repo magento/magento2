@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
-use Magento\Framework\DataObject\Factory as ObjectFactory;
 
 /**
  * Interface StockStateProvider

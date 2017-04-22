@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Reports\Test\Page\Adminhtml\Statistics;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Reports\Test\Page\Adminhtml\Statistics;
 
 /**
  * Assert that reports 'Updated' values are displayed in date/time in Default Config timezone.

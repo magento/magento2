@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;

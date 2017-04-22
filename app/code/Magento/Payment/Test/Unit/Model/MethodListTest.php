@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Payment\Test\Unit\Model;
 
-use Magento\Payment\Model\MethodList;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodList;
 
 class MethodListTest extends \PHPUnit_Framework_TestCase
 {

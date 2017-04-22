@@ -5,13 +5,13 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
-use Magento\Review\Model\ReviewFactory;
-use Magento\Review\Model\RatingFactory;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Review\Controller\Adminhtml\Product as ProductController;
+use Magento\Review\Model\RatingFactory;
+use Magento\Review\Model\ReviewFactory;
 
 class RatingItems extends ProductController
 {

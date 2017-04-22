@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -733,7 +732,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $sourceFileRelative = $this->_varDirectory->getRelativePath(self::IMPORT_DIR . $fileName);
             } elseif (isset($result['name'])) {
                 $fileName = $result['name'];
-            } elseif (!is_null($extension)) {
+            } elseif ($extension !== null) {
                 $fileName = $entity . $extension;
             } else {
                 $fileName = basename($sourceFileRelative);

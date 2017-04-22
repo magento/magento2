@@ -7,8 +7,8 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Shipment;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
-use Magento\Sales\Model\ResourceModel\Order\Shipment\Item as ShipmentItemResource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment as ShipmentCommentResource;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Item as ShipmentItemResource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track as ShipmentTrackResource;
 
 /**

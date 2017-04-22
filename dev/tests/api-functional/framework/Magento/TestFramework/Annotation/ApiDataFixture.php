@@ -10,7 +10,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\TestFramework\Annotation;
 
 class ApiDataFixture

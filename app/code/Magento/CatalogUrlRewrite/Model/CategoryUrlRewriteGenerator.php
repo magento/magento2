@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
-use Magento\Store\Model\Store;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 class CategoryUrlRewriteGenerator
@@ -145,7 +145,7 @@ class CategoryUrlRewriteGenerator
     protected function updateCategoryUrlForStore($storeId, Category $category = null)
     {
         $categoryFromRepository = $this->categoryRepository->get($category->getId(), $storeId);
-            $category->addData(
+        $category->addData(
                 [
                     'url_key' => $categoryFromRepository->getUrlKey(),
                     'url_path' => $categoryFromRepository->getUrlPath()

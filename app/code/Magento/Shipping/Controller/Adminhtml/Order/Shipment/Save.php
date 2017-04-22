@@ -6,7 +6,6 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Backend\App\Action;
 use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 
 /**

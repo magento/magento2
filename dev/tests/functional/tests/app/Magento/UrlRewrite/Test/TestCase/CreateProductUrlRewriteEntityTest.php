@@ -7,10 +7,10 @@
 namespace Magento\UrlRewrite\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

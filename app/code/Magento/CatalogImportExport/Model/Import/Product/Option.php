@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -934,7 +932,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $multiRowData = $this->_getMultiRowFormat($rowData);
 
         foreach ($multiRowData as $optionData) {
-
             $combinedData = array_merge($rowData, $optionData);
 
             if ($this->_isRowWithCustomOption($combinedData)) {
@@ -1189,11 +1186,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
-
                 $multiRowData = $this->_getMultiRowFormat($rowData);
 
                 foreach ($multiRowData as $optionData) {
-
                     $combinedData = array_merge($rowData, $optionData);
 
                     if (!$this->isRowAllowedToImport($combinedData, $rowNumber)) {
@@ -1826,41 +1821,41 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
      protected function _parseCustomOptions($rowData)
-    {
-        $beforeOptionValueSkuDelimiter = ';';
-        if (empty($rowData['custom_options'])) {
-            return $rowData;
-        }
-        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
-        $options = [];
-        $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
-        $k = 0;
-        $name = '';
-        foreach ($optionValues as $optionValue) {
-            $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
-            foreach ($optionValueParams as $nameAndValue) {
-                $nameAndValue = explode('=', $nameAndValue);
-                if (!empty($nameAndValue)) {
-                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
-                    $value = trim($value);
-                    $fieldName  = trim($nameAndValue[0]);
-                    if ($value && ($fieldName == 'name')) {
-                        if ($name != $value) {
-                            $name = $value;
-                            $k = 0;
-                        }
-                    }
-                    if ($name) {
-                        $options[$name][$k][$fieldName] = $value;
-                    }
-                }
-            }
-            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
-            $k++;
-        }
-        $rowData['custom_options'] = $options;
-        return $rowData;
-    }
+     {
+         $beforeOptionValueSkuDelimiter = ';';
+         if (empty($rowData['custom_options'])) {
+             return $rowData;
+         }
+         $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
+         $options = [];
+         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
+         $k = 0;
+         $name = '';
+         foreach ($optionValues as $optionValue) {
+             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
+             foreach ($optionValueParams as $nameAndValue) {
+                 $nameAndValue = explode('=', $nameAndValue);
+                 if (!empty($nameAndValue)) {
+                     $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                     $value = trim($value);
+                     $fieldName  = trim($nameAndValue[0]);
+                     if ($value && ($fieldName == 'name')) {
+                         if ($name != $value) {
+                             $name = $value;
+                             $k = 0;
+                         }
+                     }
+                     if ($name) {
+                         $options[$name][$k][$fieldName] = $value;
+                     }
+                 }
+             }
+             $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
+             $k++;
+         }
+         $rowData['custom_options'] = $options;
+         return $rowData;
+     }
 
     /**
      * Clear product sku to id array.

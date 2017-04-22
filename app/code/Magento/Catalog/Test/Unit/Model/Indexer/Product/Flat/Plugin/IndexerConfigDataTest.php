@@ -6,8 +6,8 @@
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData as IndexerConfigDataPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Indexer\Product\Flat\State as ProductFlatIndexerState;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Model\Config\Data as ConfigData;
 
 class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase

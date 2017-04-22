@@ -6,11 +6,11 @@
 
 namespace Magento\Widget\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\FieldDataConverterFactory;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade data for widget module.
@@ -26,10 +26,10 @@ class UpgradeData implements UpgradeDataInterface
      * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
     private $queryModifierFactory;
-    
+
     /**
      * UpgradeData constructor
-     * 
+     *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
      */

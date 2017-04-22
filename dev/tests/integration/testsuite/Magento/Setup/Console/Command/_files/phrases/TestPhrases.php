@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 use Magento\Framework\Phrase;
 
 /**

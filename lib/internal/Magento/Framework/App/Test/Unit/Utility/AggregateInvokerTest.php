@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
 
-use \Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\AggregateInvoker;
 
 class AggregateInvokerTest extends \PHPUnit_Framework_TestCase
 {

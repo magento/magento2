@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
 
-use \Magento\Framework\Pricing\Adjustment\Collection;
+use Magento\Framework\Pricing\Adjustment\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

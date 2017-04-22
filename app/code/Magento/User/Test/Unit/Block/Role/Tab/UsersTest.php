@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Unit\Block\Role\Tab;
 
-use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\User\Model\ResourceModel\User\Collection;
+use Magento\User\Model\ResourceModel\User\CollectionFactory;
 
 class UsersTest extends \PHPUnit_Framework_TestCase
 {

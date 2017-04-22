@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
-use \Magento\Framework\View\TemplateEngineFactory;
+use Magento\Framework\View\TemplateEngineFactory;
 
 class TemplateEngineFactoryTest extends \PHPUnit_Framework_TestCase
 {

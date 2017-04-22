@@ -6,12 +6,12 @@
 
 namespace Magento\Store\Model\Plugin;
 
+use InvalidArgumentException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use \InvalidArgumentException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StoreCookie

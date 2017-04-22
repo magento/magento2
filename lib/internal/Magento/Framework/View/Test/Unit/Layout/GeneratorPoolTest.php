@@ -9,9 +9,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use \Magento\Framework\View\Layout\GeneratorPool;
-use \Magento\Framework\View\Layout\ScheduledStructure;
-use \Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\GeneratorPool;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
 {

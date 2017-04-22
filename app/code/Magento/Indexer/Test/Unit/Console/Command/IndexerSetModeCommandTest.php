@@ -75,7 +75,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
         $commandTester->execute(['mode' => 'realtime']);
         $actualValue = $commandTester->getDisplay();
         $this->assertSame(
-            'Index mode for Indexer Title_indexerOne was changed from '. '\'Update by Schedule\' to \'Update on Save\''
+            'Index mode for Indexer Title_indexerOne was changed from ' . '\'Update by Schedule\' to \'Update on Save\''
             . PHP_EOL,
             $actualValue
         );

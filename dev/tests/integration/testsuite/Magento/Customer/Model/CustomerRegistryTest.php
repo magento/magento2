@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;

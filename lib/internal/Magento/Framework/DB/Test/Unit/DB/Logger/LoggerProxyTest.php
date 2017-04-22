@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\DB\Test\Unit\DB\Logger;
 
-use Magento\Framework\DB\Logger\FileFactory;
-use Magento\Framework\DB\Logger\QuietFactory;
-use Magento\Framework\DB\Logger\LoggerProxy;
 use Magento\Framework\DB\Logger\File;
+use Magento\Framework\DB\Logger\FileFactory;
+use Magento\Framework\DB\Logger\LoggerProxy;
 use Magento\Framework\DB\Logger\Quiet;
+use Magento\Framework\DB\Logger\QuietFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LoggerProxyTest extends \PHPUnit_Framework_TestCase

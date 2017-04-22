@@ -5,11 +5,11 @@
  */
 namespace Magento\Quote\Model\QuoteRepository;
 
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
 
 class SaveHandler
 {

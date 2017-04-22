@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
-use \Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 use Magento\Store\Model\ScopeInterface;
 

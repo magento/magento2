@@ -6,8 +6,8 @@
 namespace Magento\Ui\Component;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Class DataSource

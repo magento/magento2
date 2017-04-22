@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
 
 /**
@@ -128,7 +127,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                     ) . ' + ' . $connection->getIfNullSql(
                         'base_tax_invoiced - ' . $connection->getIfNullSql('base_tax_refunded', 0),
                         0
-                    )   . ') * base_to_global_rate)',
+                    ) . ') * base_to_global_rate)',
                     0
                 ),
             ];

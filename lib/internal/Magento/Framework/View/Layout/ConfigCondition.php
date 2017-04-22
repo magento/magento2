@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\View\Layout;
 
-use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 
 /**
  * Check that config flag is set to true,

@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase

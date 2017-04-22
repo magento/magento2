@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

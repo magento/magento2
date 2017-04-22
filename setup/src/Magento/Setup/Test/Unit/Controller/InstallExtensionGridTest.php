@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Controller\InstallExtensionGrid;
 use Magento\Setup\Model\PackagesData;
-use Magento\Framework\Composer\ComposerInformation;
 
 class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
 {

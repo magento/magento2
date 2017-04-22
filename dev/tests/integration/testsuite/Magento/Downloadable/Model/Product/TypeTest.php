@@ -251,7 +251,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->get(\Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory::class);
         $allLinksIds = $linksFactory->create()->addProductToFilter($product->getEntityId())->getAllIds();
         $this->assertEquals(
-            '{"qty":23,"links":["' . implode('","', $allLinksIds). '"]}',
+            '{"qty":23,"links":["' . implode('","', $allLinksIds) . '"]}',
             $product->getCustomOption('info_buyRequest')->getValue()
         );
     }

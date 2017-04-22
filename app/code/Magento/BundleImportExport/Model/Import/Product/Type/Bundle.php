@@ -8,8 +8,8 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
-use \Magento\Bundle\Model\Product\Price as BundlePrice;
-use \Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class Bundle

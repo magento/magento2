@@ -5,12 +5,11 @@
  */
 namespace Magento\SalesRule\Model\Rule\Metadata;
 
-use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
-use Magento\SalesRule\Model\Rule;
-use Magento\Store\Model\System\Store;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\DataObject;
+use Magento\SalesRule\Model\Rule;
+use Magento\Store\Model\System\Store;
 
 /**
  * Metadata provider for sales rule edit form.

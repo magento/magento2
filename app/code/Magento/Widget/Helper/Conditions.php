@@ -5,9 +5,9 @@
  */
 namespace Magento\Widget\Helper;
 
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
 
 /**
  * Widget Conditions helper.

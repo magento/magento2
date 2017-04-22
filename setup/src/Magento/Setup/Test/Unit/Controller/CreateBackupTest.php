@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\CreateBackup;
+use Magento\Setup\Controller\CreateBackup;
 
 class CreateBackupTest extends \PHPUnit_Framework_TestCase
 {

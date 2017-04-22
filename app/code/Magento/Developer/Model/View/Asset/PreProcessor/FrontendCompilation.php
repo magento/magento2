@@ -6,11 +6,11 @@
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
 use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\View\Asset\PreProcessor;
-use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\Asset\LockerProcessInterface;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\PreProcessor;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\Asset\Source;
 
 /**
@@ -76,7 +76,6 @@ class FrontendCompilation implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-
         try {
             $this->lockerProcess->lockProcess($this->lockName);
 

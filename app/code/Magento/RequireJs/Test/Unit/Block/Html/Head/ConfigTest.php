@@ -6,7 +6,7 @@
 
 namespace Magento\RequireJs\Test\Unit\Block\Html\Head;
 
-use \Magento\RequireJs\Block\Html\Head\Config;
+use Magento\RequireJs\Block\Html\Head\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

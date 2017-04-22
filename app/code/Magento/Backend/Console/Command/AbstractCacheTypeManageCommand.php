@@ -6,10 +6,10 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Cache\Manager;
 
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {

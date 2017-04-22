@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;

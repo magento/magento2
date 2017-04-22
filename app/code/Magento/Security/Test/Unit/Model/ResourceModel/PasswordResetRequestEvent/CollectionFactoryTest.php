@@ -9,8 +9,8 @@ namespace Magento\Security\Test\Unit\Model\ResourceModel\PasswordResetRequestEve
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 
 class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,11 +6,11 @@
 
 namespace Magento\CatalogRule\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\Conditions;
-use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
+use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Create a Catalog Price Rules and check whether this attribute visible in Dropdown in Conditions section.

@@ -6,7 +6,6 @@
 namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Backend\Model\AdminPathConfig;
-use Magento\Store\Model\Store;
 
 class AdminPathConfigTest extends \PHPUnit_Framework_TestCase
 {

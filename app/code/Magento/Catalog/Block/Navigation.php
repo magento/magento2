@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Catalog\Block;
 
 use Magento\Catalog\Model\Category;

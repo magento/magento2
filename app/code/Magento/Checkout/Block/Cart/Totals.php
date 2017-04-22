@@ -5,8 +5,8 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Framework\View\Element\BlockInterface;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Framework\View\Element\BlockInterface;
 
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 {

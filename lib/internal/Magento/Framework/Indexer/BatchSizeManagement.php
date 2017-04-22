@@ -52,7 +52,7 @@ class BatchSizeManagement implements \Magento\Framework\Indexer\BatchSizeManagem
         if ($size > $bufferPoolSize * .2) {
             $this->logger->warning(new \Magento\Framework\Phrase(
                 'Memory size allocated for the temporary table is more than 20% of innodb_buffer_pool_size. ' .
-                'Please update innodb_buffer_pool_size or decrease batch size value '.
+                'Please update innodb_buffer_pool_size or decrease batch size value ' .
                 '(which decreases memory usages for the temporary table).'
             ));
         }

@@ -120,7 +120,7 @@ class ConvertToXml
         $component = $this->filter->getComponent();
 
         $name = md5(microtime());
-        $file = 'export/'. $component->getName() . $name . '.xml';
+        $file = 'export/' . $component->getName() . $name . '.xml';
 
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();

@@ -14,5 +14,4 @@ namespace Magento\Framework\App;
  */
 interface RequestContentInterface extends RequestInterface, PlainTextRequestInterface
 {
-
 }

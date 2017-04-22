@@ -6,8 +6,8 @@
 
 namespace Magento\Search\Ui\Component\Listing\Column\Website;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\System\Store as SystemStore;
 
 class Options implements OptionSourceInterface

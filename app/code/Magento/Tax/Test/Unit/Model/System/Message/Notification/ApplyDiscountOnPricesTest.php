@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Tax\Test\Unit\Model\System\Message\Notification;
 
-use Magento\Tax\Model\Config as TaxConfig;
-use Magento\Tax\Model\System\Message\Notification\ApplyDiscountOnPrices as ApplyDiscountOnPricesNotification;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\Tax\Model\System\Message\Notification\ApplyDiscountOnPrices as ApplyDiscountOnPricesNotification;
 
 /**
  * Test class for @see \Magento\Tax\Model\System\Message\Notification\ApplyDiscountOnPrices

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Customer\Controller;
 
 use Magento\Framework\Message\MessageInterface;
@@ -458,7 +457,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
-            .'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />', $body);
+            . 'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />', $body);
     }
 
     /**

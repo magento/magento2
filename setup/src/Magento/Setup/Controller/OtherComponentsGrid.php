@@ -44,7 +44,7 @@ class OtherComponentsGrid extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel;
+        $view = new \Zend\View\Model\ViewModel();
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;
@@ -81,7 +81,7 @@ class OtherComponentsGrid extends AbstractActionController
                         'id' => $packageInfo[InfoCommand::CURRENT_VERSION],
                         'name' => $packageInfo[InfoCommand::CURRENT_VERSION]
                     ];
-                    
+
                     $versions[0]['name'] .= ' (latest)';
                     $versions[count($versions) - 1]['name'] .= ' (current)';
 

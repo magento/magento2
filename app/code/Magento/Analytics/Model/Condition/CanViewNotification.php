@@ -5,9 +5,9 @@
  */
 namespace Magento\Analytics\Model\Condition;
 
-use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 
 /**
  * Class CanViewNotification

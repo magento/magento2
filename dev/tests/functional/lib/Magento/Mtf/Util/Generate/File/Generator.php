@@ -55,7 +55,7 @@ class Generator
             || !$this->fileHelper->createFile($filename, $template->render())
         ) {
             throw new \Exception(
-                'Can’t create file with "' . get_class($template) .'" (file "' .  $filename . '").'
+                'Can’t create file with "' . get_class($template) . '" (file "' . $filename . '").'
             );
         }
 
