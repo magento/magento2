@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 /**
  * Abstract config form element renderer

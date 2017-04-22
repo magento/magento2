@@ -14,7 +14,6 @@ use Magento\NewRelicReporting\Model\Module;
 /**
  * Class CollectTest
  *
- * @codingStandardsIgnoreFile
  */
 class CollectTest extends \PHPUnit_Framework_TestCase
 {

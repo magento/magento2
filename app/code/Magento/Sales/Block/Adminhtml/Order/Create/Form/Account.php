@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 

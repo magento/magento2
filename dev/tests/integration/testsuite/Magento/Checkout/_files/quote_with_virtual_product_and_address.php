@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 require __DIR__ . '/../../Customer/_files/customer.php';
 require __DIR__ . '/../../Customer/_files/customer_address.php';

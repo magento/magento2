@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 $addressData = include __DIR__ . '/address_data.php';
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

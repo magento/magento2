@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 /**
  * @var \Magento\Store\Model\Website $website

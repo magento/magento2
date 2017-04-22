@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Sales\Model\Order\Address::class,

@@ -10,7 +10,6 @@ use Magento\Framework\Url\HostChecker;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {

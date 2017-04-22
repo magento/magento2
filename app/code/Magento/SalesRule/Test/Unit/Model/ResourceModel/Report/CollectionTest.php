@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 

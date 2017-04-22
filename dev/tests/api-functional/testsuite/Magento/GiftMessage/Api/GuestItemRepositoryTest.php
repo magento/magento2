@@ -5,7 +5,6 @@
  */
 namespace Magento\GiftMessage\Api;
 
-// @codingStandardsIgnoreFile
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 

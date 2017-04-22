@@ -6,7 +6,6 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
 
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Model\ItemRepository;

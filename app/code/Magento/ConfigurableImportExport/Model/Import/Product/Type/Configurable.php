@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 

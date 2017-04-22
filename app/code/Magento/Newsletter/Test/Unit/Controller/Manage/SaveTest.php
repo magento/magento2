@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\Newsletter\Test\Unit\Controller\Manage;
 

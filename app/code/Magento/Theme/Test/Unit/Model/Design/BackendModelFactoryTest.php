@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design;
 
-// @codingStandardsIgnoreFile
 
 class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
 {

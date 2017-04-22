@@ -6,7 +6,6 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
 
 use Magento\GiftMessage\Model\CartRepository;
 

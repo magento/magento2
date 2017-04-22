@@ -6,7 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Test\Unit\Block\Product;
 

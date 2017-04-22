@@ -10,7 +10,6 @@ use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

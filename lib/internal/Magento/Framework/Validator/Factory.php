@@ -8,7 +8,6 @@ namespace Magento\Framework\Validator;
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
- * @codingStandardsIgnoreFile
  */
 class Factory
 {

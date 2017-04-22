@@ -13,7 +13,6 @@ use Magento\Catalog\Api\CategoryManagementInterface;
 /**
  * Class ReportCountsTest
  *
- * @codingStandardsIgnoreFile
  */
 class ReportCountsTest extends \PHPUnit_Framework_TestCase
 {

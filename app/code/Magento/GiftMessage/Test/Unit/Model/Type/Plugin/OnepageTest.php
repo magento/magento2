@@ -5,7 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 namespace Magento\GiftMessage\Test\Unit\Model\Type\Plugin;
 
