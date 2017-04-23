@@ -178,12 +178,12 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $attributeConfig->expects(
             $this->once()
         )->method(
-                'getAttributeNames'
-            )->with(
-                'catalog_category'
-            )->will(
-                $this->returnValue($attributes)
-            );
+            'getAttributeNames'
+        )->with(
+            'catalog_category'
+        )->will(
+            $this->returnValue($attributes)
+        );
 
         $collection = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class,

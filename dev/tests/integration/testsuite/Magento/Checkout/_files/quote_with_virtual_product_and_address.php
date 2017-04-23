@@ -25,29 +25,29 @@ $quoteShippingAddress->importCustomerAddressData($addressRepository->getById(1))
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quote->setStoreId(
-        1
-    )->setIsActive(
-        true
-    )->setIsMultiShipping(
-        false
-    )->assignCustomerWithAddressChange(
-        $customerRepository->getById($customer->getId())
-    )->setShippingAddress(
-        $quoteShippingAddress
-    )->setBillingAddress(
-        $quoteShippingAddress
-    )->setCheckoutMethod(
-        $customer->getMode()
-    )->setPasswordHash(
-        $customer->encryptPassword($customer->getPassword())
-    )->setReservedOrderId(
-        'test_order_with_virtual_product'
-    )->setEmail(
-        'store@example.com'
-    )->addProduct(
-        $product->load($product->getId()),
-        1
-    );
+    1
+)->setIsActive(
+    true
+)->setIsMultiShipping(
+    false
+)->assignCustomerWithAddressChange(
+    $customerRepository->getById($customer->getId())
+)->setShippingAddress(
+    $quoteShippingAddress
+)->setBillingAddress(
+    $quoteShippingAddress
+)->setCheckoutMethod(
+    $customer->getMode()
+)->setPasswordHash(
+    $customer->encryptPassword($customer->getPassword())
+)->setReservedOrderId(
+    'test_order_with_virtual_product'
+)->setEmail(
+    'store@example.com'
+)->addProduct(
+    $product->load($product->getId()),
+    1
+);
 
 $quote->collectTotals()->save();
 

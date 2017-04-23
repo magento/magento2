@@ -451,7 +451,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 ];
                 $subEntityId = $this->connection->fetchOne(
                     $this->connection->select()->from(
-                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
+                        ['entity_id']
                     )->where($metadata->getLinkField() . ' = ?', $assocId)
                 );
                 $this->_superAttributesData['relation'][] = [

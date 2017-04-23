@@ -147,9 +147,9 @@ class Menu extends \Magento\Backend\Block\Template
         $isLast = 0 == $level && (bool)$this->getMenuModel()->isLast($menuItem) ? 'last' : '';
         $output = ($this->menuItemChecker->isItemActive(
             $this->getActiveItemModel(),
-                $menuItem,
-                $level
-            ) ? '_current _active' : '') .
+            $menuItem,
+            $level
+        ) ? '_current _active' : '') .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .

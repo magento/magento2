@@ -655,8 +655,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $directoryMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
         $directoryMock->expects($this->any())
             ->method('openFile')->will(
-            $this->returnValue(new Read($pathToCsvFile, new File()))
-        );
+                $this->returnValue(new Read($pathToCsvFile, new File()))
+            );
         $source = new Csv($pathToCsvFile, $directoryMock);
         $modelUnderTest->setSource($source);
         $modelUnderTest->validateData();

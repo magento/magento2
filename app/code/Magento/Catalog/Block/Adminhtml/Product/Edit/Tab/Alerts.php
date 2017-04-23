@@ -24,7 +24,8 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     protected function _prepareLayout()
     {
         $accordion = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Accordion::class)->setId('productAlerts');
+            \Magento\Backend\Block\Widget\Accordion::class
+        )->setId('productAlerts');
         /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
 
         $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);

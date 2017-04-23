@@ -79,7 +79,8 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->rateModelMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address\Rate::class,
             [
@@ -93,7 +94,8 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->taxHelper = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
 

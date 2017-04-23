@@ -30,13 +30,21 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $localeResolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
         $this->urlEncoder = $this->getMock(\Magento\Framework\Url\EncoderInterface::class, [], [], '', false);
         $this->fileValidatorMock = $this->getMock(
-            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class, ['isValid', 'getMessages'], [], '', false
+            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
+            ['isValid', 'getMessages'],
+            [],
+            '',
+            false
         );
         $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\File(
-            $timezoneMock, $loggerMock, $localeResolverMock,
-            $this->urlEncoder, $this->fileValidatorMock, $filesystemMock
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock,
+            $this->urlEncoder,
+            $this->fileValidatorMock,
+            $filesystemMock
         );
     }
 
@@ -105,7 +113,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
      * @dataProvider validateValueDataProvider
      */
     public function testValidateValue(
-        $value, $originalValue, $isRequired, $isAjaxRequest, $rules, $fileIsValid, $expectedResult
+        $value,
+        $originalValue,
+        $isRequired,
+        $isAjaxRequest,
+        $rules,
+        $fileIsValid,
+        $expectedResult
     ) {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
         $entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);

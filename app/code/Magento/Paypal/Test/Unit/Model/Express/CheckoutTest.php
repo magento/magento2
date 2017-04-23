@@ -62,7 +62,11 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 'getId', 'assignCustomer', 'assignCustomerWithAddressChange', 'getBillingAddress',
                 'getShippingAddress', 'isVirtual', 'addCustomerAddress', 'collectTotals', '__wakeup',
                 'save', 'getCustomerData', 'getIsVirtual', 'getExtensionAttributes'
-            ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
         $this->customerAccountManagementMock = $this->getMock(
             \Magento\Customer\Model\AccountManagement::class,
             [],

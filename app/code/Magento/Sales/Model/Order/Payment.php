@@ -1234,14 +1234,13 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (
-                is_string($preparedMessage)
+            if (is_string($preparedMessage)
                 || $preparedMessage instanceof \Magento\Framework\Phrase
             ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
-                    $preparedMessage
-                ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
+                $preparedMessage
+            ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
             ) {
                 $comment = $preparedMessage->getComment() . ' ' . $messagePrependTo;
                 $preparedMessage->setComment($comment);
@@ -1381,7 +1380,8 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->transactionManager->isTransactionExists(
             $this->getTransactionId(),
             $this->getId(),
-            $this->getOrder()->getId());
+            $this->getOrder()->getId()
+        );
     }
 
     /**
@@ -1401,8 +1401,8 @@ class Payment extends Info implements OrderPaymentInterface
         }
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
             if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
-                    $invoice->getId()
-                )
+                $invoice->getId()
+            )
             ) {
                 $invoice->setTransactionId($transactionId);
                 return $invoice;

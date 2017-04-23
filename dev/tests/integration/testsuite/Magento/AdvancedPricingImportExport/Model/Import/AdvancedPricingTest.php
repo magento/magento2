@@ -167,9 +167,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $index
     ) {
         $this->assertEquals(
-                $this->expectedTierPrice[$sku][$index]['percentage_value'],
-                $tierPrice->getExtensionAttributes()->getPercentageValue()
-            );
+            $this->expectedTierPrice[$sku][$index]['percentage_value'],
+            $tierPrice->getExtensionAttributes()->getPercentageValue()
+        );
         $tierPrice->setData('percentage_value', $tierPrice->getExtensionAttributes()->getPercentageValue());
     }
 

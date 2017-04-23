@@ -93,7 +93,9 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMock(
             \Magento\Backend\Block\Template\Context::class,
             ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState'],
-            [], '', false
+            [],
+            '',
+            false
         );
         $context->expects($this->any())->method('getRequest')->willReturn($request);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);

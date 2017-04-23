@@ -64,13 +64,20 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $cacheInterfaceMock = $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false);
 
         $actionValidatorMock = $this->getMock(
-            \Magento\Framework\Model\ActionValidator\RemoveAction::class, [], [], '', false
+            \Magento\Framework\Model\ActionValidator\RemoveAction::class,
+            [],
+            [],
+            '',
+            false
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
         $this->contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getActionValidator'],
+            [],
+            '',
+            false
         );
 
         $this->contextMock->expects($this->any())
@@ -114,7 +121,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-                [
+            [
                     'context' => $this->contextMock,
                     'productFlatIndexerProcessor' => $this->_processor,
                     'indexerEavProcessor' => $this->_eavProcessor,

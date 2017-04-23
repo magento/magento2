@@ -61,9 +61,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $scopeConfigMock->expects(
-            $this->at(0))->method('getValue')->will($this->returnValue($applyTaxAfterDiscount));
+            $this->at(0)
+        )->method('getValue')->will($this->returnValue($applyTaxAfterDiscount));
         $scopeConfigMock->expects(
-            $this->at(1))->method('getValue')->will($this->returnValue($discountTaxIncl));
+            $this->at(1)
+        )->method('getValue')->will($this->returnValue($discountTaxIncl));
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);

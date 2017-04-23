@@ -155,7 +155,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $isRequestSecure = false;
         $productMock = $this->getMock(
             \Magento\Catalog\Model\Product::class,
-            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'], [], '', false);
+            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
         $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
         $productMock->expects($this->any())->method('getUrlDataObject')

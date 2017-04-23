@@ -265,12 +265,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->contentValidatorMock = $this->getMockBuilder(
-            \Magento\Framework\Api\ImageContentValidatorInterface::class)
+            \Magento\Framework\Api\ImageContentValidatorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->linkTypeProviderMock = $this->getMock(
             \Magento\Catalog\Model\Product\LinkTypeProvider::class,
-            ['getLinkTypes'], [], '', false);
+            ['getLinkTypes'],
+            [],
+            '',
+            false
+        );
         $this->imageProcessorMock = $this->getMock(
             \Magento\Framework\Api\ImageProcessorInterface::class,
             [],

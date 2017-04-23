@@ -26,10 +26,18 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->defaultValidatorMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator::class, [], [], '', false
+            \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->selectValidatorMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Option\Validator\Select::class, [], [], '', false
+            \Magento\Catalog\Model\Product\Option\Validator\Select::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->pool = new \Magento\Catalog\Model\Product\Option\Validator\Pool(
             ['default' => $this->defaultValidatorMock, 'select' => $this->selectValidatorMock]

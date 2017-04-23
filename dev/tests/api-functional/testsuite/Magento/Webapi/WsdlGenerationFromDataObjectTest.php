@@ -505,10 +505,10 @@ FIRST_PORT_TYPE;
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
             $this->assertContains(
-            $this->_convertXmlToString($secondPortType),
-            $wsdlContent,
-            'Port type declaration is missing or invalid'
-        );
+                $this->_convertXmlToString($secondPortType),
+                $wsdlContent,
+                'Port type declaration is missing or invalid'
+            );
         }
 
         if ($this->isSingleService) {

@@ -119,7 +119,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             \Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface::class
         )->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Pricing\Adjustment\Calculator::class,
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Bundle\Pricing\Adjustment\Calculator::class,
             [
                 'calculator' => $this->baseCalculator,
                 'amountFactory' => $this->amountFactory,
@@ -586,7 +587,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $result = $calculatorMock->getOptionsAmount(
             $this->saleableItem,
-            $exclude, $searchMin,
+            $exclude,
+            $searchMin,
             $amount,
             $useRegularPrice
         );

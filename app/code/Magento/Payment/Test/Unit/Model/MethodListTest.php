@@ -49,7 +49,11 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
 
         $this->specificationFactoryMock = $this->getMock(
-            \Magento\Payment\Model\Checks\SpecificationFactory::class, [], [], '', false
+            \Magento\Payment\Model\Checks\SpecificationFactory::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->methodList = $this->objectManager->getObject(
             \Magento\Payment\Model\MethodList::class,

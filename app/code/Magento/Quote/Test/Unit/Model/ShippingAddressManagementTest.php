@@ -85,7 +85,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->validatorMock = $this->getMock(
-            \Magento\Quote\Model\QuoteAddressValidator::class, [], [], '', false
+            \Magento\Quote\Model\QuoteAddressValidator::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->totalsCollectorMock = $this->getMock(
             \Magento\Quote\Model\Quote\TotalsCollector::class,

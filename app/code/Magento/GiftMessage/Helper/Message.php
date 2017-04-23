@@ -201,7 +201,8 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $result = $this->scopeConfig->getValue(
             self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
         );
         if ($productConfig === null || '' === $productConfig || $productConfig == Boolean::VALUE_USE_CONFIG) {
             return $result;

@@ -108,7 +108,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipmentLoader = $this->getMockBuilder(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class)
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class
+        )
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

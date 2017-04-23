@@ -262,7 +262,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
+            [],
+            '',
+            false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
         $contextMock->expects($this->any())
@@ -374,7 +377,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->converterMock
         );
         $this->productLinkRepositoryMock = $this->getMockBuilder(
-            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class)
+            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)

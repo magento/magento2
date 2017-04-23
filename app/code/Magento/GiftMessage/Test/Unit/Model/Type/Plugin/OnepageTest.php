@@ -60,6 +60,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $subjectMock = $this->getMock(\Magento\Checkout\Model\Type\Onepage::class, [], [], '', false);
         $this->assertEquals(
             ['expected result'],
-            $this->plugin->afterSaveShippingMethod($subjectMock, ['expected result']));
+            $this->plugin->afterSaveShippingMethod($subjectMock, ['expected result'])
+        );
     }
 }

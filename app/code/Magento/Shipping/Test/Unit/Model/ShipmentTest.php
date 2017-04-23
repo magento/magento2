@@ -38,37 +38,42 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
             'context' => $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false),
             'registry' => $this->getMock(\Magento\Framework\Registry::class, [], [], '', false),
             'localeDate' => $this->getMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class, [], [], '', false),
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
+                [],
+                [],
+                '',
+                false
+            ),
             'dateTime' => $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false),
             'orderRepository' => $this->orderRepository,
             'shipmentItemCollectionFactory' => $this->getMock(
                 \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
             'trackCollectionFactory' => $this->getMock(
                 \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
             'commentFactory' => $this->getMock(
                 \Magento\Sales\Model\Order\Shipment\CommentFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
             'commentCollectionFactory' => $this->getMock(
                 \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
         ];
         $this->shipment = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Shipment::class,

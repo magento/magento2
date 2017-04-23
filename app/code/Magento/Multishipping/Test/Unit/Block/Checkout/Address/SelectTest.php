@@ -78,7 +78,8 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $this->searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $this->block = $this->objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Address\Select::class, [
+            \Magento\Multishipping\Block\Checkout\Address\Select::class,
+            [
                 'multishipping' => $this->multishippingMock,
                 'addressRepository' => $this->addressRepositoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -152,7 +153,8 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     public function testGetAlreadyExistingAddress()
     {
         $this->block = $this->objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Address\Select::class, [
+            \Magento\Multishipping\Block\Checkout\Address\Select::class,
+            [
                 'addressRepository' => $this->addressRepositoryMock,
                 'filterBuilder' => $this->filterBuilderMock,
                 'data' => [

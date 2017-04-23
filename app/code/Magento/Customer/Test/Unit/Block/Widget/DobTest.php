@@ -335,10 +335,10 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects(
             $this->once()
         )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+            'getValidationRules'
+        )->will(
+            $this->returnValue($validationRules)
+        );
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -405,10 +405,10 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects(
             $this->once()
         )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+            'getValidationRules'
+        )->will(
+            $this->returnValue($validationRules)
+        );
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 

@@ -103,14 +103,20 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\Chooser(
-            $context, $layoutFactory, $resultRawFactory
+            $context,
+            $layoutFactory,
+            $resultRawFactory
         );
     }
 
     protected function _getTreeBlock()
     {
         $this->chooserBlockMock = $this->getMock(
-            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class, [], [], '', false
+            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->layoutMock->expects($this->once())->method('createBlock')->will(

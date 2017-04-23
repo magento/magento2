@@ -90,7 +90,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [],
             '',
-            false);
+            false
+        );
         $this->searchCriteriaBuilderMock =
             $this->getMock(\Magento\Framework\Api\SearchCriteriaBuilder::class, [], [], '', false);
         $this->searchResultMock =
@@ -107,7 +108,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 '',
-                false);
+                false
+            );
         $this->optionManagementMock =
             $this->getMock(\Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class, [], [], '', false);
 

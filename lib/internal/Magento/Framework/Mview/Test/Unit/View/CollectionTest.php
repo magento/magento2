@@ -34,7 +34,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
 
         $state = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\StateInterface::class, [], '', false, false, true,
+            \Magento\Framework\Mview\View\StateInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
             ['getViewId', 'getMode', '__wakeup']
         );
 
@@ -49,7 +54,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $view = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\ViewInterface::class, [], '', false, false, true,
+            \Magento\Framework\Mview\ViewInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
             ['load', 'setState', 'getState', '__wakeup']
         );
 

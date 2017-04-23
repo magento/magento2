@@ -236,7 +236,10 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
         ];
         $stringUtility = new \Magento\Framework\Stdlib\StringUtils();
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
-            $this->attributeRepository, $stringUtility, [], $serviceBackendModelDataInterfaceMapData
+            $this->attributeRepository,
+            $stringUtility,
+            [],
+            $serviceBackendModelDataInterfaceMapData
         );
         $this->assertEquals(
             ['ServiceDataInterfaceA', 'ServiceDataInterfaceB', 'ServiceDataInterfaceC', 'ServiceDataInterfaceD'],

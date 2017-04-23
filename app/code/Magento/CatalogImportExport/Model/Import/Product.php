@@ -1160,8 +1160,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         foreach ($linkSkus as $linkedKey => $linkedSku) {
                             $linkedSku = trim($linkedSku);
                             if (($this->skuProcessor->getNewSku($linkedSku) !== null|| isset(
-                                        $this->_oldSku[$linkedSku]
-                                    )) && $linkedSku != $sku
+                                $this->_oldSku[$linkedSku]
+                            )) && $linkedSku != $sku
                             ) {
                                 $newSku = $this->skuProcessor->getNewSku($linkedSku);
                                 if (!empty($newSku)) {
@@ -1227,7 +1227,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // process linked product positions
                 $this->_connection->insertOnDuplicate(
                     $resource->getAttributeTypeTable('int'),
-                    $positionRows, ['value']
+                    $positionRows,
+                    ['value']
                 );
             }
         }
@@ -1737,8 +1738,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $attrTable = $attribute->getBackend()->getTable();
                     $storeIds = [0];
 
-                    if (
-                        'datetime' == $attribute->getBackendType()
+                    if ('datetime' == $attribute->getBackendType()
                         && (
                             in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
                             || $attribute->getIsUserDefined()
@@ -2368,10 +2368,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!isset($rowData[self::COL_TYPE]) || !isset($this->_productTypeModels[$rowData[self::COL_TYPE]])) {
                 $this->addRowError(ValidatorInterface::ERROR_INVALID_TYPE, $rowNum);
             } elseif (!isset(
-                    $rowData[self::COL_ATTR_SET]
-                ) || !isset(
-                    $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]]
-                )
+                $rowData[self::COL_ATTR_SET]
+            ) || !isset(
+                $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]]
+            )
             ) {
                 $this->addRowError(ValidatorInterface::ERROR_INVALID_ATTR_SET, $rowNum);
             } elseif ($this->skuProcessor->getNewSku($sku) === null) {
@@ -2564,7 +2564,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function parseAttributesWithWrappedValues($attributesData)
     {
         $attributes = [];
-        preg_match_all('~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
+        preg_match_all(
+            '~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
             $attributesData,
             $matches
         );

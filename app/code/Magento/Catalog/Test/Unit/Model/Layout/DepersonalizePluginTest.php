@@ -49,7 +49,8 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->plugin = (new ObjectManager($this))->getObject(\Magento\Catalog\Model\Layout\DepersonalizePlugin::class,
+        $this->plugin = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Model\Layout\DepersonalizePlugin::class,
             ['catalogSession' => $this->catalogSessionMock, 'depersonalizeChecker' => $this->depersonalizeCheckerMock]
         );
     }

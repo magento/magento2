@@ -100,7 +100,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['select', 'describeTable', 'quoteIdentifier', '_connect', '_quote'],
             [],
             '',
-            false);
+            false
+        );
         $this->selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();

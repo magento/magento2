@@ -73,10 +73,10 @@ class ApplyBlockPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new \Magento\Persistent\Observer\ApplyBlockPersistentDataObserver(
-                $this->sessionMock,
-                $this->persistentHelperMock,
-                $this->customerSessionMock,
-                $this->configMock
+            $this->sessionMock,
+            $this->persistentHelperMock,
+            $this->customerSessionMock,
+            $this->configMock
         );
     }
 

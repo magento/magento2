@@ -35,9 +35,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->_category->load(5);
         $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(
-                \Magento\Catalog\Model\Layer\Category::class, [
+                \Magento\Catalog\Model\Layer\Category::class,
+                [
                 'data' => ['current_category' => $this->_category]
-            ]);
+                ]
+            );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CatalogSearch\Model\Layer\Filter\Category::class, ['layer' => $layer]);
         $this->_model->setRequestVar('cat');
@@ -69,8 +71,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->assertNull($objectManager->get(\Magento\Framework\Registry::class)->registry(
-                 self::CURRENT_CATEGORY_FILTER
-            ));
+            self::CURRENT_CATEGORY_FILTER
+        ));
     }
 
     public function testApply()

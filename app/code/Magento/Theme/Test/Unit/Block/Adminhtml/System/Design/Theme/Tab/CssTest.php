@@ -45,11 +45,11 @@ class CssTest extends \PHPUnit_Framework_TestCase
                 'objectManager' => $this->_objectManager,
                 'uploaderService' => $this->getMock(
                     \Magento\Theme\Model\Uploader\Service::class,
-                        [],
-                        [],
-                        '',
-                        false
-                    ),
+                    [],
+                    [],
+                    '',
+                    false
+                ),
                 'urlBuilder' => $this->urlBuilder,
                 'urlCoder' => $this->urlCoder
             ]

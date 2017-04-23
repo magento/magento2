@@ -65,7 +65,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->attrManagementMock->expects($this->once())
             ->method('getAttributes')
             ->with(
-                \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeSetId
+                \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeSetId
             )->willReturn([$attributeMock]);
         $this->assertEquals([$attributeMock], $this->model->getAttributes($attributeSetId));
     }

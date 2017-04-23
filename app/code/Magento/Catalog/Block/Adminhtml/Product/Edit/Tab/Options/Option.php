@@ -311,7 +311,8 @@ class Option extends Widget
                     $value['checkboxScopeTitle'] = $this->getCheckboxScopeHtml(
                         $option->getOptionId(),
                         'title',
-                        $option->getStoreTitle() === null);
+                        $option->getStoreTitle() === null
+                    );
                     $value['scopeTitleDisabled'] = $option->getStoreTitle() === null ? 'disabled' : null;
                 }
 
@@ -372,7 +373,8 @@ class Option extends Widget
                         $value['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
                             $option->getOptionId(),
                             'price',
-                            $option->getStorePrice() === null);
+                            $option->getStorePrice() === null
+                        );
                         $value['scopePriceDisabled'] = $option->getStorePrice() === null ? 'disabled' : null;
                     }
                 }

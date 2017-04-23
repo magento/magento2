@@ -73,8 +73,7 @@ class ItemRepositoryTest extends WebapiAbstract
 
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
-        );
+        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         /** @var \Magento\Quote\Model\Quote $quote */
@@ -161,8 +160,7 @@ class ItemRepositoryTest extends WebapiAbstract
 
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
-        );
+        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         // sales/gift_options/allow_items must be set to 1 in system configuration

@@ -54,28 +54,38 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
             'context' => $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false),
             'registry' => $this->getMock(\Magento\Framework\Registry::class, [], [], '', false),
             'localeDate' => $this->getMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class, [], [], '', false),
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
+                [],
+                [],
+                '',
+                false
+            ),
             'dateTime' => $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false),
             'creditmemoConfig' => $this->getMock(
-                \Magento\Sales\Model\Order\Creditmemo\Config::class, [], [], '', false),
+                \Magento\Sales\Model\Order\Creditmemo\Config::class,
+                [],
+                [],
+                '',
+                false
+            ),
             'orderFactory' => $this->orderFactory,
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
             'calculatorFactory' => $this->getMock(\Magento\Framework\Math\CalculatorFactory::class, [], [], '', false),
             'storeManager' => $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false),
             'commentFactory' => $this->getMock(
                 \Magento\Sales\Model\Order\Creditmemo\CommentFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
             'commentCollectionFactory' => $this->getMock(
                 \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
         ];
         $this->creditmemo = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Creditmemo::class,
@@ -158,7 +168,8 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class)
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemCollectionMock->expects($this->once())
@@ -186,7 +197,8 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class)
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemCollectionMock->expects($this->once())

@@ -71,27 +71,45 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             $this->returnValue([$this->_store])
         );
         $this->_productIndexerHelper = $this->getMock(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class, [], [], '', false
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_flatItemEraser = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class, [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_flatItemWriter = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class, [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_flatTableBuilder = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class, [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->_model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class, [
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class,
+            [
             'resource' => $this->_resource,
             'storeManager' => $this->_storeManager,
             'productHelper' => $this->_productIndexerHelper,
             'flatItemEraser' => $this->_flatItemEraser,
             'flatItemWriter' => $this->_flatItemWriter,
             'flatTableBuilder' => $this->_flatTableBuilder
-        ]);
+            ]
+        );
     }
 
     /**

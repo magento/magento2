@@ -125,8 +125,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->object = new \Magento\SalesRule\Model\ResourceModel\Report\Collection(
-            $this->entityFactory, $this->loggerMock, $this->fetchStrategy,
-            $this->eventManager, $this->reportResource, $this->ruleFactory
+            $this->entityFactory,
+            $this->loggerMock,
+            $this->fetchStrategy,
+            $this->eventManager,
+            $this->reportResource,
+            $this->ruleFactory
         );
     }
 

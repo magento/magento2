@@ -55,7 +55,8 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             \Magento\Multishipping\Block\Checkout\Success::class,
             [
                 'context' => $this->contextMock
-            ]);
+            ]
+        );
     }
 
     public function testGetOrderIdsWithoutId()

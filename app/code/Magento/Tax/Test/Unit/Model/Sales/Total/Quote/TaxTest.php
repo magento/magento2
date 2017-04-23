@@ -35,8 +35,13 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testCollect($itemData, $appliedRatesData, $taxDetailsData, $quoteDetailsData,
-                                $addressData, $verifyData
+    public function testCollect(
+        $itemData,
+        $appliedRatesData,
+        $taxDetailsData,
+        $quoteDetailsData,
+        $addressData,
+        $verifyData
     ) {
         $this->markTestIncomplete('Source code is not testable. Need to be refactored before unit testing');
         $shippingAssignmentMock = $this->getMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
@@ -140,7 +145,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $taxClassKeyDataObjectMock = $this->getMock(\Magento\Tax\Api\Data\TaxClassKeyInterface::class);
         $taxClassKeyDataObjectFactoryMock = $this->getMockBuilder(
-            \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class)
+            \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $taxClassKeyDataObjectFactoryMock
@@ -158,7 +164,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $itemDataObjectMock = $this->getMock(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class);
         $itemDataObjectFactoryMock = $this->getMockBuilder(
-            \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class)
+            \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemDataObjectFactoryMock
@@ -440,7 +447,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $taxTotalsCalcModel = $objectManager->getObject(\Magento\Tax\Model\Sales\Total\Quote\Tax::class);
         $taxClassKeyDataObjectMock = $this->getMock(\Magento\Tax\Api\Data\TaxClassKeyInterface::class);
         $taxClassKeyDataObjectFactoryMock = $this->getMockBuilder(
-            \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class)
+            \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $taxClassKeyDataObjectFactoryMock
@@ -458,7 +466,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $itemDataObjectMock = $this->getMock(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class);
         $itemDataObjectFactoryMock = $this->getMockBuilder(
-            \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class)
+            \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemDataObjectFactoryMock

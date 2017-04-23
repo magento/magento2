@@ -97,10 +97,10 @@ class Review extends AbstractModifier
                         'opened' => false,
                         'componentType' => Form\Fieldset::NAME,
                         'sortOrder' => $this->getNextGroupSortOrder(
-                                $meta,
-                                static::GROUP_CONTENT,
-                                static::SORT_ORDER
-                            ),
+                            $meta,
+                            static::GROUP_CONTENT,
+                            static::SORT_ORDER
+                        ),
                     ],
                 ],
             ],

@@ -106,8 +106,7 @@ class DiscountCalculatorTest extends \PHPUnit_Framework_TestCase
                     $this->getPriceMock(20),
                     $this->getPriceMock(40),
                 ]
-            )
-        );
+            ));
         $this->assertEquals(20, $this->calculator->calculateDiscount($this->productMock));
     }
 
@@ -122,13 +121,12 @@ class DiscountCalculatorTest extends \PHPUnit_Framework_TestCase
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
             ->will($this->returnValue(
-                    [
+                [
                         $this->getPriceMock(30),
                         $this->getPriceMock(20),
                         $this->getPriceMock(40),
                     ]
-                )
-            );
+            ));
         $this->assertEquals(10, $this->calculator->calculateDiscount($this->productMock, 50));
     }
 }

@@ -102,7 +102,11 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
         $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
         $this->responseMock = $this->getMock(
-            \Magento\Framework\App\Response\Http::class, ['setRedirect', '__wakeup'], [], '', false
+            \Magento\Framework\App\Response\Http::class,
+            ['setRedirect', '__wakeup'],
+            [],
+            '',
+            false
         );
         $viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
         $this->redirectMock = $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class);
@@ -116,7 +120,11 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagementMock =
             $this->getMockForAbstractClass(\Magento\Customer\Api\AccountManagementInterface::class);
         $this->customerDataMock = $this->getMock(
-            \Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false
+            \Magento\Customer\Api\Data\CustomerInterface::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->customerRepositoryMock =

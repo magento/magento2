@@ -36,7 +36,7 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
-            )
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -36,7 +36,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $this->formFactory = $this->getMock(\Magento\Framework\Data\FormFactory::class, ['create'], [], '', false);
         $this->urlRewriteFactory = $this->getMock(
-            \Magento\UrlRewrite\Model\UrlRewriteFactory::class, ['create'], [], '', false
+            \Magento\UrlRewrite\Model\UrlRewriteFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->urlRewriteFactory->expects($this->once())->method('create')
             ->willReturn($this->getMock(\Magento\UrlRewrite\Model\UrlRewrite::class, [], [], '', false));
@@ -49,7 +53,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         );
         $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
 
-        $this->form = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
+        $this->form = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             [
                 'layout' => $this->layout,
                 'productFactory' => $this->productFactory,
@@ -65,8 +70,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $form = $this->getMock(\Magento\Framework\Data\Form::class, [], [], '', false);
         $form->expects($this->any())->method('getElement')->will($this->returnValue(
-            $this->getMockForAbstractClass(\Magento\Framework\Data\Form\Element\AbstractElement::class, [], '', false))
-        );
+            $this->getMockForAbstractClass(\Magento\Framework\Data\Form\Element\AbstractElement::class, [], '', false)
+        ));
         $this->formFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($form));

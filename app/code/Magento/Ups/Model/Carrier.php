@@ -808,10 +808,10 @@ XMLRequest;
                 // Negotiated rates
                 $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
                 $negotiatedActive = $this->getConfigFlag(
-                        'negotiated_active'
-                    ) && $this->getConfigData(
-                        'shipper_number'
-                    ) && !empty($negotiatedArr);
+                    'negotiated_active'
+                ) && $this->getConfigData(
+                    'shipper_number'
+                ) && !empty($negotiatedArr);
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
@@ -1331,10 +1331,10 @@ XMLAuth;
 
         // ups support reference number only for domestic service
         if ($this->_isUSCountry(
-                $request->getRecipientAddressCountryCode()
-            ) && $this->_isUSCountry(
-                $request->getShipperAddressCountryCode()
-            )
+            $request->getRecipientAddressCountryCode()
+        ) && $this->_isUSCountry(
+            $request->getShipperAddressCountryCode()
+        )
         ) {
             if ($request->getReferenceData()) {
                 $referenceData = $request->getReferenceData() . $request->getPackageId();
@@ -1385,9 +1385,9 @@ XMLAuth;
         );
 
         if ($request->getPackagingType() != $this->configHelper->getCode(
-                'container',
-                'ULE'
-            ) &&
+            'container',
+            'ULE'
+        ) &&
             $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID &&
             ($request->getRecipientAddressCountryCode() == 'CA' ||
                 $request->getRecipientAddressCountryCode() == 'PR')
@@ -1521,11 +1521,11 @@ XMLAuth;
         }
 
         if (isset(
-                $response->Response->Error
-            ) && in_array(
-                $response->Response->Error->ErrorSeverity,
-                ['Hard', 'Transient']
-            )
+            $response->Response->Error
+        ) && in_array(
+            $response->Response->Error->ErrorSeverity,
+            ['Hard', 'Transient']
+        )
         ) {
             $result->setErrors((string)$response->Response->Error->ErrorDescription);
         }

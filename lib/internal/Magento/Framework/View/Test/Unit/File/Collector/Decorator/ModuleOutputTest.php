@@ -35,7 +35,8 @@ class ModuleOutputTest extends \PHPUnit_Framework_TestCase
                 ['Module_OutputDisabled', false],
             ]));
         $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleOutput(
-            $this->_fileSource, $this->_moduleManager
+            $this->_fileSource,
+            $this->_moduleManager
         );
     }
 

@@ -67,19 +67,19 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\ObjectManager\ConfigLoader::class => $configLoader,
             \Magento\Framework\App\ObjectManager\ConfigCache::class => $configCache,
             \Magento\Framework\Config\ReaderInterface::class => $this->getMock(
-                    \Magento\Framework\Config\ReaderInterface::class
-                ),
+                \Magento\Framework\Config\ReaderInterface::class
+            ),
             \Magento\Framework\Config\ScopeInterface::class => $this->getMock(\Magento\Framework\Config\ScopeInterface::class),
             \Magento\Framework\Config\CacheInterface::class => $this->getMock(\Magento\Framework\Config\CacheInterface::class),
             \Magento\Framework\Cache\FrontendInterface::class => $this->getMock(\Magento\Framework\Cache\FrontendInterface::class),
             \Magento\Framework\App\ResourceConnection::class => $connectionMock,
             \Magento\Framework\App\ResourceConnection\Config::class => $this->getMock(
-                    \Magento\Framework\App\ResourceConnection\Config::class,
-                    [],
-                    [],
-                    '',
-                    false
-                )
+                \Magento\Framework\App\ResourceConnection\Config::class,
+                [],
+                [],
+                '',
+                false
+            )
         ];
         $model = new \Magento\TestFramework\ObjectManager(
             $factory,

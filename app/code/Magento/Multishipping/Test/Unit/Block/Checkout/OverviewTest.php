@@ -71,7 +71,8 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->priceCurrencyMock =
             $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class, [], [], '', false);
@@ -179,7 +180,8 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $totalsAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address\Total::class, [], [], '', false);
         $this->checkoutMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $this->totalsCollectorMock

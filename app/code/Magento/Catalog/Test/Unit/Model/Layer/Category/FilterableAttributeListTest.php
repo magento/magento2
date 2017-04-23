@@ -34,7 +34,11 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeManagerMock = $this->getMock(
-            \Magento\Store\Model\StoreManagerInterface::class, [], [], '', false
+            \Magento\Store\Model\StoreManagerInterface::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->model = new \Magento\Catalog\Model\Layer\Search\FilterableAttributeList(
@@ -52,7 +56,11 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
         $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class, [], [], '', false
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->collectionFactoryMock
             ->expects($this->once())

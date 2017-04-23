@@ -120,10 +120,10 @@ class AssertCategoryOnCustomStore extends AbstractAssertForm
         $this->browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
 
         \PHPUnit_Framework_Assert::assertEquals(
-                $category->getName(),
-                $this->categoryViewPage->getTitleBlock()->getTitle(),
-                'Category ' . $category->getName() . ' is not available on custom store.'
-            );
+            $category->getName(),
+            $this->categoryViewPage->getTitleBlock()->getTitle(),
+            'Category ' . $category->getName() . ' is not available on custom store.'
+        );
     }
 
     /**

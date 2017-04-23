@@ -110,14 +110,21 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
         $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\CategoriesJson(
-            $context, $layoutFactory, $resultJsonFactory, $this->registryMock
+            $context,
+            $layoutFactory,
+            $resultJsonFactory,
+            $this->registryMock
         );
     }
 
     protected function _getTreeBlock()
     {
         $this->chooserBlockMock = $this->getMock(
-            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class, [], [], '', false
+            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->layoutMock->expects($this->once())->method('createBlock')->will(
             $this->returnValue($this->chooserBlockMock)

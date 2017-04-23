@@ -17,28 +17,28 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getParam'
-            )->will(
-                $this->returnValueMap(
-                    [
+            'getParam'
+        )->will(
+            $this->returnValueMap(
+                [
                         [
                             \Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID,
                             null,
                             self::INTEGRATION_ID, ],
                         [\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 0],
                     ]
-                )
-            );
+            )
+        );
 
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getIntegrationModelMock())
-            );
+            'get'
+        )->with(
+            $this->equalTo(self::INTEGRATION_ID)
+        )->will(
+            $this->returnValue($this->_getIntegrationModelMock())
+        );
 
         $this->_oauthSvcMock->expects($this->once())->method('createAccessToken')->will($this->returnValue(true));
 
@@ -55,10 +55,10 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getParam'
-            )->will(
-                $this->returnValueMap(
-                    [
+            'getParam'
+        )->will(
+            $this->returnValueMap(
+                [
                         [
                             \Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID,
                             null,
@@ -66,18 +66,18 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
                         ],
                         [\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 1],
                     ]
-                )
-            );
+            )
+        );
 
         $this->_integrationSvcMock->expects(
             $this->once()
         )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getIntegrationModelMock())
-            );
+            'get'
+        )->with(
+            $this->equalTo(self::INTEGRATION_ID)
+        )->will(
+            $this->returnValue($this->_getIntegrationModelMock())
+        );
 
         $this->_oauthSvcMock->expects($this->once())->method('deleteIntegrationToken');
         $this->_oauthSvcMock->expects($this->once())->method('postToConsumer');

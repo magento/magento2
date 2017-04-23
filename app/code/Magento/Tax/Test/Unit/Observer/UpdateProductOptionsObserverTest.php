@@ -65,12 +65,12 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $taxObserverObject = $objectManager->getObject(
-             \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
-             [
+            \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
+            [
                  'taxData' => $taxData,
                  'registry' => $registry,
              ]
-         );
+        );
 
         $taxObserverObject->execute($observerObject);
 

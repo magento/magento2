@@ -21,12 +21,21 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $localeResolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
         $urlEncoder = $this->getMock(\Magento\Framework\Url\EncoderInterface::class, [], [], '', false);
         $fileValidatorMock = $this->getMock(
-            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class, [], [], '', false
+            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
+            [],
+            [],
+            '',
+            false
         );
         $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\Image(
-            $timezoneMock, $loggerMock, $localeResolverMock, $urlEncoder, $fileValidatorMock, $filesystemMock
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock,
+            $urlEncoder,
+            $fileValidatorMock,
+            $filesystemMock
         );
     }
 
@@ -45,7 +54,12 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @dataProvider validateValueDataProvider
      */
     public function testValidateValue(
-        $value, $originalValue, $isRequired, $isAjaxRequest, $rules, $expectedResult
+        $value,
+        $originalValue,
+        $isRequired,
+        $isAjaxRequest,
+        $rules,
+        $expectedResult
     ) {
         $entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);
         $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));

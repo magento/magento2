@@ -97,6 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->model->addCollection($this->collectionMock);
         $this->assertEquals(
             [self::INSTANCE_1 => $this->getArgument(), self::INSTANCE_2 => $this->getArgument()],
-            $this->model->getCollection());
+            $this->model->getCollection()
+        );
     }
 }

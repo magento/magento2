@@ -304,7 +304,8 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         // important
         $compareItems->setVisitorId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Customer\Model\Visitor::class)->getId()
+                \Magento\Customer\Model\Visitor::class
+            )->getId()
         );
         $actualProductIds = [];
         foreach ($compareItems as $compareItem) {

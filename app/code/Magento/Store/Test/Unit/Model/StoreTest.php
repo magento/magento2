@@ -47,7 +47,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMock(
-            \Magento\Framework\App\Request\Http::class, [
+            \Magento\Framework\App\Request\Http::class,
+            [
             'getRequestString',
             'getModuleName',
             'setModuleName',
@@ -58,7 +59,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getDistroBaseUrl',
             'isSecure',
             'getServer',
-        ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
         $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -129,9 +134,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'websiteRepository' => $websiteRepository,
-        ]);
+            ]
+        );
         $model->setWebsiteId($websiteId);
 
         $this->assertEquals($website, $model->getWebsite());
@@ -145,9 +152,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'websiteRepository' => $websiteRepository,
-        ]);
+            ]
+        );
         $model->setWebsiteId(null);
 
         $this->assertFalse($model->getWebsite());
@@ -166,9 +175,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'groupRepository' => $groupRepository,
-        ]);
+            ]
+        );
         $model->setGroupId($groupId);
 
         $this->assertEquals($group, $model->getGroup());
@@ -182,9 +193,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'groupRepository' => $groupRepository,
-        ]);
+            ]
+        );
         $model->setGroupId(null);
 
         $this->assertFalse($model->getGroup());
@@ -371,11 +384,16 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrentUrl($secure, $url, $expected)
     {
         $defaultStore = $this->getMock(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'getId',
             'isCurrentlySecure',
             '__wakeup'
-        ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
         $defaultStore->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(5));
         $defaultStore->expects($this->atLeastOnce())->method('isCurrentlySecure')->will($this->returnValue($secure));
 
@@ -502,10 +520,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'config' => $configMock,
             'currencyInstalled' => $currencyPath,
-        ]);
+            ]
+        );
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());
     }

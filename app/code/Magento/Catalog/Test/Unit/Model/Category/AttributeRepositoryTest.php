@@ -67,7 +67,8 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 '',
-                false);
+                false
+            );
         $this->eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new \Magento\Framework\DataObject(['default_attribute_set_id' => 3]));

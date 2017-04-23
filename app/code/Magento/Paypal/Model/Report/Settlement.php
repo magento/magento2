@@ -311,14 +311,14 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     public static function createConnection(array $config)
     {
         if (!isset(
-                $config['hostname']
-            ) || !isset(
-                $config['username']
-            ) || !isset(
-                $config['password']
-            ) || !isset(
-                $config['path']
-            )
+            $config['hostname']
+        ) || !isset(
+            $config['username']
+        ) || !isset(
+            $config['password']
+        ) || !isset(
+            $config['path']
+        )
         ) {
             throw new \InvalidArgumentException('Required config elements: hostname, username, password, path');
         }

@@ -267,8 +267,7 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId')
-        );
+            ->will($this->returnValue('customerGroupId'));
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
         $this->groupManagementMock->expects($this->once())
             ->method('getDefaultGroup')

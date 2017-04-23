@@ -240,7 +240,8 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn('entity type code');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
@@ -286,7 +287,8 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn('entity type code');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
@@ -349,7 +351,8 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn('entity type code');
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')

@@ -38,7 +38,8 @@ class TypesListTest extends \PHPUnit_Framework_TestCase
             ['create', '__wakeup'],
             [],
             '',
-            false);
+            false
+        );
         $this->attributeTypeFactoryMock =
             $this->getMock(
                 \Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory::class,
@@ -47,7 +48,8 @@ class TypesListTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 '',
-                false);
+                false
+            );
 
         $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()

@@ -726,7 +726,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $customerId = (int)$this->getSession()->getCustomerId();
         if ($customerId) {
             $this->_compareList = $this->_objectManager->create(
-                \Magento\Catalog\Model\Product\Compare\ListCompare::class);
+                \Magento\Catalog\Model\Product\Compare\ListCompare::class
+            );
         } else {
             $this->_compareList = false;
         }
@@ -838,7 +839,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         );
                     } else {
                         $wishlist = $this->_objectManager->create(
-                            \Magento\Wishlist\Model\Wishlist::class)->load($moveTo[1]);
+                            \Magento\Wishlist\Model\Wishlist::class
+                        )->load($moveTo[1]);
                         if (!$wishlist->getId() || $wishlist->getCustomerId() != $this->getSession()->getCustomerId()
                         ) {
                             $wishlist = null;
@@ -976,7 +978,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 break;
             case 'compared':
                 $this->_objectManager->create(
-                    \Magento\Catalog\Model\Product\Compare\Item::class)->load($itemId)->delete();
+                    \Magento\Catalog\Model\Product\Compare\Item::class
+                )->load($itemId)->delete();
                 break;
         }
 
@@ -1591,7 +1594,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
-            $data, \Magento\Customer\Api\Data\CustomerInterface::class
+            $data,
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
@@ -1712,7 +1716,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->dataObjectHelper->populateWithArray(
             $customer,
-            $data, \Magento\Customer\Api\Data\CustomerInterface::class
+            $data,
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         return $customer;
     }

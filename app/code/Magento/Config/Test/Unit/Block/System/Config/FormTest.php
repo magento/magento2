@@ -372,7 +372,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Data\Form\Element\Fieldset::class,
             [],
             [],
-            '', false, false);
+            '',
+            false,
+            false
+        );
 
         $params = [
             'legend' => 'label',

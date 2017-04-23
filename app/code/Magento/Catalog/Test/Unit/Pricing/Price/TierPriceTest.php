@@ -124,8 +124,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 function ($arg) {
                     return $arg -1;
                 }
-            )
-            );
+            ));
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
         $group = $this->getMock(
             \Magento\Customer\Model\Data\Group::class,
@@ -292,8 +291,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 function ($arg) {
                     return round(0.5 * $arg, 2);
                 }
-            )
-            );
+            ));
 
         $group = $this->getMock(
             \Magento\Customer\Model\Data\Group::class,

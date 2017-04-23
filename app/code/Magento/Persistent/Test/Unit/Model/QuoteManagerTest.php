@@ -68,7 +68,8 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 '',
-                false);
+                false
+            );
         $this->persistentDataMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
         $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
 
@@ -100,7 +101,8 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->model = new QuoteManager(
             $this->persistentSessionMock,

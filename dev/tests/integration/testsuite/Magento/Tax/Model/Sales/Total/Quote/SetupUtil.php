@@ -168,9 +168,11 @@ class SetupUtil
     {
         $this->objectManager = $objectManager;
         $this->customerRepository = $this->objectManager->create(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class);
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
+        );
         $this->accountManagement = $this->objectManager->create(
-            \Magento\Customer\Api\AccountManagementInterface::class);
+            \Magento\Customer\Api\AccountManagementInterface::class
+        );
     }
 
     /**
@@ -252,7 +254,8 @@ class SetupUtil
                 $this->taxRates[$taxRateCode]['data']['rate'] = $taxRateOverrides[$taxRateCode];
             }
             $this->taxRates[$taxRateCode]['id'] = $this->objectManager->create(
-                \Magento\Tax\Model\Calculation\Rate::class)
+                \Magento\Tax\Model\Calculation\Rate::class
+            )
                 ->setData($this->taxRates[$taxRateCode]['data'])
                 ->save()
                 ->getId();

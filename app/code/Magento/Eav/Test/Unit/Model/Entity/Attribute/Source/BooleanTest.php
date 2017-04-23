@@ -61,7 +61,10 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedOrder
      */
     public function testAddValueSortToCollection(
-        $direction, $isScopeGlobal, $expectedJoinCondition, $expectedOrder
+        $direction,
+        $isScopeGlobal,
+        $expectedJoinCondition,
+        $expectedOrder
     ) {
         $attributeMock = $this->getAttributeMock();
         $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
@@ -157,7 +160,11 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     {
         $collectionMethods = ['getSelect', 'getStoreId', 'getConnection'];
         $collectionMock = $this->getMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class, $collectionMethods, [], '', false
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            $collectionMethods,
+            [],
+            '',
+            false
         );
 
         $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method'], [], '', false);

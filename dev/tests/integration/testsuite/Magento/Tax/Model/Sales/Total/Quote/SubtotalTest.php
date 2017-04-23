@@ -62,9 +62,9 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customerGroup = $this->objectManager->create(
             \Magento\Customer\Model\Group::class
         )->load(
-                'custom_group',
-                'customer_group_code'
-            );
+            'custom_group',
+            'customer_group_code'
+        );
         $customerGroup->setTaxClassId($customerTaxClassId)->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
@@ -83,25 +83,25 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->setStoreId(
-                1
-            )->setIsActive(
-                true
-            )->setIsMultiShipping(
-                false
-            )->assignCustomerWithAddressChange(
-                $this->getCustomerById($customer->getId())
-            )->setShippingAddress(
-                $quoteShippingAddress
-            )->setBillingAddress(
-                $quoteShippingAddress
-            )->setCheckoutMethod(
-                $customer->getMode()
-            )->setPasswordHash(
-                $customer->encryptPassword($customer->getPassword())
-            )->addProduct(
-                $product->load($product->getId()),
-                $quantity
-            );
+            1
+        )->setIsActive(
+            true
+        )->setIsMultiShipping(
+            false
+        )->assignCustomerWithAddressChange(
+            $this->getCustomerById($customer->getId())
+        )->setShippingAddress(
+            $quoteShippingAddress
+        )->setBillingAddress(
+            $quoteShippingAddress
+        )->setCheckoutMethod(
+            $customer->getMode()
+        )->setPasswordHash(
+            $customer->encryptPassword($customer->getPassword())
+        )->addProduct(
+            $product->load($product->getId()),
+            $quantity
+        );
         $address = $quote->getShippingAddress();
         /** @var \Magento\Quote\Model\ShippingAssignment $shippingAssignment */
         $shippingAssignment = $this->objectManager->create(\Magento\Quote\Model\ShippingAssignment::class);
@@ -180,9 +180,9 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customerGroup = $this->objectManager->create(
             \Magento\Customer\Model\Group::class
         )->load(
-                'custom_group',
-                'customer_group_code'
-            );
+            'custom_group',
+            'customer_group_code'
+        );
         $customerGroup->setTaxClassId($customerTaxClassId)->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
@@ -206,25 +206,25 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->setStoreId(
-                1
-            )->setIsActive(
-                true
-            )->setIsMultiShipping(
-                false
-            )->assignCustomerWithAddressChange(
-                $this->getCustomerById($customer->getId())
-            )->setShippingAddress(
-                $quoteShippingAddress
-            )->setBillingAddress(
-                $quoteShippingAddress
-            )->setCheckoutMethod(
-                $customer->getMode()
-            )->setPasswordHash(
-                $customer->encryptPassword($customer->getPassword())
-            )->addProduct(
-                $product->load($product->getId()),
-                $quantity
-            );
+            1
+        )->setIsActive(
+            true
+        )->setIsMultiShipping(
+            false
+        )->assignCustomerWithAddressChange(
+            $this->getCustomerById($customer->getId())
+        )->setShippingAddress(
+            $quoteShippingAddress
+        )->setBillingAddress(
+            $quoteShippingAddress
+        )->setCheckoutMethod(
+            $customer->getMode()
+        )->setPasswordHash(
+            $customer->encryptPassword($customer->getPassword())
+        )->addProduct(
+            $product->load($product->getId()),
+            $quantity
+        );
         $address = $quote->getShippingAddress();
         /** @var \Magento\Quote\Model\ShippingAssignment $shippingAssignment */
         $shippingAssignment = $this->objectManager->create(\Magento\Quote\Model\ShippingAssignment::class);

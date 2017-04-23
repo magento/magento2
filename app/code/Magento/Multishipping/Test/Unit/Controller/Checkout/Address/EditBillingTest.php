@@ -118,7 +118,8 @@ class EditBillingTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageMock);
         $this->controller = $objectManager->getObject(
             \Magento\Multishipping\Controller\Checkout\Address\EditBilling::class,
-            ['context' => $contextMock]);
+            ['context' => $contextMock]
+        );
     }
 
     public function testExecute()

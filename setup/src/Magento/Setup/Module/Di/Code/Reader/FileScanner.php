@@ -123,15 +123,12 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
         $MACRO_DOC_COMMENT_VALIDATE();
 
         switch ($this->tokenType) {
-
             case T_DOC_COMMENT:
-
                 $MACRO_DOC_COMMENT_START();
                 goto SCANNER_CONTINUE;
             //goto no break needed
 
             case T_NAMESPACE:
-
                 $infos[$infoIndex] = [
                     'type' => 'namespace',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
@@ -176,7 +173,6 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             //goto no break needed
 
             case T_USE:
-
                 $infos[$infoIndex] = [
                     'type' => 'use',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
@@ -242,7 +238,6 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             case T_INCLUDE_ONCE:
             case T_REQUIRE:
             case T_REQUIRE_ONCE:
-
                 // Static for performance
                 static $includeTypes = [
                     T_INCLUDE => 'include',
@@ -293,7 +288,6 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             case T_CLASS:
             case T_INTERFACE:
             case T_TRAIT:
-
                 $infos[$infoIndex] = [
                     'type' => ($this->tokenType === T_FUNCTION) ? 'function' : 'class',
                     'tokenStart' => $MACRO_TOKEN_LOGICAL_START_INDEX(),
@@ -344,7 +338,6 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
 
                 $MACRO_INFO_ADVANCE();
                 goto SCANNER_CONTINUE;
-
         }
 
         SCANNER_CONTINUE:

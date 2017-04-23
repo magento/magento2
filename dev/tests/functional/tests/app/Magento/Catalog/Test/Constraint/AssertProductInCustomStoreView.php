@@ -98,10 +98,10 @@ class AssertProductInCustomStoreView extends AbstractAssertForm
         $this->browser->open($_ENV['app_frontend_url'] . $updatedProduct->getUrlKey() . '.html');
 
         \PHPUnit_Framework_Assert::assertEquals(
-                $updatedProduct->getName(),
-                $this->productViewPage->getViewBlock()->getProductName(),
-                'Product ' . $updatedProduct->getName() . ' is not available on ' . $store->getName() . ' store.'
-            );
+            $updatedProduct->getName(),
+            $this->productViewPage->getViewBlock()->getProductName(),
+            'Product ' . $updatedProduct->getName() . ' is not available on ' . $store->getName() . ' store.'
+        );
     }
 
     /**

@@ -137,7 +137,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [],
             '',
-            false);
+            false
+        );
         $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $this->storeCollectionFactory = $this->getMock(
             \Magento\Store\Model\ResourceModel\Store\CollectionFactory::class,

@@ -30,7 +30,11 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testUpdateIfOrderNotExists()
     {
         $collectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class, [], [], '', false
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->registryMock
             ->expects($this->once())
@@ -49,7 +53,11 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testUpdateIfOrderExists()
     {
         $collectionMock = $this->getMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class, [], [], '', false
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class,
+            [],
+            [],
+            '',
+            false
         );
         $orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
         $this->registryMock

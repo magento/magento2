@@ -38,7 +38,11 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filterMock = $this->getMock(
-            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class, [], [], '', false
+            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->filters = [$this->filterMock];
         $this->layerMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);

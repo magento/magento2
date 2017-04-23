@@ -55,7 +55,8 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->categoriesCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class)
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+        )
             ->disableOriginalConstructor()->getMock();
         $this->product->expects($this->any())->method('getCategoryCollection')
             ->will($this->returnValue($this->categoriesCollection));

@@ -90,7 +90,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
-                ])
+                ]
+            )
             ->getMock();
 
         $errorAggregator = $this->getMock(

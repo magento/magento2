@@ -49,17 +49,17 @@ class TreeTest extends \PHPUnit_Framework_TestCase
 
         $this->categoryTreeMock = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Category\Tree::class
-            )->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->categoryCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class
-            )->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
             \Magento\Store\Model\StoreManagerInterface::class
-            )->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->getMock();
 
         $methods = ['create'];
@@ -82,13 +82,13 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     {
         $category = $this->getMockBuilder(
             \Magento\Catalog\Model\Category::class
-            )->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->getMock();
         $category->expects($this->exactly(2))->method('getId')->will($this->returnValue(1));
 
         $node = $this->getMockBuilder(
             \Magento\Framework\Data\Tree\Node::class
-            )->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->getMock();
         $node->expects($this->once())->method('loadChildren');
         $this->categoryTreeMock->expects($this->once())->method('loadNode')

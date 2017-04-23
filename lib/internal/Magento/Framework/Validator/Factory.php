@@ -120,7 +120,9 @@ class Factory
         $this->_initializeConfigList();
         $this->_initializeDefaultTranslator();
         return $this->_objectManager->create(
-            \Magento\Framework\Validator\Config::class, ['configFiles' => $this->_configFiles]);
+            \Magento\Framework\Validator\Config::class,
+            ['configFiles' => $this->_configFiles]
+        );
     }
 
     /**

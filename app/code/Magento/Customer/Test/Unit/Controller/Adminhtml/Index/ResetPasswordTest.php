@@ -144,7 +144,8 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class)
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -232,7 +233,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -286,7 +287,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -525,7 +526,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }

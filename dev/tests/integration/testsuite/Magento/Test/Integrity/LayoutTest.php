@@ -193,7 +193,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
              */
             function ($themeFile, $theme) {
                 $baseFiles = self::_getCachedFiles(
-                    $theme->getArea(), \Magento\Framework\View\File\Collector\Base::class,
+                    $theme->getArea(),
+                    \Magento\Framework\View\File\Collector\Base::class,
                     $theme
                 );
                 $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();

@@ -19,7 +19,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
         $layoutMergeFactory = $this->_getLayoutMergeFactory($theme, $layoutStr);
         $assetRepo = $this->getMock(
-            \Magento\Framework\View\Asset\Repository::class, ['createAsset'], [], '', false
+            \Magento\Framework\View\Asset\Repository::class,
+            ['createAsset'],
+            [],
+            '',
+            false
         );
         $assetRepo->expects($this->any())
             ->method('createAsset')
@@ -128,7 +132,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
         $processorFactory = $this->getMock(
-            \Magento\Framework\View\Layout\ProcessorFactory::class, ['create'], [], '', false
+            \Magento\Framework\View\Layout\ProcessorFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $processorFactory->expects($this->any())
             ->method('create')

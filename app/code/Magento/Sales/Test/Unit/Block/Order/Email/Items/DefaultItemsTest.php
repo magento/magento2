@@ -48,8 +48,8 @@ class DefaultItemsTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->objectManager->getObject(
                     \Magento\Backend\Block\Template\Context::class,
-                        ['layout' => $this->layoutMock]
-                    )
+                    ['layout' => $this->layoutMock]
+                )
             ]
         );
 

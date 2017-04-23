@@ -18,22 +18,22 @@ class PermissionsDialogTest extends \Magento\Integration\Test\Unit\Controller\Ad
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getParam'
-            )->with(
-                $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
-            )->will(
-                $this->returnValue(self::INTEGRATION_ID)
-            );
+            'getParam'
+        )->with(
+            $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
+        )->will(
+            $this->returnValue(self::INTEGRATION_ID)
+        );
 
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getSampleIntegrationData())
-            );
+            'get'
+        )->with(
+            $this->equalTo(self::INTEGRATION_ID)
+        )->will(
+            $this->returnValue($this->_getSampleIntegrationData())
+        );
 
         // @codingStandardsIgnoreStart
         $handle = <<<HANDLE
@@ -57,18 +57,18 @@ HANDLE;
         $this->_layoutMergeMock->expects(
             $this->once()
         )->method(
-                'getFileLayoutUpdatesXml'
-            )->will(
-                $this->returnValue($layoutUpdates)
-            );
+            'getFileLayoutUpdatesXml'
+        )->will(
+            $this->returnValue($layoutUpdates)
+        );
 
         $this->_viewMock->expects(
             $this->once()
         )->method(
-                'loadLayout'
-            )->with(
-                $this->equalTo(['adminhtml_integration_activate_permissions_webapi'])
-            );
+            'loadLayout'
+        )->with(
+            $this->equalTo(['adminhtml_integration_activate_permissions_webapi'])
+        );
 
         $controller->execute();
     }

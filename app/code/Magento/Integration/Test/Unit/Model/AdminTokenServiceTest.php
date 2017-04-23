@@ -50,8 +50,8 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection::class
         )->disableOriginalConstructor()->setMethods(
-                ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
-            )->getMock();
+            ['addFilterByAdminId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
+        )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
             \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class

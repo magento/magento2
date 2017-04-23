@@ -1133,7 +1133,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // no available tracking details
         if (!$counter) {
             $this->appendTrackingError(
-                $trackingValue, __('For some reason we can\'t retrieve tracking info right now.')
+                $trackingValue,
+                __('For some reason we can\'t retrieve tracking info right now.')
             );
         }
     }

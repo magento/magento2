@@ -69,14 +69,14 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
         $this->_formRegister = $this->getMock(\Magento\Customer\Block\Form\Register::class, [], [], '', false);
         $layout->expects(
-                $this->any()
-            )->method(
-                'getBlockSingleton'
-            )->with(
-                \Magento\Customer\Block\Form\Register::class
-            )->will(
-                $this->returnValue($this->_formRegister)
-            );
+            $this->any()
+        )->method(
+            'getBlockSingleton'
+        )->with(
+            \Magento\Customer\Block\Form\Register::class
+        )->will(
+            $this->returnValue($this->_formRegister)
+        );
 
         $this->_context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()->getMock();
@@ -103,10 +103,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->_subscriberFactory->expects(
             $this->any()
         )->method(
-                'create'
-            )->will(
-                $this->returnValue($this->_subscriber)
-            );
+            'create'
+        )->will(
+            $this->returnValue($this->_subscriber)
+        );
 
         $this->_block = new \Magento\Customer\Block\Account\Dashboard\Info(
             $this->_context,
@@ -121,10 +121,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->currentCustomer->expects(
             $this->once()
         )->method(
-                'getCustomer'
-            )->will(
-                $this->returnValue($this->_customer)
-            );
+            'getCustomer'
+        )->will(
+            $this->returnValue($this->_customer)
+        );
 
         $customer = $this->_block->getCustomer();
         $this->assertEquals($customer, $this->_customer);
@@ -153,10 +153,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->currentCustomer->expects(
             $this->once()
         )->method(
-                'getCustomer'
-            )->will(
-                $this->returnValue($this->_customer)
-            );
+            'getCustomer'
+        )->will(
+            $this->returnValue($this->_customer)
+        );
 
         /**
          * Called three times, once for each attribute (i.e. prefix, middlename, and suffix)
@@ -207,10 +207,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->_formRegister->expects(
             $this->once()
         )->method(
-                'isNewsletterEnabled'
-            )->will(
-                $this->returnValue($isNewsletterEnabled)
-            );
+            'isNewsletterEnabled'
+        )->will(
+            $this->returnValue($isNewsletterEnabled)
+        );
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 

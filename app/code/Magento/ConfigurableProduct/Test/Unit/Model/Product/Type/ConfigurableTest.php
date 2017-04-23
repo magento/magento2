@@ -153,7 +153,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->_productCollectionFactory = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory::class)
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -291,7 +292,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturnMap($dataMap);
         $attribute = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
             ->getMock();
@@ -475,7 +477,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $eavAttribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn('Store Label');
 
         $attribute = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['getProductAttribute', '__wakeup', '__sleep'])
             ->getMock();
@@ -585,7 +588,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 

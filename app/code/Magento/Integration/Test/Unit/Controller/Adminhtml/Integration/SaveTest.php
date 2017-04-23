@@ -22,42 +22,42 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getPostValue'
-            )->will(
-                $this->returnValue(
-                    [
+            'getPostValue'
+        )->will(
+            $this->returnValue(
+                [
                         IntegrationController::PARAM_INTEGRATION_ID => self::INTEGRATION_ID,
                     ]
-                )
-            );
+            )
+        );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         $intData = $this->_getSampleIntegrationData();
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->returnValue($intData)
-            );
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->returnValue($intData)
+        );
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'update'
-            )->with(
-                $this->anything()
-            )->will(
-                $this->returnValue($intData)
-            );
+            'update'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->returnValue($intData)
+        );
         // verify success message
         $this->_messageManager->expects(
             $this->once()
         )->method(
-                'addSuccess'
-            )->with(
-                __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
-            );
+            'addSuccess'
+        )->with(
+            __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
+        );
 
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
@@ -72,12 +72,12 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)))
-            );
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)))
+        );
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
@@ -93,12 +93,12 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->throwException(new IntegrationException(__($exceptionMessage)))
-            );
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->throwException(new IntegrationException(__($exceptionMessage)))
+        );
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
@@ -113,39 +113,39 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getPostValue'
-            )->will(
-                $this->returnValue($integration->getData())
-            );
+            'getPostValue'
+        )->will(
+            $this->returnValue($integration->getData())
+        );
         $integration->setData('id', self::INTEGRATION_ID);
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'create'
-            )->with(
-                $this->anything()
-            )->will(
-                $this->returnValue($integration)
-            );
+            'create'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->returnValue($integration)
+        );
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->returnValue(null)
-            );
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->returnValue(null)
+        );
         // Use real translate model
         $this->_translateModelMock = null;
         // verify success message
         $this->_messageManager->expects(
             $this->once()
         )->method(
-                'addSuccess'
-            )->with(
-                __('The integration \'%1\' has been saved.', $integration->getName())
-            );
+            'addSuccess'
+        )->with(
+            __('The integration \'%1\' has been saved.', $integration->getName())
+        );
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -159,29 +159,29 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getPostValue'
-            )->will(
-                $this->returnValue($integration->getData())
-            );
+            'getPostValue'
+        )->will(
+            $this->returnValue($integration->getData())
+        );
         $integration->setData('id', self::INTEGRATION_ID);
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'create'
-            )->with(
-                $this->anything()
-            )->will(
-                $this->throwException(new IntegrationException(__($exceptionMessage)))
-            );
+            'create'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->throwException(new IntegrationException(__($exceptionMessage)))
+        );
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->returnValue(null)
-            );
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->returnValue(null)
+        );
         // Use real translate model
         $this->_translateModelMock = null;
         // Verify success message

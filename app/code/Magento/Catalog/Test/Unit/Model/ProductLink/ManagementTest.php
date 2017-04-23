@@ -214,7 +214,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->will($this->throwException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))));
+                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))
+            ));
         $this->model->setProductLinks($productSku, $links);
     }
 

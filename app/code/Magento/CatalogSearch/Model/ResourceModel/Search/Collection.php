@@ -119,7 +119,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_searchQuery = $query;
         $this->addFieldToFilter(
             $this->getEntity()->getLinkField(),
-            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query))]);
+            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query))]
+        );
         return $this;
     }
 

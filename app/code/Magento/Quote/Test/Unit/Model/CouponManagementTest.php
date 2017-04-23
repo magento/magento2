@@ -63,7 +63,8 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->couponManagement = new CouponManagement(
             $this->quoteRepositoryMock
         );

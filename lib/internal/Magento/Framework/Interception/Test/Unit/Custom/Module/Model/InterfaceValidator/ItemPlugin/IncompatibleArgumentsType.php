@@ -16,7 +16,8 @@ class IncompatibleArgumentsType
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject, array $names
+        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments $subject,
+        array $names
     ) {
         return count($names);
     }

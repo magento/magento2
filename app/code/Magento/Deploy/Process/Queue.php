@@ -201,8 +201,7 @@ class Queue
                 }
             }
         }
-        if (
-            $parentPackagesDeployed
+        if ($parentPackagesDeployed
             && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
         ) {
             unset($packages[$name]);

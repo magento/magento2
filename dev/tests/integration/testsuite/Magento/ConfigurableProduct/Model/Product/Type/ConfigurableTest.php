@@ -299,7 +299,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption('attributes',
+        $product->addCustomOption(
+            'attributes',
             $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
         );
 

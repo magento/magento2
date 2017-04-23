@@ -33,7 +33,11 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_subjectMock = $this->getMock(
-            \Magento\Customer\Api\GroupRepositoryInterface::class, [], [], '', false
+            \Magento\Customer\Api\GroupRepositoryInterface::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $indexerMock = $this->getMock(

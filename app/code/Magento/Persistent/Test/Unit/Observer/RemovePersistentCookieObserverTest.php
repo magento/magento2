@@ -59,7 +59,8 @@ class RemovePersistentCookieObserverTest extends \PHPUnit_Framework_TestCase
             $this->persistentMock,
             $this->persistentDataMock,
             $this->customerSessionMock,
-            $this->quoteManagerMock);
+            $this->quoteManagerMock
+        );
     }
 
     public function testExecuteWithPersistentDataThatCanNotBeProcess()

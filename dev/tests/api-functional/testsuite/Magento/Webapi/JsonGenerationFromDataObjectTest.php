@@ -278,7 +278,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                             'items' => [
                                 '$ref' => '#/definitions/framework-attribute-interface',
                             ],
-                        ],
+                            ],
                     ],
                     'required' => [
                         'entity_id',

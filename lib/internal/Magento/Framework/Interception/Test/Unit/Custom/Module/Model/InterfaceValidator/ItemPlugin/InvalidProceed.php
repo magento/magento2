@@ -17,7 +17,9 @@ class InvalidProceed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject, $name, $surname
+        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject,
+        $name,
+        $surname
     ) {
         return $name . $surname;
     }

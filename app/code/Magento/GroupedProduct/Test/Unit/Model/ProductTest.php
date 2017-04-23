@@ -214,7 +214,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
+            [],
+            '',
+            false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
         $contextMock->expects($this->any())->method('getEventDispatcher')->will($this->returnValue($eventManagerMock));
@@ -299,10 +302,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->linkTypeProviderMock = $this->getMock(
             \Magento\Catalog\Model\Product\LinkTypeProvider::class,
-            ['getLinkTypes'], [], '', false);
+            ['getLinkTypes'],
+            [],
+            '',
+            false
+        );
         $this->entityCollectionProviderMock = $this->getMock(
             \Magento\Catalog\Model\ProductLink\CollectionProvider::class,
-            ['getCollection'], [], '', false);
+            ['getCollection'],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(

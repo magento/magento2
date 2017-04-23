@@ -110,7 +110,9 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Export\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Export\AbstractEntity::class
+                            'The entity adapter object must be an instance of %1 or %2.',
+                            \Magento\ImportExport\Model\Export\Entity\AbstractEntity::class,
+                            \Magento\ImportExport\Model\Export\AbstractEntity::class
                         )
                     );
                 }
@@ -152,7 +154,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 if (!$this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The adapter object must be an instance of %1.', \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class
+                            'The adapter object must be an instance of %1.',
+                            \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class
                         )
                     );
                 }
