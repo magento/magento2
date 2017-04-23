@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
@@ -188,11 +189,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getBackend')
             ->willReturn(
                 $this->getMock(
-                    \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
-                    [],
-                    [],
-                    '',
-                    false
+                    \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class, [], [], '', false
                 )
             );
 

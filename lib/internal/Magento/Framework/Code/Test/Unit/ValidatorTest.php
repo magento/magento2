@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Test\Unit;
 
-use Magento\Framework\Code\Validator;
+use \Magento\Framework\Code\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

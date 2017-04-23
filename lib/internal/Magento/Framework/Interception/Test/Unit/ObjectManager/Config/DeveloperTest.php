@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Interception\Test\Unit\ObjectManager\Config;
 
-use Magento\Framework\Interception\ObjectManager\Config\Developer;
+use \Magento\Framework\Interception\ObjectManager\Config\Developer;
 
 class DeveloperTest extends \PHPUnit_Framework_TestCase
 {

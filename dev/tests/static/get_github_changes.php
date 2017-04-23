@@ -9,6 +9,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 define(
     'USAGE',
     <<<USAGE
@@ -283,8 +285,7 @@ class GitRepo
         $result = $this->call(sprintf('log %s/%s..HEAD  --name-status --oneline', $remoteAlias, $remoteBranch));
 
         return is_array($result)
-            ? $this->filterChangedFiles(
-                $result,
+            ? $this->filterChangedFiles($result,
                 $remoteAlias,
                 $remoteBranch
             )
@@ -313,11 +314,8 @@ class GitRepo
                     $fileName = trim($fileName);
                     if (!in_array($fileName, $filteredChanges) && is_file($this->workTree . '/' . $fileName)) {
                         $result = $this->call(sprintf(
-                            'diff HEAD %s/%s -- %s',
-                            $remoteAlias,
-                            $remoteBranch,
-                            $this->workTree . '/' . $fileName
-                        ));
+                                'diff HEAD %s/%s -- %s', $remoteAlias, $remoteBranch, $this->workTree . '/' . $fileName)
+                        );
                         if ($result) {
                             if (!(isset($this->changedContentFiles[$fileName]))) {
                                 $this->setChangedContentFile($result, $fileName);
