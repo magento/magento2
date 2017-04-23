@@ -23,6 +23,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Paypal\Model\Pro
      */
     protected $pro;
+
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $apiMock;
 

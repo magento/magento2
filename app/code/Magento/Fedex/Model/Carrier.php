@@ -1714,6 +1714,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Append error message to rate result instance
      * @param string $trackingValue
      * @param string $errorMessage
+     * @return void
      */
     private function appendTrackingError($trackingValue, $errorMessage)
     {

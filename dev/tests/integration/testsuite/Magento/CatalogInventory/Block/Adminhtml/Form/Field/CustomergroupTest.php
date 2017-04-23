@@ -20,7 +20,7 @@ class CustomergroupTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_toHtml()
+    public function testToHtml()
     {
         $this->_block->setClass('customer_group_select');
         $this->_block->setId('123');

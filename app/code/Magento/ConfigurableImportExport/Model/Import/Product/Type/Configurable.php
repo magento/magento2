@@ -835,7 +835,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if (isset($option['_super_products_sku'])) {
                 if (in_array($option['_super_products_sku'], $skus)) {
                     $error = true;
-                    $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                    $this->_entityModel->addRowError(
+                        sprintf(
+                            $this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS],
+                            $option['_super_products_sku']
+                        ),
+                        $rowNum
+                    );
                 }
                 $skus[] = $option['_super_products_sku'];
             }

@@ -123,7 +123,11 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderPaymentRepositoryMock->expects($this->once())->method('create')->willReturn($orderPayment);
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($orderPayment, array_merge($paymentData, $data), \Magento\Sales\Api\Data\OrderPaymentInterface::class)
+            ->with(
+                $orderPayment,
+                array_merge($paymentData, $data),
+                \Magento\Sales\Api\Data\OrderPaymentInterface::class
+            )
             ->willReturnSelf();
 
         $this->assertSame($orderPayment, $this->converter->convert($this->paymentMock, $data));

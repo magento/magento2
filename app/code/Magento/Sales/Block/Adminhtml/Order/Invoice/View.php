@@ -302,7 +302,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'setLocation(\'' . $this->getInvoice()->getBackUrl() . '\')'
                 );
             }
-            return $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('sales/invoice/') . '\')');
+            return $this->buttonList->update(
+                'back',
+                'onclick',
+                'setLocation(\'' . $this->getUrl('sales/invoice/') . '\')'
+            );
         }
         return $this;
     }

@@ -53,7 +53,8 @@ class Factory
         $serviceInstance = $this->_objectManager->create($serviceClass, $data);
         if (!$serviceInstance instanceof \Magento\Directory\Model\Currency\Import\ImportInterface) {
             throw new \UnexpectedValueException(
-                "Class '{$serviceClass}' has to implement \\Magento\\Directory\\Model\\Currency\\Import\\ImportInterface."
+                "Class '{$serviceClass}' has to implement "
+                . "\\Magento\\Directory\\Model\\Currency\\Import\\ImportInterface."
             );
         }
         return $serviceInstance;

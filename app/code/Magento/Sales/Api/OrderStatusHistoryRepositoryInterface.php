@@ -16,6 +16,7 @@ namespace Magento\Sales\Api;
  */
 interface OrderStatusHistoryRepositoryInterface
 {
+    // @codingStandardsIgnoreStart
     /**
      * Lists order status history comments that match specified search criteria.
      *
@@ -23,6 +24,7 @@ interface OrderStatusHistoryRepositoryInterface
      * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search result interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    // @codingStandardsIgnoreEnd
 
     /**
      * Loads a specified order status comment.

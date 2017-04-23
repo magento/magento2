@@ -103,19 +103,31 @@ return [
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_MODULE_DIR',
     ],
-    ['PUBLIC_MODULE_DIR', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\FileInterface::PUBLIC_MODULE_DIR'],
+    [
+        'PUBLIC_MODULE_DIR',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\FileInterface::PUBLIC_MODULE_DIR'
+    ],
     [
         'PUBLIC_THEME_DIR',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_THEME_DIR',
     ],
-    ['PUBLIC_THEME_DIR', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\FileInterface::PUBLIC_THEME_DIR'],
+    [
+        'PUBLIC_THEME_DIR',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\FileInterface::PUBLIC_THEME_DIR'
+    ],
     [
         'PUBLIC_VIEW_DIR',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_VIEW_DIR',
     ],
-    ['PUBLIC_VIEW_DIR', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\FileInterface::PUBLIC_VIEW_DIR'],
+    [
+        'PUBLIC_VIEW_DIR',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\FileInterface::PUBLIC_VIEW_DIR'
+    ],
     ['REGISTRY_FORM_PARAMS_KEY', null, 'direct value'],
     ['RULE_PERM_ALLOW', '\Magento\Framework\Math\Random'],
     ['RULE_PERM_DENY', '\Magento\Framework\Math\Random'],
@@ -506,7 +518,11 @@ return [
     ['CONTAINER_OPT_HTML_CLASS', 'Magento\Framework\View\Layout', '\Magento\Framework\View\Layout\Element'],
     ['CONTAINER_OPT_HTML_ID', 'Magento\Framework\View\Layout', '\Magento\Framework\View\Layout\Element'],
     ['CONTAINER_OPT_LABEL', 'Magento\Framework\View\Layout', '\Magento\Framework\View\Layout\Element'],
-    ['XML_PATH_THEME_ID', 'Magento\Core\Model\View\Design', '\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID'],
+    [
+        'XML_PATH_THEME_ID',
+        'Magento\Core\Model\View\Design',
+        '\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID'
+    ],
     ['UPLOAD_ROOT', 'Magento\Backend\Model\Config\Backend\Logo'],
     ['UPLOAD_ROOT', 'Magento\Backend\Model\Config\Backend\Favicon'],
     ['DIRECTORY_SEPARATOR', 'Magento\Framework\Filesystem'],
@@ -648,26 +664,74 @@ return [
     ['VAT_CLASS_INVALID', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_CLASS_INVALID'],
     ['VAT_CLASS_INTRA_UNION', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_CLASS_INTRA_UNION'],
     ['VAT_CLASS_DOMESTIC', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_CLASS_DOMESTIC'],
-    ['XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP'],
-    ['XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP'],
-    ['XML_PATH_CUSTOMER_VIV_INVALID_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_INVALID_GROUP'],
-    ['XML_PATH_CUSTOMER_VIV_ERROR_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_ERROR_GROUP'],
+    [
+        'XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP'
+    ],
+    [
+        'XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP'
+    ],
+    [
+        'XML_PATH_CUSTOMER_VIV_INVALID_GROUP',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_INVALID_GROUP'
+    ],
+    [
+        'XML_PATH_CUSTOMER_VIV_ERROR_GROUP',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_VIV_ERROR_GROUP'
+    ],
     ['VAT_VALIDATION_WSDL_URL', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_VALIDATION_WSDL_URL'],
-    ['XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN'],
-    ['XML_PATH_EU_COUNTRIES_LIST', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_EU_COUNTRIES_LIST'],
-    ['XML_PATH_MERCHANT_COUNTRY_CODE', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_MERCHANT_COUNTRY_CODE'],
-    ['XML_PATH_MERCHANT_VAT_NUMBER', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::XML_PATH_MERCHANT_VAT_NUMBER'],
+    [
+        'XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN'
+    ],
+    [
+        'XML_PATH_EU_COUNTRIES_LIST',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_EU_COUNTRIES_LIST'
+    ],
+    [
+        'XML_PATH_MERCHANT_COUNTRY_CODE',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_MERCHANT_COUNTRY_CODE'
+    ],
+    [
+        'XML_PATH_MERCHANT_VAT_NUMBER',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Vat::XML_PATH_MERCHANT_VAT_NUMBER'
+    ],
     ['ROUTE_ACCOUNT_LOGIN', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Url::ROUTE_ACCOUNT_LOGIN'],
-    ['XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD'],
-    ['REFERER_QUERY_PARAM_NAME', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Url::REFERER_QUERY_PARAM_NAME'],
-    ['XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD'],
+    [
+        'XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD'
+    ],
+    [
+        'REFERER_QUERY_PARAM_NAME',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Url::REFERER_QUERY_PARAM_NAME'
+    ],
+    [
+        'XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD',
+        'Magento\Customer\Helper\Data',
+        'Magento\Customer\Model\Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD'
+    ],
     ['XML_PATH_SUPPORT_EMAIL', 'Magento\Customer\Helper\Data'],
     ['CONTEXT_AUTH', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_AUTH'],
     ['CONTEXT_CURRENCY', 'Magento\Customer\Helper\Data', 'Magento\Framework\App\Http\Context::CONTEXT_CURRENCY'],
     ['CONTEXT_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_GROUP'],
     ['CONTEXT_STORE', 'Magento\Customer\Helper\Data', 'Magento\Store\Model\StoreManagerInterface::CONTEXT_STORE'],
     ['DEBUG_CONNECT', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_CONNECT'],
-    ['DEBUG_TRANSACTION', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_TRANSACTION'],
+    [
+        'DEBUG_TRANSACTION',
+        'Magento\Framework\DB\Adapter\Pdo\Mysql',
+        'Magento\Framework\DB\LoggerInterface::TYPE_TRANSACTION'
+    ],
     ['DEBUG_QUERY', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_QUERY'],
     [
         'PARAM_ALLOWED_MODULES',

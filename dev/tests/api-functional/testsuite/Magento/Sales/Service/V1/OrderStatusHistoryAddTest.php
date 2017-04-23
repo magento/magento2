@@ -72,8 +72,14 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
 
         $commentData = reset($comments);
         foreach ($commentData as $key => $value) {
-            $this->assertEquals($commentData[OrderStatusHistoryInterface::COMMENT], $statusHistoryComment->getComment());
-            $this->assertEquals($commentData[OrderStatusHistoryInterface::PARENT_ID], $statusHistoryComment->getParentId());
+            $this->assertEquals(
+                $commentData[OrderStatusHistoryInterface::COMMENT],
+                $statusHistoryComment->getComment()
+            );
+            $this->assertEquals(
+                $commentData[OrderStatusHistoryInterface::PARENT_ID],
+                $statusHistoryComment->getParentId()
+            );
             $this->assertEquals(
                 $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED],
                 $statusHistoryComment->getIsCustomerNotified()

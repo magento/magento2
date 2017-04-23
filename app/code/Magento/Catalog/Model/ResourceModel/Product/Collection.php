@@ -489,7 +489,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _construct()
     {
         if ($this->isEnabledFlat()) {
-            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product\Flat::class);
+            $this->_init(\Magento\Catalog\Model\Product::class, Flat::class);
         } else {
             $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         }
@@ -507,7 +507,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _init($model, $entityModel)
     {
         if ($this->isEnabledFlat()) {
-            $entityModel = \Magento\Catalog\Model\ResourceModel\Product\Flat::class;
+            $entityModel = Flat::class;
         }
         return parent::_init($model, $entityModel);
     }

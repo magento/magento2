@@ -25,7 +25,7 @@ class Pro
     /**
      * Config instance
      *
-     * @var \Magento\Paypal\Model\Config
+     * @var Config
      */
     protected $_config;
 
@@ -55,7 +55,7 @@ class Pro
      *
      * @var string
      */
-    protected $_configType = \Magento\Paypal\Model\Config::class;
+    protected $_configType = Config::class;
 
     /**
      * @var \Magento\Paypal\Model\Config\Factory
@@ -122,11 +122,11 @@ class Pro
     /**
      * Config instance setter
      *
-     * @param \Magento\Paypal\Model\Config $instace
+     * @param Config $instace
      * @param int|null $storeId
      * @return $this
      */
-    public function setConfig(\Magento\Paypal\Model\Config $instance, $storeId = null)
+    public function setConfig(Config $instance, $storeId = null)
     {
         $this->_config = $instance;
         if (null !== $storeId) {
@@ -138,7 +138,7 @@ class Pro
     /**
      * Config instance getter
      *
-     * @return \Magento\Paypal\Model\Config
+     * @return Config
      */
     public function getConfig()
     {
@@ -296,9 +296,7 @@ class Pro
             $canRefundMore = $payment->getCreditmemo()->getInvoice()->canRefund();
             $isFullRefund = !$canRefundMore &&
                 0 == (double)$order->getBaseTotalOnlineRefunded() + (double)$order->getBaseTotalOfflineRefunded();
-            $api->setRefundType(
-                $isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
-            );
+            $api->setRefundType($isFullRefund ? Config::REFUND_TYPE_FULL : Config::REFUND_TYPE_PARTIAL);
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {

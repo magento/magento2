@@ -37,7 +37,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Entity adapter.
      *
-     * @var \Magento\ImportExport\Model\Export\Entity\AbstractEntity
+     * @var Export\Entity\AbstractEntity
      */
     protected $_entityAdapter;
 
@@ -88,7 +88,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Create instance of entity adapter and return it
      *
-     * @return \Magento\ImportExport\Model\Export\Entity\AbstractEntity|\Magento\ImportExport\Model\Export\AbstractEntity
+     * @return Export\Entity\AbstractEntity|Export\AbstractEntity
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getEntityAdapter()
@@ -105,14 +105,14 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                         __('Please enter a correct entity model.')
                     );
                 }
-                if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\Entity\AbstractEntity &&
-                    !$this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\AbstractEntity
+                if (!$this->_entityAdapter instanceof Export\Entity\AbstractEntity &&
+                    !$this->_entityAdapter instanceof Export\AbstractEntity
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
                             'The entity adapter object must be an instance of %1 or %2.',
-                            \Magento\ImportExport\Model\Export\Entity\AbstractEntity::class,
-                            \Magento\ImportExport\Model\Export\AbstractEntity::class
+                            Export\Entity\AbstractEntity::class,
+                            Export\AbstractEntity::class
                         )
                     );
                 }
@@ -317,7 +317,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     {
         $fileName = null;
         $entityAdapter = $this->_getEntityAdapter();
-        if ($entityAdapter instanceof \Magento\ImportExport\Model\Export\AbstractEntity) {
+        if ($entityAdapter instanceof Export\AbstractEntity) {
             $fileName = $entityAdapter->getFileName();
         }
         if (!$fileName) {

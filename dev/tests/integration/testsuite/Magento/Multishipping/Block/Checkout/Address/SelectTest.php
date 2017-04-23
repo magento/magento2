@@ -39,7 +39,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $addressAsHtml = $this->_selectBlock->getAddressAsHtml($address);
         $this->assertEquals(
             "John Smith<br />CompanyName<br />Green str, 67<br />CityM,  Alabama, 75477"
-                . "<br />United States<br />T: <a href=\"tel:3468676\">3468676</a>",
+            . "<br />United States<br />T: <a href=\"tel:3468676\">3468676</a>",
             str_replace("\n", '', $addressAsHtml),
             "Address was represented as HTML incorrectly"
         );

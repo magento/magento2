@@ -50,7 +50,8 @@ class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->getId() === null&& $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
+        if ($object->getId() === null && $object->getCustomerId()
+            && $object->getProductId() && $object->getWebsiteId()
         ) {
             if ($row = $this->_getAlertRow($object)) {
                 $price = $object->getPrice();

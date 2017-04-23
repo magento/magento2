@@ -85,6 +85,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
      */
     public function getAllWebsitesValue()
     {
-        return AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $this->websiteModel->getBaseCurrency()->getCurrencyCode() . ']';
+        return AdvancedPricing::VALUE_ALL_WEBSITES
+            . ' [' . $this->websiteModel->getBaseCurrency()->getCurrencyCode() . ']';
     }
 }

@@ -7,6 +7,7 @@
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Website as ProductWebsite;
 use Magento\CatalogInventory\Api\StockIndexInterface;
@@ -173,7 +174,7 @@ class StockIndex implements StockIndexInterface
                         if (isset($childrenStatus[$childId])
                             && isset($childrenWebsites[$childId])
                             && in_array($websiteId, $childrenWebsites[$childId])
-                            && $childrenStatus[$childId] == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+                            && $childrenStatus[$childId] == Status::STATUS_ENABLED
                             && isset($childrenStock[$childId])
                             && $childrenStock[$childId] == \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
                         ) {
@@ -204,7 +205,7 @@ class StockIndex implements StockIndexInterface
             $this->websites = $resource->getWebsiteStores();
         }
         $websites = $this->websites;
-        if ($websiteId !== null&& isset($this->websites[$websiteId])) {
+        if ($websiteId !== null && isset($this->websites[$websiteId])) {
             $websites = [$websiteId => $this->websites[$websiteId]];
         }
         return $websites;

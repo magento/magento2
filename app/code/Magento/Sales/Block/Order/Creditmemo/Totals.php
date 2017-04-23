@@ -95,26 +95,6 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             );
             $this->addTotal($total);
         }
-        /**
-                <?php if ($this->getCanDisplayTotalPaid()): ?>
-                <tr>
-           <td colspan="6" class="a-right"><strong><?php echo __('Total Paid') ?></strong></td>
-           <td class="last a-right"><strong><?php echo $_order->formatPrice($_creditmemo->getTotalPaid()) ?></strong></td>
-                </tr>
-                <?php endif; ?>
-                <?php if ($this->getCanDisplayTotalRefunded()): ?>
-                <tr>
-           <td colspan="6" class="a-right"><strong><?php echo __('Total Refunded') ?></strong></td>
-           <td class="last a-right"><strong><?php echo $_order->formatPrice($_creditmemo->getTotalRefunded()) ?></strong></td>
-                </tr>
-                <?php endif; ?>
-                <?php if ($this->getCanDisplayTotalDue()): ?>
-                <tr>
-           <td colspan="6" class="a-right"><strong><?php echo __('Total Due') ?></strong></td>
-           <td class="last a-right"><strong><?php echo $_order->formatPrice($_creditmemo->getTotalDue()) ?></strong></td>
-                </tr>
-                <?php endif; ?>
-        */
         return $this;
     }
 }

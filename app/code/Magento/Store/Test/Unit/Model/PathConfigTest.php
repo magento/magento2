@@ -15,12 +15,16 @@ class PathConfigTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $scopeConfigMock;
+
     /** @var \Magento\Framework\Url\SecurityInfoInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $urlSecurityInfoMock;
+
     /** @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $storeManagerMock;
+
     /** @var Store | \PHPUnit_Framework_MockObject_MockObject*/
     private $storeMock;
+
     /** @var \Magento\Store\Model\RouteConfig */
     protected $model;
 

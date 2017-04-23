@@ -7,6 +7,7 @@
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Attribute\Data\Image;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\ComplexType as ComplexTypeLocator;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
@@ -186,8 +187,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => 'image'],
                 'serviceBackendModelDataInterfaceMapData' => [
-                        $serviceInterface => [\Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
-                            ]
+                        $serviceInterface => [Image::class => $mediaAttributeDataInterface]
                     ],
                 'expected' => $mediaAttributeDataInterface
             ]

@@ -57,6 +57,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @var \Magento\Tax\Model\Calculation\Rate\TitleFactory
      */
     protected $_titleFactory;
+
     /**
      * @var Region
      */

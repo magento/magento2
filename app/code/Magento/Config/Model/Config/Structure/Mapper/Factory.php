@@ -36,7 +36,7 @@ class Factory
         self::MAPPER_PATH => \Magento\Config\Model\Config\Structure\Mapper\Path::class,
         self::MAPPER_IGNORE => \Magento\Config\Model\Config\Structure\Mapper\Ignore::class,
         self::MAPPER_DEPENDENCIES => \Magento\Config\Model\Config\Structure\Mapper\Dependencies::class,
-        self::MAPPER_ATTRIBUTE_INHERITANCE => \Magento\Config\Model\Config\Structure\Mapper\Attribute\Inheritance::class,
+        self::MAPPER_ATTRIBUTE_INHERITANCE => Attribute\Inheritance::class,
         self::MAPPER_EXTENDS => \Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper::class,
     ];
 

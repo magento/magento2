@@ -345,7 +345,8 @@ class CustomerSetup extends EavSetup
                 'attribute_model' => \Magento\Customer\Model\Attribute::class,
                 'table' => 'customer_address_entity',
                 'additional_attribute_table' => 'customer_eav_attribute',
-                'entity_attribute_collection' => \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class,
+                'entity_attribute_collection'
+                    => \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class,
                 'attributes' => [
                     'prefix' => [
                         'type' => 'static',

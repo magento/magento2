@@ -29,8 +29,10 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Framework\Event\ManagerInterface $eventManager, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Registry $coreRegistry
+    ) {
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
     }

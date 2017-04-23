@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Review\Block\Adminhtml;
+
 /**
  * Adminhtml reviews grid
  *
  * @method int getProductId() getProductId()
- * @method \Magento\Review\Block\Adminhtml\Grid setProductId() setProductId(int $productId)
+ * @method Grid setProductId() setProductId(int $productId)
  * @method int getCustomerId() getCustomerId()
- * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
- * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue() setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
+ * @method Grid setCustomerId() setCustomerId(int $customerId)
+ * @method Grid setMassactionIdFieldOnlyIndexValue() setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Block\Adminhtml;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -112,7 +112,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare collection
      *
-     * @return \Magento\Review\Block\Adminhtml\Grid
+     * @return Grid
      */
     protected function _prepareCollection()
     {

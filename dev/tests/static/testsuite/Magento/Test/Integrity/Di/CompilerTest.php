@@ -306,8 +306,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 Converter::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Converter::class,
                 Mapper::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\Mapper::class,
                 SearchResults::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\SearchResults::class,
-                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
-                ExtensionAttributesGenerator::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator::class
+                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE => ExtensionAttributesInterfaceGenerator::class,
+                ExtensionAttributesGenerator::ENTITY_TYPE => ExtensionAttributesGenerator::class
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

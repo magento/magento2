@@ -35,7 +35,8 @@ abstract class NotifySender extends Sender
         if ($notify) {
             $sender->send();
         } else {
-            // Email copies are sent as separated emails if their copy method is 'copy' or a customer should not be notified
+            // Email copies are sent as separated emails
+            // if their copy method is 'copy' or a customer should not be notified
             $sender->sendCopyTo();
         }
 

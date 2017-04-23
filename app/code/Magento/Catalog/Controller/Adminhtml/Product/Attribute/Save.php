@@ -126,7 +126,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeCode = $this->getRequest()->getParam('attribute_code')
                 ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
             if (strlen($attributeCode) > 0) {
-                $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']);
+                $validatorAttrCode = new \Zend_Validate_Regex(
+                    ['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']
+                );
                 if (!$validatorAttrCode->isValid($attributeCode)) {
                     $this->messageManager->addError(
                         __(
@@ -193,7 +195,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0, 'apply_to' => []];
 
-            if ($model->getIsUserDefined() === null|| $model->getIsUserDefined() != 0) {
+            if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
             }
 

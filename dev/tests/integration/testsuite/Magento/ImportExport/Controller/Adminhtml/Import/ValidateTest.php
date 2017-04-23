@@ -59,7 +59,8 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->_objectManager->configure(
             [
                 'preferences' => [
-                    \Magento\Framework\HTTP\Adapter\FileTransferFactory::class => \Magento\ImportExport\Controller\Adminhtml\Import\HttpFactoryMock::class
+                    \Magento\Framework\HTTP\Adapter\FileTransferFactory::class
+                        => \Magento\ImportExport\Controller\Adminhtml\Import\HttpFactoryMock::class
                 ]
             ]
         );

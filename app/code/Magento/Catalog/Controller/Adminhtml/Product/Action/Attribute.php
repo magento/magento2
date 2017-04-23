@@ -21,7 +21,7 @@ abstract class Attribute extends Action
     const ADMIN_RESOURCE = 'Magento_Catalog::update_attributes';
 
     /**
-     *  @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
      */
     protected $attributeHelper;
 

@@ -61,7 +61,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'websiteRepository' => $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class),
         ];
 
-        return $this->getMock(\Magento\Store\Model\Store::class, ['getUrl'], $this->modelParams);
+        return $this->getMock(Store::class, ['getUrl'], $this->modelParams);
     }
 
     protected function tearDown()
@@ -287,7 +287,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'sort_order' => 0,
             'is_active' => 1,
         ]);
-        $crud = new \Magento\TestFramework\Entity($this->model, ['name' => 'new name'], \Magento\Store\Model\Store::class);
+        $crud = new \Magento\TestFramework\Entity($this->model, ['name' => 'new name'], Store::class);
         $crud->testCrud();
     }
 
@@ -349,7 +349,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($storeInUrl));
 
         $params['config'] = $configMock;
-        $model = $objectManager->create(\Magento\Store\Model\Store::class, $params);
+        $model = $objectManager->create(Store::class, $params);
         $model->setDisableStoreInUrl($disableStoreInUrl);
         $this->assertEquals($expectedResult, $model->isUseStoreInUrl());
     }
@@ -380,7 +380,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var Store $model */
-        $model = $objectManager->create(\Magento\Store\Model\Store::class);
+        $model = $objectManager->create(Store::class);
 
         $request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $request->setServer(new Parameters(array_merge($_SERVER, $serverValues)));
@@ -408,7 +408,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var Store $model */
-        $model = $objectManager->create(\Magento\Store\Model\Store::class);
+        $model = $objectManager->create(Store::class);
 
         $server = $_SERVER;
         $_SERVER['SERVER_PORT'] = 80;

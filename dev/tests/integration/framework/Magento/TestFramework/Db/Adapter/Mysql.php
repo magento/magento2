@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\Db\Adapter;
 
-class Mysql extends \Magento\Framework\DB\Adapter\Pdo\Mysql implements \Magento\TestFramework\Db\Adapter\TransactionInterface
+class Mysql extends \Magento\Framework\DB\Adapter\Pdo\Mysql implements TransactionInterface
 {
     /**
      * @var int

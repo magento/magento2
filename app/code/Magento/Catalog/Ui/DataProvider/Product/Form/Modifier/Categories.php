@@ -262,11 +262,13 @@ class Categories extends AbstractModifier
                                             'actionName' => 'toggleModal',
                                         ],
                                         [
-                                            'targetName' => 'product_form.product_form.create_category_modal.create_category',
+                                            'targetName'
+                                                => 'product_form.product_form.create_category_modal.create_category',
                                             'actionName' => 'render'
                                         ],
                                         [
-                                            'targetName' => 'product_form.product_form.create_category_modal.create_category',
+                                            'targetName'
+                                                => 'product_form.product_form.create_category_modal.create_category',
                                             'actionName' => 'resetForm'
                                         ]
                                     ],

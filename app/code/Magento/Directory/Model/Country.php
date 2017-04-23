@@ -196,6 +196,7 @@ T: {{telephone}}";
     /**
      * Get country name
      *
+     * @param string|null $locale
      * @return string
      */
     public function getName($locale = null)

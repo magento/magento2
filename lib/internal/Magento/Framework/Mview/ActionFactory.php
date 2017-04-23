@@ -32,7 +32,9 @@ class ActionFactory
     {
         $action = $this->objectManager->get($className);
         if (!$action instanceof ActionInterface) {
-            throw new \InvalidArgumentException($className . ' doesn\'t implement \Magento\Framework\Mview\ActionInterface');
+            throw new \InvalidArgumentException(
+                $className . ' doesn\'t implement \Magento\Framework\Mview\ActionInterface'
+            );
         }
 
         return $action;

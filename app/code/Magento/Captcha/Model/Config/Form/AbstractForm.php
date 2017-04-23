@@ -11,7 +11,9 @@
  */
 namespace Magento\Captcha\Model\Config\Form;
 
-abstract class AbstractForm extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+
+abstract class AbstractForm extends \Magento\Framework\App\Config\Value implements ArrayInterface
 {
     /**
      * @var string

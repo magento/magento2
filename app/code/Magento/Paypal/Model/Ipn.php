@@ -107,7 +107,9 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         if (!$this->_config->isMethodActive($methodCode) || !$this->_config->isMethodAvailable()) {
             throw new Exception(sprintf('Method "%s" is not available.', $methodCode));
         }
+        // @codingStandardsIgnoreStart
         /** @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro */
+        // @codingStandardsIgnoreEnd
         // verify merchant email intended to receive notification
         $merchantEmail = $this->_config->getValue('businessAccount');
         if (!$merchantEmail) {

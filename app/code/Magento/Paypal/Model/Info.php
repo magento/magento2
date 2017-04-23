@@ -428,8 +428,10 @@ class Info
      *
      * @param string $code
      * @return \Magento\Framework\Phrase
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_IPNandPDTVariables
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * @codingStandardsIgnoreEnd
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function explainPendingReason($code)
@@ -453,15 +455,11 @@ class Info
             case 'paymentreview':
                 return __('The payment is pending while it is being reviewed by PayPal for risk.');
             case 'unilateral':
-                return __(
-                    'The payment is pending because it was made to an email address that is not yet registered or confirmed.'
-                );
+                return __('The payment is pending because it was made to an email address that is not yet registered or confirmed.');
             case 'verify':
                 return __('The merchant account is not yet verified.');
             case 'upgrade':
-                return __(
-                    'The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.'
-                );
+                return __('The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.');
             case 'none':
                 // break is intentionally omitted
             case 'other':
@@ -476,8 +474,10 @@ class Info
      *
      * @param string $code
      * @return string
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_html_IPNandPDTVariables
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * @codingStandardsIgnoreEnd
      */
     public static function explainReasonCode($code)
     {
@@ -486,12 +486,8 @@ class Info
             'guarantee' => __(
                 'A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.'
             ),
-            'buyer-complaint' => __(
-                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
-            ),
-            'buyer_complaint' => __(
-                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
-            ),
+            'buyer-complaint' => __('A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'),
+            'buyer_complaint' => __('A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'),
             'refund' => __(
                 'A reversal has occurred on this transaction because you have given the customer a refund.'
             ),
@@ -500,13 +496,9 @@ class Info
             'admin_reversal' => __('Transaction reversal by PayPal administrators.'),
             'chargeback_reimbursement' => __('Reimbursement for a chargeback.'),
             'chargeback_settlement' => __('Settlement of a chargeback.'),
-            'unauthorized_spoof' => __(
-                'A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.'
-            ),
+            'unauthorized_spoof' => __('A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.'),
             'non_receipt' => __('Buyer claims that he did not receive goods or service.'),
-            'not_as_described' => __(
-                'Buyer claims that the goods or service received differ from merchant’s description of the goods or service.'
-            ),
+            'not_as_described' => __('Buyer claims that the goods or service received differ from merchant’s description of the goods or service.'),
             'unauthorized' => __('Buyer claims that he/she did not authorize transaction.'),
             'adjustment_reimburse' => __('A case that has been resolved and close requires a reimbursement.'),
             'duplicate' => __('Buyer claims that a possible duplicate payment was made to the merchant.'),
@@ -669,7 +661,9 @@ class Info
      *
      * @param string $value
      * @return string
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_AVSResponseCodes
+     * @codingStandardsIgnoreEnd
      */
     protected function _getAvsLabel($value)
     {
@@ -716,7 +710,9 @@ class Info
      *
      * @param string $value
      * @return string
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_AVSResponseCodes
+     * @codingStandardsIgnoreEnd
      */
     protected function _getCvv2Label($value)
     {

@@ -67,7 +67,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_TYPE => 'Value for \'tier_price_value_type\' ' .
             'attribute contains incorrect value, acceptable values are Fixed, Discount',
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
-        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL
+            => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
     ];
 
     /**

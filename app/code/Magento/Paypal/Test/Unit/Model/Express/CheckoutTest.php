@@ -17,6 +17,7 @@ use Magento\Quote\Model\ShippingAssignment;
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
     const SHIPPING_METHOD = 'new_shipping_method';
+
     /**
      * @var \Magento\Paypal\Model\Express\Checkout | \Magento\Paypal\Model\Express\Checkout
      */

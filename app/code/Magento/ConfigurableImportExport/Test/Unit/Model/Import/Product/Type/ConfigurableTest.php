@@ -494,16 +494,25 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     public function testSaveData()
     {
         $this->_entityModel->expects($this->any())->method('getNewSku')->will($this->returnValue([
-            'configurableskuI22' => [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v1' => [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr30v1' => [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v2' => [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'configurableskuI22'
+                => [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v1'
+                => [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr30v1'
+                => [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v2'
+                => [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
             'testSimple' => [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimpleToSkip' => [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutLabels' => [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutVariations' => [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22Duplicated' => [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22BadPrice' => [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'testSimpleToSkip'
+                => [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutLabels'
+                => [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutVariations'
+                => [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22Duplicated'
+                => [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22BadPrice'
+                => [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]));
 
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)

@@ -7,13 +7,14 @@
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog product upsell items block
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
+class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements IdentityInterface
 {
     /**
      * @var int

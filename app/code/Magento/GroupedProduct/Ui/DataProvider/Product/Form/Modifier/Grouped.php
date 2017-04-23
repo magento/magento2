@@ -404,7 +404,8 @@ class Grouped extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' => $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
+                                        'targetName' => $this->uiComponentsConfig['form']
+                                            . '.' . $this->uiComponentsConfig['form']
                                             . '.'
                                             . static::GROUP_GROUPED
                                             . '.'
@@ -412,7 +413,8 @@ class Grouped extends AbstractModifier
                                         'actionName' => 'openModal',
                                     ],
                                     [
-                                        'targetName' => $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
+                                        'targetName' => $this->uiComponentsConfig['form']
+                                            . '.' . $this->uiComponentsConfig['form']
                                             . '.'
                                             . static::GROUP_GROUPED
                                             . '.'

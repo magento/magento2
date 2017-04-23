@@ -51,8 +51,10 @@ return [
                 \Zend\ServiceManager\ServiceLocatorInterface::class => 'ServiceManager',
                 \Magento\Framework\DB\LoggerInterface::class => \Magento\Framework\DB\Logger\Quiet::class,
                 \Magento\Framework\Locale\ConfigInterface::class => \Magento\Framework\Locale\Config::class,
-                \Magento\Framework\Filesystem\DriverInterface::class => \Magento\Framework\Filesystem\Driver\File::class,
-                \Magento\Framework\Component\ComponentRegistrarInterface::class => \Magento\Framework\Component\ComponentRegistrar::class,
+                \Magento\Framework\Filesystem\DriverInterface::class
+                    => \Magento\Framework\Filesystem\Driver\File::class,
+                \Magento\Framework\Component\ComponentRegistrarInterface::class
+                    => \Magento\Framework\Component\ComponentRegistrar::class,
             ],
         ],
     ],

@@ -5,15 +5,18 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+
 class UrlRewriteHandler
 {
     /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
+    /** @var CategoryUrlRewriteGenerator */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
+    /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
     /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
@@ -36,8 +39,8 @@ class UrlRewriteHandler
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
-     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
+     * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
@@ -45,8 +48,8 @@ class UrlRewriteHandler
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
-        \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\UrlRewrite\Model\MergeDataProviderFactory $mergeDataProviderFactory = null,
@@ -186,13 +189,16 @@ class UrlRewriteHandler
             $this->urlPersist->deleteByData(
                 [
                     \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_ID => $categoryId,
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE
+                        => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
             $this->urlPersist->deleteByData(
                 [
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
-                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA
+                        => $this->serializer->serialize(['category_id' => $categoryId]),
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE
+                        => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
         }

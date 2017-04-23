@@ -1311,8 +1311,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 2 => ['second'],
                 3 => ['third']
             ]);
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([1,2,3]);
-        $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn([2,3]);
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([1, 2, 3]);
+        $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn([2, 3]);
 
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }

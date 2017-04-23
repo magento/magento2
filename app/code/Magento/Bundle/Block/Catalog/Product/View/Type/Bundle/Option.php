@@ -220,7 +220,9 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     public function getSelectionQtyTitlePrice($selection, $includeContainer = true)
     {
         $this->setFormatProduct($selection);
-        $priceTitle = '<span class="product-name">' . $selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($selection->getName()) . '</span>';
+        $priceTitle = '<span class="product-name">'
+            . $selection->getSelectionQty() * 1 . ' x ' . $this->escapeHtml($selection->getName())
+            . '</span>';
 
         $priceTitle .= ' &nbsp; ' . ($includeContainer ? '<span class="price-notice">' : '') . '+' .
             $this->renderPriceString($selection, $includeContainer) . ($includeContainer ? '</span>' : '');

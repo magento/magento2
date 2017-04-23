@@ -8,21 +8,25 @@
 
 namespace Magento\Integration\Test\Unit\Model;
 
+use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
+
 class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 {
-    /** \Magento\Integration\Model\AdminTokenService */
+    /** @var \Magento\Integration\Model\AdminTokenService */
     protected $_tokenService;
 
-    /** \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenFactoryMock;
 
-    /** \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $_userModelMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_tokenModelCollectionFactoryMock;
 
     /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit_Framework_MockObject_MockObject */
@@ -54,7 +58,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
-            \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class
+            CollectionFactory::class
         )->setMethods(['create'])->disableOriginalConstructor()->getMock();
 
         $this->_tokenModelCollectionFactoryMock->expects($this->once())

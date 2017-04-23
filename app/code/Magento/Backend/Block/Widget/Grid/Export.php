@@ -282,8 +282,10 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
-    protected function _exportCsvItem(\Magento\Framework\DataObject $item, \Magento\Framework\Filesystem\File\WriteInterface $stream)
-    {
+    protected function _exportCsvItem(
+        \Magento\Framework\DataObject $item,
+        \Magento\Framework\Filesystem\File\WriteInterface $stream
+    ) {
         $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {

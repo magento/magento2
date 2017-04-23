@@ -35,7 +35,8 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
 
     public function testMultiServiceWsdl()
     {
-        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}"
+            . "?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
         $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
         $this->isSingleService = false;
@@ -926,7 +927,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
     </xsd:sequence>
 </xsd:complexType>
 PARAMETERS_COMPLEX_TYPE;
-        // @codingStandardsIgnoreEnd
+
         $this->assertContains(
             $this->_convertXmlToString($detailsParametersType),
             $wsdlContent,

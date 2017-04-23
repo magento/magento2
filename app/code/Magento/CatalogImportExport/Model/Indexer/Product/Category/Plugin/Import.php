@@ -16,8 +16,9 @@ class Import
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Category\Processor $indexerProductCategoryProcessor
      */
-    public function __construct(\Magento\Catalog\Model\Indexer\Product\Category\Processor $indexerProductCategoryProcessor)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\Indexer\Product\Category\Processor $indexerProductCategoryProcessor
+    ) {
         $this->_indexerProductCategoryProcessor = $indexerProductCategoryProcessor;
     }
 

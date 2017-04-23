@@ -25,6 +25,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */

@@ -200,7 +200,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                     ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name1' => ['value' => 'value1']],
                     ManagerInterface::CHILDREN_KEY => [
                         'custom' => [
-                            ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['custom_name1' => ['value' => 'custom_value1']],
+                            ManagerInterface::COMPONENT_ARGUMENTS_KEY
+                                => ['custom_name1' => ['value' => 'custom_value1']],
                             ManagerInterface::CHILDREN_KEY => [],
                         ],
                     ],
@@ -219,7 +220,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                         ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name1' => ['argument' => 'value1']],
                         ManagerInterface::CHILDREN_KEY => [
                             'custom' => [
-                                ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['custom_name1' => ['argument' => 'custom_value1']],
+                                ManagerInterface::COMPONENT_ARGUMENTS_KEY
+                                    => ['custom_name1' => ['argument' => 'custom_value1']],
                                 ManagerInterface::CHILDREN_KEY => [],
                             ]
                         ]
@@ -233,7 +235,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                             ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name2' => ['value' => 'value2']],
                             ManagerInterface::CHILDREN_KEY => [
                                 'test_component21' => [
-                                    ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name21' => ['value' => 'value21']],
+                                    ManagerInterface::COMPONENT_ARGUMENTS_KEY
+                                        => ['argument_name21' => ['value' => 'value21']],
                                     ManagerInterface::CHILDREN_KEY => [],
                                 ],
                             ],
@@ -256,7 +259,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                         ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name2'],
                         ManagerInterface::CHILDREN_KEY => [
                             'attribute_name21' => [
-                                ManagerInterface::COMPONENT_ARGUMENTS_KEY => ['argument_name21' => ['argument' => 'value21']],
+                                ManagerInterface::COMPONENT_ARGUMENTS_KEY
+                                    => ['argument_name21' => ['argument' => 'value21']],
                                 ManagerInterface::COMPONENT_ATTRIBUTES_KEY => ['name' => 'attribute_name21'],
                                 ManagerInterface::CHILDREN_KEY => [],
                             ],

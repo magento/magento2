@@ -44,5 +44,8 @@ interface DataObjectServiceInterface
      * @param \Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface $request
      * @return \Magento\TestModule4\Service\V1\Entity\DataObjectResponse
      */
-    public function extensibleDataObject($id, \Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface $request);
+    public function extensibleDataObject(
+        $id,
+        \Magento\TestModule4\Service\V1\Entity\ExtensibleRequestInterface $request
+    );
 }

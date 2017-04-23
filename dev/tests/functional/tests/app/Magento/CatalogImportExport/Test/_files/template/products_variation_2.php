@@ -60,7 +60,8 @@ return [
                     'additional_attributes' => '%configurable_additional_attributes%=black',
                     'weight' => '30',
                     'qty' => '50',
-                    'configurable_variations' => "sku=%configurable_attribute_sku%,%configurable_additional_attributes%=black"
+                    'configurable_variations'
+                        => "sku=%configurable_attribute_sku%,%configurable_additional_attributes%=black"
                 ],
         ],
 ];

@@ -90,8 +90,10 @@ class Ga extends \Magento\Framework\View\Element\Template
     /**
      * Render information about specified orders and their items
      *
+     * @codingStandardsIgnoreStart
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-options
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transactions
+     * @codingStandardsIgnoreEnd
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#transaction
      *
      * @return string|void

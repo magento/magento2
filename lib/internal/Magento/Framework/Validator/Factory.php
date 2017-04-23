@@ -72,6 +72,8 @@ class Factory
 
     /**
      * Init cached list of validation files
+     *
+     * @return void
      */
     protected function _initializeConfigList()
     {

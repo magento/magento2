@@ -21,8 +21,10 @@ class AbstractExtensibleObjectTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager->configure(
             [
                 'preferences' => [
-                    \Magento\Wonderland\Api\Data\FakeAddressInterface::class => \Magento\Wonderland\Model\FakeAddress::class,
-                    \Magento\Wonderland\Api\Data\FakeRegionInterface::class => \Magento\Wonderland\Model\FakeRegion::class,
+                    \Magento\Wonderland\Api\Data\FakeAddressInterface::class
+                        => \Magento\Wonderland\Model\FakeAddress::class,
+                    \Magento\Wonderland\Api\Data\FakeRegionInterface::class
+                        => \Magento\Wonderland\Model\FakeRegion::class,
                 ],
             ]
         );

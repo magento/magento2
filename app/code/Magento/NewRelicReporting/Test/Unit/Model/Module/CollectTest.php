@@ -9,6 +9,7 @@ use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Module\Collect;
+use Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory;
 
 /**
  * Class CollectTest
@@ -42,7 +43,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
     protected $moduleFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleCollectionFactoryMock;
 
@@ -72,7 +73,7 @@ class CollectTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->moduleCollectionFactoryMock = $this->getMock(
-            \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory::class,
+            CollectionFactory::class,
             ['create'],
             [],
             '',

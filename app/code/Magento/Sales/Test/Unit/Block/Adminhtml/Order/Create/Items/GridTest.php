@@ -376,14 +376,14 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $quoteAddressMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount'],
+            ['getSubtotal', 'getTaxAmount', 'getDiscountTaxCompensationAmount', 'getDiscountAmount'],
             [],
             '',
             false
         );
         $gridMock = $this->getMock(
             \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::class,
-            ['getQuoteAddress','displayTotalsIncludeTax'],
+            ['getQuoteAddress', 'displayTotalsIncludeTax'],
             [],
             '',
             false

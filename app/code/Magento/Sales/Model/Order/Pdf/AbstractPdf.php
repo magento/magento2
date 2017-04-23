@@ -7,13 +7,14 @@
 namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
 
 /**
  * Sales Order PDF abstract model
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractPdf extends \Magento\Framework\DataObject
+abstract class AbstractPdf extends DataObject
 {
     /**
      * Y coordinate
@@ -439,7 +440,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         /* Shipping Address and Method */
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
-            $shippingAddress = $this->_formatAddress($this->addressRenderer->format($order->getShippingAddress(), 'pdf'));
+            $shippingAddress = $this->_formatAddress(
+                $this->addressRenderer->format($order->getShippingAddress(), 'pdf')
+            );
             $shippingMethod = $order->getShippingDescription();
         }
 
@@ -708,7 +711,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * Parse item description
      *
-     * @param  \Magento\Framework\DataObject $item
+     * @param  DataObject $item
      * @return array
      */
     protected function _parseItemDescription($item)
@@ -822,12 +825,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * Draw Item process
      *
-     * @param  \Magento\Framework\DataObject $item
+     * @param  DataObject $item
      * @param  \Zend_Pdf_Page $page
      * @param  \Magento\Sales\Model\Order $order
      * @return \Zend_Pdf_Page
      */
-    protected function _drawItem(\Magento\Framework\DataObject $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
+    protected function _drawItem(DataObject $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
     {
         $type = $item->getOrderItem()->getProductType();
         $renderer = $this->_getRenderer($type);

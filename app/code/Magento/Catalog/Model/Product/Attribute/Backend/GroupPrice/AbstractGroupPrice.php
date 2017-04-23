@@ -329,6 +329,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * @param \Magento\Catalog\Model\Product $object
      * @param array $priceData
+     * @return void
      */
     public function setPriceData($object, $priceData)
     {

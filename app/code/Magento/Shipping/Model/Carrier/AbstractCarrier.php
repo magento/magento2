@@ -281,9 +281,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     public function checkAvailableShipCountries(\Magento\Framework\DataObject $request)
     {
         $speCountriesAllow = $this->getConfigData('sallowspecific');
-        /*
-         * for specific countries, the flag will be 1
-         */
+        // for specific countries, the flag will be 1
         if ($speCountriesAllow && $speCountriesAllow == 1) {
             $showMethod = $this->getConfigData('showmethod');
             $availableCountries = [];
@@ -310,9 +308,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
 
                 return $error;
             } else {
-                /*
-                 * The admin set not to show the shipping module if the delivery country is not within specific countries
-                 */
+                // The admin set not to show the shipping module
+                // if the delivery country is not within specific countries
                 return false;
             }
         }

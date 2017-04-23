@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Search;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+
 class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,7 +16,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
      */
     protected $collectionFactoryMock;
 
@@ -26,7 +28,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            CollectionFactory::class,
             ['create'],
             [],
             '',

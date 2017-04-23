@@ -601,8 +601,8 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                     'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
                         . ',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                        . ' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title, title=Title 2,'
-                        . ' price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        . ' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title,'
+                        . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
                 1,
                 true

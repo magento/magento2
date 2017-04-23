@@ -12,7 +12,6 @@ use Magento\Search\Model\Query as QueryModel;
 
 /**
  * Search query resource model
-
  */
 class Query extends AbstractDb
 {

@@ -375,8 +375,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider reindexFlatEnabledTestDataProvider
      */
-    public function testReindexFlatEnabled($flatScheduled, $productScheduled, $expectedFlatReindexCalls, $expectedProductReindexCall)
-    {
+    public function testReindexFlatEnabled(
+        $flatScheduled,
+        $productScheduled,
+        $expectedFlatReindexCalls,
+        $expectedProductReindexCall
+    ) {
         $affectedProductIds = ["1", "2"];
         $this->category->setAffectedProductIds($affectedProductIds);
         $pathIds = ['path/1/2', 'path/2/3'];
@@ -390,8 +394,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
         $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexRow')->with('123');
 
-        $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
-        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
+        $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->willReturn($productScheduled);
+        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
+            ->method('reindexList')->with($pathIds);
 
         $this->indexerRegistry->expects($this->at(0))
             ->method('get')

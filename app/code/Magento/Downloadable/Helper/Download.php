@@ -280,6 +280,10 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getContentDisposition($store = null)
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_CONTENT_DISPOSITION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_CONTENT_DISPOSITION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

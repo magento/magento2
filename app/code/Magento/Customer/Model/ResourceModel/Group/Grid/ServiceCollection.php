@@ -69,7 +69,7 @@ class ServiceCollection extends AbstractServiceCollection
             $groups = $searchResults->getItems();
             foreach ($groups as $group) {
                 $groupItem = new \Magento\Framework\DataObject();
-                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group, \Magento\Customer\Api\Data\GroupInterface::class));
+                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group, GroupInterface::class));
                 $this->_addItem($groupItem);
             }
             $this->_setIsLoaded();

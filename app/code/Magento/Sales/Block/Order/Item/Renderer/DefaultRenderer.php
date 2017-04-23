@@ -170,7 +170,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         $result = ['value' => $truncatedValue];
 
         if ($this->string->strlen($optionValue) > 55) {
-            $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
+            $result['value'] = $result['value']
+                . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, ['full_view' => $optionValue]);
         }

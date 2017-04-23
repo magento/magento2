@@ -45,7 +45,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
     protected $connectionMock;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var Select|\PHPUnit_Framework_MockObject_MockObject  */
     protected $selectMock;
 
     /** @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
@@ -72,7 +72,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->connectionMock));
 
         $this->selectMock = $this->getMock(
-            \Magento\Framework\DB\Select::class,
+            Select::class,
             ['getPart', 'setPart', 'from', 'columns'],
             [$this->connectionMock, $renderer]
         );
@@ -215,7 +215,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getPart')
             ->will($this->returnValue($getPartRet));
 
-        $this->selectMock->expects($this->once())->method('setPart')->with(\Magento\Framework\DB\Select::COLUMNS, $expected);
+        $this->selectMock->expects($this->once())->method('setPart')->with(Select::COLUMNS, $expected);
         $this->assertTrue($this->uut->getSelect() instanceof Select);
     }
 

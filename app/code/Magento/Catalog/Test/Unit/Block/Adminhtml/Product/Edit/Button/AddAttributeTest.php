@@ -27,7 +27,8 @@ class AddAttributeTest extends GenericTest
                                     'actionName' => 'toggleModal'
                                 ],
                                 [
-                                    'targetName' => 'product_form.product_form.add_attribute_modal.product_attributes_grid',
+                                    'targetName' =>
+                                        'product_form.product_form.add_attribute_modal.product_attributes_grid',
                                     'actionName' => 'render'
                                 ]
                             ]

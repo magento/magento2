@@ -7,11 +7,12 @@
 namespace Magento\Weee\Block\Renderer\Weee;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Adminhtml weee tax item renderer
  */
-class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Tax extends \Magento\Backend\Block\Widget implements RendererInterface
 {
     /**
      * @var AbstractElement|null

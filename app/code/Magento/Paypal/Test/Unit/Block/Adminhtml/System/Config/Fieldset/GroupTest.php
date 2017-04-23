@@ -86,7 +86,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $html = $this->_model->render($this->_element);
         $this->assertContains(
             '<input id="' . $this->_element->getHtmlId() . '-state" name="config_state['
-                . $this->_element->getId() . ']" type="hidden" value="' . $expected . '" />',
+            . $this->_element->getId() . ']" type="hidden" value="' . $expected . '" />',
             $html
         );
     }

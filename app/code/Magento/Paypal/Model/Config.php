@@ -11,7 +11,6 @@ use Magento\Payment\Helper\Formatter;
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
  * Works with PayPal-specific system configuration
-
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -556,7 +555,9 @@ class Config extends AbstractConfig
      * Locale codes supported by misc images (marks, shortcuts etc)
      *
      * @var string[]
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration#id089QD0O0TX4__id08AH904I0YK
+     * @codingStandardsIgnoreEnd
      */
     protected $_supportedImageLocales = [
         'de_DE',
@@ -1194,7 +1195,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if ($this->_methodCode !== null&& $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;

@@ -78,7 +78,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         <arguments><argument name="file" xsi:type="string">testh.css</argument></arguments>
                     </block>
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
-                        <arguments><argument name="file" xsi:type="string">Magento_Theme::test.css</argument></arguments>
+                        <arguments>
+                            <argument name="file" xsi:type="string">Magento_Theme::test.css</argument>
+                        </arguments>
                     </block>
                 </referenceBlock>
                 <block type="Some_Block_Class">

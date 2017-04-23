@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
+use Magento\Framework\App\Response\Http\Interceptor;
+
 abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\AbstractController
 {
     /** @var  \Magento\Framework\App\Response\Http */
@@ -16,8 +18,8 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
         $this->_objectManager->configure(
             [
                 'preferences' => [
-                        \Magento\Framework\App\Response\Http::class => \Magento\Framework\App\Response\Http\Interceptor::class
-                    ]
+                    \Magento\Framework\App\Response\Http::class => Interceptor::class
+                ]
             ]
         );
         $this->interceptedResponse = $this->_objectManager->create(\Magento\Framework\App\Response\Http::class);

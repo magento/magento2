@@ -1347,16 +1347,19 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 // ensure default title is set
                 if (!isset($typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
-                    $typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] = $specificTypeData['title'];
+                    $typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID]
+                        = $specificTypeData['title'];
                 }
 
                 if ($specificTypeData['price']) {
                     if ($this->_isPriceGlobal) {
-                        $typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] = $specificTypeData['price'];
+                        $typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID]
+                            = $specificTypeData['price'];
                     } else {
                         // ensure default price is set
                         if (!isset($typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
-                            $typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] = $specificTypeData['price'];
+                            $typePrices[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID]
+                                = $specificTypeData['price'];
                         }
                         $typePrices[$nextValueId][$this->_rowStoreId] = $specificTypeData['price'];
                     }
@@ -1373,7 +1376,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!isset($childCount[$this->_rowStoreId][$prevOptionId])) {
                 $childCount[$this->_rowStoreId][$prevOptionId] = 0;
             }
-            $parentValueId = $nextValueId - $parentCount[$prevOptionId] + $childCount[$this->_rowStoreId][$prevOptionId];
+            $parentValueId = $nextValueId - $parentCount[$prevOptionId]
+                + $childCount[$this->_rowStoreId][$prevOptionId];
             $specificTypeData = $this->_getSpecificTypeData($rowData, $parentValueId, false);
             //For others stores
             if ($specificTypeData) {
@@ -1826,7 +1830,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($rowData['custom_options'])) {
             return $rowData;
         }
-        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
+        $rowData['custom_options'] = str_replace(
+            $beforeOptionValueSkuDelimiter,
+            $this->_productEntity->getMultipleValueSeparator(),
+            $rowData['custom_options']
+        );
         $options = [];
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
         $k = 0;

@@ -957,7 +957,7 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * Check if specified address ID belongs to customer.
      *
-     * @param $addressId
+     * @param int $addressId
      * @return bool
      */
     protected function isAddressIdApplicable($addressId)

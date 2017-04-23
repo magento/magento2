@@ -35,7 +35,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->storeCode = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()->getCode();
 
-        $this->productMetadata =  Bootstrap::getObjectManager()->get(\Magento\Framework\App\ProductMetadataInterface::class);
+        $this->productMetadata = Bootstrap::getObjectManager()->get(ProductMetadataInterface::class);
 
         parent::setUp();
     }

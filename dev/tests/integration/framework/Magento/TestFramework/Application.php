@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -338,8 +340,8 @@ class Application
         $objectManagerConfiguration = [
             'preferences' => [
                 \Magento\Framework\App\State::class => \Magento\TestFramework\App\State::class,
-                \Magento\Framework\Mail\TransportInterface::class => \Magento\TestFramework\Mail\TransportInterfaceMock::class,
-                \Magento\Framework\Mail\Template\TransportBuilder::class => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
+                TransportInterface::class => \Magento\TestFramework\Mail\TransportInterfaceMock::class,
+                TransportBuilder::class => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {

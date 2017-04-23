@@ -150,7 +150,8 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                     CTC::KEY_TAX_DETAILS_ROW_TOTAL => $itemData['weee_tax_applied_row_amount'],
                     CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL => $itemData['base_weee_tax_applied_row_amnt'],
                     CTC::KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX => $itemData['weee_tax_applied_row_amount_incl_tax'],
-                    CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX => $itemData['base_weee_tax_applied_row_amnt_incl_tax'],
+                    CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX
+                        => $itemData['base_weee_tax_applied_row_amnt_incl_tax'],
                     ];
             }
             $extraDetails = [

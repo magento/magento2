@@ -152,7 +152,7 @@ class Subscription implements SubscriptionInterface
     protected function getLinkedViews()
     {
         if (!$this->linkedViews) {
-            $viewList = $this->viewCollection->getViewsByStateMode(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
+            $viewList = $this->viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
 
             foreach ($viewList as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */

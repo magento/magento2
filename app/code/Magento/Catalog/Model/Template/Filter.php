@@ -12,6 +12,8 @@
  */
 namespace Magento\Catalog\Model\Template;
 
+use Magento\Framework\UrlInterface;
+
 /**
  * Work with catalog(store, website) urls
  *
@@ -126,7 +128,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function mediaDirective($construction)
     {
         $params = $this->getParameters($construction[2]);
-        return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
+        return $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**

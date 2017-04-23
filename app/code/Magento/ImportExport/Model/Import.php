@@ -104,7 +104,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Entity adapter.
      *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity
+     * @var Import\Entity\AbstractEntity
      */
     protected $_entityAdapter;
 
@@ -174,7 +174,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $localeDate
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -215,7 +215,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Create instance of entity adapter and return it
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\Magento\ImportExport\Model\Import\AbstractEntity
+     * @return Import\Entity\AbstractEntity|Import\AbstractEntity
      */
     protected function _getEntityAdapter()
     {
@@ -230,14 +230,14 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                         __('Please enter a correct entity model.')
                     );
                 }
-                if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\Entity\AbstractEntity &&
-                    !$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\AbstractEntity
+                if (!$this->_entityAdapter instanceof Import\Entity\AbstractEntity &&
+                    !$this->_entityAdapter instanceof Import\AbstractEntity
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
                             'The entity adapter object must be an instance of %1 or %2.',
-                            \Magento\ImportExport\Model\Import\Entity\AbstractEntity::class,
-                            \Magento\ImportExport\Model\Import\AbstractEntity::class
+                            Import\Entity\AbstractEntity::class,
+                            Import\AbstractEntity::class
                         )
                     );
                 }
@@ -449,7 +449,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->_getEntityAdapter()->importData();
         } catch (\Exception $e) {
             $errorAggregator->addError(
-                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,
                 null,
@@ -583,7 +583,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $adapter->validateData();
         } catch (\Exception $e) {
             $errorAggregator->addError(
-                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,
                 null,

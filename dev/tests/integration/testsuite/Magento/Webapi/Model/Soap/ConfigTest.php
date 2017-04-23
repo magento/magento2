@@ -35,7 +35,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'resources' => [
                             'Magento_Customer::manage'
                         ],
-                        'documentation' => 'Activate a customer account using a key that was sent in a confirmation email.',
+                        'documentation'
+                            => 'Activate a customer account using a key that was sent in a confirmation email.',
                         'interface' => [
                             'in' => [
                                 'parameters' => [

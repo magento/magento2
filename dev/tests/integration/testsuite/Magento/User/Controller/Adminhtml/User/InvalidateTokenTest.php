@@ -80,7 +80,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     /**
      * @magentoDataFixture Magento/User/_files/user_with_role.php
      */
-    public function testInvalidateToken_NoTokens()
+    public function testInvalidateTokenWhenUserHasNoTokens()
     {
         /** @var \Magento\User\Model\User $userModel */
         $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
@@ -95,7 +95,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         );
     }
 
-    public function testInvalidateToken_NoUser()
+    public function testInvalidateTokenWhenNoUser()
     {
         $this->dispatch('backend/admin/user/invalidateToken');
         $this->assertSessionMessages(
@@ -104,7 +104,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         );
     }
 
-    public function testInvalidateToken_InvalidUser()
+    public function testInvalidateTokenWhenUserIsInvalid()
     {
         $adminUserId = 999;
         // invalidate token

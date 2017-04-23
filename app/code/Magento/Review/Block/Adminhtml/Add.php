@@ -72,7 +72,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         toggleVis("reset_button");
                     },
                     updateRating: function() {
-                        elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
+                        elements = [
+                            $("select_stores"), 
+                            $("rating_detail").getElementsBySelector("input[type=\'radio\']")
+                        ].flatten();
                         $(\'save_button\').disabled = true;
                         var params = Form.serializeElements(elements);
                         if (!params.isAjax) {
@@ -85,7 +88,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             $this->getUrl(
                 'review/product/ratingItems'
             ) .
-            '", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
+            '", {
+                parameters:params, 
+                evalScripts: true,  
+                onComplete:function(){ $(\'save_button\').disabled = false; } });
                     },
 
                     reqSuccess :function(response) {

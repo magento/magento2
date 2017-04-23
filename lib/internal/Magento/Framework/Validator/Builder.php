@@ -255,7 +255,7 @@ class Builder
         }
 
         if (\Magento\Framework\Validator\Config::CONSTRAINT_TYPE_PROPERTY == $data['type']) {
-            $result = new \Magento\Framework\Validator\Constraint\Property($validator, $data['property'], $data['alias']);
+            $result = new Constraint\Property($validator, $data['property'], $data['alias']);
         } else {
             $result = $this->_constraintFactory->create(['validator' => $validator, 'alias' => $data['alias']]);
         }
@@ -267,7 +267,7 @@ class Builder
      * Create constraint validator instance
      *
      * @param array $data
-     * @return \Magento\Framework\Validator\ValidatorInterface
+     * @return ValidatorInterface
      * @throws \InvalidArgumentException
      */
     protected function _createConstraintValidator(array $data)
@@ -282,9 +282,12 @@ class Builder
         );
 
         // Check validator type
-        if (!$validator instanceof \Magento\Framework\Validator\ValidatorInterface) {
+        if (!$validator instanceof ValidatorInterface) {
             throw new \InvalidArgumentException(
-                sprintf('Constraint class "%s" must implement \Magento\Framework\Validator\ValidatorInterface', $data['class'])
+                sprintf(
+                    'Constraint class "%s" must implement \Magento\Framework\Validator\ValidatorInterface',
+                    $data['class']
+                )
             );
         }
 
@@ -294,11 +297,11 @@ class Builder
     /**
      * Configure validator
      *
-     * @param \Magento\Framework\Validator\ValidatorInterface $validator
+     * @param ValidatorInterface $validator
      * @param array $options
      * @return void
      */
-    protected function _configureConstraintValidator(\Magento\Framework\Validator\ValidatorInterface $validator, array $options)
+    protected function _configureConstraintValidator(ValidatorInterface $validator, array $options)
     {
         // Call all validator methods according to configuration
         if (isset($options['methods'])) {

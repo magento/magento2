@@ -185,7 +185,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $helper->getObject(
-
             LinkManagement::class,
             [
                 'productRepository' => $this->productRepository,
@@ -654,7 +653,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productLink->expects($this->any())->method('getQty')->will($this->returnValue($qty));
         $productLink->expects($this->any())->method('getPriceType')->will($this->returnValue($priceType));
         $productLink->expects($this->any())->method('getPrice')->will($this->returnValue($price));
-        $productLink->expects($this->any())->method('getCanChangeQuantity')->will($this->returnValue($canChangeQuantity));
+        $productLink->expects($this->any())->method('getCanChangeQuantity')->willReturn($canChangeQuantity);
         $productLink->expects($this->any())->method('getIsDefault')->will($this->returnValue($isDefault));
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);

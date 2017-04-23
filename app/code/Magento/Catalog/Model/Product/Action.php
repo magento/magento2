@@ -96,7 +96,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
     {
         $this->_eventManager->dispatch(
             'catalog_product_attribute_update_before',
-            ['attributes_data' => &$attrData, 'product_ids' => &$productIds, 'store_id' => &$storeId]
+            ['attributes_data' => $attrData, 'product_ids' => $productIds, 'store_id' => $storeId]
         );
 
         $this->_getResource()->updateAttributes($productIds, $attrData, $storeId);

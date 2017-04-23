@@ -7,13 +7,14 @@
 namespace Magento\Backend\Block\Widget\Form\Renderer;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Form fieldset default renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
 {
     /**
      * @var AbstractElement

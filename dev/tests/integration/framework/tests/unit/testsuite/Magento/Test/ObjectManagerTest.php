@@ -9,6 +9,10 @@
  */
 namespace Magento\Test;
 
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\ScopeInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -69,9 +73,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Config\ReaderInterface::class => $this->getMock(
                 \Magento\Framework\Config\ReaderInterface::class
             ),
-            \Magento\Framework\Config\ScopeInterface::class => $this->getMock(\Magento\Framework\Config\ScopeInterface::class),
-            \Magento\Framework\Config\CacheInterface::class => $this->getMock(\Magento\Framework\Config\CacheInterface::class),
-            \Magento\Framework\Cache\FrontendInterface::class => $this->getMock(\Magento\Framework\Cache\FrontendInterface::class),
+            ScopeInterface::class => $this->getMock(ScopeInterface::class),
+            CacheInterface::class => $this->getMock(CacheInterface::class),
+            FrontendInterface::class => $this->getMock(FrontendInterface::class),
             \Magento\Framework\App\ResourceConnection::class => $connectionMock,
             \Magento\Framework\App\ResourceConnection\Config::class => $this->getMock(
                 \Magento\Framework\App\ResourceConnection\Config::class,

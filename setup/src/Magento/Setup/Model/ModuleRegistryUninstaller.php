@@ -96,7 +96,8 @@ class ModuleRegistryUninstaller
         }
         $this->writer->saveConfig(
             [
-                \Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG => [\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES => $newModules]
+                \Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG
+                    => [\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES => $newModules]
             ],
             true
         );

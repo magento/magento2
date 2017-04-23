@@ -324,7 +324,8 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $option = [
             [
                 'label' => 'test',
-                'value' => "{{\Magento\Config\Test\Unit\Model\Config\Structure\Element\FieldTest::FIELD_TEST_CONSTANT}}",
+                'value' =>
+                    "{{\Magento\Config\Test\Unit\Model\Config\Structure\Element\FieldTest::FIELD_TEST_CONSTANT}}",
             ],
         ];
         $expected = [

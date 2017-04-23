@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache;
 use Magento\Setup\Module\Di\App\Task\OperationException;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 
@@ -26,7 +28,7 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods([])
             ->getMock();
-        $objectManagerProviderMock = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManagerProviderMock = $this->getMock(ObjectManagerProvider::class, [], [], '', false);
         $objectManagerProviderMock->expects($this->once())->method('get')->willReturn($this->objectManagerMock);
         $this->factory = new OperationFactory(
             $objectManagerProviderMock
@@ -70,7 +72,7 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
         return  [
             [OperationFactory::AREA_CONFIG_GENERATOR, [], \Magento\Setup\Module\Di\App\Task\Operation\Area::class],
             [OperationFactory::INTERCEPTION, null, \Magento\Setup\Module\Di\App\Task\Operation\Interception::class],
-            [OperationFactory::INTERCEPTION_CACHE, 1, \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class],
+            [OperationFactory::INTERCEPTION_CACHE, 1, InterceptionCache::class],
         ];
     }
 }

@@ -805,7 +805,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * TODO: put together style and giropay settings
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
+     * @codingStandardsIgnoreEnd
      */
     public function callSetExpressCheckout()
     {
@@ -836,7 +838,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetExpressCheckoutDetails call
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetExpressCheckoutDetails
+     * @codingStandardsIgnoreEnd
      */
     public function callGetExpressCheckoutDetails()
     {
@@ -851,7 +855,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoExpressCheckout call
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoExpressCheckoutPayment
+     * @codingStandardsIgnoreEnd
      */
     public function callDoExpressCheckoutPayment()
     {
@@ -890,7 +896,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Do Reference Transaction call
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoReferenceTransaction
+     * @codingStandardsIgnoreEnd
      */
     public function callDoReferenceTransaction()
     {
@@ -942,7 +950,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * DoAuthorization call
      *
      * @return $this
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_DoAuthorization
+     * @codingStandardsIgnoreEnd
      */
     public function callDoAuthorization()
     {
@@ -970,7 +980,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * GetTransactionDetails
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetTransactionDetails
+     * @codingStandardsIgnoreEnd
      */
     public function callGetTransactionDetails()
     {
@@ -983,7 +995,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * RefundTransaction call
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_RefundTransaction
+     * @codingStandardsIgnoreEnd
      */
     public function callRefundTransaction()
     {
@@ -999,7 +1013,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * ManagePendingTransactionStatus
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_ManagePendingTransactionStatus
+     * @codingStandardsIgnoreEnd
      */
     public function callManagePendingTransactionStatus()
     {
@@ -1028,7 +1044,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Set Customer BillingA greement call
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetCustomerBillingAgreement
+     * @codingStandardsIgnoreEnd
      */
     public function callSetCustomerBillingAgreement()
     {
@@ -1041,7 +1059,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Get Billing Agreement Customer Details call
      *
      * @return void
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_GetBillingAgreementCustomerDetails
+     * @codingStandardsIgnoreEnd
      */
     public function callGetBillingAgreementCustomerDetails()
     {

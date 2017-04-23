@@ -321,23 +321,75 @@ return [
     ['_resourceList', 'Magento\Framework\Module\Updater'],
     ['_storeManager', 'Magento\Customer\Controller\Account'],
     ['_urlFactory', 'Magento\Customer\Controller\Account'],
-    ['_addressHelper', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account\Confirm::$addressHelper'],
+    [
+        '_addressHelper',
+        'Magento\Customer\Controller\Account',
+        'Magento\Customer\Controller\Account\Confirm::$addressHelper'
+    ],
     ['_scopeConfig', 'Magento\Customer\Controller\Account'],
     ['_customerAccountService', 'Magento\Customer\Controller\Account'],
-    ['_formFactory', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::formFactory'],
-    ['_subscriberFactory', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::subscriberFactory'],
-    ['_regionBuilder', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::regionBuilder'],
-    ['_addressBuilder', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::addressBuilder'],
-    ['_customerDetailsBuilder', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::customerDetailsBuilder'],
-    ['_customerBuilder', 'Magento\Customer\Controller\Account\Edit', 'Magento\Customer\Controller\Account\Edit::customerBuilder'],
-    ['_customerBuilder', 'Magento\Customer\Controller\Account\EditPost', 'Magento\Customer\Controller\Account\EditPost::customerBuilder'],
-    ['_customerDetailsBuilder', 'Magento\Customer\Controller\Account\EditPost', 'Magento\Customer\Controller\Account\EditPost::customerDetailsBuilder'],
-    ['_formKeyValidator', 'Magento\Customer\Controller\Account\EditPost', 'Magento\Customer\Controller\Account\EditPost::formKeyValidator'],
-    ['_customerHelperData', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Controller\Account\LoginPost::customerHelperData'],
-    ['_formKeyValidator', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Controller\Account\LoginPost::formKeyValidator'],
+    [
+        '_formFactory',
+        'Magento\Customer\Controller\Account\CreatePost',
+        'Magento\Customer\Controller\Account\CreatePost::formFactory'
+    ],
+    [
+        '_subscriberFactory',
+        'Magento\Customer\Controller\Account\CreatePost',
+        'Magento\Customer\Controller\Account\CreatePost::subscriberFactory'
+    ],
+    [
+        '_regionBuilder',
+        'Magento\Customer\Controller\Account\CreatePost',
+        'Magento\Customer\Controller\Account\CreatePost::regionBuilder'
+    ],
+    [
+        '_addressBuilder',
+        'Magento\Customer\Controller\Account\CreatePost',
+        'Magento\Customer\Controller\Account\CreatePost::addressBuilder'
+    ],
+    [
+        '_customerDetailsBuilder',
+        'Magento\Customer\Controller\Account\CreatePost',
+        'Magento\Customer\Controller\Account\CreatePost::customerDetailsBuilder'
+    ],
+    [
+        '_customerBuilder',
+        'Magento\Customer\Controller\Account\Edit',
+        'Magento\Customer\Controller\Account\Edit::customerBuilder'
+    ],
+    [
+        '_customerBuilder',
+        'Magento\Customer\Controller\Account\EditPost',
+        'Magento\Customer\Controller\Account\EditPost::customerBuilder'
+    ],
+    [
+        '_customerDetailsBuilder',
+        'Magento\Customer\Controller\Account\EditPost',
+        'Magento\Customer\Controller\Account\EditPost::customerDetailsBuilder'
+    ],
+    [
+        '_formKeyValidator',
+        'Magento\Customer\Controller\Account\EditPost',
+        'Magento\Customer\Controller\Account\EditPost::formKeyValidator'
+    ],
+    [
+        '_customerHelperData',
+        'Magento\Customer\Controller\Account\LoginPost',
+        'Magento\Customer\Controller\Account\LoginPost::customerHelperData'
+    ],
+    [
+        '_formKeyValidator',
+        'Magento\Customer\Controller\Account\LoginPost',
+        'Magento\Customer\Controller\Account\LoginPost::formKeyValidator'
+    ],
     ['_openActions', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::openActions'],
     ['_session', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::session'],
-    ['_cache', 'Magento\Framework\App\Magento\Framework\App\ResourceConnection', 'Magento\Framework\App\ResourceConnection\ConnectionFactory'],
+    [
+        '_cache',
+        'Magento\Framework\App\Magento\Framework\App\ResourceConnection',
+        'Magento\Framework\App\ResourceConnection\ConnectionFactory'
+    ],
     ['_debug', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'logger'],
     ['_logQueryTime', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract'],
     ['_logAllQueries', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract'],
@@ -347,7 +399,11 @@ return [
     ['_debugTimer', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract'],
     ['_resourceName', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_resourceName'],
     ['_moduleConfig', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_moduleConfig'],
-    ['_callAfterApplyAllUpdates', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_callAfterApplyAllUpdates'],
+    [
+        '_callAfterApplyAllUpdates',
+        'Magento\Framework\Module\Setup',
+        'Magento\Setup\Module\DataSetup::_callAfterApplyAllUpdates'
+    ],
     ['_setupCache', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_setupCache'],
     ['_modulesReader', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_modulesReader'],
     ['_eventManager', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_eventManager'],
@@ -356,7 +412,11 @@ return [
     ['_migrationFactory', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::_migrationFactory'],
     ['filesystem', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::filesystem'],
     ['modulesDir', 'Magento\Framework\Module\Setup', 'Magento\Setup\Module\DataSetup::modulesDir'],
-    ['_directoryData', 'Magento\Customer\Model\Attribute\Data\Postcode', 'Magento\Customer\Model\Attribute\Data\Postcode::directoryHelper'],
+    [
+        '_directoryData',
+        'Magento\Customer\Model\Attribute\Data\Postcode',
+        'Magento\Customer\Model\Attribute\Data\Postcode::directoryHelper'
+    ],
     ['_conditionModels', 'Magento\Rule\Model\Condition\Combine'],
     ['_lables', 'Magento\SalesRule\Model\Rule'],
     ['_catalogData', 'Magento\Catalog\Block\Product\AbstractProduct'],
@@ -365,7 +425,11 @@ return [
     ['_view', 'Magento\Cms\Helper\Page'],
     ['aclFilter', 'Magento\Backend\Model\View\Layout\Builder'],
     ['aclFilter', 'Magento\Backend\Model\View\Page\Builder'],
-    ['_authorization', 'Magento\Backend\Model\View\Layout\Filter\Acl', 'Magento\Backend\Model\View\Layout\Filter\Acl::authorization'],
+    [
+        '_authorization',
+        'Magento\Backend\Model\View\Layout\Filter\Acl',
+        'Magento\Backend\Model\View\Layout\Filter\Acl::authorization'
+    ],
     ['scheduledStructure', 'Magento\Framework\View\Layout'],
     ['pageConfigStructure', 'Magento\Framework\View\Layout'],
     ['scopeConfig', 'Magento\Framework\View\Layout\Reader\Block'],
@@ -378,7 +442,11 @@ return [
     ['_requestedRouteName', 'Magento\Framework\App\Request\Http'],
     ['_isStraight', 'Magento\Framework\App\Request\Http'],
     ['_originalPathInfo', 'Magento\Framework\App\Request\Http', 'originalPathInfo'],
-    ['_requestString', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request::requestString'],
+    [
+        '_requestString',
+        'Magento\Framework\App\Request\Http',
+        'Magento\Framework\HTTP\PhpEnvironment\Request::requestString'
+    ],
     ['_pathInfoProcessor', 'Magento\Framework\App\Request\Http', 'pathInfoProcessor'],
     ['_objectManager', 'Magento\Framework\App\Request\Http', 'objectManager'],
     ['_directFrontNames', 'Magento\Framework\App\Request\Http', 'directFrontNames'],

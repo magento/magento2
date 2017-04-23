@@ -226,7 +226,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getLoadTreeUrl($expanded = null)
     {
         $params = ['_current' => true, 'id' => null, 'store' => null];
-        if ($expanded === null&& $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
+        if ($expanded === null && $this->_backendSession->getIsTreeWasExpanded() || $expanded == true) {
             $params['expand_all'] = true;
         }
         return $this->getUrl('*/*/categoriesJson', $params);
@@ -310,12 +310,12 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->_getNodeJson($category);
         }
-        return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
-            $categories
-        ) .
-            ';' .
-            ($this->canAddSubCategory() ? '$("add_subcategory_button").show();' : '$("add_subcategory_button").hide();') .
-            '});</script>';
+        return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = '
+            . $this->_jsonEncoder->encode($categories) . ';'
+            . ($this->canAddSubCategory()
+                ? '$("add_subcategory_button").show();'
+                : '$("add_subcategory_button").hide();')
+            . '});</script>';
     }
 
     /**

@@ -440,7 +440,7 @@ abstract class AbstractAction
         )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
             'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0'
-                . ' AND cpsd.attribute_id = ' . $statusAttributeId,
+            . ' AND cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
@@ -561,6 +561,7 @@ abstract class AbstractAction
      * Populate the temporary category tree index table
      *
      * @param string $temporaryName
+     * @return void
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {

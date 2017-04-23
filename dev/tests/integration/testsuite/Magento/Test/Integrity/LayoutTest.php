@@ -238,7 +238,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 );
 
                 // Search for the overridden file in the ancestor theme
-                $ancestorFiles = self::_getCachedFiles($ancestorTheme->getFullPath(), \Magento\Framework\View\File\Collector\ThemeModular::class, $ancestorTheme);
+                $ancestorFiles = self::_getCachedFiles(
+                    $ancestorTheme->getFullPath(),
+                    \Magento\Framework\View\File\Collector\ThemeModular::class,
+                    $ancestorTheme
+                );
                 $fileKey = $themeFile->getModule() . '/' . $themeFile->getName();
                 $this->assertArrayHasKey(
                     $fileKey,

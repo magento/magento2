@@ -15,22 +15,27 @@ class GridPoolTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\ResourceModel\GridPool
      */
     protected $gridPool;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Grid|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderGridMock;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Grid|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $invoiceGridMock;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Grid|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $shipmentGridMock;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoGridMock;
+
     /**
      * @var \Zend_Db_Statement_Interface
      */

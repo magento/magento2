@@ -142,7 +142,8 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
     private function getRulesExpectedDictionary()
     {
         return [
-            'Total Purchase Price Ceiling' => 'The purchase amount of 7501 is greater than the ceiling value set of 7500',
+            'Total Purchase Price Ceiling'
+                => 'The purchase amount of 7501 is greater than the ceiling value set of 7500',
             'Total ItemCeiling' => '16 items were ordered, which is overthe maximum allowed quantity of 15',
             'Shipping/BillingMismatch' => 'Thebilling and shipping addresses did not match',
             'BIN Risk List Match' => 'The card number is in a high risk bin list',

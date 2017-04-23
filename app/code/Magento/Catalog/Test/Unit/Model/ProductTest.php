@@ -1281,7 +1281,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($imagesCollectionMock);
-        $imagesCollectionMock->expects($this->at(2))->method('getItemById')->with(1)->willReturn($expectedImageDataObject);
+        $imagesCollectionMock->expects($this->at(2))->method('getItemById')->with(1)
+            ->willReturn($expectedImageDataObject);
         $this->mediaConfig->expects($this->at(0))
             ->method('getMediaUrl')
             ->willReturn('http://magento.dev/pub/imageFile.jpg');

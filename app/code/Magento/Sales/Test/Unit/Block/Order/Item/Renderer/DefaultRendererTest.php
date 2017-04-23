@@ -140,7 +140,8 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
         $discountAmount = 20;
         $weeeTaxAppliedRowAmount = 10;
 
-        $expectedResult = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount + $weeeTaxAppliedRowAmount;
+        $expectedResult = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount
+            + $weeeTaxAppliedRowAmount;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
             ->will($this->returnValue($rowTotal));
