@@ -54,11 +54,17 @@ class Conditions extends Template implements RendererInterface
     protected $_template = 'product/widget/conditions.phtml';
 
     /**
+     * @var \Magento\Widget\Helper\Conditions
+     */
+    protected $conditionsHelper;
+
+    /**
+     * @param Template\Context $context
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param \Magento\Rule\Block\Conditions $conditions
      * @param \Magento\CatalogWidget\Model\Rule $rule
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
      */
     public function __construct(
@@ -67,12 +73,14 @@ class Conditions extends Template implements RendererInterface
         \Magento\Rule\Block\Conditions $conditions,
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Framework\Registry $registry,
+        \Magento\Widget\Helper\Conditions $conditionsHelper,
         array $data = []
     ) {
         $this->elementFactory = $elementFactory;
         $this->conditions = $conditions;
         $this->rule = $rule;
         $this->registry = $registry;
+        $this->conditionsHelper = $conditionsHelper;
         parent::__construct($context, $data);
     }
 
@@ -87,6 +95,11 @@ class Conditions extends Template implements RendererInterface
             $widgetParameters = $widget->getWidgetParameters();
         } elseif ($widgetOptions = $this->getLayout()->getBlock('wysiwyg_widget.options')) {
             $widgetParameters = $widgetOptions->getWidgetValues();
+        }
+
+        if (isset($widgetParameters['conditions_encoded'])) {
+            $widgetParameters['conditions'] = $this->conditionsHelper
+                ->decode($widgetParameters['conditions_encoded']);
         }
 
         if (isset($widgetParameters['conditions'])) {

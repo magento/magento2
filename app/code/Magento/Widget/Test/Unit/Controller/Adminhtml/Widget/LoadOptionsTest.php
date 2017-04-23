@@ -12,11 +12,11 @@ use Magento\Framework\App\ViewInterface;
 use Magento\Widget\Helper\Conditions as ConditionsHelper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\RequestInterface;
 
 /**
  * Test class for \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoadOptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,19 +46,34 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     private $responseMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerMock;
-
-    /**
      * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestMock;
 
     /**
-     * @var LoadOptions
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    private $loadOptions;
+    private $jsonDataHelperMock;
+
+    /**
+     * @var \Magento\Framework\View\Element\BlockInterface
+     */
+    private $optionsMock;
+
+    /**
+     * @var \Magento\Framework\View\LayoutInterface
+     */
+    private $layoutMock;
+
+    /**
+     * @var \Magento\Widget\Model\Widget\Instance
+     */
+    private $widgetInstanceMock;
+
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    private $coreRegistryMock;
 
     /**
      * return void
@@ -66,7 +81,6 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
@@ -84,37 +98,32 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $this->contextMock->expects($this->once())
-            ->method('getObjectManager')
-            ->willReturn($this->objectManagerMock);
         $this->conditionsHelperMock = $this->getMockBuilder(ConditionsHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->loadOptions = $this->objectManagerHelper->getObject(
-            LoadOptions::class,
-            ['context' => $this->contextMock]
-        );
-        $this->objectManagerHelper->setBackwardCompatibleProperty(
-            $this->loadOptions,
-            'conditionsHelper',
-            $this->conditionsHelperMock
-        );
+        $this->jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->optionsMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+            ->setMethods(['setWidgetType', 'setWidgetValues'])
+            ->getMockForAbstractClass();
+        $this->layoutMock = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class);
+        $this->widgetInstanceMock = $this->getMockBuilder(\Magento\Widget\Model\Widget\Instance::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setType', 'setWidgetParameters'])
+            ->getMock();
+        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['register'])
+            ->getMock();
     }
-
-    /**
-     * @return void
-     */
-    public function dtestExecuteWithException()
+    
+    public function testExecuteWithException()
     {
         $jsonResult = '{"error":true,"message":"Some error"}';
         $errorMessage = 'Some error';
 
-        /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $jsonDataHelperMock->expects($this->once())
+        $this->jsonDataHelperMock->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => $errorMessage])
             ->willReturn($jsonResult);
@@ -122,97 +131,175 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->once())
             ->method('loadLayout')
             ->willThrowException(new LocalizedException(__($errorMessage)));
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
-            ->willReturn($jsonDataHelperMock);
+
         $this->responseMock->expects($this->once())
             ->method('representJson')
-            ->with($jsonResult)
-            ->willReturnArgument(0);
+            ->with($jsonResult);
 
-        $this->loadOptions->execute();
+        $model = $this->objectManagerHelper->getObject(LoadOptions::class, [
+            'context' => $this->contextMock,
+            'jsonDataHelper' => $this->jsonDataHelperMock
+        ]);
+
+        $model->execute();
     }
 
-    /**
-     * @return void
-     */
-    public function testExecute()
+    protected function setupExecuteTest()
     {
         $widgetType = 'Magento\SomeWidget';
-        $conditionsEncoded = 'a:3:{s:5:"value";i:1;s:8:"operator";s:2:"==";s:9:"attribute";s:2:"id";}';
-        $conditionsDecoded = [
-            'value' => 1,
-            'operator' => '==',
-            'attribute' => 'id',
-        ];
         $widgetJsonParams = '{"widget_type":"Magento\\Widget","values":{"title":"&quot;Test&quot;", "":}}';
         $widgetArrayParams = [
             'widget_type' => $widgetType,
             'values' => [
-                'title' => '&quot;Test&quot;',
-                'conditions_encoded' => $conditionsEncoded,
-            ],
-        ];
-        $resultWidgetArrayParams = [
-            'widget_type' => $widgetType,
-            'values' => [
-                'title' => '"Test"',
-                'conditions_encoded' => $conditionsEncoded,
-                'conditions' => $conditionsDecoded,
+                'title' => '&quot;Test&quot;'
             ],
         ];
 
-        /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $jsonDataHelperMock->expects($this->once())
+        $this->jsonDataHelperMock->expects($this->once())
             ->method('jsonDecode')
             ->with($widgetJsonParams)
             ->willReturn($widgetArrayParams);
 
-        $this->viewMock->expects($this->once())
-            ->method('loadLayout');
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('widget')
             ->willReturn($widgetJsonParams);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
-            ->willReturn($jsonDataHelperMock);
 
-        /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
-        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
-            ->setMethods(['setWidgetType', 'setWidgetValues'])
-            ->getMockForAbstractClass();
-        $blockMock->expects($this->once())
-            ->method('setWidgetType')
-            ->with($widgetType)
-            ->willReturnSelf();
-        $blockMock->expects($this->once())
-            ->method('setWidgetValues')
-            ->with($resultWidgetArrayParams['values'])
-            ->willReturnSelf();
-
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class);
-        $layoutMock->expects($this->once())
+        $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('wysiwyg_widget.options')
-            ->willReturn($blockMock);
+            ->willReturn($this->optionsMock);
 
-        $this->conditionsHelperMock->expects($this->once())
-            ->method('decode')
-            ->with($conditionsEncoded)
-            ->willReturn($conditionsDecoded);
         $this->viewMock->expects($this->once())
             ->method('getLayout')
-            ->willReturn($layoutMock);
-        $this->viewMock->expects($this->once())
-            ->method('renderLayout');
+            ->willReturn($this->layoutMock);
 
-        $this->loadOptions->execute();
+        $instanceFactoryMock = $this->getMockBuilder(\Magento\Widget\Model\Widget\InstanceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $instanceFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->widgetInstanceMock));
+
+        return $this->objectManagerHelper->getObject(LoadOptions::class, [
+            'context' => $this->contextMock,
+            'jsonDataHelper' => $this->jsonDataHelperMock,
+            'widgetInstanceFactory' => $instanceFactoryMock,
+            'coreRegistry' => $this->coreRegistryMock
+        ]);
+    }
+
+    public function testExecuteShouldPrepareWidgetOptionsBlock()
+    {
+        $this->optionsMock->expects($this->once())
+            ->method('setWidgetType')
+            ->with('Magento\SomeWidget');
+
+        $this->optionsMock->expects($this->once())
+            ->method('setWidgetValues')
+            ->with(['title' => '"Test"']);
+
+        $model = $this->setupExecuteTest();
+
+        $model->execute();
+    }
+
+    public function testExecuteShouldPrepareOptionsBlockBetweenLayoutLoadAndRender()
+    {
+        $callSequence = [];
+
+        $this->optionsMock->expects($this->once())
+            ->method('setWidgetType')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'setWidgetType';
+            }));
+
+        $this->optionsMock->expects($this->once())
+            ->method('setWidgetValues')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'setWidgetValues';
+            }));
+
+        $this->viewMock->expects($this->once())
+            ->method('loadLayout')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'loadLayout';
+            }));
+
+        $this->viewMock->expects($this->once())
+            ->method('renderLayout')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'renderLayout';
+            }));
+
+        $model = $this->setupExecuteTest();
+
+        $model->execute();
+
+        $this->assertEquals('loadLayout', reset($callSequence));
+        $this->assertEquals('renderLayout', end($callSequence));
+    }
+
+    public function testExecuteShouldRegisterWidgetInstanceWithRequestedOptions()
+    {
+        $this->widgetInstanceMock->expects($this->any())
+            ->method('setType')
+            ->with('Magento\SomeWidget');
+
+        $this->widgetInstanceMock->expects($this->once())
+            ->method('setWidgetParameters')
+            ->with(['title' => '"Test"']);
+
+        $this->coreRegistryMock->expects($this->once())
+            ->method('register')
+            ->with('current_widget_instance', $this->widgetInstanceMock);
+
+        $model = $this->setupExecuteTest();
+
+        $model->execute();
+    }
+
+    public function testExecuteShouldPrepareWidgetInstanceBetweenLayoutLoadAndRender()
+    {
+        $callSequence = [];
+
+        $this->widgetInstanceMock->expects($this->any())
+            ->method('setType')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'setType';
+            }));
+
+        $this->widgetInstanceMock->expects($this->once())
+            ->method('setWidgetParameters')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'setWidgetParameters';
+            }));
+
+        $this->coreRegistryMock->expects($this->once())
+            ->method('register')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'register';
+            }));
+
+        $this->viewMock->expects($this->once())
+            ->method('loadLayout')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'loadLayout';
+            }));
+
+        $this->viewMock->expects($this->once())
+            ->method('renderLayout')
+            ->will($this->returnCallback(function() use (&$callSequence) {
+                $callSequence[] = 'renderLayout';
+            }));
+
+        $model = $this->setupExecuteTest();
+
+        $model->execute();
+
+        $this->assertEquals('loadLayout', reset($callSequence));
+        $this->assertEquals('renderLayout', end($callSequence));
     }
 }
