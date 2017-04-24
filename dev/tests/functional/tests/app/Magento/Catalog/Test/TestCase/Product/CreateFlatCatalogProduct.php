@@ -128,7 +128,7 @@ class CreateFlatCatalogProduct extends Injectable
      */
     private function createBulkOfProducts($productsCount)
     {
-        foreach (range(1, $productsCount) as $element) {
+        for ($counter = 1; $counter <= $productsCount; $counter++) {
             $product = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',
                 [
