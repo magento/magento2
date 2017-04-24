@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Observer;
@@ -41,8 +41,6 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     {
         $store = $observer->getEvent()->getStore();
         $result = $observer->getEvent()->getResult();
-
-        $result->setIsAllowed(true);
 
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,

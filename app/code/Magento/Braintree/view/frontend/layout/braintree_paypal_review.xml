@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,11 +20,11 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Braintree\Block\Paypal\Checkout\Review" name="braintree.paypal.review" template="Magento_Paypal::express/review.phtml">
-                <block class="Magento\Paypal\Block\Express\Review" name="express.review.shipping.method" as="shipping_method" template="express/review/shipping/method.phtml"/>
+                <block class="Magento\Paypal\Block\Express\Review" name="express.review.shipping.method" as="shipping_method" template="Magento_Paypal::express/review/shipping/method.phtml"/>
                 <block class="Magento\Framework\View\Element\Text\ListText" name="paypal.additional.actions">
                     <block class="Magento\Checkout\Block\Cart\Coupon" name="paypal.cart.coupon" as="coupon" template="Magento_Checkout::cart/coupon.phtml"/>
                 </block>
-                <block class="Magento\Paypal\Block\Express\Review\Details" name="paypal.express.review.details" as="details" template="express/review/details.phtml">
+                <block class="Magento\Paypal\Block\Express\Review\Details" name="paypal.express.review.details" as="details" template="Magento_Paypal::express/review/details.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list"/>
                     <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="Magento_Paypal::checkout/onepage/review/totals.phtml"/>
                 </block>

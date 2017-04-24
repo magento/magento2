@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model;
@@ -24,6 +24,7 @@ namespace Magento\Authorization\Model;
  * @method \Magento\Authorization\Model\Role setUserType(string $value)
  * @method string getRoleName()
  * @method \Magento\Authorization\Model\Role setRoleName(string $value)
+ * @api
  */
 class Role extends \Magento\Framework\Model\AbstractModel
 {

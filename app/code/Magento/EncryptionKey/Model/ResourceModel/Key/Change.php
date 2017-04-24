@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
@@ -13,6 +13,8 @@ use Magento\Framework\Config\File\ConfigFilePool;
 /**
  * Encryption key changer resource model
  * The operation must be done in one transaction
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

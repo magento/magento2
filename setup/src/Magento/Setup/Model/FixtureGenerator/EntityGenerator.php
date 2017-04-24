@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model\FixtureGenerator;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -138,14 +139,25 @@ class EntityGenerator
      * @param TemplateEntityGeneratorInterface $entityGenerator
      * @param int $entitiesAmount
      * @param callable $fixture
+     * @throws LocalizedException
      * @return void
      */
     public function generate(TemplateEntityGeneratorInterface $entityGenerator, $entitiesAmount, callable $fixture)
     {
-        $this->sqlCollector->enable();
-        $entity = $entityGenerator->generateEntity();
-        $this->sqlCollector->disable();
-        $entity->delete();
+        $this->getConnection()->beginTransaction();
+        try {
+            $this->sqlCollector->enable();
+            $entity = $entityGenerator->generateEntity();
+            $this->sqlCollector->disable();
+            $entity->delete();
+            $this->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw new LocalizedException(
+                __('Cannot generate entities - error occurred during template creation: %1', $e->getMessage()),
+                $e
+            );
+        }
 
         $map = [];
         $processed = 0;
@@ -181,7 +193,7 @@ class EntityGenerator
 
         $sql = [];
         foreach ($this->sqlCollector->getSql() as $pattern) {
-            list ($binds, $table) = $pattern;
+            list($binds, $table) = $pattern;
 
             if (!isset($sql[$table])) {
                 $sql[$table] = [];
@@ -239,11 +251,22 @@ class EntityGenerator
      *
      * @param array $map
      * @return void
+     * @throws LocalizedException
      */
     private function saveEntities(array &$map)
     {
-        foreach ($map as $table => $data) {
-            $this->getConnection()->insertMultiple($table, $data);
+        $this->getConnection()->beginTransaction();
+        try {
+            foreach ($map as $table => $data) {
+                $this->getConnection()->insertMultiple($table, $data);
+            }
+            $this->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw new LocalizedException(
+                __('Cannot save entity. Error occurred: %1', $e->getMessage()),
+                $e
+            );
         }
 
         $map = [];

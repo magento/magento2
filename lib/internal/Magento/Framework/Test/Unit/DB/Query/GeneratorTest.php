@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit\DB\Query;
 
-use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Query\BatchIterator;
 use Magento\Framework\DB\Query\BatchIteratorFactory;
 use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
+use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Query\BatchIterator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {

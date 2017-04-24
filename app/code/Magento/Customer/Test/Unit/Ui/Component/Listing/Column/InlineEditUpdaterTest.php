@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -45,7 +45,6 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->column->expects($this->once())
             ->method('getConfiguration')
             ->willReturn([
-                'dataType' => 'text',
                 'visible' => true,
             ]);
         $this->validationRules->expects($this->once())
@@ -60,7 +59,6 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'config',
                 [
-                    'dataType' => 'text',
                     'visible' => true,
                     'editor' => [
                         'editorType' => 'text',

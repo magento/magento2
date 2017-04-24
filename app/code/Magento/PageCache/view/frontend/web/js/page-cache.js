@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,12 +41,19 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            if ($.nodeName(element, 'iframe') && $(element).prop('src').indexOf(window.location.hostname) === -1) {
-                return [];
-            }
-            $(element).contents().each(function (index, el) {
-                var hostName, iFrameHostName;
+            var iframeHostName;
 
+            // prevent cross origin iframe content reading
+            if ($(element).prop('tagName') === 'IFRAME') {
+                iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                                             .prop('hostname');
+
+                if (window.location.hostname !== iframeHostName) {
+                    return [];
+                }
+            }
+
+            $(element).contents().each(function (index, el) {
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
                         lookup(el);
@@ -57,14 +64,7 @@ define([
                         break;
 
                     case 9: // DOCUMENT_NODE
-                        hostName = window.location.hostname;
-                        iFrameHostName = $('<a>')
-                            .prop('href', $(element).prop('src'))
-                            .prop('hostname');
-
-                        if (hostName === iFrameHostName) {
-                            lookup($(el).find('body'));
-                        }
+                        lookup($(el).find('body'));
                         break;
                 }
             });

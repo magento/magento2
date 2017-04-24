@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -105,7 +105,7 @@ class Updater
      *
      * @param array $info
      * @param Item $item
-     * @return array
+     * @return void
      */
     protected function setCustomPrice(array $info, Item $item)
     {

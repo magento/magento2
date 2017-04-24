@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Fixtures\AttributeSet;
@@ -46,7 +46,7 @@ class Pattern
         for ($index = 1; $index <= $attributesPerSet; $index++) {
             $attributeData =  $this->generateAttribute(
                 $index,
-                $optionsPerAttribute
+                is_array($optionsPerAttribute) ? $optionsPerAttribute[$index-1] : $optionsPerAttribute
             );
             if (is_callable($attributePattern)) {
                 $attributeData = $attributePattern($index, $attributeData);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model;
@@ -10,7 +10,9 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Abstract Rule entity data model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -352,7 +354,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
                 /**
                  * Convert dates into \DateTime
                  */
-                if (in_array($key, ['from_date', 'to_date']) && $value) {
+                if (in_array($key, ['from_date', 'to_date'], true) && $value) {
                     $value = new \DateTime($value);
                 }
                 $this->setData($key, $value);

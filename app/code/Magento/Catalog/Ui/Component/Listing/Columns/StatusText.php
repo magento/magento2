@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -10,6 +10,9 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * @api
+ */
 class StatusText extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

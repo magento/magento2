@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@ use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Data object processor for array serialization using class reflection
+ *
+ * @api
  */
 class DataObjectProcessor
 {

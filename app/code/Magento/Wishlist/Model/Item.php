@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,6 +32,8 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Item extends AbstractModel implements ItemInterface
 {

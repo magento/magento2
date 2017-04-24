@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/**
- * Widget Instance Types Options
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
+
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
+/**
+ * Widget Instance Types Options
+ */
 class Types implements \Magento\Framework\Option\ArrayInterface
 {
     /**

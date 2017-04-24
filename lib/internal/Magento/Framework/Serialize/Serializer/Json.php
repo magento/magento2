@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Serialize\Serializer;
@@ -9,6 +9,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Class for serializing data to json string and unserializing json string to data
+ *
+ * @api
  */
 class Json implements SerializerInterface
 {

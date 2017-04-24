@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\FixtureModel;
-use \Magento\Setup\Fixtures\StoresFixture;
-use \Magento\Catalog\Api\Data\CategoryInterface;
-use \Magento\Catalog\Model\CategoryFactory;
-use \Magento\Framework\App\Config\Storage\Writer;
-use \Magento\Framework\Event\ManagerInterface;
-use \Magento\Framework\Locale\Config;
-use \Magento\Store\Api\Data\GroupInterface;
-use \Magento\Store\Api\Data\WebsiteInterface;
-use \Magento\Store\Api\Data\StoreInterface;
-use \Magento\Store\Model\StoreManager;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\Config;
+use Magento\Setup\Fixtures\FixtureModel;
+use Magento\Setup\Fixtures\StoresFixture;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManager;
 
 class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 {
@@ -164,6 +164,26 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
         $storeMock->expects($this->exactly(11))
             ->method('addData')
+            ->withConsecutive(
+                [
+                    [
+                        'store_id' => null,
+                        'name' => 'Store view 2 - website_id_1 - group_id_1',
+                        'website_id' => 1,
+                        'group_id' => 1,
+                        'code' => 'store_view_2',
+                    ]
+                ],
+                [
+                    [
+                        'store_id' => null,
+                        'name' => 'Store view 3 - website_id_1 - group_id_1',
+                        'website_id' => 1,
+                        'group_id' => 1,
+                        'code' => 'store_view_3',
+                    ]
+                ]
+            )
             ->willReturn($storeMock);
 
         $storeGroupMock = $this->getMockBuilder(GroupInterface::class)
@@ -177,6 +197,26 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
         $storeGroupMock->expects($this->exactly(5))
             ->method('addData')
+            ->withConsecutive(
+                [
+                    [
+                        'group_id' => null,
+                        'website_id' => 1,
+                        'name' => 'Store Group 2 - website_id_1',
+                        'code' => 'store_group_2',
+                        'root_category_id' => $categoryMock,
+                    ]
+                ],
+                [
+                    [
+                        'group_id' => null,
+                        'website_id' => 1,
+                        'name' => 'Store Group 3 - website_id_1',
+                        'code' => 'store_group_3',
+                        'root_category_id' => $categoryMock,
+                    ]
+                ]
+            )
             ->willReturn($storeGroupMock);
 
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
@@ -190,6 +230,24 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
         $websiteMock->expects($this->exactly(2))
             ->method('addData')
+            ->withConsecutive(
+                [
+                    [
+                        'website_id' => null,
+                        'code' => 'website_2',
+                        'name' => 'Website 2',
+                        'is_default' => false,
+                    ]
+                ],
+                [
+                    [
+                        'website_id' => null,
+                        'code' => 'website_3',
+                        'name' => 'Website 3',
+                        'is_default' => false,
+                    ]
+                ]
+            )
             ->willReturn($storeGroupMock);
 
         $this->storeManagerMock->expects($this->once())

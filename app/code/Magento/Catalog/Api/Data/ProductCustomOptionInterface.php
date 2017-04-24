@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,76 @@ namespace Magento\Catalog\Api\Data;
  */
 interface ProductCustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**
+     * Product text options group.
+     */
+    const OPTION_GROUP_TEXT = 'text';
+
+    /**
+     * Product file options group.
+     */
+    const OPTION_GROUP_FILE = 'file';
+
+    /**
+     * Product select options group.
+     */
+    const OPTION_GROUP_SELECT = 'select';
+
+    /**
+     * Product date options group.
+     */
+    const OPTION_GROUP_DATE = 'date';
+
+    /**
+     * Product field option type.
+     */
+    const OPTION_TYPE_FIELD = 'field';
+
+    /**
+     * Product area option type.
+     */
+    const OPTION_TYPE_AREA = 'area';
+
+    /**
+     * Product file option type.
+     */
+    const OPTION_TYPE_FILE = 'file';
+
+    /**
+     * Product drop-down option type.
+     */
+    const OPTION_TYPE_DROP_DOWN = 'drop_down';
+
+    /**
+     * Product radio option type.
+     */
+    const OPTION_TYPE_RADIO = 'radio';
+
+    /**
+     * Product checkbox option type.
+     */
+    const OPTION_TYPE_CHECKBOX = 'checkbox';
+
+    /**
+     * Product multiple option type.
+     */
+    const OPTION_TYPE_MULTIPLE = 'multiple';
+
+    /**
+     * Product date option type.
+     */
+    const OPTION_TYPE_DATE = 'date';
+
+    /**
+     * Product datetime option type.
+     */
+    const OPTION_TYPE_DATE_TIME = 'date_time';
+
+    /**
+     * Product time option type.
+     */
+    const OPTION_TYPE_TIME = 'time';
+
     /**
      * Get product SKU
      *

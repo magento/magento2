@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
         <script src="prototype/window.js"/>
         <script src="prototype/deprecation.js"/>
     </head>
-    <block class="Magento\Backend\Block\Page" name="root" output="1" template="page.phtml">
+    <block class="Magento\Backend\Block\Page" name="root" output="1" template="Magento_Backend::page.phtml">
         <block class="Magento\Backend\Block\Page" name="nodeForTesting">
             <action method="setSomething"/>
         </block>
@@ -38,6 +38,6 @@
         <action method="getSomething"/>
     </referenceBlock>
     <referenceBlock name="after.body.start">
-        <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+        <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Framework::page/js/calendar.phtml"/>
     </referenceBlock>
 </page>

@@ -1,51 +1,72 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
 
-use Magento\Framework\App;
-use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Framework\View\Layout\ReaderInterface;
+use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\Config\DataInterfaceFactory;
 
 /**
  * Class UiComponent
  */
-class UiComponent implements Layout\ReaderInterface
+class UiComponent implements ReaderInterface
 {
-    /**#@+
-     * Supported types
+    /**
+     * Supported types.
      */
     const TYPE_UI_COMPONENT = 'uiComponent';
-    /**#@-*/
 
     /**
      * List of supported attributes
      *
      * @var array
      */
-    protected $attributes = ['group', 'component', 'acl', 'condition'];
+    protected $attributes = ['group', 'component', 'aclResource'];
 
     /**
-     * @var Layout\ScheduledStructure\Helper
+     * @var Helper
      */
     protected $layoutHelper;
 
     /**
-     * @var string|null
+     * @var Condition
      */
-    protected $scopeType;
+    private $conditionReader;
+
+    /**
+     * @var DataInterfaceFactory
+     */
+    private $uiConfigFactory;
+
+    /**
+     * @var ReaderPool
+     */
+    private $readerPool;
 
     /**
      * Constructor
      *
-     * @param Layout\ScheduledStructure\Helper $helper
-     * @param string|null $scopeType
+     * @param Helper $helper
+     * @param Condition $conditionReader
+     * @param DataInterfaceFactory $uiConfigFactory
+     * @param ReaderPool $readerPool
      */
-    public function __construct(Layout\ScheduledStructure\Helper $helper, $scopeType = null)
-    {
+    public function __construct(
+        Helper $helper,
+        Condition $conditionReader,
+        DataInterfaceFactory $uiConfigFactory,
+        ReaderPool $readerPool
+    ) {
         $this->layoutHelper = $helper;
-        $this->scopeType = $scopeType;
+        $this->conditionReader = $conditionReader;
+        $this->uiConfigFactory = $uiConfigFactory;
+        $this->readerPool = $readerPool;
     }
 
     /**
@@ -59,7 +80,7 @@ class UiComponent implements Layout\ReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function interpret(Context $readerContext, Layout\Element $currentElement)
+    public function interpret(Context $readerContext, Element $currentElement)
     {
         $attributes = $this->getAttributes($currentElement);
         $scheduledStructure = $readerContext->getScheduledStructure();
@@ -69,23 +90,48 @@ class UiComponent implements Layout\ReaderInterface
             $currentElement->getParent(),
             ['attributes' => $attributes]
         );
-
+        $attributes = array_merge(
+            $attributes,
+            ['visibilityConditions' => $this->conditionReader->parseConditions($currentElement)]
+        );
         $scheduledStructure->setStructureElementData($referenceName, ['attributes' => $attributes]);
-        $configPath = (string)$currentElement->getAttribute('ifconfig');
-        if (!empty($configPath)) {
-            $scheduledStructure->setElementToIfconfigList($referenceName, $configPath, $this->scopeType);
+
+        foreach ($this->getLayoutElementsFromUiConfiguration($referenceName) as $layoutElement) {
+            $layoutElement = simplexml_load_string(
+                $layoutElement,
+                Element::class
+            );
+            $this->readerPool->interpret($readerContext, $layoutElement);
         }
 
         return $this;
     }
 
     /**
-     * Get ui component attributes
+     * Find layout elements in UI configuration for correct layout generation
      *
-     * @param Layout\Element $element
+     * @param string $uiConfigName
      * @return array
      */
-    protected function getAttributes(Layout\Element $element)
+    private function getLayoutElementsFromUiConfiguration($uiConfigName)
+    {
+        $elements = [];
+        $config = $this->uiConfigFactory->create(['componentName' => $uiConfigName])->get($uiConfigName);
+        foreach ($config['children'] as $name => $data) {
+            if (isset($data['arguments']['block']['layout'])) {
+                $elements[$name] = $data['arguments']['block']['layout'];
+            }
+        }
+        return $elements;
+    }
+
+    /**
+     * Get ui component attributes
+     *
+     * @param Element $element
+     * @return array
+     */
+    protected function getAttributes(Element $element)
     {
         $attributes = [];
         foreach ($this->attributes as $attributeName) {

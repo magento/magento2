@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Data\Form\Element;
 
@@ -123,7 +121,15 @@ class Editor extends Textarea
                 '
                 <script type="text/javascript">
                 //<![CDATA[
-                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; window.tinyMCE_GZ.loaded = true;require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
+                window.tinyMCE_GZ.loaded = true;
+                require([
+                "jquery", 
+                "mage/translate", 
+                "mage/adminhtml/events", 
+                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
+                "mage/adminhtml/wysiwyg/widget"
+                ], function(jQuery){' .
                 "\n" .
                 '  (function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
@@ -254,9 +260,9 @@ class Editor extends Textarea
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Widget...'),
-                    'onclick' => "widgetTools.openDialog('" . $this->getConfig(
-                        'widget_window_url'
-                    ) . "widget_target_id/" . $this->getHtmlId() . "')",
+                    'onclick' => "widgetTools.openDialog('"
+                        . $this->getConfig('widget_window_url')
+                        . "widget_target_id/" . $this->getHtmlId() . "')",
                     'class' => 'action-add-widget plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -268,13 +274,12 @@ class Editor extends Textarea
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Image...'),
-                    'onclick' => "MediabrowserUtility.openDialog('" . $this->getConfig(
-                        'files_browser_window_url'
-                    ) . "target_element_id/" . $this->getHtmlId() . "/" . (null !== $this->getConfig(
-                        'store_id'
-                    ) ? 'store/' . $this->getConfig(
-                        'store_id'
-                    ) . '/' : '') . "')",
+                    'onclick' => "MediabrowserUtility.openDialog('"
+                        . $this->getConfig('files_browser_window_url')
+                        . "target_element_id/" . $this->getHtmlId() . "/"
+                        . (null !== $this->getConfig('store_id') ? 'store/'
+                            . $this->getConfig('store_id') . '/' : '')
+                        . "')",
                     'class' => 'action-add-image plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -389,13 +394,11 @@ class Editor extends Textarea
             return '<div class="admin__control-wysiwig">' .$html . '</div>';
         }
 
-        $html = '<div id="editor' . $this->getHtmlId() . '"' . ($this->getConfig(
-            'no_display'
-        ) ? ' style="display:none;"' : '') . ($this->getConfig(
-            'container_class'
-        ) ? ' class="admin__control-wysiwig ' . $this->getConfig(
-            'container_class'
-        ) . '"' : '') . '>' . $html . '</div>';
+        $html = '<div id="editor' . $this->getHtmlId() . '"'
+            . ($this->getConfig('no_display') ? ' style="display:none;"' : '')
+            . ($this->getConfig('container_class') ? ' class="admin__control-wysiwig '
+                . $this->getConfig('container_class') . '"' : '')
+            . '>' . $html . '</div>';
 
         return $html;
     }

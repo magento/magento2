@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -319,7 +319,7 @@
     </zip>
     <zip countryCode="NL">
         <codes>
-            <code id="pattern_1" active="true" example="1234 AB">^[0-9]{4}\s[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="1234 AB">^[0-9]{4}\s?[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="NO">

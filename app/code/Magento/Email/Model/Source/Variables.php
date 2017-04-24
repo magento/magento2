@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Source;
@@ -9,8 +9,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Store Contact Information source model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Variables implements \Magento\Framework\Option\ArrayInterface
 {
@@ -61,7 +59,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray($withGroup = false)
     {
         $optionArray = [];
-        foreach ($this->_configVariables as $variable) {
+        foreach ($this->getData() as $variable) {
             $optionArray[] = [
                 'value' => '{{config path="' . $variable['value'] . '"}}',
                 'label' => $variable['label'],
@@ -81,6 +79,6 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      */
     public function getData()
     {
-        return  $this->_configVariables;
+        return $this->_configVariables;
     }
 }
