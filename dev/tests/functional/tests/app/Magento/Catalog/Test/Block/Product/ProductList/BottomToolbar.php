@@ -20,28 +20,28 @@ class BottomToolbar extends Block
      *
      * @var string
      */
-    protected $nextPageSelector = '.item.current + .item a';
+    private $nextPageSelector = '.item.current + .item a';
 
     /**
      * Selector previous element
      *
      * @var string
      */
-    protected $previousPageSelector = '.item.pages-item-previous';
+    private $previousPageSelector = '.item.pages-item-previous';
 
     /**
      * Selector limiter block
      *
      * @var string
      */
-    protected $optionBlockSelector = '.control';
+    private $optionBlockSelector = '.control';
 
     /**
      * Selector option element
      *
      * @var string
      */
-    protected $optionSelector = './/option';
+    private $optionSelector = './/option';
 
     /**
      * Go to the next page

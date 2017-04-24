@@ -37,7 +37,7 @@ class CreateFlatCatalogProduct extends Injectable
      *
      * @var string
      */
-    protected $configData;
+    private $configData;
 
     /**
      * Factory for Fixtures
@@ -51,14 +51,14 @@ class CreateFlatCatalogProduct extends Injectable
      *
      * @var Category
      */
-    protected $category;
+    private $category;
 
     /**
      * CatalogCategoryView page
      *
      * @var CatalogCategoryView
      */
-    protected $catalogCategoryView;
+    private $catalogCategoryView;
 
     /**
      * Prepare data
