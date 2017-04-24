@@ -33,14 +33,14 @@ class CreateFlatCatalogProduct extends Injectable
     /* end tags */
 
     /**
-     * Configuration data.
+     * Configuration data
      *
      * @var string
      */
     protected $configData;
 
     /**
-     * Factory for Fixtures.
+     * Factory for Fixtures
      *
      * @var FixtureFactory
      */
@@ -108,7 +108,7 @@ class CreateFlatCatalogProduct extends Injectable
     }
 
     /**
-     * Clear data after test.
+     * Clear data after test
      *
      * @return void
      */
