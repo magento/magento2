@@ -6,10 +6,26 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\Category;
 
+/**
+ * Preconditions:
+ * 1. Use Flat Catalog Category & Use Flat Catalog Product are enabled (Store/Configuration/Catalog/Catalog/Storefront)
+ *
+ * Steps:
+ * 1. Assign 16 or more products to the same category (e.g. 20 products)
+ * 2. Go to Storefront and navigate to this category
+ * 3. Click on Page 2 or any further page
+ * 4. Go back to page 1 and change № of products per page from 9 to any number (e.g 12)
+ * 5. Click on Page 2 or any further page
+ * 5. Perform assertions.
+ *
+ * @ZephyrId MAGETWO-67570
+ */
 class CreateFlatCatalogProduct extends Injectable
 {
     /* tags */
@@ -38,6 +54,13 @@ class CreateFlatCatalogProduct extends Injectable
     protected $category;
 
     /**
+     * CatalogCategoryView page
+     *
+     * @var CatalogCategoryView
+     */
+    protected $catalogCategoryView;
+
+    /**
      * Prepare data
      *
      * @param Category $category
@@ -56,18 +79,21 @@ class CreateFlatCatalogProduct extends Injectable
      *
      * @param Category $category
      * @param FixtureFactory $fixtureFactory
+     * @param CatalogCategoryView $catalogCategoryView
      * @return void
      */
     public function __inject(
         Category $category,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        CatalogCategoryView $catalogCategoryView
     ) {
         $this->category = $category;
         $this->fixtureFactory = $fixtureFactory;
+        $this->catalogCategoryView = $catalogCategoryView;
     }
 
     /**
-     * Run mass update product simple entity test.
+     * Run create flat catalog product
      *
      * @param string $configData
      * @param string $productsCount
@@ -75,9 +101,10 @@ class CreateFlatCatalogProduct extends Injectable
      */
     public function test($configData, $productsCount)
     {
+        $this->objectManager->create(SetupConfigurationStep::class, ['configData' => $this->configData])->run();
         $this->createBulkOfProducts($productsCount);
         $this->configData = $configData;
-        return ['category' => $this->category];
+        return ['category' => $this->category, 'catalogCategoryView' => $this->catalogCategoryView];
     }
 
     /**
@@ -88,20 +115,20 @@ class CreateFlatCatalogProduct extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }
 
     /**
+     * Create products for tests
+     *
      * @param $productsCount
+     * @return void
      */
     private function createBulkOfProducts($productsCount)
     {
         foreach (range(1, $productsCount) as $element) {
-            /**
-             * @product FixtureInterface
-             */
             $product = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',
                 [
