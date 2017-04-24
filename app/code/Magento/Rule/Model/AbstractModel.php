@@ -10,7 +10,9 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Abstract Rule entity data model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {

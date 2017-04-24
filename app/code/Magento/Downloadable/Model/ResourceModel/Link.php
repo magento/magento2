@@ -12,7 +12,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Downloadable Product  Samples resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

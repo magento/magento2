@@ -35,6 +35,8 @@ use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 /**
  * Class Eav
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */

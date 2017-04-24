@@ -6,7 +6,7 @@
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
 /**
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface GroupedInterface
 {

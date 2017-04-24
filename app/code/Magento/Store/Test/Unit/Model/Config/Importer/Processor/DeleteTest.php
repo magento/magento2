@@ -120,6 +120,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupCollectionMock = $this->getMockBuilder(Collection::class)
+            ->setMethods(['getIterator', 'addFieldToFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
@@ -135,9 +136,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->groupCollectionMock->expects($this->any())
-            ->method('addFilter')
-            ->willReturnSelf();
         $this->groupMock->expects($this->any())
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
@@ -234,10 +232,11 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->websiteMock);
         $this->groupCollectionMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([
-                $this->groupMock
-            ]);
+            ->method('addFieldToFilter')
+            ->with('code', ['in' => [2]]);
+        $this->groupCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->groupMock]));
         $this->groupResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->groupMock);

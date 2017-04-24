@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Class build validation rules for catalog EAV attributes
+ *
+ * @api
  */
 class CatalogEavValidationRules
 {
