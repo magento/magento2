@@ -8,20 +8,9 @@ namespace Magento\Authorization\Model\ResourceModel\Permissions;
 /**
  * Admin permissions collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @see \Magento\Authorization\Model\ResourceModel\Rules\Collection
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends \Magento\Authorization\Model\ResourceModel\Rules\Collection
 {
-    /**
-     * Initialize resource
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_init(
-            \Magento\Authorization\Model\Rules::class,
-            \Magento\Authorization\Model\ResourceModel\Rules::class
-        );
-    }
 }

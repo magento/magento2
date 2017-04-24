@@ -8,7 +8,7 @@ namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option;
 /**
  * Bundle option dropdown type renderer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option
 {

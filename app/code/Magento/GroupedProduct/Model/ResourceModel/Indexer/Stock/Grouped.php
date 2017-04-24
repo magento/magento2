@@ -11,7 +11,6 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
 /**

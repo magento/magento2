@@ -10,7 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class Link
+ * @api
  */
 class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
 {
