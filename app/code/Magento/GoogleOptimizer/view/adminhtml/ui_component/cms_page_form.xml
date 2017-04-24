@@ -13,7 +13,7 @@
         </settings>
         <container name="google_experiment_container" sortOrder="250">
             <htmlContent name="html_content">
-                <argument name="block" xsi:type="object">Magento\GoogleOptimizer\Block\Adminhtml\Form\CmsPage</argument>
+                <block name="googleOptimizerBlockAdminhtmlFormCmsPage" class="MagentoGoogleOptimizerBlockAdminhtmlFormCmsPage"/>
             </htmlContent>
         </container>
     </fieldset>

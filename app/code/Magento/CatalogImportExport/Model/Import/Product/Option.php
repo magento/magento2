@@ -16,12 +16,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Entity class which provide possibility to import product custom options
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @todo Need to explode this class because of several responsibilities
  */
 class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
