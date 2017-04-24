@@ -5,8 +5,12 @@
  */
 namespace Magento\Cms\Setup;
 
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -25,11 +29,6 @@ class UpgradeData implements UpgradeDataInterface
     private $pageFactory;
 
     /**
-     * @var \Magento\Framework\DB\FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
      * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
     private $queryModifierFactory;
@@ -40,21 +39,26 @@ class UpgradeData implements UpgradeDataInterface
     private $metadataPool;
 
     /**
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldConverter;
+
+    /**
      * UpgradeData constructor.
      *
      * @param PageFactory $pageFactory
-     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
      * @param MetadataPool $metadataPool
      */
     public function __construct(
         PageFactory $pageFactory,
-        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
+        AggregatedFieldDataConverter $aggregatedFieldConverter,
         \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory,
         MetadataPool $metadataPool
     ) {
         $this->pageFactory = $pageFactory;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
         $this->queryModifierFactory = $queryModifierFactory;
         $this->metadataPool = $metadataPool;
     }
@@ -84,10 +88,6 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function convertWidgetConditionsToJson(ModuleDataSetupInterface $setup)
     {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Cms\Setup\ContentConverter::class
-        );
-
         $queryModifier = $this->queryModifierFactory->create(
             'like',
             [
@@ -97,22 +97,26 @@ class UpgradeData implements UpgradeDataInterface
             ]
         );
 
-        $blockMetadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\BlockInterface::class);
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('cms_block'),
-            $blockMetadata->getIdentifierField(),
-            'content',
-            $queryModifier
-        );
-
-        $pageMetadata = $this->metadataPool->getMetadata(\Magento\Cms\Api\Data\PageInterface::class);
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('cms_page'),
-            $pageMetadata->getIdentifierField(),
-            'content',
-            $queryModifier
+        $blockMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        $pageMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+        $this->aggregatedFieldConverter->convert(
+            [
+                new FieldToConvert(
+                    ContentConverter::class,
+                    $setup->getTable('cms_block'),
+                    $blockMetadata->getIdentifierField(),
+                    'content',
+                    $queryModifier
+                ),
+                new FieldToConvert(
+                    ContentConverter::class,
+                    $setup->getTable('cms_page'),
+                    $pageMetadata->getIdentifierField(),
+                    'content',
+                    $queryModifier
+                ),
+            ],
+            $setup->getConnection()
         );
     }
 
