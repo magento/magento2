@@ -26,6 +26,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 
+// @codingStandardsIgnoreStart
 /**
  * MySQL database adapter
  *
@@ -33,10 +34,11 @@ use Magento\Framework\Stdlib\StringUtils;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
+    // @codingStandardsIgnoreEnd
+
     const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
     const DATETIME_FORMAT       = 'Y-m-d H:i:s';
     const DATE_FORMAT           = 'Y-m-d';
@@ -524,7 +526,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $pdoException = null;
                 if ($e instanceof \PDOException) {
                     $pdoException = $e;
-                } elseif (($e instanceof \Zend_Db_Statement_Exception) && ($e->getPrevious() instanceof \PDOException)) {
+                } elseif (($e instanceof \Zend_Db_Statement_Exception)
+                    && ($e->getPrevious() instanceof \PDOException)
+                ) {
                     $pdoException = $e->getPrevious();
                 }
 
@@ -753,7 +757,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-
      * @deprecated
      */
     protected function _splitMultiQuery($sql)
@@ -1644,9 +1647,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($columnData['PRIMARY'] === true) {
             $options['primary'] = true;
         }
-        if (!is_null($columnData['DEFAULT'])
-            && $type != Table::TYPE_TEXT
-        ) {
+        if ($columnData['DEFAULT'] !== null && $type != Table::TYPE_TEXT) {
             $options['default'] = $this->quote($columnData['DEFAULT']);
         }
         if (strlen($columnData['SCALE']) > 0) {
@@ -1751,7 +1752,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $definition = array_change_key_case($definition, CASE_UPPER);
         $definition['COLUMN_TYPE'] = $this->_getColumnTypeByDdl($definition);
-        if (array_key_exists('DEFAULT', $definition) && is_null($definition['DEFAULT'])) {
+        if (array_key_exists('DEFAULT', $definition) && $definition['DEFAULT'] === null) {
             unset($definition['DEFAULT']);
         }
 
@@ -2445,7 +2446,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             } else {
                 $cDefault = false;
             }
-        } elseif (is_null($cDefault) && $cNullable) {
+        } elseif ($cDefault === null && $cNullable) {
             $cDefault = new \Zend_Db_Expr('NULL');
         }
 
@@ -2941,7 +2942,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         // return null
-        if (is_null($value) && $column['NULLABLE']) {
+        if ($value === null && $column['NULLABLE']) {
             return null;
         }
 
@@ -3206,7 +3207,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function getSubstringSql($stringExpression, $pos, $len = null)
     {
-        if (is_null($len)) {
+        if ($len === null) {
             return new \Zend_Db_Expr(sprintf('SUBSTRING(%s, %s)', $stringExpression, $pos));
         }
         return new \Zend_Db_Expr(sprintf('SUBSTRING(%s, %s, %s)', $stringExpression, $pos, $len));
@@ -3830,7 +3831,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function getTables($likeCondition = null)
     {
-        $sql = is_null($likeCondition) ? 'SHOW TABLES' : sprintf("SHOW TABLES LIKE '%s'", $likeCondition);
+        $sql = ($likeCondition === null) ? 'SHOW TABLES' : sprintf("SHOW TABLES LIKE '%s'", $likeCondition);
         $result = $this->query($sql);
         $tables = [];
         while ($row = $result->fetchColumn()) {

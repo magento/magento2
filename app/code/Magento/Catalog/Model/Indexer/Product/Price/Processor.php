@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+/**
+ * @api
+ */
 class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
