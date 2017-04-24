@@ -10,6 +10,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Rating model
  *
+ * @api
+ *
  * @method \Magento\Review\Model\ResourceModel\Rating getResource()
  * @method \Magento\Review\Model\ResourceModel\Rating _getResource()
  * @method array getRatingCodes()

@@ -7,6 +7,8 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 /**
  * Interface RowCustomizerInterface
+ *
+ * @api
  */
 interface RowCustomizerInterface
 {

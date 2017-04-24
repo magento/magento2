@@ -10,6 +10,8 @@ use Magento\Framework\App\Helper\Context;
 
 /**
  * Helper to get attributes for video
+ *
+ * @api
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
