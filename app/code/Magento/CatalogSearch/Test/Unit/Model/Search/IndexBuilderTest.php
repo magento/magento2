@@ -174,11 +174,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->fullTextSearchCheckMock = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck::class
         )->disableOriginalConstructor()
-        ->setMethods(['check'])
+        ->setMethods(['isRequiredForQuery'])
         ->getMock();
 
         $this->fullTextSearchCheckMock->expects($this->any())
-            ->method('check')
+            ->method('isRequiredForQuery')
             ->willReturn(true);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
