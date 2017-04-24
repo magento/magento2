@@ -14,8 +14,15 @@
         <simple_products>600000</simple_products> <!-- Simple products count -->
         <configurable_products> <!-- Configurable product -->
             <config>
-                <attributes>1</attributes>
-                <options>24</options>
+                <attributes>
+                    <attribute>
+                        <options>3</options>
+                        <swatches>image</swatches>
+                    </attribute>
+                    <attribute>
+                        <options>8</options>
+                    </attribute>
+                </attributes>
                 <sku>Configurable Product %s</sku>
                 <products>16000</products>
             </config>

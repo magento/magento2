@@ -5,38 +5,39 @@
  */
 namespace Magento\Framework\View\Layout\Reader;
 
-use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Framework\View\Layout\ReaderInterface;
 use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\Config\DataInterfaceFactory;
 
 /**
  * Class UiComponent
  */
-class UiComponent implements Layout\ReaderInterface
+class UiComponent implements ReaderInterface
 {
-    /**#@+
-     * Supported types
+    /**
+     * Supported types.
      */
     const TYPE_UI_COMPONENT = 'uiComponent';
-    /**#@-*/
 
     /**
      * List of supported attributes
      *
      * @var array
      */
-    protected $attributes = ['group', 'component', 'acl', 'condition'];
+    protected $attributes = ['group', 'component', 'aclResource'];
 
     /**
-     * @var Layout\ScheduledStructure\Helper
+     * @var Helper
      */
     protected $layoutHelper;
 
     /**
-     * @var string|null
+     * @var Condition
      */
-    protected $scopeType;
+    private $conditionReader;
 
     /**
      * @var DataInterfaceFactory
@@ -49,19 +50,21 @@ class UiComponent implements Layout\ReaderInterface
     private $readerPool;
 
     /**
-     * @param Layout\ScheduledStructure\Helper $helper
+     * Constructor
+     *
+     * @param Helper $helper
+     * @param Condition $conditionReader
      * @param DataInterfaceFactory $uiConfigFactory
      * @param ReaderPool $readerPool
-     * @param string|null $scopeType
      */
     public function __construct(
-        Layout\ScheduledStructure\Helper $helper,
+        Helper $helper,
+        Condition $conditionReader,
         DataInterfaceFactory $uiConfigFactory,
-        ReaderPool $readerPool,
-        $scopeType = null
+        ReaderPool $readerPool
     ) {
         $this->layoutHelper = $helper;
-        $this->scopeType = $scopeType;
+        $this->conditionReader = $conditionReader;
         $this->uiConfigFactory = $uiConfigFactory;
         $this->readerPool = $readerPool;
     }
@@ -87,12 +90,11 @@ class UiComponent implements Layout\ReaderInterface
             $currentElement->getParent(),
             ['attributes' => $attributes]
         );
-
+        $attributes = array_merge(
+            $attributes,
+            ['visibilityConditions' => $this->conditionReader->parseConditions($currentElement)]
+        );
         $scheduledStructure->setStructureElementData($referenceName, ['attributes' => $attributes]);
-        $configPath = (string)$currentElement->getAttribute('ifconfig');
-        if (!empty($configPath)) {
-            $scheduledStructure->setElementToIfconfigList($referenceName, $configPath, $this->scopeType);
-        }
 
         foreach ($this->getLayoutElementsFromUiConfiguration($referenceName) as $layoutElement) {
             $layoutElement = simplexml_load_string(

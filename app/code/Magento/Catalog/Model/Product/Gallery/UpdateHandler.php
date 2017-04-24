@@ -9,6 +9,8 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Update handler for catalog product gallery.
+ *
+ * @api
  */
 class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 {
