@@ -5,14 +5,23 @@
  */
 
 // @codingStandardsIgnoreFile
-
+?>
+<?php
+/* @var $block \Magento\Customer\Block\CustomerScopeData */
 ?>
 <script type="text/x-magento-init">
 <?php
-    /* @noEscape */ echo $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
+    /* @noEscape */
+    echo \Zend_Json::encode([
         '*' => ['Magento_Customer/js/invalidation-processor' => [
             'invalidationRules' => [
-                'websiteRule' => 'Magento_Customer/js/invalidation-rules/website-rule'
+                'website-rule' => [
+                    'Magento_Customer/js/invalidation-rules/website-rule' => [
+                        'scopeConfig' => [
+                            'website_id' => $block->getWebsiteId(),
+                        ]
+                    ]
+                ]
             ]
         ]],
     ]);

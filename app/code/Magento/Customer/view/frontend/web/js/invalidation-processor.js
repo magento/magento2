@@ -4,14 +4,16 @@
  */
 define([
     "underscore",
-    "uiClass",
-    "require"
-], function (_, Class, require) {
+    "uiElement",
+    'Magento_Customer/js/customer-data'
+], function (_, Element, customerData) {
     "use strict";
+    var invalidationRules;
 
-    return Class.extend({
-        defaults: {
-            invalidationRules: {}
+    return Element.extend({
+        initialize: function () {
+            this._super();
+            this.process(customerData);
         },
 
         /**
@@ -20,16 +22,17 @@ define([
          * @param {Object} customerData
          */
         process: function (customerData) {
-            var rule;
+            _.each(this.invalidationRules, function (rule, ruleName) {
+                _.each(rule, function (ruleArgs, rulePath) {
+                    require([rulePath], function (Rule) {
+                        var rule = new Rule(ruleArgs);
 
-            _.each(this.invalidationRules, function (rulePath, ruleName) {
-                debugger;
-                rule = require(rulePath);
-                if (!_.isFunction(rule.process)) {
-                    throw new Error("Rule " + ruleName + " should implement invalidationProcessor interface");
-                }
-
-                rule.process(customerData);
+                        if (!_.isFunction(rule.process)) {
+                            throw new Error("Rule " + ruleName + " should implement invalidationProcessor interface");
+                        }
+                        rule.process(customerData);
+                    });
+                });
             });
         }
     });

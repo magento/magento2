@@ -3,11 +3,19 @@
  * See COPYING.txt for license details.
  */
 define([
-    "underscore"
-], function (_) {
+    "uiClass"
+], function (Element) {
     'use strict';
 
-    return {
+    return Element.extend({
+
+        defaults: {
+            scopeConfig: {}
+        },
+
+        initialize: function () {
+            this._super();
+        },
         /**
          * Takes website id from current customer data and compare it with current website id
          * If customer belongs to another scope, we need to invalidate current section
@@ -15,12 +23,12 @@ define([
          * @param {Object} customerData
          */
         process: function (customerData) {
-            var customer = customerData.get('customer'),
-                scopeConfig = window.scopeConfig;
+            var customer = customerData.get('customer');
 
-            if (scopeConfig && customer && customer.websiteId != scopeConfig.websiteId) {
-                customerData.invalidate(['customer']);
+            if (this.scopeConfig && customer() && customer().websiteId != this.scopeConfig.websiteId) {
+
+                customerData.reload(['customer']);
             }
         }
-    }
+    });
 });

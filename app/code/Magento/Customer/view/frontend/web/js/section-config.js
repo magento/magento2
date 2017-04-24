@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define(['underscore', 'Magento_Customer/js/invalidation-processor'], function (_, invalidationRules) {
+define(['underscore'], function (_) {
     'use strict';
 
     var baseUrls, sections, clientSideSections, canonize;
@@ -33,7 +33,6 @@ define(['underscore', 'Magento_Customer/js/invalidation-processor'], function (_
          * @return {Array}
          */
         getAffectedSections: function (url) {
-            debugger;
             var route = canonize(url),
                 actions = _.find(sections, function (val, section) {
                     var matched;

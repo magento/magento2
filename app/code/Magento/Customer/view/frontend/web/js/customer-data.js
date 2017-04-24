@@ -9,8 +9,7 @@ define([
     'ko',
     'Magento_Customer/js/section-config',
     'mage/storage',
-    'jquery/jquery-storageapi',
-    'Magento_Customer/js/invalidation-processor'
+    'jquery/jquery-storageapi'
 ], function ($, _, ko, sectionConfig) {
     'use strict';
 
