@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class AllowedProductTypes contains product types on which some product type can be displayed
+ *
+ * @api
  */
 class AllowedProductTypes
 {

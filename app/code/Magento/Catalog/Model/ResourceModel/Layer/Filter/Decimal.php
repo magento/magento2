@@ -10,6 +10,8 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Catalog Layer Decimal attribute Filter Resource Model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

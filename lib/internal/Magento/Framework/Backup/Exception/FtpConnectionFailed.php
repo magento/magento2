@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * \Exception
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Backup\Exception;
 
+/**
+ * @api
+ */
 class FtpConnectionFailed extends \Magento\Framework\Backup\BackupException
 {
 }
