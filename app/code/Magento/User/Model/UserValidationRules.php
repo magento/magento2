@@ -12,6 +12,8 @@ use Magento\Framework\Validator\StringLength;
 
 /**
  * Class for adding validation rules to an Admin user
+ *
+ * @api
  */
 class UserValidationRules
 {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Locale\Test\Unit;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -43,9 +41,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     ];
 
     private static $samplePresentLocales = [
-         'en_US', 'lv_LV', 'pt_BR', 'it_IT', 'ar_EG', 'bg_BG', 'en_IE', 'es_ES',
-         'en_AU', 'pt_PT', 'ru_RU', 'en_CA', 'vi_VN', 'ja_JP', 'en_GB', 'zh_CN',
-         'zh_TW', 'fr_FR', 'ar_KW', 'pl_PL', 'ko_KR', 'sk_SK', 'el_GR', 'hi_IN',
+        'en_US', 'lv_LV', 'pt_BR', 'it_IT', 'ar_EG', 'bg_BG', 'en_IE', 'es_ES',
+        'en_AU', 'pt_PT', 'ru_RU', 'en_CA', 'vi_VN', 'ja_JP', 'en_GB', 'zh_CN',
+        'zh_TW', 'fr_FR', 'ar_KW', 'pl_PL', 'ko_KR', 'sk_SK', 'el_GR', 'hi_IN',
     ];
 
     private static $sampleAbsentLocales = [

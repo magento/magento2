@@ -11,6 +11,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Interface EntryConverterInterface. Create Media Gallery Entry and extract Entry data
+ *
+ * @api
  */
 interface EntryConverterInterface
 {
