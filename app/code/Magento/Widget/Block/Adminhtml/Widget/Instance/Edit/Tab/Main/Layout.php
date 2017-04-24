@@ -33,16 +33,24 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     protected $_productType;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\Product\Type $productType,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_productType = $productType;
+        $this->serializer = $serializer;
         parent::__construct($context, $data);
     }
 
@@ -335,17 +343,26 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
         $pageGroups = [];
         if ($widgetInstance->getPageGroups()) {
             foreach ($widgetInstance->getPageGroups() as $pageGroup) {
-                $pageGroups[] = [
-                    'page_id' => $pageGroup['page_id'],
-                    'group' => $pageGroup['page_group'],
-                    'block' => $pageGroup['block_reference'],
-                    'for_value' => $pageGroup['page_for'],
-                    'layout_handle' => $pageGroup['layout_handle'],
-                    $pageGroup['page_group'] . '_entities' => $pageGroup['entities'],
-                    'template' => $pageGroup['page_template'],
-                ];
+                $pageGroups[] = $this->serializer->serialize($this->getPageGroup($pageGroup));
             }
         }
         return $pageGroups;
+    }
+
+    /**
+     * @param array $pageGroup
+     * @return array
+     */
+    private function getPageGroup(array $pageGroup)
+    {
+        return [
+            'page_id' => $pageGroup['page_id'],
+            'group' => $pageGroup['page_group'],
+            'block' => $pageGroup['block_reference'],
+            'for_value' => $pageGroup['page_for'],
+            'layout_handle' => $pageGroup['layout_handle'],
+            $pageGroup['page_group'] . '_entities' => $pageGroup['entities'],
+            'template' => $pageGroup['page_template'],
+        ];
     }
 }
