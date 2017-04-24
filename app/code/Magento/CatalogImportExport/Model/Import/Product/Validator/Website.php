@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
@@ -22,14 +21,6 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     public function __construct(\Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver)
     {
         $this->storeResolver = $storeResolver;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init($context)
-    {
-        return parent::init($context);
     }
 
     /**

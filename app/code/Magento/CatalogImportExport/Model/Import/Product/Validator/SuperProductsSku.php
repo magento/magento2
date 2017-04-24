@@ -26,14 +26,6 @@ class SuperProductsSku extends AbstractImportValidator implements RowValidatorIn
     /**
      * {@inheritdoc}
      */
-    public function init($context)
-    {
-        return parent::init($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isValid($value)
     {
         $this->_clearMessages();
