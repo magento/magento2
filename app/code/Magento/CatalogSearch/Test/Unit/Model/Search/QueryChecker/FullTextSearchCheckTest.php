@@ -75,7 +75,7 @@ class FullTextSearchCheckTest extends \PHPUnit_Framework_TestCase
             ->method('getReferenceType')
             ->willReturn('42');
 
-        $this->fullTextSearchCheck->check($filterMock);
+        $this->fullTextSearchCheck->isRequiredForQuery($filterMock);
     }
 
     public function positiveDataProvider()
