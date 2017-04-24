@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -159,8 +159,8 @@ interface ConfigInterface
 
     /**
      * Get topic config
-     * @param string $name
      *
+     * @param string $name
      * @return array
      * @see \Magento\Framework\Communication\ConfigInterface::getTopic
      * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher

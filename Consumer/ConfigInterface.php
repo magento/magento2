@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue\Consumer;
@@ -10,6 +10,8 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 
 /**
  * Consumer config interface provides access data declared in etc/queue_consumer.xml
+ *
+ * @api
  */
 interface ConfigInterface
 {
