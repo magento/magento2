@@ -30,13 +30,6 @@ class BottomToolbar extends Block
     private $previousPageSelector = '.item.pages-item-previous';
 
     /**
-     * Selector limiter block
-     *
-     * @var string
-     */
-    private $optionBlockSelector = '.control';
-
-    /**
      * Selector option element
      *
      * @var string
