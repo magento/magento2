@@ -15,6 +15,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\Fronten
 
 /**
  * Class AbstractAction
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction

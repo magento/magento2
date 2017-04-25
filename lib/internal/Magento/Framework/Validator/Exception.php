@@ -13,7 +13,9 @@ use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Message\Error;
 
 /**
- * Exception to be thrown when an validation data is failed
+ * Exception to be thrown when data validation fails
+ *
+ * @api
  */
 class Exception extends InputException
 {
