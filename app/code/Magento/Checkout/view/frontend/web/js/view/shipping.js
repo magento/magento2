@@ -153,17 +153,18 @@ define([
                         class: buttons.cancel.class ? buttons.cancel.class : 'action secondary action-hide-popup',
 
                         /** @inheritdoc */
-                        click: function () {
-                            // Revert address.
-                            checkoutData.setShippingAddressFromData(self.tempData);
-                            this.closeModal();
-                        }
+                        click: this.onClosePopUp.bind(this)
                     }
                 ];
 
                 /** @inheritdoc */
                 this.popUpForm.options.closed = function () {
                     self.isFormPopUpVisible(false);
+                };
+
+                this.popUpForm.options.modalCloseBtnHandler = this.onClosePopUp.bind(this);
+                this.popUpForm.options.keyEventHandlers = {
+                    escapeKey: this.onClosePopUp.bind(this)
                 };
 
                 /** @inheritdoc */
@@ -175,6 +176,14 @@ define([
             }
 
             return popUp;
+        },
+
+        /**
+         * Revert address and close modal.
+         */
+        onClosePopUp: function () {
+            checkoutData.setShippingAddressFromData($.extend(true, {}, this.temporaryAddress));
+            this.getPopUp().closeModal();
         },
 
         /**
@@ -203,7 +212,7 @@ define([
                 newShippingAddress = createShippingAddress(addressData);
                 selectShippingAddress(newShippingAddress);
                 checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
-                checkoutData.setNewCustomerShippingAddress(addressData);
+                checkoutData.setNewCustomerShippingAddress($.extend(true, {}, addressData));
                 this.getPopUp().closeModal();
                 this.isNewAddressAdded(true);
             }
