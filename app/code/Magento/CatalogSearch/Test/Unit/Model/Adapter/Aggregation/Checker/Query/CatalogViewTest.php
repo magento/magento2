@@ -138,7 +138,7 @@ class CatalogViewTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->categoryMock);
         $this->categoryMock->expects($this->once())
             ->method('getIsAnchor')
-            ->willReturn(true);
-        $this->assertTrue($this->catalogViewMock->isApplicable($this->requestMock));
+            ->willReturn(false);
+        $this->assertFalse($this->catalogViewMock->isApplicable($this->requestMock));
     }
 }
