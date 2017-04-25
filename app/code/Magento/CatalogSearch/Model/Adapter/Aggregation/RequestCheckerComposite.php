@@ -9,10 +9,6 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * A Composite implementation for request checker.
- * Checker for attribute resolver class.
- */
 class RequestCheckerComposite implements RequestCheckerInterface
 {
     /**

@@ -87,6 +87,17 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testIsNotAplicable()
+    {
+        $documentIds = [1];
+        $this->aggregationChecker
+            ->expects($this->once())
+            ->method('isApplicable')
+            ->with($this->request)
+            ->willReturn(false);
+        $this->assertEquals([], $this->aggregationResolver->resolve($this->request, $documentIds));
+    }
+
     public function testResolve()
     {
         $documentIds = [1, 2, 3];
