@@ -385,7 +385,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value
      * @return string
      */
-    private function _filterLoop($value)
+    protected function _filterLoop($value)
     {
         if(preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach($constructions as $index=>$construction) {
