@@ -679,9 +679,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
 
-        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
-            $collection->addAttributeToSelect($metadata->getAttributeCode());
-        }
+        $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
