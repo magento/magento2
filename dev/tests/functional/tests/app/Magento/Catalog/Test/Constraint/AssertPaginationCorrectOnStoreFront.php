@@ -12,7 +12,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\Category;
 
 /**
- * Checks pagination of storefront for correct pagination and list of products
+ * Checks correct pagination for list of products on storefront.
  */
 class AssertPaginationCorrectOnStoreFront extends AbstractConstraint
 {
