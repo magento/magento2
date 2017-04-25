@@ -5,8 +5,9 @@
  */
 namespace Magento\Backend\Model\View\Layout\Reader;
 
-use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 
 /**
  * Backend block structure reader with ACL support
@@ -20,6 +21,7 @@ class Block extends Layout\Reader\Block
      * @param Layout\Argument\Parser $argumentParser
      * @param Layout\ReaderPool $readerPool
      * @param InterpreterInterface $argumentInterpreter
+     * @param Condition $conditionReader
      * @param string|null $scopeType
      */
     public function __construct(
@@ -27,6 +29,7 @@ class Block extends Layout\Reader\Block
         Layout\Argument\Parser $argumentParser,
         Layout\ReaderPool $readerPool,
         InterpreterInterface $argumentInterpreter,
+        Condition $conditionReader,
         $scopeType = null
     ) {
         $this->attributes[] = 'acl';
@@ -35,6 +38,7 @@ class Block extends Layout\Reader\Block
             $argumentParser,
             $readerPool,
             $argumentInterpreter,
+            $conditionReader,
             $scopeType
         );
     }

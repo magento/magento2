@@ -11,6 +11,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Product status functionality model
+ *
+ * @api
  */
 class Status extends AbstractSource implements SourceInterface, OptionSourceInterface
 {

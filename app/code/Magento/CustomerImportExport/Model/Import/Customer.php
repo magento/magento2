@@ -9,6 +9,10 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
+ * Customer entity import
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Customer extends AbstractCustomer

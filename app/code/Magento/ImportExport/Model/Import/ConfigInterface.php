@@ -5,6 +5,11 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+/**
+ * Provides import configuration
+ *
+ * @api
+ */
 interface ConfigInterface
 {
     /**

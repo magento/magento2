@@ -12,7 +12,8 @@ use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 /**
  * Export entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
