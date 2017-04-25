@@ -136,7 +136,7 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
-        value = $this->_filterLoop($value);
+        $value = $this->_filterLoop($value);
         
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
