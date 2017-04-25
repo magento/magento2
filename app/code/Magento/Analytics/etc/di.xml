@@ -23,13 +23,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\View\Layout\ConditionPool">
-        <arguments>
-            <argument name="conditions" xsi:type="array">
-                <item name="analytics::can-view-notification" xsi:type="string">Magento\Analytics\Model\Condition\CanViewNotification</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Analytics\Controller\Adminhtml\Subscription\Activate">
         <arguments>
             <argument name="configValueResource" xsi:type="object">Magento\Config\Model\ResourceModel\Config\Data</argument>

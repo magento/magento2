@@ -12,6 +12,8 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * ImportExport history reports helper
+ *
+ * @api
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {

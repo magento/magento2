@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\Product\Price\Validation;
 
 /**
  * Validation Result is used to aggregate errors that occurred during price update.
+ *
+ * @api
  */
 class Result
 {
