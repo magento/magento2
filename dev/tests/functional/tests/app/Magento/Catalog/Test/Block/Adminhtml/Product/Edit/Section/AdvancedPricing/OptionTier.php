@@ -124,7 +124,7 @@ class OptionTier extends AbstractOptions
     }
 
     /**
-     * Wait until price form locks
+     * Waiting until advanced price form becomes hidden
      *
      * @return void
      */
