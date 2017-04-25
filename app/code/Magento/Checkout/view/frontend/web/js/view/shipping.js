@@ -60,11 +60,7 @@ define([
             template: 'Magento_Checkout/shipping',
             shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
             shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
-            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item',
-            saveInAddressBook: 1,
-            links: {
-                saveInAddressBook: '${ $.provider }:shippingAddress.save_in_address_book'
-            }
+            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
         },
         visible: ko.observable(!quote.isVirtual()),
         errorValidationMessage: ko.observable(false),
@@ -72,6 +68,7 @@ define([
         isFormPopUpVisible: formPopUpState.isVisible,
         isFormInline: addressList().length === 0,
         isNewAddressAdded: ko.observable(false),
+        saveInAddressBook: 1,
         quoteIsVirtual: quote.isVirtual(),
 
         /**
@@ -117,7 +114,7 @@ define([
                 if (shippingAddressData) {
                     checkoutProvider.set(
                         'shippingAddress',
-                        $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
@@ -125,14 +122,6 @@ define([
                 });
                 shippingRatesValidator.initFields(fieldsetName);
             });
-
-            return this;
-        },
-
-        /** @inheritdoc */
-        initObservable: function () {
-            this._super()
-                .observe('saveInAddressBook');
 
             return this;
         },
@@ -165,6 +154,8 @@ define([
 
                         /** @inheritdoc */
                         click: function () {
+                            // Revert address.
+                            checkoutData.setShippingAddressFromData(self.tempData);
                             this.closeModal();
                         }
                     }
@@ -173,6 +164,12 @@ define([
                 /** @inheritdoc */
                 this.popUpForm.options.closed = function () {
                     self.isFormPopUpVisible(false);
+                };
+
+                /** @inheritdoc */
+                this.popUpForm.options.opened = function () {
+                    // Store temporary address for revert action in case when user click cancel action
+                    self.temporaryAddress = $.extend(true, {}, checkoutData.getShippingAddressFromData());
                 };
                 popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
             }
@@ -200,7 +197,7 @@ define([
             if (!this.source.get('params.invalid')) {
                 addressData = this.source.get('shippingAddress');
                 // if user clicked the checkbox, its value is true or false. Need to convert.
-                addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
+                addressData['save_in_address_book'] = this.saveInAddressBook ? 1 : 0;
 
                 // New address must be selected as a shipping address
                 newShippingAddress = createShippingAddress(addressData);
