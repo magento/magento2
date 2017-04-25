@@ -59,6 +59,13 @@ class System implements ConfigTypeInterface
     private $serializer;
 
     /**
+     * The type of config.
+     *
+     * @var string
+     */
+    private $configType;
+
+    /**
      * Key name for flag which displays whether configuration is cached or not.
      *
      * Once configuration is cached additional flag pushed to cache storage
@@ -66,14 +73,7 @@ class System implements ConfigTypeInterface
      *
      * @var string
      */
-    private $cacheExistenceKey = self::CONFIG_TYPE . '_CACHE_EXISTS';
-
-    /**
-     * The type of config.
-     *
-     * @var string
-     */
-    private $configType;
+    private $cacheExistenceKey;
 
     /**
      * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
@@ -103,6 +103,7 @@ class System implements ConfigTypeInterface
         $this->fallback = $fallback;
         $this->serializer = $serializer;
         $this->configType = $configType;
+        $this->cacheExistenceKey = $this->configType . '_CACHE_EXISTS';
     }
 
     /**
@@ -209,8 +210,8 @@ class System implements ConfigTypeInterface
         foreach ($data as $scope => $scopeData) {
             foreach ($scopeData as $key => $config) {
                 $this->cache->save(
-                    $this->serializer->serialize($this->data->getData()),
-                    self::CONFIG_TYPE,
+                    $this->serializer->serialize($config),
+                    $this->configType . '_' . $scope . $key,
                     [self::CACHE_TAG]
                 );
             }
@@ -237,7 +238,7 @@ class System implements ConfigTypeInterface
         $result = null;
         $pathParts = $this->getPathParts($path);
         if (!empty($pathParts)) {
-            $result = $this->cache->load(self::CONFIG_TYPE . '_' . $pathParts[0] . $pathParts[1]);
+            $result = $this->cache->load($this->configType . '_' . $pathParts[0] . $pathParts[1]);
             if ($result !== false) {
                 $readData = $this->data->getData();
                 $readData[$pathParts[0]][$pathParts[1]] = $this->serializer->unserialize($result);
