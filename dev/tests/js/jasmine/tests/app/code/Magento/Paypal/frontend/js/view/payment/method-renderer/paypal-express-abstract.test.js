@@ -24,7 +24,7 @@ define([
                 }
             },
             paypalExpressAbstract,
-            templateElement = $('<div data-bind="template: getTemplate()"></div>')[0];
+            tplElement = $('<div data-bind="with: child"><div data-bind="template: getTemplate()"></div></div>')[0];
 
         /**
          * Click on PayPal help link and call expectation
@@ -52,8 +52,9 @@ define([
                         }
                     });
 
-                    $(document.body).append(templateElement);
-                    ko.applyBindings(paypalExpressAbstract, templateElement);
+                    paypalExpressAbstract.child = paypalExpressAbstract;
+                    $(document.body).append(tplElement);
+                    ko.applyBindings(paypalExpressAbstract, tplElement);
                     done();
                 });
         });
@@ -83,7 +84,7 @@ define([
         });
 
         afterAll(function (done) {
-            templateElement.remove();
+            tplElement.remove();
             done();
         });
     });
