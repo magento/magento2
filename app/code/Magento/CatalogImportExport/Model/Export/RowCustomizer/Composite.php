@@ -8,6 +8,11 @@ namespace Magento\CatalogImportExport\Model\Export\RowCustomizer;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class Composite
+ *
+ * @api
+ */
 class Composite implements RowCustomizerInterface
 {
     /**
