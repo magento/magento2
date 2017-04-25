@@ -101,6 +101,12 @@ class Item extends Sidebar
      */
     public function getQty()
     {
+        $rootElement = $this->_rootElement;
+        $this->browser->waitUntil(
+            function () use ($rootElement) {
+                return $rootElement->find($this->qty) ? true : null;
+            }
+        );
         return $this->_rootElement->find($this->qty)->getValue();
     }
 
