@@ -15,6 +15,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Shell\ComplexParameter;
+use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
@@ -68,8 +69,10 @@ class Cli extends Console\Application
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
-        $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-            ->getServiceManager();
+        $configuration = require BP . '/setup/config/application.config.php';
+        $bootstrapApplication = new Application();
+        $application = $bootstrapApplication->bootstrap($configuration);
+        $this->serviceManager = $application->getServiceManager();
 
         $this->assertCompilerPreparation();
         $this->initObjectManager();

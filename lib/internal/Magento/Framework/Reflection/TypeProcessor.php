@@ -542,8 +542,8 @@ class TypeProcessor
      */
     public function getParamType(ParameterReflection $param)
     {
-        $type = $param->getType();
-        if ($param->getType() == 'null') {
+        $type = $param->detectType();
+        if ($type == 'null') {
             throw new \LogicException(sprintf(
                 '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
                 . ' First declared type should not be null. E.g. string|null',
