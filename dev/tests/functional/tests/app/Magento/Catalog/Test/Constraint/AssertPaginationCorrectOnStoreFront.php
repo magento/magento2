@@ -56,7 +56,7 @@ class AssertPaginationCorrectOnStoreFront extends AbstractConstraint
             $catalogCategoryView->getListProductBlock()->getProductsCount(),
             'Count of products on 2 page does not equivalent with declared in pagination (default value)'
         );
-        $catalogCategoryView->getBottomToolbar()->previousPage();
+        $catalogCategoryView->getBottomToolbar()->firstPage();
         $catalogCategoryView->getBottomToolbar()->setLimiterValueByIndex(1);
         \PHPUnit_Framework_Assert::assertEquals(
             $catalogCategoryView->getBottomToolbar()->getLimitedValueByIndex(1),
