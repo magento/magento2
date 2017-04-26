@@ -5,11 +5,12 @@
  */
 namespace Magento\Cms\Setup;
 
-use Magento\Widget\Model\Widget\Wysiwyg\Normalizer;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Filter\Template\Tokenizer\ParameterFactory;
 
 /**
  * Convert conditions_encoded part of cms block content data from serialized to JSON format
@@ -17,7 +18,7 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 class ContentConverter extends SerializedToJson
 {
     /**
-     * @var \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory
+     * @var ParameterFactory
      */
     private $parameterFactory;
 
@@ -31,13 +32,13 @@ class ContentConverter extends SerializedToJson
      *
      * @param Serialize $serialize
      * @param Json $json
-     * @param \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory
+     * @param ParameterFactory $parameterFactory
      * @param Normalizer $normalizer
      */
     public function __construct(
         Serialize $serialize,
         Json $json,
-        \Magento\Framework\Filter\Template\Tokenizer\ParameterFactory $parameterFactory,
+        ParameterFactory $parameterFactory,
         Normalizer $normalizer
     ) {
         $this->parameterFactory = $parameterFactory;
@@ -71,6 +72,14 @@ class ContentConverter extends SerializedToJson
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function isValidJsonValue($value)
+    {
+        return parent::isValidJsonValue($this->normalizer->restoreReservedCharacters($value));
+    }
+
+    /**
      * Convert widget parameters from serialized format to JSON format
      *
      * @param string $paramsString
@@ -83,11 +92,11 @@ class ContentConverter extends SerializedToJson
         $tokenizer->setString($paramsString);
         $widgetParameters = $tokenizer->tokenize();
         if (isset($widgetParameters['conditions_encoded'])) {
-            $conditions = $this->normalizer->restoreReservedCharaters($widgetParameters['conditions_encoded']);
-            if ($this->isValidJsonValue($conditions)) {
+            if ($this->isValidJsonValue($widgetParameters['conditions_encoded'])) {
                 return $paramsString;
             }
-            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharaters(
+            $conditions = $this->restoreReservedCharactersInSerializedContent($widgetParameters['conditions_encoded']);
+            $widgetParameters['conditions_encoded'] = $this->normalizer->replaceReservedCharacters(
                 parent::convert($conditions)
             );
             $newParamsString = '';
@@ -98,5 +107,26 @@ class ContentConverter extends SerializedToJson
         } else {
             return $paramsString;
         }
+    }
+
+    /**
+     * Restore the reserved characters in the existing serialized content
+     *
+     * @param string $serializedContent
+     * @return string
+     */
+    private function restoreReservedCharactersInSerializedContent($serializedContent)
+    {
+        $map = [
+            '{' => '[',
+            '}' => ']',
+            '"' => '`',
+            '\\' => '|',
+        ];
+        return str_replace(
+            array_values($map),
+            array_keys($map),
+            $serializedContent
+        );
     }
 }
