@@ -5,70 +5,60 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match;
-use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
+use Magento\Framework\Search\Request\Query\Match as MatchRequestQuery;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Match
-     */
-    protected $model;
-
-    /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fieldMapper;
-
-    /**
-     * @var QueryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $queryInterface;
-
-    /**
-     * @var PreprocessorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $preprocessorInterface;
-
-    /**
-     * Set up test environment.
+     * @covers \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match::build
      *
-     * @return void
+     * @dataProvider resultVariations
+     *
+     * @param string $rawQueryValue
+     * @param string $errorMessage
      */
-    protected function setUp()
+    public function testBuild($rawQueryValue, $errorMessage)
     {
-        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->queryInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->preprocessorInterface = $this
-            ->getMockBuilder(\Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match::class,
+        /** @var MatchQueryBuilder $matchQueryBuilder */
+        $matchQueryBuilder = (new ObjectManager($this))->getObject(
+            MatchQueryBuilder::class,
             [
-                'fieldMapper' => $this->fieldMapper,
-                'preprocessorContainer' => [$this->preprocessorInterface],
+                'fieldMapper' => $this->getFieldMapper(),
+                'preprocessorContainer' => [],
             ]
+        );
+
+        $this->assertSelectQuery(
+            $matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'not'),
+            $errorMessage
         );
     }
 
     /**
-     * Test build() method
+     * @see https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html
+     *
+     * @return array
      */
-    public function testBuild()
+    public function resultVariations()
     {
-        $expectedResult = [
+        return [
+            ['query_value+', 'Specifying a trailing plus sign causes InnoDB to report a syntax error.'],
+            ['query_value-', 'Specifying a trailing minus sign causes InnoDB to report a syntax error.'],
+            ['query_@value', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
+        ];
+    }
+
+    /**
+     * @param array $selectQuery
+     * @param string $errorMessage
+     */
+    private function assertSelectQuery($selectQuery, $errorMessage)
+    {
+        $expectedSelectQuery = [
             'bool' => [
                 'must_not' => [
                     [
@@ -83,24 +73,39 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->fieldMapper->expects($this->once())
-            ->method('getFieldName')
+        $this->assertEquals($expectedSelectQuery, $selectQuery, $errorMessage);
+    }
+
+    /**
+     * @return FieldMapperInterface|MockObject
+     */
+    private function getFieldMapper()
+    {
+        $fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
+            ->getMockForAbstractClass();
+
+        $fieldMapper->method('getFieldName')
             ->with('some_field', ['type' => FieldMapperInterface::TYPE_QUERY])
             ->willReturnArgument(0);
 
-        /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject $query */
-        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Match::class)
-            ->setMethods(['getValue', 'getMatches'])
+        return $fieldMapper;
+    }
+
+    /**
+     * @param string $rawQueryValue
+     * @return MatchRequestQuery|MockObject
+     */
+    private function getMatchRequestQuery($rawQueryValue)
+    {
+        $matchRequestQuery = $this->getMockBuilder(MatchRequestQuery::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $query->expects($this->once())->method('getValue')->willReturn('query_value');
-        $query->expects($this->once())->method('getMatches')->willReturn([['field' => 'some_field', 'boost' => 42]]);
+        $matchRequestQuery->method('getValue')
+            ->willReturn($rawQueryValue);
+        $matchRequestQuery->method('getMatches')
+            ->willReturn([['field' => 'some_field', 'boost' => 42]]);
 
-        $this->preprocessorInterface->expects($this->any())
-            ->method('process')
-            ->with('query_value')
-            ->willReturn('query_value');
-        $this->assertEquals($expectedResult, $this->model->build([], $query, 'not'));
+        return $matchRequestQuery;
     }
 }

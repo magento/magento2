@@ -115,6 +115,9 @@ class Match implements QueryInterface
     }
 
     /**
+     * Cut trailing plus or minus sign, and @ symbol, using of which causes InnoDB to report a syntax error.
+     * @see https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html
+     *
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *
      * @param string $value
@@ -122,6 +125,8 @@ class Match implements QueryInterface
      */
     protected function escape($value)
     {
+        $value = preg_replace('/@+|[@+-]+$/', '', $value);
+
         $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\\\)/';
         $replace = '\\\$1';
 
