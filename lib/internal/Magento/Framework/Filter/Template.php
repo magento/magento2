@@ -387,33 +387,33 @@ class Template implements \Zend_Filter_Interface
      */
     protected function _filterLoop($value)
     {
-        if(preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
-            foreach($constructions as $index=>$construction) {
+        if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $index => $construction) {
 
                 $full_text_to_replace = $construction[0];
                 $objectArrayData = $this->_getVariable($construction[1], '');
                 $delimiter = $construction[2];
                 $loop_text_to_replace = $construction[3];
                 
-                if(is_array($objectArrayData) || $objectArrayData instanceof Varien_Data_Collection) {
+                if (is_array($objectArrayData) || $objectArrayData instanceof Varien_Data_Collection) {
 
-                    $loopText = array();
+                    $loopText = [];
                     foreach ($objectArrayData as $k => $objectData) {
 
                         if (!$objectData instanceof Varien_Object) { // is array?
 
-                            if (!is_array($objectData))
+                            if (!is_array($objectData)) {
                                 continue;
-
+                            }
+                             
                             $_item = new Varien_Object();
                             $_item->setData($k, $objectData);
                             $objectData = $_item;
-
                         }
 
                         $this->_templateVars['item'] = $objectData;
 
-                        if(preg_match_all(self::CONSTRUCTION_PATTERN, $loop_text_to_replace, $attributes, PREG_SET_ORDER)) {
+                        if (preg_match_all(self::CONSTRUCTION_PATTERN, $loop_text_to_replace, $attributes, PREG_SET_ORDER)) {
 
                             $subText = $loop_text_to_replace;
                             foreach ($attributes as $j => $attribute) {
