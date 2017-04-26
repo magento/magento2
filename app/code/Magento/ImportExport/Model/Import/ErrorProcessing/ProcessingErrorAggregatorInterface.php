@@ -8,6 +8,8 @@ namespace Magento\ImportExport\Model\Import\ErrorProcessing;
 
 /**
  * Interface for Processing errors Aggregator
+ *
+ * @api
  */
 interface ProcessingErrorAggregatorInterface
 {

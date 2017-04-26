@@ -40,7 +40,7 @@ class OnePageCheckoutTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test, 3rd_party_test_single_flow';
     const SEVERITY = 'S0';
     /* end tags */
 

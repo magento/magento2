@@ -8,6 +8,8 @@ namespace Magento\Review\Model\Rating;
 /**
  * Rating option model
  *
+ * @api
+ *
  * @method \Magento\Review\Model\ResourceModel\Rating\Option _getResource()
  * @method \Magento\Review\Model\ResourceModel\Rating\Option getResource()
  * @method int getRatingId()
