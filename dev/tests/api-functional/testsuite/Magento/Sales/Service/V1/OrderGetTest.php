@@ -39,7 +39,7 @@ class OrderGetTest extends WebapiAbstract
             'increment_id' => self::ORDER_INCREMENT_ID,
         ];
         $expectedPayments = ['method' => 'checkmo'];
-        $expectedBillingAddressNotEmpty = [
+        $expectedAddressNotEmpty = [
             'city',
             'postcode',
             'lastname',
@@ -78,8 +78,18 @@ class OrderGetTest extends WebapiAbstract
         }
 
         $this->assertArrayHasKey('billing_address', $result);
-        foreach ($expectedBillingAddressNotEmpty as $field) {
-            $this->assertArrayHasKey($field, $result['billing_address']);
+        $this->assertArrayHasKey('shipping_address', $result);
+        foreach ($expectedAddressNotEmpty as $field) {
+            $this->assertArrayHasKey(
+                $field,
+                $result['billing_address'],
+                "Billing address should have field {$field}"
+            );
+            $this->assertArrayHasKey(
+                $field,
+                $result['shipping_address'],
+                "Shipping address should have field {$field}"
+            );
         }
 
         //check that nullable fields were marked as optional and were not sent

@@ -1529,12 +1529,27 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getBillingAddress();
 
     /**
+     * Gets the shipping address, if any, for the order.
+     *
+     * @return \Magento\Sales\Api\Data\OrderAddressInterface|null Shipping address. Otherwise, null.
+     */
+    public function getShippingAddress();
+
+    /**
      * Sets the billing address, if any, for the order.
      *
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
      * @return $this
      */
     public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
+
+    /**
+     * Sets the shipping address, if any, for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @return $this
+     */
+    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
 
     /**
      * Gets order payment
