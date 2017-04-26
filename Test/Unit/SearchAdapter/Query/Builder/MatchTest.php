@@ -14,9 +14,10 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match::build
+     * Tests that method constructs a correct select query.
+     * @see MatchQueryBuilder::build
      *
-     * @dataProvider resultVariations
+     * @dataProvider queryValuesInvariantsProvider
      *
      * @param string $rawQueryValue
      * @param string $errorMessage
@@ -39,13 +40,14 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html
+     * @link https://dev.mysql.com/doc/refman/5.7/en/fulltext-boolean.html Fulltext-boolean search docs.
      *
      * @return array
      */
-    public function resultVariations()
+    public function queryValuesInvariantsProvider()
     {
         return [
+            ['query_value', 'Select query field must match simple raw query value.'],
             ['query_value+', 'Specifying a trailing plus sign causes InnoDB to report a syntax error.'],
             ['query_value-', 'Specifying a trailing minus sign causes InnoDB to report a syntax error.'],
             ['query_@value', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
@@ -77,6 +79,8 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Gets fieldMapper mock object.
+     *
      * @return FieldMapperInterface|MockObject
      */
     private function getFieldMapper()
@@ -92,6 +96,8 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Gets RequestQuery mock object.
+     *
      * @param string $rawQueryValue
      * @return MatchRequestQuery|MockObject
      */
