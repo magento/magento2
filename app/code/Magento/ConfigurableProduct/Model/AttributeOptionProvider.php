@@ -77,6 +77,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                     'default_option_value.value'
                 ),
                 'default_title' => 'default_option_value.value',
+                'sort_order' => 'option.sort_order',
             ]
         )->joinInner(
             ['product_entity' => $this->attributeResource->getTable('catalog_product_entity')],
@@ -106,6 +107,10 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                 ]
             ),
             []
+        )->joinInner(
+            ['option' => $this->getTable('eav_attribute_option')],
+            'option.option_id = entity_value.value',
+            []
         )->joinLeft(
             ['option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
             implode(
@@ -132,7 +137,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         )->where(
             'attribute.attribute_id = ?',
             $superAttribute->getAttributeId()
-        );
+        )->order('option.sort_order ASC');
 
         return $select;
     }
