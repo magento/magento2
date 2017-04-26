@@ -8,6 +8,8 @@
  * Newsletter Data Helper
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 namespace Magento\Newsletter\Helper;
 

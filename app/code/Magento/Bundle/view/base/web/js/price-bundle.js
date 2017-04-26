@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
@@ -239,7 +242,6 @@ define([
 
         switch (optionType) {
             case 'radio':
-
             case 'select-one':
 
                 if (optionType === 'radio' && !element.is(':checked')) {

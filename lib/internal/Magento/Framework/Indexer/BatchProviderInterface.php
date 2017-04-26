@@ -13,6 +13,8 @@ use Magento\Framework\DB\Select;
  *
  * Can be used during indexation process to split large amount of data into batches
  * and process them one by one in order to reduce memory consumption and improve overall performance.
+ *
+ * @api retrieve Batches when implementing custom Indexer\Action
  */
 interface BatchProviderInterface
 {

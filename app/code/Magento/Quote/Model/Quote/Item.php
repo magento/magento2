@@ -171,6 +171,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @deprecated
      */
     protected $stockRegistry;
 
@@ -433,8 +434,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             ->setTaxClassId($product->getTaxClassId())
             ->setBaseCost($product->getCost());
 
-        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
-        $this->setIsQtyDecimal($stockItem->getIsQtyDecimal());
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->setIsQtyDecimal($stockItem ? $stockItem->getIsQtyDecimal() : false);
 
         $this->_eventManager->dispatch(
             'sales_quote_item_set_product',

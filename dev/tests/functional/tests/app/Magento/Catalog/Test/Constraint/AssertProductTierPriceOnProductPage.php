@@ -83,9 +83,9 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
             if (!$noError) {
                 break;
             }
-            if (count($match) < 2
-                && $match[1] != $tierPrice['price_qty']
-                || $match[2] !== number_format($tierPrice['price'], $this->priceFormat)
+            $tierPriceValue = isset($tierPrice['price']) ? $tierPrice['price'] : $tierPrice['percentage_value'];
+            if ($match[1] !== $tierPrice['price_qty']
+                || $match[2] !== number_format($tierPriceValue, $this->priceFormat)
             ) {
                 $noError = false;
                 break;

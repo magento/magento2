@@ -21,6 +21,9 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import entity product model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -2201,9 +2204,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function retrieveAttributeByCode($attrCode)
     {
+        /** @var string $attrCode */
+        $attrCode = mb_strtolower($attrCode);
+
         if (!isset($this->_attributeCache[$attrCode])) {
             $this->_attributeCache[$attrCode] = $this->getResource()->getAttribute($attrCode);
         }
+
         return $this->_attributeCache[$attrCode];
     }
 
@@ -2537,6 +2544,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 continue;
             }
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
+            $code = mb_strtolower($code);
             $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
@@ -2563,7 +2571,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function parseAttributesWithWrappedValues($attributesData)
     {
         $attributes = [];
-        preg_match_all('~((?:[a-z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
+        preg_match_all('~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
             $attributesData,
             $matches
         );
@@ -2572,7 +2580,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $value = 'multiselect' != $attribute->getFrontendInput()
                 ? str_replace('""', '"', $matches[2][$i])
                 : '"' . $matches[2][$i] . '"';
-            $attributes[$attributeCode] = $value;
+            $attributes[mb_strtolower($attributeCode)] = $value;
         }
         return $attributes;
     }

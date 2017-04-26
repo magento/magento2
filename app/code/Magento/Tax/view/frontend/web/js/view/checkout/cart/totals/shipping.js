@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
+
 define([
     'Magento_Tax/js/view/checkout/summary/shipping',
     'Magento_Checkout/js/model/quote'

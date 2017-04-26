@@ -8,6 +8,9 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @api
+ */
 interface EmailNotificationInterface
 {
     /**

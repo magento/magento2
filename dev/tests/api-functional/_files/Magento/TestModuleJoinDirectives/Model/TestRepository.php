@@ -46,7 +46,7 @@ class TestRepository implements TestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $quoteCollection = $this->quoteCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($quoteCollection);

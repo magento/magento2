@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing\Adjustment;
 
 /**
  * Adjustment collection model
+ *
+ * @api
  */
 class Collection
 {

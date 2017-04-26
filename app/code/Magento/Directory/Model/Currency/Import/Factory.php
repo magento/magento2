@@ -8,6 +8,11 @@
 
 namespace Magento\Directory\Model\Currency\Import;
 
+/**
+ * Factory for currency import services
+ *
+ * @api
+ */
 class Factory
 {
     /**

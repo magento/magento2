@@ -6,6 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+/**
+ * @api
+ */
 interface PriceResolverInterface
 {
     /**

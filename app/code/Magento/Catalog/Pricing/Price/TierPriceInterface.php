@@ -8,6 +8,8 @@ namespace Magento\Catalog\Pricing\Price;
 
 /**
  * Tier price interface
+ *
+ * @api
  */
 interface TierPriceInterface
 {

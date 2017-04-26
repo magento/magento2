@@ -10,6 +10,8 @@ use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
  * Admin Sessions Manager Model
+ *
+ * @api
  */
 class AdminSessionsManager
 {
