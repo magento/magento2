@@ -24,7 +24,7 @@ class Template implements \Zend_Filter_Interface
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
     const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
-    
+
     /**
      * Looping regular expression
      */
@@ -136,8 +136,8 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
-        $value = $this->_filterLoop($value);
-        
+        $value = $this->filterLoop($value);
+
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 $callback = [$this, $construction[1] . 'Directive'];
@@ -326,7 +326,7 @@ class Template implements \Zend_Filter_Interface
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
             } elseif (isset($stackVars[$i - 1]['variable'])
-                    && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
+                && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
             ) {
                 // If object calling methods or getting properties
                 if ($stackVars[$i]['type'] == 'property') {
@@ -340,7 +340,7 @@ class Template implements \Zend_Filter_Interface
                 } elseif ($stackVars[$i]['type'] == 'method') {
                     // Calling of object method
                     if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
-                            || substr($stackVars[$i]['name'], 0, 3) == 'get'
+                        || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
                         $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
                         $stackVars[$i]['variable'] = call_user_func_array(
@@ -378,51 +378,51 @@ class Template implements \Zend_Filter_Interface
         }
         return $stack;
     }
-    
+
     /**
      * Filter the string as template.
      *
      * @param string $value
      * @return string
      */
-    protected function _filterLoop($value)
+    protected function filterLoop($value)
     {
         if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
 
                 $full_text_to_replace = $construction[0];
-                $objectArrayData = $this->_getVariable($construction[1], '');
+                $objectArrayData = $this->getVariable($construction[1], '');
                 $delimiter = $construction[2];
                 $loop_text_to_replace = $construction[3];
-                
-                if (is_array($objectArrayData) || $objectArrayData instanceof Varien_Data_Collection) {
+
+                if (is_array($objectArrayData) || $objectArrayData instanceof \Traversable) {
 
                     $loopText = [];
                     foreach ($objectArrayData as $k => $objectData) {
 
-                        if (!$objectData instanceof Varien_Object) { // is array?
+                        if (!$objectData instanceof \Magento\Framework\DataObject) { // is array?
 
                             if (!is_array($objectData)) {
                                 continue;
                             }
-                             
-                            $_item = new Varien_Object();
+
+                            $_item = new \Magento\Framework\DataObject;
                             $_item->setData($k, $objectData);
                             $objectData = $_item;
                         }
 
-                        $this->_templateVars['item'] = $objectData;
+                        $this->templateVars['item'] = $objectData;
 
                         if (preg_match_all(self::CONSTRUCTION_PATTERN, $loop_text_to_replace, $attributes, PREG_SET_ORDER)) {
 
                             $subText = $loop_text_to_replace;
                             foreach ($attributes as $attribute) {
-                                $text = $this->_getVariable($attribute[2], '');
+                                $text = $this->getVariable($attribute[2], '');
                                 $subText = str_replace($attribute[0], $text, $subText);
                             }
                             $loopText[] = $subText;
                         }
-                        unset($this->_templateVars['item']);
+                        unset($this->templateVars['item']);
 
                     }
                     $replaceText = implode($delimiter, $loopText);
