@@ -7,6 +7,11 @@ namespace Magento\Catalog\Model\Indexer\Category;
 
 use Magento\Framework\Indexer\CacheContext;
 
+/**
+ * Category product indexer
+ *
+ * @api
+ */
 class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**

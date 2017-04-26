@@ -1,12 +1,13 @@
 <?php
 /**
- * Widgets Insertion Plugin Config for Editor HTML Element
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Widget;
 
+/**
+ * Widgets Insertion Plugin Config for Editor HTML Element
+ */
 class Config
 {
     /**

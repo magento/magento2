@@ -7,6 +7,11 @@ namespace Magento\Security\Model;
 
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 
+/**
+ * Manager for a cookie with logout reason
+ *
+ * @api
+ */
 class SecurityCookie
 {
     /**

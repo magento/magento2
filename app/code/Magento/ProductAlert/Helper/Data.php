@@ -11,6 +11,8 @@ use Magento\Store\Model\Store;
  * ProductAlert data helper
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Data extends \Magento\Framework\Url\Helper\Data
 {

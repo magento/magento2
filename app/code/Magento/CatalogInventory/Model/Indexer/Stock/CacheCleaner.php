@@ -15,6 +15,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Clean product cache only when stock status was updated
@@ -47,21 +48,30 @@ class CacheCleaner
     private $connection;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param ResourceConnection $resource
      * @param StockConfigurationInterface $stockConfiguration
      * @param CacheContext $cacheContext
      * @param ManagerInterface $eventManager
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         ResourceConnection $resource,
         StockConfigurationInterface $stockConfiguration,
         CacheContext $cacheContext,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->resource = $resource;
         $this->stockConfiguration = $stockConfiguration;
         $this->cacheContext = $cacheContext;
         $this->eventManager = $eventManager;
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -89,7 +99,7 @@ class CacheCleaner
     {
         $select = $this->getConnection()->select()
             ->from(
-                $this->resource->getTableName('cataloginventory_stock_status'),
+                $this->indexerStockFrontendResource->getMainTable(),
                 ['product_id', 'stock_status', 'qty']
             )->where('product_id IN (?)', $productIds)
             ->where('stock_id = ?', Stock::DEFAULT_STOCK_ID)

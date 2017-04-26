@@ -78,12 +78,7 @@ class Definition
     public function getComponentData($name)
     {
         if (!$this->componentData->offsetExists($name)) {
-            throw new LocalizedException(
-                new Phrase(
-                    'The requested component ("' . $name . '") is not found. '
-                    . 'Before using, you must add the implementation.'
-                )
-            );
+            return [];
         }
         return (array) $this->componentData->offsetGet($name);
     }
