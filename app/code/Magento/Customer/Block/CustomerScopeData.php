@@ -5,6 +5,11 @@
  */
 namespace Magento\Customer\Block;
 
+/**
+ * Class CustomerScopeData provide scope (website, store or store_group) information on front
+ * Can be used, for example, on store front, in order to determine that private cache invalid for current scope, by comparing
+ * with appropriate value in store front private cache.
+ */
 class CustomerScopeData extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -35,13 +40,14 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @inheritdoc
-     * @return integer - Return customer website id
+     * Return id of current website
+     *
+     * Can be used when necessary to obtain website id of the current customer.
+     *
+     * @return integer
      */
     public function getWebsiteId()
     {
-        $this->_storeManager->getStore()->getWebsiteId();
-
         return (int)$this->_storeManager->getStore()->getWebsiteId();
     }
 }
