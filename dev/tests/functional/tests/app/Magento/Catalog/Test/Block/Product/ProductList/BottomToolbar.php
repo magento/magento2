@@ -23,18 +23,11 @@ class BottomToolbar extends Block
     private $nextPageSelector = '.item.current + .item a';
 
     /**
-     * Selector previous element
+     * Selector first element
      *
      * @var string
      */
-    private $previousPageSelector = '.item.pages-item-previous';
-
-    /**
-     * Selector limiter block
-     *
-     * @var string
-     */
-    private $optionBlockSelector = '.control';
+    private $firstPageSelector = '.item>.page';
 
     /**
      * Selector option element
@@ -59,15 +52,15 @@ class BottomToolbar extends Block
     }
 
     /**
-     * Go to the previous page
+     * Go to the first page
      *
      * @return bool
      */
-    public function previousPage()
+    public function firstPage()
     {
-        $previousPageItem = $this->_rootElement->find($this->previousPageSelector);
-        if ($previousPageItem->isVisible()) {
-            $previousPageItem->click();
+        $firstPageItem = $this->_rootElement->find($this->firstPageSelector);
+        if ($firstPageItem->isVisible()) {
+            $firstPageItem->click();
             return true;
         }
         return false;
