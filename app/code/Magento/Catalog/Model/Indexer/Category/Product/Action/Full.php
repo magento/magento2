@@ -15,18 +15,24 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected $useTempTable = false;
 
     /**
-     * Refresh entities index
+     * Refresh entities index in transaction
      *
      * @return $this
      */
     public function execute()
     {
-        $this->clearTmpData();
-
-        $this->reindex();
-
-        $this->publishData();
-        $this->removeUnnecessaryData();
+        $this->connection->beginTransaction();
+        try {
+            $this->clearTmpData();            
+            $this->reindex();
+            $this->publishData();
+            $this->removeUnnecessaryData();
+            
+            $this->connection->commit();
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return $this;
     }
