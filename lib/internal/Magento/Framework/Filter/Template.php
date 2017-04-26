@@ -388,7 +388,7 @@ class Template implements \Zend_Filter_Interface
     protected function _filterLoop($value)
     {
         if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
-            foreach ($constructions as $index => $construction) {
+            foreach ($constructions as $construction) {
 
                 $full_text_to_replace = $construction[0];
                 $objectArrayData = $this->_getVariable($construction[1], '');
@@ -416,7 +416,7 @@ class Template implements \Zend_Filter_Interface
                         if (preg_match_all(self::CONSTRUCTION_PATTERN, $loop_text_to_replace, $attributes, PREG_SET_ORDER)) {
 
                             $subText = $loop_text_to_replace;
-                            foreach ($attributes as $j => $attribute) {
+                            foreach ($attributes as $attribute) {
                                 $text = $this->_getVariable($attribute[2], '');
                                 $subText = str_replace($attribute[0], $text, $subText);
                             }
