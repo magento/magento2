@@ -12,8 +12,8 @@ use Magento\Framework\DB\Select;
 /**
  * Query batch range iterator.
  *
- * It is uses to processing selects which will obtain values from  $rangeField with relation one-to-many.
- * This iterator make chunks with operator LIMIT...OFFSET,
+ * It is used for processing selects which will obtain values from  $rangeField with relation one-to-many.
+ * This iterator makes chunks with operator LIMIT...OFFSET,
  * starting with zero offset and finishing on OFFSET + LIMIT = TOTAL_COUNT.
  *
  * @see \Magento\Framework\DB\Query\Generator
@@ -116,7 +116,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     /**
      * Return the key of the current element.
      *
-     * Сan return the number of the current sub-select in the iteration.
+     * Сan return the number of the current sub-selects in the iteration.
      *
      * @return int
      */
@@ -126,10 +126,10 @@ class BatchRangeIterator implements BatchIteratorInterface
     }
 
     /**
-     * Move forward to next sub-select
+     * Move forward to next sub-select.
      *
      * Retrieve the next sub-select and move cursor to the next element.
-     * Checks that the count of elements more than the sum of limit and offset.
+     * Check that the count of elements more than the sum of limit and offset.
      *
      * @return Select
      */

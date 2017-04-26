@@ -11,13 +11,13 @@ namespace Magento\Framework\DB\Query;
 interface BatchIteratorInterface extends \Iterator
 {
     /**
-     * Constant which determine strategy to create iterator which will to process
+     * Constant which determines strategy to create iterator which will process
      * range field eg. entity_id with unique values.
      */
     const UNIQUE_FIELD_ITERATOR = "unique";
 
     /**
-     * Constant which determine strategy to create iterator which will to process
+     * Constant which determines strategy to create iterator which will process
      * range field with non-unique values.
      */
     const NON_UNIQUE_FIELD_ITERATOR = "non_unqiue";
@@ -25,7 +25,7 @@ interface BatchIteratorInterface extends \Iterator
     /**
      * Return the current element.
      *
-     * If we don't have sub-select we should create and remember it.
+     * If we don't have sub-select, we should create and remember it.
      *
      * @return \Magento\Framework\DB\Select
      */
@@ -34,7 +34,7 @@ interface BatchIteratorInterface extends \Iterator
     /**
      * Return the key of the current element.
      *
-     * Сan return the number of the current sub-select in the iteration.
+     * Сan return the number of the current sub-selects in the iteration.
      *
      * @return int
      */

@@ -88,7 +88,7 @@ class BatchIterator implements BatchIteratorInterface
     }
 
     /**
-     * @return Select
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -101,7 +101,7 @@ class BatchIterator implements BatchIteratorInterface
     }
 
     /**
-     * @return Select
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -121,7 +121,7 @@ class BatchIterator implements BatchIteratorInterface
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -129,7 +129,7 @@ class BatchIterator implements BatchIteratorInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -137,7 +137,7 @@ class BatchIterator implements BatchIteratorInterface
     }
 
     /**
-     * @return void
+     * {@inheritdoc}
      */
     public function rewind()
     {
