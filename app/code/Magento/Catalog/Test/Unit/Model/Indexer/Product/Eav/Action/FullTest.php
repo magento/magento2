@@ -31,9 +31,24 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->throwException($exception));
 
+        $metadataMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $batchProviderMock = $this->getMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
+
+        $batchManagementMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full(
             $eavDecimalFactory,
-            $eavSourceFactory
+            $eavSourceFactory,
+            $metadataMock,
+            $batchProviderMock,
+            $batchManagementMock,
+            []
         );
 
         $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);

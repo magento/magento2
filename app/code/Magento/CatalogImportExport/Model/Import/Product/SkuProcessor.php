@@ -5,6 +5,11 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Class SkuProcessor
+ *
+ * @api
+ */
 class SkuProcessor
 {
     /**

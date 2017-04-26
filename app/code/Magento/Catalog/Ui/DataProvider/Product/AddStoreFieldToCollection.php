@@ -9,6 +9,9 @@ use Magento\Framework\Data\Collection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
+/**
+ * @api
+ */
 class AddStoreFieldToCollection implements AddFilterToCollectionInterface
 {
     /**

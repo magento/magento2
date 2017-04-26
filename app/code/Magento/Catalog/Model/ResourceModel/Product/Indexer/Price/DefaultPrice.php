@@ -11,6 +11,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  * Default Product Type Price Indexer Resource model
  * For correctly work need define product type id
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
