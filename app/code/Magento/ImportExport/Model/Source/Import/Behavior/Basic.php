@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
 /**
  * Import behavior source model used for defining the behaviour during the import.
+ *
+ * @api
  */
 class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {
