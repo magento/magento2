@@ -62,7 +62,6 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         $errors = [];
         $attribute = $this->getAttribute();
 
-
         if ($value === false) {
             // try to load original value and validate it
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());

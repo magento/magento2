@@ -471,7 +471,7 @@ class Config
      * Get attributes by entity type
      *
      * @deprecated
-     *  @see \Magento\Eav\Model\Config::getEntityAttributes
+     * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param string $entityType
      * @return AbstractAttribute[]
@@ -540,7 +540,7 @@ class Config
      * Get codes of all entity type attributes
      *
      * @deprecated
-     *  @see \Magento\Eav\Model\Config::getEntityAttributes
+     * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param  mixed $entityType
      * @param  \Magento\Framework\DataObject $object
@@ -572,7 +572,6 @@ class Config
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
 
-
         if (isset($this->attributesPerSet[$cacheKey])) {
             return $this->attributesPerSet[$cacheKey];
         }
@@ -580,7 +579,6 @@ class Config
         $attributesData = $this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attributes)
             : null;
-
 
         $attributes = [];
         if ($attributesData === null) {
