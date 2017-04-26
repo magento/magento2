@@ -417,6 +417,11 @@ class Data
     }
 
     /**
+     * @var array
+     */
+    private $swatchesCache = [];
+
+    /**
      * Get swatch options by option id's according to fallback logic
      *
      * @param array $optionIds
@@ -424,27 +429,31 @@ class Data
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
-        /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
-        $swatchCollection = $this->swatchCollectionFactory->create();
-        $swatchCollection->addFilterByOptionsIds($optionIds);
+        $cacheKey = implode('-', $optionIds);
+        if (!isset($this->swatchesCache[$cacheKey])) {
+            /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
+            $swatchCollection = $this->swatchCollectionFactory->create();
+            $swatchCollection->addFilterByOptionsIds($optionIds);
 
-        $swatches = [];
-        $currentStoreId = $this->storeManager->getStore()->getId();
-        foreach ($swatchCollection as $item) {
-            if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
-                $swatches[$item['option_id']] = $item->getData();
-            } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
-                $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
-            } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
-                $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();
+            $swatches = [];
+            $currentStoreId = $this->storeManager->getStore()->getId();
+            foreach ($swatchCollection as $item) {
+                if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
+                    $swatches[$item['option_id']] = $item->getData();
+                } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
+                    $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
+                } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
+                    $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();
+                }
             }
+
+            if (!empty($fallbackValues)) {
+                $swatches = $this->addFallbackOptions($fallbackValues, $swatches);
+            }
+            $this->swatchesCache[$cacheKey] = $swatches;
         }
 
-        if (!empty($fallbackValues)) {
-            $swatches = $this->addFallbackOptions($fallbackValues, $swatches);
-        }
-
-        return $swatches;
+        return $this->swatchesCache[$cacheKey];
     }
 
     /**
