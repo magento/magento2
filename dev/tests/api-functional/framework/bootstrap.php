@@ -39,11 +39,11 @@ try {
     require_once __DIR__ . '/../../integration/framework/deployTestModules.php';
 
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
-    if ( ! file_exists($installConfigFile)) {
+    if (!file_exists($installConfigFile)) {
         $installConfigFile = $installConfigFile . '.dist';
     }
     $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
-    if ( ! file_exists($installConfigFile)) {
+    if (!file_exists($installConfigFile)) {
         $installConfigFile = $installConfigFile . '.dist';
     }
     $dirList     = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
@@ -77,10 +77,10 @@ try {
     $application->initialize();
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
-    $dirSearch        = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                                                               ->create(\Magento\Framework\Component\DirSearch::class);
+    $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+       ->create(\Magento\Framework\Component\DirSearch::class);
     $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                                                               ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
+       ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
     \Magento\Framework\App\Utility\Files::setInstance(
         new \Magento\Framework\App\Utility\Files(
             new \Magento\Framework\Component\ComponentRegistrar(),
