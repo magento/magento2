@@ -38,7 +38,7 @@
                 <item name="4" xsi:type="boolean">true</item>
                 <item name="5" xsi:type="boolean">true</item>
             </data>
-            <data name="configData" xsi:type="string">dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
+            <data name="configData" xsi:type="string">dhl_eu, shipping_origin_GB, config_base_currency_gb</data>
         </variation>
     </testCase>
 </config>
