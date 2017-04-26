@@ -5,6 +5,11 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Interface RowValidatorInterface
+ *
+ * @api
+ */
 interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorInterface
 {
     const ERROR_INVALID_SCOPE = 'invalidScope';

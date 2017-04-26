@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Model\Source\Import;
 /**
  * Source import behavior model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterface
 {
