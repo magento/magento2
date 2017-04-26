@@ -273,7 +273,7 @@ class TransportBuilder
         $body = $template->processTemplate();
         $this->message->setMessageType($types[$template->getType()])
             ->setBody($body)
-            ->setSubject($template->getSubject());
+            ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
 
         return $this;
     }
