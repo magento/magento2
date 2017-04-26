@@ -24,6 +24,11 @@ class Template implements \Zend_Filter_Interface
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
     const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
+    
+    /**
+     * Looping regular expression
+     */
+    const LOOP_PATTERN = '/{{loop(.*?)delimiter=(.*?)}}(.*?){{\/loop}}/si';
 
     /**#@-*/
 
@@ -131,6 +136,8 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
+        $value = $this->_filterLoop($value);
+        
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 $callback = [$this, $construction[1] . 'Directive'];
@@ -370,5 +377,60 @@ class Template implements \Zend_Filter_Interface
             }
         }
         return $stack;
+    }
+    
+    /**
+     * Filter the string as template.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function _filterLoop($value)
+    {
+        if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $index => $construction) {
+
+                $full_text_to_replace = $construction[0];
+                $objectArrayData = $this->_getVariable($construction[1], '');
+                $delimiter = $construction[2];
+                $loop_text_to_replace = $construction[3];
+                
+                if (is_array($objectArrayData) || $objectArrayData instanceof Varien_Data_Collection) {
+
+                    $loopText = [];
+                    foreach ($objectArrayData as $k => $objectData) {
+
+                        if (!$objectData instanceof Varien_Object) { // is array?
+
+                            if (!is_array($objectData)) {
+                                continue;
+                            }
+                             
+                            $_item = new Varien_Object();
+                            $_item->setData($k, $objectData);
+                            $objectData = $_item;
+                        }
+
+                        $this->_templateVars['item'] = $objectData;
+
+                        if (preg_match_all(self::CONSTRUCTION_PATTERN, $loop_text_to_replace, $attributes, PREG_SET_ORDER)) {
+
+                            $subText = $loop_text_to_replace;
+                            foreach ($attributes as $j => $attribute) {
+                                $text = $this->_getVariable($attribute[2], '');
+                                $subText = str_replace($attribute[0], $text, $subText);
+                            }
+                            $loopText[] = $subText;
+                        }
+                        unset($this->_templateVars['item']);
+
+                    }
+                    $replaceText = implode($delimiter, $loopText);
+                    $value = str_replace($full_text_to_replace, $replaceText, $value);
+                }
+            }
+        }
+
+        return $value;
     }
 }
