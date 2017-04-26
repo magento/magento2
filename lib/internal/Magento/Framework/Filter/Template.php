@@ -28,7 +28,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * Looping regular expression
      */
-    const LOOP_PATTERN = '/{{loop(.*?)delimiter=(.*?)}}(.*?){{\/loop}}/si';
+    const LOOP_PATTERN = '/{{loop(.*?)}}(.*?){{\/loop}}/si';
 
     /**#@-*/
 
@@ -392,8 +392,7 @@ class Template implements \Zend_Filter_Interface
 
                 $full_text_to_replace = $construction[0];
                 $objectArrayData = $this->getVariable($construction[1], '');
-                $delimiter = $construction[2];
-                $loop_text_to_replace = $construction[3];
+                $loop_text_to_replace = $construction[2];
 
                 if (is_array($objectArrayData) || $objectArrayData instanceof \Traversable) {
 
@@ -425,7 +424,7 @@ class Template implements \Zend_Filter_Interface
                         unset($this->templateVars['item']);
 
                     }
-                    $replaceText = implode($delimiter, $loopText);
+                    $replaceText = implode('', $loopText);
                     $value = str_replace($full_text_to_replace, $replaceText, $value);
                 }
             }
