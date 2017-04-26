@@ -132,7 +132,6 @@ class IndexIterator implements \Iterator
         $this->statusIds = $statusIds;
     }
 
-
     /**
      * {@inheritDoc}
      *
