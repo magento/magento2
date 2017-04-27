@@ -6,7 +6,7 @@
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Directory data processor.
@@ -37,9 +37,9 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     private $countryCollectionFactory;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var DirectoryHelper
@@ -49,18 +49,18 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection
-     * @param StoreResolverInterface $storeResolver
+     * @param StoreManagerInterface $storeManager
      * @param DirectoryHelper $directoryHelper
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection,
-        StoreResolverInterface $storeResolver,
+        StoreManagerInterface $storeManager,
         DirectoryHelper $directoryHelper
     ) {
         $this->countryCollectionFactory = $countryCollection;
         $this->regionCollectionFactory = $regionCollection;
-        $this->storeResolver = $storeResolver;
+        $this->storeManager = $storeManager;
         $this->directoryHelper = $directoryHelper;
     }
 
@@ -91,7 +91,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     {
         if (!isset($this->countryOptions)) {
             $this->countryOptions = $this->countryCollectionFactory->create()->loadByStore(
-                $this->storeResolver->getCurrentStoreId()
+                $this->storeManager->getStore()->getId()
             )->toOptionArray();
             $this->countryOptions = $this->orderCountryOptions($this->countryOptions);
         }
@@ -108,7 +108,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     {
         if (!isset($this->regionOptions)) {
             $this->regionOptions = $this->regionCollectionFactory->create()->addAllowedCountriesFilter(
-                $this->storeResolver->getCurrentStoreId()
+                $this->storeManager->getStore()->getId()
             )->toOptionArray();
         }
 
