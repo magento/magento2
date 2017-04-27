@@ -109,4 +109,16 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
         $dateTime = $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
         $this->getConnection()->delete($this->getMainTable(), ['lock_expires_at <= ?' => $dateTime]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLockExpiresAt($userName, $userType)
+    {
+        $select = $this->getConnection()->select();
+        $select->from($this->getMainTable(), 'lock_expires_at')
+            ->where('user_name = :user_name AND user_type = :user_type');
+
+        return $this->getConnection()->fetchOne($select, ['user_name' => $userName, 'user_type' => $userType]);
+    }
 }
