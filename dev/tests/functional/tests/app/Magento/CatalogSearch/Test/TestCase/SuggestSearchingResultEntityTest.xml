@@ -8,13 +8,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogSearch\Test\TestCase\SuggestSearchingResultEntityTest" summary="Suggest Searching Results" ticketId="MAGETWO-24671, MAGETWO-23186">
         <variation name="SuggestSearchingResultEntityTestVariation1" summary="Auto-complete search with product name" ticketId="MAGETWO-24671">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::name</data>
             <data name="searchTerm/data/num_results" xsi:type="string">-</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
         </variation>
         <variation name="SuggestSearchingResultEntityTestVariation2" summary="Auto-complete search with product sku" ticketId="MAGETWO-24671">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::sku</data>
             <data name="searchTerm/data/num_results" xsi:type="string">1</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSuggestSearchingResult" />
