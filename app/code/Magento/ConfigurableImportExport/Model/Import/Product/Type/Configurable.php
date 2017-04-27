@@ -720,7 +720,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $label = isset($variationLabels[$data['_super_attribute_code']])
                 ? $variationLabels[$data['_super_attribute_code']]
                 : $attrParams['frontend_label'];
-        $this->_superAttributesData['labels'][] = [
+        $this->_superAttributesData['labels'][$productSuperAttrId] = [
             'product_super_attribute_id' => $productSuperAttrId,
             'store_id' => 0,
             'use_default' => $label ? 0 : 1,
