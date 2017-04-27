@@ -90,7 +90,6 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                 'url' => $url
             ]
         ];
-        $serializedDataString = '{"serialized-data"}';
 
         $this->cache->expects($this->any())
             ->method('load')
