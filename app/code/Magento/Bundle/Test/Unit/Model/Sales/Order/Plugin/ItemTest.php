@@ -87,4 +87,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->itemMock->expects($this->once())->method('getQtyToCancel')->willReturn(5);
         $this->assertTrue($this->plugin->afterIsProcessingAvailable($this->itemMock, false));
     }
+
+    public function testAfterIsProcessingAvailableForBundleProduct()
+    {
+        $this->itemMock->expects($this->once())
+            ->method('getProductType')
+            ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
+        $this->itemMock->expects($this->once())->method('getSimpleQtyToShip')->willReturn(10);
+        $this->itemMock->expects($this->once())->method('getQtyToCancel')->willReturn(5);
+        $this->assertTrue($this->plugin->afterIsProcessingAvailable($this->itemMock, false));
+    }
 }

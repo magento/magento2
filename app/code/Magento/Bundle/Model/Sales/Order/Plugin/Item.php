@@ -38,7 +38,7 @@ class Item
      */
     public function afterIsProcessingAvailable(\Magento\Sales\Model\Order\Item $subject, $result)
     {
-        if ($subject->getParentItem()
+        if ($subject->getProductType() === \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE || $subject->getParentItem()
             && $subject->getParentItem()->getProductType() === \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
         ) {
             return $subject->getSimpleQtyToShip() > $subject->getQtyToCancel();
