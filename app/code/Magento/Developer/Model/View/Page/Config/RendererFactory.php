@@ -6,12 +6,13 @@
 namespace Magento\Developer\Model\View\Page\Config;
 
 use Magento\Developer\Model\Config\Source\WorkflowType;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
+ *
+ * @api
  */
 class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactory
 {

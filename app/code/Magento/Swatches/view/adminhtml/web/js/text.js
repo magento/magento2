@@ -5,6 +5,9 @@
 
 /* global $break $ $$ */
 
+/**
+ *  @api
+ */
 define([
     'jquery',
     'mage/template',

@@ -11,7 +11,7 @@ use Magento\Framework\DB\Ddl\Table;
 /**
  * Bundle Price View Attribute Renderer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {

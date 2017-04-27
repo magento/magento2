@@ -15,6 +15,9 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
     /** @var Image */

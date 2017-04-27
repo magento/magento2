@@ -56,9 +56,8 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     ) {
         $this->context = $context;
         $this->components = $components;
-        $this->initObservers($data);
-        $this->context->getProcessor()->register($this);
         $this->_data = array_replace_recursive($this->_data, $data);
+        $this->initObservers($this->_data);
     }
 
     /**
@@ -113,6 +112,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
+        $this->context->getProcessor()->register($this);
         $this->getContext()->getProcessor()->notify($this->getComponentName());
     }
 

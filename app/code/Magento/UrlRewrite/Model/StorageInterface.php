@@ -5,6 +5,9 @@
  */
 namespace Magento\UrlRewrite\Model;
 
+/**
+ * @api
+ */
 interface StorageInterface extends UrlFinderInterface, UrlPersistInterface
 {
 }

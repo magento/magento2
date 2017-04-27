@@ -45,7 +45,6 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->column->expects($this->once())
             ->method('getConfiguration')
             ->willReturn([
-                'dataType' => 'text',
                 'visible' => true,
             ]);
         $this->validationRules->expects($this->once())
@@ -60,7 +59,6 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'config',
                 [
-                    'dataType' => 'text',
                     'visible' => true,
                     'editor' => [
                         'editorType' => 'text',
