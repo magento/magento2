@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Cache;
 
-namespace Magento\Framework\Cache;
-
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
  *
