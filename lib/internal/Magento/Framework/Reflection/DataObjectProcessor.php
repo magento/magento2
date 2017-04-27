@@ -98,7 +98,9 @@ class DataObjectProcessor
                 $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
             } elseif ($key === "extension_attributes") {
                 $attributeArray = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
-                $value = empty($attributeArray) ? new \Magento\Framework\DataObject() : $attributeArray;
+                if (!empty($attributeArray)) {
+                    $value = $attributeArray;
+                }
             } else {
                 if (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
