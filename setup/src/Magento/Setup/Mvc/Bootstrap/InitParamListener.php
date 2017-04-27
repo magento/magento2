@@ -57,6 +57,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * {@inheritdoc}
+     *
+     * The $priority argument is added to support latest versions of Zend Event Manager.
+     * Starting from Zend Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
+     * supports the `priority` argument.
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
@@ -64,7 +68,8 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         $this->listeners[] = $sharedEvents->attach(
             Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
-            [$this, 'onBootstrap']
+            [$this, 'onBootstrap'],
+            $priority
         );
     }
 
