@@ -16,9 +16,6 @@ use Magento\Framework\Profiler;
 /**
  * @api
  */
-/**
- * @api
- */
 class Form extends \Magento\Framework\Data\Form\AbstractForm
 {
     /**

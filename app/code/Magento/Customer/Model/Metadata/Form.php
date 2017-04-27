@@ -11,9 +11,6 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 /**
  * @api
  */
-/**
- * @api
- */
 class Form
 {
     /**#@+

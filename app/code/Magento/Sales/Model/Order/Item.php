@@ -13,7 +13,6 @@ use Magento\Sales\Model\AbstractModel;
  * Order Item Model
  *
  * @api
- * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
  * @method int getGiftMessageId()

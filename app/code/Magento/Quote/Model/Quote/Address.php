@@ -15,7 +15,6 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Sales Quote address model
  *
  * @api
- * @api
  * @method int getQuoteId()
  * @method Address setQuoteId(int $value)
  * @method string getCreatedAt()
