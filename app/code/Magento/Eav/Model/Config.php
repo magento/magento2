@@ -544,14 +544,13 @@ class Config
      *
      * @param  mixed $entityType
      * @param  \Magento\Framework\DataObject $object
-     * @return array
+     * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getEntityAttributeCodes($entityType, $object = null)
     {
-        $attributes = array_keys($this->getEntityAttributes($entityType, $object));
-        return $attributes;
+        return array_keys($this->getEntityAttributes($entityType, $object));
     }
 
     /**

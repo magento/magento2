@@ -1186,7 +1186,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param array &$delete
      * @param AbstractAttribute $attribute
-     * @param \Magento\Eav\Model\Entity\AbstractEntity $object
+     * @param AbstractEntity $object
      * @return void
      */
     private function _aggregateDeleteData(&$delete, $attribute, $object)
@@ -1920,8 +1920,12 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
+     * Load attributes for object
+     *  if the object will not pass all attributes for this entity type will be loaded
+     *
      * @param array $attributes
-     * @param |null $object
+     * @param AbstractEntity|null $object
+     * @return void
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {
