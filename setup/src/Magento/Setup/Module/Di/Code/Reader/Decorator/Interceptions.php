@@ -40,7 +40,6 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
      * @param \Magento\Framework\Code\Reader\ClassReader $classReader
      * @param \Magento\Framework\Code\Validator $validator
      * @param \Magento\Framework\Code\Validator\ConstructorIntegrity $constructorIntegrityValidator
-     * @param \Magento\Framework\Code\Validator\ContextAggregation $contextAggregationValidator
      * @param Log $log
      */
     public function __construct(
@@ -48,7 +47,6 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
         \Magento\Framework\Code\Reader\ClassReader $classReader,
         \Magento\Framework\Code\Validator $validator,
         \Magento\Framework\Code\Validator\ConstructorIntegrity $constructorIntegrityValidator,
-        \Magento\Framework\Code\Validator\ContextAggregation $contextAggregationValidator,
         Log $log
     ) {
         $this->classReader = $classReader;
@@ -57,7 +55,6 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
         $this->log = $log;
 
         $this->validator->add($constructorIntegrityValidator);
-        $this->validator->add($contextAggregationValidator);
     }
 
     /**
