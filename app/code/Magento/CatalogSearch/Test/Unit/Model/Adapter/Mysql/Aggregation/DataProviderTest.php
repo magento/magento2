@@ -158,6 +158,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $selectMock = $this->getMock(Select::class, [], [], '', false);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $selectMock->expects($this->any())->method('distinct')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('columns')->willReturnSelf();
         $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
