@@ -17,7 +17,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
      *
      * @var \Magento\Framework\Registry
      */
-    protected $registry = null;
+    protected $coreRegistry = null;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -28,7 +28,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
         \Magento\Framework\Registry $registry
     ) {
         parent::__construct($context);
-        $this->registry = $registry;
+        $this->coreRegistry = $registry;
     }
 
     /**
@@ -50,7 +50,7 @@ class SelectAttributes extends \Magento\Ui\Block\Component\StepsWizard\StepAbstr
                         'productAttributes' => [
                             'dataProvider' => $dataProvider,
                             'url' => $this->getUrl('catalog/product_attribute/new', [
-                                'store' => $this->registry->registry('current_product')->getStoreId(),
+                                'store' => $this->coreRegistry->registry('current_product')->getStoreId(),
                                 'product_tab' => 'variations',
                                 'popup' => 1,
                                 '_query' => [
