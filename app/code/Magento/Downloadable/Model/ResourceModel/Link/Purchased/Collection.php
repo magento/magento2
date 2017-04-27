@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Model\ResourceModel\Link\Purchased;
 /**
  * Downloadable links purchased resource collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

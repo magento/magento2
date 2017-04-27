@@ -8,6 +8,9 @@ namespace Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class Validator
 {
     /**

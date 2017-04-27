@@ -6,7 +6,7 @@
 namespace Magento\Swatches\Model;
 
 /**
- * Swatch Model
+ * @api
  */
 class Swatch extends \Magento\Framework\Model\AbstractModel
 {

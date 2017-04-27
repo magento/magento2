@@ -11,6 +11,9 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
 
+/**
+ * @api
+ */
 class Created extends \Magento\Backend\Block\Widget
 {
     /**

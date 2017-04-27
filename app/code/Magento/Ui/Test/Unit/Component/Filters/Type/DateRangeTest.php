@@ -48,10 +48,6 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
             \Magento\Framework\View\Element\UiComponentFactory::class,
             ['create'],
@@ -82,6 +78,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $dateRange = new DateRange(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -103,6 +100,10 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var FormDate $uiComponent */
         $uiComponent = $this->getMock(
             \Magento\Ui\Component\Form\Element\DataType\Date::class,

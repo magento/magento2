@@ -12,5 +12,7 @@
     <block name="addAttributeModal" class="Magento\Catalog\Test\Block\Adminhtml\Product\Modal\AddAttribute" locator=".product_form_product_form_add_attribute_modal" strategy="css selector"/>
     <block name="newAttributeModal" class="Magento\Catalog\Test\Block\Adminhtml\Product\Modal\NewAttribute" locator=".product_form_product_form_add_attribute_modal_create_new_attribute_modal" strategy="css selector"/>
     <block name="productForm" class="Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm" locator="[id='page:main-container']" strategy="css selector"/>
+    <block name="storeSwitcherBlock" class="Magento\Store\Test\Block\Switcher" locator=".store-switcher" strategy="css selector" />
+    <block name="advancedPrice" class="Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing" locator="table[data-index='tier_price']" strategy="css selector" />
   </page>
 </config>

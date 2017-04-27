@@ -69,7 +69,8 @@ class DownloadablePanel extends AbstractModifier
             'label' => __('Downloadable Information'),
             'collapsible' => true,
             'opened' => $this->locator->getProduct()->getTypeId() === Type::TYPE_DOWNLOADABLE,
-            'dataScope' => 'data',
+            'sortOrder' => '800',
+            'dataScope' => 'data'
         ];
         $this->meta = $this->arrayManager->set('downloadable', $this->meta, $panelConfig);
 
