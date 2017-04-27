@@ -98,11 +98,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     }
 
     /**
-     * Return the current element.
-     *
-     * If we don't have sub-select we should create and remember it.
-     *
-     * @return Select
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -114,11 +110,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     }
 
     /**
-     * Return the key of the current element.
-     *
-     * Сan return the number of the current sub-selects in the iteration.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -126,12 +118,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     }
 
     /**
-     * Move forward to next sub-select.
-     *
-     * Retrieve the next sub-select and move cursor to the next element.
-     * Check that the count of elements more than the sum of limit and offset.
-     *
-     * @return Select
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -150,11 +137,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     }
 
     /**
-     * Rewind the BatchRangeIterator to the first element.
-     *
-     * Allows to start iteration from the beginning.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -165,9 +148,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     }
 
     /**
-     * Checks if current position is valid.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function valid()
     {
