@@ -14,7 +14,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog Rule data model
  *
- * @api
  * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
  * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)

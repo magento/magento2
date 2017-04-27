@@ -35,9 +35,7 @@ class PublicCodeTest extends \PHPUnit_Framework_TestCase
         $xml = simplexml_load_file($layoutFile);
         $elements = $xml->xpath('//block | //referenceBlock') ?: [];
         /** @var $node \SimpleXMLElement */
-        $counter = 0;
         foreach ($elements as $node) {
-            $counter++;
             $class = (string) $node['class'];
             if ($class && \class_exists($class)) {
                 $reflection = (new \ReflectionClass($class));
