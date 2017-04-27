@@ -10,6 +10,8 @@ use Magento\Framework\UrlInterface;
 
 /**
  * Class SystemDataProvider
+ *
+ * @api
  */
 class System extends AbstractModifier
 {

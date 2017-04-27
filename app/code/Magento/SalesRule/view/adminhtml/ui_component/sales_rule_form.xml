@@ -409,7 +409,7 @@
         </settings>
         <container name="conditions_apply_to" sortOrder="10">
             <htmlContent name="html_content">
-                <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions</argument>
+                <block name="conditions_apply_to" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions" />
             </htmlContent>
         </container>
     </fieldset>
@@ -521,7 +521,7 @@
         </field>
         <container name="actions_apply_to" sortOrder="40">
             <htmlContent name="html_content">
-                <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions</argument>
+                <block name="actions_apply_to" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions"/>
             </htmlContent>
         </container>
     </fieldset>
@@ -544,7 +544,7 @@
         </field>
         <container name="store_view_labels" sortOrder="40">
             <htmlContent name="html_content">
-                <argument name="block" xsi:type="object">Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels</argument>
+                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels"/>
             </htmlContent>
         </container>
     </fieldset>

@@ -344,6 +344,10 @@ class InstallSchema implements InstallSchemaInterface
                 $installer->getIdxName('cataloginventory_stock_status', ['website_id']),
                 ['website_id']
             )
+            ->addIndex(
+                $installer->getIdxName('cataloginventory_stock_status', ['stock_status']),
+                ['stock_status']
+            )
             ->setComment('Cataloginventory Stock Status');
         $installer->getConnection()
             ->createTable($table);

@@ -10,6 +10,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 /**
  * Product Compare List Model
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class ListCompare extends \Magento\Framework\DataObject

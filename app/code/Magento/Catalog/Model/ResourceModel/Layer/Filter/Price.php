@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 
 /**
  * Catalog Layer Price Filter resource model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

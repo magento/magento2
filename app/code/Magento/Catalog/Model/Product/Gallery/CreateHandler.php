@@ -12,6 +12,8 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 /**
  * Create handler for catalog product gallery
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler implements ExtensionInterface

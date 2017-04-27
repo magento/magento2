@@ -22,6 +22,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\Fronten
 
 /**
  * Product collection
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -2286,7 +2289,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        if (!$this->count()) {
+        if (!$this->getSize()) {
             return $this;
         }
 
