@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Cache frontend decorator that logger of cache invalidate
- */
 namespace Magento\Framework\Cache\Frontend\Decorator;
 
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\InvalidateLogger as LoggerHandler;
 
+/**
+ * Cache frontend decorator that logs cache invalidation actions
+ */
 class Logger extends Bare
 {
     /**

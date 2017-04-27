@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
@@ -340,10 +340,10 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'origResult' => Payflowpro::RESPONSE_CODE_APPROVED,
-                'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
+                'resultCode' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER
             ],
             [
-                'origResult' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER,
+                'origResult' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER,
                 'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
             ],
             [

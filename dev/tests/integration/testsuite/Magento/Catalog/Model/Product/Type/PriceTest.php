@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -98,10 +98,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         /** @var $option \Magento\Catalog\Model\Product\Option */
         foreach ($product->getOptions() as $option) {
             switch ($option->getGroupByType()) {
-                case \Magento\Catalog\Model\Product\Option::OPTION_GROUP_DATE:
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE:
                     $value = ['year' => 2013, 'month' => 8, 'day' => 9, 'hour' => 13, 'minute' => 35];
                     break;
-                case \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT:
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT:
                     $value = key($option->getValues());
                     break;
                 default:

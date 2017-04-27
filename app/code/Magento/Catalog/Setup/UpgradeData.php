@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script
- * @codeCoverageIgnore
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
@@ -35,15 +35,25 @@ class UpgradeData implements UpgradeDataInterface
     private $eavSetupFactory;
 
     /**
-     * Init
+     * @var UpgradeWidgetData
+     */
+    private $upgradeWidgetData;
+
+    /**
+     * Constructor
      *
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
+     * @param UpgradeWidgetData $upgradeWidgetData
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        CategorySetupFactory $categorySetupFactory,
+        EavSetupFactory $eavSetupFactory,
+        UpgradeWidgetData $upgradeWidgetData
+    ) {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->upgradeWidgetData = $upgradeWidgetData;
     }
 
     /**
@@ -366,6 +376,9 @@ class UpgradeData implements UpgradeDataInterface
             $this->dissallowUsingHtmlForProductName($setup);
         }
 
+        if ($context->getVersion() && version_compare($context->getVersion(), '2.2.1') < 0) {
+            $this->upgradeWidgetData->upgrade();
+        }
         $setup->endSetup();
     }
 

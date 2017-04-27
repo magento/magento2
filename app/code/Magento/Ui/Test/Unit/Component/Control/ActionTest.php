@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
@@ -33,7 +33,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->objectManager = new ObjectManager($this);
         $this->action = $this->objectManager->getObject(
             \Magento\Ui\Component\Control\Action::class,

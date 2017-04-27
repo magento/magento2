@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\Total\Quote;
@@ -21,6 +21,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Weee\Model\Total\Quote\Weee
      */
     protected $weeeCollector;
+
+    private $serializerMock;
 
     /**
      * Setup tax helper with an array of methodName, returnValue
@@ -77,7 +79,17 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setupWeeeHelper($weeeConfig)
     {
-        $weeeHelper = $this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+
+        $weeeHelper = $this->getMock(
+            \Magento\Weee\Helper\Data::class,
+            [],
+            [
+                'serializer'  => $this->serializerMock
+            ],
+            '',
+            false
+        );
 
         foreach ($weeeConfig as $method => $value) {
             $weeeHelper->expects($this->any())->method($method)->will($this->returnValue($value));
@@ -286,7 +298,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $addressMock = $this->setupAddressMock($items);
-        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total(
+            [],
+            $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock()
+        );
         $shippingAssignmentMock = $this->setupShippingAssignmentMock($addressMock, $items);
 
         $taxHelper = $this->setupTaxHelper($taxConfig);

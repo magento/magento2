@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class EmptyGroupCategory implements \Magento\Framework\Notification\MessageInter
         }
         return __(
             'The following stores are not associated with a root category: '
-            . implode(' ,', $groupLinks) . '. For the store to be displayed in the storefront, '
+            . implode(', ', $groupLinks) . '. For the store to be displayed in the storefront, '
             . 'it must be associated with a root category.'
         );
     }

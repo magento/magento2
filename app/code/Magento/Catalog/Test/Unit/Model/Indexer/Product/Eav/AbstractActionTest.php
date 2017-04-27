@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav;
@@ -22,6 +22,11 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_eavSourceFactoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $frontendResourceMock;
+
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->getMock(
@@ -38,10 +43,13 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->frontendResourceMock =
+            $this->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,
-            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock]
+            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock, ['default' => $this->frontendResourceMock]]
         );
     }
 
@@ -123,6 +131,8 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
     public function testReindexWithNotNullArgumentExecutesReindexEntities()
     {
         $ids = [1, 2, 3];
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->getMockForAbstractClass();
 
         $eavSource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source::class)
             ->disableOriginalConstructor()
@@ -132,6 +142,18 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $eavSource->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
+        $eavSource->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+
+        $eavDecimal->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
+        $eavDecimal->expects($this->once())->method('getRelationsByParent')->with($ids)->willReturn([]);
+
+        $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
+        $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
+        $this->frontendResourceMock
+            ->expects($this->any())
+            ->method('getMainTable')
+            ->willReturn('indexer_table');
         $eavDecimal->expects($this->once())
             ->method('reindexEntities')
             ->with($ids);

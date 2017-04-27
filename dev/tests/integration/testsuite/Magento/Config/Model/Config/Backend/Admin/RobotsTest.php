@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 
 /**
  * @magentoAppArea adminhtml
@@ -33,11 +33,11 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->create(\Magento\Config\Model\Config\Backend\Admin\Robots::class);
         $this->model->setPath('design/search_engine_robots/custom_instructions');
         $this->model->afterLoad();
+
+        $documentRootPath = $objectManager->get(DocumentRoot::class)->getPath();
         $this->rootDirectory = $objectManager->get(
             \Magento\Framework\Filesystem::class
-        )->getDirectoryRead(
-            DirectoryList::ROOT
-        );
+        )->getDirectoryRead($documentRootPath);
     }
 
     /**

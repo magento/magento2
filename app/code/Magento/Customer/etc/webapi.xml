@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,6 +22,12 @@
     </route>
     <route url="/V1/customerGroups/default" method="GET">
         <service class="Magento\Customer\Api\GroupManagementInterface" method="getDefaultGroup"/>
+        <resources>
+            <resource ref="Magento_Customer::group"/>
+        </resources>
+    </route>
+    <route url="/V1/customerGroups/default/:id" method="PUT">
+        <service class="Magento\Customer\Api\CustomerGroupConfigInterface" method="setDefaultCustomerGroup"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>

@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer;
 
+/**
+ * @api Retrieve status of the Indexer
+ */
 interface StateInterface
 {
     /**
@@ -13,6 +16,8 @@ interface StateInterface
     const STATUS_WORKING = 'working';
     const STATUS_VALID = 'valid';
     const STATUS_INVALID = 'invalid';
+
+    const ADDITIONAL_TABLE_SUFFIX = '_replica';
 
     /**
      * Return indexer id

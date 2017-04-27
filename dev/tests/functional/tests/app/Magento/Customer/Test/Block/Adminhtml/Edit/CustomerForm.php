@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Form for creation of the customer.

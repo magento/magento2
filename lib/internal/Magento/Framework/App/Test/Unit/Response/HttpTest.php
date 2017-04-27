@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Response;
 
@@ -53,7 +51,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(
-            \Magento\Framework\App\Http\Context::class)->disableOriginalConstructor()
+            \Magento\Framework\App\Http\Context::class
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
@@ -84,11 +83,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testSendVary()
     {
-        $data = ['some-vary-key' => 'some-vary-value'];
         $expectedCookieName = Http::COOKIE_VARY_STRING;
-        $expectedCookieValue = sha1(serialize($data));
+        $expectedCookieValue = 'SHA1 Serialized String';
         $sensitiveCookieMetadataMock = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class)
+            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $sensitiveCookieMetadataMock->expects($this->once())

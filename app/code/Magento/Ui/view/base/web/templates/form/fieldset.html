@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -46,7 +46,7 @@
     <div class="admin__fieldset-wrapper-content"
          css="'admin__collapsible-content': collapsible, '_show': opened, '_hide': !opened()">
         <fieldset
-                if="opened() || _wasOpened"
+                if="opened() || _wasOpened || initializeFieldsetDataByDefault"
                 class="admin__fieldset"
                 each="data: elems, as: 'element'" render=""/>
     </div>

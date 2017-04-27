@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
@@ -134,7 +134,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('frontend_label', $productAttributeData);
             $this->assertEquals('Test Configurable', $productAttributeData['frontend_label']);
             $this->assertArrayHasKey('label', $optionData);
-            $this->assertEquals('test_configurable', $optionData['label']);
+            $this->assertEquals('test_configurable_custom_label', $optionData['label']);
             $this->assertArrayHasKey('use_default', $optionData);
             $this->assertArrayHasKey('options', $optionData);
             $this->assertEquals('Option 1', $optionData['options'][0]['label']);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ define([
         /** Open window with  */
         showAcceptanceWindow: function (data, event) {
             window.open(
-                $(event.target).attr('href'),
+                $(event.currentTarget).attr('href'),
                 'olcwhatispaypal',
                 'toolbar=no, location=no,' +
                 ' directories=no, status=no,' +

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,8 +17,8 @@
   </label>
   <div class="admin__field-control control">
 
-  <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
-      || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE): ?>
+  <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+      || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
 
       <?php echo $block->getDateHtml() ?>
 
@@ -38,8 +38,8 @@ require([
 
   <?php endif; ?>
 
-  <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
-      || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME): ?>
+  <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+      || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
       <span class="time-picker"><?php echo $block->getTimeHtml() ?></span>
   <?php endif; ?>
 

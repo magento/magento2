@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -25,4 +25,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="VarnishGenerateVclCommand" xsi:type="object">Magento\PageCache\Console\Command\GenerateVclCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\PageCache\Model\VclGeneratorInterface" type="Magento\PageCache\Model\Varnish\VclGenerator"/>
+    <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
 </config>

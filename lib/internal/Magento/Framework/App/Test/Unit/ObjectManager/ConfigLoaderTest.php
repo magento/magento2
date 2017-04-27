@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
@@ -55,15 +53,18 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->readerFactoryMock->expects(
-            $this->any()
-        )->method(
-            'create'
-        )->will(
-            $this->returnValue($this->readerMock)
+        $this->readerFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->readerMock));
+
+        $this->cacheMock = $this->getMock(
+            \Magento\Framework\App\Cache\Type\Config::class,
+            [],
+            [],
+            '',
+            false
         );
 
-        $this->cacheMock = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->object = $objectManagerHelper->getObject(
@@ -98,7 +99,10 @@ class ConfigLoaderTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())
             ->method('save')
             ->with($serializedData);
-        $this->readerMock->expects($this->once())->method('read')->with($area)->will($this->returnValue($configData));
+        $this->readerMock->expects($this->once())
+            ->method('read')
+            ->with($area)
+            ->will($this->returnValue($configData));
 
         $this->serializerMock->expects($this->once())
             ->method('serialize')

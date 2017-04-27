@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model\Export;
@@ -43,6 +43,10 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'sku=simple_10,test_configurable=Option 1|sku=simple_20,test_configurable=Option 2',
             $result['configurable_variations']
+        );
+        $this->assertEquals(
+            'test_configurable=Test Configurable',
+            $result['configurable_variation_labels']
         );
     }
 }

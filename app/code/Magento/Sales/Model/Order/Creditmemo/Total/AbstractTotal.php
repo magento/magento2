@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
  * Base class for credit memo total
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

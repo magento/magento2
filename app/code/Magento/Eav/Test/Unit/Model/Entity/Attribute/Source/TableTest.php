@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
@@ -83,12 +83,13 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attrOptionFactory = $this->getMockBuilder(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class
-        )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->attrOptionFactory = $this->getMock(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
 
         $this->sourceMock = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()

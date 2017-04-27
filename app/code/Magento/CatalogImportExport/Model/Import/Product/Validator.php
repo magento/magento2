@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
-use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\Validator\AbstractValidator;
 
+/**
+ * Class Validator
+ *
+ * @api
+ */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
     /**
@@ -223,7 +228,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
-        
+
         if (!$valid) {
             $this->setInvalidAttribute($attrCode);
         }

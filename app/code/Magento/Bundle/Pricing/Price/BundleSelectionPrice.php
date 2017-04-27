@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Pricing\Price;
@@ -17,6 +17,7 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 /**
  * Bundle option price
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class BundleSelectionPrice extends AbstractPrice
 {

@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <argument name="data" xsi:type="array">
-        <item name="buttons" xsi:type="array">
-            <item name="save" xsi:type="string">Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Button\Save</item>
-        </item>
-    </argument>
+    <settings>
+        <buttons>
+            <button name="save" class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Button\Save"/>
+        </buttons>
+    </settings>
+    <htmlContent name="product.form.configurable.matrix.content" sortOrder="1000">
+        <argument name="data" xsi:type="array">
+            <item name="wrapper" xsi:type="array">
+                <item name="collapsible" xsi:type="boolean">false</item>
+                <item name="label" xsi:type="string" translate="true"/>
+            </item>
+        </argument>
+        <settings>
+            <wrapper>
+                <canShow>true</canShow>
+                <componentType>fieldset</componentType>
+            </wrapper>
+        </settings>
+        <block name="product.form.configurable.matrix" class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard.phtml" as="matrix">
+            <arguments>
+                <argument name="config" xsi:type="array">
+                    <item name="collapsible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true" />
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                    <item name="canShow" xsi:type="boolean">true</item>
+                    <item name="componentType" xsi:type="string">fieldset</item>
+                    <item name="provider" xsi:type="string">product_form.product_form_data_source</item>
+                    <item name="form" xsi:type="string">product_form.product_form</item>
+                    <item name="modal" xsi:type="string">configurableModal</item>
+                    <item name="nameStepWizard" xsi:type="string">variation-steps-wizard</item>
+                    <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                    <item name="urlWizard" xsi:type="string">catalog/product/wizard</item>
+                </argument>
+            </arguments>
+        </block>
+    </htmlContent>
 </form>

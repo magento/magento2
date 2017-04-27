@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link;
@@ -29,7 +29,7 @@ namespace Magento\Downloadable\Model\Link;
  * @method string getLinkSectionTitle()
  * @method \Magento\Downloadable\Model\Link\Purchased setLinkSectionTitle(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Purchased extends \Magento\Framework\Model\AbstractModel
 {

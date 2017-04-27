@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Filters\Type;
 
+use Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
-use Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 
 /**
@@ -53,7 +53,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::atLeastOnce())
             ->method('getProcessor')
             ->willReturn($processor);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
@@ -68,7 +68,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['applyFilterModifier'])
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
     }
 
@@ -103,7 +103,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
             ->willReturn($filterData);
-        
+
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
@@ -203,7 +203,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with($expectedDate)
             ->willReturnSelf();
-        
+
         $filterMock = $this->getMock(Filter::class);
         $this->filterBuilderMock->expects(static::at($i++))
             ->method('create')

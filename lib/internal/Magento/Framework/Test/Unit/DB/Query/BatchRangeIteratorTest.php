@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Test\Unit\DB\Query;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchRangeIterator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,7 +94,7 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCurrent()
     {
-        $this->selectMock->expects($this->once())->method('limit')->with($this->currentBatch, $this->batchSize);
+        $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize, $this->currentBatch);
         $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());
@@ -114,7 +114,7 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
         foreach ($this->model as $key) {
             $this->assertEquals($this->selectMock, $key);
             $iterations++;
-        };
+        }
 
         $this->assertEquals(10, $iterations);
     }

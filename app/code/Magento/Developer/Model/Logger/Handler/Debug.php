@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\Logger\Handler;
@@ -12,7 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
- * Class Debug
+ * Enable/disable debug logging based on the store config setting
  */
 class Debug extends \Magento\Framework\Logger\Handler\Debug
 {

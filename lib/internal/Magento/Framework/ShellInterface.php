@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
+ *
+ * @api
  */
 interface ShellInterface
 {

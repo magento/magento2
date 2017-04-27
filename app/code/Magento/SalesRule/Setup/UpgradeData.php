@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Setup;
 
-use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\AggregatedFieldDataConverter;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -16,26 +17,26 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
      * @var MetadataPool
      */
     private $metadataPool;
 
     /**
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldConverter;
+
+    /**
      * UpgradeData constructor.
      *
-     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param MetadataPool $metadataPool
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory,
+        AggregatedFieldDataConverter $aggregatedFieldConverter,
         MetadataPool $metadataPool
     ) {
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
         $this->metadataPool = $metadataPool;
     }
 
@@ -62,20 +63,23 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function convertSerializedDataToJson($setup)
     {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
-
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('salesrule'),
-            $metadata->getLinkField(),
-            'conditions_serialized'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('salesrule'),
-            $metadata->getLinkField(),
-            'actions_serialized'
+        $this->aggregatedFieldConverter->convert(
+            [
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $setup->getTable('salesrule'),
+                    $metadata->getLinkField(),
+                    'conditions_serialized'
+                ),
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $setup->getTable('salesrule'),
+                    $metadata->getLinkField(),
+                    'actions_serialized'
+                ),
+            ],
+            $setup->getConnection()
         );
     }
 }

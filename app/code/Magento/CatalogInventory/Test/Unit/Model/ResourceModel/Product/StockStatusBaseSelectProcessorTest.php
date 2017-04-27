@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel\Product;
@@ -11,6 +11,7 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,6 +26,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     private $select;
 
     /**
+     * @var FrontendResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @var StockStatusBaseSelectProcessor
      */
     private $stockStatusBaseSelectProcessor;
@@ -33,11 +39,15 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)->disableOriginalConstructor()->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $this->indexerStockFrontendResource = $this->getMockBuilder(FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stockStatusBaseSelectProcessor =  (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
             [
                 'resource' => $this->resource,
+                'indexerStockFrontendResource' => $this->indexerStockFrontendResource
             ]
         );
     }
@@ -46,9 +56,8 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $tableName = 'table_name';
 
-        $this->resource->expects($this->once())
-            ->method('getTableName')
-            ->with('cataloginventory_stock_status')
+        $this->indexerStockFrontendResource->expects($this->once())
+            ->method('getMainTable')
             ->willReturn($tableName);
 
         $this->select->expects($this->once())

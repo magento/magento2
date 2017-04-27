@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,11 @@ $shippingAddress->setId(null)->setAddressType('shipping');
 
 $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
+$payment->setAdditionalInformation('last_trans_id', '11122');
+$payment->setAdditionalInformation('metadata', [
+    'type' => 'free',
+    'fraudulent' => false
+]);
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);

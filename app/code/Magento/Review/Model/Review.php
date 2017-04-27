@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
@@ -12,6 +12,8 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
 
 /**
  * Review model
+ *
+ * @api
  *
  * @method string getCreatedAt()
  * @method \Magento\Review\Model\Review setCreatedAt(string $value)

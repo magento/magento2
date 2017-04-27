@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -10,6 +10,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
 
 /**
  * Catalog product link model
+ *
+ * @api
  *
  * @method \Magento\Catalog\Model\ResourceModel\Product\Link _getResource()
  * @method \Magento\Catalog\Model\ResourceModel\Product\Link getResource()

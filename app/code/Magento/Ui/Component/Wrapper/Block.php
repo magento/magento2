@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Wrapper;
@@ -11,7 +11,7 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
- * Class Block
+ * @deprecated
  */
 class Block extends AbstractComponent implements BlockWrapperInterface
 {

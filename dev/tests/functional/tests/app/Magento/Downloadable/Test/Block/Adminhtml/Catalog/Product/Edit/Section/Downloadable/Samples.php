@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable;
@@ -66,7 +66,7 @@ class Samples extends Form
             $element->find($this->addNewSampleRow)->click();
 
             if (isset($sample['sort_order'])) {
-                $currentSortOrder = (int)$sample['sort_order'];
+                $currentSortOrder = (int)$sample['sort_order'] - 1;
                 unset($sample['sort_order']);
             } else {
                 $currentSortOrder = 0;
@@ -94,7 +94,7 @@ class Samples extends Form
             unset($sample['sort_order']);
             $processedSample = $this->getRowBlock($index, $element)
                 ->getDataSampleRow($sample);
-            $processedSample['sort_order'] = $index;
+            $processedSample['sort_order'] = $index + 1;
             $newFields['downloadable']['sample'][$index] = $processedSample;
         }
         return $newFields;

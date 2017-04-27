@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
@@ -54,12 +54,6 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'element6' => ['data', 'of', 'element', 'to', 'remove', '6'],
                 'element7' => ['data', 'of', 'element', 'to', 'remove', '7'],
             ],
-            'scheduledIfconfig' => [
-                'element1' => ['data', 'of', 'ifconfig', 'element', '1'],
-                'element4' => ['data', 'of', 'ifconfig', 'element', '4'],
-                'element6' => ['data', 'of', 'ifconfig', 'element', '6'],
-                'element8' => ['data', 'of', 'ifconfig', 'element', '8'],
-            ],
             'scheduledPaths' => [
                 'path1' => 'path 1',
                 'path2' => 'path 2',
@@ -97,12 +91,6 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
          */
         $expected = ['element2', 'element3'];
         $this->assertEquals($expected, $this->model->getListToRemove());
-    }
-
-    public function testGetIfconfigList()
-    {
-        $expected = ['element1', 'element4'];
-        $this->assertEquals($expected, $this->model->getIfconfigList());
     }
 
     /**
@@ -234,26 +222,6 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('element1', $this->model->getListToRemove());
         $this->model->setElementToRemoveList('element1');
         $this->assertContains('element1', $this->model->getListToRemove());
-    }
-
-    /**
-     * @return void
-     */
-    public function testUnsetElementFromIfconfigList()
-    {
-        $this->assertContains('element4', $this->model->getIfconfigList());
-        $this->model->unsetElementFromIfconfigList('element4');
-        $this->assertNotContains('element4', $this->model->getIfconfigList());
-    }
-
-    /**
-     * @return void
-     */
-    public function testSetElementToIfconfigList()
-    {
-        $this->assertNotContains('element5', $this->model->getIfconfigList());
-        $this->model->setElementToIfconfigList('element5', 'config_path', 'scope');
-        $this->assertContains('element5', $this->model->getIfconfigList());
     }
 
     /**

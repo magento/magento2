@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,16 +134,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * Return copy of DOM
-     *
-     * @return \Magento\Framework\Config\Dom
-     */
-    public function getDomConfigCopy()
-    {
-        return clone $this->_getDomConfigModel();
-    }
-
-    /**
      * Variables are identified by module and name
      *
      * @return array
@@ -152,7 +142,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     {
         $idAttributes = [
             '/view/vars' => 'module',
-            '/view/vars/var' => 'name',
+            '/view/vars/(var/)*var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
         foreach ($this->xpath as $attribute) {

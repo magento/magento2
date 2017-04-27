@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\Total\Quote;
@@ -242,8 +242,12 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
 
     public function testFetch()
     {
+        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
         $weeeTotal = 17;
-        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total(
+            [],
+            $serializerMock
+        );
         $taxHelper = $this->setupTaxHelper([]);
         $weeeHelper = $this->setupWeeeHelper(['getTotalAmounts' => $weeeTotal]);
         $this->weeeCollector = $this->objectManagerHelper->getObject(
@@ -262,7 +266,11 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchWithZeroAmounts()
     {
-        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total(
+            [],
+            $serializerMock
+        );
         $taxHelper = $this->setupTaxHelper([]);
         $weeeHelper = $this->setupWeeeHelper(['getTotalAmounts' => null]);
         $this->weeeCollector = $this->objectManagerHelper->getObject(

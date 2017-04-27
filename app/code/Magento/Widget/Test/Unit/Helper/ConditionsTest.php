@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Unit\Helper;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Data\Wysiwyg\Normalizer;
 
 /**
  * Class ConditionsTest
@@ -22,38 +25,47 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     private $serializer;
 
     /**
+     * @var Normalizer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $normalizer;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, null);
-        $this->conditions = new \Magento\Widget\Helper\Conditions(
-            $this->serializer
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->normalizer = $this->getMock(Normalizer::class);
+        $this->conditions = (new ObjectManager($this))->getObject(
+            \Magento\Widget\Helper\Conditions::class,
+            [
+                'serializer' => $this->serializer,
+                'normalizer' => $this->normalizer
+            ]
         );
     }
 
     public function testEncodeDecode()
     {
-        $value = [
-            '1' => [
-                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
-                "aggregator" => "all",
-                "value" => "1",
-                "new_child" => "",
-            ],
-            '1--1' => [
-                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
-                "attribute" => "attribute_set_id",
-                "value" => "4",
-                "operator" => "==",
-            ],
-            '1--2' => [
-                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
-                "attribute" => "category_ids",
-                "value" => "2",
-                "operator" => "==",
-            ],
-        ];
+        $value = ['string'];
+        $serializedValue = 'serializedString';
+        $normalizedValue = 'normalizedValue';
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($value)
+            ->willReturn($serializedValue);
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedValue)
+            ->willReturn($value);
+        $this->normalizer->expects($this->once())
+            ->method('replaceReservedCharacters')
+            ->with($serializedValue)
+            ->willReturn($normalizedValue);
+        $this->normalizer->expects($this->once())
+            ->method('restoreReservedCharacters')
+            ->with($normalizedValue)
+            ->willReturn($serializedValue);
         $encoded = $this->conditions->encode($value);
         $this->assertEquals($value, $this->conditions->decode($encoded));
     }

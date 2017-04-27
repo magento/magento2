@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Backup;
 
@@ -108,7 +106,8 @@ class Filesystem extends AbstractBackup
 
         $filesInfo = $fsHelper->getInfo(
             $this->getRootDir(),
-            \Magento\Framework\Backup\Filesystem\Helper::INFO_READABLE | \Magento\Framework\Backup\Filesystem\Helper::INFO_SIZE,
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_READABLE |
+            \Magento\Framework\Backup\Filesystem\Helper::INFO_SIZE,
             $this->getIgnorePaths()
         );
 
@@ -162,8 +161,8 @@ class Filesystem extends AbstractBackup
         if ($requiredSpace > $freeSpace) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughFreeSpace(
                 new \Magento\Framework\Phrase(
-                'Warning: necessary space for backup is ' . (ceil($requiredSpace) / 1024)
-                . 'MB, but your free disc space is ' . (ceil($freeSpace) / 1024) . 'MB.'
+                    'Warning: necessary space for backup is ' . (ceil($requiredSpace) / 1024)
+                    . 'MB, but your free disc space is ' . (ceil($freeSpace) / 1024) . 'MB.'
                 )
             );
         }
