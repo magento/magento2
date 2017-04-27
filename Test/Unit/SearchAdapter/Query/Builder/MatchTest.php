@@ -51,6 +51,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ['query_value+', 'Specifying a trailing plus sign causes InnoDB to report a syntax error.'],
             ['query_value-', 'Specifying a trailing minus sign causes InnoDB to report a syntax error.'],
             ['query_@value', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
+            ['query_value+@', 'The @ symbol is reserved for use by the @distance proximity search operator.'],
         ];
     }
 
