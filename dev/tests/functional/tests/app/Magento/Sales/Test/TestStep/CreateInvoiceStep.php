@@ -125,9 +125,9 @@ class CreateInvoiceStep implements TestStepInterface
         foreach ($invoicesData as $invoiceData) {
             $this->salesOrderView->getPageActions()->invoice();
 
-            $items = $this->cart->getItems();
+            $items = $this->getItems();
             $this->orderInvoiceNew->getFormBlock()->fillProductData($invoiceData, $items);
-            if ($this->compare($items, $invoiceData)) {
+            if ($this->compare($this->cart->getItems(), $invoiceData)) {
                 $this->orderInvoiceNew->getFormBlock()->updateQty();
             }
 
@@ -165,5 +165,15 @@ class CreateInvoiceStep implements TestStepInterface
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
         return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
+    }
+
+    /**
+     * Get cart items
+     *
+     * @return mixed
+     */
+    protected function getItems()
+    {
+        return $this->cart->getItems();
     }
 }
