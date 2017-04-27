@@ -65,11 +65,15 @@ class RequestThrottler
     public function throttle($userName, $userType)
     {
         $lockExpiresAtString = $this->requestLogReader->getLockExpiresAt($userName, $userType);
-        $lockExpiresAt = new \Zend_Date($lockExpiresAtString);
-        $now = new \Zend_Date();
 
-        if ($lockExpiresAt < $now) {
-            $this->resetAuthenticationFailuresCount($userName, $userType);
+        if ($lockExpiresAtString !== '') {
+
+            $lockExpiresAt = new \Zend_Date($lockExpiresAtString);
+            $now = new \Zend_Date();
+
+            if ($lockExpiresAt < $now) {
+                $this->resetAuthenticationFailuresCount($userName, $userType);
+            }
         }
 
         $count = $this->requestLogReader->getFailuresCount($userName, $userType);
