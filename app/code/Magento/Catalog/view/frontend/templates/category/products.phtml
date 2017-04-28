@@ -16,4 +16,6 @@
 ?>
 <?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
     <?php echo $block->getProductListHtml() ?>
+<?php else: ?>
+    <?php echo $block->getCmsBlockHtml() ?>
 <?php endif; ?>
