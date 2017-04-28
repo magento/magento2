@@ -2289,7 +2289,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        if (!$this->count()) {
+        if (!$this->getSize()) {
             return $this;
         }
 
