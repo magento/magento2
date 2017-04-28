@@ -8,7 +8,6 @@ define([
     'Magento_Customer/js/customer-data'
 ], function (_, Element, customerData) {
     "use strict";
-    var invalidationRules;
 
     return Element.extend({
         initialize: function () {
@@ -24,16 +23,18 @@ define([
         process: function (customerData) {
             _.each(this.invalidationRules, function (rule, ruleName) {
                 _.each(rule, function (ruleArgs, rulePath) {
-                    require([rulePath], function (Rule) {
-                        var rule = new Rule(ruleArgs);
+                    require([rulePath], this.initRule.bind(this));
+                }, this);
+            }, this);
+        },
 
-                        if (!_.isFunction(rule.process)) {
-                            throw new Error("Rule " + ruleName + " should implement invalidationProcessor interface");
-                        }
-                        rule.process(customerData);
-                    });
-                });
-            });
+        initRule: function () {
+            var rule = new Rule(ruleArgs);
+
+            if (!_.isFunction(rule.process)) {
+                throw new Error("Rule " + ruleName + " should implement invalidationProcessor interface");
+            }
+            rule.process(customerData);
         }
     });
 });
