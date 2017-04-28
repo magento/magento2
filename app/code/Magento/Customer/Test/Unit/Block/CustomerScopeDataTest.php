@@ -44,7 +44,7 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
         $this->encoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->getMock();
 
-        $this->contextMock->expects($this->once())
+        $this->contextMock->expects($this->exactly(2))
             ->method('getStoreManager')
             ->willReturn($this->storeManagerMock);
 
@@ -54,7 +54,6 @@ class CustomerScopeDataTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new CustomerScopeData(
             $this->contextMock,
-            $this->storeManagerMock,
             $this->encoderMock,
             []
         );

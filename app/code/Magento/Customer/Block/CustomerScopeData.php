@@ -7,7 +7,8 @@ namespace Magento\Customer\Block;
 
 /**
  * Class CustomerScopeData provide scope (website, store or store_group) information on front
- * Can be used, for example, on store front, in order to determine that private cache invalid for current scope, by comparing
+ * Can be used, for example, on store front, in order to determine
+ * that private cache invalid for current scope, by comparing
  * with appropriate value in store front private cache.
  */
 class CustomerScopeData extends \Magento\Framework\View\Element\Template
@@ -24,18 +25,16 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
-        $this->storeManager = $storeManager;
+        $this->storeManager = $context->getStoreManager();
         $this->jsonEncoder = $jsonEncoder;
     }
 
