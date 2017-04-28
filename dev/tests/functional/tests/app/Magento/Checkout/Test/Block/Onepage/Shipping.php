@@ -23,6 +23,13 @@ class Shipping extends Form
     private $newAddressButton = '[data-bind*="isNewAddressAdded"]';
 
     /**
+     * CSS Selector for "Edit" button.
+     *
+     * @var string
+     */
+    private $editAddressButton = '.edit-address-link';
+
+    /**
      * Wait element.
      *
      * @var string
@@ -168,6 +175,22 @@ class Shipping extends Form
     public function getSelectedAddress()
     {
         return $this->_rootElement->find($this->selectedAddress, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Get address block.
+     *
+     * @param String $address
+     */
+    public function editAddress($address)
+    {
+        $addresses = $this->_rootElement->getElements($this->shippingAddressBlock);
+        foreach ($addresses as $addressBlock) {
+            if (strpos($addressBlock->getText(), $address) === 0) {
+                $addressBlock->find($this->editAddressButton)->click();
+                break;
+            }
+        }
     }
 
     /**
