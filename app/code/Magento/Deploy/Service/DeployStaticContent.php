@@ -96,7 +96,9 @@ class DeployStaticContent
             ]
         );
 
-        $version = (new \DateTime())->getTimestamp();
+        $version = !empty($options[Options::CONTENT_VERSION]) && is_string($options[Options::CONTENT_VERSION])
+            ? $options[Options::CONTENT_VERSION]
+            : (new \DateTime())->getTimestamp();
         $this->versionStorage->save($version);
 
         $packages = $deployStrategy->deploy($options);
