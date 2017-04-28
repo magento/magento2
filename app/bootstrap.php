@@ -11,14 +11,14 @@ error_reporting(E_ALL);
 #ini_set('display_errors', 1);
 
 /* PHP version validation */
-if (!defined('PHP_VERSION_ID') || !(PHP_VERSION_ID >= 50605 && PHP_VERSION_ID < 50700 || PHP_VERSION_ID === 70002 || PHP_VERSION_ID === 70004 || PHP_VERSION_ID >= 70006)) {
+if (!defined('PHP_VERSION_ID') || !(PHP_VERSION_ID === 70002 || PHP_VERSION_ID === 70004 || PHP_VERSION_ID >= 70006)) {
     if (PHP_SAPI == 'cli') {
-        echo 'Magento supports PHP 5.6.5, 7.0.2, 7.0.4, and 7.0.6 or later. ' .
+        echo 'Magento supports 7.0.2, 7.0.4, and 7.0.6 or later. ' .
             'Please read http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 5.6.5, 7.0.2, 7.0.4, and 7.0.6 or later. Please read
+    <p>Magento supports PHP 7.0.2, 7.0.4, and 7.0.6 or later. Please read
     <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html">
     Magento System Requirements</a>.
 </div>
