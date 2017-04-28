@@ -95,13 +95,14 @@ class AttributeRepository
             if ($entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
                 $attributeCode = self::BILLING_ADDRESS_PREFIX . $attribute->getAttributeCode();
             }
-            $attributeOptions = $attribute->getOption();
+            $attributeOptions = $attribute->getOptions();
             $attributes[$attributeCode] = [
                 AttributeMetadataInterface::ATTRIBUTE_CODE => $attributeCode,
                 AttributeMetadataInterface::FRONTEND_INPUT => $attribute->getFrontendInput(),
                 AttributeMetadataInterface::FRONTEND_LABEL => $attribute->getFrontendLabel(),
                 AttributeMetadataInterface::BACKEND_TYPE => $attribute->getBackendType(),
-                AttributeMetadataInterface::OPTIONS => is_array($attributeOptions) ? $this->getOptionArray($attributeOptions) : [],
+                AttributeMetadataInterface::OPTIONS => is_array($attributeOptions)
+                    ? $this->getOptionArray($attributeOptions) : [],
                 AttributeMetadataInterface::IS_USED_IN_GRID => $attribute->getIsUsedInGrid(),
                 AttributeMetadataInterface::IS_VISIBLE_IN_GRID => $attribute->getIsVisibleInGrid(),
                 AttributeMetadataInterface::IS_FILTERABLE_IN_GRID => $management->canBeFilterableInGrid($attribute),
