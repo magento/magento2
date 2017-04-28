@@ -30,8 +30,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.3.0', '<')) {
+            $this->addCatalogInventoryStockStatusIndexOnStockStatus($setup);
             $this->addReplicaTable($setup, 'cataloginventory_stock_status', 'cataloginventory_stock_status_replica');
         }
+
         $setup->endSetup();
     }
 
@@ -122,6 +124,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         return $foreignKeys;
+    }
+
+    /**
+     * Creates index for `stock_status` field in `cataloginventory_stock_status` table
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addCatalogInventoryStockStatusIndexOnStockStatus(SchemaSetupInterface $setup)
+    {
+        $table = $setup->getTable('cataloginventory_stock_status');
+        $indexesList = $setup->getConnection()->getIndexList($table);
+        $indexName = $setup->getIdxName($table, ['stock_status']);
+
+        if (!array_key_exists(strtoupper($indexName), $indexesList)) {
+            $setup->getConnection()->addIndex(
+                $table,
+                $indexName,
+                ['stock_status']
+            );
+        }
     }
 
     /**

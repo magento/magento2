@@ -66,6 +66,7 @@ class FrontendResource extends AbstractDb
     public function getMainTable()
     {
         $indexerState = $this->indexerStateFactory->create()->loadByIndexer($this->indexerId);
+
         return $this->getTable($this->indexerBaseTable . $indexerState->getTableSuffix());
     }
 
