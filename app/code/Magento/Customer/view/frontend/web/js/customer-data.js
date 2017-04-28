@@ -34,7 +34,6 @@ define([
     storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
     /**
-     * @TODO: move to invalidation rules
      * @param {Object} invalidateOptions
      */
     invalidateCacheBySessionTimeOut = function (invalidateOptions) {
@@ -48,7 +47,6 @@ define([
     };
 
     /**
-     * @TODO: move to invalidation rules
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
@@ -216,9 +214,6 @@ define([
                     this.reload(storageInvalidation.keys(), false);
                 }
             }
-
-            //sectionInvalidator().process(this);//all invalidation rules should be move here
-
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
 
