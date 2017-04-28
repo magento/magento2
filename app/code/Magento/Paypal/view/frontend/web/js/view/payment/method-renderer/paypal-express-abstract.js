@@ -30,7 +30,7 @@ define([
         /** Open window with  */
         showAcceptanceWindow: function (data, event) {
             window.open(
-                $(event.target).attr('href'),
+                $(event.currentTarget).attr('href'),
                 'olcwhatispaypal',
                 'toolbar=no, location=no,' +
                 ' directories=no, status=no,' +
