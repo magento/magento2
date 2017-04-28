@@ -105,7 +105,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     public function get($cartId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesById[$cartId])) {
-            $quote = $this->loadQuote('load', 'cartId', $cartId, $sharedStoreIds);
+            $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
             $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
         }
@@ -223,7 +223,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $this->quoteCollection = $this->getQuoteCollection();
         /** @var \Magento\Quote\Api\Data\CartSearchResultsInterface $searchData */

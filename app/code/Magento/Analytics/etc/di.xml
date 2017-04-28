@@ -13,6 +13,7 @@
     <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
     <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
     <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification" />
+    <preference for="Magento\Analytics\Model\Connector\Http\ConverterInterface" type="Magento\Analytics\Model\Connector\Http\JsonConverter" />
     <type name="Magento\Analytics\Model\Connector">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -22,14 +23,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\View\Layout\ConditionPool">
-        <arguments>
-            <argument name="conditions" xsi:type="array">
-                <item name="analytics::can-view-notification" xsi:type="string">Magento\Analytics\Model\Condition\CanViewNotification</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Analytics\Model\Subscription">
+    <type name="Magento\Analytics\Controller\Adminhtml\Subscription\Activate">
         <arguments>
             <argument name="configValueResource" xsi:type="object">Magento\Config\Model\ResourceModel\Config\Data</argument>
         </arguments>
@@ -146,5 +140,55 @@
     </type>
     <type name="Magento\Config\Model\Config\Backend\Baseurl">
         <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
+    </type>
+    <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">\Magento\Analytics\Model\Connector\ResponseHandler\SignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UpdateResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\Update</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OtpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\OTP</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="NotifyDataChangedResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Analytics\Model\Connector\SignUpCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">SignUpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\UpdateCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\OTPRequest">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">OtpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\NotifyDataChangedCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">NotifyDataChangedResponseResolver</argument>
+        </arguments>
     </type>
 </config>

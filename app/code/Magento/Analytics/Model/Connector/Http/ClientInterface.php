@@ -19,11 +19,11 @@ interface ClientInterface
      *
      * @param string $method
      * @param string $url
-     * @param string $body
+     * @param array $body
      * @param array $headers
      * @param string $version
      *
-     * @return \Zend_Http_Response|bool
+     * @return \Zend_Http_Response
      */
-    public function request($method, $url, $body = '', array $headers = [], $version = '1.1');
+    public function request($method, $url, array $body = [], array $headers = [], $version = '1.1');
 }

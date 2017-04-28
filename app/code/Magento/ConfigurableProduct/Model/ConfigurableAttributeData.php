@@ -11,6 +11,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
 /**
  * Class ConfigurableAttributeData
+ * @api
  */
 class ConfigurableAttributeData
 {

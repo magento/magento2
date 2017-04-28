@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Factory class for \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+ *
+ * @internal
  */
 class ItemsFactory
 {

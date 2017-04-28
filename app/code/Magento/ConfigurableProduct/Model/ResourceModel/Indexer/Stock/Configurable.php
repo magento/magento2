@@ -13,9 +13,45 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock;
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
+/**
+ * Stock indexer for configurable product.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
+    /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string $connectionName
+     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $connectionName = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+    ) {
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
+    }
+
     /**
      * Get the select object for get stock status by configurable product ids
      *
@@ -27,7 +63,10 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
     {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
-        $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
+        $table = $this->getActionType() === Full::ACTION_TYPE
+            ? $this->getMainTable()
+            : $this->indexerStockFrontendResource->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
         $linkField = $metadata->getLinkField();
         $select->reset(

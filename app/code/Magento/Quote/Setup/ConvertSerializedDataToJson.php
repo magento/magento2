@@ -5,7 +5,9 @@
  */
 namespace Magento\Quote\Setup;
 
-use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\Query\Generator;
 
@@ -20,11 +22,6 @@ class ConvertSerializedDataToJson
     private $quoteSetup;
 
     /**
-     * @var FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
      * @var QueryModifierFactory
      */
     private $queryModifierFactory;
@@ -35,21 +32,26 @@ class ConvertSerializedDataToJson
     private $queryGenerator;
 
     /**
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldConverter;
+
+    /**
      * Constructor
      *
      * @param QuoteSetup $quoteSetup
-     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param QueryModifierFactory $queryModifierFactory
      * @param Generator $queryGenerator
      */
     public function __construct(
         QuoteSetup $quoteSetup,
-        FieldDataConverterFactory $fieldDataConverterFactory,
+        AggregatedFieldDataConverter $aggregatedFieldConverter,
         QueryModifierFactory $queryModifierFactory,
         Generator $queryGenerator
     ) {
         $this->quoteSetup = $quoteSetup;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
         $this->queryModifierFactory = $queryModifierFactory;
         $this->queryGenerator = $queryGenerator;
     }
@@ -63,21 +65,6 @@ class ConvertSerializedDataToJson
      */
     public function convert()
     {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Framework\DB\DataConverter\SerializedToJson::class
-        );
-        $fieldDataConverter->convert(
-            $this->quoteSetup->getConnection(),
-            $this->quoteSetup->getTable('quote_payment'),
-            'payment_id',
-            'additional_information'
-        );
-        $fieldDataConverter->convert(
-            $this->quoteSetup->getConnection(),
-            $this->quoteSetup->getTable('quote_address'),
-            'address_id',
-            'applied_taxes'
-        );
         $queryModifier = $this->queryModifierFactory->create(
             'in',
             [
@@ -93,13 +80,37 @@ class ConvertSerializedDataToJson
                 ]
             ]
         );
-        $fieldDataConverter->convert(
-            $this->quoteSetup->getConnection(),
-            $this->quoteSetup->getTable('quote_item_option'),
-            'option_id',
-            'value',
-            $queryModifier
+        $this->aggregatedFieldConverter->convert(
+            [
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $this->quoteSetup->getTable('quote_payment'),
+                    'payment_id',
+                    'additional_information'
+                ),
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $this->quoteSetup->getTable('quote_payment'),
+                    'payment_id',
+                    'additional_data'
+                ),
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $this->quoteSetup->getTable('quote_address'),
+                    'address_id',
+                    'applied_taxes'
+                ),
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $this->quoteSetup->getTable('quote_item_option'),
+                    'option_id',
+                    'value',
+                    $queryModifier
+                ),
+            ],
+            $this->quoteSetup->getConnection()
         );
+
         $select = $this->quoteSetup->getSetup()
             ->getConnection()
             ->select()
@@ -128,12 +139,17 @@ class ConvertSerializedDataToJson
                     ]
                 ]
             );
-            $fieldDataConverter->convert(
-                $this->quoteSetup->getConnection(),
-                $this->quoteSetup->getTable('quote_item_option'),
-                'option_id',
-                'value',
-                $queryModifier
+            $this->aggregatedFieldConverter->convert(
+                [
+                    new FieldToConvert(
+                        SerializedToJson::class,
+                        $this->quoteSetup->getTable('quote_item_option'),
+                        'option_id',
+                        'value',
+                        $queryModifier
+                    ),
+                ],
+                $this->quoteSetup->getConnection()
             );
         }
     }

@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog Compare Item Model
  *
+ * @api
+ *
  * @method \Magento\Catalog\Model\ResourceModel\Product\Compare\Item getResource()
  * @method \Magento\Catalog\Model\Product\Compare\Item setVisitorId(int $value)
  * @method \Magento\Catalog\Model\Product\Compare\Item setCustomerId(int $value)

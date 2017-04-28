@@ -126,12 +126,6 @@
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
             </field>
-            <field name="payment/authorizenet_directpost/payment_action" xsi:type="array">
-                <item name="scope" xsi:type="string">payment</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Authorize and Capture</item>
-                <item name="value" xsi:type="string">authorize_capture</item>
-            </field>
         </dataset>
         <dataset name="authorizenet_fraud_review_rollback">
             <field name="payment/authorizenet_directpost/active" xsi:type="array">
@@ -139,22 +133,6 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
-            </field>
-        </dataset>
-        <dataset name="authorizenet_authorize">
-            <field name="payment/authorizenet_directpost/payment_action" xsi:type="array">
-                <item name="scope" xsi:type="string">payment</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string"/>
-                <item name="value" xsi:type="string">authorize_capture</item>
-            </field>
-        </dataset>
-        <dataset name="authorizenet_authorize_rollback">
-            <field name="payment/authorizenet_directpost/payment_action" xsi:type="array">
-                <item name="scope" xsi:type="string">payment</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string"/>
-                <item name="value" xsi:type="string">authorize</item>
             </field>
         </dataset>
         <dataset name="authorizenet_authorize_capture">

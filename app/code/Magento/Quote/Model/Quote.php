@@ -329,7 +329,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $totalsCollector;
 
     /**
-     * @var \\Magento\Quote\Model\Quote\TotalsReader
+     * @var \Magento\Quote\Model\Quote\TotalsReader
      */
     protected $totalsReader;
 
@@ -507,6 +507,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 ->setStoreToQuoteRate($this->getStoreToQuoteRate())
                 ->setBaseToGlobalRate($this->getBaseToGlobalRate())
                 ->setBaseToQuoteRate($this->getBaseToQuoteRate());
+            $this->setData(self::KEY_CURRENCY, $currency);
         }
         return $currency;
     }

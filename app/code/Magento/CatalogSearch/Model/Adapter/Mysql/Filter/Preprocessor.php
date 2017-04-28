@@ -22,6 +22,7 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Customer\Model\Session;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,14 +75,28 @@ class Preprocessor implements PreprocessorInterface
     private $aliasResolver;
 
     /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
+
+    /**
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
      * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
-     * @param ScopeConfigInterface $scopeConfig
-     * @param AliasResolver $aliasResolver
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param AliasResolver|null $aliasResolver
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param Session $customerSession
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -92,7 +107,9 @@ class Preprocessor implements PreprocessorInterface
         TableMapper $tableMapper,
         $attributePrefix,
         ScopeConfigInterface $scopeConfig = null,
-        AliasResolver $aliasResolver = null
+        AliasResolver $aliasResolver = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        Session $customerSession = null
     ) {
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
@@ -107,9 +124,15 @@ class Preprocessor implements PreprocessorInterface
         if (null === $aliasResolver) {
             $aliasResolver = ObjectManager::getInstance()->get(AliasResolver::class);
         }
+        if (null === $customerSession) {
+            $customerSession = ObjectManager::getInstance()->get(Session::class);
+        }
 
         $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
+        $this->customerSession = $customerSession;
+        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
     }
 
     /**
@@ -136,6 +159,12 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier('price'),
                 $this->connection->quoteIdentifier('price_index.min_price'),
                 $query
+            );
+
+            $resultQuery .= sprintf(
+                ' AND %s = %s',
+                $this->connection->quoteIdentifier('price_index.customer_group_id'),
+                $this->customerSession->getCustomerGroupId()
             );
         } elseif ($filter->getField() === 'category_ids') {
             return 'category_ids_index.category_id = ' . (int) $filter->getValue();
@@ -197,7 +226,10 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
     {
-        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
+        $indexerSuffix = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
+        )->getTableSuffix();
+        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' . $indexerSuffix : '' . $indexerSuffix;
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
         $entityField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
