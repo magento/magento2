@@ -131,10 +131,10 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Transaction\BuilderInterface $transactionBuilder
      * @param Payment\Processor $paymentProcessor
      * @param OrderRepositoryInterface $orderRepository
-     * @param CreditmemoManager $creditmemoManager
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CreditmemoManager $creditmemoManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,10 +151,10 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         OrderRepositoryInterface $orderRepository,
-        CreditmemoManager $creditmemoManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CreditmemoManager $creditmemoManager = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->creditmemoFactory = $creditmemoFactory;
@@ -163,7 +163,7 @@ class Payment extends Info implements OrderPaymentInterface
         $this->transactionBuilder = $transactionBuilder;
         $this->orderPaymentProcessor = $paymentProcessor;
         $this->orderRepository = $orderRepository;
-        $this->creditmemoManager = $creditmemoManager;
+        $this->creditmemoManager = $creditmemoManager ?: ObjectManager::getInstance()->get(CreditmemoManager::class);
         parent::__construct(
             $context,
             $registry,
