@@ -17,7 +17,12 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
+use Magento\Store\Model\StoreManager;
 
+/**
+ * Class DataProviderTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -26,22 +31,22 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendResource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $frontendResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Range|\PHPUnit_Framework_MockObject_MockObject
      */
     private $rangeMock;
 
@@ -51,14 +56,19 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     private $adapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mysqlDataProviderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var IntervalFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $intervalFactoryMock;
+
+    /**
+     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
 
     protected function setUp()
     {
@@ -70,6 +80,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->rangeMock = $this->getMock(Range::class, [], [], '', false);
         $this->mysqlDataProviderMock = $this->getMock(DataProviderInterface::class);
         $this->intervalFactoryMock = $this->getMock(IntervalFactory::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(StoreManager::class, [], [], '', false);
 
         $this->model = new DataProvider(
             $this->resourceConnectionMock,
@@ -77,7 +88,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->sessionMock,
             $this->mysqlDataProviderMock,
             $this->intervalFactoryMock,
-            $this->frontendResourceMock
+            $this->frontendResourceMock,
+            $this->storeManagerMock
         );
     }
 
@@ -85,7 +97,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $selectMock = $this->getMock(Select::class, [], [], '', false);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
-        $selectMock->expects($this->any())->method('joinInner')->willReturnSelf();
+        $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('columns')->willReturnSelf();
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
         $tableMock = $this->getMock(Table::class, [], [], '', false);
@@ -95,6 +107,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         // verify that frontend indexer table is used
         $this->frontendResourceMock->expects($this->once())->method('getMainTable');
+
+        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class, [], [], '', false);
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(42);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->model->getAggregations($entityStorageMock);
     }

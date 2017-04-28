@@ -44,5 +44,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             'sku=simple_10,test_configurable=Option 1|sku=simple_20,test_configurable=Option 2',
             $result['configurable_variations']
         );
+        $this->assertEquals(
+            'test_configurable=Test Configurable',
+            $result['configurable_variation_labels']
+        );
     }
 }
