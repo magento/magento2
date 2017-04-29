@@ -22,7 +22,7 @@ class Feed implements \Magento\Framework\App\FeedInterface
 
     /**
      * Get the xml from Zend_Feed_Abstract object
-     * 
+     *
      * @return string
      */
     public function asXml()

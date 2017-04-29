@@ -85,7 +85,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
         $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->feedImporterMock = $this->getMock(\Magento\Framework\App\FeedImporterInterface::class);
         $this->feedMock = $this->getMock(\Magento\Framework\App\FeedInterface::class);
-        
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rss = $this->objectManagerHelper->getObject(
             \Magento\Rss\Model\Rss::class,
