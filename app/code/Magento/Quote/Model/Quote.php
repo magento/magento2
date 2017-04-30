@@ -507,6 +507,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 ->setStoreToQuoteRate($this->getStoreToQuoteRate())
                 ->setBaseToGlobalRate($this->getBaseToGlobalRate())
                 ->setBaseToQuoteRate($this->getBaseToQuoteRate());
+            $this->setData(self::KEY_CURRENCY, $currency);
         }
         return $currency;
     }

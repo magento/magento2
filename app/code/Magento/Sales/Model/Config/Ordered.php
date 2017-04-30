@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Configuration class for ordered items
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

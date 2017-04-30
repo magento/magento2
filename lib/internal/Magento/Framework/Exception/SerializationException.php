@@ -9,6 +9,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Serialization Exception
+ *
+ * @api
  */
 class SerializationException extends LocalizedException
 {

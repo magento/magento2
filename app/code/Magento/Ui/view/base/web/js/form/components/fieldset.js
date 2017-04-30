@@ -22,6 +22,7 @@ define([
             opened: false,
             level: 0,
             visible: true,
+            initializeFieldsetDataByDefault: false,    /* Data in some fieldsets should be initialized before open */
             disabled: false,
             listens: {
                 'opened': 'onVisibilityChange'

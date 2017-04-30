@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Filter\Input;
 
 class MaliciousCode implements \Zend_Filter_Interface
@@ -29,7 +27,8 @@ class MaliciousCode implements \Zend_Filter_Interface
         //js in the style attribute
         '/style=[^<]*((expression\s*?\([^<]*?\))|(behavior\s*:))[^<]*(?=\/*\>)/Uis',
         //js attributes
-        '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onload|onunload|onerror)=[^<]*(?=\/*\>)/Uis',
+        '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|'.
+        'onload|onunload|onerror)=[^<]*(?=\/*\>)/Uis',
         //tags
         '/<\/?(script|meta|link|frame|iframe|object).*>/Uis',
         //base64 usage

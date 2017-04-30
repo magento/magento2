@@ -6,16 +6,17 @@
 
 // @codingStandardsIgnoreFile
 
-/**
- * Directory Country Resource Collection
- */
 namespace Magento\Directory\Model\ResourceModel\Country;
+
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Collection
+ * Country Resource Collection
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -115,6 +116,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @var array
      */
     protected $_foregroundCountries = [];
+
+    /**
+     * Add top destinition countries to head of option array
+     *
+     * @param $emptyLabel
+     * @param $options
+     * @return array
+     */
+    private function addForegroundCountriesToOptionArray($emptyLabel, $options)
+    {
+        if ($emptyLabel !== false && count($this->_foregroundCountries) !== 0 &&
+            count($options) === count($this->_foregroundCountries)
+        ) {
+            $options[] = ['value' => '', 'label' => $emptyLabel];
+            return $options;
+        }
+        return $options;
+    }
 
     /**
      * Define main table
@@ -240,7 +259,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function toOptionArray($emptyLabel = ' ')
     {
         $options = $this->_toOptionArray('country_id', 'name', ['title' => 'iso2_code']);
-
         $sort = [];
         foreach ($options as $data) {
             $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
@@ -257,6 +275,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
         $options = [];
         foreach ($sort as $label => $value) {
+            $options = $this->addForegroundCountriesToOptionArray($emptyLabel, $options);
             $option = ['value' => $value, 'label' => $label];
             if ($this->helperData->isRegionRequired($value)) {
                 $option['is_region_required'] = true;
@@ -268,8 +287,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
             $options[] = $option;
         }
-
-        if (count($options) > 0 && $emptyLabel !== false) {
+        if ($emptyLabel !== false && count($options) > 0) {
             array_unshift($options, ['value' => '', 'label' => $emptyLabel]);
         }
 

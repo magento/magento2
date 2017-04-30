@@ -54,7 +54,7 @@ abstract class AbstractColumnTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock->expects($this->any())
+        $this->contextMock->expects($this->never())
             ->method('getProcessor')
             ->willReturn($this->processorMock);
     }
