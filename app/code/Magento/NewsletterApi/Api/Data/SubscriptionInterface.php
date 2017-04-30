@@ -8,6 +8,7 @@ namespace Magento\NewsletterApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\NewsletterApi\Api\Data\SubscriptionExtensionInterface;
+use Magento\NewsletterApi\Api\SubscriptionStateInterface;
 
 /**
  * Newsletter Subscription Interface
@@ -48,14 +49,15 @@ interface SubscriptionInterface extends ExtensibleDataInterface
     public function setEmail($email);
 
     /**
-     * Set Status
+     * Set State
      *
-     * set the status of the subscription
+     * set the state of the subscription
      *
-     * @param int $status
+     * @param \Magento\NewsletterApi\Api\SubscriptionStateInterface $state
+     *
      * @return void
      */
-    public function setStatus($status);
+    public function setState(SubscriptionStateInterface $state);
 
     /**
      * Get ID
@@ -76,13 +78,13 @@ interface SubscriptionInterface extends ExtensibleDataInterface
     public function getEmail();
 
     /**
-     * Get Status
+     * Get State
      *
-     * get the status of the subscription
+     * get the state of the subscription
      *
-     * @return int
+     * @return \Magento\NewsletterApi\Api\SubscriptionStateInterface
      */
-    public function getStatus();
+    public function getState();
 
     /**
      * Get Extension Attributes

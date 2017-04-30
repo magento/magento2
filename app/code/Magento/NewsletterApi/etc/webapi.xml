@@ -44,7 +44,7 @@
         </data>
     </route>
     <route url="/V1/newsletter/subscriptions/mine" method="POST">
-        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribe"/>
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribeCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -53,7 +53,7 @@
         </data>
     </route>
     <route url="/V1/newsletter/subscriptions/mine" method="PUT">
-        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribe"/>
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribeCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -62,7 +62,7 @@
         </data>
     </route>
     <route url="/V1/newsletter/subscriptions/mine" method="DELETE">
-        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="unsubscribe"/>
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="unsubscribeCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -73,13 +73,13 @@
 
     <!-- Managing Guest Subscriptions -->
     <route url="/V1/newsletter/guest-subscriptions" method="POST">
-        <service class="Magento\NewsletterApi\Api\GuestSubscriptionManagementInterface" method="subscribe"/>
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribe"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/newsletter/guest-subscriptions" method="DELETE">
-        <service class="Magento\NewsletterApi\Api\GuestSubscriptionManagementInterface" method="unsubscribe"/>
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="unsubscribe"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

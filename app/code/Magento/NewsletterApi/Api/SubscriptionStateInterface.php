@@ -6,12 +6,19 @@
 
 namespace Magento\NewsletterApi\Api;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
- * Newsletter Subscription Management Interface
+ * Newsletter Subscription State Interface
+ *
+ * represents the subscription state.
+ * Each possible state that changes behaviour of the subscription should
+ * implement this interface. all state dependent methods of the subscription
+ * management should be delegated to the state object
  *
  * @api
  */
-interface SubscriptionManagementInterface
+interface SubscriptionStateInterface extends ExtensibleDataInterface
 {
     /**
      * Subscribe
@@ -19,13 +26,17 @@ interface SubscriptionManagementInterface
      * Adds a new Newsletter Subscription
      *
      * @param \Magento\NewsletterApi\Api\Data\SubscriptionInterface $subscription the subscription
+     * @param \Magento\NewsletterApi\Api\SubscriptionManagementInterface $subscriptionManagement
      *
      * @return bool true on success
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException if an error occurred during subscription
      * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
      */
-    public function subscribe(Data\SubscriptionInterface $subscription);
+    public function subscribe(
+        Data\SubscriptionInterface $subscription,
+        SubscriptionManagementInterface $subscriptionManagement
+    );
 
     /**
      * unsubscribe
@@ -33,6 +44,7 @@ interface SubscriptionManagementInterface
      * unsubscribe by given email address
      *
      * @param string $email
+     * @param \Magento\NewsletterApi\Api\SubscriptionManagementInterface $subscriptionManagement
      *
      * @return bool true on success
      *
@@ -40,7 +52,7 @@ interface SubscriptionManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotDeleteException when an error occurred during unsubscribe
      * @throws \Magento\Framework\Exception\StateException when entity is in invalid state for deletion
      */
-    public function unsubscribe($email);
+    public function unsubscribe($email, SubscriptionManagementInterface $subscriptionManagement);
 
     /**
      * Subscribe a customer
@@ -49,27 +61,18 @@ interface SubscriptionManagementInterface
      *
      * @param int $customerId the id of the customer to subscribe
      * @param \Magento\NewsletterApi\Api\Data\SubscriptionInterface $subscription the subscription
+     * @param \Magento\NewsletterApi\Api\SubscriptionManagementInterface $subscriptionManagement
      *
      * @return bool true on success
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException if an error occurred during subscription
      * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
      */
-    public function subscribeCustomer($customerId, Data\SubscriptionInterface $subscription);
-
-    /**
-     * Get Subscription for given Customer
-     *
-     * retrieves the subscription entity for the given customer id
-     *
-     * @param int $customerId the id of the customer
-     *
-     * @return \Magento\NewsletterApi\Api\Data\SubscriptionInterface $subscription
-     *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException when subscription does not exist
-     * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
-     */
-    public function getSubscriptionForCustomer($customerId);
+    public function subscribeCustomer(
+        $customerId,
+        Data\SubscriptionInterface $subscription,
+        SubscriptionManagementInterface $subscriptionManagement
+    );
 
     /**
      * unsubscribe customer
@@ -78,6 +81,7 @@ interface SubscriptionManagementInterface
      * from the underlying persistence layer
      *
      * @param int $customerId the id of the customer to unsubscribe
+     * @param \Magento\NewsletterApi\Api\SubscriptionManagementInterface $subscriptionManagement
      *
      * @return bool true on success
      *
@@ -85,5 +89,5 @@ interface SubscriptionManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotDeleteException when an error occurred during unsubscribe
      * @throws \Magento\Framework\Exception\StateException when entity is in invalid state for deletion
      */
-    public function unsubscribeCustomer($customerId);
+    public function unsubscribeCustomer($customerId, SubscriptionManagementInterface $subscriptionManagement);
 }
