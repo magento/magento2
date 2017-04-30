@@ -7,6 +7,7 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Managing Subscriptions -->
     <route url="/V1/newsletter/subscriptions/:subscriptionId" method="GET">
         <service class="Magento\NewsletterApi\Api\SubscriptionRepositoryInterface" method="getById"/>
         <resources>
@@ -29,6 +30,58 @@
         <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribe"/>
         <resources>
             <resource ref="Magento_Newsletter::manage" />
+        </resources>
+    </route>
+
+    <!-- Managing My Subscriptions -->
+    <route url="/V1/newsletter/subscriptions/mine" method="GET">
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="getSubscriptionForCustomer"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/newsletter/subscriptions/mine" method="POST">
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribe"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/newsletter/subscriptions/mine" method="PUT">
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="subscribe"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/newsletter/subscriptions/mine" method="DELETE">
+        <service class="Magento\NewsletterApi\Api\SubscriptionManagementInterface" method="unsubscribe"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+
+    <!-- Managing Guest Subscriptions -->
+    <route url="/V1/newsletter/guest-subscriptions" method="POST">
+        <service class="Magento\NewsletterApi\Api\GuestSubscriptionManagementInterface" method="subscribe"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/newsletter/guest-subscriptions" method="DELETE">
+        <service class="Magento\NewsletterApi\Api\GuestSubscriptionManagementInterface" method="unsubscribe"/>
+        <resources>
+            <resource ref="anonymous" />
         </resources>
     </route>
 </routes>

@@ -45,7 +45,7 @@ interface SubscriptionInterface extends ExtensibleDataInterface
      * @param string $email
      * @return void
      */
-    public function setEmail(string $email);
+    public function setEmail($email);
 
     /**
      * Set Status
@@ -55,7 +55,7 @@ interface SubscriptionInterface extends ExtensibleDataInterface
      * @param int $status
      * @return void
      */
-    public function setStatus(int $status);
+    public function setStatus($status);
 
     /**
      * Get ID

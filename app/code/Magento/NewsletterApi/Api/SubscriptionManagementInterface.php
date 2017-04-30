@@ -6,74 +6,42 @@
 
 namespace Magento\NewsletterApi\Api;
 
-use Magento\Customer\Api\Data\CustomerInterface;
-
 /**
- * Newsletter Subscription Management Interface
+ * Newsletter Subscription Management Interface fot Customers
  *
  * @api
  */
 interface SubscriptionManagementInterface
 {
     /**
-     * Subscribe
-     *
-     * Adds a new Newsletter Subscription
-     *
-     * @param \Magento\NewsletterApi\Api\Data\SubscriptionInterface $subscription the subscription
-     *
-     * @return bool true on success
-     *
-     * @throws \Magento\NewsletterApi\Exception\AlreadySubscribedException when subscription already exists
-     * @throws \Magento\NewsletterApi\Exception\CouldNotSubscribeException if an error occurred during subscription
-     * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
-     */
-    public function subscribe(Data\SubscriptionInterface $subscription);
-
-    /**
      * Subscribe a customer
      *
      * Adds a new Newsletter Subscription for the given customer
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer the customer to be subscribed
+     * @param int $customerId the id of the customer to subscribe
+     * @param \Magento\NewsletterApi\Api\Data\SubscriptionInterface $subscription the subscription
      *
      * @return bool true on success
      *
-     * @throws \Magento\NewsletterApi\Exception\AlreadySubscribedException when subscription already exists
-     * @throws \Magento\NewsletterApi\Exception\CouldNotSubscribeException if an error occurred during subscription
+     * @throws \Magento\Framework\Exception\AlreadyExistsException when subscription already exists
+     * @throws \Magento\Framework\Exception\CouldNotSaveException if an error occurred during subscription
      * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
      */
-    public function subscribeCustomer(CustomerInterface $customer);
+    public function subscribe($customerId, Data\SubscriptionInterface $subscription);
 
     /**
-     * Subscribe a customer by id
+     * Get Subscription for given Customer
      *
-     * Adds a new Newsletter Subscription for the given customer
-     * by provided customer id
+     * retrieves the subscription entity for the given customer id
      *
-     * @param int $customerId the id of the customer to be subscribed
+     * @param int $customerId the id of the customer
      *
-     * @return bool true on success
+     * @return \Magento\NewsletterApi\Api\Data\SubscriptionInterface $subscription
      *
-     * @throws \Magento\NewsletterApi\Exception\AlreadySubscribedException when subscription already exists
-     * @throws \Magento\NewsletterApi\Exception\CouldNotSubscribeException if an error occurred during subscription
+     * @throws \Magento\Framework\Exception\NoSuchEntityException when subscription does not exist
      * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
      */
-    public function subscribeCustomerById(int $customerId);
-
-    /**
-     * unsubscribe
-     *
-     * unsubscribe by given email address
-     *
-     * @param string $email
-     *
-     * @return bool true on success
-     *
-     * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
-     * @throws \Magento\NewsletterApi\Exception\CouldNotUnSubscribeException when an error occurred during unsubscribe
-     */
-    public function unsubscribe(string $email);
+    public function getSubscriptionForCustomer($customerId);
 
     /**
      * unsubscribe customer
@@ -81,27 +49,13 @@ interface SubscriptionManagementInterface
      * remove the subscription entity linked to the given customer
      * from the underlying persistence layer
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer the customer to unsubscribe
-     *
-     * @return bool true on success
-     *
-     * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
-     * @throws \Magento\NewsletterApi\Exception\CouldNotUnSubscribeException when an error occurred during unsubscribe
-     */
-    public function unsubscribeCustomer(CustomerInterface $customer);
-
-    /**
-     * unsubscribe customer by id
-     *
-     * remove the subscription entity linked to the given customer id
-     * from the underlying persistence layer
-     *
      * @param int $customerId the id of the customer to unsubscribe
      *
      * @return bool true on success
      *
      * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
-     * @throws \Magento\NewsletterApi\Exception\CouldNotUnSubscribeException when an error occurred during unsubscribe
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException when an error occurred during unsubscribe
+     * @throws \Magento\Framework\Exception\StateException when entity is in invalid state for deletion
      */
-    public function unsubscribeCustomerById(int $customerId);
+    public function unsubscribe($customerId);
 }

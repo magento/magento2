@@ -47,7 +47,7 @@ interface SubscriptionRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException if no entity with this id exists
      * @throws \Magento\Framework\Exception\InputException if an invalid id was provided
      */
-    public function getById(int $subscriptionId);
+    public function getById($subscriptionId);
 
     /**
      * Retrieve newsletter subscription list
@@ -94,5 +94,5 @@ interface SubscriptionRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException when an entity with given id does not exist
      * @throws \Magento\Framework\Exception\CouldNotDeleteException when an error occurred during deletion
      */
-    public function deleteById(int $subscriptionId);
+    public function deleteById($subscriptionId);
 }
