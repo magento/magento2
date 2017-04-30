@@ -22,7 +22,6 @@ interface GuestSubscriptionManagementInterface
      *
      * @return bool true on success
      *
-     * @throws \Magento\Framework\Exception\AlreadyExistsException when subscription already exists
      * @throws \Magento\Framework\Exception\CouldNotSaveException if an error occurred during subscription
      * @throws \Magento\Framework\Exception\InputException when an invalid input has been provided
      */
