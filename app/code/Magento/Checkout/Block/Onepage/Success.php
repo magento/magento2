@@ -10,6 +10,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * One page checkout success page
+ *
+ * @api
  */
 class Success extends \Magento\Framework\View\Element\Template
 {

@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Billing Agreement abstract model
  *
+ * @api
  * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement _getResource()
  * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement getResource()
  * @method int getCustomerId()

@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Block;
 
+/**
+ * @api
+ */
 class SectionConfig extends \Magento\Framework\View\Element\Template
 {
     /** @var \Magento\Framework\Config\DataInterface */

@@ -7,6 +7,9 @@
  */
 namespace Magento\AdminNotification\Block;
 
+/**
+ * @api
+ */
 class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

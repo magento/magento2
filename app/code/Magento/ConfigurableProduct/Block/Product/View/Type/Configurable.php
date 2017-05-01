@@ -12,6 +12,7 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  */

@@ -11,6 +11,9 @@
  */
 namespace Magento\Wishlist\Block\Share\Email;
 
+/**
+ * @api
+ */
 class Items extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**

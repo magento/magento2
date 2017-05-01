@@ -12,6 +12,8 @@ use Magento\Ups\Helper\Config as ConfigHelper;
 
 /**
  * Backend shipping UPS content block
+ *
+ * @api
  */
 class CarrierConfig extends Template
 {

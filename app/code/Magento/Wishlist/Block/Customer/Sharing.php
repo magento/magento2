@@ -11,6 +11,9 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
+/**
+ * @api
+ */
 class Sharing extends \Magento\Framework\View\Element\Template
 {
     /**

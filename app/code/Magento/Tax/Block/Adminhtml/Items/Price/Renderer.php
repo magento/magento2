@@ -14,6 +14,8 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order items price column renderer
+ *
+ * @api
  */
 class Renderer extends \Magento\Backend\Block\Template
 {

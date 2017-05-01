@@ -9,6 +9,9 @@ use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Cookie extends Template
 {
     /**

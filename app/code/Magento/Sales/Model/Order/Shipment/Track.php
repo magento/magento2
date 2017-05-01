@@ -11,6 +11,7 @@ use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
  *

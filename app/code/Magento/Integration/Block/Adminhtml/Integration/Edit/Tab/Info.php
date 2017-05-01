@@ -11,6 +11,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Main Integration info edit form
  *
+ * @api
  */
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

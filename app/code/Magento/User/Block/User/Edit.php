@@ -9,6 +9,7 @@ namespace Magento\User\Block\User;
 /**
  * User edit page
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container

@@ -11,6 +11,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
 /**
  * Customer authorization link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface

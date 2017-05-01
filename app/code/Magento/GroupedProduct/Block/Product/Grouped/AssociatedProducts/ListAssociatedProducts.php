@@ -11,6 +11,9 @@
  */
 namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 
+/**
+ * @api
+ */
 class ListAssociatedProducts extends \Magento\Backend\Block\Template
 {
     /**

@@ -11,6 +11,7 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 /**
  * Flat sales order collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements OrderSearchResultInterface

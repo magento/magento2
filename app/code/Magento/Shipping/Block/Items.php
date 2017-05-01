@@ -11,6 +11,9 @@
  */
 namespace Magento\Shipping\Block;
 
+/**
+ * @api
+ */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**

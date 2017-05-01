@@ -7,6 +7,9 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
 
+/**
+ * @api
+ */
 class Config extends \Magento\Sales\Model\Order\Total\Config\Base
 {
     /**

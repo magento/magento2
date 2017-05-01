@@ -11,6 +11,9 @@
  */
 namespace Magento\Customer\Block\Adminhtml;
 
+/**
+ * @api
+ */
 class Group extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

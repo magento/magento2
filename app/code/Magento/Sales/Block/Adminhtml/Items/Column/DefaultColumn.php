@@ -13,6 +13,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 /**
  * Adminhtml sales order column renderer
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems

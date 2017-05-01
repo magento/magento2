@@ -7,6 +7,7 @@ namespace Magento\Catalog\Block\Category\Rss;
 
 /**
  * Class Link
+ * @api
  * @package Magento\Catalog\Block\Category\Rss
  */
 class Link extends \Magento\Framework\View\Element\Template

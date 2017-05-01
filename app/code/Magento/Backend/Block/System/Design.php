@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block\System;
 
+/**
+ * @api
+ */
 class Design extends \Magento\Backend\Block\Template
 {
     /**

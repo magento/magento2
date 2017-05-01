@@ -23,6 +23,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Swatch renderer block
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

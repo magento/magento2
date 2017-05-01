@@ -11,6 +11,9 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
     /**

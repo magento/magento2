@@ -15,6 +15,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @api
+ */
 class Attributes extends \Magento\Framework\View\Element\Template
 {
     /**

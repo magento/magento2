@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
 /**
  * Invoice view form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder

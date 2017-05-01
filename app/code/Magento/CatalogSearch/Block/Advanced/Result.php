@@ -15,6 +15,8 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Advanced search result
+ *
+ * @api
  */
 class Result extends Template
 {

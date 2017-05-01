@@ -10,6 +10,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Adminhtml sales order create totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

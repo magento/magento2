@@ -15,6 +15,7 @@ namespace Magento\Store\Model;
 /**
  * Class Group
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements

@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * Product qty increments block
+ *
  * @api
  */
 class Qtyincrements extends Template implements IdentityInterface

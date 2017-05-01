@@ -13,6 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Shopping cart model
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated
  */

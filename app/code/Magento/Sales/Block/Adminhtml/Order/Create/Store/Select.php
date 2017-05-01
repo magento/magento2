@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Store;
 /**
  * Adminhtml sales order create select store block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Magento\Backend\Block\Store\Switcher

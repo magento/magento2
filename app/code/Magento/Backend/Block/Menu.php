@@ -11,6 +11,7 @@ namespace Magento\Backend\Block;
 /**
  * Backend menu block
  *
+ * @api
  * @method \Magento\Backend\Block\Menu setAdditionalCacheKeyInfo(array $cacheKeyInfo)
  * @method array getAdditionalCacheKeyInfo()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

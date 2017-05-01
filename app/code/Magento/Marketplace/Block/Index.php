@@ -6,6 +6,9 @@
 
 namespace Magento\Marketplace\Block;
 
+/**
+ * @api
+ */
 class Index extends \Magento\Backend\Block\Template
 {
     /**

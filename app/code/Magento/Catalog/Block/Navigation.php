@@ -14,6 +14,7 @@ use Magento\Customer\Model\Context;
 /**
  * Catalog navigation
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
