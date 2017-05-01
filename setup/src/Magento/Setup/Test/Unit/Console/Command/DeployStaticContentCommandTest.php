@@ -50,11 +50,6 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     private $deployService;
 
     /**
-     * @var DeployStaticOptions|Mock
-     */
-    private $options;
-
-    /**
      * Object manager to create various objects
      *
      * @var ObjectManagerInterface|Mock
@@ -75,7 +70,6 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->inputValidator = $this->getMock(InputValidator::class, [], [], '', false);
         $this->consoleLoggerFactory = $this->getMock(ConsoleLoggerFactory::class, [], [], '', false);
         $this->logger = $this->getMock(ConsoleLogger::class, [], [], '', false);
-        $this->options = $this->getMock(DeployStaticOptions::class, [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->appState = $this->getMock(State::class, [], [], '', false);
         $this->deployService = $this->getMock(DeployStaticContent::class, [], [], '', false);
@@ -99,9 +93,11 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $input
      * @see DeployStaticContentCommand::execute()
+     * @dataProvider executeDataProvider
      */
-    public function testExecute()
+    public function testExecute($input)
     {
         $this->appState->expects($this->once())
             ->method('getMode')
@@ -118,7 +114,19 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->deployService->expects($this->once())->method('deploy');
 
         $tester = new CommandTester($this->command);
-        $tester->execute([]);
+        $tester->execute($input);
+    }
+
+    public function executeDataProvider()
+    {
+        return [
+            'No options' => [
+                []
+            ],
+            'With static content version option' => [
+                ['--content-version' => '123456']
+            ]
+        ];
     }
 
     /**

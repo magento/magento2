@@ -130,7 +130,6 @@ class DeployTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeploy()
     {
-        //$this->markTestSkipped('Test blocked since it must be run in isolated Filesystem');
         $this->deployService->deploy($this->options);
 
         $this->assertFileExists($this->staticDir->getAbsolutePath('frontend/Magento/zoom1/default/css/root.css'));
