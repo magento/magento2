@@ -7,6 +7,9 @@ namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Grid\Column;
 
+/**
+ * @api
+ */
 class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**

@@ -7,6 +7,8 @@ namespace Magento\Shipping\Block\Tracking;
 
 /**
  * Tracking info link
+ *
+ * @api
  */
 class Link extends \Magento\Framework\View\Element\Html\Link
 {

@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
 
 /**
  * Adminhtml invoice items grid
+ *
+ * @api
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

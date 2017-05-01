@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * For block generation you must define Data source class, data source class method,
  * parameters array and block template
  *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

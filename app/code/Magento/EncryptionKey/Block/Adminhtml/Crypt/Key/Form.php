@@ -7,6 +7,8 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
 /**
  * Encryption key change form block
+ *
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

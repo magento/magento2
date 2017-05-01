@@ -7,6 +7,7 @@
 namespace Magento\Backend\Block\Widget\Button;
 
 /**
+ * @api
  * @method string getButtonKey()
  * @method string getRegion()
  * @method string getName()

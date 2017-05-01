@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 /**
  * Order view tabs
+ *
+ * @api
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {

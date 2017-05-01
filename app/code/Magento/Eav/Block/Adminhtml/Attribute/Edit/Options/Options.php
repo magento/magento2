@@ -13,6 +13,9 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
 use Magento\Store\Model\ResourceModel\Store\Collection;
 
+/**
+ * @api
+ */
 class Options extends \Magento\Backend\Block\Template
 {
     /**

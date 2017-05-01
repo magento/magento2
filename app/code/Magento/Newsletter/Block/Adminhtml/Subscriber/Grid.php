@@ -11,6 +11,9 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber;
 
+/**
+ * @api
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**

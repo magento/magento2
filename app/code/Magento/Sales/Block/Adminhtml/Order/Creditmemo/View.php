@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 /**
  * Adminhtml creditmemo view
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container

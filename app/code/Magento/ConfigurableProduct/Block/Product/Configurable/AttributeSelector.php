@@ -8,6 +8,7 @@
 namespace Magento\ConfigurableProduct\Block\Product\Configurable;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @api
  */

@@ -24,6 +24,7 @@ use Magento\Sales\Model\Status;
  *  sales_quote_delete_before
  *  sales_quote_delete_after
  *
+ * @api
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()

@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Grid column block that is displayed only in multistore mode
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated
  */
-namespace Magento\Backend\Block\Widget\Grid\Column;
-
 class Multistore extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**

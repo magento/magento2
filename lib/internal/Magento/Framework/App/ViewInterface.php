@@ -5,6 +5,14 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Introduced as a facade for presentation related operations.
+ * Later replaced with Magento\Framework\View\Result component
+ *
+ * @api
+ * @deprecated since 2.2.0
+ * @see \Magento\Framework\View\Result\Layout
+ */
 interface ViewInterface
 {
     /**

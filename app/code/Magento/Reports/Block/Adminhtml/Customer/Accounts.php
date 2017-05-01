@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Customer;
 /**
  * Backend new accounts report page content block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Accounts extends \Magento\Backend\Block\Widget\Grid\Container

@@ -7,6 +7,8 @@ namespace Magento\Multishipping\Block\Checkout;
 
 /**
  * Multishipping cart link
+ *
+ * @api
  */
 class Link extends \Magento\Framework\View\Element\Template
 {

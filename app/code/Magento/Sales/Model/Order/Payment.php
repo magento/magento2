@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
 /**
  * Order payment information
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

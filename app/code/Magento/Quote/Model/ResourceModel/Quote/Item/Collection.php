@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 /**
  * Quote item resource collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection

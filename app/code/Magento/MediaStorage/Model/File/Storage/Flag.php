@@ -11,6 +11,9 @@
  */
 namespace Magento\MediaStorage\Model\File\Storage;
 
+/**
+ * @api
+ */
 class Flag extends \Magento\Framework\Flag
 {
     /**

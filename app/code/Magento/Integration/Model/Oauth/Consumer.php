@@ -10,6 +10,7 @@ use Magento\Framework\Oauth\ConsumerInterface;
 /**
  * Consumer model
  *
+ * @api
  * @author Magento Core Team <core@magentocommerce.com>
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer _getResource()
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer getResource()

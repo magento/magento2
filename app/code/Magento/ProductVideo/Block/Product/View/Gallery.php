@@ -11,6 +11,9 @@
  */
 namespace Magento\ProductVideo\Block\Product\View;
 
+/**
+ * @api
+ */
 class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 {
     /**

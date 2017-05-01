@@ -14,6 +14,7 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 /**
  * Item price render block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Renderer extends \Magento\Tax\Block\Item\Price\Renderer

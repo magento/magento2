@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
 /**
  * Adminhtml sales order create shipping method block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Method extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

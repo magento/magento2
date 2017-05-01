@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class Denied extends \Magento\Backend\Block\Template
 {
     /**

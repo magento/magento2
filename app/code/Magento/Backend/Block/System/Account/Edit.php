@@ -8,6 +8,7 @@ namespace Magento\Backend\Block\System\Account;
 /**
  * Adminhtml edit admin user account
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container

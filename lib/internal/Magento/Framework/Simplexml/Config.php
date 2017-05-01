@@ -7,6 +7,8 @@ namespace Magento\Framework\Simplexml;
 
 /**
  * Base class for simplexml based configurations
+ *
+ * @api
  */
 class Config
 {

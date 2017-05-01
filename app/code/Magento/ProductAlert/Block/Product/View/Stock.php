@@ -7,6 +7,8 @@ namespace Magento\ProductAlert\Block\Product\View;
 
 /**
  * Recurring payment view stock
+ *
+ * @api
  */
 class Stock extends \Magento\ProductAlert\Block\Product\View
 {

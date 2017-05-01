@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 /**
  * Adminhtml order creditmemo totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals

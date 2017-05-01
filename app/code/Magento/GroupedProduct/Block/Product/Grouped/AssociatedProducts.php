@@ -5,6 +5,9 @@
  */
 namespace Magento\GroupedProduct\Block\Product\Grouped;
 
+/**
+ * @api
+ */
 class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Container
 {
     /**

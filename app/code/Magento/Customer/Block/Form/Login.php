@@ -8,6 +8,7 @@ namespace Magento\Customer\Block\Form;
 /**
  * Customer login form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Login extends \Magento\Framework\View\Element\Template

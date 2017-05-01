@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Element;
 
+/**
+ * @api
+ */
 class Section extends AbstractComposite
 {
     /**

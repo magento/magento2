@@ -10,6 +10,7 @@ use Magento\CatalogInventory\Helper\Stock as StockHelper;
 /**
  * Cart crosssell list
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct

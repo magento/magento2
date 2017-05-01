@@ -10,6 +10,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Order create data
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

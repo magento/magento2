@@ -5,6 +5,9 @@
  */
 namespace Magento\Wishlist\Model;
 
+/**
+ * @api
+ */
 class Config
 {
     const XML_PATH_SHARING_EMAIL_LIMIT = 'wishlist/email/number_limit';

@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Block;
 
+/**
+ * @api
+ */
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
     /**

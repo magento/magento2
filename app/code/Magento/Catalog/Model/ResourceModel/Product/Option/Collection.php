@@ -12,6 +12,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 /**
  * Catalog product options collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

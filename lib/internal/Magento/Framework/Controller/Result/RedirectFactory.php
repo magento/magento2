@@ -7,6 +7,9 @@ namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api
+ */
 class RedirectFactory
 {
     /**

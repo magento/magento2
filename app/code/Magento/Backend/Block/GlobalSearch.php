@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class GlobalSearch extends \Magento\Backend\Block\Template
 {
     /**

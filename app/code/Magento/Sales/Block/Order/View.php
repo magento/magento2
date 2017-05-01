@@ -9,6 +9,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * Sales order view block
+ *
+ * @api
  */
 class View extends \Magento\Framework\View\Element\Template
 {

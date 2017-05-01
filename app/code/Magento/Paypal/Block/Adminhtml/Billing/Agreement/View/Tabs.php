@@ -9,6 +9,9 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View;
 
+/**
+ * @api
+ */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

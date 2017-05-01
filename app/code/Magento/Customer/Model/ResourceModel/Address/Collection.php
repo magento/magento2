@@ -8,6 +8,7 @@ namespace Magento\Customer\Model\ResourceModel\Address;
 /**
  * Customers collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection

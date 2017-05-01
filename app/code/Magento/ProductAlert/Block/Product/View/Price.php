@@ -7,6 +7,8 @@ namespace Magento\ProductAlert\Block\Product\View;
 
 /**
  * Product view price
+ *
+ * @api
  */
 class Price extends \Magento\ProductAlert\Block\Product\View
 {

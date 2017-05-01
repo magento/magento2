@@ -11,6 +11,8 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Class for handling API section within integration.
+ *
+ * @api
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
