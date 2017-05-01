@@ -97,9 +97,9 @@ class DataObjectProcessor
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
                 $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
             } elseif ($key === "extension_attributes") {
-                $attributeArray = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
-                if (!empty($attributeArray)) {
-                    $value = $attributeArray;
+                $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
+                if (empty($value)) {
+                    continue;
                 }
             } else {
                 if (is_object($value) && !($value instanceof Phrase)) {
