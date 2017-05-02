@@ -65,6 +65,22 @@ class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testWhenCustomCSVOptionsProvided_ParserIsCreatedFromIt()
+    {
+        $factory = $this->createCsvParserFactory();
+
+        $this->assertCsvFile(
+            ['column1', 'column2', 'column3'],
+            $factory->create(
+                'test_options.csv',
+                [
+                    'delimiter' => '|',
+                    'enclosure' => ';'
+                ]
+            )
+        );
+    }
+
     private function createTestFilesystem($baseDirectory = null)
     {
         $baseDirectory = $baseDirectory ?? __DIR__ . '/_files';
@@ -80,7 +96,7 @@ class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return new FileParser\CsvParserFactory(
             $this->createTestFilesystem($baseDirectory),
-            new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this)
+            new FakeObjectManager()
         );
     }
 

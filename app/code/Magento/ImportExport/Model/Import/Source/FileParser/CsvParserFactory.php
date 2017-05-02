@@ -5,6 +5,7 @@ namespace Magento\ImportExport\Model\Import\Source\FileParser;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
 
 class CsvParserFactory implements ParserFactoryInterface
 {
@@ -15,9 +16,17 @@ class CsvParserFactory implements ParserFactoryInterface
      */
     private $filesystem;
 
-    public function __construct(Filesystem $filesystem)
+    /**
+     * Object Manager for CSV parser creation
+     *
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    public function __construct(Filesystem $filesystem, ObjectManagerInterface $objectManager)
     {
         $this->filesystem = $filesystem;
+        $this->objectManager = $objectManager;
     }
 
     public function create($filePath, array $options = [])
@@ -34,6 +43,12 @@ class CsvParserFactory implements ParserFactoryInterface
             throw new \InvalidArgumentException(sprintf('File "%s" does not exists', $filePath));
         }
 
-        return new CsvParser($directory->openFile($filePath));
+        return $this->objectManager->create(
+            CsvParser::class,
+            [
+                'file' => $directory->openFile($filePath),
+                'options' => $options
+            ]
+        );
     }
 }
