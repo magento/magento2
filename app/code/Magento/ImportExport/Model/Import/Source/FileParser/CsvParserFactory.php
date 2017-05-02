@@ -42,6 +42,7 @@ class CsvParserFactory implements ParserFactoryInterface
         }
 
         $directory = $this->filesystem->getDirectoryRead($directoryCode);
+        $filePath = $directory->getRelativePath($filePath);
 
         if (!$directory->isFile($filePath)) {
             throw new \InvalidArgumentException(sprintf('File "%s" does not exists', $filePath));

@@ -78,6 +78,23 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testWhenProperZipFileWithAbsolutePathIsProvided_FirstFileIsParsed()
+    {
+        $expectedParser = new FakeParser();
+
+        $parserFactory = new FileParser\ZipParserFactory(
+            $this->createTestFilesystem(),
+            new FakeParserFactory([
+                'test.csv' => $expectedParser
+            ])
+        );
+
+        $this->assertSame(
+            $expectedParser,
+            $parserFactory->create(__DIR__ . '/_files/complete.zip')
+        );
+    }
+
     public function testWhenProperZipFileIsProvided_SecondFileIsParsed()
     {
         $expectedParser = new FakeParser();

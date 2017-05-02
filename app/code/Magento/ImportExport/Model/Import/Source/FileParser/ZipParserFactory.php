@@ -33,6 +33,7 @@ class ZipParserFactory implements ParserFactoryInterface
         $sourceDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         $writeDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
 
+        $path = $sourceDirectory->getRelativePath($path);
         $this->assertFileExistance($path, $sourceDirectory);
 
         $zip = new \ZipArchive();

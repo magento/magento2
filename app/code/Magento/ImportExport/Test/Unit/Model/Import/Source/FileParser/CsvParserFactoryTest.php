@@ -55,6 +55,16 @@ class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testWhenAbsolutePathIsProvided_ParserIsCreated()
+    {
+        $factory = $this->createCsvParserFactory();
+
+        $this->assertCsvFile(
+            ['column1', 'column2', 'column3'],
+            $factory->create(__DIR__ . '/_files/test.csv')
+        );
+    }
+
     public function testWhenCustomDirectoryIsProvided_ParserIsCreatedFromIt()
     {
         $factory = $this->createCsvParserFactory();
