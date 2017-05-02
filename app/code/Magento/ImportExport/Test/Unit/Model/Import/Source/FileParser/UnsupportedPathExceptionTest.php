@@ -12,29 +12,29 @@ class UnsupportedPathExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testWhenNoArgumentsAreProvided_FileNameIsEmpty()
     {
-        $notSupportedPathException = new UnsupportedPathException();
+        $unsupportedPathException = new UnsupportedPathException();
 
-        $this->assertEmpty($notSupportedPathException->getPath());
+        $this->assertEmpty($unsupportedPathException->getPath());
     }
 
     public function testWhenFileNameIsProvided_FileNameCanBeRetrievedLater()
     {
-        $notSupportedPathException = new UnsupportedPathException('file.csv');
+        $unsupportedPathException = new UnsupportedPathException('file.csv');
 
-        $this->assertSame('file.csv', $notSupportedPathException->getPath());
+        $this->assertSame('file.csv', $unsupportedPathException->getPath());
     }
 
     public function testWhenMessageIsProvided_MessageCanBeRetrievedLater()
     {
-        $notSupportedPathException = new UnsupportedPathException('', 'My message');
+        $unsupportedPathException = new UnsupportedPathException('', 'My message');
 
-        $this->assertSame('My message', $notSupportedPathException->getMessage());
+        $this->assertSame('My message', $unsupportedPathException->getMessage());
     }
 
     public function testWhenNoMessageIsProvided_MessageIsGeneratedFromPath()
     {
-        $notSupportedPathException = new UnsupportedPathException('file.csv');
+        $unsupportedPathException = new UnsupportedPathException('file.csv');
 
-        $this->assertSame('Path "file.csv" is not supported', $notSupportedPathException->getMessage());
+        $this->assertSame('Path "file.csv" is not supported', $unsupportedPathException->getMessage());
     }
 }
