@@ -188,7 +188,7 @@
                         <attribute type="shared">1</attribute>
                     </field>
                     <field id="avs_international" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1">
-                        <label>International AVS Indicator Does Not Match</label>
+                        <label>Card Issuer Is Outside The United States</label>
                         <config_path>payment/payflowpro/avs_international</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <attribute type="shared">1</attribute>
