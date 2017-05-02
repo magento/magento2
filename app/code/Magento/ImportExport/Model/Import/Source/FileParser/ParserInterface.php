@@ -6,7 +6,6 @@
 
 namespace Magento\ImportExport\Model\Import\Source\FileParser;
 
-
 /**
  * File parser for import of source format
  *

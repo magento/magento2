@@ -6,7 +6,6 @@
 
 namespace Magento\ImportExport\Model\Import\Source\FileParser;
 
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
