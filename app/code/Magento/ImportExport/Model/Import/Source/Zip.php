@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * Zip import adapter.
+ *
+ * @deprecated
  */
 class Zip extends Csv
 {
