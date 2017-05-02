@@ -29,6 +29,8 @@ class FakeParserFactory implements ParserFactoryInterface
 
     private function findParserInMap($path)
     {
+        $path = $this->trimTemporaryFilePrefix($path);
+
         if (!isset($this->parser[$path])) {
             throw new UnsupportedPathException($path);
         }
@@ -36,8 +38,17 @@ class FakeParserFactory implements ParserFactoryInterface
         return $this->parser[$path];
     }
 
-    private function isParserMap(): bool
+    private function isParserMap()
     {
         return is_array($this->parser);
+    }
+
+    private function trimTemporaryFilePrefix($path)
+    {
+        if (strpos($path, 'tmp-') === 0) {
+            $path = preg_replace('/tmp-[a-z0-9]+-/i', '', $path);
+        }
+
+        return $path;
     }
 }
