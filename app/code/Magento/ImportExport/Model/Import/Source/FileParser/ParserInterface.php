@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ImportExport\Model\Import\Source;
+namespace Magento\ImportExport\Model\Import\Source\FileParser;
 
 
 /**
  * File parser for import of source format
  *
  */
-interface FileParserInterface
+interface ParserInterface
 {
     /**
      * Must return list of columns

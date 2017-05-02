@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ImportExport\Model\Import\Source;
+namespace Magento\ImportExport\Model\Import\Source\FileParser;
 
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class CsvFileParser implements FileParserInterface
+class CsvParser implements ParserInterface
 {
     /**
      * Enclosure for values in CSV file
@@ -34,11 +34,16 @@ class CsvFileParser implements FileParserInterface
     private $escape;
 
     /**
-     * Null character for parsing value
+     * List of CSV parsing options
      *
-     * @var string
+     * @var array
      */
-    private $nullPlaceholder;
+    private $options = [
+        'delimiter' => ',',
+        'enclosure' => '"',
+        'escape' => '\\',
+        'null' => null
+    ];
 
     /**
      * File reader
@@ -55,28 +60,16 @@ class CsvFileParser implements FileParserInterface
     private $columns;
 
     public function __construct(
-        $filePath,
-        Filesystem $filesystem,
-        $directoryCode = DirectoryList::ROOT,
-        $nullPlaceholder = null,
-        $enclosure = '"',
-        $delimiter = ',',
-        $escape = '\\'
+        Filesystem\File\ReadInterface $file,
+        $options = []
     ) {
-        $this->nullPlaceholder = $nullPlaceholder;
-        $this->enclosure = $enclosure;
-        $this->delimiter = $delimiter;
-        $this->escape = $escape;
-
-        $directory = $filesystem->getDirectoryRead($directoryCode);
-        if (!$directory->isFile($filePath)) {
-            throw new \InvalidArgumentException(
-                sprintf('File "%s" does not exists', $filePath)
-            );
-        }
-
-        $this->file = $directory->openFile($filePath);
+        $this->file = $file;
+        $this->options = $options + $this->options;
         $this->columns = $this->fetchCsvLine();
+
+        if ($this->columns === false) {
+            throw new \InvalidArgumentException('CSV file should contain at least 1 row');
+        }
     }
 
     public function getColumnNames()
@@ -101,24 +94,45 @@ class CsvFileParser implements FileParserInterface
         $this->fetchCsvLine();
     }
 
+
     private function fetchCsvLine()
     {
-        return $this->file->readCsv(0, $this->delimiter, $this->enclosure, $this->escape);
+        return $this->file->readCsv(
+            0,
+            $this->options['delimiter'],
+            $this->options['enclosure'],
+            $this->options['escape']
+        );
     }
 
     private function mapRowData($row)
     {
         $result = [];
         foreach ($this->columns as $index => $column) {
-            $value = isset($row[$index]) ? $row[$index] : '';
-
-            if ($this->nullPlaceholder && $value === $this->nullPlaceholder) {
-                $value = null;
-            }
-
-            $result[] = $value;
+            $result[] = $this->mapNullValue(
+                $this->extractRowValue($row, $index)
+            );
         }
         return $result;
+    }
+
+
+    public function __destruct()
+    {
+        $this->file->close();
+    }
+
+    private function mapNullValue($value)
+    {
+        if ($value === $this->options['null']) {
+            $value = null;
+        }
+        return $value;
+    }
+
+    private function extractRowValue($row, $index)
+    {
+        return (isset($row[$index]) ? $row[$index] : '');
     }
 
 }
