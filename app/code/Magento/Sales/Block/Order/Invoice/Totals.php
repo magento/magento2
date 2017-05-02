@@ -7,6 +7,9 @@ namespace Magento\Sales\Block\Order\Invoice;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * @api
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**

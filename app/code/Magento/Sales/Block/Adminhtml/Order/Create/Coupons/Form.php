@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Coupons;
 /**
  * Adminhtml sales order create coupons form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

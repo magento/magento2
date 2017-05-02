@@ -11,6 +11,9 @@ namespace Magento\Sales\Block\Widget\Guest;
 
 use Magento\Customer\Model\Context;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**

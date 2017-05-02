@@ -9,6 +9,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Cms page content block
+ *
+ * @api
  */
 class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     \Magento\Framework\DataObject\IdentityInterface

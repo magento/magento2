@@ -10,6 +10,7 @@ use Magento\Customer\Model\AccountManagement;
 /**
  * Customer register form block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Register extends \Magento\Directory\Block\Data

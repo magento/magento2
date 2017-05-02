@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tree extends Dbp

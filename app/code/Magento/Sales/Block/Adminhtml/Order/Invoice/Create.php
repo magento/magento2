@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
 
 /**
  * Adminhtml invoice create
+ *
+ * @api
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {

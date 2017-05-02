@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * Class ProductLimitation
+ *
+ * @api
  */
 class ProductLimitation implements \ArrayAccess
 {

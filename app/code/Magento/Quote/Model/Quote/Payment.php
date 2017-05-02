@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Quote payment information
  *
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Payment _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Payment getResource()
  * @method int getQuoteId()

@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Status;
 
+/**
+ * @api
+ */
 class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 /**
  * Edit order giftmessage block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Giftmessage extends \Magento\Backend\Block\Widget

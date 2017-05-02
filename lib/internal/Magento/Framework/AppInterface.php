@@ -8,6 +8,11 @@
 namespace Magento\Framework;
 
 /**
+ * Different magento entry points call corresponding applications after platform is bootstrapped.
+ * index.php in webroot calls HTTP application (implementation of this interface) as it is responsible for web requests.
+ * cron.php entry point calls cron application
+ * Implementations of this interface should implement application type specific initialization.
+ *
  * @api
  */
 interface AppInterface

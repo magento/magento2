@@ -5,6 +5,9 @@
  */
 namespace Magento\UrlRewrite\Block;
 
+/**
+ * @api
+ */
 class GridContainer extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

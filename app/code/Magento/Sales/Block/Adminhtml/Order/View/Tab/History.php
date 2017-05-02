@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order history tab
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

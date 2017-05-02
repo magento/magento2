@@ -11,11 +11,9 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Data collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ *
+ * @api
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {

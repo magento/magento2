@@ -7,6 +7,12 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\SearchCriteriaInterface as BaseSearchCriteriaInterface;
 
+/**
+ * Interface SearchCriteriaInterface
+ *
+ * @api
+ * @package Magento\Framework\Api\Search
+ */
 interface SearchCriteriaInterface extends BaseSearchCriteriaInterface
 {
     /**

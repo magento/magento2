@@ -9,6 +9,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Dashboard Customer Info
+ *
+ * @api
  */
 class Info extends \Magento\Framework\View\Element\Template
 {

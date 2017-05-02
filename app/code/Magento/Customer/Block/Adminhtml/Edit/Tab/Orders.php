@@ -9,6 +9,8 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 {

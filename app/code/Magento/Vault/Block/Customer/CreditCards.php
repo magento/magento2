@@ -9,6 +9,8 @@ use Magento\Vault\Model\CreditCardTokenFactory;
 
 /**
  * Class CreditCards
+ *
+ * @api
  */
 class CreditCards extends PaymentTokens
 {

@@ -10,6 +10,8 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
 
 /**
  * Newsletter queue edit block
+ *
+ * @api
  */
 class Edit extends \Magento\Backend\Block\Template
 {

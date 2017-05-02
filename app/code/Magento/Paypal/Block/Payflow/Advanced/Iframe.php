@@ -7,6 +7,8 @@ namespace Magento\Paypal\Block\Payflow\Advanced;
 
 /**
  * Payflow Advanced iframe block
+ *
+ * @api
  */
 class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
 {

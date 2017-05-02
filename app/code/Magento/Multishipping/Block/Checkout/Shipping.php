@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Mustishipping checkout shipping
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends \Magento\Sales\Block\Items\AbstractItems

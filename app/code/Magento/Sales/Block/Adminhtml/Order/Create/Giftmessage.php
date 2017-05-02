@@ -10,6 +10,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Adminhtml order create gift message block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

@@ -7,6 +7,9 @@
  */
 namespace Magento\GroupedProduct\Block\Adminhtml\Items\Column\Name;
 
+/**
+ * @api
+ */
 class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {
     const COLUMN_NAME = 'name';

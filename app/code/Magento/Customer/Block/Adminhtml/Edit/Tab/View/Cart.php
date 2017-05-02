@@ -12,6 +12,8 @@ use Magento\Directory\Model\Currency;
  * Adminhtml customer cart items grid block
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ *
+ * @api
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {

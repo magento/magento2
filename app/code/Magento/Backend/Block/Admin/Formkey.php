@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\Admin;
 
+/**
+ * @api
+ */
 class Formkey extends \Magento\Backend\Block\Template
 {
     /**

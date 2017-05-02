@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order information tab
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements

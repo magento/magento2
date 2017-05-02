@@ -17,6 +17,7 @@ use Magento\Sales\Model\AbstractModel;
  * Tracks transaction history, allows to build transactions hierarchy
  * By default transactions are saved as closed.
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction getResource()
 

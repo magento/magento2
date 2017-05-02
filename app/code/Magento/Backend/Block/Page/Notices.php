@@ -13,6 +13,9 @@
  */
 namespace Magento\Backend\Block\Page;
 
+/**
+ * @api
+ */
 class Notices extends \Magento\Backend\Block\Template
 {
     /**

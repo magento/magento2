@@ -9,6 +9,8 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer view wishlist block
+ *
+ * @api
  */
 class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
 {

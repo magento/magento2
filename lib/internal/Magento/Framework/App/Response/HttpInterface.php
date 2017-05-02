@@ -1,12 +1,15 @@
 <?php
 /**
- * HTTP response interface
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response;
 
+/**
+ * HTTP response interface
+ *
+ * @api
+ */
 interface HttpInterface extends \Magento\Framework\App\ResponseInterface
 {
     /**

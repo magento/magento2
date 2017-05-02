@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Variable\Model\Variable;
 
 /**
  * Variable Wysiwyg Plugin Config
  *
  * @api
  */
-namespace Magento\Variable\Model\Variable;
-
 class Config
 {
     /**

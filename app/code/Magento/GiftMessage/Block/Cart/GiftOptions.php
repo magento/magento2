@@ -9,6 +9,9 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Json\Encoder;
 use Magento\GiftMessage\Model\CompositeConfigProvider;
 
+/**
+ * @api
+ */
 class GiftOptions extends \Magento\Backend\Block\Template
 {
     /**

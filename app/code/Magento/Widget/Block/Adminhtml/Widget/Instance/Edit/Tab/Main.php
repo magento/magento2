@@ -11,6 +11,9 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * @api
+ */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**

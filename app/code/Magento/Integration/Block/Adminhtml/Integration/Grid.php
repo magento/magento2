@@ -10,6 +10,7 @@ namespace Magento\Integration\Block\Adminhtml\Integration;
 use Magento\Backend\Block\Widget\Grid as BackendGrid;
 
 /**
+ * @api
  * @codeCoverageIgnore
  */
 class Grid extends BackendGrid

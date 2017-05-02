@@ -12,6 +12,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Class SelectFactory
+ *
+ * @api
  */
 class SelectFactory
 {

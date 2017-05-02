@@ -13,6 +13,9 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
+/**
+ * @api
+ */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**

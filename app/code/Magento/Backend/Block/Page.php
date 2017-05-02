@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class Page extends \Magento\Backend\Block\Template
 {
     /**

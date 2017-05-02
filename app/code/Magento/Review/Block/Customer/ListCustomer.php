@@ -10,6 +10,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer Reviews list block
+ *
+ * @api
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {

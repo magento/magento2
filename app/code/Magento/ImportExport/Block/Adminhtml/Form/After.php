@@ -9,6 +9,9 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Form;
 
+/**
+ * @api
+ */
 class After extends \Magento\Backend\Block\Template
 {
     /**

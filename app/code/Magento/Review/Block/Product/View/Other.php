@@ -7,6 +7,8 @@ namespace Magento\Review\Block\Product\View;
 
 /**
  * Product view other block
+ *
+ * @api
  */
 class Other extends \Magento\Framework\View\Element\Template
 {

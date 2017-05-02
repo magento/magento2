@@ -8,7 +8,7 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 /**
  * Uploader block for Wysiwyg Images
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Uploader extends \Magento\Backend\Block\Media\Uploader
 {

@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
 
 /**
  * Adminhtml sales item renderer
+ *
+ * @api
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

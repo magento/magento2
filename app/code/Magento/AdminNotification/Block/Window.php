@@ -7,6 +7,9 @@
  */
 namespace Magento\AdminNotification\Block;
 
+/**
+ * @api
+ */
 class Window extends \Magento\Backend\Block\Template
 {
     /**

@@ -17,6 +17,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
 /**
  * Item price render block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Renderer extends \Magento\Framework\View\Element\Template

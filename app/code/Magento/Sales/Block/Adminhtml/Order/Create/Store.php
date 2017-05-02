@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 /**
  * Adminhtml sales order create select store block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Store extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

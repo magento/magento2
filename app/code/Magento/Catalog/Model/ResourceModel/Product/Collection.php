@@ -24,7 +24,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\Fronten
  * Product collection
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

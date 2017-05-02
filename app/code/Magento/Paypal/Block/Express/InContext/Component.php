@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Component
+ *
+ * @api
  */
 class Component extends Template
 {

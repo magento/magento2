@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 /**
  * Sales Order Email items default renderer
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class DefaultOrder extends \Magento\Framework\View\Element\Template

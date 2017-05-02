@@ -7,6 +7,8 @@ namespace Magento\Shipping\Block\Adminhtml\Create;
 
 /**
  * Adminhtml shipment items grid
+ *
+ * @api
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

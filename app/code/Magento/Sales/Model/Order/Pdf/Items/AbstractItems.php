@@ -9,6 +9,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order Pdf Items renderer Abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel

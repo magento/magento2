@@ -14,6 +14,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
 /**
  * Class Link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface

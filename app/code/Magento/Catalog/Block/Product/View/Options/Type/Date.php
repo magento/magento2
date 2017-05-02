@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
 /**
  * Product options text type block
  *
- * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
  */
 class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {

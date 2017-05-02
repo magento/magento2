@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Sales order details block
+ *
+ * @api
  */
 class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 {

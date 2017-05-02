@@ -11,6 +11,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Resource setup model with methods needed for migration process between Magento versions
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Category;
 
 /**
  * Product View block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface

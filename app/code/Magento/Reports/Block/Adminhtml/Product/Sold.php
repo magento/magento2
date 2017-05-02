@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Product;
 /**
  * Backend Report Sold Product Content Block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Sold extends \Magento\Backend\Block\Widget\Grid\Container

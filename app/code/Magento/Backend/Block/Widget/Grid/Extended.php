@@ -8,6 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * @api
+ * @deprecated
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
