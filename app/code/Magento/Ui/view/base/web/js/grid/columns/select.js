@@ -55,6 +55,10 @@ define([
         flatOptions: function (options) {
             var self = this;
 
+            if (!Array.isArray(options)) {
+                options = _.values(options);
+            }
+
             return options.reduce(function (opts, option) {
                 if (_.isArray(option.value)) {
                     opts = opts.concat(self.flatOptions(option.value));
