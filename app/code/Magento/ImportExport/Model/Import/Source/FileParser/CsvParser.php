@@ -12,27 +12,6 @@ use Magento\Framework\Filesystem;
 class CsvParser implements ParserInterface
 {
     /**
-     * Enclosure for values in CSV file
-     *
-     * @var string
-     */
-    private $enclosure;
-
-    /**
-     * Column delimiter
-     *
-     * @var string
-     */
-    private $delimiter;
-
-    /**
-     * Escape sequence character
-     *
-     * @var string
-     */
-    private $escape;
-
-    /**
      * List of CSV parsing options
      *
      * @var array
