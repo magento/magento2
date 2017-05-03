@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
+/**
+ * @api
+ */
 class Edit extends \Magento\Framework\View\Element\Template
 {
     /**

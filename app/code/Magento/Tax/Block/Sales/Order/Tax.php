@@ -11,6 +11,9 @@ namespace Magento\Tax\Block\Sales\Order;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * @api
+ */
 class Tax extends \Magento\Framework\View\Element\Template
 {
     /**
