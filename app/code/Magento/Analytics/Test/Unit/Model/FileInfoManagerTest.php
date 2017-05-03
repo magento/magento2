@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\Model;
 use Magento\Analytics\Model\FileInfo;
 use Magento\Analytics\Model\FileInfoFactory;
 use Magento\Analytics\Model\FileInfoManager;
-use Magento\Analytics\Model\FlagManager;
+use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

@@ -14,7 +14,6 @@ use Magento\Integration\Model\Integration;
 
 /**
  * Class RecreatedIntegration to display message when a config-based integration needs to be reactivated
- *
  */
 class RecreatedIntegration implements \Magento\Framework\Notification\MessageInterface
 {

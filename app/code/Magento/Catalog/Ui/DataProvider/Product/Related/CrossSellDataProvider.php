@@ -7,6 +7,8 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 
 /**
  * Class CrossSellDataProvider
+ *
+ * @api
  */
 class CrossSellDataProvider extends AbstractDataProvider
 {

@@ -32,6 +32,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected $fields;
 
     /**
+     * Temporary media path.
+     *
+     * @var string
+     */
+    protected $mediaPathTmp = '/pub/media/tmp/catalog/product/';
+
+    /**
      * Product website.
      *
      * @var array
@@ -288,6 +295,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $this->prepareCustomOptionsData();
         $this->prepareAutosetting();
         $this->prepareCustomAttributes();
+        if (isset($this->fields['product']['media_gallery'])) {
+            $this->fields['product']['media_gallery']
+                = $this->prepareMediaGallery($this->fields['product']['media_gallery']);
+        }
 
         $this->fields['product'] = $this->replaceMappingData($this->fields['product']);
         return $this->fields;
@@ -352,7 +363,20 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareAttributeSet()
     {
-        if ($this->fixture->hasData('attribute_set_id')) {
+        if (
+            $this->fixture->hasData('attribute_set_id')
+            && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
+            && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
+        ) {
+            $this->fields['product']['attribute_set_id'] = $this->fixture
+                ->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()
+                ->getAttributeSetId();
+        } else if (
+            $this->fixture->hasData('attribute_set_id')
+            && !empty($this->fixture->getDataFieldConfig('attribute_set_id')['source'])
+            && $this->fixture->getDataFieldConfig('attribute_set_id')['source']->getAttributeSet()
+        ) {
             $this->fields['product']['attribute_set_id'] = $this->fixture
                 ->getDataFieldConfig('attribute_set_id')['source']
                 ->getAttributeSet()
@@ -420,13 +444,14 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function prepareWebsites()
     {
         if (!empty($this->fields['product']['website_ids'])) {
+            unset($this->fields['product']['website_ids']);
             foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
-                $this->fields['product']['extension_attributes']['website_ids'][$key] = $website->getWebsiteId();
+                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
             }
         } else {
             $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
                 ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
-            $this->fields['product']['extension_attributes']['website_ids'][] = $website->getWebsiteId();
+            $this->fields['product']['website_ids'][] = $website->getWebsiteId();
         }
     }
 
@@ -614,5 +639,50 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             $this->fields['product'][$attributeLabel] = $this->fields['product']['fpt'];
             unset($this->fields['product']['fpt']);
         }
+    }
+
+    /**
+     * Create test image file.
+     *
+     * @param string $filename
+     * @return array
+     */
+    protected function prepareMediaGallery($filename)
+    {
+        $filePath = $this->getFullPath($filename);
+
+        if (!file_exists($filePath)) {
+            $image = imagecreate(300, 200);
+            $colorYellow = imagecolorallocate($image, 255, 255, 0);
+            imagefilledrectangle($image, 50, 50, 250, 150, $colorYellow);
+            $directory = dirname($filePath);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }
+            imagejpeg($image, $filePath);
+            imagedestroy($image);
+        }
+
+        return [
+            'images' => [
+                0 => [
+                    'position' => 1,
+                    'file' => $filename,
+                    'disabled' => 0,
+                    'label' => $filename,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Gets full path based on filename.
+     *
+     * @param string $filename
+     * @return string
+     */
+    private function getFullPath($filename)
+    {
+        return BP . $this->mediaPathTmp . $filename;
     }
 }

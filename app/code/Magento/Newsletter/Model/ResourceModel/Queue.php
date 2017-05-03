@@ -12,6 +12,8 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
  * Newsletter queue resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

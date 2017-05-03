@@ -8,6 +8,8 @@ namespace Magento\CustomerImportExport\Model\Export;
 /**
  * Export entity customer model
  *
+ * @api
+ *
  * @method \Magento\Customer\Model\ResourceModel\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
 class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav

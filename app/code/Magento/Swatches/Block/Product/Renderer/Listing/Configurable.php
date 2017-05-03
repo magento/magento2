@@ -8,8 +8,7 @@ namespace Magento\Swatches\Block\Product\Renderer\Listing;
 /**
  * Swatch renderer block in Category page
  *
- * @codeCoverageIgnore
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
@@ -27,7 +26,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     protected function getHtmlOutput()
     {
         $output = '';
-        if ($this->isProductHasSwatchAttribute) {
+        if ($this->isProductHasSwatchAttribute()) {
             $output = parent::getHtmlOutput();
         }
 

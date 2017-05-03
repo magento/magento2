@@ -149,9 +149,7 @@ EXPECTED_RESULT;
 
         $stub->expects($this->once())
             ->method('bar')
-            ->will($this->returnCallback(function ($arg) {
-                return serialize($arg);
-            }));
+            ->willReturn('Mocked Method Return');
 
         return [
             'no variables' => [
@@ -177,14 +175,7 @@ EXPECTED_RESULT;
                     'b' => 'bee',
                     'd' => 'dee',
                 ],
-                serialize([
-                    'param_1' => 'value_1',
-                    'param_2' => 'lorem',
-                    'param_3' => [
-                        'a' => 'bee',
-                        'c' => 'dee',
-                    ],
-                ]),
+                'Mocked Method Return'
             ],
         ];
     }

@@ -9,10 +9,9 @@ namespace Magento\Analytics\ReportXml\DB\Assembler;
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Analytics\ReportXml\DB\NameResolver;
+use Magento\Framework\App\ResourceConnection;
 
 /**
- * Class FromAssembler
- *
  * Assembles FROM condition
  */
 class FromAssembler implements AssemblerInterface
@@ -28,17 +27,23 @@ class FromAssembler implements AssemblerInterface
     private $columnsResolver;
 
     /**
-     * FromAssembler constructor.
-     *
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param NameResolver $nameResolver
      * @param ColumnsResolver $columnsResolver
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         NameResolver $nameResolver,
-        ColumnsResolver $columnsResolver
+        ColumnsResolver $columnsResolver,
+        ResourceConnection $resourceConnection
     ) {
         $this->nameResolver = $nameResolver;
         $this->columnsResolver = $columnsResolver;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -52,8 +57,9 @@ class FromAssembler implements AssemblerInterface
     {
         $selectBuilder->setFrom(
             [
-                $this->nameResolver->getAlias($queryConfig['source'])
-                    => $this->nameResolver->getName($queryConfig['source'])
+                $this->nameResolver->getAlias($queryConfig['source']) =>
+                    $this->resourceConnection
+                        ->getTableName($this->nameResolver->getName($queryConfig['source'])),
             ]
         );
         $columns = $this->columnsResolver->getColumns($selectBuilder, $queryConfig['source']);

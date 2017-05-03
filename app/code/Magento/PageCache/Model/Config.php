@@ -9,17 +9,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
 
 /**
  * Model is responsible for replacing default vcl template
  * file configuration with user-defined from configuration
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-
-/**
- * Class Config
- *
  */
 class Config
 {
@@ -83,10 +77,16 @@ class Config
     private $serializer;
 
     /**
+     * @var VclGeneratorFactory
+     */
+    private $vclGeneratorFactory;
+
+    /**
      * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param Dir\Reader $reader
+     * @param VclGeneratorFactory $vclGeneratorFactory
      * @param Json|null $serializer
      */
     public function __construct(
@@ -94,6 +94,7 @@ class Config
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Module\Dir\Reader $reader,
+        VclGeneratorFactory $vclGeneratorFactory,
         Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
@@ -101,6 +102,7 @@ class Config
         $this->_cacheState = $cacheState;
         $this->reader = $reader;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->vclGeneratorFactory = $vclGeneratorFactory;
     }
 
     /**
@@ -108,6 +110,7 @@ class Config
      *
      * @return int
      * @api
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getType()
     {
@@ -119,6 +122,7 @@ class Config
      *
      * @return int
      * @api
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getTtl()
     {
@@ -130,22 +134,37 @@ class Config
      *
      * @param string $vclTemplatePath
      * @return string
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      * @api
      */
     public function getVclFile($vclTemplatePath)
     {
-        $moduleEtcPath = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_PageCache');
-        $configFilePath = $moduleEtcPath . '/' . $this->_scopeConfig->getValue($vclTemplatePath);
-        $directoryRead = $this->readFactory->create($moduleEtcPath);
-        $configFilePath = $directoryRead->getRelativePath($configFilePath);
-        $data = $directoryRead->readFile($configFilePath);
-        return strtr($data, $this->_getReplacements());
+        $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
+        $designExceptions = $this->_scopeConfig->getValue(
+            self::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        $version = $vclTemplatePath === self::VARNISH_5_CONFIGURATION_PATH ? 5 : 4;
+        $sslOffloadedHeader = $this->_scopeConfig->getValue(
+            \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER
+        );
+        $vclGenerator = $this->vclGeneratorFactory->create([
+            'backendHost' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
+            'backendPort' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
+            'accessList' => $accessList ? explode(',', $accessList) : [],
+            'designExceptions' => $designExceptions ? $this->serializer->unserialize($designExceptions) : [],
+            'sslOffloadedHeader' => $sslOffloadedHeader,
+            'gracePeriod' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
+        ]);
+        return $vclGenerator->generateVcl($version);
     }
 
     /**
      * Prepare data for VCL config
      *
      * @return array
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getReplacements()
     {
@@ -175,6 +194,7 @@ class Config
      *  "127.0.0.2";
      *
      * @return mixed|null|string
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getAccessList()
     {
@@ -199,6 +219,7 @@ class Config
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getDesignExceptions()
     {
@@ -231,6 +252,7 @@ class Config
      *
      * @return bool
      * @api
+     * @deprecated see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function isEnabled()
     {

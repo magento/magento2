@@ -151,4 +151,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Downloadable\Model\ResourceModel\Indexer\Price">
+        <arguments>
+            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
 </config>

@@ -5,6 +5,8 @@
 
 /**
  * Checkout adapter for customer data storage
+ *
+ * @api
  */
 define([
     'jquery',

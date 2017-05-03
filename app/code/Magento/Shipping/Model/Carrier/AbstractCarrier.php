@@ -13,6 +13,8 @@ use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Class AbstractCarrier
+ *
+ * @api
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {

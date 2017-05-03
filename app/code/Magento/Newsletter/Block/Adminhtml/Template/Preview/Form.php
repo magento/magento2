@@ -11,6 +11,9 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template\Preview;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

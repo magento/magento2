@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model;
+
+use Magento\Framework\FlagManager;
 
 /**
  * Class NotificationTime
@@ -24,7 +25,7 @@ class NotificationTime
     /**
      * NotificationTime constructor.
      *
-     * @param \Magento\Analytics\Model\FlagManager $flagManager
+     * @param FlagManager $flagManager
      */
     public function __construct(
         FlagManager $flagManager

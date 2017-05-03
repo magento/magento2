@@ -76,7 +76,7 @@ class IntegrationManager
     /**
      * This method execute Generate Token command and enable integration
      *
-     * @return bool|string
+     * @return bool|\Magento\Integration\Model\Oauth\Token
      */
     public function generateToken()
     {

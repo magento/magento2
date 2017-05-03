@@ -35,6 +35,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method string getOrigTemplateVariables()
  * @method \Magento\Email\Model\Template setOrigTemplateVariables(string $value)
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template extends AbstractTemplate implements \Magento\Framework\Mail\TemplateInterface

@@ -12,7 +12,8 @@ return [
         ],
     ],
     /**
-     * The configuration file doesn't contain sensitive data for security reasons.
+     * Shared configuration was written to config.php and system-specific configuration to env.php.
+     * Shared configuration file (config.php) doesn't contain sensitive data for security reasons.
      * Sensitive data can be stored in the following environment variables:
      * CONFIG__DEFAULT__SOME__PAYMENT__PASSWORD for some/payment/password
      */

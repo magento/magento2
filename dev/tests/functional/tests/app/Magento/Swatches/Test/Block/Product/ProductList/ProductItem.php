@@ -22,6 +22,13 @@ class ProductItem extends CatalogProductItem
     protected $swatchSelector = 'div[option-id="%s"]';
 
     /**
+     * Selector for the swatches of the product.
+     *
+     * @var string
+     */
+    protected $swatchBlockSelector = '.swatch-attribute-options';
+
+    /**
      * Fill product options on category page.
      *
      * @param \Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct $product
@@ -69,5 +76,15 @@ class ProductItem extends CatalogProductItem
     {
         $this->_rootElement->hover();
         parent::clickAddToCart();
+    }
+
+    /**
+     * Check swatches visibility.
+     *
+     * @return bool
+     */
+    public function isSwatchesBlockVisible()
+    {
+        return $this->_rootElement->find($this->swatchBlockSelector)->isVisible();
     }
 }

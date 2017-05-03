@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 /**
  * Create order comment form
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate

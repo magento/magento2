@@ -6,16 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="carriers/usps/userid" xsi:type="string">1</item>
-                <item name="carriers/usps/password" xsi:type="string">1</item>
-                <item name="carriers/usps/gateway_url" xsi:type="string">1</item>
-                <item name="carriers/usps/gateway_secure_url" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">

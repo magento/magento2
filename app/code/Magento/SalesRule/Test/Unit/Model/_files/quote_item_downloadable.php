@@ -54,7 +54,7 @@ return [
     'weee_tax_row_disposition' => '0.0000',
     'base_weee_tax_disposition' => '0.0000',
     'base_weee_tax_row_disposition' => '0.0000',
-    'weee_tax_applied' => 'a:0:{}',
+    'weee_tax_applied' => '[]',
     'weee_tax_applied_amount' => '0.0000',
     'weee_tax_applied_row_amount' => '0.0000',
     'base_weee_tax_applied_amount' => '0.0000',

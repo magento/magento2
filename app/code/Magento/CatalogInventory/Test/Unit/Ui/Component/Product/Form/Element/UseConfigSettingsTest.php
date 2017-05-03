@@ -36,21 +36,7 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $processorMock = $this->getMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
-        $processorMock->expects($this->once())
-            ->method('register');
         $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
-        $this->contextMock->expects($this->any())
-            ->method('getProcessor')
-            ->willReturn($processorMock);
         $this->serializerMock = $this->getMock(Json::class);
         $this->useConfigSettings = $this->objectManagerHelper->getObject(
             UseConfigSettings::class,
@@ -63,6 +49,16 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepare()
     {
+        $processorMock = $this->getMock(
+            \Magento\Framework\View\Element\UiComponent\Processor::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $processorMock->expects($this->atLeastOnce())->method('register');
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         $config = ['valueFromConfig' => 123];
         $this->useConfigSettings->setData('config', $config);
         $this->useConfigSettings->prepare();
@@ -77,6 +73,16 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareSource(array $expectedResult, $sourceValue, $serializedCallCount = 0)
     {
+        $processorMock = $this->getMock(
+            \Magento\Framework\View\Element\UiComponent\Processor::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $processorMock->expects($this->atLeastOnce())->method('register');
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         /** @var ValueSourceInterface|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMock(ValueSourceInterface::class);
         $source->expects($this->once())

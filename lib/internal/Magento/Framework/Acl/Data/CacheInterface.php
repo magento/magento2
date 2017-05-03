@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Acl\Data;
 
+/**
+ * Interface for caching ACL data
+ */
 interface CacheInterface extends \Magento\Framework\Cache\FrontendInterface
 {
 }

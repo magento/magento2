@@ -8,7 +8,7 @@ namespace Magento\Captcha\Model;
 /**
  * Implementation of \Zend\Captcha\Image
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
 {

@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Exception;
 
+/**
+ * @api
+ */
 class AuthenticationException extends LocalizedException
 {
     /**

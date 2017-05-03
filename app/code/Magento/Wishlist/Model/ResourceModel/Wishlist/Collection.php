@@ -11,6 +11,9 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel\Wishlist;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

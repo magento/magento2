@@ -9,9 +9,7 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Store\App\Config\Type\Scopes;
 
 /**
- * Fallback throguh different scopes and merge them
- *
- * @package Magento\Store\Model\Config\Processor
+ * Fallback through different scopes and merge them
  */
 class Fallback implements PostProcessorInterface
 {

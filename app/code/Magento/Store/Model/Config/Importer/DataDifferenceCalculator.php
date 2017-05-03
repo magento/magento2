@@ -38,11 +38,11 @@ class DataDifferenceCalculator
     public function getItemsToDelete($scope, array $data)
     {
         $data = $this->changeDataKeyToCode($data);
-        $runtimeGroupsData = $this->changeDataKeyToCode(
+        $runtimeScopeData = $this->changeDataKeyToCode(
             $this->getRuntimeData($scope)
         );
 
-        return array_diff_key($runtimeGroupsData, $data);
+        return array_diff_key($runtimeScopeData, $data);
     }
 
     /**
@@ -55,11 +55,11 @@ class DataDifferenceCalculator
     public function getItemsToCreate($scope, array $data)
     {
         $data = $this->changeDataKeyToCode($data);
-        $runtimeGroupsData = $this->changeDataKeyToCode(
+        $runtimeScopeData = $this->changeDataKeyToCode(
             $this->getRuntimeData($scope)
         );
 
-        return array_diff_key($data, $runtimeGroupsData);
+        return array_diff_key($data, $runtimeScopeData);
     }
 
     /**
@@ -71,22 +71,22 @@ class DataDifferenceCalculator
      */
     public function getItemsToUpdate($scope, array $data)
     {
-        $groupsToUpdate = [];
+        $itemsToUpdate = [];
         $data = $this->changeDataKeyToCode($data);
         $data = $this->setDefaultValues($scope, $data);
-        $runtimeGroupsData = $this->changeDataKeyToCode(
+        $runtimeScopeData = $this->changeDataKeyToCode(
             $this->getRuntimeData($scope)
         );
 
-        foreach ($runtimeGroupsData as $groupCode => $groupData) {
+        foreach ($runtimeScopeData as $entityCode => $entityData) {
             if (
-                isset($data[$groupCode]) && array_diff_assoc($groupData, $data[$groupCode])
+                isset($data[$entityCode]) && array_diff_assoc($entityData, $data[$entityCode])
             ) {
-                $groupsToUpdate[$groupCode] = array_replace($groupData, $data[$groupCode]);
+                $itemsToUpdate[$entityCode] = array_replace($entityData, $data[$entityCode]);
             }
         }
 
-        return $groupsToUpdate;
+        return $itemsToUpdate;
     }
 
     /**
@@ -111,12 +111,12 @@ class DataDifferenceCalculator
                 break;
         }
 
-        foreach ($data as $groupCode => $groupData) {
+        foreach ($data as $entityCode => $entityData) {
             foreach ($fieldset as $field) {
-                $groupData[$field] = !empty($groupData[$field]) ? $groupData[$field] : '0';
+                $entityData[$field] = !empty($entityData[$field]) ? $entityData[$field] : '0';
             }
 
-            $data[$groupCode] = $groupData;
+            $data[$entityCode] = $entityData;
         }
 
         return $data;

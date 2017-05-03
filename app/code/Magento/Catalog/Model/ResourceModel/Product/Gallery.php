@@ -9,6 +9,8 @@ use Magento\Store\Model\Store;
 
 /**
  * Catalog product media gallery resource model.
+ *
+ * @api
  */
 class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

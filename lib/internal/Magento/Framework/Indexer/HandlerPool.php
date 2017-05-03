@@ -8,6 +8,9 @@ namespace Magento\Framework\Indexer;
 use Magento\Framework\Indexer\Handler\DefaultHandler;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api Instantiate save handler when implementing custom Indexer\Action
+ */
 class HandlerPool
 {
     /**
