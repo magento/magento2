@@ -6,7 +6,6 @@
 
 namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
 
-
 use Magento\ImportExport\Model\Import\Source\File;
 use Magento\ImportExport\Test\Unit\Model\Import\Source\FileParser\FakeParser;
 
@@ -109,6 +108,4 @@ class FileTest extends \PHPUnit_Framework_TestCase
             $file->current()
         );
     }
-
-
 }

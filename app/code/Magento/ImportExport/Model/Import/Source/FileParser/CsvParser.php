@@ -72,7 +72,6 @@ class CsvParser implements ParserInterface
         $this->fetchCsvLine();
     }
 
-
     private function fetchCsvLine()
     {
         return $this->file->readCsv(
@@ -94,7 +93,6 @@ class CsvParser implements ParserInterface
         return $result;
     }
 
-
     public function __destruct()
     {
         $this->file->close();
@@ -112,5 +110,4 @@ class CsvParser implements ParserInterface
     {
         return (isset($row[$index]) ? $row[$index] : '');
     }
-
 }

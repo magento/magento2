@@ -37,7 +37,7 @@ class CsvParserFactory implements ParserFactoryInterface
     {
         $directoryCode = $options['directory_code'] ?? DirectoryList::ROOT;
 
-        if (substr($filePath,-4) !== '.csv') {
+        if (substr($filePath, -4) !== '.csv') {
             throw new UnsupportedPathException($filePath);
         }
 

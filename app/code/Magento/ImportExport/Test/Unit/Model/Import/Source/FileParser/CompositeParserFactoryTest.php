@@ -61,6 +61,4 @@ class CompositeParserFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($expectedParser, $compositeFactory->create('file.csv'));
     }
-
-
 }

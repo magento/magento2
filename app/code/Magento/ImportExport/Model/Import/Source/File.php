@@ -28,6 +28,4 @@ class File extends AbstractSource
         $this->parser->reset();
         parent::rewind();
     }
-
-
 }

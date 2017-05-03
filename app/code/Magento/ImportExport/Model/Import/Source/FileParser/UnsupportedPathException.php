@@ -21,5 +21,4 @@ class UnsupportedPathException extends \RuntimeException
     {
         return $this->path;
     }
-
 }

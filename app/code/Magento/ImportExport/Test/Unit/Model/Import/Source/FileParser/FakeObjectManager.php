@@ -58,5 +58,4 @@ class FakeObjectManager implements ObjectManagerInterface
         }
         return $arguments;
     }
-
 }

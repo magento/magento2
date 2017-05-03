@@ -14,7 +14,6 @@ class FakeParser implements ParserInterface
     private $columns;
     private $position;
 
-
     public function __construct(array $columns = [], array $rows = [])
     {
         $this->columns = $columns;
@@ -46,5 +45,4 @@ class FakeParser implements ParserInterface
     {
         return !isset($this->rows[$this->position]);
     }
-
 }

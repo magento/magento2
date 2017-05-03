@@ -19,8 +19,7 @@ class ZipParserFactory implements ParserFactoryInterface
         Filesystem $filesystem,
         ParserFactoryInterface $parserFactory,
         $isZipAvailable = null
-    )
-    {
+    ) {
         $this->filesystem = $filesystem;
         $this->parserFactory = $parserFactory;
         $this->isZipAvailable = $isZipAvailable ?? extension_loaded('zip');
