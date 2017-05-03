@@ -16,6 +16,7 @@ use Magento\Cms\Helper\Page as PageHelper;
 /**
  * Cms Page Model
  *
+ * @api
  * @method ResourceCmsPage _getResource()
  * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)

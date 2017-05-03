@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
 /**
  * Adminhtml creditmemo create
+ *
+ * @api
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {

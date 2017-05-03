@@ -11,6 +11,9 @@ namespace Magento\Sales\Block\Order\Info;
 
 use Magento\Customer\Model\Context;
 
+/**
+ * @api
+ */
 class Buttons extends \Magento\Framework\View\Element\Template
 {
     /**

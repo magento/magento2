@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Multishipping checkout overview information
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Overview extends \Magento\Sales\Block\Items\AbstractItems

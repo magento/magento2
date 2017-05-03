@@ -8,6 +8,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
 /**
  * Bundle option multi select type renderer
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi

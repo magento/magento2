@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml;
 /**
  * Adminhtml sales transactions block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Transactions extends \Magento\Backend\Block\Widget\Grid\Container
