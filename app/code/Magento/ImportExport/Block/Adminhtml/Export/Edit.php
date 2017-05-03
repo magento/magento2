@@ -11,6 +11,9 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
+/**
+ * @api
+ */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * @api
+ */
 class Element extends \Magento\Framework\Simplexml\Element
 {
     /**

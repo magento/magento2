@@ -9,6 +9,9 @@
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme;
 
+/**
+ * @api
+ */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

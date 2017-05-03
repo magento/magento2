@@ -8,6 +8,8 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
 /**
  * Wishlist block customer item cart column
+ *
+ * @api
  */
 class Cart extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
 {
