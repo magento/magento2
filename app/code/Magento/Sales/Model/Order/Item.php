@@ -2392,4 +2392,14 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     //@codeCoverageIgnoreEnd
+
+    /**
+     * Check if it is possible to process item after cancellation
+     *
+     * @return bool
+     */
+    public function isProcessingAvailable()
+    {
+        return $this->getQtyToShip() > $this->getQtyToCancel();
+    }
 }
