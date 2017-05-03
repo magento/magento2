@@ -33,14 +33,14 @@ define([
 
     if ($.isEmptyObject(getData())) {
         checkoutData = {
-            'selectedShippingAddress': null, //Selected shipping address pullled from persistence storage.
-            'shippingAddressFromData': null, //Shipping address pullled from persistence storage.
-            'newCustomerShippingAddress': null, //Shipping address pullled from persistence storage for new customer.
+            'selectedShippingAddress': null, //Selected shipping address pulled from persistence storage.
+            'shippingAddressFromData': null, //Shipping address pulled from persistence storage.
+            'newCustomerShippingAddress': null, //Shipping address pulled from persistence storage for new customer.
             'selectedShippingRate': null, //Shipping rate pulled from persistence storage.
             'selectedPaymentMethod': null, //Payment method pulled from persistence storage.
-            'selectedBillingAddress': null, //Selected billing address pullled from persistence storage.
-            'billingAddressFromData': null, //Billing address pullled from persistence storage.
-            'newCustomerBillingAddress': null //Billing address pullled from persistence storage for new customer.
+            'selectedBillingAddress': null, //Selected billing address pulled from persistence storage.
+            'billingAddressFromData': null, //Billing address pulled from persistence storage.
+            'newCustomerBillingAddress': null //Billing address pulled from persistence storage for new customer.
         };
         saveData(checkoutData);
     }
