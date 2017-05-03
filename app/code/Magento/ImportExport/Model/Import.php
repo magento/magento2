@@ -785,7 +785,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected function getSourceAdapterOptions()
     {
         return [
-            'delimiter' => $this->getData(self::FIELD_FIELD_SEPARATOR)
+            'delimiter' => $this->getData(self::FIELD_FIELD_SEPARATOR) ?: ','
         ];
     }
 }

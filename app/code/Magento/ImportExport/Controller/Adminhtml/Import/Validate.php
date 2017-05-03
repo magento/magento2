@@ -131,7 +131,7 @@ class Validate extends ImportResultController
     protected function getSourceAdapterOptions($data)
     {
         return [
-            'delimiter' => $data[Import::FIELD_FIELD_SEPARATOR]
+            'delimiter' => $data[Import::FIELD_FIELD_SEPARATOR] ?: ','
         ];
     }
 }
