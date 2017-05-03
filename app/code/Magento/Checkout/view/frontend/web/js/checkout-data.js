@@ -39,7 +39,7 @@ define([
             'selectedShippingRate': null,
             'selectedPaymentMethod': null,
             'selectedBillingAddress': null,
-            'billingAddressFormData': null,
+            'billingAddressFromData': null,
             'newCustomerBillingAddress': null
         };
         saveData(checkoutData);
