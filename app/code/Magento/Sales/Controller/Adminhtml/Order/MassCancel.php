@@ -24,7 +24,6 @@ class MassCancel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassA
      */
     public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
     {
-        $this->filter = $filter;
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;
     }

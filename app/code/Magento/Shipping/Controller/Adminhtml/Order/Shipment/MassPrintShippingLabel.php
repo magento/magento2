@@ -70,7 +70,6 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
         $this->collectionFactory = $collectionFactory;
         $this->shipmentCollectionFactory = $shipmentCollectionFactory;
         $this->labelGenerator = $labelGenerator;
-        $this->filter = $filter;
         parent::__construct($context, $filter);
     }
 

@@ -68,7 +68,6 @@ abstract class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\Abs
         $this->dateTime = $dateTime;
         $this->pdfInvoice = $pdfInvoice;
         $this->collectionFactory = $collectionFactory;
-        $this->filter = $filter;
         parent::__construct($context, $filter);
     }
 
