@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Order\History;
 
 /**
  * Sales order history extra container block
+ *
+ * @api
  */
 class Container extends \Magento\Framework\View\Element\Template
 {

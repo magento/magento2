@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Widget\Block\Adminhtml\Widget;
 
 /**
  * WYSIWYG widget options form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Widget\Block\Adminhtml\Widget;
-
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

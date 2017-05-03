@@ -11,6 +11,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class MetadataPool
+ *
+ * @api
  */
 class MetadataPool
 {

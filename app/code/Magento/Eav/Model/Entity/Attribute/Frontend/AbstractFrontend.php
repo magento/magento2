@@ -11,6 +11,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
+/**
+ * @api
+ */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
     /**
