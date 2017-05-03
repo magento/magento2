@@ -429,6 +429,7 @@ class Data
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
+        sort($optionIds);
         $cacheKey = implode('-', $optionIds);
         if (!isset($this->swatchesCache[$cacheKey])) {
             /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */

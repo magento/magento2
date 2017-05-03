@@ -543,11 +543,9 @@ class Config
      * @deprecated
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
-     * @param  mixed $entityType
-     * @param  \Magento\Framework\DataObject $object
+     * @param mixed $entityType
+     * @param \Magento\Framework\DataObject $object
      * @return string[]
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getEntityAttributeCodes($entityType, $object = null)
     {
@@ -560,6 +558,9 @@ class Config
      * @param  int|string|Type $entityType
      * @param  \Magento\Framework\DataObject|null $object
      * @return AbstractAttribute[]
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getEntityAttributes($entityType, $object = null)
     {

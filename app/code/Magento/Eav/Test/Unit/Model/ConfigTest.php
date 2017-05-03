@@ -87,15 +87,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param boolean $cacheEnabled
-     * @param int $loadCalls
-     * @param int $cachedValue
-     * @param int $unserializeCalls
-     * @dataProvider getAttributeCacheDataProvider
-     * @return void
-     */
-    public function testGetAttributeCache($cacheEnabled, $loadCalls, $unserializeCalls, $cachedValue)
+    public function testGetAttributeCache()
     {
         $attributeData = [
             'attribute_code' => 'attribute_code_1',
@@ -201,7 +193,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getAttributeCacheDataProvider
      * @return void
      */
-    public function testGetAttributes($cacheEnabled, $loadCalls, $unserializeCalls, $cachedValue)
+    public function testGetAttributes($cacheEnabled)
     {
         $attributeData = [
             'attribute_code' => 'attribute_code_1',

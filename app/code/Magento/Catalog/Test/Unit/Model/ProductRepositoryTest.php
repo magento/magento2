@@ -707,20 +707,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class, [], [], '', false);
-        $attributeCode = 'attribute_code';
         $collectionMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $productAttributeSearchResultsMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
-            ->getMockForAbstractClass();
-        $productAttributeMock = $this->getMock(
-            \Magento\Catalog\Api\Data\ProductAttributeInterface::class,
             [],
             [],
             '',
