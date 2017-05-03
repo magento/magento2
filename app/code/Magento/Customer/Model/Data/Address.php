@@ -13,6 +13,8 @@ use \Magento\Framework\Api\AttributeValueFactory;
 /**
  * Class Address
  *
+ *
+ * @api
  */
 class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\AddressInterface

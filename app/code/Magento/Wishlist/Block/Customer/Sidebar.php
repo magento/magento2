@@ -12,6 +12,9 @@ namespace Magento\Wishlist\Block\Customer;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Render;
 
+/**
+ * @api
+ */
 class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**

@@ -1,7 +1,5 @@
 <?php
 /**
- * Adminhtml block for fieldset of configurable product
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -16,6 +14,8 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
+ * Adminhtml block for fieldset of configurable product
+ *
  * @api
  */
 class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
