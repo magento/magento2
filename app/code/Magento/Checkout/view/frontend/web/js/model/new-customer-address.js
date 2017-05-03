@@ -22,9 +22,7 @@ define([], function () {
         return {
             email: addressData.email,
             countryId: addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
-            regionId: (addressData.region && addressData.region.region_id) ?
-                addressData.region.region_id
-                : window.checkoutConfig.defaultRegionId,
+            regionId: regionId || addressData.regionId,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
             customerId: addressData.customer_id || addressData.customerId,
