@@ -33,20 +33,24 @@ define([
 
     if ($.isEmptyObject(getData())) {
         checkoutData = {
-            'selectedShippingAddress': null,
-            'shippingAddressFromData': null,
-            'newCustomerShippingAddress': null,
-            'selectedShippingRate': null,
-            'selectedPaymentMethod': null,
-            'selectedBillingAddress': null,
-            'billingAddressFromData': null,
-            'newCustomerBillingAddress': null
+            'selectedShippingAddress': null, // Selected shipping address pullled from local storage (Persistence)
+            'shippingAddressFromData': null, // Shipping address pullled from local storage (Persistence)
+            'newCustomerShippingAddress': null, // Shipping address pullled from local storage for new customer (Persistence)
+            'selectedShippingRate': null, // Shipping rate pulled from local storage (Persistence)
+            'selectedPaymentMethod': null, // Payment method pulled from local storage (Persistence)
+            'selectedBillingAddress': null, // Selected billing address pullled from local storage (Persistence)
+            'billingAddressFromData': null, // Billing address pullled from local storage (Persistence)
+            'newCustomerBillingAddress': null, // Billing address pullled from local storage for new customer (Persistence)
+            'validatedEmailValue': null, // Validated email address from local storage (Persistence)
+            'inputFieldEmailValue' : null // Email input field value from local storage (Persistence)
         };
         saveData(checkoutData);
     }
 
     return {
         /**
+         * Setting the selected shipping address pulled from local storage
+         * 
          * @param {Object} data
          */
         setSelectedShippingAddress: function (data) {
@@ -57,6 +61,8 @@ define([
         },
 
         /**
+         * Pulling the selected shipping address from local storage
+         * 
          * @return {*}
          */
         getSelectedShippingAddress: function () {
@@ -64,6 +70,8 @@ define([
         },
 
         /**
+         * Setting the shipping address pulled from local storage
+         *
          * @param {Object} data
          */
         setShippingAddressFromData: function (data) {
@@ -74,6 +82,8 @@ define([
         },
 
         /**
+         * Pulling the shipping address from local storage 
+         *
          * @return {*}
          */
         getShippingAddressFromData: function () {
@@ -81,6 +91,8 @@ define([
         },
 
         /**
+         * Setting the shipping address pulled from local storage for new customer
+         *
          * @param {Object} data
          */
         setNewCustomerShippingAddress: function (data) {
@@ -91,6 +103,8 @@ define([
         },
 
         /**
+         * Pulling the shipping address from local storage for new customer
+         *
          * @return {*}
          */
         getNewCustomerShippingAddress: function () {
@@ -98,6 +112,8 @@ define([
         },
 
         /**
+         * Setting the selected shipping rate pulled from local storage
+         *
          * @param {Object} data
          */
         setSelectedShippingRate: function (data) {
@@ -108,6 +124,8 @@ define([
         },
 
         /**
+         * Pulling the selected shipping rate from local storge
+         *
          * @return {*}
          */
         getSelectedShippingRate: function () {
@@ -115,6 +133,8 @@ define([
         },
 
         /**
+         * Setting the selected payment method pulled from local storage
+         *
          * @param {Object} data
          */
         setSelectedPaymentMethod: function (data) {
@@ -125,6 +145,8 @@ define([
         },
 
         /**
+         * Pulling the payment method from local storage
+         *
          * @return {*}
          */
         getSelectedPaymentMethod: function () {
@@ -132,6 +154,8 @@ define([
         },
 
         /**
+         * Setting the selected billing address pulled from local storage
+         *
          * @param {Object} data
          */
         setSelectedBillingAddress: function (data) {
@@ -142,6 +166,8 @@ define([
         },
 
         /**
+         * Pulling the selected billing address from local storage
+         *
          * @return {*}
          */
         getSelectedBillingAddress: function () {
@@ -149,6 +175,8 @@ define([
         },
 
         /**
+         * Setting the billing address pulled from local storage
+         *
          * @param {Object} data
          */
         setBillingAddressFromData: function (data) {
@@ -159,6 +187,7 @@ define([
         },
 
         /**
+         * Pulling the billing address from local storage
          * @return {*}
          */
         getBillingAddressFromData: function () {
@@ -166,6 +195,8 @@ define([
         },
 
         /**
+         * Setting the billing address pulled from local storage for new customer
+         *
          * @param {Object} data
          */
         setNewCustomerBillingAddress: function (data) {
@@ -176,6 +207,8 @@ define([
         },
 
         /**
+         * Pulling the billing address from local storage for new customer
+         *
          * @return {*}
          */
         getNewCustomerBillingAddress: function () {
@@ -183,6 +216,8 @@ define([
         },
 
         /**
+         * Pulling the email address from local storage
+         *
          * @return {*}
          */
         getValidatedEmailValue: function () {
@@ -192,6 +227,8 @@ define([
         },
 
         /**
+         * Setting the email address pulled from local storage
+         *
          * @param {String} email
          */
         setValidatedEmailValue: function (email) {
@@ -202,6 +239,8 @@ define([
         },
 
         /**
+         * Pulling the email input field value from local storage
+         *
          * @return {*}
          */
         getInputFieldEmailValue: function () {
@@ -211,6 +250,8 @@ define([
         },
 
         /**
+         * Setting the email input field value pulled from local storage
+         *
          * @param {String} email
          */
         setInputFieldEmailValue: function (email) {
