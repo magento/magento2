@@ -340,10 +340,10 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'origResult' => Payflowpro::RESPONSE_CODE_APPROVED,
-                'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
+                'resultCode' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER
             ],
             [
-                'origResult' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER,
+                'origResult' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER,
                 'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
             ],
             [

@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Block\Backend;
 
+/**
+ * @api
+ */
 class Container extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

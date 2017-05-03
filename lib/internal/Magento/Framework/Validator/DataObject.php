@@ -10,6 +10,9 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * @api
+ */
 class DataObject implements \Zend_Validate_Interface
 {
     /**

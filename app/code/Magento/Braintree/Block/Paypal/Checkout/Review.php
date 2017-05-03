@@ -9,6 +9,8 @@ use Magento\Paypal\Block\Express;
 
 /**
  * Class Review
+ *
+ * @api
  */
 class Review extends Express\Review
 {

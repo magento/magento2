@@ -11,6 +11,8 @@ use Magento\Directory\Model\Currency;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
