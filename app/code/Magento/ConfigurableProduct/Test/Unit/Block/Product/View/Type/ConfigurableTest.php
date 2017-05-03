@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTestTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject
