@@ -429,12 +429,13 @@ class Data
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
-        sort($optionIds);
-        $cacheKey = implode('-', $optionIds);
-        if (!isset($this->swatchesCache[$cacheKey])) {
+        $swatches = $this->getCachedSwatches($optionIds);
+
+        if (count($swatches) !== count($optionIds)) {
+            $swatchOptionIds = array_diff($optionIds, array_keys($swatches));
             /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
             $swatchCollection = $this->swatchCollectionFactory->create();
-            $swatchCollection->addFilterByOptionsIds($optionIds);
+            $swatchCollection->addFilterByOptionsIds($swatchOptionIds);
 
             $swatches = [];
             $currentStoreId = $this->storeManager->getStore()->getId();
@@ -451,10 +452,34 @@ class Data
             if (!empty($fallbackValues)) {
                 $swatches = $this->addFallbackOptions($fallbackValues, $swatches);
             }
-            $this->swatchesCache[$cacheKey] = $swatches;
+            $this->setCachedSwatches($swatchOptionIds, $swatches);
         }
 
-        return $this->swatchesCache[$cacheKey];
+        return array_filter($this->getCachedSwatches($optionIds));
+    }
+
+    /**
+     * Get cached swatches
+     *
+     * @param array $optionIds
+     * @return array
+     */
+    private function getCachedSwatches(array $optionIds)
+    {
+        return array_intersect_key($this->swatchesCache, array_combine($optionIds, $optionIds));
+    }
+
+    /**
+     * Cache swatch. If no swathes found for specific option id - set null for prevent double call
+     *
+     * @param array $optionIds
+     * @param array $swatches
+     */
+    private function setCachedSwatches(array $optionIds, array $swatches)
+    {
+        foreach ($optionIds as $optionId) {
+            $this->swatchesCache[$optionId] = isset($swatches[$optionId]) ? $swatches[$optionId] : null;
+        }
     }
 
     /**
