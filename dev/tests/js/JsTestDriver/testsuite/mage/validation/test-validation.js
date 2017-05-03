@@ -414,7 +414,7 @@ test( "testValidateGroupedQty", function() {
 });
 
 test( "testValidateCCTypeSelect", function() {
-    expect(6);
+    expect(14);
      var visaValid = $('<input id="visa-valid" type="text" value="4916808263499650"/>');
      var visaInvalid = $('<input id="visa-invalid" type="text" value="1234567890123456"/>');
      var mcValid = $('<input id="mc-valid" type="text" value="5203731841177490"/>');
@@ -422,16 +422,33 @@ test( "testValidateCCTypeSelect", function() {
      var aeValid = $('<input id="ae-valid" type="text" value="376244899619217"/>');
      var aeInvalid = $('<input id="ae-invalid" type="text" value="123451234512345"/>');
 
+    var diValid = $('<input id="di-valid" type="text" value="6011050000000009"/>');
+    var diInvalid = $('<input id="di-invalid" type="text" value="6011199900000005"/>');
+    var dnValid = $('<input id="dn-valid" type="text" value="3095434000000001"/>');
+    var dnInvalid = $('<input id="dn-invalid" type="text" value="3799999900000003"/>');
+    var jcbValid = $('<input id="jcb-valid" type="text" value="3528000000000007"/>');
+    var jcbInvalid = $('<input id="jcb-invalid" type="text" value="359000001111118"/>');
+    var upValid = $('<input id="up-valid" type="text" value="6221260000000000"/>');
+    var upInvalid = $('<input id="up-invalid" type="text" value="6229260000000002"/>');
+
     ok($.validator.methods['validate-cc-type-select'].call(this, 'VI', null, visaValid));
     ok(!$.validator.methods['validate-cc-type-select'].call(this, 'VI', null, visaInvalid));
     ok($.validator.methods['validate-cc-type-select'].call(this, 'MC', null, mcValid));
     ok(!$.validator.methods['validate-cc-type-select'].call(this, 'MC', null, mcInvalid));
     ok($.validator.methods['validate-cc-type-select'].call(this, 'AE', null, aeValid));
     ok(!$.validator.methods['validate-cc-type-select'].call(this, 'AE', null, aeInvalid));
+    ok($.validator.methods['validate-cc-type-select'].call(this, 'DI', null, diValid));
+    ok(!$.validator.methods['validate-cc-type-select'].call(this, 'DI', null, diInvalid));
+    ok($.validator.methods['validate-cc-type-select'].call(this, 'DN', null, dnValid));
+    ok(!$.validator.methods['validate-cc-type-select'].call(this, 'DN', null, dnInvalid));
+    ok($.validator.methods['validate-cc-type-select'].call(this, 'JCB', null, jcbValid));
+    ok(!$.validator.methods['validate-cc-type-select'].call(this, 'JCB', null, jcbInvalid));
+    ok($.validator.methods['validate-cc-type-select'].call(this, 'UP', null, upValid));
+    ok(!$.validator.methods['validate-cc-type-select'].call(this, 'UP', null, upInvalid));
 });
 
 test( "testValidateCCNumber", function() {
-    expect(8);
+    expect(37);
     ok($.validator.methods['validate-cc-number'].call(this, '4916835098995909', null, null));
     ok($.validator.methods['validate-cc-number'].call(this, '5265071363284878', null, null));
     ok($.validator.methods['validate-cc-number'].call(this, '6011120623356953', null, null));
@@ -440,16 +457,48 @@ test( "testValidateCCNumber", function() {
     ok(!$.validator.methods['validate-cc-number'].call(this, '5265071363284870', null, null));
     ok(!$.validator.methods['validate-cc-number'].call(this, '6011120623356951', null, null));
     ok(!$.validator.methods['validate-cc-number'].call(this, '371293266574619', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '2221220000000003', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '2721220000000008', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '601109020000000003', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6011111144444444', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '6011222233334444', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6011522233334447', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '601174455555553', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6011745555555550', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '601177455555556', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '601182455555556', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '601187999555558', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '601287999555556', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '6444444444444443', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6644444444444441', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '3044444444444444', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '3064444444444449', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '3095444444444442', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '3096444444444441', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '3696444444444445', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '3796444444444444', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '3896444444444443', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '3528444444444449', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '3529444444444448', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '6221262244444440', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6229981111111111', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '6249981111111117', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6279981111111110', null, null));
+    ok($.validator.methods['validate-cc-number'].call(this, '6282981111111115', null, null));
+    ok(!$.validator.methods['validate-cc-number'].call(this, '6289981111111118', null, null));
 });
 
 test( "testValidateCCType", function() {
-    expect(8);
+    expect(14);
     var select = $('<select id="cc-type">' +
         '<option value="">' +
         '</option><option value="VI">' +
         '</option><option value="MC">' +
         '</option><option value="AE">' +
         '</option><option value="DI">' +
+        '</option><option value="DN">' +
+        '</option><option value="JCB">' +
+        '</option><option value="UP">' +
         '</option>' +
         '</select>');
 
@@ -463,8 +512,17 @@ test( "testValidateCCType", function() {
     ok($.validator.methods['validate-cc-type'].call(this, '371293266574617', null, select));
     ok(!$.validator.methods['validate-cc-type'].call(this, '5265071363284878', null, select));
     select.val('DI');
-    ok($.validator.methods['validate-cc-type'].call(this, '6011000990139424', null, select));
-    ok(!$.validator.methods['validate-cc-type'].call(this, '4916835098995909', null, select));
+    ok($.validator.methods['validate-cc-type'].call(this, '6011050000000009', null, select));
+    ok(!$.validator.methods['validate-cc-type'].call(this, '371293266574617', null, select));
+    select.val('DN');
+    ok($.validator.methods['validate-cc-type'].call(this, '3095434000000001', null, select));
+    ok(!$.validator.methods['validate-cc-type'].call(this, '6011050000000009', null, select));
+    select.val('JCB');
+    ok($.validator.methods['validate-cc-type'].call(this, '3528000000000007', null, select));
+    ok(!$.validator.methods['validate-cc-type'].call(this, '3095434000000001', null, select));
+    select.val('UP');
+    ok($.validator.methods['validate-cc-type'].call(this, '6221260000000000', null, select));
+    ok(!$.validator.methods['validate-cc-type'].call(this, '3528000000000007', null, select));
 });
 
 test( "testValidateCCExp", function() {
