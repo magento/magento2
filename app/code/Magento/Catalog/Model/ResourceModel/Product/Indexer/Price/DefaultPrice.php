@@ -247,6 +247,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Get select by entity ids or/and product type.
+     *
      * @param int|array $entityIds the entity ids limitation
      * @param string|null $type product type, all if null
      * @return \Magento\Framework\DB\Select
