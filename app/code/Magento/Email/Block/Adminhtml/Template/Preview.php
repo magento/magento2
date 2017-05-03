@@ -11,6 +11,9 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
+/**
+ * @api
+ */
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**

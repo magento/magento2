@@ -8,6 +8,7 @@ namespace Magento\Shipping\Block\Adminhtml;
 /**
  * Adminhtml shipment create
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container

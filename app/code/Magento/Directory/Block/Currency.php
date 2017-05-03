@@ -11,6 +11,9 @@ namespace Magento\Directory\Block;
 
 use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
 
+/**
+ * @api
+ */
 class Currency extends \Magento\Framework\View\Element\Template
 {
     /**

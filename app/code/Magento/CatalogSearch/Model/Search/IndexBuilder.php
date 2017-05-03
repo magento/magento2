@@ -20,6 +20,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
 
 /**
  * Build base Query for Index
@@ -74,6 +75,11 @@ class IndexBuilder implements IndexBuilderInterface
     private $indexerStockFrontendResource;
 
     /**
+     * @var FullTextSearchCheck
+     */
+    private $fullTextSearchCheck;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
@@ -82,6 +88,7 @@ class IndexBuilder implements IndexBuilderInterface
      * @param TableMapper $tableMapper
      * @param ScopeResolverInterface $dimensionScopeResolver
      * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @param FullTextSearchCheck $fullTextSearchCheck
      */
     public function __construct(
         ResourceConnection $resource,
@@ -91,7 +98,8 @@ class IndexBuilder implements IndexBuilderInterface
         IndexScopeResolver $scopeResolver,
         TableMapper $tableMapper,
         ScopeResolverInterface $dimensionScopeResolver,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null,
+        FullTextSearchCheck $fullTextSearchCheck = null
     ) {
         $this->resource = $resource;
         $this->config = $config;
@@ -102,6 +110,8 @@ class IndexBuilder implements IndexBuilderInterface
         $this->dimensionScopeResolver = $dimensionScopeResolver;
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        $this->fullTextSearchCheck = $fullTextSearchCheck ?: ObjectManager::getInstance()
+            ->get(FullTextSearchCheck::class);
     }
 
     /**
@@ -110,6 +120,8 @@ class IndexBuilder implements IndexBuilderInterface
      * @param RequestInterface $request
      * @return Select
      * @throws \LogicException
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     public function build(RequestInterface $request)
     {
@@ -118,12 +130,15 @@ class IndexBuilder implements IndexBuilderInterface
             ->from(
                 ['search_index' => $searchIndexTable],
                 ['entity_id' => 'entity_id']
-            )
-            ->joinLeft(
+            );
+
+        if ($this->fullTextSearchCheck->isRequiredForQuery($request->getQuery())) {
+            $select->joinLeft(
                 ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
                 'search_index.attribute_id = cea.attribute_id',
                 []
             );
+        }
 
         $select = $this->tableMapper->addTables($select, $request);
 

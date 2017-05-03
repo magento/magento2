@@ -11,6 +11,7 @@ use Magento\Customer\Model\AccountManagement;
 /**
  * Customer edit form block
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard

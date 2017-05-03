@@ -14,6 +14,8 @@ use Magento\Review\Model\Review;
 /**
  * Class ReviewDataProvider
  *
+ * @api
+ *
  * @method Collection getCollection
  */
 class ReviewDataProvider extends AbstractDataProvider

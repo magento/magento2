@@ -7,6 +7,8 @@ namespace Magento\Framework\App\Cache\Tag;
 
 /**
  * Invalidation tags generator
+ *
+ * @api
  */
 interface StrategyInterface
 {

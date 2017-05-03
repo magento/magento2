@@ -12,7 +12,6 @@ use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Quote\Model\Quote;
@@ -646,7 +645,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $response->getResultCode() != self::RESPONSE_CODE_FRAUDSERVICE_FILTER
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
-        } elseif ($response->getOrigresult() == self::RESPONSE_CODE_FRAUDSERVICE_FILTER) {
+        } elseif ($response->getOrigresult() == self::RESPONSE_CODE_DECLINED_BY_FILTER) {
             throw new \Magento\Framework\Exception\LocalizedException(__($response->getRespmsg()));
         }
     }

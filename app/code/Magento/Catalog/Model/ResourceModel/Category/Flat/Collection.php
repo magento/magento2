@@ -119,7 +119,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $condition = ['in' => $ids];
             }
         }
-        $this->addFieldToFilter('entity_id', $condition);
+        $this->addFieldToFilter('main_table.entity_id', $condition);
         return $this;
     }
 
