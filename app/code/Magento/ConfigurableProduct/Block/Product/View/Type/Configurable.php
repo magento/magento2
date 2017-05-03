@@ -77,6 +77,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
      * @param Format|null $localeFormat
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,

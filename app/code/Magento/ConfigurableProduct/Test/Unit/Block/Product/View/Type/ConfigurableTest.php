@@ -5,6 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurableTestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -128,18 +131,7 @@ class ConfigurableTestTest extends \PHPUnit_Framework_TestCase
         $priceQty = 1;
         $percentage = 10;
 
-        $amountMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountInterface::class)
-            ->setMethods([
-                'getValue',
-                'getBaseAmount',
-            ])
-            ->getMockForAbstractClass();
-        $amountMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($amount);
-        $amountMock->expects($this->any())
-            ->method('getBaseAmount')
-            ->willReturn($amount);
+        $amountMock = $this->getAmountMock($amount);
 
         $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
             ->setMethods([
@@ -150,23 +142,7 @@ class ConfigurableTestTest extends \PHPUnit_Framework_TestCase
             ->method('getAmount')
             ->willReturn($amountMock);
 
-        $tierPrice = [
-            'price_qty' => $priceQty,
-            'price' => $amountMock,
-        ];
-
-        $tierPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\TierPriceInterface::class)
-            ->setMethods([
-                'getTierPriceList',
-                'getSavePercent',
-            ])
-            ->getMockForAbstractClass();
-        $tierPriceMock->expects($this->any())
-            ->method('getTierPriceList')
-            ->willReturn([$tierPrice]);
-        $tierPriceMock->expects($this->any())
-            ->method('getSavePercent')
-            ->willReturn($percentage);
+        $tierPriceMock = $this->getTierPriceMock($amountMock, $priceQty, $percentage);
 
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -367,5 +343,60 @@ class ConfigurableTestTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getRegistry')
             ->willReturn($this->registry);
+    }
+
+    /**
+     * Retrieve mock of \Magento\Framework\Pricing\Amount\AmountInterface object
+     *
+     * @param float $amount
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getAmountMock($amount): \PHPUnit_Framework_MockObject_MockObject
+    {
+        $amountMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountInterface::class)
+            ->setMethods([
+                'getValue',
+                'getBaseAmount',
+            ])
+            ->getMockForAbstractClass();
+        $amountMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn($amount);
+        $amountMock->expects($this->any())
+            ->method('getBaseAmount')
+            ->willReturn($amount);
+
+        return $amountMock;
+    }
+
+    /**
+     * Retrieve mock of \Magento\Catalog\Pricing\Price\TierPriceInterface object
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject $amountMock
+     * @param float $priceQty
+     * @param int $percentage
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTierPriceMock(\PHPUnit_Framework_MockObject_MockObject $amountMock, $priceQty, $percentage)
+    {
+        $tierPrice = [
+            'price_qty' => $priceQty,
+            'price' => $amountMock,
+        ];
+
+        $tierPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\TierPriceInterface::class)
+            ->setMethods([
+                'getTierPriceList',
+                'getSavePercent',
+            ])
+            ->getMockForAbstractClass();
+        $tierPriceMock->expects($this->any())
+            ->method('getTierPriceList')
+            ->willReturn([$tierPrice]);
+        $tierPriceMock->expects($this->any())
+            ->method('getSavePercent')
+            ->willReturn($percentage);
+
+        return $tierPriceMock;
     }
 }
