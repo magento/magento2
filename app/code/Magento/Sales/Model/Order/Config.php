@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order;
 
 /**
  * Order configuration model
+ *
  * @api
  */
 class Config

@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\ResourceModel\Collection;
  * Implement using different stores for retrieve attribute values
  *
  * @api
- *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -8,6 +8,10 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Groups all dependencies of the base Action Controller
+ * Introduced to help with backwards compatibility of base controller constructor.
+ * Do not call methods of this class.
+ *
  * @api
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface

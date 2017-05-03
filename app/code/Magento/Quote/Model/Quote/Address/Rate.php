@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Framework\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Rate _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Rate getResource()
  * @method int getAddressId()

@@ -8,6 +8,8 @@ namespace Magento\Wishlist\Block;
 
 /**
  * Wishlist js plugin initialization block
+ *
+ * @api
  */
 class AddToWishlist extends \Magento\Framework\View\Element\Template
 {

@@ -5,6 +5,9 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+/**
+ * @api
+ */
 class Coupon extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
