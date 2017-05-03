@@ -81,6 +81,9 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
     </type>
+    <type name="Magento\Sales\Model\Order\Item">
+        <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100" />
+    </type>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
