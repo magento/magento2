@@ -10,6 +10,7 @@ use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection
 /**
  * Quote item resource collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection

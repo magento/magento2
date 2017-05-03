@@ -7,6 +7,8 @@ namespace Magento\Paypal\Block;
 
 /**
  * HSS iframe block
+ *
+ * @api
  */
 class Iframe extends \Magento\Payment\Block\Form
 {

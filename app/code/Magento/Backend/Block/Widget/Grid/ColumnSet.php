@@ -6,8 +6,8 @@
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
- *
- *
+ * @api
+ * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ColumnSet extends \Magento\Framework\View\Element\Template

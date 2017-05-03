@@ -8,6 +8,9 @@ namespace Magento\Framework\Api\Search;
 use Magento\Framework\Api\SearchCriteria as BaseSearchCriteria;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
+/**
+ * @api
+ */
 class SearchCriteria extends BaseSearchCriteria implements SearchCriteriaInterface
 {
     const REQUEST_NAME = 'request_name';

@@ -21,6 +21,7 @@ use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
 /**
  * Order payment information
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Order;
 
 /**
  * Sales order history block
+ *
+ * @api
  */
 class Recent extends \Magento\Framework\View\Element\Template
 {

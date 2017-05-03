@@ -13,6 +13,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Sales order shipment model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)

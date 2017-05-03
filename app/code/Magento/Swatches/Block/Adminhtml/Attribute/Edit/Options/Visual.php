@@ -7,6 +7,7 @@ namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
 
 /**
  * Block Class for Visual Swatch
+ *
  * @api
  */
 class Visual extends AbstractSwatch

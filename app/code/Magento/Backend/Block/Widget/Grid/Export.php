@@ -11,6 +11,8 @@ namespace Magento\Backend\Block\Widget\Grid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * @api
+ * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Grid\ExportInterface

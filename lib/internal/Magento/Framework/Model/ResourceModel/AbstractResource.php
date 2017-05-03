@@ -12,6 +12,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Abstract resource model
+ *
+ * @api
  */
 abstract class AbstractResource
 {
