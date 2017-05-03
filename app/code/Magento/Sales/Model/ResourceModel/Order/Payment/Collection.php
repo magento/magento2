@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
-use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\OrderPaymentSearchResultInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
@@ -68,7 +67,7 @@ class Collection extends AbstractCollection implements OrderPaymentSearchResultI
     }
 
     /**
-     * Unserialize additional_information in each item
+     * Unserialize additional_information in each item.
      *
      * @return $this
      */
@@ -76,34 +75,8 @@ class Collection extends AbstractCollection implements OrderPaymentSearchResultI
     {
         foreach ($this->_items as $item) {
             $this->getResource()->unserializeFields($item);
-            if (!empty($item->getData(OrderPaymentInterface::ADDITIONAL_INFORMATION))) {
-                $additionalInfo = $this->convertAdditionalInfo(
-                    $item->getData(OrderPaymentInterface::ADDITIONAL_INFORMATION)
-                );
-                $item->setData(OrderPaymentInterface::ADDITIONAL_INFORMATION, $additionalInfo);
-            }
         }
+
         return parent::_afterLoad();
-    }
-
-    /**
-     * Convert multidimensional additional information array to single
-     *
-     * @param array $info
-     * @return array
-     */
-    private function convertAdditionalInfo($info)
-    {
-        $result = [];
-        foreach ($info as $key => $item) {
-            if (is_array($item)) {
-                $result += $this->convertAdditionalInfo($item);
-                unset($info[$key]);
-            } else {
-                $result[$key] = $item;
-            }
-        }
-
-        return $result;
     }
 }

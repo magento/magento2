@@ -5,8 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Service;
 
-use Magento\SalesRule\Model\Coupon;
-
 /**
  * Coupon management service class
  *
