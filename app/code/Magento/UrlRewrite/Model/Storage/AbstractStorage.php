@@ -76,24 +76,18 @@ abstract class AbstractStorage implements StorageInterface
     public function replace(array $urls)
     {
         if (!$urls) {
-            return;
+            return [];
         }
 
-        try {
-            $this->doReplace($urls);
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            throw new \Magento\Framework\Exception\AlreadyExistsException(
-                __('URL key for specified store already exists.')
-            );
-        }
+        return $this->doReplace($urls);
     }
 
     /**
      * Save new url rewrites and remove old if exist. Template method
      *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
-     * @return int
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
+     * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
      */
     abstract protected function doReplace($urls);
 

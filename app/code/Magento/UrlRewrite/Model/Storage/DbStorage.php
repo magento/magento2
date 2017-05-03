@@ -20,7 +20,7 @@ class DbStorage extends AbstractStorage
     /**
      * Code of "Integrity constraint violation: 1062 Duplicate entry" error
      */
-    const ERROR_CODE_DUPLICATE_ENTRY = 23000;
+    const ERROR_CODE_DUPLICATE_ENTRY = 1062;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -90,11 +90,12 @@ class DbStorage extends AbstractStorage
             $urlData[UrlRewrite::ENTITY_TYPE] = $type;
             $this->deleteByData($urlData);
         }
-        $data = [];
-        foreach ($urls as $url) {
-            $data[] = $url->toArray();
+        foreach ($urls as $key => $url) {
+            if (!$this->insert($url->toArray())) {
+                unset($urls[$key]);
+            }
         }
-        $this->insertMultiple($data);
+        return $urls;
     }
 
     /**
@@ -104,13 +105,14 @@ class DbStorage extends AbstractStorage
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Exception
+     * @deprecated
      */
     protected function insertMultiple($data)
     {
         try {
             $this->connection->insertMultiple($this->resource->getTableName(self::TABLE_NAME), $data);
         } catch (\Exception $e) {
-            if ($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY
+            if (($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY)
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
                 throw new \Magento\Framework\Exception\AlreadyExistsException(
@@ -118,6 +120,28 @@ class DbStorage extends AbstractStorage
                 );
             }
             throw $e;
+        }
+    }
+
+    /**
+     * Insert multiple
+     *
+     * @param array $data
+     * @return bool
+     * @throws \Exception
+     */
+    private function insert($data)
+    {
+        try {
+            return $this->connection->insert($this->resource->getTableName(self::TABLE_NAME), $data) > 0;
+        } catch (\Exception $e) {
+            if ($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY
+                && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
+            ) {
+                return false;
+            } else {
+                throw $e;
+            }
         }
     }
 

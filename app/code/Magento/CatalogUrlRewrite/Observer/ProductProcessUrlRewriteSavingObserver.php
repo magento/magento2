@@ -58,7 +58,14 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             ]);
 
             if ($product->isVisibleInSiteVisibility()) {
-                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+                $generatedUrls = $this->productUrlRewriteGenerator->generate($product);
+                $product->setData(
+                    'unsaved_urls',
+                    array_diff_key(
+                        $generatedUrls,
+                        $this->urlPersist->replace($generatedUrls)
+                    )
+                );
             }
         }
     }
