@@ -10,6 +10,7 @@ use Magento\Quote\Model\Quote;
 /**
  * Shopping cart interface
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @deprecated
  */

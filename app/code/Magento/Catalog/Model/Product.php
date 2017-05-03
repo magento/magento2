@@ -18,6 +18,7 @@ use Magento\Framework\Pricing\SaleableInterface;
 /**
  * Catalog product model
  *
+ * @api
  * @method Product setHasError(bool $value)
  * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()

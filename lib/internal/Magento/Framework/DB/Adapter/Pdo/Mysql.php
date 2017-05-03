@@ -30,6 +30,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * MySQL database adapter
  *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

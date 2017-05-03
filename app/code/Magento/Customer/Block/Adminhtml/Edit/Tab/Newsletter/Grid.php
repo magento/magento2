@@ -8,7 +8,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter;
 /**
  * Adminhtml newsletter queue grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

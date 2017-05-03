@@ -9,6 +9,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * Shopping cart block
+ *
+ * @api
  */
 class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 {

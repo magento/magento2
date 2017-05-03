@@ -16,6 +16,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Multishipping checkout model
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

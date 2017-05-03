@@ -10,6 +10,9 @@ use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @api
+ */
 class Forward extends \Magento\Framework\Controller\Result\Forward
 {
     /**

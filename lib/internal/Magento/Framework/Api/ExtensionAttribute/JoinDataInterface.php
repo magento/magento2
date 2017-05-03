@@ -8,6 +8,8 @@ namespace Magento\Framework\Api\ExtensionAttribute;
 
 /**
  * Interface of data holder for extension attribute joins.
+ *
+ * @api
  */
 interface JoinDataInterface
 {
