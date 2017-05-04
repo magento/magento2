@@ -89,7 +89,7 @@ class Widget
     {
         if ($this->mathRandom === null) {
             $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\Math\Random');
+                ->get(\Magento\Framework\Math\Random::class);
         }
         return $this->mathRandom;
     }
@@ -314,12 +314,11 @@ class Widget
                 }
             }
             if ($value) {
-                $directive .= sprintf(' %s="%s"', $name, $value);
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
             }
         }
 
         $directive .= $this->getWidgetPageVarName($params);
-
         $directive .= '}}';
 
         if ($asIs) {
