@@ -12,7 +12,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-reset-list() {
+    .abs-reset-list {
         .lib-list-reset-styles();
         > li {
             margin: 0;
@@ -25,7 +25,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-action-link-button() {
+    .abs-action-link-button {
         .lib-button();
         .lib-link-as-button();
         .lib-css(border-radius, @button__border-radius);
@@ -55,13 +55,13 @@
 };
 
 & when (@media-common = true) {
-    .abs-product-options-list() {
+    .abs-product-options-list {
         @abs-product-options-list();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-product-options-list-desktop() {
+    .abs-product-options-list-desktop {
         @abs-product-options-list();
     }
 }
@@ -75,19 +75,19 @@
 };
 
 & when (@media-common = true) {
-    .abs-button-responsive() {
+    .abs-button-responsive {
         @abs-button-responsive();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-button-desktop() {
+    .abs-button-desktop {
         width: auto;
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-button-responsive-smaller() {
+    .abs-button-responsive-smaller {
         @abs-button-responsive();
     }
 }
@@ -110,13 +110,13 @@
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-blocks-2columns() {
+    .abs-blocks-2columns {
         @abs-blocks-2columns();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
-    .abs-blocks-2columns-s() {
+    .abs-blocks-2columns-s {
         @abs-blocks-2columns();
     }
 }
@@ -126,7 +126,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-reset-image-wrapper() {
+    .abs-reset-image-wrapper {
         height: auto;
         padding: 0 !important;
 
@@ -141,13 +141,13 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-adaptive-images() {
+    .abs-adaptive-images {
         display: block;
         height: auto;
         max-width: 100%;
     }
 
-    .abs-adaptive-images-centered() {
+    .abs-adaptive-images-centered {
         display: block;
         height: auto;
         margin: 0 auto;
@@ -160,7 +160,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-login-block-title() {
+    .abs-login-block-title {
         strong {
             font-weight: 500;
         }
@@ -177,7 +177,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-block-title() {
+    .abs-block-title {
         > strong {
             .lib-heading(h3);
         }
@@ -191,7 +191,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-account-blocks() {
+    .abs-account-blocks {
         .block-title {
             &:extend(.abs-block-title all);
             > .action {
@@ -230,7 +230,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-dropdown-simple() {
+    .abs-dropdown-simple {
         .lib-dropdown(
         @_dropdown-list-item-padding: 5px 5px 5px 23px,
         @_dropdown-list-min-width: 200px,
@@ -245,7 +245,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-input-qty() {
+    .abs-input-qty {
         text-align: center;
         width: 47px;
     }
@@ -256,7 +256,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-margin-for-blocks-and-widgets() {
+    .abs-margin-for-blocks-and-widgets {
         margin-bottom: @indent__xl;
     }
 }
@@ -266,7 +266,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-remove-button-for-blocks() {
+    .abs-remove-button-for-blocks {
         .lib-icon-font(
         @icon-remove,
         @_icon-font-size: 26px,
@@ -284,7 +284,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-product-link() {
+    .abs-product-link {
         font-weight: @font-weight__regular;
 
         > a {
@@ -311,19 +311,19 @@
 };
 
 & when (@media-common = true) {
-    .abs-reset-left-margin() {
+    .abs-reset-left-margin {
         @abs-reset-left-margin();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-reset-left-margin-desktop() {
+    .abs-reset-left-margin-desktop {
         @abs-reset-left-margin();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
-    .abs-reset-left-margin-desktop-s() {
+    .abs-reset-left-margin-desktop-s {
         @abs-reset-left-margin();
     }
 }
@@ -333,7 +333,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-action-remove() {
+    .abs-action-remove {
         &:extend(.abs-action-button-as-link all);
         left: @indent__s;
         margin-left: 70%;
@@ -359,7 +359,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-add-fields() {
+    .abs-add-fields {
         .fieldset {
             margin-bottom: 50px;
 
@@ -418,7 +418,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-add-fields-desktop() {
+    .abs-add-fields-desktop {
         .fieldset {
             .field {
                 &:not(.choice) {
@@ -448,13 +448,13 @@
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-margin-for-forms-desktop() {
+    .abs-margin-for-forms-desktop {
         @abs-margin-for-forms-desktop();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
-    .abs-margin-for-forms-desktop-s() {
+    .abs-margin-for-forms-desktop-s {
         @abs-margin-for-forms-desktop();
     }
 }
@@ -464,7 +464,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-hidden() {
+    .abs-hidden {
         .lib-visibility-hidden();
     }
 }
@@ -478,31 +478,31 @@
 };
 
 & when (@media-common = true) {
-    .abs-visually-hidden() {
+    .abs-visually-hidden {
         @abs-visually-hidden();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .abs-visually-hidden-mobile() {
+    .abs-visually-hidden-mobile {
         @abs-visually-hidden();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-visually-hidden-mobile-m() {
+    .abs-visually-hidden-mobile-m {
         @abs-visually-hidden();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
-    .abs-visually-hidden-desktop-s() {
+    .abs-visually-hidden-desktop-s {
         @abs-visually-hidden();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-visually-hidden-desktop() {
+    .abs-visually-hidden-desktop {
         @abs-visually-hidden();
     }
 }
@@ -512,7 +512,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-visually-hidden-reset() {
+    .abs-visually-hidden-reset {
         .lib-visually-hidden-reset();
     }
 }
@@ -526,31 +526,31 @@
 };
 
 & when (@media-common = true) {
-    .abs-add-clearfix() {
+    .abs-add-clearfix {
         @abs-add-clearfix();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-add-clearfix-desktop() {
+    .abs-add-clearfix-desktop {
         @abs-add-clearfix();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
-    .abs-add-clearfix-desktop-s() {
+    .abs-add-clearfix-desktop-s {
         @abs-add-clearfix();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .abs-add-clearfix-mobile() {
+    .abs-add-clearfix-mobile {
         @abs-add-clearfix();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-add-clearfix-mobile-m() {
+    .abs-add-clearfix-mobile-m {
         @abs-add-clearfix();
     }
 }
@@ -564,25 +564,25 @@
 };
 
 & when (@media-common = true) {
-    .abs-add-box-sizing() {
+    .abs-add-box-sizing {
         @abs-add-box-sizing();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-add-box-sizing-desktop() {
+    .abs-add-box-sizing-desktop {
         @abs-add-box-sizing();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
-    .abs-add-box-sizing-desktop-s() {
+    .abs-add-box-sizing-desktop-s {
         @abs-add-box-sizing();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-add-box-sizing-desktop-m() {
+    .abs-add-box-sizing-desktop-m {
         @abs-add-box-sizing();
     }
 }
@@ -592,7 +592,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-revert-field-type-desktop() {
+    .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
             .fields > .field {
@@ -611,7 +611,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-navigation-icon() {
+    .abs-navigation-icon {
         .lib-icon-font(
         @_icon-font-content: @icon-down,
         @_icon-font-size: 34px,
@@ -633,7 +633,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-split-button() {
+    .abs-split-button {
         .lib-dropdown-split(
         @_options-selector : ~'.items',
         @_dropdown-split-button-border-radius-fix: true
@@ -647,12 +647,12 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-action-addto-product() {
+    .abs-action-addto-product {
         &:extend(.abs-action-link-button all);
         .lib-button-s();
     }
 
-    .abs-actions-addto-gridlist() {
+    .abs-actions-addto-gridlist {
         .lib-icon-font(
         @_icon-font-content: '',
         @_icon-font-size: 29px,
@@ -670,7 +670,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-button-l() {
+    .abs-button-l {
         .lib-button-l();
     }
 }
@@ -680,7 +680,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-action-button-as-link() {
+    .abs-action-button-as-link {
         .lib-button-as-link(@_margin: false);
         border-radius: 0;
         font-size: inherit;
@@ -698,7 +698,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-revert-secondary-color() {
+    .abs-revert-secondary-color {
         .lib-button-revert-secondary-color();
     }
 }
@@ -708,7 +708,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-revert-secondary-size() {
+    .abs-revert-secondary-size {
         .lib-button-revert-secondary-size();
     }
 }
@@ -718,7 +718,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-box-tocart() {
+    .abs-box-tocart {
         margin: @indent__s 0;
     }
 }
@@ -728,7 +728,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-adjustment-incl-excl-tax() {
+    .abs-adjustment-incl-excl-tax {
         .price-including-tax,
         .price-excluding-tax,
         .weee {
@@ -757,7 +757,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-tax-total() {
+    .abs-tax-total {
         cursor: pointer;
         padding-right: 12px;
         position: relative;
@@ -783,7 +783,7 @@
         }
     }
 
-    .abs-tax-total-expanded() {
+    .abs-tax-total-expanded {
         .lib-icon-font-symbol(
         @_icon-font-content: @icon-up,
         @_icon-font-position: after
@@ -796,7 +796,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-methods-shipping-title() {
+    .abs-methods-shipping-title {
         .lib-font-size(14);
         font-weight: @font-weight__bold;
         margin: 0 0 15px;
@@ -807,14 +807,14 @@
 //  Checkout order review price
 //  ---------------------------------------------
 
-.abs-checkout-cart-price() {
+.abs-checkout-cart-price {
 }
 
 //
 //  Checkout order product name
 //  ---------------------------------------------
 
-.abs-checkout-product-name() {
+.abs-checkout-product-name {
 }
 
 //
@@ -822,7 +822,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .abs-checkout-order-review() {
+    .abs-checkout-order-review {
         tbody tr {
             &:not(:last-child) {
                 border-bottom: @border-width__base solid @border-color__base;
@@ -867,7 +867,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-colon() {
+    .abs-colon {
         &:after {
             content: ': ';
         }
@@ -879,7 +879,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-icon-add() {
+    .abs-icon-add {
         .lib-icon-font(
         @_icon-font-content: @icon-expand,
         @_icon-font-size: 10px,
@@ -890,7 +890,7 @@
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-icon-add-mobile() {
+    .abs-icon-add-mobile {
         .lib-icon-font(
         @_icon-font-content: @icon-expand,
         @_icon-font-size: 10px,
@@ -907,7 +907,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-dropdown-items-new() {
+    .abs-dropdown-items-new {
         .items .item:last-child {
             &:hover {
                 .lib-css(background, @dropdown-list-item__hover);
@@ -929,7 +929,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-toggling-title-mobile() {
+    .abs-toggling-title-mobile {
         border-bottom: @border-width__base solid @border-color__base;
         border-top: @border-width__base solid @border-color__base;
         cursor: pointer;
@@ -969,19 +969,19 @@
 };
 
 & when (@media-common = true) {
-    .abs-no-display() {
+    .abs-no-display {
         @abs-no-display();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .abs-no-display-s() {
+    .abs-no-display-s {
         @abs-no-display();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-no-display-desktop() {
+    .abs-no-display-desktop {
         @abs-no-display();
     }
 }
@@ -991,7 +991,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-status() {
+    .abs-status {
         display: inline-block;
         margin-bottom: @indent__base;
     }
@@ -1002,7 +1002,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-pager-toolbar-mobile() {
+    .abs-pager-toolbar-mobile {
         .toolbar-amount,
         .limiter,
         .pages {
@@ -1017,7 +1017,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .abs-pager-toolbar-mobile-s() {
+    .abs-pager-toolbar-mobile-s {
         .toolbar-amount,
         .limiter,
         .pages {
@@ -1031,7 +1031,7 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-pager-toolbar() {
+    .abs-pager-toolbar {
         margin-bottom: @indent__base;
         position: relative;
         &:extend(.abs-add-clearfix-desktop all);
@@ -1063,7 +1063,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-block-items-counter() {
+    .abs-block-items-counter {
         .lib-css(color, @primary__color__lighter);
         .lib-font-size(12px);
         white-space: nowrap;
@@ -1075,7 +1075,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-shopping-cart-items() {
+    .abs-shopping-cart-items {
         .action {
             &.continue {
                 border-radius: 3px;
@@ -1108,7 +1108,7 @@
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .abs-shopping-cart-items-mobile() {
+    .abs-shopping-cart-items-mobile {
         .actions {
             text-align: center;
         }
@@ -1129,7 +1129,7 @@
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .abs-shopping-cart-items-desktop() {
+    .abs-shopping-cart-items-desktop {
         float: left;
         position: relative;
         width: 73%;
@@ -1156,7 +1156,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-field-date() {
+    .abs-field-date {
         .control {
             &:extend(.abs-add-box-sizing all);
             position: relative;
@@ -1173,7 +1173,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-field-date-input() {
+    .abs-field-date-input {
         .lib-css(margin-right, @indent__s);
         width: calc(~'100% -' @icon-calendar__font-size + @indent__s);
     }
@@ -1184,7 +1184,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-field-tooltip() {
+    .abs-field-tooltip {
         &:extend(.abs-add-box-sizing all);
         position: relative;
 
@@ -1228,13 +1228,13 @@
 };
 
 & when (@media-common = true) {
-    .abs-checkout-tooltip-content-position-top() {
+    .abs-checkout-tooltip-content-position-top {
         @abs-checkout-tooltip-content-position-top();
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
-    .abs-checkout-tooltip-content-position-top-mobile() {
+    .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }
 }
@@ -1244,7 +1244,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-checkout-title() {
+    .abs-checkout-title {
         .lib-css(border-bottom, @checkout-step-title__border);
         .lib-css(padding-bottom, @checkout-step-title__padding);
         .lib-typography(
@@ -1262,7 +1262,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-sidebar-totals() {
+    .abs-sidebar-totals {
         .mark {
             font-weight: @font-weight__regular;
             padding-left: 4px;
@@ -1365,7 +1365,7 @@
 //  ---------------------------------------------
 
 & when (@media-common = true) {
-    .abs-discount-block() {
+    .abs-discount-block {
         > .title {
             border-top: @border-width__base solid @border-color__base;
             cursor: pointer;
