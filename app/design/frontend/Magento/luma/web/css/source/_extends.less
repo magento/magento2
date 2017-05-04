@@ -129,7 +129,8 @@
 };
 
 & when (@media-common = true) {
-    .abs-product-options-list {
+    .abs-product-options-list,
+    .abs-product-options-list-desktop {
         @abs-product-options-list();
     }
 }
@@ -138,7 +139,7 @@
 //  Desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-product-options-list-desktop {
         @abs-product-options-list();
     }
@@ -154,7 +155,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-button-desktop {
         width: auto;
     }
@@ -181,13 +182,13 @@
     }
 };
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-blocks-2columns {
         @abs-blocks-2columns();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-blocks-2columns-s {
         @abs-blocks-2columns();
     }
@@ -284,7 +285,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-margin-for-blocks-and-widgets-desktop {
         margin-bottom: @indent__xl + @indent__s;
     }
@@ -355,13 +356,13 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-reset-left-margin-desktop {
         @abs-reset-left-margin();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-reset-left-margin-desktop-s {
         @abs-reset-left-margin();
     }
@@ -386,7 +387,7 @@
 //  Action with icon remove with text for desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-action-remove-desktop {
         margin-left: 90%;
     }
@@ -449,7 +450,7 @@
 //  Add Recipient for desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-fields-desktop {
         .fieldset {
             .field {
@@ -473,7 +474,7 @@
 //  Margin for forms
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-margin-for-forms-desktop {
         .lib-css(margin-left, @form-field-type-label-inline__width);
     }
@@ -507,25 +508,25 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-visually-hidden-mobile {
         @abs-visually-hidden();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-visually-hidden-mobile-m {
         @abs-visually-hidden();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-visually-hidden-desktop-s {
         @abs-visually-hidden();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-visually-hidden-desktop {
         @abs-visually-hidden();
     }
@@ -555,25 +556,25 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-clearfix-desktop {
         @abs-add-clearfix();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-add-clearfix-desktop-s {
         @abs-add-clearfix();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-add-clearfix-mobile {
         @abs-add-clearfix();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-clearfix-mobile-m {
         @abs-add-clearfix();
     }
@@ -593,19 +594,19 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-box-sizing-desktop {
         @abs-add-box-sizing();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-add-box-sizing-desktop-s {
         @abs-add-box-sizing();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-box-sizing-desktop-m {
         @abs-add-box-sizing();
     }
@@ -615,7 +616,7 @@
 //  Revert field type
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
@@ -688,13 +689,13 @@
     }
 };
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-form-field-column-2 {
         @abs-form-field-column-2();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-form-field-column-2-s {
         @abs-form-field-column-2();
     }
@@ -708,13 +709,13 @@
     .lib-form-field-column-number(@_column-number: 1);
 };
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-form-field-revert-column-1 {
         @abs-form-field-revert-column-1();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-form-field-revert-column-1-s {
         @abs-form-field-revert-column-1();
     }
@@ -736,7 +737,7 @@
 //  Checkout order review
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-checkout-order-review {
         tbody > tr {
             &:extend(.abs-add-clearfix-mobile all);
@@ -824,7 +825,7 @@
 //  General pages forms
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-forms-general-desktop {
         max-width: 500px;
 
@@ -842,7 +843,7 @@
 //  Revert side paddings
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-revert-side-paddings {
         padding-left: 0;
         padding-right: 0;
@@ -882,7 +883,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-toggling-title-mobile {
         @abs-toggling-title();
         .lib-css(border-bottom, @border-width__base solid @border-color__base);
@@ -973,7 +974,7 @@
 //  Mobile checkout order product name
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-product-items-summary {
         tbody {
             .col {
@@ -1039,7 +1040,7 @@
 //  Account pages: block font size
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-account-block-font-size {
         .lib-font-size(16);
     }
@@ -1059,12 +1060,13 @@
 //  Account pages: margin for table
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-account-table-margin-mobile {
         .lib-css(margin-top, -@indent__base);
     }
 }
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+
+& when (@media-common = true) {
     .abs-account-table-margin-desktop {
         .lib-css(margin-top, -@indent__m);
     }
@@ -1074,7 +1076,7 @@
 //  Account pages: table col actions
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-col-no-prefix {
         &:before {
             .lib-visually-hidden();
@@ -1112,13 +1114,13 @@
     }
 };
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-action-print {
         @abs-action-print();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-action-print-s {
         @abs-action-print();
     }
@@ -1316,7 +1318,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-icon-add-mobile {
         .lib-icon-font(
         @_icon-font-content: @icon-expand,
@@ -1365,13 +1367,13 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-no-display-s {
         @abs-no-display();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-no-display-desktop {
         @abs-no-display();
     }
@@ -1393,7 +1395,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-status-desktop {
         margin-top: 6px;
         padding: @indent__xs @indent__s;
@@ -1425,7 +1427,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-title-orders-mobile {
         .page-main {
             .page-title-wrapper {
@@ -1442,7 +1444,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-title-orders-desktop {
         .page-main {
             .page-title-wrapper {
@@ -1470,7 +1472,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-table-striped-mobile {
         > tbody > tr > td:last-child {
             border: 0;
@@ -1482,7 +1484,7 @@
 //  Table bordered desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-table-bordered-desktop {
         .lib-table-bordered(
         @_table_type: light,
@@ -1495,7 +1497,7 @@
 //  Pager toolbar for non-catalog pages desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-pager-toolbar {
         position: relative;
 
@@ -1562,7 +1564,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-shopping-cart-items-desktop {
         .lib-layout-column(2, 1, @layout-column-checkout__width-main);
         &:extend(.abs-add-box-sizing-desktop all);
@@ -1575,7 +1577,7 @@
 //  Remove top border
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-no-border-top {
         border-top: 0;
     }
@@ -1585,7 +1587,7 @@
 //  Remove bottom border
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-no-border-bottom {
         border-bottom: 0;
     }
@@ -1673,7 +1675,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+& when (@media-common = true) {
     .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }
@@ -1816,7 +1818,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-sidebar-totals-mobile {
         th {
             &:extend(.abs-col-no-prefix all);
@@ -1901,7 +1903,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-discount-block-desktop {
         .block {
             &:extend(.abs-blocks-2columns all);

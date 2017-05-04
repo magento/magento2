@@ -60,7 +60,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-product-options-list-desktop {
         @abs-product-options-list();
     }
@@ -80,13 +80,13 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-button-desktop {
         width: auto;
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-button-responsive-smaller {
         @abs-button-responsive();
     }
@@ -109,13 +109,13 @@
     }
 };
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-blocks-2columns {
         @abs-blocks-2columns();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-blocks-2columns-s {
         @abs-blocks-2columns();
     }
@@ -316,13 +316,13 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-reset-left-margin-desktop {
         @abs-reset-left-margin();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-reset-left-margin-desktop-s {
         @abs-reset-left-margin();
     }
@@ -347,7 +347,7 @@
 //  Action with icon remove with text for desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-action-remove-desktop when not (@form-field-type-label-inline__width = false) and not (@form-field-type-label-inline__width = '') {
         margin-left: @form-field-type-label-inline__width + 50%;
         top: 6px;
@@ -417,7 +417,7 @@
 //  Add Recipient for desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-fields-desktop {
         .fieldset {
             .field {
@@ -447,13 +447,13 @@
     .lib-css(margin-left, @form-field-type-label-inline__width);
 };
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-margin-for-forms-desktop {
         @abs-margin-for-forms-desktop();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-margin-for-forms-desktop-s {
         @abs-margin-for-forms-desktop();
     }
@@ -483,25 +483,25 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-visually-hidden-mobile {
         @abs-visually-hidden();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-visually-hidden-mobile-m {
         @abs-visually-hidden();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-visually-hidden-desktop-s {
         @abs-visually-hidden();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-visually-hidden-desktop {
         @abs-visually-hidden();
     }
@@ -531,25 +531,25 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-clearfix-desktop {
         @abs-add-clearfix();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-add-clearfix-desktop-s {
         @abs-add-clearfix();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-add-clearfix-mobile {
         @abs-add-clearfix();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-clearfix-mobile-m {
         @abs-add-clearfix();
     }
@@ -569,19 +569,19 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-box-sizing-desktop {
         @abs-add-box-sizing();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-add-box-sizing-desktop-s {
         @abs-add-box-sizing();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-add-box-sizing-desktop-m {
         @abs-add-box-sizing();
     }
@@ -591,7 +591,7 @@
 //  Revert field type
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
@@ -821,7 +821,7 @@
 //  Checkout order review
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-checkout-order-review {
         tbody tr {
             &:not(:last-child) {
@@ -889,7 +889,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-icon-add-mobile {
         .lib-icon-font(
         @_icon-font-content: @icon-expand,
@@ -928,7 +928,7 @@
 //  Abstract toggle title block
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-toggling-title-mobile {
         border-bottom: @border-width__base solid @border-color__base;
         border-top: @border-width__base solid @border-color__base;
@@ -974,13 +974,13 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-no-display-s {
         @abs-no-display();
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-no-display-desktop {
         @abs-no-display();
     }
@@ -1001,7 +1001,7 @@
 //  Pager toolbar for non-catalog pages mobile
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-pager-toolbar-mobile {
         .toolbar-amount,
         .limiter,
@@ -1016,7 +1016,7 @@
 //  Pager toolbar for non-catalog pages mobile
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+& when (@media-common = true) {
     .abs-pager-toolbar-mobile-s {
         .toolbar-amount,
         .limiter,
@@ -1030,7 +1030,7 @@
 //  Pager toolbar for non-catalog pages desktop
 //  ---------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-pager-toolbar {
         margin-bottom: @indent__base;
         position: relative;
@@ -1107,7 +1107,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-shopping-cart-items-mobile {
         .actions {
             text-align: center;
@@ -1128,7 +1128,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+& when (@media-common = true) {
     .abs-shopping-cart-items-desktop {
         float: left;
         position: relative;
@@ -1233,7 +1233,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+& when (@media-common = true) {
     .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }
