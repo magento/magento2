@@ -8,6 +8,7 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Escaper;
+use Magento\CatalogUrlRewrite\Model\UrlDuplicatesRegistry;
 
 class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
 {
@@ -22,37 +23,44 @@ class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
     private $escaper;
 
     /**
+     * @var UrlDuplicatesRegistry
+     */
+    private $urlDuplicatesRegistry;
+
+    /**
      * @param ManagerInterface $messageManager
      * @param Escaper $escaper
+     * @param UrlDuplicatesRegistry $urlDuplicatesRegistry
      */
     public function __construct(
         ManagerInterface $messageManager,
-        Escaper $escaper
+        Escaper $escaper,
+        UrlDuplicatesRegistry $urlDuplicatesRegistry
     ) {
         $this->messageManager = $messageManager;
         $this->escaper = $escaper;
+        $this->urlDuplicatesRegistry = $urlDuplicatesRegistry;
     }
 
     /**
-     * Add url collisions notices
+     * Add url rewrite duplicates warnings
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $observer->getEvent()->getProduct();
-        if ($product->getData('unsaved_urls')) {
+        if (!empty($this->urlDuplicatesRegistry->getUrlDuplicates())) {
             $urls = '';
-            foreach ($product->getData('unsaved_urls') as $url) {
+            foreach ($this->urlDuplicatesRegistry->getUrlDuplicates() as $url) {
                 /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $url */
                 $urls .= $url->getRequestPath() . ', ';
             }
             $urls = rtrim($urls, ', ');
             $this->messageManager->addWarningMessage(
                 __(
-                    'The following URL keys for specified store already exists %1',
+                    'Could not save the following URL keys for specified store because they already exist: %1',
                     $this->escaper->escapeHtml($urls)
                 )
             );

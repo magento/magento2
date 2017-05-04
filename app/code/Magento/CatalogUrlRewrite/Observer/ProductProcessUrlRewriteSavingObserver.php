@@ -10,29 +10,38 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\CatalogUrlRewrite\Model\UrlDuplicatesRegistry;
 
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
     /**
      * @var ProductUrlRewriteGenerator
      */
-    protected $productUrlRewriteGenerator;
+    private $productUrlRewriteGenerator;
 
     /**
      * @var UrlPersistInterface
      */
-    protected $urlPersist;
+    private $urlPersist;
+
+    /**
+     * @var UrlDuplicatesRegistry
+     */
+    private $urlDuplicatesRegistry;
 
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
+     * @param UrlDuplicatesRegistry $urlDuplicatesRegistry
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        UrlPersistInterface $urlPersist
+        UrlPersistInterface $urlPersist,
+        UrlDuplicatesRegistry $urlDuplicatesRegistry
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
+        $this->urlDuplicatesRegistry = $urlDuplicatesRegistry;
     }
 
     /**
@@ -59,13 +68,12 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 
             if ($product->isVisibleInSiteVisibility()) {
                 $generatedUrls = $this->productUrlRewriteGenerator->generate($product);
-                $product->setData(
-                    'unsaved_urls',
-                    array_diff_key(
-                        $generatedUrls,
-                        $this->urlPersist->replace($generatedUrls)
-                    )
+                $unsavedUrlsDuplicates = array_diff_key(
+                    $generatedUrls,
+                    $this->urlPersist->replace($generatedUrls)
                 );
+                // Set the duplicates to registry so it can be processed by the presentation layer
+                $this->urlDuplicatesRegistry->setUrlDuplicates($unsavedUrlsDuplicates);
             }
         }
     }

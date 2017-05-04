@@ -134,12 +134,12 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Insert multiple
+     * Inserts a url as array to database
      *
      * @param array $data
      * @return bool
      */
-    private function insert($data)
+    private function insert(array $data)
     {
         try {
             return $this->connection->insert($this->resource->getTableName(self::TABLE_NAME), $data) > 0;
