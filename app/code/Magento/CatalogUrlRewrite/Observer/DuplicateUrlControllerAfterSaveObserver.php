@@ -58,13 +58,9 @@ class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
                 $urls .= $url->getRequestPath() . ', ';
             }
             $urls = rtrim($urls, ', ');
-            $this->messageManager->addWarningMessage(
-                __(
-                    'There is a conflict between the product\'s URL keys and other URLs.'
-                    . 'The product can\'t be accessed in the frontend in the specified store, through this URL: %1'
-                    . 'To fix the conflict, under Search Engine Optimization, edit the URL key to make it unique.',
-                    $this->escaper->escapeHtml($urls)
-                )
+            $this->messageManager->addComplexWarningMessage(
+                'addProductUrlDuplicateMessage',
+                ['urls' => $this->escaper->escapeHtml($urls)]
             );
         }
     }

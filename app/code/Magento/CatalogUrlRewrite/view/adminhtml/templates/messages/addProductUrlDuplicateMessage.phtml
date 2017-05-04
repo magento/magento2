@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<p>
+    <b>
+    <?php echo $block->escapeHtml(__('There is a conflict between the product\'s URL keys and other URLs keys.')); ?>
+    </b>
+</p>
+<p>
+    <?php echo $block->escapeHtml(
+        __('The product can\'t be accessed in the frontend in the specified store, through this URL key:')
+    ); ?>
+    <i>
+        <?php echo $block->getData('urls');?>
+    </i>
+</p>
+<p>
+    <?php echo $block->escapeHtml(
+        __('To fix the conflict, under Search Engine Optimization section, edit the URL key to make it unique.')
+    );
+    ?>
+</p>

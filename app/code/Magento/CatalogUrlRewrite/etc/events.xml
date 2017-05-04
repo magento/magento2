@@ -33,7 +33,4 @@
     <event name="catalog_category_move_after">
         <observer name="process_url_rewrite_moving" instance="Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteMovingObserver"/>
     </event>
-    <event name="controller_action_catalog_product_save_entity_after">
-        <observer name="controller_notifications_on_duplicate_urls" instance="Magento\CatalogUrlRewrite\Observer\DuplicateUrlControllerAfterSaveObserver"/>
-    </event>
 </config>

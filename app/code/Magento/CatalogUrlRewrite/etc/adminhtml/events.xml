@@ -9,4 +9,7 @@
     <event name="catalog_product_to_website_change">
         <observer name="catalog_product_to_website_change" instance="Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver"/>
     </event>
+    <event name="controller_action_catalog_product_save_entity_after">
+        <observer name="controller_notifications_on_duplicate_urls" instance="Magento\CatalogUrlRewrite\Observer\DuplicateUrlControllerAfterSaveObserver"/>
+    </event>
 </config>
