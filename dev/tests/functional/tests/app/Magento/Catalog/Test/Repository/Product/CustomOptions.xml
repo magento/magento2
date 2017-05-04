@@ -18,7 +18,7 @@
                         <item name="price" xsi:type="string">10</item>
                         <item name="price_type" xsi:type="string">Percent</item>
                         <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
-                        <item name="sort_order" xsi:type="string">0</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                     </item>
                 </item>
             </field>
@@ -32,7 +32,7 @@
                         <item name="price" xsi:type="string">20</item>
                         <item name="price_type" xsi:type="string">Percent</item>
                         <item name="sku" xsi:type="string">sku_drop_down_row_2</item>
-                        <item name="sort_order" xsi:type="string">0</item>
+                        <item name="sort_order" xsi:type="string">2</item>
                     </item>
                 </item>
             </field>
@@ -49,14 +49,14 @@
                         <item name="price" xsi:type="string">10</item>
                         <item name="price_type" xsi:type="string">Percent</item>
                         <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
-                        <item name="sort_order" xsi:type="string">0</item>
+                        <item name="sort_order" xsi:type="string">1</item>
                     </item>
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">20 percent</item>
                         <item name="price" xsi:type="string">20</item>
                         <item name="price_type" xsi:type="string">Percent</item>
                         <item name="sku" xsi:type="string">sku_drop_down_row_2</item>
-                        <item name="sort_order" xsi:type="string">1</item>
+                        <item name="sort_order" xsi:type="string">2</item>
                     </item>
                 </item>
             </field>
