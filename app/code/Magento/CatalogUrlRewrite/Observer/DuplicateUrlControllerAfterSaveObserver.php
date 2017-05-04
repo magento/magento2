@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Escaper;
-use Magento\CatalogUrlRewrite\Model\UrlDuplicatesRegistry;
+use Magento\UrlRewrite\Model\UrlDuplicatesRegistry;
 
 class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
 {
@@ -60,7 +60,9 @@ class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
             $urls = rtrim($urls, ', ');
             $this->messageManager->addWarningMessage(
                 __(
-                    'Could not save the following URL keys for specified store because they already exist: %1',
+                    'There is a conflict between the product\'s URL keys and other URLs.'
+                    . 'The product can\'t be accessed in the frontend in the specified store, through this URL: %1'
+                    . 'To fix the conflict, under Search Engine Optimization, edit the URL key to make it unique.',
                     $this->escaper->escapeHtml($urls)
                 )
             );

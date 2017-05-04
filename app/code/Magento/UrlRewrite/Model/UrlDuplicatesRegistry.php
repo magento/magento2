@@ -1,10 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogUrlRewrite\Model;
+namespace Magento\UrlRewrite\Model;
 
 /**
  * Class to store url rewrites duplicates that were discovered when we save an entity that has related urls
@@ -17,6 +17,16 @@ class UrlDuplicatesRegistry
 
     /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]  */
     private $urlDuplicates = [];
+
+    /**
+     * Clears the url rewrites so it can be reused by other processes
+     *
+     * @return void
+     */
+    public function clearUrlDuplicates()
+    {
+        $this->urlDuplicates = [];
+    }
 
     /**
      * Set the url rewrites duplicates that resulted from a saving process

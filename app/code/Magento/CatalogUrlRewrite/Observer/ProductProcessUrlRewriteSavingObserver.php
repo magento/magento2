@@ -10,7 +10,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\CatalogUrlRewrite\Model\UrlDuplicatesRegistry;
+use Magento\UrlRewrite\Model\UrlDuplicatesRegistry;
 
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
@@ -67,13 +67,8 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             ]);
 
             if ($product->isVisibleInSiteVisibility()) {
-                $generatedUrls = $this->productUrlRewriteGenerator->generate($product);
-                $unsavedUrlsDuplicates = array_diff_key(
-                    $generatedUrls,
-                    $this->urlPersist->replace($generatedUrls)
-                );
-                // Set the duplicates to registry so it can be processed by the presentation layer
-                $this->urlDuplicatesRegistry->setUrlDuplicates($unsavedUrlsDuplicates);
+                $this->urlDuplicatesRegistry->clearUrlDuplicates();
+                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }
     }
