@@ -183,7 +183,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Framework\View\Asset\LocalInterface
      */
-    private $imageAsset;
+    protected $imageAsset;
 
     /**
      * @param \Magento\Framework\Model\Context $context
