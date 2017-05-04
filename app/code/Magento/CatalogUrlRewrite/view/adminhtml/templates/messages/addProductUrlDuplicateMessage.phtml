@@ -6,11 +6,9 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<p>
-    <b>
+<h4>
     <?php echo $block->escapeHtml(__('There is a conflict between the product\'s URL keys and other URLs keys.')); ?>
-    </b>
-</p>
+</h4>
 <p>
     <?php echo $block->escapeHtml(
         __('The product can\'t be accessed in the frontend in the specified store, through this URL key:')
@@ -18,10 +16,9 @@
     <i>
         <?php echo $block->getData('urls');?>
     </i>
-</p>
-<p>
+    <br>
     <?php echo $block->escapeHtml(
-        __('To fix the conflict, under Search Engine Optimization section, edit the URL key to make it unique.')
+        __('To fix the conflict, under the Search Engine Optimization section, edit the URL key to make it unique.')
     );
     ?>
 </p>

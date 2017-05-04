@@ -153,7 +153,7 @@ class DbStorage extends AbstractStorage
             ) {
                 $this->logger->warning(
                     __(
-                        'Could not insert a duplicate URL when trying to insert %1 for %3 on store %2, entity id %4.',
+                        'Could not insert a duplicate URL when trying to insert %1 for %2 on store %3, entity id %4.',
                         $data['request_path'],
                         $data['entity_type'],
                         $data['store_id'],
@@ -161,7 +161,7 @@ class DbStorage extends AbstractStorage
                     )
                 );
             } else {
-                $this->logger->warning($e->getMessage());
+                $this->logger->error($e->getMessage());
             }
         }
         return false;
