@@ -6,6 +6,14 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Directory\Model\RegionFactory;
+use Magento\Backend\App\Action;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
+use Psr\Log\LoggerInterface;
+
 class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -15,6 +23,46 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
      */
     const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
+    /** @var RegionFactory $regionFactory */
+    protected $regionFactory;
+    
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
+     * @param RegionFactory $regionFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     */
+    public function __construct(
+        Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\Translate\InlineInterface $translateInline,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger,
+        RegionFactory $regionFactory
+    ) {
+        $this->regionFactory = $regionFactory;
+        parent::__construct($context,$coreRegistry,$fileFactory,$translateInline,
+            $resultPageFactory,$resultJsonFactory,$resultLayoutFactory,$resultRawFactory,
+            $orderManagement,$orderRepository,$logger);
+    }
+    
     /**
      * Save order address
      *
@@ -32,6 +80,14 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
         if ($data && $address->getId()) {
             $address->addData($data);
             try {
+                if($address->getRegion() == null)   {
+                    $regionId = $address->getRegionId();
+                    /** @var \Magento\Directory\Model\Region $region */
+                    $region = $this->regionFactory->create();
+                    $region->getResource()->load($region,$regionId);
+                    $address->setRegion($region->getName());
+                    $address->setRegionCode($region->getCode());
+                }                
                 $address->save();
                 $this->_eventManager->dispatch(
                     'admin_sales_order_address_update',
