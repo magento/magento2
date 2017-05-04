@@ -313,7 +313,7 @@ class Widget
                     $value = $parameters[$name]->getValue();
                 }
             }
-            if ($value) {
+            if (isset($value)) {
                 $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
             }
         }
