@@ -135,7 +135,7 @@ class UpdateSimpleProductEntityTest extends Injectable
     {
         if ($this->configData) {
             $this->objectManager->create(
-                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
                 ['configData' => $this->configData, 'rollback' => true]
             )->run();
         }

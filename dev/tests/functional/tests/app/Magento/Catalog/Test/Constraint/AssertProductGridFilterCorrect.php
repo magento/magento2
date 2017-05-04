@@ -32,7 +32,7 @@ class AssertProductGridFilterCorrect extends AbstractConstraint
         array $productNames,
         array $stores
     ) {
-        $productId = $initialProduct->getId();
+        $productSku = $initialProduct->getSku();
         //open products grid
         $productIndex->open();
         /** @var Grid $productGrid */
@@ -66,18 +66,16 @@ class AssertProductGridFilterCorrect extends AbstractConstraint
         //apply filters and compare results
         foreach ($dataForFilters as $filterData) {
             if (!empty($filterData)) {
-                $productGrid->sortByColumn('ID');
                 $filter = [
                     'store_id' => $filterData['store_view'],
+                    'sku' => $productSku,
                 ];
+                $productGrid->resetFilter();
                 $productGrid->search($filter);
-                $gridProductName = $productGrid->getColumnValue($productId, 'Name');
+                $res = $productGrid->isRowVisible(['name' => $filterData['name']], false, true);
 
-                $productGrid->sortByColumn('ID');
-
-                \PHPUnit_Framework_Assert::assertEquals(
-                    $filterData['name'],
-                    $gridProductName,
+                \PHPUnit_Framework_Assert::assertTrue(
+                    $res,
                     'Product \'' . $initialProduct->getName() . '\' is absent in Products grid.'
                 );
 
