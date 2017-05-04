@@ -175,6 +175,11 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Init Configurable Data
+     * 
+     * @return void
+     */
     private function initConfigurableData()
     {
         $productIds = [1, 2, 3];

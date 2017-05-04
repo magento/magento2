@@ -5,16 +5,17 @@
  */
 
 /** @var \Magento\Eav\Model\Config $eavConfig */
-$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Setup\CategorySetup::class);
 
 /** @var $attributes array */
 $attributes = [
     [
         'code' => 'test_attribute_1',
         'label' => 'Test attribute 1'
-    ], [
+    ],
+    [
         'code' => 'test_attribute_2',
         'label' => 'Test attribute 2'
     ]
@@ -35,7 +36,7 @@ foreach ($attributes as $item) {
     /* Create attribute */
     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
     $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
     );
 
     $attribute->setData(
@@ -70,11 +71,10 @@ foreach ($attributes as $item) {
 
     /* Assign attribute to attribute set */
     $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
-
 }
 
 /** @var \Magento\Eav\Model\Config $eavConfig */
-$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $eavConfig->clear();
 
 

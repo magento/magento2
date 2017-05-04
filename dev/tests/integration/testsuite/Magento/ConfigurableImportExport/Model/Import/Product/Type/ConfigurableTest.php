@@ -42,8 +42,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-
-
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -71,14 +69,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'directory' => $directory
             ]
         );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
+        $errors = $this->model->setSource($source)
+            ->setParameters(
+                [
+                    'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                    'entity' => 'catalog_product'
+                ]
+            )
+            ->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
@@ -113,65 +111,65 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableProductOption */
-        foreach ($configurableProductOptions as $configurableProductOption){
-                $productAttribute = $configurableProductOption->getProductAttribute();
-                $productAttributeCode = $productAttribute->getAttributeCode();
-                $productAttributeData = $productAttribute->getData();
-                $productAttributeDataExpectation = self::getProductAttributesDataExpectation()[$productAttributeCode];
+        foreach ($configurableProductOptions as $configurableProductOption) {
+            $productAttribute = $configurableProductOption->getProductAttribute();
+            $productAttributeCode = $productAttribute->getAttributeCode();
+            $productAttributeData = $productAttribute->getData();
+            $productAttributeDataExpectation = self::getProductAttributesDataExpectation()[$productAttributeCode];
 
-                $productOptionData = $configurableProductOption->getData();
-                $productOptionLabel = $productOptionData['label'];
-                $productOptionsDataExpectation = self::getProductOptionsDataExpectation()[$productOptionLabel];
+            $productOptionData = $configurableProductOption->getData();
+            $productOptionLabel = $productOptionData['label'];
+            $productOptionsDataExpectation = self::getProductOptionsDataExpectation()[$productOptionLabel];
 
-                if (isset($attributesPositionExpectation[$productAttributeCode])) {
-                    $expectedPosition = $attributesPositionExpectation[$productAttributeCode];
-                    $this->assertEquals($expectedPosition, $configurableProductOption->getPosition());
-                }
+            if (isset($attributesPositionExpectation[$productAttributeCode])) {
+                $expectedPosition = $attributesPositionExpectation[$productAttributeCode];
+                $this->assertEquals($expectedPosition, $configurableProductOption->getPosition());
+            }
 
-                $this->assertArrayHasKey('product_super_attribute_id', $productOptionData);
-                $this->assertArrayHasKey('product_id', $productOptionData);
-                $this->assertArrayHasKey('attribute_id', $productOptionData);
-                $this->assertArrayHasKey('position', $productOptionData);
-                $this->assertArrayHasKey('extension_attributes', $productOptionData);
-                $this->assertArrayHasKey('product_attribute', $productOptionData);
-                $this->assertArrayHasKey('attribute_id', $productAttributeData);
-                $this->assertArrayHasKey('entity_type_id', $productAttributeData);
-                $this->assertArrayHasKey('attribute_code', $productAttributeData);
-                $this->assertArrayHasKey('frontend_label', $productAttributeData);
-                $this->assertArrayHasKey('label', $productOptionData);
-                $this->assertArrayHasKey('use_default', $productOptionData);
-                $this->assertArrayHasKey('options', $productOptionData);
+            $this->assertArrayHasKey('product_super_attribute_id', $productOptionData);
+            $this->assertArrayHasKey('product_id', $productOptionData);
+            $this->assertArrayHasKey('attribute_id', $productOptionData);
+            $this->assertArrayHasKey('position', $productOptionData);
+            $this->assertArrayHasKey('extension_attributes', $productOptionData);
+            $this->assertArrayHasKey('product_attribute', $productOptionData);
+            $this->assertArrayHasKey('attribute_id', $productAttributeData);
+            $this->assertArrayHasKey('entity_type_id', $productAttributeData);
+            $this->assertArrayHasKey('attribute_code', $productAttributeData);
+            $this->assertArrayHasKey('frontend_label', $productAttributeData);
+            $this->assertArrayHasKey('label', $productOptionData);
+            $this->assertArrayHasKey('use_default', $productOptionData);
+            $this->assertArrayHasKey('options', $productOptionData);
 
-                $this->assertEquals(
-                    $productAttributeDataExpectation['attribute_code'],
-                    $productAttributeData['attribute_code']
-                );
-                $this->assertEquals(
-                    $product->getData('entity_id'),
-                    $productOptionData['product_id']);
-                $this->assertEquals(
-                    $productAttributeDataExpectation['frontend_label'],
-                    $productAttributeData['frontend_label']
-                );
-                $this->assertEquals(
-                    $productOptionsDataExpectation['label'],
-                    $productOptionData['label']
-                );
-                $this->assertEquals(
-                    $productOptionsDataExpectation['options']['label'],
-                    $productOptionData['options'][0]['label']
-                );
-                $this->assertEquals(
-                    $productOptionsDataExpectation['options']['default_label'],
-                    $productOptionData['options'][0]['default_label']
-                );
-                $this->assertEquals(
-                    $productOptionsDataExpectation['options']['store_label'],
-                    $productOptionData['options'][0]['store_label']
-                );
-                $this->assertArrayHasKey('values', $productOptionData);
-                $valuesData = $productOptionData['values'];
-                $this->assertEquals(1, count($valuesData));
+            $this->assertEquals(
+                $productAttributeDataExpectation['attribute_code'],
+                $productAttributeData['attribute_code']
+            );
+            $this->assertEquals(
+                $product->getData('entity_id'),
+                $productOptionData['product_id']);
+            $this->assertEquals(
+                $productAttributeDataExpectation['frontend_label'],
+                $productAttributeData['frontend_label']
+            );
+            $this->assertEquals(
+                $productOptionsDataExpectation['label'],
+                $productOptionData['label']
+            );
+            $this->assertEquals(
+                $productOptionsDataExpectation['options']['label'],
+                $productOptionData['options'][0]['label']
+            );
+            $this->assertEquals(
+                $productOptionsDataExpectation['options']['default_label'],
+                $productOptionData['options'][0]['default_label']
+            );
+            $this->assertEquals(
+                $productOptionsDataExpectation['options']['store_label'],
+                $productOptionData['options'][0]['store_label']
+            );
+            $this->assertArrayHasKey('values', $productOptionData);
+            $valuesData = $productOptionData['values'];
+            $this->assertEquals(1, count($valuesData));
         }
     }
 
@@ -189,8 +187,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'store_label' => 'Option 1'
                 ]
             ],
-
-
             'Test attribute 2' => [
                 'label' => 'Test attribute 2',
                 'options' => [
