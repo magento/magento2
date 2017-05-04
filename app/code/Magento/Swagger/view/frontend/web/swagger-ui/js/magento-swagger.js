@@ -3,21 +3,49 @@
  * See COPYING.txt for license details.
  */
 
+/*global SwaggerClient SwaggerUi initOAuth hljs*/
+
 /**
  * @api
  */
 $(function () {
+    'use strict';
+
     var url = $('#input_baseUrl').val();
 
     // Pre load translate...
     if (window.SwaggerTranslator) {
         window.SwaggerTranslator.translate();
     }
+
+    /** @function addApiKeyAuthorization */
+    function addApiKeyAuthorization() {
+        var key = encodeURIComponent($('#input_apiKey')[0].value);
+
+        if (key && key.trim() !== '') {
+            window.swaggerUi.api.clientAuthorizations.add(
+                'apiKeyAuth',
+                new SwaggerClient.ApiKeyAuthorization('Authorization',  'Bearer ' + key, 'header')
+            );
+        }
+    }
+
+    /** @function log */
+    function log() {
+        if ('console' in window) {
+            console.log.apply(console, arguments);
+        }
+    }
+
     window.swaggerUi = new SwaggerUi({
         url: url,
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         dom_id: 'swagger-ui-container',
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-        onComplete: function (swaggerApi, swaggerUi) {
+
+        /** @function onComplete */
+        onComplete: function () {
             if (typeof initOAuth == 'function') {
                 initOAuth({
                     clientId: 'your-client-id',
@@ -38,7 +66,9 @@ $(function () {
 
             addApiKeyAuthorization();
         },
-        onFailure: function (data) {
+
+        /** @function onFailure */
+        onFailure: function () {
             log('Unable to Load SwaggerUI');
         },
         docExpansion: 'none',
@@ -46,23 +76,7 @@ $(function () {
         showRequestHeaders: false
     });
 
-    function addApiKeyAuthorization() {
-        var key = encodeURIComponent($('#input_apiKey')[0].value);
-
-        if (key && key.trim() != '') {
-            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization('Authorization',  'Bearer ' + key, 'header');
-
-            window.swaggerUi.api.clientAuthorizations.add('apiKeyAuth', apiKeyAuth);
-        }
-    }
-
     $('#input_apiKey').change(addApiKeyAuthorization);
 
     window.swaggerUi.load();
-
-    function log() {
-        if ('console' in window) {
-            console.log.apply(console, arguments);
-        }
-    }
 });
