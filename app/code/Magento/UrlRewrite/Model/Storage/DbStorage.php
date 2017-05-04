@@ -9,6 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Psr\Log\LoggerInterface;
 
 class DbStorage extends AbstractStorage
 {
@@ -33,17 +34,26 @@ class DbStorage extends AbstractStorage
     protected $resource;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        LoggerInterface $logger = null
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Psr\Log\LoggerInterface::class);
 
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
@@ -128,21 +138,33 @@ class DbStorage extends AbstractStorage
      *
      * @param array $data
      * @return bool
-     * @throws \Exception
      */
     private function insert($data)
     {
         try {
             return $this->connection->insert($this->resource->getTableName(self::TABLE_NAME), $data) > 0;
         } catch (\Exception $e) {
-            if ($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY
+            if (isset($data['request_path'])
+                && isset($data['entity_type'])
+                && isset($data['store_id'])
+                && isset($data['entity_id'])
+                && $e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
-                return false;
+                $this->logger->warning(
+                    __(
+                        'Could not insert a duplicate URL when trying to insert %1 for %3 on store %2, entity id %4.',
+                        $data['request_path'],
+                        $data['entity_type'],
+                        $data['store_id'],
+                        $data['entity_id']
+                    )
+                );
             } else {
-                throw $e;
+                $this->logger->warning($e->getMessage());
             }
         }
+        return false;
     }
 
     /**

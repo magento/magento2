@@ -50,10 +50,9 @@ class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
                 $urls .= $url->getRequestPath() . ', ';
             }
             $urls = rtrim($urls, ', ');
-            $this->messageManager->addNoticeMessage(
+            $this->messageManager->addWarningMessage(
                 __(
-                    'The following urls have not been saved for product %1: %2',
-                    $this->escaper->escapeHtml($product->getName()),
+                    'The following URL keys for specified store already exists %1',
                     $this->escaper->escapeHtml($urls)
                 )
             );
