@@ -58,9 +58,19 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
         RegionFactory $regionFactory
     ) {
         $this->regionFactory = $regionFactory;
-        parent::__construct($context,$coreRegistry,$fileFactory,$translateInline,
-            $resultPageFactory,$resultJsonFactory,$resultLayoutFactory,$resultRawFactory,
-            $orderManagement,$orderRepository,$logger);
+        parent::__construct(
+            $context, 
+            $coreRegistry,
+            $fileFactory,
+            $translateInline,                            
+            $resultPageFactory,
+            $resultJsonFactory,
+            $resultLayoutFactory,
+            $resultRawFactory,
+            $orderManagement,
+            $orderRepository,
+            $logger
+        );
     }
     
     /**
@@ -80,11 +90,11 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
         if ($data && $address->getId()) {
             $address->addData($data);
             try {
-                if($address->getRegion() == null)   {
+                if($address->getRegion() == null) {
                     $regionId = $address->getRegionId();
                     /** @var \Magento\Directory\Model\Region $region */
                     $region = $this->regionFactory->create();
-                    $region->getResource()->load($region,$regionId);
+                    $region->getResource()->load($region, $regionId);
                     $address->setRegion($region->getName());
                     $address->setRegionCode($region->getCode());
                 }                
