@@ -9,8 +9,8 @@ namespace Magento\Catalog\Test\TestCase\Product;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Precondition:
@@ -77,11 +77,17 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
+     * @param Store|null $store
      * @param string $configData
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData = '')
-    {
+    public function test(
+        CatalogProductSimple $initialProduct,
+        CatalogProductSimple $product,
+        Store $store = null,
+        $configData = ''
+    ) {
         $this->configData = $configData;
         // Preconditions
         $initialProduct->persist();
@@ -92,8 +98,13 @@ class UpdateSimpleProductEntityTest extends Injectable
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
 
+        if ($store) {
+            $store->persist();
+            $productName[$store->getStoreId()] = $product->getName();
+        }
+
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
 
@@ -102,10 +113,17 @@ class UpdateSimpleProductEntityTest extends Injectable
 
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen($filter);
+        if ($store) {
+            $this->editProductPage->getFormPageActions()->changeStoreViewScope($store);
+        }
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
 
-        return ['category' => $category];
+        return [
+            'category' => $category,
+            'stores' => isset($store) ? [$store] : [],
+            'productNames' => isset($productName) ? $productName : [],
+        ];
     }
 
     /**
