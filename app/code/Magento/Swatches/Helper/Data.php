@@ -474,6 +474,7 @@ class Data
      *
      * @param array $optionIds
      * @param array $swatches
+     * @return void
      */
     private function setCachedSwatches(array $optionIds, array $swatches)
     {
