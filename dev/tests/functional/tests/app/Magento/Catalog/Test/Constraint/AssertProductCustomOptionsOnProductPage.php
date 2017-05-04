@@ -245,7 +245,6 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
         return $result;
     }
 
-
     /**
      * Returns a string representation of the object
      *
