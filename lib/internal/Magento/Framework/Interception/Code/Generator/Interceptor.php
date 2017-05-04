@@ -110,7 +110,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         }
 
         $methodInfo = [
-            'name' => $method->getName(),
+            'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
             'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
             "if (!\$pluginInfo) {\n" .

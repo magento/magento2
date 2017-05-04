@@ -18,4 +18,9 @@ class Sample
     {
         $this->attribute = $value;
     }
+
+    public function & getReference()
+    {
+
+    }
 }

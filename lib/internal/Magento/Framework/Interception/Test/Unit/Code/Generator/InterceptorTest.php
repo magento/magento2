@@ -32,7 +32,6 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/_files'
         );
         $loader->register();
-
     }
 
     /**
