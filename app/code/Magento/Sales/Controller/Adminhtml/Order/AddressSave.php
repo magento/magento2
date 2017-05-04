@@ -14,6 +14,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -59,10 +63,10 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     ) {
         $this->regionFactory = $regionFactory;
         parent::__construct(
-            $context, 
+            $context,
             $coreRegistry,
             $fileFactory,
-            $translateInline,                            
+            $translateInline,
             $resultPageFactory,
             $resultJsonFactory,
             $resultLayoutFactory,
@@ -90,14 +94,14 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
         if ($data && $address->getId()) {
             $address->addData($data);
             try {
-                if($address->getRegion() == null) {
+                if ($address->getRegion() == null) {
                     $regionId = $address->getRegionId();
                     /** @var \Magento\Directory\Model\Region $region */
                     $region = $this->regionFactory->create();
                     $region->getResource()->load($region, $regionId);
                     $address->setRegion($region->getName());
                     $address->setRegionCode($region->getCode());
-                }                
+                }
                 $address->save();
                 $this->_eventManager->dispatch(
                     'admin_sales_order_address_update',
