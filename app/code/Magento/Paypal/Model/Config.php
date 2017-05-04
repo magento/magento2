@@ -1265,7 +1265,7 @@ class Config extends AbstractConfig
     public function getWppPeCcTypesAsOptionArray()
     {
         return $this->_cctypeFactory->create()->setAllowedTypes(
-            ['VI', 'MC', 'SM', 'SO', 'OT', 'AE']
+            ['VI', 'MC', 'SM', 'SO', 'AE']
         )->toOptionArray();
     }
 
@@ -1276,7 +1276,7 @@ class Config extends AbstractConfig
      */
     public function getPayflowproCcTypesAsOptionArray()
     {
-        return $this->_cctypeFactory->create()->setAllowedTypes(['AE', 'VI', 'MC', 'JCB', 'DI'])->toOptionArray();
+        return $this->_cctypeFactory->create()->setAllowedTypes(['AE', 'VI', 'MC', 'JCB', 'DI', 'DN'])->toOptionArray();
     }
 
     /**
