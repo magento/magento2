@@ -16,7 +16,7 @@
     <?php echo $block->getBlockHtml('formkey'); ?>
     <?php echo $block->getChildHtml('form_fields_before')?>
     <fieldset class="fieldset review-fieldset" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')); ?>">
-        <legend class="legend review-legend"><span><?php echo $block->escapeHtml(__("You're reviewing:")); ?></span><strong><?php echo $block->escapeHtml($block->getProductInfo()->getName()) ?></strong></legend><br />
+        <legend class="legend review-legend"><span><?php echo $block->escapeHtml(__("You're reviewing:")); ?></span><strong><?php echo $block->escapeHtml($block->getProductInfo()->getName(), null, true) ?></strong></legend><br />
         <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
         <fieldset class="field required review-field-ratings">

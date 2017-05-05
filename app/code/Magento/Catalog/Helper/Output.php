@@ -145,7 +145,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
             !$attribute->getIsWysiwygEnabled())
         ) {
             if ($attribute->getFrontendInput() != 'price') {
-                $attributeHtml = $this->_escaper->escapeHtml($attributeHtml);
+                $attributeHtml = $this->_escaper->escapeHtml($attributeHtml, null, true);
             }
             if ($attribute->getFrontendInput() == 'textarea') {
                 $attributeHtml = nl2br($attributeHtml);

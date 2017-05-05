@@ -13,7 +13,7 @@ $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
 $title = '';
 if (trim($block->getPageHeading())) {
     $title = '<span class="base" data-ui-id="page-title-wrapper" ' .  $block->getAddBaseAttribute() . '>'
-        . $block->escapeHtml($block->getPageHeading()) . '</span>';
+        . $block->escapeHtml($block->getPageHeading(), null, true) . '</span>';
 }
 ?>
 <?php if ($title): ?>
