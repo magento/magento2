@@ -129,6 +129,9 @@ class AssertConfigurableProductPage extends AssertProductPage
             if ($price > $option['price']) {
                 $price = $option['price'];
             }
+            if (isset($option['special_price']) && $price > $option['special_price']) {
+                $price = $option['special_price'];
+            }
         }
 
         return $price;
