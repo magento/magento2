@@ -711,6 +711,132 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @return void
+     */
+    public function testGetListWithFilteringByWebsite()
+    {
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Website::class);
+        $website->load('test', 'code');
+        $searchCriteria = [
+            'searchCriteria' => [
+                'filter_groups' => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'website_id',
+                                'value' => $website->getId(),
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
+                'current_page' => 1,
+                'page_size' => 10,
+            ],
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+        $this->assertTrue(count($response['items']) == 1);
+        $this->assertTrue(isset($response['items'][0]['sku']));
+        $this->assertEquals('simple-2', $response['items'][0]['sku']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @dataProvider testGetListWithFilteringByStoreDataProvider
+     *
+     * @param array $searchCriteria
+     * @param array $skus
+     * @param int $expectedProductCount
+     * @return void
+     */
+    public function testGetListWithFilteringByStore(array $searchCriteria, array $skus, $expectedProductCount = null)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+        if ($expectedProductCount) {
+            $this->assertTrue(count($response['items']) == $expectedProductCount);
+        }
+
+        $isResultValid = false;
+        foreach ($skus as $sku) {
+            foreach ($response['items'] as $item) {
+                if ($item['sku'] == $sku) {
+                    $isResultValid = true;
+                }
+            }
+            $this->assertTrue($isResultValid);
+        }
+    }
+
+    public function testGetListWithFilteringByStoreDataProvider()
+    {
+        return [
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [
+                            [
+                                'filters' => [
+                                    [
+                                        'field' => 'store',
+                                        'value' => 'fixture_second_store',
+                                        'condition_type' => 'eq',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                ['simple-2'],
+                1,
+            ],
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                ['simple-2', 'simple-1'],
+                null
+            ]
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
      */
     public function testGetListWithMultipleFilterGroupsAndSortingAndPagination()

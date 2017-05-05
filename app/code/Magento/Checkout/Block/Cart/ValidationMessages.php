@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Shopping cart validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {

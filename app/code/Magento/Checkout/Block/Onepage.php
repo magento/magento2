@@ -7,6 +7,7 @@ namespace Magento\Checkout\Block;
 
 /**
  * Onepage checkout block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Onepage extends \Magento\Framework\View\Element\Template

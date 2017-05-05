@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * Catalog product related items block
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface

@@ -24,6 +24,9 @@ namespace Magento\CatalogRule\Model\Rule;
 
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
+/**
+ * @api
+ */
 class Job extends \Magento\Framework\DataObject
 {
     /**

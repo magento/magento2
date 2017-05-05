@@ -30,6 +30,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * MySQL database adapter
  *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -358,6 +359,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return void
      * @throws \Zend_Db_Adapter_Exception
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function _connect()
     {
@@ -401,7 +403,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $this->_connection->query("SET time_zone = '+00:00'");
 
         if (isset($this->_config['initStatements'])) {
-            $this->query($this->_config['initStatements']);
+            $statements = $this->_splitMultiQuery($this->_config['initStatements']);
+            foreach ($statements as $statement) {
+                $this->_query($statement);
+            }
         }
 
         if (!$this->_connectionFlagsSet) {

@@ -29,6 +29,11 @@ class AssertCartItemsOptions extends AbstractAssertForm
     protected $errorMessage = '- %s: "%s" instead of "%s"';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $skippedFields = ['sku'];
+
+    /**
      * Assert that cart item options for product(s) display with correct information block
      * (custom options, variations, links, samples, bundle items etc) according to passed from dataset.
      *

@@ -10,6 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Customer address edit block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Edit extends \Magento\Directory\Block\Data
