@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Status;
 
+/**
+ * @api
+ */
 class Assign extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

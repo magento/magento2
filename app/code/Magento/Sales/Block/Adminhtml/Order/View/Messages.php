@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order;
 /**
  * Order view messages
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Messages extends \Magento\Framework\View\Element\Messages

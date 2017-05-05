@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
 /**
  * Sales Order items name column renderer
+ *
+ * @api
  */
 class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
 {

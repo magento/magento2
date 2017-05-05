@@ -8,6 +8,9 @@
 
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class Dashboard extends \Magento\Backend\Block\Template
 {
     /**

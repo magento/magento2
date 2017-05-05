@@ -8,6 +8,8 @@ namespace Magento\Customer\Block\Account;
 
 /**
  * Class for delimiter.
+ *
+ * @api
  */
 class Delimiter extends \Magento\Framework\View\Element\Template implements SortLinkInterface
 {

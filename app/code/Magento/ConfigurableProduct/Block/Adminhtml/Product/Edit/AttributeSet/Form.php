@@ -9,6 +9,9 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\AttributeSet;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

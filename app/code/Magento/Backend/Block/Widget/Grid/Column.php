@@ -10,7 +10,8 @@ use Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter;
 /**
  * Grid column block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated
  */
 class Column extends \Magento\Backend\Block\Widget
 {

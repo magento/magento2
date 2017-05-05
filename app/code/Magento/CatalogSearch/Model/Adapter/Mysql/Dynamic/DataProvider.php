@@ -17,6 +17,7 @@ use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
+use Magento\Store\Model\StoreManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,12 +60,18 @@ class DataProvider implements DataProviderInterface
     private $indexerFrontendResource;
 
     /**
+     * @var StoreManager
+     */
+    private $storeManager;
+
+    /**
      * @param ResourceConnection $resource
      * @param Range $range
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
      * @param FrontendResource $indexerFrontendResource
+     * @param StoreManager $storeManager
      */
     public function __construct(
         ResourceConnection $resource,
@@ -72,7 +79,8 @@ class DataProvider implements DataProviderInterface
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,
         IntervalFactory $intervalFactory,
-        FrontendResource $indexerFrontendResource = null
+        FrontendResource $indexerFrontendResource = null,
+        StoreManager $storeManager = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -83,6 +91,7 @@ class DataProvider implements DataProviderInterface
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManager::class);
     }
 
     /**
@@ -99,7 +108,7 @@ class DataProvider implements DataProviderInterface
     public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
         $aggregation = [
-            'count' => 'count(DISTINCT main_table.entity_id)',
+            'count' => 'count(main_table.entity_id)',
             'max' => 'MAX(min_price)',
             'min' => 'MIN(min_price)',
             'std' => 'STDDEV_SAMP(min_price)',
@@ -111,14 +120,13 @@ class DataProvider implements DataProviderInterface
         /** @var Table $table */
         $table = $entityStorage->getSource();
         $select->from(['main_table' => $tableName], [])
-            ->joinInner(['entities' => $table->getName()], 'main_table.entity_id  = entities.entity_id', [])
+            ->where('main_table.entity_id in (select entity_id from ' . $table->getName() . ')')
             ->columns($aggregation);
 
         $select = $this->setCustomerGroupId($select);
+        $select->where('main_table.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
 
-        $result = $this->connection->fetchRow($select);
-
-        return $result;
+        return $this->connection->fetchRow($select);
     }
 
     /**
