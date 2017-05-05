@@ -7,6 +7,9 @@ namespace Magento\Widget\Controller\Adminhtml\Widget;
 
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Loading widget options
+ */
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**
