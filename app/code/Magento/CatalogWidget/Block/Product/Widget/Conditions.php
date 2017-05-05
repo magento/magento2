@@ -73,6 +73,7 @@ class Conditions extends Template implements RendererInterface
         $this->conditions = $conditions;
         $this->rule = $rule;
         $this->registry = $registry;
+
         parent::__construct($context, $data);
     }
 
@@ -81,12 +82,17 @@ class Conditions extends Template implements RendererInterface
      */
     protected function _construct()
     {
+        $widgetParameters = [];
         $widget = $this->registry->registry('current_widget_instance');
+        
         if ($widget) {
             $widgetParameters = $widget->getWidgetParameters();
-            if (isset($widgetParameters['conditions'])) {
-                $this->rule->loadPost($widgetParameters);
-            }
+        } elseif (($widgetOptions = $this->getLayout()->getBlock('wysiwyg_widget.options')) != false) {
+            $widgetParameters = $widgetOptions->getWidgetValues();
+        }
+
+        if (isset($widgetParameters['conditions'])) {
+            $this->rule->loadPost($widgetParameters);
         }
     }
 
