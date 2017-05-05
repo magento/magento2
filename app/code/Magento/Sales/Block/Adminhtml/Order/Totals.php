@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 /**
  * Adminhtml order totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block\Adminhtml\Order\AbstractOrder

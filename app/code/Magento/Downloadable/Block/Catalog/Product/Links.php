@@ -12,6 +12,8 @@ use Magento\Framework\Json\EncoderInterface;
 
 /**
  * Downloadable Product Links part block
+ *
+ * @api
  */
 class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 {

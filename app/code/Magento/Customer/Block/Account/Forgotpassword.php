@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * Customer account navigation sidebar
+ *
+ * @api
  */
 class Forgotpassword extends \Magento\Framework\View\Element\Template
 {

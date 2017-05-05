@@ -13,6 +13,9 @@ namespace Magento\Downloadable\Block\Checkout;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
     /**

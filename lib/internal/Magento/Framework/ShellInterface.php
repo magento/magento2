@@ -7,6 +7,8 @@ namespace Magento\Framework;
 
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
+ *
+ * @api
  */
 interface ShellInterface
 {

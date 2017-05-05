@@ -8,6 +8,9 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Framework\DB\Select;
 
+/**
+ * @api
+ */
 interface QueryProcessorInterface
 {
     /**

@@ -16,7 +16,9 @@ use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Class Review
+ * Review modifier for catalog product form
+ *
+ * @api
  */
 class Review extends AbstractModifier
 {

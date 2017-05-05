@@ -15,6 +15,8 @@ use Magento\Framework\DataObject;
 
 /**
  * DataProvider for grid on Import Custom Options modal panel
+ *
+ * @api
  */
 class ProductCustomOptionsDataProvider extends ProductDataProvider
 {

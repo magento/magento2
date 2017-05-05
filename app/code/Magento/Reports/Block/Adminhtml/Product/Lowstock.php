@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Product;
 /**
  * Adminhtml low stock products report content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Lowstock extends \Magento\Backend\Block\Widget\Grid\Container

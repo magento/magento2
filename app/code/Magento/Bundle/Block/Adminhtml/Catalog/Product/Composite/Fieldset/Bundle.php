@@ -7,6 +7,8 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
 
 /**
  * Adminhtml block for fieldset of bundle product
+ *
+ * @api
  */
 class Bundle extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
 {

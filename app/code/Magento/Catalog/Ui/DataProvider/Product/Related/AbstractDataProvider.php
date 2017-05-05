@@ -18,6 +18,8 @@ use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Class AbstractDataProvider
+ *
+ * @api
  */
 abstract class AbstractDataProvider extends ProductDataProvider
 {

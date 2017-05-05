@@ -7,7 +7,7 @@ namespace Magento\Bundle\Block\Catalog\Product;
 
 /**
  * Bundle product price block
- *
+ * @api
  */
 class Price extends \Magento\Catalog\Block\Product\Price
 {

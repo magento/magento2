@@ -16,6 +16,9 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 use Magento\Backend\Block\Widget;
 use Magento\Framework\App\TemplateTypesInterface;
 
+/**
+ * @api
+ */
 class Edit extends Widget
 {
     /**

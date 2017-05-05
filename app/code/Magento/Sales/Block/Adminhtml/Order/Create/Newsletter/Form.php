@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Newsletter;
 /**
  * Adminhtml sales order create newsletter form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget

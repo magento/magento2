@@ -7,6 +7,8 @@ namespace Magento\Customer\Block\Form\Login;
 
 /**
  * Customer login info block
+ *
+ * @api
  */
 class Info extends \Magento\Framework\View\Element\Template
 {

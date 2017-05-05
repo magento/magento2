@@ -8,7 +8,9 @@
 namespace Magento\ConfigurableProduct\Block\Product\Configurable;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
  */
 class AttributeSelector extends \Magento\Backend\Block\Template
 {

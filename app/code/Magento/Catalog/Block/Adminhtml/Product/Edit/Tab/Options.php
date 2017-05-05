@@ -3,16 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * customers defined options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Block\Widget;
 
+/**
+ * @api
+ */
 class Options extends Widget
 {
     /**

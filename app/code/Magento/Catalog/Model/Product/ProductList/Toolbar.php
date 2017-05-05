@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Product\ProductList;
 
 /**
  * Class Toolbar
+ *
+ * @api
  */
 class Toolbar
 {

@@ -12,8 +12,6 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Class Media
- *
- * @package Magento\Swatches\Controller\Ajax
  */
 class Media extends \Magento\Framework\App\Action\Action
 {

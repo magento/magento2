@@ -7,6 +7,8 @@ namespace Magento\Framework\Webapi;
 
 /**
  * Web API authorization model.
+ *
+ * @api
  */
 class Authorization
 {

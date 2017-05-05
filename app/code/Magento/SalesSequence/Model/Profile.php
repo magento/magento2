@@ -9,6 +9,8 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Profile
+ *
+ * @api
  */
 class Profile extends AbstractModel
 {

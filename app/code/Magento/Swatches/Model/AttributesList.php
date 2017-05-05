@@ -7,6 +7,9 @@ namespace Magento\Swatches\Model;
 
 use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
+/**
+ * @api
+ */
 class AttributesList implements AttributesListInterface
 {
     /**

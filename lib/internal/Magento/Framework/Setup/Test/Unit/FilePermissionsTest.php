@@ -172,6 +172,18 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetMissingWritableDirectoriesForDbUpgrade()
+    {
+        $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
+        foreach ($directoryMethods as $method) {
+            $this->directoryWriteMock->expects($this->exactly(2))
+                ->method($method)
+                ->willReturn(true);
+        }
+
+        $this->assertEmpty($this->filePermissions->getMissingWritableDirectoriesForDbUpgrade());
+    }
+
     /**
      * @param array $mockMethods
      * @param array $expected

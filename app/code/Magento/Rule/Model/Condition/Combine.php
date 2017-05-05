@@ -5,6 +5,9 @@
  */
 namespace Magento\Rule\Model\Condition;
 
+/**
+ * @api
+ */
 class Combine extends AbstractCondition
 {
     /**

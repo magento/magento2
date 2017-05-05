@@ -1291,6 +1291,68 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         );
     }
 
+    public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes()
+    {
+        $attributesData = 'PARAM1=value1,param2=value2';
+        $preparedAttributes = $this->invokeMethod(
+            $this->importProduct,
+            'parseAttributesWithoutWrappedValues',
+            [$attributesData]
+        );
+
+        $this->assertArrayHasKey('param1', $preparedAttributes);
+        $this->assertEquals('value1', $preparedAttributes['param1']);
+
+        $this->assertArrayHasKey('param2', $preparedAttributes);
+        $this->assertEquals('value2', $preparedAttributes['param2']);
+
+        $this->assertArrayNotHasKey('PARAM1', $preparedAttributes);
+    }
+
+    public function testParseAttributesWithWrappedValuesWillReturnsLowercasedAttributeCodes()
+    {
+        $attribute1 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getFrontendInput'])
+            ->getMockForAbstractClass();
+
+        $attribute1->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('text');
+
+        $attribute2 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getFrontendInput'])
+            ->getMockForAbstractClass();
+
+        $attribute2->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('multiselect');
+
+        $attributeCache = [
+            'param1' => $attribute1,
+            'param2' => $attribute2,
+        ];
+
+        $this->setPropertyValue($this->importProduct, '_attributeCache', $attributeCache);
+
+        $attributesData = 'PARAM1="value1",PARAM2="value2"';
+        $attributes = $this->invokeMethod(
+            $this->importProduct,
+            'parseAttributesWithWrappedValues',
+            [$attributesData]
+        );
+
+        $this->assertArrayHasKey('param1', $attributes);
+        $this->assertEquals('value1', $attributes['param1']);
+
+        $this->assertArrayHasKey('param2', $attributes);
+        $this->assertEquals('"value2"', $attributes['param2']);
+
+        $this->assertArrayNotHasKey('PARAM1', $attributes);
+        $this->assertArrayNotHasKey('PARAM2', $attributes);
+    }
+
     public function getImagesFromRowDataProvider()
     {
         return [
