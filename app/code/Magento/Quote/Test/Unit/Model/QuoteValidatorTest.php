@@ -6,6 +6,10 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\QuoteValidator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Paymen;
 
 /**
  * Class QuoteValidatorTest
@@ -174,5 +178,59 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(true);
 
         $this->quoteValidator->validateBeforeSubmit($this->quoteMock);
+    }
+
+    /**
+     * Test case when country id not present in allowed countries list.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Some addresses cannot be used due to country-specific configurations.
+     */
+    public function testValidateBeforeSubmitThrowsExceptionIfCountrySpecificConfigurations()
+    {
+        $objectManagerHelper = new ObjectManager($this);
+        $allowedCountryReader = $this->getMockBuilder(AllowedCountries::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllowedCountries'])
+            ->getMock();
+        $allowedCountryReader->method('getAllowedCountries')
+            ->willReturn(['EE' => 'EE']);
+
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountryId'])
+            ->getMock();
+        $addressMock->method('getCountryId')
+            ->willReturn('EU');
+
+        $paymentMock = $this->getMockBuilder(Paymen::class)
+            ->setMethods(['getMethod'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $paymentMock->method('getMethod')
+            ->willReturn(true);
+
+        $billingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+        $billingAddressMock->method('validate')
+            ->willReturn(true);
+
+        $this->quoteMock->method('getShippingAddress')
+            ->willReturn($addressMock);
+        $this->quoteMock->method('isVirtual')
+            ->willReturn(true);
+        $this->quoteMock->method('getBillingAddress')
+            ->willReturn($billingAddressMock);
+        $this->quoteMock->method('getPayment')
+            ->willReturn($paymentMock);
+
+        $quoteValidator = $objectManagerHelper->getObject(
+            QuoteValidator::class,
+            ['allowedCountryReader' => $allowedCountryReader]
+        );
+
+        $quoteValidator->validateBeforeSubmit($this->quoteMock);
     }
 }
