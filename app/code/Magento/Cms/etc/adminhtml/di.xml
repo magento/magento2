@@ -12,4 +12,16 @@
             <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addUrlDuplicateWarningMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Cms::messages/addUrlDuplicateWarningMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -35,12 +35,10 @@ class UrlDuplicatesRegistry
      * @return void
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function setUrlDuplicates(array $urlDuplicates)
+    public function addUrlDuplicates(array $urlDuplicates)
     {
         if (empty($this->urlDuplicates)) {
-            $this->urlDuplicates = $urlDuplicates;
-        } else {
-            throw new \Magento\Framework\Exception\RuntimeException(__('Url rewrites duplicates can only be set once'));
+            $this->urlDuplicates = array_merge($this->urlDuplicates, $urlDuplicates);
         }
     }
 

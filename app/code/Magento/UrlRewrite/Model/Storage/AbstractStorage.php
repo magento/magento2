@@ -97,7 +97,7 @@ abstract class AbstractStorage implements StorageInterface
             $savedUrls
         );
         // Set the duplicates to registry so it can be processed by the presentation layer
-        $this->urlDuplicatesRegistry->setUrlDuplicates($unsavedUrlsDuplicates);
+        $this->urlDuplicatesRegistry->addUrlDuplicates($unsavedUrlsDuplicates);
         return $this->doReplace($urls);
     }
 

@@ -67,7 +67,6 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
             ]);
 
             if ($product->isVisibleInSiteVisibility()) {
-                $this->urlDuplicatesRegistry->clearUrlDuplicates();
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }

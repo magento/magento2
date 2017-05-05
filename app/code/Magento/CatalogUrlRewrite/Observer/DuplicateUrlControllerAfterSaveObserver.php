@@ -58,9 +58,10 @@ class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
                 $urls .= $url->getRequestPath() . ', ';
             }
             $urls = rtrim($urls, ', ');
+
             $this->messageManager->addComplexWarningMessage(
-                'addProductUrlDuplicateMessage',
-                ['urls' => $this->escaper->escapeHtml($urls)]
+                'addUrlDuplicateWarningMessage',
+                ['urls' => $urls, 'entity_type' => $observer->getProduct() ? 'product' : 'category']
             );
         }
     }

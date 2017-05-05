@@ -107,6 +107,12 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccess(__('You saved the page.'));
+
+                $this->_eventManager->dispatch(
+                    'controller_action_cms_page_save_entity_after',
+                    ['controller' => $this, 'page' => $model]
+                );
+
                 $this->dataPersistor->clear('cms_page');
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
