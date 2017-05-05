@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Store\Test\Fixture\Store;
 
 /**
@@ -58,18 +59,28 @@ class UpdateSimpleProductEntityTest extends Injectable
     protected $configData;
 
     /**
+     * Test step factory.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
-        CatalogProductEdit $editProductPage
+        CatalogProductEdit $editProductPage,
+        TestStepFactory $testStepFactory
     ) {
         $this->productGrid = $productGrid;
         $this->editProductPage = $editProductPage;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -103,7 +114,7 @@ class UpdateSimpleProductEntityTest extends Injectable
             $productName[$store->getStoreId()] = $product->getName();
         }
 
-        $this->objectManager->create(
+        $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
@@ -134,7 +145,7 @@ class UpdateSimpleProductEntityTest extends Injectable
     public function tearDown()
     {
         if ($this->configData) {
-            $this->objectManager->create(
+            $this->testStepFactory->create(
                 \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
                 ['configData' => $this->configData, 'rollback' => true]
             )->run();

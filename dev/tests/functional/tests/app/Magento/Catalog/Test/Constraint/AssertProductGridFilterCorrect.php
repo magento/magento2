@@ -11,6 +11,10 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
+/**
+ * Assert to check that name of product in grid is changing when store filter changed
+ *
+ */
 class AssertProductGridFilterCorrect extends AbstractConstraint
 {
     /**
