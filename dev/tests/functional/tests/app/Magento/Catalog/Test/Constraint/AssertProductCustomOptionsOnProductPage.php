@@ -126,7 +126,6 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
      * @param bool $isStrict
      * @param bool $isPrepareError
      * @return array|string
-     *
      */
     protected function verifyData(array $fixtureData, array $formData, $isStrict = false, $isPrepareError = true)
     {
@@ -255,3 +254,5 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
         return 'Value of custom option on the page is correct.';
     }
 }
+
+
