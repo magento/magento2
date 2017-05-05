@@ -10,6 +10,9 @@ namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Write test.
+ */
 class WriteTest extends \PHPUnit_Framework_TestCase
 {
     /**
