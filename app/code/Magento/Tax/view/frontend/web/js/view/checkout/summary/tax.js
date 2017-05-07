@@ -32,7 +32,7 @@ define([
          * @return {Boolean}
          */
         ifShowValue: function () {
-            if (this.isFullMode() && this.getPureValue() == 0) { //eslint-disable-line eqeqeq
+            if (this.isFullMode() && this.getPureValue() === '0.0000') {
                 return isZeroTaxDisplayed;
             }
 
