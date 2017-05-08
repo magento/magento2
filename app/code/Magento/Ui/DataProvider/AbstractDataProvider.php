@@ -172,7 +172,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * Returns SearchResult
      *
-     * @return AbstractCollection
+     * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
     public function getSearchResult()
     {
