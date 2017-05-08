@@ -27,7 +27,7 @@ class Mapper
     /**
      * @var array
      */
-    private $filters;
+    protected $filters;
 
     /**
      * @var string[]
@@ -37,7 +37,7 @@ class Mapper
     /**
      * @var string[]
      */
-    private $mappedFilters;
+    protected $mappedFilters;
 
     /**
      * @var array
@@ -47,7 +47,7 @@ class Mapper
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager;
+    protected $objectManager;
 
     /**
      * @var string
@@ -241,7 +241,7 @@ class Mapper
      * @param array $data
      * @return array
      */
-    private function aggregateFiltersByType($data)
+    protected function aggregateFiltersByType($data)
     {
         $list = [];
         foreach ($data as $value) {
