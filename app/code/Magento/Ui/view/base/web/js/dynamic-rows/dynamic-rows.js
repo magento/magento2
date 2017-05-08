@@ -270,6 +270,7 @@ define([
          */
         deleteHandler: function (index, id) {
             var defaultState;
+
             this.setDefaultState();
             defaultState = this.defaultPagesState[this.currentPage()];
             this.processingDeleteRecord(index, id);
@@ -725,6 +726,7 @@ define([
             }
 
             this.initChildren();
+
             return true;
         },
 
@@ -876,7 +878,13 @@ define([
             this._sort();
         },
 
-        _reducePages: function() {
+        /**
+         * Reduce the number of pages
+         *
+         * @private
+         * @return void
+         */
+        _reducePages: function () {
             if (this.pages() < ~~this.currentPage()) {
                 this.currentPage(this.pages());
             }

@@ -12,18 +12,28 @@ define([
     var model,
         ElementMock = function (index) {
             return {
-                destroy: function () {},
+                destroy: new Function (),
                 index: index
             };
         };
 
-    beforeEach(function(done) {
+    /**
+     * Run before each test method
+     *
+     * @return void
+     */
+    beforeEach(function (done) {
         model = new DynamicRows({});
         done();
     });
 
+    /**
+     * Testing changePage and delete record methods
+     *
+     * @return void
+     */
     describe('Magento_Ui/js/dynamic-rows/dynamic-rows', function () {
-        it('changePage without Records', function() {
+        it('changePage without Records', function () {
             model.recordData = function () {
                 return {
                     length: 0
@@ -33,7 +43,7 @@ define([
             expect(model.changePage(1)).toBeFalsy();
         });
 
-        it('changePage with Fake Page', function() {
+        it('changePage with Fake Page', function () {
             model.pages = function () {
                 return 3;
             };
@@ -41,13 +51,19 @@ define([
             expect(model.changePage(4)).toBeFalsy();
         });
 
-        it('changePage', function() {
+        it('changePage', function () {
             model.startIndex = 0;
             model.pageSize = 3;
             model.relatedData = [
-                {"a": "b"},
-                {"b": "c"},
-                {"v": "g"}
+                {
+                    'a': 'b'
+                },
+                {
+                    'b': 'c'
+                },
+                {
+                    'v': 'g'
+                }
             ];
 
             model.pages = function () {
@@ -62,7 +78,8 @@ define([
             var elems,
                 recordInstanceMock = new ElementMock(1),
                 elem2 = new ElementMock(2);
-            spyOn(recordInstanceMock, "destroy");
+
+            spyOn(recordInstanceMock, 'destroy');
             model.recordData({1: {}});
             elems = [
                 recordInstanceMock,
