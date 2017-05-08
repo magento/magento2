@@ -547,6 +547,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Cover categoriesUrlRewriteGenerate().
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCategoriesUrlRewriteGenerate()
     {
