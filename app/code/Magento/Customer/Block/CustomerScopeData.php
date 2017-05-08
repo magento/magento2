@@ -10,6 +10,7 @@ namespace Magento\Customer\Block;
  * Can be used, for example, on store front, in order to determine
  * that private cache invalid for current scope, by comparing
  * with appropriate value in store front private cache.
+ * @api
  */
 class CustomerScopeData extends \Magento\Framework\View\Element\Template
 {
