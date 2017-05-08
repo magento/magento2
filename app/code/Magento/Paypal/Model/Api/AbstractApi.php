@@ -52,7 +52,9 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     /**
      * @var array
      */
-    protected $_lineItemExportItemsFilters = [];
+    protected $_lineItemExportItemsFilters = [
+        'name' => 'convertToString'
+    ];
 
     /**
      * @var array
@@ -352,6 +354,17 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     public function getFraudManagementFiltersEnabled()
     {
         return 1;
+    }
+
+    /**
+     * Converts provided value to string.
+     *
+     * @param string|int|\Magento\Framework\Phrase $value
+     * @return string
+     */
+    public function convertToString($value)
+    {
+        return strval($value);
     }
 
     /**
