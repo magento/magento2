@@ -172,7 +172,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * Returns SearchResult
      *
-     * @return null
+     * @return AbstractCollection
      */
     public function getSearchResult()
     {
@@ -278,5 +278,15 @@ abstract class AbstractDataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
+    }
+
+    /**
+     * Retrieve all ids from Search Result
+     *
+     * @return int[]
+     */
+    public function getAllIds()
+    {
+        return $this->getSearchResult()->getAllIds();
     }
 }

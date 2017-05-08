@@ -125,11 +125,4 @@ interface UiComponentInterface extends BlockInterface
      * @return array
      */
     public function getDataSourceData();
-
-    /**
-     * Retrieve all ids from Search Result
-     *
-     * @return int[]
-     */
-    public function getAllIds();
 }

@@ -217,7 +217,19 @@ class Filter
      */
     private function getFilterIds()
     {
+        $idsArray = [];
         $this->applySelectionOnTargetProvider();
-        return $this->getComponent()->getAllIds();
+        if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
+            // Use collection's getItems for optimization purposes
+            return $this->getDataProvider()->getAllIds();
+        } else {
+            $searchResult = $this->getDataProvider()->getSearchResult();
+            // Use compatible search api getItems when searchResult is not a collection.
+            foreach ($searchResult->getItems() as $item) {
+                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                $idsArray[] = $item->getId();
+            }
+        }
+        return  $idsArray;
     }
 }
