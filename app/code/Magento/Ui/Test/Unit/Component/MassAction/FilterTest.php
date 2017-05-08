@@ -17,6 +17,11 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
+/**
+ * Class FilterTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -243,8 +248,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($excludedIds);
         $this->assertEquals($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
     }
-
-
 
     /**
      * This tests the method prepareComponent()
