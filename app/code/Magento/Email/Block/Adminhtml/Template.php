@@ -11,6 +11,9 @@
  */
 namespace Magento\Email\Block\Adminhtml;
 
+/**
+ * @api
+ */
 class Template extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**

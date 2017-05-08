@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 /**
  * Layered navigation state model
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class State extends DataObject
