@@ -82,6 +82,11 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\Interception\Code\Generator\Sample::class,
                 \Magento\Framework\Interception\Code\Generator\Sample\Interceptor::class,
                 'Interceptor'
+            ],
+            [
+                \Magento\Framework\Interception\Code\Generator\TSample::class,
+                \Magento\Framework\Interception\Code\Generator\TSample\Interceptor::class,
+                'TInterceptor'
             ]
         ];
     }
