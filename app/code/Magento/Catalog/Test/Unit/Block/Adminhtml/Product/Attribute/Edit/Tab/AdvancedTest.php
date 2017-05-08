@@ -61,7 +61,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->propertyLocker = $this->getMock(PropertyLocker::class, [], [], '', false);
 
         $this->block = $objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced',
+            \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced::class,
             [
                 'registry' => $this->registry,
                 'formFactory' => $this->formFactory,

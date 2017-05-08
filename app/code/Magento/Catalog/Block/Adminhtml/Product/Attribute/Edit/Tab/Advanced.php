@@ -39,7 +39,9 @@ class Advanced extends Generic
     protected $disableScopeChangeList;
 
     /**
-     * @var PropertyLocker
+     * Disable form fields.
+     *
+     * @var \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker PropertyLocker
      */
     private $propertyLocker;
 
@@ -275,7 +277,7 @@ class Advanced extends Generic
     }
 
     /**
-     * Get property locker
+     * Get property locker.
      *
      * @return PropertyLocker
      */
@@ -284,6 +286,7 @@ class Advanced extends Generic
         if (null === $this->propertyLocker) {
             $this->propertyLocker = ObjectManager::getInstance()->get(PropertyLocker::class);
         }
+        
         return $this->propertyLocker;
     }
 }
