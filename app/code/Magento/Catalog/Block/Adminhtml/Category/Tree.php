@@ -18,6 +18,7 @@ use Magento\Store\Model\Store;
 /**
  * Class Tree
  *
+ * @api
  * @package Magento\Catalog\Block\Adminhtml\Category
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

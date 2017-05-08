@@ -7,6 +7,8 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
 /**
  * Encryption key change edit page block
+ *
+ * @api
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {

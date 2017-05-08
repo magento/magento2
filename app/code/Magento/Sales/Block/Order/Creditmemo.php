@@ -10,6 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * Sales order view block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items

@@ -7,6 +7,7 @@ namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement;
 
 /**
  * Adminhtml billing agreements grid
+ * @api
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {

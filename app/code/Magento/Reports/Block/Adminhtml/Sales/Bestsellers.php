@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
 /**
  * Adminhtml sales report page content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Bestsellers extends \Magento\Backend\Block\Widget\Grid\Container

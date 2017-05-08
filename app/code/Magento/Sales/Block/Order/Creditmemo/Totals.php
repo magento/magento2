@@ -10,6 +10,9 @@ namespace Magento\Sales\Block\Order\Creditmemo;
 
 use Magento\Sales\Model\Order\Creditmemo;
 
+/**
+ * @api
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**

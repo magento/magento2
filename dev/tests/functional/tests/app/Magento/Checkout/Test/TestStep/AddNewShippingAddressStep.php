@@ -11,7 +11,7 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Create customer custom attribute step.
+ * Add new shipping address on checkout step.
  */
 class AddNewShippingAddressStep implements TestStepInterface
 {
@@ -30,20 +30,29 @@ class AddNewShippingAddressStep implements TestStepInterface
     private $address;
 
     /**
+     * Save Shipping Address.
+     *
+     * @var boolean
+     */
+    private $save;
+
+    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param Address|null $address [optional]
+     * @param Address|null $shippingAddress [optional]
+     * @param boolean $save [optional]
      */
-    public function __construct(CheckoutOnepage $checkoutOnepage, Address $address = null)
+    public function __construct(CheckoutOnepage $checkoutOnepage, Address $shippingAddress = null, $save = true)
     {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->address = $address;
+        $this->address = $shippingAddress;
+        $this->save = $save;
     }
 
     /**
-     * Create customer account.
+     * Add new shipping address.
      *
-     * @return void
+     * @return array
      */
     public function run()
     {
@@ -52,6 +61,12 @@ class AddNewShippingAddressStep implements TestStepInterface
         if ($this->address) {
             $shippingBlock->getAddressModalBlock()->fill($this->address);
         }
-        $shippingBlock->getAddressModalBlock()->save();
+        if ($this->save) {
+            $shippingBlock->getAddressModalBlock()->save();
+        } else {
+            $shippingBlock->getAddressModalBlock()->cancel();
+        }
+
+        return ['shippingAddress' => $this->address];
     }
 }

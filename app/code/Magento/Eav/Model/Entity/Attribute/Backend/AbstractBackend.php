@@ -9,6 +9,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Backend\BackendInterface
