@@ -26,22 +26,28 @@ define([
         },
 
         /**
-         * Get data from local storage.
-         *
-         * @param {String} [key]
-         * @returns {*}
-         */
-        getData = function (key) {
-            return key ? storage.get(cacheKey)()[key] : storage.get(cacheKey)();
-        },
-
-        /**
          * Set data to local storage.
          *
          * @param {Object} checkoutData
          */
         setData = function (checkoutData) {
             storage.set(cacheKey, checkoutData);
+        },
+
+        /**
+         * Get data from local storage.
+         *
+         * @param {String} [key]
+         * @returns {*}
+         */
+        getData = function (key) {
+            var data = key ? storage.get(cacheKey)()[key] : storage.get(cacheKey)();
+
+            if (_.isEmpty(storage.get(cacheKey)())) {
+                setData(utils.copy(cartData));
+            }
+
+            return data;
         },
 
         /**
@@ -58,10 +64,6 @@ define([
 
             return prefix + name.charAt(0).toUpperCase() + name.slice(1) + suffix;
         };
-
-    if (_.isEmpty(getData())) {
-        setData(utils.copy(cartData));
-    }
 
     /**
      * Provides get/set/isChanged/clear methods for work with cart data.

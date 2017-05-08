@@ -8,6 +8,7 @@ namespace Magento\Backend\Block\Page;
 /**
  * Adminhtml footer block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Footer extends \Magento\Backend\Block\Template

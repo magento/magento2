@@ -8,6 +8,8 @@ namespace Magento\Catalog\Block\Product\View\AddTo;
 
 /**
  * Product view compare block
+ *
+ * @api
  */
 class Compare extends \Magento\Catalog\Block\Product\View
 {

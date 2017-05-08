@@ -12,6 +12,8 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Payment
+ *
+ * @api
  */
 class Payment extends Template
 {

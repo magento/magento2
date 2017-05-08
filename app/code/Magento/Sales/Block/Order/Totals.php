@@ -7,6 +7,9 @@ namespace Magento\Sales\Block\Order;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * @api
+ */
 class Totals extends \Magento\Framework\View\Element\Template
 {
     /**

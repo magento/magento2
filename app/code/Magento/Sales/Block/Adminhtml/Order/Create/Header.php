@@ -9,6 +9,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Create order form header
+ *
+ * @api
  */
 class Header extends AbstractCreate
 {
