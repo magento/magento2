@@ -282,10 +282,15 @@ define([
          * @private
          */
         _init: function () {
+            // creates debounced variant of _LoadProductMedia()
+            // to use it in events handlers instead of _LoadProductMedia()
+            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 1000);
+
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
                 this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
+                this._setPreSelectedGallery();
                 this._RenderControls();
                 $(this.element).trigger('swatch.initialized');
             } else {
@@ -678,7 +683,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -736,7 +741,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -961,12 +966,13 @@ define([
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
+                $widget._XhrKiller();
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.post(
+                $widget.xhr = $.get(
                     $widget.options.mediaCallback,
                     mediaCallData,
                     mediaSuccessCallback,
@@ -1200,6 +1206,28 @@ define([
             var galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Sets mediaCache for cases when jsonConfig contains preSelectedGallery on layered navigation result pages
+         *
+         * @private
+         */
+        _setPreSelectedGallery: function () {
+            if (this.options.jsonConfig.preSelectedGallery) {
+                var productData = this._determineProductData(),
+                    mediaCallData,
+                    mediaCacheKey;
+
+                mediaCallData = {
+                    'product_id': productData.productId,
+                    'attributes': $.parseQuery(),
+                    'additional': $.parseQuery()
+                };
+
+                mediaCacheKey = JSON.stringify(mediaCallData);
+                this.options.mediaCache[mediaCacheKey] = this.options.jsonConfig.preSelectedGallery;
+            }
         }
     });
 

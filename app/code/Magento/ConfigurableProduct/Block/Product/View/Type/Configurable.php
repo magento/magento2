@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -60,6 +61,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $configurableAttributeData;
 
     /**
+     * @var \Magento\Swatches\Model\Product\Variations\Media
+     */
+    private $variationsMedia;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -69,6 +75,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param PriceCurrencyInterface $priceCurrency
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
+     * @param \Magento\Swatches\Model\Product\Variations\Media $variationsMedia
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -79,7 +86,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
-        array $data = []
+        array $data = [],
+        \Magento\Swatches\Model\Product\Variations\Media $variationsMedia = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -87,6 +95,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
+        $this->variationsMedia = $variationsMedia
+            ?: ObjectManager::getInstance()->get(\Magento\Swatches\Model\Product\Variations\Media::class);
+
         parent::__construct(
             $context,
             $arrayUtils,
@@ -218,6 +229,15 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
             $config['defaultValues'] = $attributesData['defaultValues'];
+        }
+
+        // Is there any better way to check that we are on layered navigation search result page?
+        if (!empty($this->getRequest()->getQuery()->toArray())) {
+            $config['preSelectedGallery'] = $this->variationsMedia->getProductVariationWithMedia(
+                $currentProduct,
+                [],
+                $this->getRequest()->getQuery()->toArray()
+            );
         }
 
         $config = array_merge($config, $this->_getAdditionalConfig());
