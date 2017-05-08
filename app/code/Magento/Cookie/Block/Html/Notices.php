@@ -9,6 +9,9 @@
  */
 namespace Magento\Cookie\Block\Html;
 
+/**
+ * @api
+ */
 class Notices extends \Magento\Framework\View\Element\Template
 {
     /**

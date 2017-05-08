@@ -11,6 +11,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 /**
  * Adminhtml transaction detail
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Detail extends \Magento\Backend\Block\Widget\Container
