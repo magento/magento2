@@ -301,4 +301,29 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
             }
         }
     }
+
+
+    /**
+     * Retrieve all ids from Search Result
+     *
+     * @return int[]
+     */
+    public function getAllIds()
+    {
+        $searchResult = $this->getContext()->getDataProvider()->getSearchResult();
+        $idsArray = [];
+
+        if ($searchResult instanceof \Magento\Eav\Model\Entity\Collection\AbstractCollection
+            || $searchResult instanceof \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+        ) {
+            // Query optimization as SearchResultInterface doesn't have optimization for retrieving just ids
+            $idsArray = $searchResult->getAllIds();
+        } else {
+            foreach ($searchResult->getItems() as $item) {
+                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                $idsArray[] = $item->getId();
+            }
+        }
+        return $idsArray;
+    }
 }

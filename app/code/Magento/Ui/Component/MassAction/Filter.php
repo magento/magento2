@@ -218,9 +218,6 @@ class Filter
     private function getFilterIds()
     {
         $this->applySelectionOnTargetProvider();
-        if ($this->getDataProvider()->getSearchResult()) {
-            return $this->getDataProvider()->getSearchResult()->getAllIds();
-        }
-        return [];
+        return $this->getComponent()->getAllIds();
     }
 }
