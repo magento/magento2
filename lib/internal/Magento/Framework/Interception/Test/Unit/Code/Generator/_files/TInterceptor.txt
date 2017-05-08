@@ -1,9 +1,9 @@
-namespace Magento\Framework\Interception\Code\Generator\Sample;
+namespace Magento\Framework\Interception\Code\Generator\TSample;
 
 /**
- * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\Sample
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\TSample
  */
-class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample implements \Magento\Framework\Interception\InterceptorInterface
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\TSample implements \Magento\Framework\Interception\InterceptorInterface
 {
     use \Magento\Framework\Interception\Interceptor;
 
@@ -15,7 +15,7 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample 
     /**
      * {@inheritdoc}
      */
-    public function getValue()
+    public function getValue() : string
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
         if (!$pluginInfo) {
@@ -28,26 +28,13 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample 
     /**
      * {@inheritdoc}
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
         if (!$pluginInfo) {
             return parent::setValue($value);
         } else {
             return $this->___callPlugins('setValue', func_get_args(), $pluginInfo);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function & getReference()
-    {
-        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getReference');
-        if (!$pluginInfo) {
-            return parent::getReference();
-        } else {
-            return $this->___callPlugins('getReference', func_get_args(), $pluginInfo);
         }
     }
 }
