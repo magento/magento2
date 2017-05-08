@@ -85,8 +85,13 @@ define([
      */
     function getRoot() {
         var data = localStorage.getItem(root);
+        var result = {};
 
-        return !_.isNull(data) ? JSON.parse(data) : {};
+        if (!_.isNull(data) && typeof(data) != 'undefined') {
+            result = JSON.parse(data);
+        }
+
+        return result;
     }
 
     /**
