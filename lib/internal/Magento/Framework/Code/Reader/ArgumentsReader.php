@@ -25,7 +25,7 @@ class ArgumentsReader
         /**
          * Skip native PHP types, classes without constructor
          */
-        if (!$class->getFileName() || false == $class->hasMethod(
+        if ($class->isInterface() || !$class->getFileName() || false == $class->hasMethod(
             '__construct'
         ) || !$inherited && $class->getConstructor()->class != $class->getName()
         ) {
