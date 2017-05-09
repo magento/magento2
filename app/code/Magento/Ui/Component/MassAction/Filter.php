@@ -225,17 +225,10 @@ class Filter
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
             $searchResult = $this->getDataProvider()->getSearchResult();
-            if ($searchResult instanceof \Magento\Eav\Model\Entity\Collection\AbstractCollection
-                || $searchResult instanceof \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-            ) {
-                // Use collection's getItems for optimization purposes.
-                $idsArray = $searchResult->getAllIds();
-            } else {
-                // Use compatible search api getItems when searchResult is not a collection.
-                foreach ($searchResult->getItems() as $item) {
-                    /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
-                    $idsArray[] = $item->getId();
-                }
+            // Use compatible search api getItems when searchResult is not a collection.
+            foreach ($searchResult->getItems() as $item) {
+                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                $idsArray[] = $item->getId();
             }
         }
         return  $idsArray;
