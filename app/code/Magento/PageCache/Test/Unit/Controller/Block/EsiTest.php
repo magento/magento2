@@ -89,9 +89,11 @@ class EsiTest extends \PHPUnit_Framework_TestCase
     public function testExecute($blockClass, $shouldSetHeaders)
     {
         $block = 'block';
-        $handles = ['handle1', 'handle2'];
+        $requestHandles = ['handle1', 'handle2'];
+        $additionalPageCacheHandle = 'additional_page_cache_handle';
+        $pageCacheHandles = array_merge($requestHandles, [$additionalPageCacheHandle]);
         $html = 'some-html';
-        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
+        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($requestHandles))]];
 
         $blockInstance1 = $this->getMock(
             $blockClass,
@@ -106,7 +108,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($mapData));
 
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($pageCacheHandles));
 
         $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
 

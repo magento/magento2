@@ -111,7 +111,10 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $blocks = ['block1', 'block2'];
-        $handles = ['handle1', 'handle2'];
+        $requestHandles = ['handle1', 'handle2'];
+        $additionalPageCacheHandle = 'additional_page_cache_handle';
+        $pageCacheHandles = array_merge($requestHandles, [$additionalPageCacheHandle]);
+
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
@@ -159,8 +162,8 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(base64_encode(json_encode($handles))));
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
+            ->will($this->returnValue(base64_encode(json_encode($requestHandles))));
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($pageCacheHandles));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
         $this->layoutMock->expects($this->at(0))
             ->method('getBlock')
