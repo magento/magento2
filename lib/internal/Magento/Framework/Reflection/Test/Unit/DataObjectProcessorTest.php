@@ -67,19 +67,22 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
     public function testBuildOutputDataArray($extensionAttributes, $expectedOutputDataArray)
     {
         $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Reflection\Test\Unit\_files\TestDataObject $testDataObject */
-        $testDataObject = $objectManager->getObject(_files\TestDataObject::class, [
-            'extensionAttributes' => $this->getMockForAbstractClass(
-                \Magento\Framework\Api\ExtensionAttributesInterface::class
-            )
-        ]);
+        /** @var \Magento\Framework\Reflection\Test\Unit\TestDataObject $testDataObject */
+        $testDataObject = $objectManager->getObject(
+            \Magento\Framework\Reflection\Test\Unit\TestDataObject::class,
+            [
+                'extensionAttributes' => $this->getMockForAbstractClass(
+                    \Magento\Framework\Api\ExtensionAttributesInterface::class
+                )
+            ]
+        );
 
         $this->extensionAttributesProcessorMock->expects($this->once())
             ->method('buildOutputDataArray')
             ->willReturn($extensionAttributes);
 
         $outputData = $this->dataObjectProcessor
-            ->buildOutputDataArray($testDataObject, _files\TestDataInterface::class);
+            ->buildOutputDataArray($testDataObject, \Magento\Framework\Reflection\Test\Unit\TestDataInterface::class);
         $this->assertEquals($expectedOutputDataArray, $outputData);
     }
 
@@ -100,9 +103,10 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
             'No Attributes' => [[], $expectedOutputDataArray],
             'With Attributes' => [
                 $extensionAttributeArray,
-                array_merge($expectedOutputDataArray, [
-                    'extension_attributes' => $extensionAttributeArray
-                ])
+                array_merge(
+                    $expectedOutputDataArray,
+                    ['extension_attributes' => $extensionAttributeArray]
+                )
             ]
         ];
     }
