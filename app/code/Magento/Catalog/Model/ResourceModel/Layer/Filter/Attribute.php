@@ -10,6 +10,8 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Catalog Layer Attribute Filter Resource Model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

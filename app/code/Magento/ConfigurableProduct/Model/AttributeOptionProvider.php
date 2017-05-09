@@ -77,6 +77,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                     'default_option_value.value'
                 ),
                 'default_title' => 'default_option_value.value',
+                'super_attribute_label' => 'attribute_label.value',
             ]
         )->joinInner(
             ['product_entity' => $this->attributeResource->getTable('catalog_product_entity')],
@@ -123,6 +124,16 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                 [
                     'default_option_value.option_id = entity_value.value',
                     'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                ]
+            ),
+            []
+        )->joinLeft(
+            ['attribute_label' => $this->attributeResource->getTable('catalog_product_super_attribute_label')],
+            implode(
+                ' AND ',
+                [
+                    'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
+                    'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
                 ]
             ),
             []

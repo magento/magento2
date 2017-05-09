@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Locale\Test\Unit;
 
 use Magento\Framework\Locale\Currency;

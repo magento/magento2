@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Table;
 
 /**
  * Interface BuilderInterface
+ *
+ * @api
  */
 interface BuilderInterface
 {

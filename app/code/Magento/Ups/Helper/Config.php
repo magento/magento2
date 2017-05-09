@@ -7,6 +7,8 @@ namespace Magento\Ups\Helper;
 
 /**
  * Configuration data of carrier
+ *
+ * @api
  */
 class Config
 {

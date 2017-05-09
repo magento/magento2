@@ -13,6 +13,9 @@ namespace Magento\Newsletter\Block\Adminhtml;
 
 use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 
+/**
+ * @api
+ */
 class Subscriber extends \Magento\Backend\Block\Template
 {
     /**

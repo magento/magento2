@@ -12,6 +12,8 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Visibility
+ *
+ * @api
  */
 class Visibility extends Column
 {

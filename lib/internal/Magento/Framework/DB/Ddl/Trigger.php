@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\DB\Ddl;
 
+/**
+ * @api
+ */
 class Trigger
 {
     /**#@+

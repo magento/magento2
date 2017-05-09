@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Database saving file helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\MediaStorage\Helper\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * Database saving file helper
+ *
+ * @api
+ */
 class Database extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

@@ -7,6 +7,9 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
+/**
+ * @api
+ */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
 {
     /**

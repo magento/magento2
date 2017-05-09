@@ -6,6 +6,10 @@
 namespace Magento\CustomerImportExport\Model\Export;
 
 /**
+ * Customer address export
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav

@@ -11,6 +11,7 @@ use Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollectio
 /**
  * Flat sales order creditmemo comments collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements CreditmemoCommentSearchResultInterface

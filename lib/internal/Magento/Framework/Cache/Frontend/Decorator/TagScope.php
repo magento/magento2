@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Cache frontend decorator that limits the cleaning scope within a tag
- */
 namespace Magento\Framework\Cache\Frontend\Decorator;
 
+/**
+ * Cache frontend decorator that limits the cleaning scope within a tag
+ *
+ * @api
+ */
 class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
 {
     /**

@@ -9,6 +9,9 @@
  */
 namespace Magento\Wishlist\Block\Rss;
 
+/**
+ * @api
+ */
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**

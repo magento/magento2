@@ -6,6 +6,7 @@
 namespace Magento\Msrp\Block;
 
 /**
+ * @api
  * @method string getOriginalBlockName()
  */
 class Total extends \Magento\Framework\View\Element\Template

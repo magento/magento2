@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
- * Class AttributeGroupAlreadyExistsException
+ * @api
  */
 class AttributeGroupAlreadyExistsException extends AlreadyExistsException
 {

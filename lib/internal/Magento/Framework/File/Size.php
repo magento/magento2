@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\File;
 
+/**
+ * @api
+ */
 class Size
 {
     /**

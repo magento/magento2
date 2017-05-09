@@ -8,6 +8,7 @@ namespace Magento\AdminNotification\Model\ResourceModel\Inbox;
 /**
  * AdminNotification Inbox model
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection

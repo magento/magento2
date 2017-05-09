@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 /**
  * Catalog Product Compare Helper
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
