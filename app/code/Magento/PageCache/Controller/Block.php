@@ -68,7 +68,9 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
-        $handles[] = $this->additionalPageCacheHandle;
+        if(is_array($handles)){
+            $handles[] = $this->additionalPageCacheHandle;
+        }
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];
