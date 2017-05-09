@@ -28,6 +28,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private $base64jsonSerializer;
 
     /**
+     * @var string
+     */
+    private $additionalPageCacheHandle = 'additional_page_cache_handle';
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param Json $jsonSerializer
@@ -62,6 +67,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
+
+        $handles[] = $this->additionalPageCacheHandle;
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];
