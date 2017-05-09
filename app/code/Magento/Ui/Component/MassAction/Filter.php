@@ -99,6 +99,7 @@ class Filter
                 throw new LocalizedException(__('Please select item(s).'));
             }
         }
+        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $idsArray = $this->getFilterIds();
         if (!empty($idsArray)) {
             $collection->addFieldToFilter(
@@ -220,14 +221,21 @@ class Filter
         $idsArray = [];
         $this->applySelectionOnTargetProvider();
         if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
-            // Use collection's getItems for optimization purposes
-            return $this->getDataProvider()->getAllIds();
+            // Use collection's getItems for optimization purposes.
+            $idsArray = $this->getDataProvider()->getAllIds();
         } else {
             $searchResult = $this->getDataProvider()->getSearchResult();
-            // Use compatible search api getItems when searchResult is not a collection.
-            foreach ($searchResult->getItems() as $item) {
-                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
-                $idsArray[] = $item->getId();
+            if ($searchResult instanceof \Magento\Eav\Model\Entity\Collection\AbstractCollection
+                || $searchResult instanceof \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+            ) {
+                // Use collection's getItems for optimization purposes.
+                $idsArray = $searchResult->getAllIds();
+            } else {
+                // Use compatible search api getItems when searchResult is not a collection.
+                foreach ($searchResult->getItems() as $item) {
+                    /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                    $idsArray[] = $item->getId();
+                }
             }
         }
         return  $idsArray;

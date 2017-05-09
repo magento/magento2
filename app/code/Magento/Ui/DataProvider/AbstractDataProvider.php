@@ -281,24 +281,12 @@ abstract class AbstractDataProvider implements DataProviderInterface
     }
 
     /**
-     * Retrieve all ids from Search Result
+     * Retrieve all ids from collection
      *
      * @return int[]
      */
     public function getAllIds()
     {
-        $idsArray = [];
-        $searchResult = $this->getSearchResult();
-        if ($searchResult instanceof \Magento\Eav\Model\Entity\Collection\AbstractCollection
-            || $searchResult instanceof \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-        ) {
-            $idsArray = $searchResult->getAllIds();
-        } else {
-            foreach ($searchResult->getItems() as $item) {
-                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
-                $idsArray[] = $item->getId();
-            }
-        }
-        return $idsArray;
+        return  $this->collection->getAllIds();
     }
 }
