@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Item getResource()
  * @method float getBaseWeeeTaxRowDisposition()

@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Product\ProductList\Item\AddTo;
 
 /**
  * Add product to compare
+ *
+ * @api
  */
 class Compare extends \Magento\Catalog\Block\Product\ProductList\Item\Block
 {

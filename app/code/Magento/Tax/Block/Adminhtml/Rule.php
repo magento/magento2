@@ -11,6 +11,9 @@
  */
 namespace Magento\Tax\Block\Adminhtml;
 
+/**
+ * @api
+ */
 class Rule extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

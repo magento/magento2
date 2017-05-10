@@ -5,6 +5,9 @@
  */
 namespace Magento\Quote\Model\Quote\Address\RateResult;
 
+/**
+ * @api
+ */
 class AbstractResult extends \Magento\Framework\DataObject
 {
 }

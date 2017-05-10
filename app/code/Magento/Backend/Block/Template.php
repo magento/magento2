@@ -8,6 +8,7 @@ namespace Magento\Backend\Block;
 /**
  * Backend abstract block
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Template extends \Magento\Framework\View\Element\Template
