@@ -76,7 +76,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test create new customer new then update first name.
+     * Test create new customer, then update first name.
      *
      * @magentoDbIsolation enabled
      */
