@@ -221,7 +221,7 @@ class Filter
         $idsArray = [];
         $this->applySelectionOnTargetProvider();
         if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
-            // Use collection's getItems for optimization purposes.
+            // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
             $searchResult = $this->getDataProvider()->getSearchResult();
