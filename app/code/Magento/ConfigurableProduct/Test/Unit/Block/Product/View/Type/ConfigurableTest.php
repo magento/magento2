@@ -65,11 +65,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     private $storeManager;
 
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $registry;
-
     protected function setUp()
     {
         $this->mockContextObject();
@@ -174,11 +169,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($productId);
 
-        $this->registry->expects($this->any())
-            ->method('registry')
-            ->with('product')
-            ->willReturn($productMock);
-
         $this->helper->expects($this->any())
             ->method('getOptions')
             ->with($productMock, [$productMock])
@@ -216,6 +206,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('encode')
             ->with($expectedArray)
             ->willReturn($expectedJson);
+
+        $this->block->setData('product', $productMock);
 
         $result = $this->block->getJsonConfig();
         $this->assertEquals($expectedJson, $result);
@@ -330,19 +322,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->context = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
             ->method('getStoreManager')
             ->willReturn($this->storeManager);
-        $this->context->expects($this->any())
-            ->method('getRegistry')
-            ->willReturn($this->registry);
     }
 
     /**
