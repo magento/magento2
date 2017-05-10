@@ -150,4 +150,16 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $expectedLogMessage = 'message parameter1 parameter2';
         $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
     }
+
+    public function testGetCode()
+    {
+        $expectedCode = 42;
+        $localizedException = new LocalizedException(
+            new Phrase("message %1", ['test']),
+            new \Exception(),
+            $expectedCode
+        );
+
+        $this->assertEquals($expectedCode, $localizedException->getCode());
+    }
 }
