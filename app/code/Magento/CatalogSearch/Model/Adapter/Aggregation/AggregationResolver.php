@@ -37,10 +37,15 @@ class AggregationResolver implements AggregationResolverInterface
     private $config;
 
     /**
+     * @var RequestCheckerInterface
+     */
+    private $requestChecker;
+
+    /**
      * @var AttributeCollection
      */
     private $attributeCollection;
-    
+
     /**
      * AggregationResolver constructor
      *
@@ -48,6 +53,7 @@ class AggregationResolver implements AggregationResolverInterface
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Config $config
+     * @param RequestCheckerInterface $aggregationChecker
      * @param AttributeCollection $attributeCollection [optional]
      */
     public function __construct(
@@ -55,6 +61,7 @@ class AggregationResolver implements AggregationResolverInterface
         ProductAttributeRepositoryInterface $productAttributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Config $config,
+        RequestCheckerInterface $aggregationChecker = null,
         AttributeCollection $attributeCollection = null
     ) {
         $this->attributeSetFinder = $attributeSetFinder;
@@ -63,6 +70,8 @@ class AggregationResolver implements AggregationResolverInterface
         $this->config = $config;
         $this->attributeCollection = $attributeCollection
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollection::class);
+        $this->requestChecker = $aggregationChecker ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(RequestCheckerInterface::class);
     }
 
     /**
@@ -70,6 +79,10 @@ class AggregationResolver implements AggregationResolverInterface
      */
     public function resolve(RequestInterface $request, array $documentIds)
     {
+        if (!$this->requestChecker->isApplicable($request)) {
+            return [];
+        }
+
         $data = $this->config->get($request->getName());
 
         $bucketKeys = isset($data['aggregations']) ? array_keys($data['aggregations']) : [];
@@ -79,7 +92,8 @@ class AggregationResolver implements AggregationResolverInterface
             $request->getAggregation(),
             function ($bucket) use ($attributeCodes, $bucketKeys) {
                 /** @var BucketInterface $bucket */
-                return in_array($bucket->getField(), $attributeCodes) || in_array($bucket->getName(), $bucketKeys);
+                return in_array($bucket->getField(), $attributeCodes, true) ||
+                    in_array($bucket->getName(), $bucketKeys, true);
             }
         );
         return array_values($resolvedAggregation);
