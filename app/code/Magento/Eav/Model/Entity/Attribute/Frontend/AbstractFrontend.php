@@ -19,6 +19,9 @@ use Magento\Eav\Model\Cache\Type as CacheType;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 
+/**
+ * @api
+ */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
     /**
