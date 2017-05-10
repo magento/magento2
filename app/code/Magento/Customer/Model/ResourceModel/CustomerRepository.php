@@ -329,12 +329,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Update customer addresses.
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param \Magento\Framework\Api\CustomAttributesDataInterface $customer
      * @param $customerId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      */
-    private function updateAddresses(\Magento\Customer\Api\Data\CustomerInterface $customer, $customerId)
+    private function updateAddresses(\Magento\Framework\Api\CustomAttributesDataInterface $customer, $customerId)
     {
         if ($customer->getAddresses() !== null) {
             if ($customer->getId()) {
@@ -367,12 +367,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Populate customer model with secure data.
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param \Magento\Framework\Api\CustomAttributesDataInterface $customer
      * @param $passwordHash
      * @param $customerModel
      */
     private function populateCustomerModelWithSecureData(
-        \Magento\Customer\Api\Data\CustomerInterface $customer,
+        \Magento\Framework\Api\CustomAttributesDataInterface $customer,
         $passwordHash,
         $customerModel
     ) {
