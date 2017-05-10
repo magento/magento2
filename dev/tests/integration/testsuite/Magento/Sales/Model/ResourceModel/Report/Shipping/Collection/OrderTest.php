@@ -34,7 +34,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Sales/_files/report_shipping.php
      * @return void
      */
-    public function testGetItemsIfShipmentDateIsDifferent()
+    public function testGetItems()
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
