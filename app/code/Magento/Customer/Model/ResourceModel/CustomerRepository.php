@@ -130,6 +130,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Save.
+     *
      * {@inheritdoc}
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
@@ -175,19 +177,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             );
         }
         // Populate model with secure data
-        if ($customer->getId()) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerModel->setRpToken($customerSecure->getRpToken());
-            $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
-            $customerModel->setPasswordHash($customerSecure->getPasswordHash());
-            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
-            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
-            $customerModel->setLockExpires($customerSecure->getLockExpires());
-        } else {
-            if ($passwordHash) {
-                $customerModel->setPasswordHash($passwordHash);
-            }
-        }
+        $this->populateCustomerModelWithSecureData($customer, $passwordHash, $customerModel);
 
         // If customer email was changed, reset RpToken info
         if ($prevCustomerData
@@ -197,19 +187,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpTokenCreatedAt(null);
         }
 
-        if (!array_key_exists('default_billing', $customerArr) &&
-            null !== $prevCustomerDataArr &&
-            array_key_exists('default_billing', $prevCustomerDataArr)
-        ) {
-            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
-        }
+        $this->setDefaultBilling($customerArr, $prevCustomerDataArr, $customerModel);
 
-        if (!array_key_exists('default_shipping', $customerArr) &&
-            null !== $prevCustomerDataArr &&
-            array_key_exists('default_shipping', $prevCustomerDataArr)
-        ) {
-            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
-        }
+        $this->setDefaultShipping($customerArr, $prevCustomerDataArr, $customerModel);
 
         $customerModel->save();
         $this->customerRegistry->push($customerModel);
@@ -226,6 +206,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Get.
+     *
      * {@inheritdoc}
      */
     public function get($email, $websiteId = null)
@@ -235,6 +217,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Get by Id.
+     *
      * {@inheritdoc}
      */
     public function getById($customerId)
@@ -244,6 +228,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Get list.
+     *
      * {@inheritdoc}
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -296,6 +282,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Delete.
+     *
      * {@inheritdoc}
      */
     public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer)
@@ -304,6 +292,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
+     * Delete by Id.
+     *
      * {@inheritdoc}
      */
     public function deleteById($customerId)
@@ -371,6 +361,67 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             foreach ($addressIdsToDelete as $addressId) {
                 $this->addressRepository->deleteById($addressId);
             }
+        }
+    }
+
+    /**
+     * Populate customer model with secure data.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param $passwordHash
+     * @param $customerModel
+     */
+    private function populateCustomerModelWithSecureData(
+        \Magento\Customer\Api\Data\CustomerInterface $customer,
+        $passwordHash,
+        $customerModel
+    ) {
+        if ($customer->getId()) {
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+            $customerModel->setRpToken($customerSecure->getRpToken());
+            $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
+            $customerModel->setPasswordHash($customerSecure->getPasswordHash());
+            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
+            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
+            $customerModel->setLockExpires($customerSecure->getLockExpires());
+        } else {
+            if ($passwordHash) {
+                $customerModel->setPasswordHash($passwordHash);
+            }
+        }
+    }
+
+    /**
+     * Set default billing.
+     *
+     * @param $customerArr
+     * @param $prevCustomerDataArr
+     * @param $customerModel
+     */
+    private function setDefaultBilling($customerArr, $prevCustomerDataArr, $customerModel)
+    {
+        if (!array_key_exists('default_billing', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_billing', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultBilling($prevCustomerDataArr['default_billing']);
+        }
+    }
+
+    /**
+     * Set default shipping.
+     *
+     * @param $customerArr
+     * @param $prevCustomerDataArr
+     * @param $customerModel
+     */
+    private function setDefaultShipping($customerArr, $prevCustomerDataArr, $customerModel)
+    {
+        if (!array_key_exists('default_shipping', $customerArr) &&
+            null !== $prevCustomerDataArr &&
+            array_key_exists('default_shipping', $prevCustomerDataArr)
+        ) {
+            $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
         }
     }
 }
