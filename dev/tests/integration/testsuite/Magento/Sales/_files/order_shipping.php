@@ -29,3 +29,25 @@ $order->setData(
     'is_virtual',
     0
 )->save();
+
+/** @var \Magento\Sales\Api\Data\ShipmentItemCreationInterface $shipmentItem */
+$invoiceItem = $objectManager->create(\Magento\Sales\Api\Data\InvoiceItemCreationInterface::class);
+/** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+$orderItems = $order->getItems();
+$orderItem = array_values($orderItems)[0];
+$invoiceItem->setOrderItemId($orderItem->getItemId());
+$invoiceItem->setQty($orderItem->getQtyOrdered());
+/** @var \Magento\Sales\Api\InvoiceOrderInterface $invoiceOrder */
+$invoiceOrder = $objectManager->create(\Magento\Sales\Api\InvoiceOrderInterface::class);
+$invoiceOrder->execute($order->getEntityId(), false, [$invoiceItem]);
+
+/** @var \Magento\Sales\Api\Data\ShipmentItemCreationInterface $shipmentItem */
+$shipmentItem = $objectManager->create(\Magento\Sales\Api\Data\ShipmentItemCreationInterface::class);
+/** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+$orderItems = $order->getItems();
+$orderItem = array_values($orderItems)[0];
+$shipmentItem->setOrderItemId($orderItem->getItemId());
+$shipmentItem->setQty($orderItem->getQtyOrdered());
+/** @var \Magento\Sales\Api\ShipOrderInterface $shipOrder */
+$shipOrder = $objectManager->create(\Magento\Sales\Api\ShipOrderInterface::class);
+$shipOrder->execute($order->getEntityId(), [$shipmentItem]);

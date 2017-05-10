@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Refunded\Collection;
 
+/**
+ * Integration tests for refunds reports collection.
+ */
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,6 +15,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     private $_collection;
 
+    /**
+     * Set up.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -21,13 +29,32 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/creditmemo.php
+     * @magentoDataFixture Magento/Sales/_files/order_info.php
+     * @magentoDataFixture Magento/Sales/_files/order_from_past.php
      * @magentoDataFixture Magento/Sales/_files/report_refunded.php
+     * @return void
      */
     public function testGetItems()
     {
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Sales\Model\Order::class);
+        $order->loadByIncrementId('100000001');
+        /** @var \Magento\Framework\Stdlib\DateTime\DateTime $dateTime */
+        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Stdlib\DateTime\DateTimeFactory::class
+        )
+            ->create();
+        $creditmemoCreatedAtDate = $dateTime->date('Y-m-d', $order->getCreatedAt());
+
         $expectedResult = [
-            ['orders_count' => 1, 'refunded' => 100, 'online_refunded' => 80, 'offline_refunded' => 20],
+            [
+                'orders_count' => 1,
+                'refunded' => 50,
+                'online_refunded' => 50,
+                'offline_refunded' => 0,
+                'period' => $creditmemoCreatedAtDate
+            ],
         ];
         $actualResult = [];
         /** @var \Magento\Reports\Model\Item $reportItem */
