@@ -14,6 +14,7 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Customer repository.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInterface
@@ -330,11 +331,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * Update customer addresses.
      *
      * @param \Magento\Framework\Api\CustomAttributesDataInterface $customer
-     * @param $customerId
+     * @param int $customerId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      */
-    private function updateAddresses(\Magento\Framework\Api\CustomAttributesDataInterface $customer, $customerId)
+    private function updateAddresses(\Magento\Framework\Api\CustomAttributesDataInterface $customer, int $customerId)
     {
         if ($customer->getAddresses() !== null) {
             if ($customer->getId()) {
@@ -368,8 +369,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * Populate customer model with secure data.
      *
      * @param \Magento\Framework\Api\CustomAttributesDataInterface $customer
-     * @param $passwordHash
-     * @param $customerModel
+     * @param string $passwordHash
+     * @param \Magento\Customer\Model\Customer\Interceptor $customerModel
+     * @return void
      */
     private function populateCustomerModelWithSecureData(
         \Magento\Framework\Api\CustomAttributesDataInterface $customer,
@@ -394,12 +396,16 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Set default billing.
      *
-     * @param $customerArr
-     * @param $prevCustomerDataArr
-     * @param $customerModel
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     * @param \Magento\Customer\Model\Customer\Interceptor $customerModel
+     * @return void
      */
-    private function setDefaultBilling($customerArr, $prevCustomerDataArr, $customerModel)
-    {
+    private function setDefaultBilling(
+        $customerArr,
+        $prevCustomerDataArr,
+        $customerModel
+    ) {
         if (!array_key_exists('default_billing', $customerArr) &&
             null !== $prevCustomerDataArr &&
             array_key_exists('default_billing', $prevCustomerDataArr)
@@ -411,12 +417,16 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * Set default shipping.
      *
-     * @param $customerArr
-     * @param $prevCustomerDataArr
-     * @param $customerModel
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     * @param \Magento\Customer\Model\Customer\Interceptor $customerModel
+     * @return void
      */
-    private function setDefaultShipping($customerArr, $prevCustomerDataArr, $customerModel)
-    {
+    private function setDefaultShipping(
+        $customerArr,
+        $prevCustomerDataArr,
+        $customerModel
+    ) {
         if (!array_key_exists('default_shipping', $customerArr) &&
             null !== $prevCustomerDataArr &&
             array_key_exists('default_shipping', $prevCustomerDataArr)
