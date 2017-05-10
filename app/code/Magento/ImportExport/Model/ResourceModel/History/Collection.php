@@ -9,6 +9,8 @@ use \Magento\ImportExport\Model\History;
 
 /**
  * Import history collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

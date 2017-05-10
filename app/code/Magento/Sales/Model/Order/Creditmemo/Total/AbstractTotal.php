@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
  * Base class for credit memo total
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

@@ -15,6 +15,9 @@ use Magento\Ui\Component\DynamicRows;
 
 /**
  * Class Websites customizes websites panel
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Websites extends AbstractModifier

@@ -9,6 +9,9 @@ namespace Magento\Framework\Exception;
 
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class NoSuchEntityException extends LocalizedException
 {
     /**

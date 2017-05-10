@@ -17,6 +17,9 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for categories field of product page
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Categories extends AbstractModifier

@@ -7,6 +7,9 @@ namespace Magento\Checkout\Block;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
 {
     /**

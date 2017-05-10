@@ -13,6 +13,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Backend menu model
+ *
+ * @api
  */
 class Menu extends \ArrayObject
 {

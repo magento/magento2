@@ -12,6 +12,8 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 /**
  * Create handler for catalog product gallery
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler implements ExtensionInterface
@@ -295,7 +297,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 

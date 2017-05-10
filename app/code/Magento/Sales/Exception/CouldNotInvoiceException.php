@@ -10,6 +10,8 @@ use Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface;
 
 /**
  * Class CouldNotInvoiceException
+ *
+ * @api
  */
 class CouldNotInvoiceException extends LocalizedException implements CouldNotInvoiceExceptionInterface
 {

@@ -7,6 +7,8 @@ namespace Magento\Framework;
 
 /**
  * Magento escape methods
+ *
+ * @api
  */
 class Escaper
 {

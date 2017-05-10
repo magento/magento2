@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Bundle Price Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -339,8 +340,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                             }
 
                             $multiTypes = [
-                                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX,
-                                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE,
+                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX,
+                                \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE,
                             ];
 
                             if (in_array($customOption->getType(), $multiTypes)) {

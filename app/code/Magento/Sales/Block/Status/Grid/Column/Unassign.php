@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Status\Grid\Column;
 
+/**
+ * @api
+ */
 class Unassign extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**

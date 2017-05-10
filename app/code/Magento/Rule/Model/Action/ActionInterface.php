@@ -5,6 +5,9 @@
  */
 namespace Magento\Rule\Model\Action;
 
+/**
+ * @api
+ */
 interface ActionInterface
 {
 }

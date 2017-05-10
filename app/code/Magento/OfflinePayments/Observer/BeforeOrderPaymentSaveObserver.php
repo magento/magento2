@@ -36,14 +36,13 @@ class BeforeOrderPaymentSaveObserver implements ObserverInterface
                 $payment->getMethodInstance()->getInstructions()
             );
         } elseif ($payment->getMethod() === Checkmo::PAYMENT_METHOD_CHECKMO_CODE) {
-            $payment->setAdditionalInformation(
-                'payable_to',
-                $payment->getMethodInstance()->getPayableTo()
-            );
-            $payment->setAdditionalInformation(
-                'mailing_address',
-                $payment->getMethodInstance()->getMailingAddress()
-            );
+            $methodInstance = $payment->getMethodInstance();
+            if (!empty($methodInstance->getPayableTo())) {
+                $payment->setAdditionalInformation('payable_to', $methodInstance->getPayableTo());
+            }
+            if (!empty($methodInstance->getMailingAddress())) {
+                $payment->setAdditionalInformation('mailing_address', $methodInstance->getMailingAddress());
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Magento\Bundle\Model\Product\Attribute\Source\Shipment;
 
 /**
  * Bundle Shipment Type Attribute Renderer
+ * @api
  */
 class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {

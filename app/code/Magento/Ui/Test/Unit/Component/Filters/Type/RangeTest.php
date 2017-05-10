@@ -46,10 +46,6 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
             \Magento\Framework\View\Element\UiComponentFactory::class,
             [],
@@ -80,6 +76,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $range = new Range(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -102,6 +99,10 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare($name, $filterData, $expectedCalls)
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $filter = $this->getMock(
             \Magento\Framework\Api\Filter::class,
             [],

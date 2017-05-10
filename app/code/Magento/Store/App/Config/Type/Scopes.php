@@ -11,8 +11,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Merge and hold scopes data from different sources
- *
- * @package Magento\Store\App\Config\Type
  */
 class Scopes implements ConfigTypeInterface
 {

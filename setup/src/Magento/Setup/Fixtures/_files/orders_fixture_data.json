@@ -328,7 +328,7 @@
     "cc_number_enc": "NULL",
     "cc_trans_id": "NULL",
     "address_status": "NULL",
-    "additional_information": "'a:1:{s:53:\"a:1:{s:12:\"method_title\";s:19:\"Check \/ Money order\";}\";N;}'"
+    "additional_information": "'{\"method_title\":\"Check \/ Money order\"}'"
   },
   "sales_order_status_history": {
     "entity_id": "'%entityId%'",

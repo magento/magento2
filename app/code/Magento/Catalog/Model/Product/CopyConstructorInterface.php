@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+/**
+ * Contains duplication logic for variety of product types
+ *
+ * @api
+ */
 interface CopyConstructorInterface
 {
     /**

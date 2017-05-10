@@ -10,6 +10,8 @@ use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
  * Sales order history block
+ *
+ * @api
  */
 class History extends \Magento\Framework\View\Element\Template
 {

@@ -8,6 +8,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <!-- Include section -->
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:etc/ui_components.xsd"/>
+
     <!-- Definition the document element -->
     <xs:element name="components" type="definition"/>
     <!-- Registering components in the system -->
@@ -16,91 +17,63 @@
             <xs:appinfo>Registering components in the system and basic setup</xs:appinfo>
             <xs:documentation>Registering components in the system and basic setup</xs:documentation>
         </xs:annotation>
-        <xs:all>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
             <!-- Components list -->
-            <xs:element type="range" name="range"/>
-            <xs:element type="tab" name="tab"/>
-            <xs:element type="dataSource" name="dataSource"/>
-            <xs:element type="paging" name="paging"/>
-            <xs:element type="massaction" name="massaction"/>
-            <xs:element type="listingDefinition" name="listing"/>
-            <xs:element type="formDefinition" name="form"/>
-            <xs:element type="fieldset" name="fieldset"/>
-            <xs:element type="field" name="field"/>
-            <xs:element type="filters" name="filters"/>
-            <xs:element type="columns" name="columns"/>
-            <xs:element type="column" name="column"/>
-            <xs:element type="filterSelect" name="filterSelect"/>
-            <xs:element type="filterSearch" name="filterSearch"/>
-            <xs:element type="filterRange" name="filterRange"/>
-            <xs:element type="filterInput" name="filterInput"/>
-            <xs:element type="filterDate" name="filterDate"/>
-            <xs:element type="container" name="container"/>
-            <xs:element type="input" name="input"/>
-            <xs:element type="hidden" name="hidden"/>
-            <xs:element type="checkbox" name="checkbox"/>
-            <xs:element type="select" name="select"/>
-            <xs:element type="multiselect" name="multiselect"/>
-            <xs:element type="textarea" name="textarea"/>
-            <xs:element type="fileUploader" name="fileUploader"/>
-            <xs:element type="wysiwyg" name="wysiwyg"/>
-            <xs:element type="radioset" name="radioset"/>
-            <xs:element type="checkboxset" name="checkboxset"/>
-            <xs:element type="multiline" name="multiline"/>
-            <xs:element type="dataTypeText" name="text"/>
-            <xs:element type="dataTypeBoolean" name="boolean"/>
-            <xs:element type="dataTypeNumber" name="number"/>
-            <xs:element type="dataTypePrice" name="price"/>
-            <xs:element type="dataTypeMedia" name="image"/>
-            <xs:element type="dataTypeDate" name="date"/>
-            <xs:element type="dataTypeEmail" name="email"/>
-            <xs:element type="dataTypeMedia" name="file"/>
-            <xs:element type="nav" name="nav"/>
-            <xs:element type="actions" name="actions"/>
-            <xs:element type="actionDelete" name="actionDelete"/>
-            <xs:element type="bookmark" name="bookmark"/>
-            <xs:element type="exportButton" name="exportButton"/>
-            <xs:element type="columnsControls" name="columnsControls"/>
-            <xs:element type="container" name="listingToolbar"/>
-            <xs:element type="action" name="action"/>
-            <xs:element name="component" type="component" />
-            <xs:element name="actionsColumn" type="actionsColumn" />
-            <xs:element name="selectionsColumn" type="selectionsColumn" />
-            <xs:element type="dynamicRows" name="dynamicRows"/>
-            <xs:element name="htmlContent" type="htmlContent" />
-            <xs:element type="insertForm" name="insertForm"/>
-            <xs:element type="insertListing" name="insertListing"/>
-            <xs:element type="modal" name="modal"/>
-            <xs:element type="button" name="button"/>
-        </xs:all>
-    </xs:complexType>
-    <!-- Custom configuration -->
-    <xs:complexType name="listingDefinition">
-        <xs:complexContent>
-            <xs:extension base="listing">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element type="container" name="listingToolbar"/>
-                    <xs:element type="dataSource" name="dataSource"/>
-                    <xs:element type="paging" name="paging"/>
-                    <xs:element type="massaction" name="massaction"/>
-                    <xs:element type="columns" name="columns"/>
-                    <xs:element type="filters" name="filters"/>
-                </xs:choice>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="formDefinition">
-        <xs:complexContent>
-            <xs:extension base="form">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element type="fieldset" name="fieldset"/>
-                    <xs:element type="dataSource" name="dataSource"/>
-                    <xs:element type="insertForm" name="insertForm"/>
-                    <xs:element type="insertListing" name="insertListing"/>
-                    <xs:element type="modal" name="modal"/>
-                    <xs:element type="dynamicRows" name="dynamicRows"/>
-                </xs:choice>
-            </xs:extension>
-        </xs:complexContent>
+            <xs:element name="action" type="componentAction"/>
+            <xs:element name="actionDelete" type="componentActionDelete"/>
+            <xs:element name="actions" type="componentActions"/>
+            <xs:element name="actionsColumn" type="componentActionsColumn" />
+            <xs:element name="bookmark" type="componentBookmark"/>
+            <xs:element name="boolean" type="componentBoolean"/>
+            <xs:element name="button" type="componentButton"/>
+            <xs:element name="checkbox" type="componentCheckbox"/>
+            <xs:element name="checkboxset" type="componentCheckboxset"/>
+            <xs:element name="column" type="componentColumn"/>
+            <xs:element name="columns" type="componentColumns"/>
+            <xs:element name="columnsControls" type="componentColumnsControls"/>
+            <xs:element name="component" type="componentComponent" />
+            <xs:element name="container" type="componentContainer"/>
+            <xs:element name="date" type="componentDate"/>
+            <xs:element name="dynamicRows" type="componentDynamicRows"/>
+            <xs:element name="tab" type="componentTab"/>
+            <xs:element name="dataSource" type="componentDataSource"/>
+            <xs:element name="email" type="componentEmail"/>
+            <xs:element name="exportButton" type="componentExportButton"/>
+            <xs:element name="field" type="componentField"/>
+            <xs:element name="fieldset" type="componentFieldset"/>
+            <xs:element name="file" type="componentFile"/>
+            <xs:element name="fileUploader" type="componentFileUploader"/>
+            <xs:element name="filters" type="componentFilters"/>
+            <xs:element name="filterDate" type="componentFilterDate"/>
+            <xs:element name="filterInput" type="componentFilterInput"/>
+            <xs:element name="filterRange" type="componentFilterRange"/>
+            <xs:element name="filterSelect" type="componentFilterSelect"/>
+            <xs:element name="filterSearch" type="componentFilterSearch"/>
+            <xs:element name="form" type="componentForm"/>
+            <xs:element name="hidden" type="componentHidden"/>
+            <xs:element name="htmlContent" type="componentHtmlContent" />
+            <xs:element name="image" type="componentFile"/>
+            <xs:element name="input" type="componentInput"/>
+            <xs:element name="insertForm" type="componentInsertForm"/>
+            <xs:element name="insertListing" type="componentInsertListing"/>
+            <xs:element name="listingToolbar" type="componentListingToolbar"/>
+            <xs:element name="listing" type="componentListing"/>
+            <xs:element name="massaction" type="componentMassaction"/>
+            <xs:element name="multiline" type="componentMultiline"/>
+            <xs:element name="multiselect" type="componentMultiselect"/>
+            <xs:element name="modal" type="componentModal"/>
+            <xs:element name="nav" type="componentNav"/>
+            <xs:element name="number" type="componentNumber"/>
+            <xs:element name="paging" type="componentPaging"/>
+            <xs:element name="price" type="componentPrice"/>
+            <xs:element name="radioset" type="componentRadioset"/>
+            <xs:element name="range" type="componentRange"/>
+            <xs:element name="select" type="componentSelect"/>
+            <xs:element name="selectionsColumn" type="componentSelectionsColumn" />
+            <xs:element name="text" type="componentText"/>
+            <xs:element name="textarea" type="componentTextarea"/>
+            <xs:element name="wysiwyg" type="componentWysiwyg"/>
+            <xs:element name="inlineEditing" type="componentInlineEditing"/>
+        </xs:choice>
     </xs:complexType>
 </xs:schema>

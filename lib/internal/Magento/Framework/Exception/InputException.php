@@ -9,6 +9,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Exception to be thrown when there is an issue with the Input to a function call.
+ *
+ * @api
  */
 class InputException extends AbstractAggregateException
 {

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
+/**
+ * @api
+ */
 class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
 {
     /**
