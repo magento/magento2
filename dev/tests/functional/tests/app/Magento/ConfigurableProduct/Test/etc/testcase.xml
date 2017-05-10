@@ -13,4 +13,9 @@
     <step name="updateConfigurableProduct" module="Magento_ConfigurableProduct" next="saveProduct"/>
     <step name="saveProduct" module="Magento_Catalog"/>
   </scenario>
+  <scenario name="UpdateConfigurableProductCustomWebsiteTest" firstStep="setupConfiguration">
+    <step name="setupConfiguration" module="Magento_Config" next="createProduct"/>
+    <step name="createProduct" module="Magento_Catalog" next="updateSimplesInConfigurablePerStore"/>
+    <step name="updateSimplesInConfigurablePerStore" module="Magento_ConfigurableProduct"/>
+  </scenario>
 </config>
