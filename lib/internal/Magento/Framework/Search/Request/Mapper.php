@@ -176,7 +176,7 @@ class Mapper
      * @throws \InvalidArgumentException
      * @throws StateException
      */
-    private function mapFilter($filterName)
+    protected function mapFilter($filterName)
     {
         if (!isset($this->filters[$filterName])) {
             throw new \Exception('Filter ' . $filterName . ' does not exist');

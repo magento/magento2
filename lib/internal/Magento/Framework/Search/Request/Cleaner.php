@@ -154,7 +154,7 @@ class Cleaner
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function cleanFilter($filterName)
+    protected function cleanFilter($filterName)
     {
         if (!isset($this->requestData['filters'][$filterName])) {
             throw new \Exception('Filter ' . $filterName . ' does not exist');
