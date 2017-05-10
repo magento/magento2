@@ -10,8 +10,9 @@ define([
     'use strict';
 
     var model,
+
         /**
-         * @param index
+         * @param {Number} index
          * @returns {Object}
          * @constructor
          */
