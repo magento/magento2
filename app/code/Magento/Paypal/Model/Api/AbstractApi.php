@@ -53,7 +53,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * @var array
      */
     protected $_lineItemExportItemsFilters = [
-        'name' => 'convertToString'
+        'name' => 'strval'
     ];
 
     /**
@@ -357,17 +357,6 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     }
 
     /**
-     * Converts provided value to string.
-     *
-     * @param string|int|\Magento\Framework\Phrase $value
-     * @return string
-     */
-    public function convertToString($value)
-    {
-        return strval($value);
-    }
-
-    /**
      * Export $this public data to private request array
      *
      * @param array $privateRequestMap
@@ -453,14 +442,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
             foreach ($this->_lineItemExportItemsFormat as $publicKey => $privateFormat) {
                 $result = true;
                 $value = $item->getDataUsingMethod($publicKey);
-                if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
-                    $value = call_user_func([$this, $callback], $value);
-                }
-                if (is_float($value)) {
-                    $value = $this->formatPrice($value);
-                }
-                $request[sprintf($privateFormat, $i)] = $value;
+                $request[sprintf($privateFormat, $i)] = $this->formatValue($value, $publicKey);
             }
             $i++;
         }
@@ -647,5 +629,26 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     public function getDebugReplacePrivateDataKeys()
     {
         return $this->_debugReplacePrivateDataKeys;
+    }
+
+    /**
+     * Formats value according to configured filters or converts to 0.00 format if value is float.
+     *
+     * @param string|int|float|\Magento\Framework\Phrase $value
+     * @param $publicKey
+     * @return string
+     */
+    private function formatValue($value, $publicKey)
+    {
+        if (!empty($this->_lineItemExportItemsFilters[$publicKey])) {
+            $callback = $this->_lineItemExportItemsFilters[$publicKey];
+            $value = method_exists($this, $callback) ? $this->{$callback}($value) : $callback($value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->formatPrice($value);
+        }
+
+        return $value;
     }
 }
