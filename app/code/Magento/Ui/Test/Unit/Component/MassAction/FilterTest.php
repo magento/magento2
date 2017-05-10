@@ -233,8 +233,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->willReturn([1, 2, 3]);
 
         $this->setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected);
-
-
+        
         $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap([
