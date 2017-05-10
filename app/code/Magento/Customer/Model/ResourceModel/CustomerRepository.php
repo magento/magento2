@@ -131,8 +131,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * Save.
-     *
      * {@inheritdoc}
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
@@ -207,8 +205,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * Get.
-     *
      * {@inheritdoc}
      */
     public function get($email, $websiteId = null)
@@ -218,8 +214,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * Get by Id.
-     *
      * {@inheritdoc}
      */
     public function getById($customerId)
@@ -229,8 +223,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * Get list.
-     *
      * {@inheritdoc}
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -283,8 +275,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * Delete.
-     *
      * {@inheritdoc}
      */
     public function delete(\Magento\Customer\Api\Data\CustomerInterface $customer)
@@ -293,8 +283,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     }
 
     /**
-     * Delete by Id.
-     *
      * {@inheritdoc}
      */
     public function deleteById($customerId)
