@@ -33,7 +33,6 @@ class UrlDuplicatesRegistry
      *
      * @param array $urlDuplicates
      * @return void
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function addUrlDuplicates(array $urlDuplicates)
     {

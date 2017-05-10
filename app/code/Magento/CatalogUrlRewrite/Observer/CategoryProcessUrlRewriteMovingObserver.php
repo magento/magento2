@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
+use Magento\UrlRewrite\Model\UrlDuplicatesRegistry;
 
 class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
 {
@@ -40,6 +41,9 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
     /** @var string[] */
     private $dataUrlRewriteClassNames;
 
+    /** @var UrlDuplicatesRegistry */
+    private $urlDuplicatesRegistry;
+
     /**
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
@@ -47,6 +51,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
      * @param UrlRewriteHandler $urlRewriteHandler
      * @param UrlRewriteBunchReplacer $urlRewriteBunchReplacer
      * @param DatabaseMapPool $databaseMapPool
+     * @param UrlDuplicatesRegistry $urlDuplicatesRegistry,
      * @param string[] $dataUrlRewriteClassNames
      */
     public function __construct(
@@ -56,6 +61,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         UrlRewriteHandler $urlRewriteHandler,
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
+        UrlDuplicatesRegistry $urlDuplicatesRegistry,
         $dataUrlRewriteClassNames = [
             DataCategoryUrlRewriteDatabaseMap::class,
             DataProductUrlRewriteDatabaseMap::class
@@ -85,11 +91,19 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
                 $category->getStoreId()
             );
             $category->setData('save_rewrites_history', $saveRewritesHistory);
+            $this->urlDuplicatesRegistry->clearUrlDuplicates();
             $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category, true);
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
-
-
+            if (!empty($this->urlDuplicatesRegistry->getUrlDuplicates())) {
+                throw new \Magento\Framework\Exception\AlreadyExistsException(
+                    __(
+                        'URL key %1 for specified store already exists.',
+                        current($this->urlDuplicatesRegistry->getUrlDuplicates())
+                    )
+                );
+            }
+            $this->urlDuplicatesRegistry->clearUrlDuplicates();
             $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
 

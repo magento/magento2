@@ -212,10 +212,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
-                $this->_eventManager->dispatch(
-                    'controller_action_catalog_category_save_entity_after',
-                    ['controller' => $this, 'category' => $category]
-                );
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 var_dump($e->getMessage());
                 $this->messageManager->addError($e->getMessage());

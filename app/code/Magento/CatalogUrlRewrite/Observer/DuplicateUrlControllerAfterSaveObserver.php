@@ -59,6 +59,7 @@ class DuplicateUrlControllerAfterSaveObserver implements ObserverInterface
             }
             $urls = rtrim($urls, ', ');
 
+            //replace this with admin permament notification
             $this->messageManager->addComplexWarningMessage(
                 'addUrlDuplicateWarningMessage',
                 ['urls' => $urls, 'entity_type' => $observer->getProduct() ? 'product' : 'category']
