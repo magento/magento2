@@ -10,9 +10,16 @@
         <variation name="CmsPagesGridSorting">
             <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify cms page grid sorting</data>
+            <data name="itemsCount" xsi:type="string">2</data>
+            <data name="fixtureName" xsi:type="string">cmsPage</data>
+            <data name="fixtureDataSet" xsi:type="string">default</data>
+            <data name="steps" xsi:type="array">
+                <item name="0" xsi:type="string">-</item>
+                <item name="1" xsi:type="string">-</item>
+            </data>
             <data name="columnsForSorting" xsi:type="array">
                 <item name="id" xsi:type="string">ID</item>
-                <item name="date" xsi:type="string">Created</item>
+                <item name="identifier" xsi:type="string">URL Key</item>
             </data>
             <data name="pageClass" xsi:type="string">Magento\Cms\Test\Page\Adminhtml\CmsPageIndex</data>
             <data name="gridRetriever" xsi:type="string">getCmsPageGridBlock</data>
@@ -29,7 +36,7 @@
             <data name="fixtureDataSet" xsi:type="string">default</data>
             <data name="columnsForSorting" xsi:type="array">
                 <item name="id" xsi:type="string">ID</item>
-                <item name="date" xsi:type="string">Created</item>
+                <item name="identifier" xsi:type="string">Identifier</item>
             </data>
             <data name="pageClass" xsi:type="string">Magento\Cms\Test\Page\Adminhtml\CmsBlockIndex</data>
             <data name="gridRetriever" xsi:type="string">getCmsBlockGrid</data>
