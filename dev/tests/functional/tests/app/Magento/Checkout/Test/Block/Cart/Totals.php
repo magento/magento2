@@ -105,6 +105,7 @@ class Totals extends Block
      */
     public function getGrandTotal()
     {
+        $this->waitForUpdatedTotals();
         $grandTotal = $this->_rootElement->find($this->grandTotal, Locator::SELECTOR_CSS)->getText();
         return $this->escapeCurrency($grandTotal);
     }
