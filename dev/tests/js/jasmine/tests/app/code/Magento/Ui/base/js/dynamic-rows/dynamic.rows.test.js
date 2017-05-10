@@ -10,6 +10,11 @@ define([
     'use strict';
 
     var model,
+        /**
+         * @param index
+         * @returns {Object}
+         * @constructor
+         */
         ElementMock = function (index) {
             return {
                 /**
@@ -40,7 +45,7 @@ define([
             /**
              * Mock function which return length of record data
              *
-             * @returns {{length: number}}
+             * @returns {Object}
              */
             model.recordData = function () {
                 return {
@@ -55,7 +60,7 @@ define([
             /**
              * Mock function, which return the number of pages
              *
-             * @returns {number}
+             * @returns {Number}
              */
             model.pages = function () {
                 return 3;
@@ -79,6 +84,9 @@ define([
                 }
             ];
 
+            /**
+             * @returns {Number}
+             */
             model.pages = function () {
                 return 3;
             };
