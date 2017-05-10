@@ -112,7 +112,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     {
         $blocks = ['block1', 'block2'];
         $requestHandles = ['handle1', 'handle2'];
-        $additionalPageCacheHandle = 'additional_page_cache_handle';
+        $additionalPageCacheHandle = 'mage_pagecache_additional_handle';
         $pageCacheHandles = array_merge($requestHandles, [$additionalPageCacheHandle]);
 
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';

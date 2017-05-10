@@ -90,7 +90,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
     {
         $block = 'block';
         $requestHandles = ['handle1', 'handle2'];
-        $additionalPageCacheHandle = 'additional_page_cache_handle';
+        $additionalPageCacheHandle = 'mage_pagecache_additional_handle';
         $pageCacheHandles = array_merge($requestHandles, [$additionalPageCacheHandle]);
         $html = 'some-html';
         $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($requestHandles))]];

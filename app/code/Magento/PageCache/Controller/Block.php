@@ -30,7 +30,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * @var string
      */
-    private $additionalPageCacheHandle = 'additional_page_cache_handle';
+    private $additionalPageCacheHandle = 'mage_pagecache_additional_handle';
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
