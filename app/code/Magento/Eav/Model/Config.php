@@ -448,7 +448,6 @@ class Config
             if (empty($attribute['attribute_model'])) {
                 $attribute['attribute_model'] = $entityType->getAttributeModel();
             }
-            // attributes should be reloaded via model to be processed by custom resource model
             $attributeObject = $this->_createAttribute($entityType, $attribute);
             $this->saveAttribute($attributeObject, $entityTypeCode, $attributeObject->getAttributeCode());
             $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->toArray();
