@@ -53,16 +53,16 @@ class AggregationResolver implements AggregationResolverInterface
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Config $config
-     * @param RequestCheckerInterface $aggregationChecker
      * @param AttributeCollection $attributeCollection [optional]
+     * @param RequestCheckerInterface|null $aggregationChecker
      */
     public function __construct(
         AttributeSetFinderInterface $attributeSetFinder,
         ProductAttributeRepositoryInterface $productAttributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Config $config,
-        RequestCheckerInterface $aggregationChecker = null,
-        AttributeCollection $attributeCollection = null
+        AttributeCollection $attributeCollection = null,
+        RequestCheckerInterface $aggregationChecker = null
     ) {
         $this->attributeSetFinder = $attributeSetFinder;
         $this->productAttributeRepository = $productAttributeRepository;
