@@ -234,18 +234,15 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $this->setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected);
 
-        $this->requestMock->expects($this->at(4))
+
+        $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->with('namespace')
-            ->willReturn('');
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with(Filter::SELECTED_PARAM)
-            ->willReturn($selectedIds);
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with(Filter::EXCLUDED_PARAM)
-            ->willReturn($excludedIds);
+            ->willReturnMap([
+                ['namespace', null, ''],
+                [Filter::SELECTED_PARAM, null, $selectedIds],
+                [Filter::EXCLUDED_PARAM, null, $excludedIds],
+            ]);
+
         $this->assertEquals($this->abstractDbMock, $this->filter->getCollection($this->abstractDbMock));
     }
 
