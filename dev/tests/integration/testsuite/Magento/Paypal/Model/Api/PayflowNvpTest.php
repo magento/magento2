@@ -6,15 +6,16 @@
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Paypal\Model\CartFactory;
+use Magento\Paypal\Model\Config;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Paypal\Model\Config;
 
 class PayflowNvpTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,9 +56,21 @@ class PayflowNvpTest extends \PHPUnit_Framework_TestCase
             'curlFactory' => $httpFactory
         ]);
 
+        /** @var ProductMetadataInterface|MockObject $productMetadata */
+        $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->getMock();
+        $productMetadata->method('getEdition')
+            ->willReturn('');
+
         /** @var Config $config */
         $config = $this->objectManager->get(Config::class);
         $config->setMethodCode(Config::METHOD_WPP_PE_EXPRESS);
+
+        $refObject = new \ReflectionObject($config);
+        $refProperty = $refObject->getProperty('productMetadata');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($config, $productMetadata);
+
         $this->nvpApi->setConfigObject($config);
     }
 
@@ -78,7 +91,7 @@ class PayflowNvpTest extends \PHPUnit_Framework_TestCase
             . 'L_NAME1=Simple 2&L_QTY1=2&L_COST1=9.69&'
             . 'L_NAME2=Simple 3&L_QTY2=3&L_COST2=11.69&'
             . 'L_NAME3=Discount&L_QTY3=1&L_COST3=-10.00&'
-            . 'TRXTYPE=A&ACTION=S&BUTTONSOURCE=Magento_Cart_Community';
+            . 'TRXTYPE=A&ACTION=S&BUTTONSOURCE=Magento_Cart_';
 
         $this->httpClient->method('write')
             ->with(

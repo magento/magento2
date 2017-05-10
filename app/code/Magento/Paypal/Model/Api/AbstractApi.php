@@ -635,7 +635,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      * Formats value according to configured filters or converts to 0.00 format if value is float.
      *
      * @param string|int|float|\Magento\Framework\Phrase $value
-     * @param $publicKey
+     * @param string $publicKey
      * @return string
      */
     private function formatValue($value, $publicKey)
