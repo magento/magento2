@@ -648,6 +648,7 @@ define([
         getChildItems: function (data, page) {
             var dataRecord = data || this.relatedData,
                 startIndex;
+
             this.startIndex = (~~this.currentPage() - 1) * this.pageSize;
 
             startIndex = page || this.startIndex;

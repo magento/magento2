@@ -12,7 +12,10 @@ define([
     var model,
         ElementMock = function (index) {
             return {
-                destroy: new Function (),
+                /**
+                 * @return void
+                 */
+                destroy: function () {},
                 index: index
             };
         };
@@ -34,6 +37,11 @@ define([
      */
     describe('Magento_Ui/js/dynamic-rows/dynamic-rows', function () {
         it('changePage without Records', function () {
+            /**
+             * Mock function which return length of record data
+             *
+             * @returns {{length: number}}
+             */
             model.recordData = function () {
                 return {
                     length: 0
@@ -44,6 +52,11 @@ define([
         });
 
         it('changePage with Fake Page', function () {
+            /**
+             * Mock function, which return the number of pages
+             *
+             * @returns {number}
+             */
             model.pages = function () {
                 return 3;
             };
@@ -74,13 +87,15 @@ define([
             expect(model.templates.record.recordId).toBe(2);//last record number is 3
         });
 
-        it ('deleteRecord with Delete Property', function () {
+        it('deleteRecord with Delete Property', function () {
             var elems,
                 recordInstanceMock = new ElementMock(1),
                 elem2 = new ElementMock(2);
 
             spyOn(recordInstanceMock, 'destroy');
-            model.recordData({1: {}});
+            model.recordData({
+                1: {}
+            });
             elems = [
                 recordInstanceMock,
                 elem2
