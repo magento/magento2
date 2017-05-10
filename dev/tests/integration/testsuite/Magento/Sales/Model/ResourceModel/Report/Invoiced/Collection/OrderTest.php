@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
 
 /**
- * Integration tests for invoices reports collection.
+ * Integration tests for invoices reports collection which is used to obtain invoice reports by order date.
  */
 class OrderTest extends \PHPUnit_Framework_TestCase
 {

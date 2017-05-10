@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Report\Refunded\Collection;
 
 /**
- * Integration tests for refunds reports collection.
+ * Integration tests for refunds reports collection which is used to obtain refund reports by refund date.
  */
 class RefundedTest extends \PHPUnit_Framework_TestCase
 {

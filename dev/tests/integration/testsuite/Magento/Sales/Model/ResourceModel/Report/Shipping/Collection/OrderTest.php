@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Report\Shipping\Collection;
 
 /**
- * Integration tests for shipments reports collection.
+ * Integration tests for shipments reports collection which is used to obtain shipment reports by order date.
  */
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
