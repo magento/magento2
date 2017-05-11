@@ -133,8 +133,9 @@ class ObjectManagerFactory
         $argumentMapper = new \Magento\Framework\ObjectManager\Config\Mapper\Dom($argInterpreter);
 
         if ($env->getMode() != Environment\Compiled::MODE) {
-            $configData = $this->_loadPrimaryConfig($this->directoryList, $this->driverPool, $argumentMapper, $appMode);
-            if ($configData) {
+            $diConfigData = $this->_loadPrimaryConfig($this->directoryList, $this->driverPool, $argumentMapper, $appMode);
+            if (count($diConfigData)) {
+                foreach($diConfigData as $configData)
                 $diConfig->extend($configData);
             }
         }
@@ -251,7 +252,7 @@ class ObjectManagerFactory
      */
     protected function _loadPrimaryConfig(DirectoryList $directoryList, $driverPool, $argumentMapper, $appMode)
     {
-        $configData = null;
+        $configData = array();
         try {
             $fileResolver = new \Magento\Framework\App\Arguments\FileResolver\Primary(
                 new \Magento\Framework\Filesystem(
@@ -266,13 +267,20 @@ class ObjectManagerFactory
             $schemaLocator = new \Magento\Framework\ObjectManager\Config\SchemaLocator();
             $validationState = new \Magento\Framework\App\Arguments\ValidationState($appMode);
 
-            $reader = new \Magento\Framework\ObjectManager\Config\Reader\Dom(
-                $fileResolver,
-                $argumentMapper,
-                $schemaLocator,
-                $validationState
+            $readerForPreference = new \Magento\Framework\ObjectManager\Config\Reader\Dom(
+                    $fileResolver, $argumentMapper, $schemaLocator, $validationState, 'preference.xml'
             );
-            $configData = $reader->read('primary');
+            $configData[] = $readerForPreference->read('primary');
+
+            $readerForVirtualType = new \Magento\Framework\ObjectManager\Config\Reader\Dom(
+                    $fileResolver, $argumentMapper, $schemaLocator, $validationState, 'virtualtype.xml'
+            );
+            $configData[] = $readerForVirtualType->read('primary');
+
+            $readerForType = new \Magento\Framework\ObjectManager\Config\Reader\Dom(
+                    $fileResolver, $argumentMapper, $schemaLocator, $validationState, 'type.xml'
+            );
+            $configData[] = $readerForType->read('primary');
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\State\InitException(
                 new \Magento\Framework\Phrase($e->getMessage()),
