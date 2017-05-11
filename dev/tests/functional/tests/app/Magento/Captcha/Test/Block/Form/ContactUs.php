@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Captcha\Test\Block\Form;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Contact\Test\Block\Form\ContactUs as ContactForm;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Form for "Contact Us" page with captcha.

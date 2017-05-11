@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\DB\Test\Unit;
 
@@ -247,8 +245,10 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($resultCondition));
 
         if (is_array($field)) {
-            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR
-                    . ' (', array_fill(0, count($field), $resultCondition)) . ')';
+            $resultCondition = '(' . implode(
+                ') ' . \Magento\Framework\DB\Select::SQL_OR . ' (',
+                array_fill(0, count($field), $resultCondition)
+            ) . ')';
         }
 
         $this->selectMock->expects($this->once())

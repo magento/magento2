@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Ui\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Page\PageFactory;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 

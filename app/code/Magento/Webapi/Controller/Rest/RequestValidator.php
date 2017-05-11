@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Webapi\Controller\Rest;
 
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Webapi\Controller\Rest\Router;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
-use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * This class is responsible for validating the request
@@ -86,7 +84,7 @@ class RequestValidator
         if (!$this->authorization->isAllowed($route->getAclResources())) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
             throw new AuthorizationException(
-                __(AuthorizationException::NOT_AUTHORIZED, $params)
+                __('Consumer is not authorized to access %resources', $params)
             );
         }
     }

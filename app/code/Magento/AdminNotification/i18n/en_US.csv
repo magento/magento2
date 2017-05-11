@@ -1,13 +1,13 @@
 "Read Details","Read Details"
 "Mark as Read","Mark as Read"
 "Are you sure?","Are you sure?"
-Remove,Remove
+"Remove","Remove"
 "Messages Inbox","Messages Inbox"
 "You have %1 new system messages","You have %1 new system messages"
 "You have %1 new system message","You have %1 new system message"
 "Incoming Message","Incoming Message"
-close,close
-Notifications,Notifications
+"close","close"
+"Notifications","Notifications"
 "The message has been marked as Read.","The message has been marked as Read."
 "We couldn't mark the notification as Read because of an error.","We couldn't mark the notification as Read because of an error."
 "Please select messages.","Please select messages."
@@ -20,10 +20,10 @@ Notifications,Notifications
 "6 Hours","6 Hours"
 "12 Hours","12 Hours"
 "24 Hours","24 Hours"
-critical,critical
-major,major
-minor,minor
-notice,notice
+"critical","critical"
+"major","major"
+"minor","minor"
+"notice","notice"
 "Wrong message type","Wrong message type"
 "Wrong notification ID specified.","Wrong notification ID specified."
 "{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. We highly recommend changing this value in your Magento <a href=""%1"">configuration</a>.","{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. We highly recommend changing this value in your Magento <a href=""%1"">configuration</a>."
@@ -33,7 +33,7 @@ notice,notice
 "Synchronization of media storages has been completed.","Synchronization of media storages has been completed."
 "Your web server is set up incorrectly and allows unauthorized access to sensitive files. Please contact your hosting provider.","Your web server is set up incorrectly and allows unauthorized access to sensitive files. Please contact your hosting provider."
 "Close popup","Close popup"
-Close,Close
+"Close","Close"
 "System Messages:","System Messages:"
 "Critical System Messages","Critical System Messages"
 "Major System Messages","Major System Messages"
@@ -45,7 +45,7 @@ Close,Close
 "Use HTTPS to Get Feed","Use HTTPS to Get Feed"
 "Update Frequency","Update Frequency"
 "Last Update","Last Update"
-Severity,Severity
+"Severity","Severity"
 "Date Added","Date Added"
-Message,Message
-Actions,Actions
+"Message","Message"
+"Actions","Actions"

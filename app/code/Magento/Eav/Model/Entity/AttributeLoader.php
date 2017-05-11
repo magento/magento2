@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\DataObject;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Attribute loader

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Aggregation;
@@ -12,6 +12,7 @@ use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 
 class AggregationResolver implements AggregationResolverInterface
 {
@@ -34,6 +35,11 @@ class AggregationResolver implements AggregationResolverInterface
      * @var Config
      */
     private $config;
+
+    /**
+     * @var AttributeCollection
+     */
+    private $attributeCollection;
     
     /**
      * AggregationResolver constructor
@@ -42,17 +48,21 @@ class AggregationResolver implements AggregationResolverInterface
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Config $config
+     * @param AttributeCollection $attributeCollection [optional]
      */
     public function __construct(
         AttributeSetFinderInterface $attributeSetFinder,
         ProductAttributeRepositoryInterface $productAttributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        Config $config
+        Config $config,
+        AttributeCollection $attributeCollection = null
     ) {
         $this->attributeSetFinder = $attributeSetFinder;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->config = $config;
+        $this->attributeCollection = $attributeCollection
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(AttributeCollection::class);
     }
 
     /**
@@ -85,15 +95,14 @@ class AggregationResolver implements AggregationResolverInterface
     {
         $attributeSetIds = $this->attributeSetFinder->findAttributeSetIdsByProductIds($documentIds);
 
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('attribute_set_id', $attributeSetIds, 'in')
-            ->create();
-        $result = $this->productAttributeRepository->getList($searchCriteria);
+        $this->attributeCollection->setAttributeSetFilter($attributeSetIds);
+        $this->attributeCollection->setEntityTypeFilter(
+            \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE
+        );
+        $this->attributeCollection->getSelect()
+            ->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->columns('attribute_code');
 
-        $attributeCodes = [];
-        foreach ($result->getItems() as $attribute) {
-            $attributeCodes[] = $attribute->getAttributeCode();
-        }
-        return $attributeCodes;
+        return $this->attributeCollection->getConnection()->fetchCol($this->attributeCollection->getSelect());
     }
 }

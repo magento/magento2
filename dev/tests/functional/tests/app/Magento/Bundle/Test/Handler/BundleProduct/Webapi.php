@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Handler\BundleProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Webapi as SimpleProductWebapi;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Config\DataInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
@@ -135,7 +133,6 @@ class Webapi extends SimpleProductWebapi implements BundleProductInterface
                     'selection_id' => (int)$optionValue['id'],
                     'option_id' => $option['option_id']
                 ];
-
             }
         }
 

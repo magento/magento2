@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -422,7 +422,6 @@ class DataProvider
             $attributeCode = $attribute->getAttributeCode();
 
             if (isset($productData[$attributeCode])) {
-
                 if ('store_id' === $attributeCode) {
                     continue;
                 }

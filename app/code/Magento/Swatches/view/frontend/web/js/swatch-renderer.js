@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -309,12 +309,12 @@ define([
         _create: function () {
             var options = this.options,
                 gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
-                isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ?
+                productData = this._determineProductData(),
+                $main = productData.isInProductView ?
                     this.element.parents('.column.main') :
                     this.element.parents('.product-item-info');
 
-            if (isProductViewExist) {
+            if (productData.isInProductView) {
                 gallery.data('gallery') ?
                     this._onGalleryLoaded(gallery) :
                     gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
@@ -326,6 +326,34 @@ define([
 
             this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
             this.inProductList = this.productForm.length > 0;
+        },
+
+        /**
+         * Determine product id and related data
+         *
+         * @returns {{productId: *, isInProductView: bool}}
+         * @private
+         */
+        _determineProductData: function () {
+            // Check if product is in a list of products.
+            var productId,
+                product,
+                isInProductView = false;
+
+            productId = this.element.parents('.product-item-details')
+                    .find('.price-box.price-final_price').attr('data-product-id');
+
+            if (!productId) {
+                // Check individual product.
+                product = document.getElementsByName('product')[0];
+                productId = product ? product.value : undefined;
+                isInProductView = productId > 0;
+            }
+
+            return {
+                productId: productId,
+                isInProductView: isInProductView
+            };
         },
 
         /**
@@ -840,13 +868,13 @@ define([
                 }
             );
 
-            if (result.oldPrice.amount !== result.finalPrice.amount) {
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
 
-            if (result.tierPrices.length) {
+            if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,
@@ -897,7 +925,7 @@ define([
             var $widget = this,
                 $this = $widget.element,
                 attributes = {},
-                productId = 0,
+                productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
 
@@ -911,7 +939,7 @@ define([
                     if (!(mediaCacheKey in $widget.options.mediaCache)) {
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
-                    $widget._ProductMediaCallback($this, data);
+                    $widget._ProductMediaCallback($this, data, productData.isInProductView);
                     $widget._DisableProductMediaLoader($this);
                 };
 
@@ -925,17 +953,8 @@ define([
                 attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
             });
 
-            if ($('body.catalog-product-view').size() > 0) {
-                //Product Page
-                productId = document.getElementsByName('product')[0].value;
-            } else {
-                //Category View
-                productId = $this.parents('.product.details.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
-            }
-
             mediaCallData = {
-                'product_id': productId,
+                'product_id': productData.productId,
                 'attributes': attributes,
                 'additional': $.parseQuery()
             };
@@ -1001,11 +1020,11 @@ define([
          *
          * @param {Object} $this
          * @param {String} response
+         * @param {Boolean} isInProductView
          * @private
          */
-        _ProductMediaCallback: function ($this, response) {
-            var isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ? $this.parents('.column.main') : $this.parents('.product-item-info'),
+        _ProductMediaCallback: function ($this, response, isInProductView) {
+            var $main = isInProductView ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
 
@@ -1020,7 +1039,7 @@ define([
                 };
 
             if (_.size($widget) < 1 || !support(response)) {
-                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isInProductView);
 
                 return;
             }
@@ -1045,7 +1064,7 @@ define([
                 });
             }
 
-            this.updateBaseImage(images, $main, isProductViewExist);
+            this.updateBaseImage(images, $main, isInProductView);
         },
 
         /**
@@ -1070,16 +1089,16 @@ define([
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
-         * @param {Boolean} isProductViewExist
+         * @param {Boolean} isInProductView
          */
-        updateBaseImage: function (images, context, isProductViewExist) {
+        updateBaseImage: function (images, context, isInProductView) {
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 imagesToUpdate,
                 isInitial;
 
-            if (isProductViewExist) {
+            if (isInProductView) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
                 isInitial = _.isEqual(imagesToUpdate, initialImages);
 

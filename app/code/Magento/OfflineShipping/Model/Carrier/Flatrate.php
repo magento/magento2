@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
@@ -13,6 +13,8 @@ use Magento\Shipping\Model\Rate\Result;
 
 /**
  * Flat rate shipping model
+ *
+ * @api
  */
 class Flatrate extends AbstractCarrier implements CarrierInterface
 {

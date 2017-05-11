@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -40,7 +40,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
 

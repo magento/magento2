@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model;
 
-use Magento\Framework\DataObject;
-use Magento\Eav\Model\Config;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Cache\Type as Cache;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

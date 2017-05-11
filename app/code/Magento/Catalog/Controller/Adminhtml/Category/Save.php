@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save
@@ -213,14 +213,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                var_dump($e->getMessage());
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                var_dump($e->getMessage());
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {
+                var_dump($e->getMessage());
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
@@ -364,7 +367,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         } else {
             $path = 'catalog/*/edit';
             $params['id'] = $categoryId;
-
         }
         return ['path' => $path, 'params' => $params];
     }

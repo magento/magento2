@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -119,7 +119,6 @@ class AdminAccount
             // User does not exist, create it
             $adminData['username'] = $this->data[self::KEY_USER];
             $adminData['email'] = $this->data[self::KEY_EMAIL];
-            $adminData['extra'] = serialize(null);
             $this->setup->getConnection()->insert(
                 $this->setup->getTable('admin_user'),
                 $adminData

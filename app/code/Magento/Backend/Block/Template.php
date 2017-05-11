@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -8,6 +8,7 @@ namespace Magento\Backend\Block;
 /**
  * Backend abstract block
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Template extends \Magento\Framework\View\Element\Template

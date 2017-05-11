@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model;
@@ -96,8 +96,7 @@ class ConfigWriter
     private function getPathPrefix($scope, $scopeCode)
     {
         $pathPrefixes = [System::CONFIG_TYPE, $scope];
-        if (
-            $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             && !empty($scopeCode)
         ) {
             $pathPrefixes[] = $scopeCode;

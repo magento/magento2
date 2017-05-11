@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Provider;
@@ -39,7 +39,7 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
     public function getIds($mainTableName, $gridTableName)
     {
         $select = $this->getConnection()->select()
-            ->from($this->getConnection()->getTableName($mainTableName), [$mainTableName.'.entity_id'])
+            ->from($this->getConnection()->getTableName($mainTableName), [$mainTableName . '.entity_id'])
             ->joinLeft(
                 [$gridTableName => $this->getConnection()->getTableName($gridTableName)],
                 sprintf(
@@ -51,7 +51,7 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
                 ),
                 []
             )
-            ->where($gridTableName.'.entity_id IS NULL');
+            ->where($gridTableName . '.entity_id IS NULL');
 
         return $this->getConnection()->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Setup\Module\Setup;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class AdminAccountFactory
 {

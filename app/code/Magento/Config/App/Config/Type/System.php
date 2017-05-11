@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\App\Config\Type;
@@ -58,6 +58,13 @@ class System implements ConfigTypeInterface
     private $serializer;
 
     /**
+     * The type of config.
+     *
+     * @var string
+     */
+    private $configType;
+
+    /**
      * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
      * @param \Magento\Framework\App\Config\Spi\PostProcessorInterface $postProcessor
      * @param \Magento\Store\Model\Config\Processor\Fallback $fallback
@@ -65,6 +72,7 @@ class System implements ConfigTypeInterface
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor
      * @param int $cachingNestedLevel
+     * @param string $configType
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
@@ -73,7 +81,8 @@ class System implements ConfigTypeInterface
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor,
-        $cachingNestedLevel = 1
+        $cachingNestedLevel = 1,
+        $configType = self::CONFIG_TYPE
     ) {
         $this->source = $source;
         $this->postProcessor = $postProcessor;
@@ -82,6 +91,7 @@ class System implements ConfigTypeInterface
         $this->cachingNestedLevel = $cachingNestedLevel;
         $this->fallback = $fallback;
         $this->serializer = $serializer;
+        $this->configType = $configType;
     }
 
     /**
@@ -93,7 +103,7 @@ class System implements ConfigTypeInterface
             $path = '';
         }
         if (!$this->data) {
-            $data = $this->cache->load(self::CONFIG_TYPE);
+            $data = $this->cache->load($this->configType);
             if (!$data) {
                 $data = $this->preProcessor->process($this->source->get());
                 $this->data = new DataObject($data);
@@ -104,7 +114,7 @@ class System implements ConfigTypeInterface
                 $this->data = new DataObject($data);
                 $this->cache->save(
                     $this->serializer->serialize($this->data->getData()),
-                    self::CONFIG_TYPE,
+                    $this->configType,
                     [self::CACHE_TAG]
                 );
             } else {

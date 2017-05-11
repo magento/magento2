@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model;
@@ -25,6 +25,18 @@ class Link implements LinkInterface
     private $initializationVector;
 
     /**
+     * Link constructor.
+     *
+     * @param string $url
+     * @param string $initializationVector
+     */
+    public function __construct($url, $initializationVector)
+    {
+        $this->url = $url;
+        $this->initializationVector = $initializationVector;
+    }
+
+    /**
      * @return string
      */
     public function getUrl()
@@ -38,23 +50,5 @@ class Link implements LinkInterface
     public function getInitializationVector()
     {
         return $this->initializationVector;
-    }
-
-    /**
-     * @param string $url
-     * @return void
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * @param string $initializationVector
-     * @return void
-     */
-    public function setInitializationVector($initializationVector)
-    {
-        $this->initializationVector = $initializationVector;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,6 @@ interface EngineInterface
      * @return mixed
      */
     public function processAttributeValue($attribute, $value);
-
 
     /**
      * Prepare index array as a string glued by separator

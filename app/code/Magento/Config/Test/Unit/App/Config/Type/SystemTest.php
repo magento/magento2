@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\App\Config\Type;
@@ -88,7 +88,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'default/dev/unsecure/url';
         $url = 'http://magento.test/';
-        $data = [
+        $unserializedData = [
             'default' => [
                 'dev' => [
                     'unsecure' => [
@@ -97,41 +97,42 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+        $serializedDataString = '{"serialized-data"}';
 
         $this->cache->expects($this->once())
             ->method('load')
             ->with(System::CONFIG_TYPE)
-            ->willReturn($isCached ? $data : null);
+            ->willReturn($isCached ? $unserializedData : null);
 
         if ($isCached) {
             $this->serializer->expects($this->once())
                 ->method('unserialize')
-                ->willReturn($data);
+                ->willReturn($unserializedData);
         }
 
         if (!$isCached) {
             $this->serializer->expects($this->once())
                 ->method('serialize')
-                ->willReturn(serialize($data));
+                ->willReturn($serializedDataString);
             $this->source->expects($this->once())
                 ->method('get')
-                ->willReturn($data);
+                ->willReturn($unserializedData);
             $this->fallback->expects($this->once())
                 ->method('process')
-                ->with($data)
+                ->with($unserializedData)
                 ->willReturnArgument(0);
             $this->preProcessor->expects($this->once())
                 ->method('process')
-                ->with($data)
+                ->with($unserializedData)
                 ->willReturnArgument(0);
             $this->postProcessor->expects($this->once())
                 ->method('process')
-                ->with($data)
+                ->with($unserializedData)
                 ->willReturnArgument(0);
             $this->cache->expects($this->once())
                 ->method('save')
                 ->with(
-                    serialize($data),
+                    $serializedDataString,
                     System::CONFIG_TYPE,
                     [System::CACHE_TAG]
                 );

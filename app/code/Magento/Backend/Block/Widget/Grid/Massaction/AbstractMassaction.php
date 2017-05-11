@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
  *
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
+ * @deprecated
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {

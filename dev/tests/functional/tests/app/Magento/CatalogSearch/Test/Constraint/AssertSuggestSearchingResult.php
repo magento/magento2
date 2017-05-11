@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,13 +22,13 @@ class AssertSuggestSearchingResult extends AbstractConstraint
      * Click on search suggestion and verify that search is performed.
      *
      * @param CmsIndex $cmsIndex
-     * @param CatalogSearchQuery $catalogSearch
+     * @param CatalogSearchQuery $searchTerm
      * @param AssertCatalogSearchResult $assertCatalogSearchResult
      * @param AdvancedResult $resultPage
      * @return void
      */
     public function processAssert(
-        CatalogSearchQuery $catalogSearch,
+        CatalogSearchQuery $searchTerm,
         CmsIndex $cmsIndex,
         AssertCatalogSearchResult $assertCatalogSearchResult,
         AdvancedResult $resultPage
@@ -36,11 +36,11 @@ class AssertSuggestSearchingResult extends AbstractConstraint
         $cmsIndex->open();
         $searchBlock = $cmsIndex->getSearchBlock();
 
-        $queryText = $catalogSearch->getQueryText();
+        $queryText = $searchTerm->getQueryText();
         $searchBlock->fillSearch($queryText);
 
-        if ($catalogSearch->hasData('num_results')) {
-            $isVisible = $searchBlock->isSuggestSearchVisible($queryText, $catalogSearch->getNumResults());
+        if ($searchTerm->hasData('num_results')) {
+            $isVisible = $searchBlock->isSuggestSearchVisible($queryText, $searchTerm->getNumResults());
         } else {
             $isVisible = $searchBlock->isSuggestSearchVisible($queryText);
         }
@@ -50,7 +50,7 @@ class AssertSuggestSearchingResult extends AbstractConstraint
             'Block "Suggest Search" when searching was not found'
         );
         $searchBlock->clickSuggestedText($queryText);
-        $assertCatalogSearchResult->processAssert($catalogSearch, $resultPage);
+        $assertCatalogSearchResult->processAssert($searchTerm, $resultPage);
     }
 
     /**

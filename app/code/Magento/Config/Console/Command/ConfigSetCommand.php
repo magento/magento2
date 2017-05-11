@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Framework\App\Area;
-use Magento\Framework\App\State;
-use Magento\Framework\Config\ScopeInterface;
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Console\Command\ConfigSet\EmulatedProcessorFacade;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -15,7 +17,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 
 /**
  * Command provides possibility to change system configuration.
@@ -33,39 +34,39 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * Scope manager.
+     * The emulated processor facade.
      *
-     * @var ScopeInterface
+     * @var EmulatedProcessorFacade
      */
-    private $scope;
+    private $emulatedProcessorFacade;
 
     /**
-     * Application state.
+     * The config change detector.
      *
-     * @var State
+     * @var ChangeDetector
      */
-    private $state;
+    private $changeDetector;
 
     /**
-     * The processor facade factory
+     * The hash manager.
      *
-     * @var ProcessorFacadeFactory
+     * @var Hash
      */
-    private $processorFacadeFactory;
+    private $hash;
 
     /**
-     * @param ScopeInterface $scope Scope manager
-     * @param State $state Application state
-     * @param ProcessorFacadeFactory $processorFacadeFactory The processor facade factory
+     * @param EmulatedProcessorFacade $emulatedProcessorFacade The emulated processor facade
+     * @param ChangeDetector $changeDetector The config change detector
+     * @param Hash $hash The hash manager
      */
     public function __construct(
-        ScopeInterface $scope,
-        State $state,
-        ProcessorFacadeFactory $processorFacadeFactory
+        EmulatedProcessorFacade $emulatedProcessorFacade,
+        ChangeDetector $changeDetector,
+        Hash $hash
     ) {
-        $this->scope = $scope;
-        $this->state = $state;
-        $this->processorFacadeFactory = $processorFacadeFactory;
+        $this->emulatedProcessorFacade = $emulatedProcessorFacade;
+        $this->changeDetector = $changeDetector;
+        $this->hash = $hash;
 
         parent::__construct();
     }
@@ -115,21 +116,29 @@ class ConfigSetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
+            $output->writeln(
+                '<error>'
+                . 'This command is unavailable right now. '
+                . 'To continue working with it please run app:config:import or setup:upgrade command before.'
+                . '</error>'
+            );
+
+            return Cli::RETURN_FAILURE;
+        }
+
         try {
-            // Emulating adminhtml scope to be able to read configs.
-            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($input, $output) {
-                $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+            $message = $this->emulatedProcessorFacade->process(
+                $input->getArgument(static::ARG_PATH),
+                $input->getArgument(static::ARG_VALUE),
+                $input->getOption(static::OPTION_SCOPE),
+                $input->getOption(static::OPTION_SCOPE_CODE),
+                $input->getOption(static::OPTION_LOCK)
+            );
 
-                $message = $this->processorFacadeFactory->create()->process(
-                    $input->getArgument(static::ARG_PATH),
-                    $input->getArgument(static::ARG_VALUE),
-                    $input->getOption(static::OPTION_SCOPE),
-                    $input->getOption(static::OPTION_SCOPE_CODE),
-                    $input->getOption(static::OPTION_LOCK)
-                );
+            $this->hash->regenerate(System::CONFIG_TYPE);
 
-                $output->writeln('<info>' . $message . '</info>');
-            });
+            $output->writeln('<info>' . $message . '</info>');
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {

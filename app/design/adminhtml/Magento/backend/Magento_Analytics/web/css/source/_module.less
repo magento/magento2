@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -77,4 +77,116 @@
         opacity: @disabled__opacity;
         pointer-events: none;
     }
+}
+
+//
+//  Modal on dashboard
+//  ---------------------------------------------
+
+.advanced-reports-decline-subscription-modal,
+.advanced-reports-subscription-modal {
+    .modal-inner-wrap {
+        max-width: 80rem;
+    }
+}
+
+.advanced-reports-subscription-modal {
+    .admin__fieldset {
+        padding: 0;
+    }
+}
+
+.advanced-reports-decline-subscription-modal {
+    .advanced-reports-subscription-text {
+        margin-bottom: 0;
+    }
+
+    .modal-content {
+        padding-bottom: 0;
+    }
+}
+
+.advanced-reports-subscription-text {
+    line-height: @line-height__xl;
+
+    .list {
+        .lib-list-reset-styles(@_margin: @indent__m 0, @_padding: 0);
+
+        li {
+            padding-left: @indent__l;
+            position: relative;
+
+            &:before {
+                content: '\2022';
+                left: 1rem;
+                position: absolute;
+            }
+
+            + li {
+                margin-top: @indent__m;
+            }
+        }
+    }
+}
+
+.advanced-reports-subscription-actions {
+    font-size: 0;
+    text-align: justify;
+
+    &:after {
+        content: '';
+        display: inline-block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        width: 100%;
+    }
+
+    .action-basic,
+    .action-additional {
+        &:extend(.abs-action-l all);
+    }
+
+    .advanced-reports-subscription-postpone,
+    .advanced-reports-subscription-disable,
+    .advanced-reports-subscription-enable {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.advanced-reports-subscription-enable {
+    .admin__field {
+        max-width: 22rem;
+    }
+
+    .admin__field-label {
+        font-size: @font-size__s;
+        line-height: @line-height__l;
+    }
+
+    .action-basic {
+        &:extend(.abs-action-primary all);
+        margin-bottom: @indent__s;
+    }
+}
+
+//
+//  Configuration
+//  _____________________________________________
+
+.config-additional-comment {
+  border-color: @color-gray80;
+  border-style: solid;
+  border-width: 1px 0;
+  margin: @indent__l 0;
+  padding: @indent__m;
+}
+
+.config-additional-comment-title {
+  margin-bottom: @indent__xs;
+}
+
+.config-additional-comment-content {
+  line-height: @line-height__l;
 }

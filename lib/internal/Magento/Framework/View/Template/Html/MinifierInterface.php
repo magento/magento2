@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,6 +33,7 @@ interface MinifierInterface
      * Minify template file
      *
      * @param string $file
+     * @return void
      */
     public function minify($file);
 }

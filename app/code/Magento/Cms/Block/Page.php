@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block;
@@ -9,6 +9,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Cms page content block
+ *
+ * @api
  */
 class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     \Magento\Framework\DataObject\IdentityInterface

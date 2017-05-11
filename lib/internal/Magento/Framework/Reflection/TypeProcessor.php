@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
@@ -259,7 +259,7 @@ class TypeProcessor
      *
      * @param string $getterName
      * @return string
-     * 
+     *
      * @deprecated
      */
     public function dataObjectGetterNameToFieldName($getterName)
@@ -542,8 +542,8 @@ class TypeProcessor
      */
     public function getParamType(ParameterReflection $param)
     {
-        $type = $param->getType();
-        if ($param->getType() == 'null') {
+        $type = $param->detectType();
+        if ($type == 'null') {
             throw new \LogicException(sprintf(
                 '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
                 . ' First declared type should not be null. E.g. string|null',
@@ -592,8 +592,8 @@ class TypeProcessor
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -630,8 +630,8 @@ class TypeProcessor
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -647,8 +647,8 @@ class TypeProcessor
      * @param bool $boolAccessorName
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -668,8 +668,8 @@ class TypeProcessor
      * @param ClassReflection $class
      * @param string $methodName
      * @return bool
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 
-use Magento\Framework\DataObject;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\DataObject;
 
 /**
  * Class CountryCreditCard
@@ -22,10 +22,10 @@ class CountryCreditCard extends AbstractFieldArray
      * @var CcTypes
      */
     protected $ccTypesRenderer = null;
-    
+
     /**
      * Returns renderer for country element
-     * 
+     *
      * @return Countries
      */
     protected function getCountryRenderer()
@@ -42,7 +42,7 @@ class CountryCreditCard extends AbstractFieldArray
 
     /**
      * Returns renderer for country element
-     * 
+     *
      * @return CcTypes
      */
     protected function getCcTypesRenderer()

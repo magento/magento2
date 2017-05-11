@@ -2,7 +2,7 @@
 /**
  * Validator constraint delegates validation of value's property to wrapped validator.
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -1106,6 +1107,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::IS_REQUIRED, $isRequired);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1264,6 +1266,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::SOURCE_MODEL, $sourceModel);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

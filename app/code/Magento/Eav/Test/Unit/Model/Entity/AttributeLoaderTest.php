@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
-use Magento\Eav\Model\Config;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Eav\Model\Entity\AttributeLoader;
 use Magento\Eav\Model\Attribute;
-use Magento\Framework\DataObject;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\AbstractEntity;
-use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\AttributeLoader;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 
 class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
 {

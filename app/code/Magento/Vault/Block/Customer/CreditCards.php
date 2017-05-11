@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Block\Customer;
@@ -9,6 +9,8 @@ use Magento\Vault\Model\CreditCardTokenFactory;
 
 /**
  * Class CreditCards
+ *
+ * @api
  */
 class CreditCards extends PaymentTokens
 {

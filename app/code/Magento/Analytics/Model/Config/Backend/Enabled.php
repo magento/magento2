@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Config\Backend;
@@ -21,7 +21,12 @@ use Magento\Framework\Registry;
 class Enabled extends Value
 {
     /**
-     * Service for handling after save action.
+     * Path to field subscription enabled into config structure.
+     */
+    const XML_ENABLED_CONFIG_STRUCTURE_PATH = 'analytics/general/enabled';
+
+    /**
+     * Service for processing of activation/deactivation MBI subscription.
      *
      * @var SubscriptionHandler
      */
@@ -60,7 +65,15 @@ class Enabled extends Value
     public function afterSave()
     {
         try {
-            $this->subscriptionHandler->process($this);
+            if ($this->isValueChanged()) {
+                $enabled = $this->getData('value');
+
+                if ($enabled) {
+                    $this->subscriptionHandler->processEnabled();
+                } else {
+                    $this->subscriptionHandler->processDisabled();
+                }
+            }
         } catch (\Exception $e) {
             $this->_logger->error($e->getMessage());
             throw new LocalizedException(__('There was an error save new configuration value.'));

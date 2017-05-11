@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="alert.urls">
-            <block class="Magento\ProductAlert\Block\Product\View\Price" name="productalert.price" as="productalert_price" template="product/view.phtml">
+            <block class="Magento\ProductAlert\Block\Product\View\Price" name="productalert.price" as="productalert_price" template="Magento_ProductAlert::product/view.phtml">
                 <action method="setHtmlClass">
                     <argument name="value" xsi:type="string">price</argument>
                 </action>
@@ -16,7 +16,7 @@
                     <argument translate="true" name="value" xsi:type="string">Notify me when the price drops</argument>
                 </action>
             </block>
-            <block class="Magento\ProductAlert\Block\Product\View\Stock" name="productalert.stock" as="productalert_stock" template="product/view.phtml">
+            <block class="Magento\ProductAlert\Block\Product\View\Stock" name="productalert.stock" as="productalert_stock" template="Magento_ProductAlert::product/view.phtml">
                 <action method="setHtmlClass">
                     <argument name="value" xsi:type="string">stock</argument>
                 </action>

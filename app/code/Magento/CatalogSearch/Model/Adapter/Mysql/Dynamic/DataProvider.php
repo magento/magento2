@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
@@ -15,6 +15,9 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface as 
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
+use Magento\Store\Model\StoreManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -52,18 +55,32 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
+     * @var FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
+     * @var StoreManager
+     */
+    private $storeManager;
+
+    /**
      * @param ResourceConnection $resource
      * @param Range $range
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
+     * @param FrontendResource $indexerFrontendResource
+     * @param StoreManager $storeManager
      */
     public function __construct(
         ResourceConnection $resource,
         Range $range,
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,
-        IntervalFactory $intervalFactory
+        IntervalFactory $intervalFactory,
+        FrontendResource $indexerFrontendResource = null,
+        StoreManager $storeManager = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -71,6 +88,10 @@ class DataProvider implements DataProviderInterface
         $this->customerSession = $customerSession;
         $this->dataProvider = $dataProvider;
         $this->intervalFactory = $intervalFactory;
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManager::class);
     }
 
     /**
@@ -87,7 +108,7 @@ class DataProvider implements DataProviderInterface
     public function getAggregations(\Magento\Framework\Search\Dynamic\EntityStorage $entityStorage)
     {
         $aggregation = [
-            'count' => 'count(DISTINCT main_table.entity_id)',
+            'count' => 'count(main_table.entity_id)',
             'max' => 'MAX(min_price)',
             'min' => 'MIN(min_price)',
             'std' => 'STDDEV_SAMP(min_price)',
@@ -95,18 +116,17 @@ class DataProvider implements DataProviderInterface
 
         $select = $this->getSelect();
 
-        $tableName = $this->resource->getTableName('catalog_product_index_price');
+        $tableName = $this->indexerFrontendResource->getMainTable();
         /** @var Table $table */
         $table = $entityStorage->getSource();
         $select->from(['main_table' => $tableName], [])
-            ->joinInner(['entities' => $table->getName()], 'main_table.entity_id  = entities.entity_id', [])
+            ->where('main_table.entity_id in (select entity_id from ' . $table->getName() . ')')
             ->columns($aggregation);
 
         $select = $this->setCustomerGroupId($select);
+        $select->where('main_table.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
 
-        $result = $this->connection->fetchRow($select);
-
-        return $result;
+        return $this->connection->fetchRow($select);
     }
 
     /**

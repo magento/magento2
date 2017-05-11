@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
             <block class="Magento\Framework\View\Element\Js\Components" name="customer_address_head_components" template="Magento_Customer::js/components.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Address\Book" name="address_book" template="address/book.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Address\Book" name="address_book" template="Magento_Customer::address/book.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

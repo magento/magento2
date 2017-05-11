@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
@@ -42,7 +42,7 @@ class BlockActionsTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context->expects(static::once())
+        $context->expects(static::never())
             ->method('getProcessor')
             ->willReturn($processor);
 

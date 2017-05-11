@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 /**
  * Adminhtml sales order view gift message form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Template

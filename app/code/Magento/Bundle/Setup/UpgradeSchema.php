@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * @codeCoverageIgnore
@@ -23,7 +23,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->startSetup();
         $connection = $setup->getConnection();
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-
             $fields = [
                 ['table' => 'catalog_product_index_price_bundle_opt_idx', 'column' => 'alt_group_price'],
                 ['table' => 'catalog_product_index_price_bundle_opt_tmp', 'column' => 'alt_group_price'],

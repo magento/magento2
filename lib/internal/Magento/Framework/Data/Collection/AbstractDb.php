@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Collection;
@@ -15,6 +15,8 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Base items collection class
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection

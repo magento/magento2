@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\App\Config\Type\System;
-use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -24,70 +22,49 @@ use Magento\Framework\Stdlib\ArrayManager;
 class LockProcessor implements ConfigSetProcessorInterface
 {
     /**
-     * The deployment configuration reader.
+     * The factory for prepared value
      *
-     * @var DeploymentConfig
+     * @var PreparedValueFactory
      */
-    private $deploymentConfig;
+    private $preparedValueFactory;
 
     /**
-     * The deployment configuration writer.
+     * The deployment configuration writer
      *
      * @var DeploymentConfig\Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * An array manager for different manipulations with arrays.
+     * An array manager for different manipulations with arrays
      *
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
-     * The resolver for configuration paths according to source type.
+     * The resolver for configuration paths according to source type
      *
      * @var ConfigPathResolver
      */
     private $configPathResolver;
 
     /**
-     * The manager for system configuration structure.
-     *
-     * @var Structure
-     */
-    private $configStructure;
-
-    /**
-     * The factory for configuration value objects.
-     *
-     * @see Value
-     * @var ValueFactory
-     */
-    private $configValueFactory;
-
-    /**
-     * @param DeploymentConfig $deploymentConfig The deployment configuration reader
+     * @param PreparedValueFactory $preparedValueFactory The factory for prepared value
      * @param DeploymentConfig\Writer $writer The deployment configuration writer
      * @param ArrayManager $arrayManager An array manager for different manipulations with arrays
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths according to source type
-     * @param Structure $configStructure The manager for system configuration structure
-     * @param ValueFactory $configValueFactory The factory for configuration value objects
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
+        PreparedValueFactory $preparedValueFactory,
         DeploymentConfig\Writer $writer,
         ArrayManager $arrayManager,
-        ConfigPathResolver $configPathResolver,
-        Structure $configStructure,
-        ValueFactory $configValueFactory
+        ConfigPathResolver $configPathResolver
     ) {
-        $this->deploymentConfig = $deploymentConfig;
+        $this->preparedValueFactory = $preparedValueFactory;
         $this->deploymentConfigWriter = $writer;
         $this->arrayManager = $arrayManager;
         $this->configPathResolver = $configPathResolver;
-        $this->configStructure = $configStructure;
-        $this->configValueFactory = $configValueFactory;
     }
 
     /**
@@ -100,19 +77,7 @@ class LockProcessor implements ConfigSetProcessorInterface
     {
         try {
             $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
-            /** @var Structure\Element\Field $field */
-            $field = $this->deploymentConfig->isAvailable()
-                ? $this->configStructure->getElement($path)
-                : null;
-            /** @var Value $backendModel */
-            $backendModel = $field && $field->hasBackendModel()
-                ? $field->getBackendModel()
-                : $this->configValueFactory->create();
-
-            $backendModel->setPath($path);
-            $backendModel->setScope($scope);
-            $backendModel->setScopeId($scopeCode);
-            $backendModel->setValue($value);
+            $backendModel = $this->preparedValueFactory->create($path, $value, $scope, $scopeCode);
 
             /**
              * Temporary solution until Magento introduce unified interface

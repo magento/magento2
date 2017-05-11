@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * Wishlist block customer items
  */
 namespace Magento\Wishlist\Block\Rss;
 
+/**
+ * @api
+ */
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**

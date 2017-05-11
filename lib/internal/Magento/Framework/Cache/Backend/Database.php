@@ -1,32 +1,31 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
-Tables declaration:
-
-CREATE TABLE IF NOT EXISTS `cache` (
-        `id` VARCHAR(255) NOT NULL,
-        `data` mediumblob,
-        `create_time` int(11),
-        `update_time` int(11),
-        `expire_time` int(11),
-        PRIMARY KEY  (`id`),
-        KEY `IDX_EXPIRE_TIME` (`expire_time`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `cache_tag` (
-    `tag` VARCHAR(255) NOT NULL,
-    `cache_id` VARCHAR(255) NOT NULL,
-    KEY `IDX_TAG` (`tag`),
-    KEY `IDX_CACHE_ID` (`cache_id`),
-    CONSTRAINT `FK_CORE_CACHE_TAG` FOREIGN KEY (`cache_id`) REFERENCES `cache` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-*/
+ * Tables declaration:
+ *
+ * CREATE TABLE IF NOT EXISTS `cache` (
+ *      `id` VARCHAR(255) NOT NULL,
+ *      `data` mediumblob,
+ *      `create_time` int(11),
+ *      `update_time` int(11),
+ *      `expire_time` int(11),
+ *      PRIMARY KEY  (`id`),
+ *      KEY `IDX_EXPIRE_TIME` (`expire_time`)
+ * )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ *
+ * CREATE TABLE IF NOT EXISTS `cache_tag` (
+ *      `tag` VARCHAR(255) NOT NULL,
+ *      `cache_id` VARCHAR(255) NOT NULL,
+ *      KEY `IDX_TAG` (`tag`),
+ *      KEY `IDX_CACHE_ID` (`cache_id`),
+ *      CONSTRAINT `FK_CORE_CACHE_TAG` FOREIGN KEY (`cache_id`)
+ *      REFERENCES `cache` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+ * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ */
 
 /**
  * Database cache backend
@@ -148,7 +147,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     {
         if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
             $this->_options['infinite_loop_flag'] = true;
-            $select = $this->_getConnection()->select()->from($this->_getDataTable(), 'data')->where('id=:cache_id');
+            $select = $this->_getConnection()->select()->from(
+                $this->_getDataTable(),
+                'data'
+            )->where('id=:cache_id');
 
             if (!$doNotTestCacheValidity) {
                 $select->where('expire_time=0 OR expire_time>?', time());
@@ -197,7 +199,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $data            Datas to cache
      * @param string $id              Cache id
      * @param string[] $tags          Array of strings, the cache record will be tagged by each string entry
-     * @param int|bool $specificLifetime  If != false, set a specific lifetime for this cache record (null => infinite lifetime)
+     * @param int|bool $specificLifetime  Integer to set a specific lifetime or null for infinite lifetime
      * @return bool true if no problem
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
@@ -222,7 +224,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 'create_time'
             )},\n                    {$connection->quoteIdentifier(
                 'update_time'
-            )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n                    {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
+            )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n
+            {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
 
                 $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
             }
@@ -554,10 +557,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Clean all cache entries
      *
-     * @param $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
      */
-    private function cleanAll($connection)
+    private function cleanAll(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
         if ($this->_options['store_data']) {
             $result = $connection->query('TRUNCATE TABLE ' . $this->_getDataTable());
@@ -571,10 +574,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
     /**
      * Clean old cache entries
      *
-     * @param $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @return bool
      */
-    private function cleanOld($connection)
+    private function cleanOld(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
         if ($this->_options['store_data']) {
             $result = $connection->delete(

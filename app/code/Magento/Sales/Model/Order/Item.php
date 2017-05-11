@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * Order Item Model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
  * @method int getGiftMessageId()
@@ -2389,5 +2390,16 @@ class Item extends AbstractModel implements OrderItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
+
+    /**
+     * Check if it is possible to process item after cancellation
+     *
+     * @return bool
+     */
+    public function isProcessingAvailable()
+    {
+        return $this->getQtyToShip() > $this->getQtyToCancel();
+    }
 }

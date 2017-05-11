@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit;
@@ -170,6 +170,18 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             $expected,
             array_values($this->filePermissions->getMissingWritablePathsForInstallation())
         );
+    }
+
+    public function testGetMissingWritableDirectoriesForDbUpgrade()
+    {
+        $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
+        foreach ($directoryMethods as $method) {
+            $this->directoryWriteMock->expects($this->exactly(2))
+                ->method($method)
+                ->willReturn(true);
+        }
+
+        $this->assertEmpty($this->filePermissions->getMissingWritableDirectoriesForDbUpgrade());
     }
 
     /**

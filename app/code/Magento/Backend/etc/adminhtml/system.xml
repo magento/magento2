@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,7 +33,7 @@
             <class>separator-top</class>
             <label>Store Email Addresses</label>
             <tab>general</tab>
-            <resource>Magento_Backend::trans_email</resource>
+            <resource>Magento_Config::trans_email</resource>
             <group id="ident_custom1" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Email 1</label>
                 <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Quote payment information
  *
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Payment _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Payment getResource()
  * @method int getQuoteId()
@@ -357,6 +358,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     {
         return $this->setData(self::KEY_ADDITIONAL_DATA, $additionalData);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

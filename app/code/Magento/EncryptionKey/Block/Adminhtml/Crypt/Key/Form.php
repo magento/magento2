@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
 /**
  * Encryption key change form block
+ *
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

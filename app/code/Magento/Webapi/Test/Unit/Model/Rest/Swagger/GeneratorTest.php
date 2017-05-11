@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Rest\Swagger;
@@ -38,6 +38,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
 
     protected function setUp()
     {
@@ -90,6 +95,17 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
         $this->generator = $this->objectManager->getObject(
             \Magento\Webapi\Model\Rest\Swagger\Generator::class,
             [
@@ -98,12 +114,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $this->typeProcessorMock,
                 'serviceMetadata' => $this->serviceMetadataMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocatorMock,
-                'authorization' => $authorizationMock
+                'authorization' => $authorizationMock,
+                'serializer' => $this->serializer
             ]
         );
     }
 
     /**
+     * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @param string[] $serviceMetadata
      * @param string[] $typeData
      * @param string $schema

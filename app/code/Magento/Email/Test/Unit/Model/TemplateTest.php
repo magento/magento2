@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model;
@@ -8,7 +8,6 @@ namespace Magento\Email\Test\Unit\Model;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Filter\Template as FilterTemplate;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Store\Model\ScopeInterface;
 
@@ -87,7 +86,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $serilizerMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -144,7 +143,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serilizerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
     }
 
     /**
@@ -172,7 +171,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->urlModel,
                 $this->filterFactory,
                 [],
-                $this->serilizerMock
+                $this->serializerMock
             ])
             ->getMock();
     }
@@ -312,7 +311,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © 2013-2017 Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -320,7 +319,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © 2013-2017 Magento, Inc. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © Magento, Inc. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -542,7 +541,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model = $this->getModelMock();
         $model->setData('orig_template_variables', $templateVariables);
 
-        $this->serilizerMock->expects($this->any())->method('unserialize')
+        $this->serializerMock->expects($this->any())->method('unserialize')
             ->willReturn(
                 json_decode($templateVariables, true)
             );

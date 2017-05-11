@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Test\Unit;
 
@@ -54,7 +52,10 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     public function testExecute($command, $commandArgs, $expectedResult)
     {
         $this->_testExecuteCommand(
-            new \Magento\Framework\Shell($this->commandRenderer, $this->logger), $command, $commandArgs, $expectedResult
+            new \Magento\Framework\Shell($this->commandRenderer, $this->logger),
+            $command,
+            $commandArgs,
+            $expectedResult
         );
     }
 
