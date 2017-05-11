@@ -201,7 +201,7 @@ class Image implements LocalInterface
         $result = $this->join($result, $this->getModule());
         $result = $this->join($result, $this->getMiscPath());
         $result = $this->join($result, $this->getFilePath());
-        if(1 !== strpos($result, ':')) {
+        if (1 !== strpos($result, ':')) {
             $result = DIRECTORY_SEPARATOR . $result;
         }
         return $result;
