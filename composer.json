@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "2.1.6",
+    "version": "2.1.7",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -70,7 +70,7 @@
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
-        "pdepend/pdepend": "2.2.2",
+        "pdepend/pdepend": "2.4.0",
         "fabpot/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3 <=0.7.0",
         "sebastian/phpcpd": "2.0.0"

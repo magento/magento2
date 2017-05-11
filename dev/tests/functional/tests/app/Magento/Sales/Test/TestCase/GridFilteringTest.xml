@@ -32,6 +32,8 @@
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesInvoiceGridFiltering">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66285: Magento\Ui\Test\TestCase\GridFilteringTest.test with data set "SalesInvoiceGridFiltering" failed on Jenkins</data>
             <data name="description" xsi:type="string">Verify sales invoice grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
@@ -55,6 +57,8 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesShipmentGridFiltering">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66287: Magento\Ui\Test\TestCase\GridFilteringTest.test with data set "SalesShipmentGridFiltering" failed on Jenkins</data>
             <data name="description" xsi:type="string">Verify sales shipment grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
@@ -78,6 +82,8 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesCreditMemoGridFiltering">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66288: Magento\Ui\Test\TestCase\GridFilteringTest.test with data set "SalesCreditMemoGridFiltering" failed on Jenkins</data>
             <data name="description" xsi:type="string">Verify sales credit memo grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">

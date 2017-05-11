@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Ui\Test\TestCase\AdminUiControllerPermissionTest" summary="Magento UI controller permission" ticketId="MAGETWO-64320">
+        <variation name="AdminUiControllerPermissionTestV1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <constraint name="Magento\Ui\Test\Constraint\AssertAdminUrlNoAccess" />
+        </variation>
+    </testCase>
+</config>

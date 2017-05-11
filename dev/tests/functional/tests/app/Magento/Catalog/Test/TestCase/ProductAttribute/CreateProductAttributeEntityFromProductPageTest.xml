@@ -33,6 +33,8 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation2_Filterable">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-64245: Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityFromProductPageTest.test with data set "	CreateProductAttributeEntityFromProductPageTestVariation2_Filterable"</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
             <data name="attribute/data/options/dataset" xsi:type="string">two_options</data>
@@ -50,6 +52,8 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation3_Required">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66706: Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityFromProductPageTest::test with data set "CreateProductAttributeEntityFromProductPageTestVariation3_Required"</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
@@ -59,6 +63,8 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation4_Unique">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66707: Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityFromProductPageTest::test with data set "CreateProductAttributeEntityFromProductPageTestVariation4_Unique"</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="attribute/data/is_required" xsi:type="string">No</data>
