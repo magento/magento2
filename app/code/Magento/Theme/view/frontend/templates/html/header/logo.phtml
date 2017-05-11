@@ -19,8 +19,8 @@
 <?php endif ?>
         <img src="<?php /* @escapeNotVerified */ echo $block->getLogoSrc() ?>"
              alt="<?php /* @escapeNotVerified */ echo $block->getLogoAlt() ?>"
-             <?php echo $block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '' ?>
-             <?php echo $block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '' ?>
+             style="<?php echo $block->getLogoWidth() ? 'width:' . $block->getLogoWidth() . 'px;' : '';
+                    echo $block->getLogoHeight() ? 'height:' . $block->getLogoHeight() . 'px;' : '' ?>"
         />
 <?php if ($block->isHomePage()):?>
     </strong>
