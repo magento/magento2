@@ -557,7 +557,7 @@ define([
          * @param {Object} elem - instance
          */
         setMaxPosition: function (position, elem) {
-            if (!_.isNaN(position)) {
+            if (position || position === 0) {
                 this.checkMaxPosition(position);
                 this.sort(position, elem);
             } else {
