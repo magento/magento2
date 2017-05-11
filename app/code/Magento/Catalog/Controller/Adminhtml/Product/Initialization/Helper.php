@@ -74,6 +74,11 @@ class Helper
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      */
     private $dateTimeFilter;
+    
+    /**
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    private $linkTypeProvider;
 
     /**
      * Helper constructor.
@@ -90,7 +95,8 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -98,6 +104,7 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
+        $this->linkTypeProvider = $linkTypeProvider;
     }
 
     /**
@@ -244,15 +251,13 @@ class Helper
 
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = $product->getProductLinks();
-        $linkTypes = [
-            'related' => $product->getRelatedReadonly(),
-            'upsell' => $product->getUpsellReadonly(),
-            'crosssell' => $product->getCrosssellReadonly()
-        ];
 
-        foreach ($linkTypes as $linkType => $readonly) {
-            if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array)$links[$linkType] as $linkData) {
+        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkType */
+        foreach ($this->linkTypeProvider->getItems() as $linkType) {
+            $readonly = $product->getData($linkType->getName() . '_readonly');
+
+            if (isset($links[$linkType->getName()]) && !$readonly) {
+                foreach ((array) $links[$linkType->getName()] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
                     }
@@ -261,7 +266,7 @@ class Helper
                     $link = $this->getProductLinkFactory()->create();
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
-                        ->setLinkType($linkType)
+                        ->setLinkType($linkType->getName())
                         ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
                     $productLinks[] = $link;
                 }
