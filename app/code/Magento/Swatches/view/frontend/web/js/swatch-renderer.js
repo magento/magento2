@@ -272,10 +272,11 @@ define([
         /**
          * Get chosen product
          *
-         * @returns array
+         * @returns int|null
          */
         getProduct: function () {
-            return this._CalcProducts().shift();
+            var products = this._CalcProducts();
+            return _.isArray(products) ? products[0] : null;
         },
 
         /**
@@ -290,8 +291,8 @@ define([
                 // store unsorted attributes
                 this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
-                this._setPreSelectedGallery();
                 this._RenderControls();
+                this._setPreSelectedGallery();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
@@ -929,7 +930,6 @@ define([
         _LoadProductMedia: function () {
             var $widget = this,
                 $this = $widget.element,
-                attributes = {},
                 productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
@@ -952,16 +952,8 @@ define([
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
-
-                attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
-            });
-
             mediaCallData = {
-                'product_id': productData.productId,
-                'attributes': attributes,
-                'additional': $.parseQuery()
+                'product_id': this.getProduct()
             };
             mediaCacheKey = JSON.stringify(mediaCallData);
 
@@ -1215,18 +1207,11 @@ define([
          */
         _setPreSelectedGallery: function () {
             if (this.options.jsonConfig.preSelectedGallery) {
-                var productData = this._determineProductData(),
-                    mediaCallData,
-                    mediaCacheKey;
-
-                mediaCallData = {
-                    'product_id': productData.productId,
-                    'attributes': $.parseQuery(),
-                    'additional': $.parseQuery()
+                var mediaCallData = {
+                    'product_id': this.getProduct()
                 };
 
-                mediaCacheKey = JSON.stringify(mediaCallData);
-                this.options.mediaCache[mediaCacheKey] = this.options.jsonConfig.preSelectedGallery;
+                this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
             }
         }
     });

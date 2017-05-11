@@ -20,30 +20,28 @@ class Media extends \Magento\Framework\App\Action\Action
     protected $productModelFactory;
 
     /**
-     * @var \Magento\Swatches\Model\Product\Variations\Media
+     * @var \Magento\Swatches\Helper\Data
      */
-    private $variationsMedia;
+    private $swatchHelper;
 
     /**
      * @param Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productModelFactory
-     * @param \Magento\Swatches\Model\Product\Variations\Media $variationsMedia
+     * @param \Magento\Swatches\Helper\Data $swatchHelper
      */
     public function __construct(
         Context $context,
         \Magento\Catalog\Model\ProductFactory $productModelFactory,
-        \Magento\Swatches\Model\Product\Variations\Media $variationsMedia
+        \Magento\Swatches\Helper\Data $swatchHelper
     ) {
         $this->productModelFactory = $productModelFactory;
-        $this->variationsMedia = $variationsMedia;
+        $this->swatchHelper = $swatchHelper;
 
         parent::__construct($context);
     }
 
     /**
-     * Get product media by fallback:
-     * 1stly by default attribute values
-     * 2ndly by getting base image from configurable product
+     * Get product media for specified configurable product variation
      *
      * @return string
      */
@@ -51,10 +49,8 @@ class Media extends \Magento\Framework\App\Action\Action
     {
         $productMedia = [];
         if ($productId = (int)$this->getRequest()->getParam('product_id')) {
-            $productMedia = $this->variationsMedia->getProductVariationWithMedia(
-                $this->productModelFactory->create()->load($productId),
-                (array)$this->getRequest()->getParam('attributes'),
-                (array)$this->getRequest()->getParam('additional')
+            $productMedia = $this->swatchHelper->getProductMediaGallery(
+                $this->productModelFactory->create()->load($productId)
             );
         }
 

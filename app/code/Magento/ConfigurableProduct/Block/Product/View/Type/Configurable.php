@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -61,11 +60,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $configurableAttributeData;
 
     /**
-     * @var \Magento\Swatches\Model\Product\Variations\Media
-     */
-    private $variationsMedia;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -75,7 +69,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param PriceCurrencyInterface $priceCurrency
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
-     * @param \Magento\Swatches\Model\Product\Variations\Media $variationsMedia
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -86,8 +79,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
-        array $data = [],
-        \Magento\Swatches\Model\Product\Variations\Media $variationsMedia = null
+        array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -95,9 +87,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
-        $this->variationsMedia = $variationsMedia
-            ?: ObjectManager::getInstance()->get(\Magento\Swatches\Model\Product\Variations\Media::class);
-
         parent::__construct(
             $context,
             $arrayUtils,
@@ -223,7 +212,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             ],
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
-            'images' => isset($options['images']) ? $options['images'] : [],
+            'images' => $this->getImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
@@ -231,18 +220,36 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $config['defaultValues'] = $attributesData['defaultValues'];
         }
 
-        // Is there any better way to check that we are on layered navigation search result page?
-        if (!empty($this->getRequest()->getQuery()->toArray())) {
-            $config['preSelectedGallery'] = $this->variationsMedia->getProductVariationWithMedia(
-                $currentProduct,
-                [],
-                $this->getRequest()->getQuery()->toArray()
-            );
-        }
-
         $config = array_merge($config, $this->_getAdditionalConfig());
 
         return $this->jsonEncoder->encode($config);
+    }
+
+    /**
+     * Get product images for configurable variations
+     *
+     * @return array
+     */
+    protected function getImages()
+    {
+        $images = [];
+        foreach ($this->getAllowProducts() as $product) {
+
+            $productImages = $this->helper->getGalleryImages($product) ?: [];
+            foreach ($productImages as $image) {
+                $images[$product->getId()][] =
+                    [
+                        'thumb' => $image->getData('small_image_url'),
+                        'img' => $image->getData('medium_image_url'),
+                        'full' => $image->getData('large_image_url'),
+                        'caption' => $image->getLabel(),
+                        'position' => $image->getPosition(),
+                        'isMain' => $image->getFile() == $product->getImage(),
+                    ];
+            }
+        }
+
+        return $images;
     }
 
     /**
