@@ -50,6 +50,10 @@
                 <selector>[name="product[news_to_date]"]</selector>
                 <strategy>css selector</strategy>
             </news_to_date>
+            <use_default_name>
+                <selector>[name="use_default[name]"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
         </fields>
     </product-details>
     <advanced-pricing>
