@@ -74,5 +74,17 @@
                 <item name="template" xsi:type="string">Viewed Products Grid Template</item>
             </field>
         </dataset>
+
+        <dataset name="widget_with_special_characters_in_title">
+            <field name="widget_1" xsi:type="array">
+                <item name="widget_type" xsi:type="string">CMS Page Link</item>
+                <item name="anchor_text" xsi:type="string">CMS Page Link anchor_text_%isolation%</item>
+                <item name="title" xsi:type="string">glāžšķūņu rūķīši_%isolation%</item>
+                <item name="template" xsi:type="string">CMS Page Link Block Template</item>
+                <item name="chosen_option" xsi:type="array">
+                    <item name="filter_url_key" xsi:type="string">home</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>
