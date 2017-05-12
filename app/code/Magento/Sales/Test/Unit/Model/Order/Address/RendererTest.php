@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Test\Unit\Model\Order\Address;
 
 use Magento\Customer\Block\Address\Renderer\RendererInterface as CustomerAddressBlockRenderer;
@@ -20,36 +21,50 @@ use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Order address renderer instance.
+     *
      * @var OrderAddressRenderer
      */
     private $orderAddressRenderer;
 
     /**
+     * Object manager helper instance.
+     *
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
 
     /**
+     * Customer address config instance mock.
+     *
      * @var CustomerAddressConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerAddressConfigMock;
 
     /**
+     * Event manager instance mock.
+     *
      * @var EventManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $eventManagerMock;
 
     /**
+     * Order address instance mock.
+     *
      * @var OrderAddress|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderAddressMock;
 
     /**
+     * Order instance mock.
+     *
      * @var Order|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderMock;
 
     /**
+     * Customer address block renderer instance mock.
+     *
      * @var CustomerAddressBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerAddressBlockRendererMock;
@@ -88,7 +103,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run test fromat.
+     * Run test format.
      */
     public function testFormat()
     {

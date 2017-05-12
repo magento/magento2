@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order\Address;
 
 use Magento\Config\Model\ResourceModel\Config as ConfigResourceModel;
@@ -20,21 +21,29 @@ use Magento\TestFramework\Helper\Bootstrap;
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Object manager instance.
+     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
+     * Order address renderer instance.
+     *
      * @var OrderAddressRenderer
      */
     private $orderAddressRenderer;
 
     /**
+     * Config resource model instance.
+     *
      * @var ConfigResourceModel
      */
     private $configResourceModel;
 
     /**
+     * Reinitable config instance.
+     *
      * @var ReinitableConfig
      */
     private $reinitableConfig;
@@ -51,6 +60,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Format address test.
+     *
      * @magentoDataFixture Magento/Sales/_files/order_fixture_store.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
