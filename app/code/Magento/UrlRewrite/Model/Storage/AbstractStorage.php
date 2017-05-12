@@ -8,7 +8,6 @@ namespace Magento\UrlRewrite\Model\Storage;
 use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\UrlRewrite\Model\UrlDuplicatesRegistry;
 
 /**
  * Abstract db storage
@@ -22,24 +21,15 @@ abstract class AbstractStorage implements StorageInterface
     protected $dataObjectHelper;
 
     /**
-     * @var UrlDuplicatesRegistry
-     */
-    private $urlDuplicatesRegistry;
-
-    /**
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param UrlDuplicatesRegistry $urlDuplicatesRegistry
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
-        DataObjectHelper $dataObjectHelper,
-        UrlDuplicatesRegistry $urlDuplicatesRegistry = null
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->urlDuplicatesRegistry = $urlDuplicatesRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(UrlDuplicatesRegistry::class);
     }
 
     /**
@@ -90,14 +80,6 @@ abstract class AbstractStorage implements StorageInterface
         if (!$urls) {
             return [];
         }
-
-        $savedUrls = $this->doReplace($urls);
-        $unsavedUrlsDuplicates = array_diff_key(
-            $urls,
-            $savedUrls
-        );
-        // Set the duplicates to registry so it can be processed by the presentation layer
-        $this->urlDuplicatesRegistry->addUrlDuplicates($unsavedUrlsDuplicates);
         return $this->doReplace($urls);
     }
 
@@ -106,6 +88,7 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     abstract protected function doReplace($urls);
 

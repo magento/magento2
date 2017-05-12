@@ -100,11 +100,21 @@ class DbStorage extends AbstractStorage
             $urlData[UrlRewrite::ENTITY_TYPE] = $type;
             $this->deleteByData($urlData);
         }
-        foreach ($urls as $key => $url) {
-            if (!$this->insert($url->toArray())) {
-                unset($urls[$key]);
+        $urlConflicted = [];
+        foreach ($urls as $url) {
+            if (!$this->insertUrl($url->toArray())) {
+                $urlConflicted[$url->getStoreId()] = $url->getRequestPath();
             }
         }
+        if (!empty($urlConflicted)) {
+            throw new \Magento\Framework\Exception\AlreadyExistsException(
+                __(
+                    'A conflict has occurred between the entity\'s URL(s) and other URL(s): %1.',
+                    implode(', ', $urlConflicted)
+                )
+            );
+        }
+
         return $urls;
     }
 
@@ -126,7 +136,7 @@ class DbStorage extends AbstractStorage
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
                 throw new \Magento\Framework\Exception\AlreadyExistsException(
-                    __('URL key for specified store already exists.')
+                    __('A conflict has occurred between the entity\'s URL(s) and other URL(s).')
                 );
             }
             throw $e;
@@ -134,12 +144,13 @@ class DbStorage extends AbstractStorage
     }
 
     /**
-     * Inserts a url as array to database
+     * Inserts a url as array to database and returns conflict status
      *
      * @param array $data
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function insert(array $data)
+    private function insertUrl(array $data)
     {
         try {
             return $this->connection->insert($this->resource->getTableName(self::TABLE_NAME), $data) > 0;
@@ -161,11 +172,13 @@ class DbStorage extends AbstractStorage
                         $data['store_id']
                     )
                 );
+                return false;
             } else {
-                $this->logger->error($e->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while inserting a url key.')
+                );
             }
         }
-        return false;
     }
 
     /**

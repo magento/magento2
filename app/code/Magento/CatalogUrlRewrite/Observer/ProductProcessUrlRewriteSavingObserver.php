@@ -10,7 +10,6 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\UrlRewrite\Model\UrlDuplicatesRegistry;
 
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
@@ -25,23 +24,15 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $urlPersist;
 
     /**
-     * @var UrlDuplicatesRegistry
-     */
-    private $urlDuplicatesRegistry;
-
-    /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
-     * @param UrlDuplicatesRegistry $urlDuplicatesRegistry
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        UrlPersistInterface $urlPersist,
-        UrlDuplicatesRegistry $urlDuplicatesRegistry
+        UrlPersistInterface $urlPersist
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
-        $this->urlDuplicatesRegistry = $urlDuplicatesRegistry;
     }
 
     /**
