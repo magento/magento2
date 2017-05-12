@@ -602,6 +602,4 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             unset($this->fields['product']['fpt']);
         }
     }
-
-
 }
