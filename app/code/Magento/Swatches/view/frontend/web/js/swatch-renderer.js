@@ -945,7 +945,9 @@ define([
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
                     $widget._ProductMediaCallback($this, data, productData.isInProductView);
-                    $widget._DisableProductMediaLoader($this);
+                    setTimeout(function() {
+                        $widget._DisableProductMediaLoader($this)
+                    }, 300);
                 };
 
             if (!$widget.options.mediaCallback) {
@@ -959,6 +961,7 @@ define([
 
             if (mediaCacheKey in $widget.options.mediaCache) {
                 $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
