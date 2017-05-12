@@ -76,9 +76,11 @@ class Data
     public function getOptions($currentProduct, $allowedProducts)
     {
         $options = [];
+        $allowAttributes = $this->getAllowAttributes($currentProduct);
+
         foreach ($allowedProducts as $product) {
             $productId = $product->getId();
-            foreach ($this->getAllowAttributes($currentProduct) as $attribute) {
+            foreach ($allowAttributes as $attribute) {
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
