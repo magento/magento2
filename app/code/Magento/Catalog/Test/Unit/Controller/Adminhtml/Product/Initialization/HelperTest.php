@@ -19,6 +19,8 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 
 /**
  * Class HelperTest
@@ -104,6 +106,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     protected $linkResolverMock;
 
+    protected $linkTypeProviderMock;
+
     /**
      * @var ProductLinks
      */
@@ -165,6 +169,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productLinksMock = $this->getMockBuilder(ProductLinks::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->linkTypeProviderMock = $this->getMockBuilder(LinkTypeProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->productLinksMock->expects($this->any())
             ->method('initializeLinks')
@@ -179,6 +186,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'customOptionFactory' => $this->customOptionFactoryMock,
             'productLinkFactory' => $this->productLinkFactoryMock,
             'productRepository' => $this->productRepositoryMock,
+            'linkTypeProvider' => $this->linkTypeProviderMock,
         ]);
 
         $this->linkResolverMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link\Resolver::class)
@@ -299,6 +307,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('setOptions')
             ->with([$this->customOptionMock]);
 
+        $this->linkTypeProviderMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn($this->assembleLinkTypes());
+
         $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
     }
 
@@ -391,4 +403,21 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
         $this->assertEquals($expectedResults, $result);
     }
+
+    private function assembleLinkTypes($types = ['related', 'crosssell', 'upsell'])
+    {
+        $linkTypes = [];
+        $linkTypeCode = 1;
+
+        foreach ($types as $typeName) {
+            $linkType = $this->getMock(ProductLinkTypeInterface::class);
+            $linkType->method('setCode')->willReturn($linkTypeCode++);
+            $linkType->method('setName')->willReturn($typeName);
+
+            $linkTypes[] = $linkType;
+        }
+
+        return $linkTypes;
+    }
+
 }
