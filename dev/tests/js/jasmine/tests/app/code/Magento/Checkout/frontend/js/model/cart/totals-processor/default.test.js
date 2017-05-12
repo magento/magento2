@@ -70,8 +70,7 @@ define([
                 get: function () {
                 },
                 set: jasmine.createSpy()
-            },
-            data: data
+            }
         },
         defaultProcessor;
 
