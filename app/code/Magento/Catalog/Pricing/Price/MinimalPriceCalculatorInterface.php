@@ -10,12 +10,12 @@ use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
- * Interface define methods which control display of "As low as" price
+ * Interface define methods which control display of "As low as" price.
  */
 interface MinimalPriceCalculatorInterface
 {
     /**
-     * Get raw value for "as low as" price
+     * Get raw value for "as low as" price.
      *
      * @param SaleableInterface $saleableItem
      * @return float|null
@@ -23,7 +23,7 @@ interface MinimalPriceCalculatorInterface
     public function getValue(SaleableInterface $saleableItem);
 
     /**
-     * Return structured object with "as low as" value
+     * Return structured object with "as low as" value.
      *
      * @param SaleableInterface $saleableItem
      * @return AmountInterface|null

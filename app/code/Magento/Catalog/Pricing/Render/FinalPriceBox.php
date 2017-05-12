@@ -16,7 +16,7 @@ use Magento\Msrp\Pricing\Price\MsrpPrice;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Class for final_price rendering
+ * Class for final_price rendering.
  *
  * @method bool getUseLinkForAsLowAs()
  * @method bool getDisplayMinimalPrice()
@@ -24,14 +24,22 @@ use Magento\Framework\View\Element\Template\Context;
 class FinalPriceBox extends BasePriceBox
 {
     /**
+     * Interface resolver provided to check is product available for sale.
+     *
      * @var \Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface
      */
     private $salableResolver;
 
-    /** @var \Magento\Framework\Module\Manager */
+    /**
+     * Module statuses manager.
+     *
+     * @var \Magento\Framework\Module\Manager
+     */
     private $moduleManager;
 
     /**
+     * Shows minimal value of Tier Prices.
+     *
      * @var \Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface
      */
     private $minimalPriceCalculator;
@@ -117,7 +125,7 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * Wrap with standard required container
+     * Wrap with standard required container.
      *
      * @param string $html
      * @return string
@@ -131,7 +139,7 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * Render minimal amount
+     * Render minimal amount.
      *
      * @return string
      */
@@ -156,7 +164,7 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * Define if the special price should be shown
+     * Define if the special price should be shown.
      *
      * @return bool
      */
@@ -168,7 +176,7 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * Define if the minimal price should be shown
+     * Define if the minimal price should be shown.
      *
      * @return bool
      */
@@ -186,7 +194,7 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * Get Key for caching block content
+     * Get Key for caching block content.
      *
      * @return string
      */
@@ -221,8 +229,8 @@ class FinalPriceBox extends BasePriceBox
     }
 
     /**
-     * Get flag that price rendering should be done for the list of products
-     * By default (if flag is not set) is false
+     * Get flag that price rendering should be done for the list of products.
+     * By default (if flag is not set) is false.
      *
      * @return bool
      */

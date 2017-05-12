@@ -129,6 +129,7 @@ class Section extends DataSource
                 return $value;
             }, $params);
         }
+
         return $data;
     }
 
