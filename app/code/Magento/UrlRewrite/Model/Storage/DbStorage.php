@@ -10,6 +10,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Psr\Log\LoggerInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
+use Magento\Framework\UrlInterface;
 
 class DbStorage extends AbstractStorage
 {
@@ -39,21 +41,30 @@ class DbStorage extends AbstractStorage
     private $logger;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Psr\Log\LoggerInterface|null $logger
+     * @param \Magento\Framework\UrlInterface|null $urlBuilder
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        UrlInterface $urlBuilder = null
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Psr\Log\LoggerInterface::class);
+        $this->urlBuilder = $urlBuilder ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\UrlInterface::class);
 
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
@@ -100,17 +111,37 @@ class DbStorage extends AbstractStorage
             $urlData[UrlRewrite::ENTITY_TYPE] = $type;
             $this->deleteByData($urlData);
         }
+        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
         $urlConflicted = [];
         foreach ($urls as $url) {
             if (!$this->insertUrl($url->toArray())) {
-                $urlConflicted[$url->getStoreId()] = $url->getRequestPath();
+                $urlConflicted[] = $url;
             }
         }
         if (!empty($urlConflicted)) {
+            $urlsWithLinks = '';
+            foreach ($urlConflicted as $url) {
+                $urlFound = $this->doFindOneByData(
+                    [
+                        UrlRewriteData::REQUEST_PATH => $url->getRequestPath(),
+                        UrlRewriteData::STORE_ID => $url->getStoreId()
+                    ]
+                );
+                $adminEditUrl = $this->urlBuilder->getUrl(
+                    'adminhtml/url_rewrite/edit',
+                    ['id' => $urlFound[UrlRewriteData::URL_REWRITE_ID]]
+                );
+                $urlsWithLinks .='<a href="' . $adminEditUrl .'">'
+                    . $url->getRequestPath() . '</a><br>';
+            }
+
             throw new \Magento\Framework\Exception\AlreadyExistsException(
                 __(
-                    'A conflict has occurred between the entity\'s URL(s) and other URL(s): %1.',
-                    implode(', ', $urlConflicted)
+                    'A conflict has occurred between the entity\'s URL(s) and the existing URL(s):<br> %1'
+                    . 'To fix the conflict, rename the conflicting urls by clicking on the links above, '
+                    . 'or navigate to Search Engine Optimization section, '
+                    . 'then edit the URL key to make it unique',
+                    $urlsWithLinks
                 )
             );
         }
