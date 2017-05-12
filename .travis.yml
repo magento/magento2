@@ -23,6 +23,12 @@ env:
     - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=static
     - TEST_SUITE=js
+matrix:
+  exclude:
+    - php: 7.0
+      env: TEST_SUITE=static
+    - php: 7.0
+      env: TEST_SUITE=js
 cache:
   apt: true
   directories:
