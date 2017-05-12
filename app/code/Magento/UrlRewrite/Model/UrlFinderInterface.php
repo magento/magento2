@@ -15,7 +15,7 @@ interface UrlFinderInterface
      * Find rewrite by specific data
      *
      * @param array $data
-     * @return array|null
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
      */
     public function findOneByData(array $data);
 
@@ -23,7 +23,7 @@ interface UrlFinderInterface
      * Find rewrites by specific data
      *
      * @param array $data
-     * @return array
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
     public function findAllByData(array $data);
 }

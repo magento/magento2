@@ -50,9 +50,9 @@ abstract class AbstractStorage implements StorageInterface
      * Find all rows by specific filter. Template method
      *
      * @param array $data
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @return array
      */
-    abstract protected function doFindAllByData($data);
+    abstract protected function doFindAllByData(array $data);
 
     /**
      * {@inheritdoc}
@@ -90,7 +90,7 @@ abstract class AbstractStorage implements StorageInterface
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    abstract protected function doReplace($urls);
+    abstract protected function doReplace(array $urls);
 
     /**
      * Create url rewrite object

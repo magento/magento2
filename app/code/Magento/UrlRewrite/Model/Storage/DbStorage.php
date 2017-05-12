@@ -89,7 +89,7 @@ class DbStorage extends AbstractStorage
     /**
      * {@inheritdoc}
      */
-    protected function doFindAllByData($data)
+    protected function doFindAllByData(array $data)
     {
         return $this->connection->fetchAll($this->prepareSelect($data));
     }
@@ -105,7 +105,7 @@ class DbStorage extends AbstractStorage
     /**
      * {@inheritdoc}
      */
-    protected function doReplace($urls)
+    protected function doReplace(array $urls)
     {
         foreach ($this->createFilterDataBasedOnUrls($urls) as $type => $urlData) {
             $urlData[UrlRewrite::ENTITY_TYPE] = $type;
