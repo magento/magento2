@@ -307,10 +307,10 @@ abstract class AbstractData
             return true;
         }
 
-        $label = $this->getAttribute()->getStoreLabel();
         $validateRules = $this->getAttribute()->getValidateRules();
 
         if (!empty($validateRules['input_validation'])) {
+            $label = $this->getAttribute()->getStoreLabel();
             switch ($validateRules['input_validation']) {
                 case 'alphanumeric':
                     $validator = new \Zend_Validate_Alnum(true);
