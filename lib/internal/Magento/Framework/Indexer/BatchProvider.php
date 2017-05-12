@@ -58,7 +58,7 @@ class BatchProvider implements BatchProviderInterface
             $connection->quote($batch['to'])
         );
 
-        $ids = $connection->fetchCol($select->where($betweenCondition));
+        $ids = $connection->fetchCol($select->where($betweenCondition)->limit($batch['from'] - $batch['to'] + 1));
         return array_map('intval', $ids);
     }
 }
