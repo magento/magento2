@@ -119,7 +119,7 @@ class DbStorage extends AbstractStorage
             }
         }
         if (!empty($urlConflicted)) {
-            $urlsWithLinks = '';
+            $urlsWithLinks = '<br />';
             foreach ($urlConflicted as $url) {
                 $urlFound = $this->doFindOneByData(
                     [
@@ -131,16 +131,16 @@ class DbStorage extends AbstractStorage
                     'adminhtml/url_rewrite/edit',
                     ['id' => $urlFound[UrlRewriteData::URL_REWRITE_ID]]
                 );
-                $urlsWithLinks .='<a href="' . $adminEditUrl .'">'
-                    . $url->getRequestPath() . '</a><br>';
+                $urlsWithLinks .='- <a href="' . $adminEditUrl .'">'
+                    . $url->getRequestPath() . '</a><br />';
             }
 
             throw new \Magento\Framework\Exception\AlreadyExistsException(
                 __(
-                    'A conflict has occurred between the entity\'s URL(s) and the existing URL(s):<br> %1'
-                    . 'To fix the conflict, rename the conflicting urls by clicking on the links above, '
-                    . 'or navigate to Search Engine Optimization section, '
-                    . 'then edit the URL key to make it unique',
+                    '<h4>The value specified in the URL Key field would generate a URL that already exists.</h4>'
+                    .'To resolve this conflict, you can either change the value of the URL Key field '
+                    .' (located in the Search Engine Optimization section) to a unique value, '
+                    . 'or change the URL Key fields in all locations listed below:%1',
                     $urlsWithLinks
                 )
             );
