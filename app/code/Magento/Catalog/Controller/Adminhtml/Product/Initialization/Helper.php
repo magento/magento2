@@ -97,7 +97,7 @@ class Helper
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -105,7 +105,8 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->linkTypeProvider = $linkTypeProvider;
+        $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
     }
 
     /**
