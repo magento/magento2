@@ -88,6 +88,7 @@ class Helper
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
