@@ -68,9 +68,9 @@ abstract class AbstractStorage implements StorageInterface
      * Find row by specific filter. Template method
      *
      * @param array $data
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @return array
      */
-    abstract protected function doFindOneByData($data);
+    abstract protected function doFindOneByData(array $data);
 
     /**
      * {@inheritdoc}

@@ -75,7 +75,7 @@ class DbStorage extends AbstractStorage
      * @param array $data
      * @return \Magento\Framework\DB\Select
      */
-    protected function prepareSelect($data)
+    protected function prepareSelect(array $data)
     {
         $select = $this->connection->select();
         $select->from($this->resource->getTableName(self::TABLE_NAME));
@@ -97,7 +97,7 @@ class DbStorage extends AbstractStorage
     /**
      * {@inheritdoc}
      */
-    protected function doFindOneByData($data)
+    protected function doFindOneByData(array $data)
     {
         return $this->connection->fetchRow($this->prepareSelect($data));
     }
