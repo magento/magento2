@@ -49,7 +49,7 @@ define([
                 shippingCarrierCode: null
             };
 
-            if (quote.shippingMethod()) {
+            if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
                 data.shippingMethodCode = quote.shippingMethod()['method_code'];
                 data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
             }
@@ -82,7 +82,7 @@ define([
                 shippingCarrierCode: null
             };
 
-            if (quote.shippingMethod()) {
+            if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
                 data.shippingMethodCode = quote.shippingMethod()['method_code'];
                 data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
             }
