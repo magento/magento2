@@ -47,7 +47,6 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(count($methods) > 0);
         $this->assertEquals('flatrate', $methods[0]->getMethodCode());
         $this->assertEquals(0, $methods[0]->getAmount());
-
     }
 
     /**
@@ -64,7 +63,6 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(count($methods) > 0);
         $this->assertEquals('flatrate', $methods[0]->getMethodCode());
         $this->assertEquals(25, $methods[0]->getAmount());
-
     }
 
     /**
@@ -83,6 +81,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Quote\Api\GuestShipmentEstimationInterface $estimation */
         $estimation = $this->objectManager->get(\Magento\Quote\Api\GuestShipmentEstimationInterface::class);
+
         return $estimation->estimateByExtendedAddress($cartId, $address);
     }
 
