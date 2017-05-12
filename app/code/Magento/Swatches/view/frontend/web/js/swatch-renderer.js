@@ -276,6 +276,7 @@ define([
          */
         getProduct: function () {
             var products = this._CalcProducts();
+
             return _.isArray(products) ? products[0] : null;
         },
 
@@ -285,7 +286,7 @@ define([
         _init: function () {
             // creates debounced variant of _LoadProductMedia()
             // to use it in events handlers instead of _LoadProductMedia()
-            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 1000);
+            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
 
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
@@ -945,8 +946,8 @@ define([
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
                     $widget._ProductMediaCallback($this, data, productData.isInProductView);
-                    setTimeout(function() {
-                        $widget._DisableProductMediaLoader($this)
+                    setTimeout(function () {
+                        $widget._DisableProductMediaLoader($this);
                     }, 300);
                 };
 
@@ -1209,8 +1210,10 @@ define([
          * @private
          */
         _setPreSelectedGallery: function () {
+            var mediaCallData;
+
             if (this.options.jsonConfig.preSelectedGallery) {
-                var mediaCallData = {
+                mediaCallData = {
                     'product_id': this.getProduct()
                 };
 
