@@ -66,7 +66,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      *
      * @return array
      */
-    protected function getImages()
+    protected function getOptionImages()
     {
         return [];
     }

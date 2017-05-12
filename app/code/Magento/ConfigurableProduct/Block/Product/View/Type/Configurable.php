@@ -212,7 +212,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             ],
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
-            'images' => $this->getImages(),
+            'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
@@ -230,7 +230,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @return array
      */
-    protected function getImages()
+    protected function getOptionImages()
     {
         $images = [];
         foreach ($this->getAllowProducts() as $product) {
