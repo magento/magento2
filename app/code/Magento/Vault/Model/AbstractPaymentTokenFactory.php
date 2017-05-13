@@ -12,7 +12,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 /**
  * Class AbstractPaymentTokenFactory
  * @deprecated
- * @see PaymentTokenFactory
+ * @see PaymentTokenFactoryInterface
  */
 abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFactory
 {
@@ -33,10 +33,12 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        PaymentTokenFactoryInterface $paymentTokenFactory
+        PaymentTokenFactoryInterface $paymentTokenFactory = null
     ) {
         $this->objectManager = $objectManager;
-        $this->paymentTokenFactory = $paymentTokenFactory;
+        $this->paymentTokenFactory = $paymentTokenFactory ?: $this->objectManager->get(
+            PaymentTokenFactoryInterface::class
+        );
     }
 
     /**

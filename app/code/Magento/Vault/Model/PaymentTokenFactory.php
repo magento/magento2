@@ -9,7 +9,7 @@ namespace Magento\Vault\Model;
 use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 
 /**
- * Interface PaymentTokenFactory
+ * PaymentTokenFactory class
  * @api
  */
 class PaymentTokenFactory implements PaymentTokenFactoryInterface
