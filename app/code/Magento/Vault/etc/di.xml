@@ -47,7 +47,7 @@
 
     <type name="Magento\Vault\Model\PaymentTokenFactory">
         <arguments>
-            <argument name="types" xsi:type="array">
+            <argument name="tokenTypes" xsi:type="array">
                 <item name="account" xsi:type="const">Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_ACCOUNT</item>
                 <item name="credit_card" xsi:type="const">Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD</item>
             </argument>
