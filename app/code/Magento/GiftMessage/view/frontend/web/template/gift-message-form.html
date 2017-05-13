@@ -9,7 +9,7 @@
     <div class="gift-options-title">
         <span data-bind="i18n: 'Gift Message (optional)'"></span>
     </div>
-    <div class="gift-options-content">
+    <div class="gift-options-content" data-bind="blockLoader: isLoading">
         <fieldset class="fieldset">
             <div class="field field-to">
                 <label for="gift-message-whole-to" class="label">

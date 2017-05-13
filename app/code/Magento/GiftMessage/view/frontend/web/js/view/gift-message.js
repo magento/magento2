@@ -13,6 +13,9 @@ define(
     function (Component, GiftMessage, giftOptions, giftOptionsService) {
         'use strict';
         return Component.extend({
+            defaults: {
+                isLoading: false
+            },
             formBlockVisibility: null,
             resultBlockVisibility: null,
             model: {},
@@ -24,11 +27,15 @@ define(
                     model;
                 this._super()
                     .observe('formBlockVisibility')
+                    .observe('isLoading')
                     .observe({
                         'resultBlockVisibility': false
                     });
                 this.itemId = this.itemId || 'orderLevel';
                 model = new GiftMessage(this.itemId);
+                model.observables = {
+                    isLoading: this.isLoading
+                };
                 giftOptions.addOption(model);
                 this.model = model;
                 this.model.getObservable('isClear').subscribe(function (value) {
