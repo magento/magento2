@@ -51,7 +51,8 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
 
         // 1. Create mocks
         $notificationList = $this->getMockBuilder(
-            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class)
+            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
