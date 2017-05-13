@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+use Magento\GiftMessage\Api\Data\MessageInterface;
+
 /**
  * Interface OrderItemRepositoryInterface
  * @api
@@ -32,5 +34,5 @@ interface OrderItemRepositoryInterface
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save($orderId, $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage);
+    public function save($orderId, $orderItemId, MessageInterface $giftMessage);
 }

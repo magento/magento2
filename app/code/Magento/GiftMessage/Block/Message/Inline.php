@@ -7,6 +7,12 @@ namespace Magento\GiftMessage\Block\Message;
 
 use Magento\Customer\Model\Context;
 use Magento\GiftMessage\Model\Message;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Customer\Model\Session;
+use Magento\GiftMessage\Helper\Message as HelperMessage;
+use Magento\Catalog\Block\Product\ImageBuilder;
+use \Magento\Framework\App\Http\Context as HttpContext;
+
 
 /**
  * Gift message inline edit form
@@ -65,19 +71,20 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $checkoutType;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
-     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * Inline constructor.
+     * @param TemplateContext $context
+     * @param Session $customerSession
+     * @param HelperMessage $giftMessageMessage
+     * @param ImageBuilder $imageBuilder
+     * @param HttpContext $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\GiftMessage\Helper\Message $giftMessageMessage,
-        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
-        \Magento\Framework\App\Http\Context $httpContext,
+        TemplateContext $context,
+        Session $customerSession,
+        HelperMessage $giftMessageMessage,
+        ImageBuilder $imageBuilder,
+        HttpContext $httpContext,
         array $data = []
     ) {
         $this->imageBuilder = $imageBuilder;

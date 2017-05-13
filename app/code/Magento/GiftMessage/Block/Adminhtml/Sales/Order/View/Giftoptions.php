@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 
+use Magento\Backend\Block\Template;
+
 /**
  * Adminhtml sales order view gift options block
  *
@@ -12,7 +14,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
-class Giftoptions extends \Magento\Backend\Block\Template
+class Giftoptions extends Template
 {
     /**
      * Get order item object from parent block

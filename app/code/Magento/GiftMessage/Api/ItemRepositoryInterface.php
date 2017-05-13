@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+use Magento\GiftMessage\Api\Data\MessageInterface;
+
 /**
  * Interface ItemRepositoryInterface
  * @api
@@ -34,5 +36,5 @@ interface ItemRepositoryInterface
      * virtual products.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
      */
-    public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage, $itemId);
+    public function save($cartId, MessageInterface $giftMessage, $itemId);
 }

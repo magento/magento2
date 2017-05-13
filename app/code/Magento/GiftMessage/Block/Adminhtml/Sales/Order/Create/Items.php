@@ -5,13 +5,18 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\GiftMessage\Helper\Message;
+use Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form;
+
 /**
  * Gift message adminhtml sales order create items
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Items extends \Magento\Backend\Block\Template
+class Items extends Template
 {
     /**
      * @var \Magento\GiftMessage\Helper\Message
@@ -24,8 +29,8 @@ class Items extends \Magento\Backend\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\GiftMessage\Helper\Message $messageHelper,
+        Context $context,
+        Message $messageHelper,
         array $data = []
     ) {
         $this->_messageHelper = $messageHelper;
@@ -66,7 +71,7 @@ class Items extends \Magento\Backend\Block\Template
     public function getFormHtml()
     {
         return $this->getLayout()->createBlock(
-            \Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form::class
+            Form::class
         )->setEntity(
             $this->getItem()
         )->setEntityType(

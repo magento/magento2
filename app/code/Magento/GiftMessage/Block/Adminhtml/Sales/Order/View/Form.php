@@ -5,13 +5,17 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
+
 /**
  * Adminhtml sales order view gift message form
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Form extends \Magento\Backend\Block\Template
+class Form extends Template
 {
     /**
      * Core registry
@@ -26,8 +30,8 @@ class Form extends \Magento\Backend\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
