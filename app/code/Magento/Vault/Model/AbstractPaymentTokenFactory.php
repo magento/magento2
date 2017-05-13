@@ -36,10 +36,12 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
         ObjectManagerInterface $objectManager,
         PaymentTokenFactoryInterface $paymentTokenFactory = null
     ) {
+        if (!$paymentTokenFactory) {
+            $paymentTokenFactory = $this->objectManager->get(PaymentTokenFactoryInterface::class);
+        }
+
         $this->objectManager = $objectManager;
-        $this->paymentTokenFactory = $paymentTokenFactory ?: $this->objectManager->get(
-            PaymentTokenFactoryInterface::class
-        );
+        $this->paymentTokenFactory = $paymentTokenFactory;
     }
 
     /**
