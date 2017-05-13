@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\GiftMessage\Helper\Message;
-use Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form;
+use Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form as GiftMessageForm;
 
 /**
  * Gift message adminhtml sales order create items
@@ -71,7 +71,7 @@ class Items extends Template
     public function getFormHtml()
     {
         return $this->getLayout()->createBlock(
-            Form::class
+            GiftMessageForm::class
         )->setEntity(
             $this->getItem()
         )->setEntityType(
