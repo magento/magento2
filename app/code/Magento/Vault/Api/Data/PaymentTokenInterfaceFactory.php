@@ -9,8 +9,19 @@ namespace Magento\Vault\Api\Data;
 /**
  * Interface PaymentTokenFactoryInterface
  * @deprecated
+ * @see PaymentTokenFactoryInterface
  */
-interface PaymentTokenInterfaceFactory extends PaymentTokenFactoryInterface
+interface PaymentTokenInterfaceFactory
 {
+    /**
+     * Create payment token entity
+     * @return PaymentTokenInterface
+     */
+    public function create();
 
+    /**
+     * Return type of payment token
+     * @return string
+     */
+    public function getType();
 }
