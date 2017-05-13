@@ -29,9 +29,12 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
     /**
      * AccountPaymentTokenFactory constructor.
      * @param ObjectManagerInterface $objectManager
+     * @param PaymentTokenFactoryInterface $paymentTokenFactory
      */
-    public function __construct(ObjectManagerInterface $objectManager, PaymentTokenFactoryInterface $paymentTokenFactory)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        PaymentTokenFactoryInterface $paymentTokenFactory
+    ) {
         $this->objectManager = $objectManager;
         $this->paymentTokenFactory = $paymentTokenFactory;
     }
@@ -48,5 +51,5 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
     /**
      * @return string
      */
-    abstract function getType();
+    abstract public function getType();
 }
