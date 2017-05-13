@@ -24,5 +24,5 @@ interface PaymentTokenFactoryInterface
      * @param $type string
      * @return PaymentTokenInterface
      */
-    public function create($type);
+    public function create($type = null);
 }
