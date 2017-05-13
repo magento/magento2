@@ -13,14 +13,16 @@ namespace Magento\Vault\Api\Data;
 interface PaymentTokenFactoryInterface
 {
     /**
-     * Create payment token entity
-     * @return PaymentTokenInterface
+     * Payment Token types
+     * @var string
      */
-    public function create();
+    const TOKEN_TYPE_ACCOUNT = 'account';
+    const TOKEN_TYPE_CREDIT_CARD = 'card';
 
     /**
-     * Return type of payment token
-     * @return string
+     * Create payment token entity
+     * @param $type string
+     * @return PaymentTokenInterface
      */
-    public function getType();
+    public function create($type);
 }

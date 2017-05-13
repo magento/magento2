@@ -9,6 +9,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Vault\Model\VaultPaymentInterface" type="Magento\Vault\Model\Method\Vault"/>
     <preference for="Magento\Vault\Api\Data\PaymentTokenInterface" type="Magento\Vault\Model\PaymentToken"/>
+    <preference for="Magento\Vault\Api\Data\PaymentTokenFactoryInterface" type="Magento\Vault\Model\PaymentTokenFactory"/>
     <preference for="Magento\Vault\Api\PaymentTokenRepositoryInterface" type="Magento\Vault\Model\PaymentTokenRepository" />
     <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
     <preference for="Magento\Vault\Api\PaymentMethodListInterface" type="Magento\Vault\Model\PaymentMethodList" />
