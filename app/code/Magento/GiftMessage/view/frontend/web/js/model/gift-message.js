@@ -126,9 +126,7 @@ define([
              * After submit.
              */
             afterSubmit: function () {
-                window.location.href = url.build('checkout/cart/updatePost') +
-                    '?form_key=' + window.checkoutConfig.formKey +
-                    '&cart[]';
+
             },
 
             /**
