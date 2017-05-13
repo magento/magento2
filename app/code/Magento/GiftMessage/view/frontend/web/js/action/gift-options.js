@@ -59,7 +59,7 @@ define([
             }
         ).done(
             function (response) {
-                giftMessage.reset();
+                giftMessage.reset(remove);
                 _.each(giftMessage.getAfterSubmitCallbacks(), function (callback) {
                     if (_.isFunction(callback)) {
                         callback();

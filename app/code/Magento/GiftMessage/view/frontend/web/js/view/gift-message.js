@@ -40,8 +40,13 @@ define(
                 this.model = model;
                 this.model.getObservable('isClear').subscribe(function (value) {
                     if (value == true) {
-                        self.resultBlockVisibility(true);
-                        self.formBlockVisibility(false);
+                        if (self.model.getObservable('message')() === null) {
+                            self.resultBlockVisibility(false);
+                            self.formBlockVisibility(true);
+                        } else {
+                            self.resultBlockVisibility(true);
+                            self.formBlockVisibility(false);
+                        }
                         self.model.getObservable('alreadyAdded')(true);
                     }
                     self.model.getObservable('isClear')(false)

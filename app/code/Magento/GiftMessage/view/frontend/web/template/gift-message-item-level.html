@@ -23,7 +23,7 @@
     </div>
     <!-- /ko -->
     <!-- ko if: resultBlockVisibility() -->
-    <div class="gift-summary">
+    <div class="gift-summary" data-bind="blockLoader: isLoading">
         <!-- ko foreach: getRegion('additionalOptions') -->
         <!--ko template: appliedTemplate --><!-- /ko -->
         <!-- /ko -->

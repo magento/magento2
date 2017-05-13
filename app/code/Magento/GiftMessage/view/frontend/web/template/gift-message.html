@@ -21,8 +21,8 @@
                 <!-- ko template: formTemplate --><!--/ko-->
             </div>
             <!-- /ko -->
-            <div class="gift-summary">
-                <!-- ko if: resultBlockVisibility() -->
+            <!-- ko if: resultBlockVisibility() -->
+            <div class="gift-summary" data-bind="blockLoader: isLoading">
                 <!-- ko foreach: getRegion('additionalOptions') -->
                 <!--ko template: appliedTemplate --><!-- /ko -->
                 <!-- /ko -->
@@ -57,8 +57,8 @@
                         </button>
                     </div>
                 </div>
-                <!-- /ko -->
             </div>
+            <!-- /ko -->
         </div>
     </div>
 </div>
