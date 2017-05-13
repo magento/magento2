@@ -37,10 +37,10 @@ class AccountPaymentTokenFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $tokenTypes = array(
+        $tokenTypes = [
             'account' => \Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_ACCOUNT,
             'credit_card' => \Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD
-        );
+        ];
 
         $this->paymentToken = $objectManager->getObject(PaymentToken::class);
         $this->objectManager = $this->getMock(ObjectManagerInterface::class);

@@ -19,7 +19,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
     /**
      * @var array
      */
-    private $tokenTypes = array();
+    private $tokenTypes = [];
 
     /**
      * PaymentTokenFactory constructor.
@@ -43,6 +43,9 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
             throw new \LogicException('There is no such payment token type: ' . $type);
         }
 
-        return $this->objectManager->create(PaymentTokenInterface::class, ['data' => [PaymentTokenInterface::TYPE => $type]]);
+        return $this->objectManager->create(
+            PaymentTokenInterface::class,
+            ['data' => [PaymentTokenInterface::TYPE => $type]]
+        );
     }
 }
