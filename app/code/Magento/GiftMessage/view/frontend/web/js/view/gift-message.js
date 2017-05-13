@@ -40,7 +40,7 @@ define(
                 this.isResultBlockVisible();
             },
             /**
-             * Is reslt block visible
+             * Is result block visible
              */
             isResultBlockVisible: function () {
                 var self = this;
