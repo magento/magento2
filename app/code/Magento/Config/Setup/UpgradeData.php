@@ -19,6 +19,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
+     * @return void
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -29,8 +30,10 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @param ModuleDataSetupInterface $setup
+     * @return void
      */
-    protected function upgradeAcl(ModuleDataSetupInterface $setup) {
+    protected function upgradeAcl(ModuleDataSetupInterface $setup)
+    {
 
         $aclUpdates = [
             'Magento_Config::dev'           => 'Magento_Backend::dev',
@@ -40,7 +43,7 @@ class UpgradeData implements UpgradeDataInterface
             'Magento_Config::advanced'      => 'Magento_Backend::advanced',
         ];
 
-        foreach($aclUpdates as $aclKey => $aclUpdate) {
+        foreach ($aclUpdates as $aclKey => $aclUpdate) {
             $setup->getConnection()->update(
                 $setup->getTable('authorization_rule'),
                 ['resource_id' => $aclUpdate],
@@ -49,5 +52,4 @@ class UpgradeData implements UpgradeDataInterface
         }
 
     }
-
 }

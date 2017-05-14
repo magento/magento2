@@ -19,6 +19,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
+     * @return void
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -29,8 +30,10 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @param ModuleDataSetupInterface $setup
+     * @return void
      */
-    protected function upgradeAcl(ModuleDataSetupInterface $setup) {
+    protected function upgradeAcl(ModuleDataSetupInterface $setup)
+    {
 
         $setup->getConnection()->update(
             $setup->getTable('authorization_rule'),
@@ -39,5 +42,4 @@ class UpgradeData implements UpgradeDataInterface
         );
 
     }
-
 }
