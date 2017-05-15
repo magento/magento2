@@ -13,6 +13,9 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
+/**
+ * @api
+ */
 class Index extends AbstractDb
 {
     /**

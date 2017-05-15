@@ -7,6 +7,9 @@ namespace Magento\AdvancedSearch\Model;
 
 use Magento\Search\Model\QueryInterface;
 
+/**
+ * @api
+ */
 interface SuggestedQueriesInterface
 {
     /**

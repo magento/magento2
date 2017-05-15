@@ -5,6 +5,9 @@
  */
 namespace Magento\AdvancedSearch\Model\Client;
 
+/**
+ * @api
+ */
 interface ClientFactoryInterface
 {
     /**

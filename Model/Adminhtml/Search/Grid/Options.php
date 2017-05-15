@@ -7,6 +7,9 @@
  */
 namespace Magento\AdvancedSearch\Model\Adminhtml\Search\Grid;
 
+/**
+ * @api
+ */
 class Options implements \Magento\Framework\Option\ArrayInterface
 {
     /**

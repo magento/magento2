@@ -7,7 +7,7 @@ namespace Magento\AdvancedSearch\Block\Adminhtml\System\Config;
 
 /**
  * Search engine test connection block
- *
+ * @api
  */
 class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
 {
