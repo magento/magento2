@@ -33,7 +33,7 @@
     </scenario>
     <scenario name="CreateOrderBackendTest">
         <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />
-        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" prev="selectShippingMethodForOrder" next="submitOrder" />
     </scenario>
     <scenario name="CreateOrderFromCustomerPageTest">
         <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />
