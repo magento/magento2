@@ -323,7 +323,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      */
-    private function updateAddresses(\Magento\Framework\Api\CustomAttributesDataInterface $customer, int $customerId)
+    private function updateAddresses(\Magento\Framework\Api\CustomAttributesDataInterface $customer, $customerId)
     {
         if ($customer->getAddresses() !== null) {
             if ($customer->getId()) {
