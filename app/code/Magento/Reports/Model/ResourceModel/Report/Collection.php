@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**

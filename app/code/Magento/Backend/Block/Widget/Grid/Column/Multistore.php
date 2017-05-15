@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column;
 /**
  * Grid column block that is displayed only in multistore mode
  *
- * @api
  * @deprecated
  */
 class Multistore extends \Magento\Backend\Block\Widget\Grid\Column

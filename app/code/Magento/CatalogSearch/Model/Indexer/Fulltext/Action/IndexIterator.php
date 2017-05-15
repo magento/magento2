@@ -10,6 +10,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @api
  */
 class IndexIterator implements \Iterator
 {

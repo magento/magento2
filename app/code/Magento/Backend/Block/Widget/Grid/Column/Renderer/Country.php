@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+/**
+ * @api
+ */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

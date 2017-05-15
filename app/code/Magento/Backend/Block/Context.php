@@ -11,6 +11,7 @@ namespace Magento\Backend\Block;
  * Backend block context
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Context extends \Magento\Framework\View\Element\Context
 {

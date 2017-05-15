@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @api
  */
 class Item
 {

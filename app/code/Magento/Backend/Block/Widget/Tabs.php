@@ -10,6 +10,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 /**
  * Tabs block
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Tabs extends \Magento\Backend\Block\Widget
 {

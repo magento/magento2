@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer decimal filter
+ * @api
  */
 class Decimal extends AbstractFilter
 {

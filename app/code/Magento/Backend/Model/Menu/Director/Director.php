@@ -8,6 +8,9 @@
 
 namespace Magento\Backend\Model\Menu\Director;
 
+/**
+ * @api
+ */
 class Director extends \Magento\Backend\Model\Menu\AbstractDirector
 {
     /**

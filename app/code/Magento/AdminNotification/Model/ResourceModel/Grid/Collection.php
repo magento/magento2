@@ -13,6 +13,9 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\Grid;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection
 {
     /**

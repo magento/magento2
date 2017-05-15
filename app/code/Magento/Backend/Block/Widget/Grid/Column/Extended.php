@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column;
 
+/**
+ * @api
+ */
 class Extended extends \Magento\Backend\Block\Widget\Grid\Column
 {
     /**

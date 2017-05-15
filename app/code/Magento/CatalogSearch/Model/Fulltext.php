@@ -25,6 +25,7 @@ use Magento\Search\Model\QueryFactory;
  * @method \Magento\CatalogSearch\Model\Fulltext setDataIndex(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Fulltext extends \Magento\Framework\Model\AbstractModel
 {

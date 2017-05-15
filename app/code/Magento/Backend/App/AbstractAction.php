@@ -10,6 +10,7 @@ namespace Magento\Backend\App;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 {

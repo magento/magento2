@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+/**
+ * @api
+ */
 class Button extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

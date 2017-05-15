@@ -7,6 +7,7 @@ namespace Magento\Backend\Block;
 
 /**
  * Backend abstract block
+ * @api
  */
 class AbstractBlock extends \Magento\Framework\View\Element\AbstractBlock
 {

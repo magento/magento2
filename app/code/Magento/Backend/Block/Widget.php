@@ -11,6 +11,7 @@ namespace Magento\Backend\Block;
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Widget extends \Magento\Backend\Block\Template
 {

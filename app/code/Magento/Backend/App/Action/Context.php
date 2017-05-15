@@ -10,6 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Backend Controller context
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Context extends \Magento\Framework\App\Action\Context
 {

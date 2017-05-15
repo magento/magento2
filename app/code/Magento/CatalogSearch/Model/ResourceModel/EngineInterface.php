@@ -9,6 +9,9 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
+/**
+ * @api
+ */
 interface EngineInterface
 {
     /**

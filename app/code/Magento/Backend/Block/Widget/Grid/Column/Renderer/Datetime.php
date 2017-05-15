@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+/**
+ * @api
+ */
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

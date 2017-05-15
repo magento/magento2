@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 /**
  * GoogleAnalytics data helper
  *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

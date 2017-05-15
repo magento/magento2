@@ -10,7 +10,6 @@ namespace Magento\Backend\Block\Widget\Grid;
  *
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @api
  * @deprecated
  */
 class Container extends \Magento\Backend\Block\Widget\Container

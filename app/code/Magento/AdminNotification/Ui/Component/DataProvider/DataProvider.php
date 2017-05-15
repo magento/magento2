@@ -9,7 +9,7 @@ namespace Magento\AdminNotification\Ui\Component\DataProvider;
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\SynchronizedFactory;
 
 /**
- * Class DataProvider
+ * @api
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {

@@ -8,6 +8,9 @@
 
 namespace Magento\Backend\Model\Widget\Grid;
 
+/**
+ * @api
+ */
 abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\TotalsInterface
 {
     /**

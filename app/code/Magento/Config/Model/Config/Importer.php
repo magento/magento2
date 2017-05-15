@@ -23,6 +23,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  *
  * {@inheritdoc}
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
+ * @api
  */
 class Importer implements ImporterInterface
 {

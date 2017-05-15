@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Backend grid item renderer number
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Collection;
 
+/**
+ * @api
+ */
 class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

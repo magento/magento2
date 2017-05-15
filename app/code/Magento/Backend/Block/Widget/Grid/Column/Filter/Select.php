@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * Select grid column filter
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {

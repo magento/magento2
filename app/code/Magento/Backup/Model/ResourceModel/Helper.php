@@ -8,6 +8,9 @@
 
 namespace Magento\Backup\Model\ResourceModel;
 
+/**
+ * @api
+ */
 class Helper extends \Magento\Framework\DB\Helper
 {
     /**

@@ -12,6 +12,7 @@ namespace Magento\Backend\Block\Widget\Form;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Generic extends \Magento\Backend\Block\Widget\Form
 {

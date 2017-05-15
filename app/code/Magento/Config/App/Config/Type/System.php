@@ -10,6 +10,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Class process source, cache them and retrieve value by path
+ * @api
  */
 class System implements ConfigTypeInterface
 {

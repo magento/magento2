@@ -9,6 +9,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
  */
 class Data extends AbstractHelper
 {

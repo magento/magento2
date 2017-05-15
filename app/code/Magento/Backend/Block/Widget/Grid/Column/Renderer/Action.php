@@ -12,6 +12,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Grid column widget for rendering action grid cells
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {

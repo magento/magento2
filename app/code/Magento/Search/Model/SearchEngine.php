@@ -11,6 +11,7 @@ use Magento\Framework\Search\SearchEngineInterface;
 
 /**
  * Search Engine
+ * @api
  */
 class SearchEngine implements SearchEngineInterface
 {

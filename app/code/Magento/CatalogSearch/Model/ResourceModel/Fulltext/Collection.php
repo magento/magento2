@@ -21,6 +21,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 /**
  * Fulltext Collection
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {

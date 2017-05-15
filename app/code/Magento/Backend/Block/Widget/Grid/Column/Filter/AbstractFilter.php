@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * @api
+ */
 class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Backend\Block\Widget\Grid\Column\Filter\FilterInterface
 {

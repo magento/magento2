@@ -7,6 +7,8 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
  * CatalogSearch Fulltext Index resource model
+ *
+ * @api
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

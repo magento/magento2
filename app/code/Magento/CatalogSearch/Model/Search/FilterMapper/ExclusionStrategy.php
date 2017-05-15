@@ -12,6 +12,7 @@ use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Strategy which processes exclusions from general rules
+ * @api
  */
 class ExclusionStrategy implements FilterStrategyInterface
 {

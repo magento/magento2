@@ -15,6 +15,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {

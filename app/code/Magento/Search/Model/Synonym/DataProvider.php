@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
+ * @api
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {

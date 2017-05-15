@@ -11,6 +11,7 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Implementation of IndexScopeResolverInterface which resolves index scope dynamically
  * depending on current scope state
+ * @api
  */
 class ScopeProxy implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {

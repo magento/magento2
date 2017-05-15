@@ -14,6 +14,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Form element default renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Element extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {

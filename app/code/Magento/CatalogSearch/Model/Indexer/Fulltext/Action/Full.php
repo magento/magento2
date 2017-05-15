@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Full
 {

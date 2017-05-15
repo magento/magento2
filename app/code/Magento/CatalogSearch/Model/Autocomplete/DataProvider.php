@@ -11,6 +11,9 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
 use Magento\Search\Model\Autocomplete\ItemFactory;
 
+/**
+ * @api
+ */
 class DataProvider implements DataProviderInterface
 {
     /**

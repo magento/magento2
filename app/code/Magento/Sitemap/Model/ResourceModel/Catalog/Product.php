@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

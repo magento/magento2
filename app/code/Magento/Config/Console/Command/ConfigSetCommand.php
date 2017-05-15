@@ -19,6 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command provides possibility to change system configuration.
+ *
+ * @api
  */
 class ConfigSetCommand extends Command
 {

@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+/**
+ * @api
+ */
 class Input extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

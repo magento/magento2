@@ -8,6 +8,7 @@ namespace Magento\Framework\Notification;
 
 /*
  * List of registered system notifiers
+ * @api
  */
 class NotifierList
 {

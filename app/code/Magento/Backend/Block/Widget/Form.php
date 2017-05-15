@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget;
  * Backend form widget
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget
 {
