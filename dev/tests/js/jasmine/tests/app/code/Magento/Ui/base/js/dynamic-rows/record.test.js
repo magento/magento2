@@ -10,20 +10,9 @@ define([
     'use strict';
 
     var model,
-
-        /**
-         * @param {Number} index
-         * @returns {Object}
-         * @constructor
-         */
-        ElementMock = function (index) {
-            return {
-                /**
-                 * @return void
-                 */
-                destroy: function () {},
-                index: index
-            };
+        parentComponent = {
+            setMaxPosition: jasmine.createSpy(),
+            maxPosition: 10
         };
 
     /**
@@ -31,24 +20,18 @@ define([
      *
      * @return void
      */
-    beforeEach(function (done) {
+    beforeEach(function () {
         model = new Record({});
-        done();
+        model.parentComponent = jasmine.createSpy().and.returnValue(parentComponent);
     });
 
     /**
-     * Testing changePage and delete record methods
+     * Testing 'Magento_Ui/js/dynamic-rows/record' class
      *
      * @return void
      */
     describe('Magento_Ui/js/dynamic-rows/record', function () {
         it('Calls "initPosition" method without position.', function () {
-            var parentComponent = {
-                setMaxPosition: jasmine.createSpy(),
-                maxPosition: 10
-            };
-
-            model.parentComponent = jasmine.createSpy().and.returnValue(parentComponent);
             model.initPosition(false);
 
             expect(model.parentComponent().setMaxPosition).toHaveBeenCalledWith(NaN, model);
@@ -56,12 +39,6 @@ define([
         });
 
         it('Calls "initPosition" method without position 0.', function () {
-            var parentComponent = {
-                setMaxPosition: jasmine.createSpy(),
-                maxPosition: 0
-            };
-
-            model.parentComponent = jasmine.createSpy().and.returnValue(parentComponent);
             model.position = 10;
             model.initPosition(0);
 

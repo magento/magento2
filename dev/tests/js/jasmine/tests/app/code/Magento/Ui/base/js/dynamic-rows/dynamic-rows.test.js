@@ -31,9 +31,8 @@ define([
      *
      * @return void
      */
-    beforeEach(function (done) {
+    beforeEach(function () {
         model = new DynamicRows({});
-        done();
     });
 
     /**
