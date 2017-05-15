@@ -33,21 +33,21 @@ define([
 
     if ($.isEmptyObject(getData())) {
         checkoutData = {
-            'selectedShippingAddress': null, //Selected shipping address pulled from persistence storage.
-            'shippingAddressFromData': null, //Shipping address pulled from persistence storage.
-            'newCustomerShippingAddress': null, //Shipping address pulled from persistence storage for new customer.
-            'selectedShippingRate': null, //Shipping rate pulled from persistence storage.
-            'selectedPaymentMethod': null, //Payment method pulled from persistence storage.
-            'selectedBillingAddress': null, //Selected billing address pulled from persistence storage.
-            'billingAddressFromData': null, //Billing address pulled from persistence storage.
-            'newCustomerBillingAddress': null //Billing address pulled from persistence storage for new customer.
+            'selectedShippingAddress': null, //Selected shipping address pulled from persistence storage
+            'shippingAddressFromData': null, //Shipping address pulled from persistence storage
+            'newCustomerShippingAddress': null, //Shipping address pulled from persistence storage for new customer
+            'selectedShippingRate': null, //Shipping rate pulled from persistence storage
+            'selectedPaymentMethod': null, //Payment method pulled from persistence storage
+            'selectedBillingAddress': null, //Selected billing address pulled from persistence storage
+            'billingAddressFromData': null, //Billing address pulled from persistence storage
+            'newCustomerBillingAddress': null //Billing address pulled from persistence storage for new customer
         };
         saveData(checkoutData);
     }
 
     return {
         /**
-         * Setting the selected shipping address pulled from persistence storage.
+         * Setting the selected shipping address pulled from persistence storage
          *
          * @param {Object} data
          */
@@ -59,7 +59,7 @@ define([
         },
 
         /**
-         * Pulling the selected shipping address from persistence storage.
+         * Pulling the selected shipping address from persistence storage
          *
          * @return {*}
          */
@@ -68,7 +68,7 @@ define([
         },
 
         /**
-         * Setting the shipping address pulled from persistence storage.
+         * Setting the shipping address pulled from persistence storage
          *
          * @param {Object} data
          */
@@ -80,7 +80,7 @@ define([
         },
 
         /**
-         * Pulling the shipping address from persistence storage.
+         * Pulling the shipping address from persistence storage
          *
          * @return {*}
          */
@@ -89,7 +89,7 @@ define([
         },
 
         /**
-         * Setting the shipping address pulled from persistence storage for new customer.
+         * Setting the shipping address pulled from persistence storage for new customer
          *
          * @param {Object} data
          */
@@ -101,7 +101,7 @@ define([
         },
 
         /**
-         * Pulling the shipping address from persistence storage for new customer.
+         * Pulling the shipping address from persistence storage for new customer
          *
          * @return {*}
          */
@@ -110,7 +110,7 @@ define([
         },
 
         /**
-         * Setting the selected shipping rate pulled from persistence storage.
+         * Setting the selected shipping rate pulled from persistence storage
          *
          * @param {Object} data
          */
@@ -122,7 +122,7 @@ define([
         },
 
         /**
-         * Pulling the selected shipping rate from local storage.
+         * Pulling the selected shipping rate from local storage
          *
          * @return {*}
          */
@@ -131,7 +131,7 @@ define([
         },
 
         /**
-         * Setting the selected payment method pulled from persistence storage.
+         * Setting the selected payment method pulled from persistence storage
          *
          * @param {Object} data
          */
@@ -143,7 +143,7 @@ define([
         },
 
         /**
-         * Pulling the payment method from persistence storage.
+         * Pulling the payment method from persistence storage
          *
          * @return {*}
          */
@@ -152,7 +152,7 @@ define([
         },
 
         /**
-         * Setting the selected billing address pulled from persistence storage.
+         * Setting the selected billing address pulled from persistence storage
          *
          * @param {Object} data
          */
@@ -164,7 +164,7 @@ define([
         },
 
         /**
-         * Pulling the selected billing address from persistence storage.
+         * Pulling the selected billing address from persistence storage
          *
          * @return {*}
          */
@@ -173,7 +173,7 @@ define([
         },
 
         /**
-         * Setting the billing address pulled from persistence storage.
+         * Setting the billing address pulled from persistence storage
          *
          * @param {Object} data
          */
@@ -185,7 +185,8 @@ define([
         },
 
         /**
-         * Pulling the billing address from persistence storage.
+         * Pulling the billing address from persistence storage
+         *
          * @return {*}
          */
         getBillingAddressFromData: function () {
@@ -193,7 +194,7 @@ define([
         },
 
         /**
-         * Setting the billing address pulled from persistence storage for new customer.
+         * Setting the billing address pulled from persistence storage for new customer
          *
          * @param {Object} data
          */
@@ -205,7 +206,7 @@ define([
         },
 
         /**
-         * Pulling the billing address from persistence storage for new customer.
+         * Pulling the billing address from persistence storage for new customer
          *
          * @return {*}
          */
@@ -214,7 +215,7 @@ define([
         },
 
         /**
-         * Pulling the email address from persistence storage.
+         * Pulling the email address from persistence storage
          *
          * @return {*}
          */
@@ -225,7 +226,7 @@ define([
         },
 
         /**
-         * Setting the email address pulled from persistence storage.
+         * Setting the email address pulled from persistence storage
          *
          * @param {String} email
          */
@@ -237,7 +238,7 @@ define([
         },
 
         /**
-         * Pulling the email input field value from persistence storage.
+         * Pulling the email input field value from persistence storage
          *
          * @return {*}
          */
@@ -248,7 +249,7 @@ define([
         },
 
         /**
-         * Setting the email input field value pulled from persistence storage.
+         * Setting the email input field value pulled from persistence storage
          *
          * @param {String} email
          */
