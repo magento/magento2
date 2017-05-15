@@ -9,6 +9,9 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 
+/**
+ * @api
+ */
 class Builder
 {
     /**

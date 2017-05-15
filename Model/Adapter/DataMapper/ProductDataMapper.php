@@ -15,6 +15,9 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
 
+/**
+ * @api
+ */
 class ProductDataMapper implements DataMapperInterface
 {
     /**

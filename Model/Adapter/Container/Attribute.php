@@ -8,6 +8,9 @@ namespace Magento\Elasticsearch\Model\Adapter\Container;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
+/**
+ * @api
+ */
 class Attribute
 {
     /**

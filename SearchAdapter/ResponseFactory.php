@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Response Factory
+ * @api
  */
 class ResponseFactory
 {

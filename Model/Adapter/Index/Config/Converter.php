@@ -7,6 +7,9 @@ namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 
 use Magento\Framework\Config\ConverterInterface;
 
+/**
+ * @api
+ */
 class Converter implements ConverterInterface
 {
     /**

@@ -16,6 +16,7 @@ use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Elasticsearch index resource model
+ * @api
  */
 class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
 {

@@ -9,6 +9,9 @@ use Magento\Framework\Search\Request\Filter\Wildcard as WildcardFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
+/**
+ * @api
+ */
 class Wildcard implements FilterInterface
 {
     /**

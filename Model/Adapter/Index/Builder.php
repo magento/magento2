@@ -8,6 +8,9 @@ namespace Magento\Elasticsearch\Model\Adapter\Index;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 
+/**
+ * @api
+ */
 class Builder implements BuilderInterface
 {
     /**

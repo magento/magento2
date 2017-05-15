@@ -9,6 +9,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 
+/**
+ * @api
+ */
 class DataMapperResolver implements DataMapperInterface
 {
     /**

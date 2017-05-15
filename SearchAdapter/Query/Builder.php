@@ -11,6 +11,9 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
 use Magento\Framework\App\ScopeResolverInterface;
 
+/**
+ * @api
+ */
 class Builder
 {
     /**

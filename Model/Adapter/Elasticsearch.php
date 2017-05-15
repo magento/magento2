@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
  * Elasticsearch adapter
+ * @api
  */
 class Elasticsearch
 {

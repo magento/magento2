@@ -5,6 +5,9 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
+/**
+ * @api
+ */
 interface DataMapperInterface
 {
     /**

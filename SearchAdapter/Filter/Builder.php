@@ -12,6 +12,9 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
 
+/**
+ * @api
+ */
 class Builder implements BuilderInterface
 {
     /**#@+

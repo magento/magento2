@@ -10,6 +10,9 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * @api
+ */
 class EsConfig extends Data implements EsConfigInterface
 {
     /**

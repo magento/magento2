@@ -7,6 +7,9 @@ namespace Magento\Elasticsearch\SearchAdapter\Filter;
 
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * @api
+ */
 interface BuilderInterface
 {
     /**

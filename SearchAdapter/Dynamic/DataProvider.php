@@ -5,6 +5,9 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
+/**
+ * @api
+ */
 class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface
 {
     /**

@@ -11,6 +11,7 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 /**
  * Search engine resource model
+ * @api
  */
 class Engine implements EngineInterface
 {

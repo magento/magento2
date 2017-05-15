@@ -15,6 +15,7 @@ use \Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Class ProductFieldMapper
+ * @api
  */
 class ProductFieldMapper implements FieldMapperInterface
 {

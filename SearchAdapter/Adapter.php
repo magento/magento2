@@ -12,6 +12,7 @@ use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilde
 
 /**
  * Elasticsearch Search Adapter
+ * @api
  */
 class Adapter implements AdapterInterface
 {
