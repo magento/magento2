@@ -88,7 +88,7 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException
      */
     abstract protected function doReplace(array $urls);
 
