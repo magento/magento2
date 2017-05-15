@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ /**
+ * @security-private
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Customer\Test\Repository\Customer">
+        <dataset name="customer_with_special_chars">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string"><![CDATA[Mc\'><img src=\'#\' onerror=\'alert(123);\'/>Neil]]></field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="address" xsi:type="array">
+                <item name="dataset" xsi:type="string">US_address_with_special_chars</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

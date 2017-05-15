@@ -313,6 +313,7 @@
             <data name="product/data/weight" xsi:type="string">1</data>
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
             <data name="product/data/shipment_type" xsi:type="string">Together</data>
+            <data name="product/data/website_ids" xsi:type="string">Main Website</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">two_options_with_fixed_and_percent_prices</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -328,6 +329,7 @@
             <data name="product/data/price/dataset" xsi:type="string">dynamic-560</data>
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
             <data name="product/data/shipment_type" xsi:type="string">Together</data>
+            <data name="product/data/website_ids" xsi:type="string">Main Website</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">one_options_assigned_simple_big_qty</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />

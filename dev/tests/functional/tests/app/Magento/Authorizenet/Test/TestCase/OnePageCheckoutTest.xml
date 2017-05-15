@@ -16,10 +16,11 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">156.81</item>
+                <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
-            <data name="payment/method" xsi:type="string">authorizenet</data>
-            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_authorizenet</data>
+            <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_authorizenet</data>
             <data name="configData" xsi:type="string">authorizenet</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />

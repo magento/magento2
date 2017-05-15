@@ -215,6 +215,7 @@ class Config extends Tab
      */
     public function deleteAttributes()
     {
+        $this->showContent();
         $attributeElements = $this->_rootElement->getElements($this->attributeElement);
         foreach (array_reverse($attributeElements) as $element) {
             $element->find($this->actionMenu)->hover();

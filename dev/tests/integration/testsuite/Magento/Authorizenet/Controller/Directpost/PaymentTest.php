@@ -17,18 +17,10 @@ class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
         // @codingStandardsIgnoreStart
         $this->assertContains(
             'authorizenet/directpost_payment/redirect/success/0/error_msg/The transaction was'
-            . ' declined because the response hash validation failed.',
+                . ' declined because the response hash validation failed.',
             // @codingStandardsIgnoreEnd
             $this->getResponse()->getBody()
         );
-    }
-
-    public function testRedirectActionErrorMessage()
-    {
-        $this->getRequest()->setParam('success', '0');
-        $this->getRequest()->setParam('error_msg', 'Error message');
-        $this->dispatch('authorizenet/directpost_payment/redirect');
-        $this->assertContains('alert("Error message");', $this->getResponse()->getBody());
     }
 
     public function testBackendResponseActionOrderSuccess()
@@ -37,20 +29,7 @@ class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue('x_invoice_num', $xNum);
         $this->dispatch('authorizenet/directpost_payment/backendresponse');
         $this->assertContains(
-            '/sales/order/view/',
-            $this->getResponse()->getBody()
-        );
-    }
-
-    public function testBackendResponseActionValidationFailed()
-    {
-        $this->getRequest()->setPostValue('controller_action_name', 'action_name');
-        $this->dispatch('authorizenet/directpost_payment/backendresponse');
-        // @codingStandardsIgnoreStart
-        $this->assertContains(
-            'authorizenet_directpost_payment/redirect/success/0/error_msg/The transaction was declined'
-            . ' because the response hash validation failed./controller_action_name/action_name/',
-            // @codingStandardsIgnoreEnd
+            '/checkout/onepage/success/',
             $this->getResponse()->getBody()
         );
     }

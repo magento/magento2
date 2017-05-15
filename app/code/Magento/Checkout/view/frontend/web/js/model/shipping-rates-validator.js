@@ -12,6 +12,7 @@ define(
         '../action/select-shipping-address',
         './postcode-validator',
         'mage/translate',
+        'uiRegistry',
         'Magento_Checkout/js/model/quote'
     ],
     function (
@@ -22,6 +23,7 @@ define(
         selectShippingAddress,
         postcodeValidator,
         $t,
+        uiRegistry,
         quote
     ) {
         'use strict';
@@ -29,7 +31,8 @@ define(
         var checkoutConfig = window.checkoutConfig,
             validators = [],
             observedElements = [],
-            postcodeElement = null;
+            postcodeElement = null,
+            postcodeElementName = 'postcode';
 
         return {
             validateAddressTimeout: 0,
@@ -56,25 +59,56 @@ define(
             },
 
             /**
+             * Perform postponed binding for fieldset elements
+             *
+             * @param {String} formPath
+             */
+            initFields: function (formPath) {
+                var self = this,
+                    elements = shippingRatesValidationRules.getObservableFields();
+
+                if ($.inArray(postcodeElementName, elements) === -1) {
+                    // Add postcode field to observables if not exist for zip code validation support
+                    elements.push(postcodeElementName);
+                }
+
+                $.each(elements, function (index, field) {
+                    uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
+                });
+            },
+
+            /**
+             * Bind shipping rates request to form element
+             *
+             * @param {Object} element
+             * @param {Boolean} force
+             * @param {Number} delay
+             */
+            doElementBinding: function (element, force, delay) {
+                var observableFields = shippingRatesValidationRules.getObservableFields();
+
+                if (element && (observableFields.indexOf(element.index) !== -1 || force)) {
+                    if (element.index !== postcodeElementName) {
+                        this.bindHandler(element, delay);
+                    }
+                }
+
+                if (element.index === postcodeElementName) {
+                    this.bindHandler(element, delay);
+                    postcodeElement = element;
+                }
+            },
+
+            /**
              * @param {*} elements
              * @param {Boolean} force
              * @param {Number} delay
              */
             bindChangeHandlers: function (elements, force, delay) {
-                var self = this,
-                    observableFields = shippingRatesValidationRules.getObservableFields();
+                var self = this;
 
                 $.each(elements, function (index, elem) {
-                    if (elem && (observableFields.indexOf(elem.index) != -1 || force)) {
-                        if (elem.index !== 'postcode') {
-                            self.bindHandler(elem, delay);
-                        }
-                    }
-
-                    if (elem.index === 'postcode') {
-                        self.bindHandler(elem, delay);
-                        postcodeElement = elem;
-                    }
+                    self.doElementBinding(elem, force, delay);
                 });
             },
 
@@ -87,7 +121,7 @@ define(
 
                 delay = typeof delay === "undefined" ? self.validateDelay : delay;
 
-                if (element.component.indexOf('/group') != -1) {
+                if (element.component.indexOf('/group') !== -1) {
                     $.each(element.elems(), function (index, elem) {
                         self.bindHandler(elem);
                     });

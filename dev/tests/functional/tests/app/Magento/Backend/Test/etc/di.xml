@@ -16,4 +16,9 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Test\Constraint\AssertInterfaceLocaleSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
 </config>

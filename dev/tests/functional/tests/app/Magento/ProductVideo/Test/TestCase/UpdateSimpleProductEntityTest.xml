@@ -12,6 +12,7 @@
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
             <data name="product/data/media_gallery/images" xsi:type="string" />
+            <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
@@ -43,7 +44,7 @@
             <data name="description" xsi:type="string">Add vimeo video with all available fields filled in</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
-            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
+            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776333</data>
             <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 2</data>
             <data name="product/data/media_gallery/images/0/video_description" xsi:type="string">This is a test "Foo Test 2"</data>
             <data name="configData" xsi:type="string">play_if_base</data>
@@ -65,7 +66,7 @@
         <variation name="AddVideoToPCFTestVariation4">
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
-            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
+            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776333</data>
             <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 2</data>
             <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
@@ -120,8 +121,8 @@
             <data name="description" xsi:type="string">Validate Vimeo video info</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
-            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
-            <data name="video/video_title" xsi:type="string">Foo Fighters - "Walk" - Official Music Video (HD)</data>
+            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776333</data>
+            <data name="video/video_title" xsi:type="string">Gospel: The Preperation</data>
             <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect" />
         </variation>
