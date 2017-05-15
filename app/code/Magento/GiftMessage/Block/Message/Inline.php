@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Customer\Model\Session;
 use Magento\GiftMessage\Helper\Message as HelperMessage;
 use Magento\Catalog\Block\Product\ImageBuilder;
-use \Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\Http\Context as HttpContext;
 
 
 /**
