@@ -197,7 +197,7 @@ class Attribute extends Form
         $this->getTemplateBlock()->waitLoader();
 
         $attributesList = $this->browser->find($this->selectedAttributes)->getText();
-        if (!$attributesList || $attributesList != '--') {
+        if (!$attributesList || $attributesList !== '--') {
             $this->getAttributesGrid()->deselectAttributes();
         }
 
