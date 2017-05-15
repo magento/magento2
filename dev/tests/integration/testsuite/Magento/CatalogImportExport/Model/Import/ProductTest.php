@@ -1640,4 +1640,62 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0);
     }
+
+    /**
+     * Test if we can change attribute set for product via import.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     */
+    public function testImportDataChangeAttributeSet()
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_new_attribute_set.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        /** @var \Magento\Catalog\Model\Product[] $products */
+        $products[] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
+        $products[] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple2');
+
+        /** @var \Magento\Catalog\Model\Config $catalogConfig */
+        $catalogConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\Config::class);
+
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Eav\Model\Config::class);
+
+        $entityTypeId = (int)$eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
+            ->getId();
+
+        foreach ($products as $product) {
+            $attributeSetName = $catalogConfig->getAttributeSetName($entityTypeId, $product->getAttributeSetId());
+            $this->assertEquals('attribute_set_test', $attributeSetName);
+        }
+    }
 }
