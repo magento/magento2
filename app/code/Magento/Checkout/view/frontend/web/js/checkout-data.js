@@ -48,7 +48,7 @@ define([
     return {
         /**
          * Setting the selected shipping address pulled from persistence storage.
-         * 
+         *
          * @param {Object} data
          */
         setSelectedShippingAddress: function (data) {
@@ -60,7 +60,7 @@ define([
 
         /**
          * Pulling the selected shipping address from persistence storage.
-         * 
+         *
          * @return {*}
          */
         getSelectedShippingAddress: function () {
@@ -80,7 +80,7 @@ define([
         },
 
         /**
-         * Pulling the shipping address from persistence storage. 
+         * Pulling the shipping address from persistence storage.
          *
          * @return {*}
          */
@@ -122,7 +122,7 @@ define([
         },
 
         /**
-         * Pulling the selected shipping rate from local storge
+         * Pulling the selected shipping rate from local storage.
          *
          * @return {*}
          */
