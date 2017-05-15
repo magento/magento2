@@ -13,6 +13,8 @@ use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Abstract online shipping carrier model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier

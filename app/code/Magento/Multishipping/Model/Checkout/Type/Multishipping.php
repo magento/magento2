@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Multishipping checkout model
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

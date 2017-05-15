@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model\Import;
 
 /**
  * Data source with columns for Magento_ImportExport
+ *
+ * @api
  */
 abstract class AbstractSource implements \SeekableIterator
 {

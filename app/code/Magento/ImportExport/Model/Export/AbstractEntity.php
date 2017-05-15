@@ -12,7 +12,8 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 /**
  * Export entity abstract model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractEntity

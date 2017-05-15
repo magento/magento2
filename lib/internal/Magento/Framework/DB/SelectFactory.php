@@ -11,6 +11,8 @@ use Magento\Framework\DB\Select\SelectRenderer;
 
 /**
  * Class SelectFactory
+ *
+ * @api
  */
 class SelectFactory
 {

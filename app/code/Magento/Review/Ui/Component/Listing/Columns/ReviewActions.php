@@ -9,6 +9,8 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class ReviewActions
+ *
+ * @api
  */
 class ReviewActions extends Column
 {

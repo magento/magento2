@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Html\Links;
 
 /**
  * Class for sorting links in navigation panels.
+ *
+ * @api
  */
 class Navigation extends Links
 {

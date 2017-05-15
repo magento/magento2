@@ -10,6 +10,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Default review helper
+ *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

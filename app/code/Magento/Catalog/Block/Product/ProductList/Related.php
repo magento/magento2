@@ -12,6 +12,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog product related items block
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements IdentityInterface

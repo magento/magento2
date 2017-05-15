@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Block;
 /**
  * Toolbar entry that shows latest notifications
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class ToolbarEntry extends \Magento\Backend\Block\Template

@@ -23,6 +23,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Swatch renderer block
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -391,7 +392,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Produce and return block's html output
      *
-     * @codeCoverageIgnore
      * @return string
      */
     public function toHtml()
@@ -406,7 +406,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Return HTML code
      *
-     * @codeCoverageIgnore
      * @return string
      */
     protected function _toHtml()
@@ -428,7 +427,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * @codeCoverageIgnore
+     * @deprecated Now is used _toHtml() directly
      * @return string
      */
     protected function getHtmlOutput()

@@ -16,6 +16,9 @@ namespace Magento\Eav\Model;
 use Magento\Eav\Model\Attribute\Data\AbstractData;
 use Magento\Store\Model\Website;
 
+/**
+ * @api
+ */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**
@@ -102,7 +105,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return $this->getSerializer()->unserialize($rules);
+            return (array)$this->getSerializer()->unserialize($rules);
         }
         return [];
     }

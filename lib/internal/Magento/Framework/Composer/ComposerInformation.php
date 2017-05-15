@@ -47,7 +47,7 @@ class ComposerInformation
     /**
      * Default composer repository key
      */
-    const COMPOSER_DEFAULT_REPO_KEY = 'packagist';
+    const COMPOSER_DEFAULT_REPO_KEY = 'packagist.org';
 
     /**#@+
      * Composer command

@@ -8,6 +8,7 @@ namespace Magento\User\Block;
 /**
  * Magento_User role block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Role extends \Magento\Backend\Block\Widget\Grid\Container

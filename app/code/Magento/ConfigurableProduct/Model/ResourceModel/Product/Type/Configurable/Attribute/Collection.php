@@ -16,6 +16,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -13,7 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Catalog view layer model
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Element\Text;
 
 /**
  * Class ListText
+ *
+ * @api
  */
 class ListText extends \Magento\Framework\View\Element\Text
 {

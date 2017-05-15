@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog navigation
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -12,6 +12,8 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Visibility
+ *
+ * @api
  */
 class Visibility extends Column
 {

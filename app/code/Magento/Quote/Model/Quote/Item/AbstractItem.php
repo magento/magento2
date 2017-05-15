@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Item;
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
  *  - original_custom_price - original defined value of custom price without any convertion
  *
+ * @api
  * @method float getDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
  * @method float getBaseDiscountAmount()

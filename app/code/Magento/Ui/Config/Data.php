@@ -83,7 +83,6 @@ class Data implements \Magento\Framework\Config\DataInterface
         $this->componentName = $componentName;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->cacheId = static::CACHE_ID . '_' . $componentName;
-        $this->initData();
     }
 
     /**
@@ -120,7 +119,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     public function merge(array $config)
     {
-        $this->data = array_replace_recursive($this->data, $config);
+        $this->data = array_replace_recursive($this->get(), $config);
     }
 
     /**
@@ -132,6 +131,9 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     public function get($path = null, $default = null)
     {
+        if (empty($this->data)) {
+            $this->initData();
+        }
         if ($path === null) {
             return $this->data;
         }

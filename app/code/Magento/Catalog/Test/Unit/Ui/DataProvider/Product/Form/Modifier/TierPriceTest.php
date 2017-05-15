@@ -69,7 +69,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 'data' => [
                     'config' => [
                         'visible' => true,
-                        'validation' => ['validate-number' => true],
+                        'validation' => ['validate-zero-or-greater' => true],
                     ],
                 ],
             ],

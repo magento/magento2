@@ -8,6 +8,8 @@ namespace Magento\Framework\App\Cache;
 
 /**
  * Cache status manager
+ *
+ * @api
  */
 class Manager
 {

@@ -11,6 +11,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 /**
  * Adminhtml quote session
  *
+ * @api
  * @method Quote setCustomerId($id)
  * @method int getCustomerId()
  * @method bool hasCustomerId()

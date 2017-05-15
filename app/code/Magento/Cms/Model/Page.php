@@ -16,6 +16,7 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Cms Page Model
  *
+ * @api
  * @method ResourceCmsPage _getResource()
  * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)

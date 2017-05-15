@@ -9,7 +9,8 @@ namespace Magento\ImportExport\Model;
 /**
  * Export model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel

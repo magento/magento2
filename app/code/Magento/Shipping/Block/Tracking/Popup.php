@@ -8,6 +8,9 @@ namespace Magento\Shipping\Block\Tracking;
 
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
+/**
+ * @api
+ */
 class Popup extends \Magento\Framework\View\Element\Template
 {
     /**

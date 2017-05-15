@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Order create model
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

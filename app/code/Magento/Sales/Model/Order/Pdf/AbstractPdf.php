@@ -11,6 +11,8 @@ use Magento\Framework\DataObject;
 
 /**
  * Sales Order PDF abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

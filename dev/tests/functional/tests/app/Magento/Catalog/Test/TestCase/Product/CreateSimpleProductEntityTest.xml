@@ -549,7 +549,6 @@
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/weight" xsi:type="string">50</data>
-            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">100</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductHasImageInGrid" />

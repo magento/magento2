@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Block\Adminhtml\Import\Frame;
 /**
  * Import frame result block.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Result extends \Magento\Backend\Block\Template
 {

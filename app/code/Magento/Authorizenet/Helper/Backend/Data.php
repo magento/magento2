@@ -13,6 +13,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Authorize.net Backend Data Helper
+ *
+ * @api
  */
 class Data extends FrontendDataHelper
 {

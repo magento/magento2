@@ -10,6 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * Customer authorization link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface

@@ -55,14 +55,6 @@ class SearchResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getAllIds
-     */
-    public function testGetAllIds()
-    {
-        $this->assertEquals([1, 2], $this->search->getAllIds());
-    }
-
-    /**
      * Test getItems
      */
     public function testGetItems()

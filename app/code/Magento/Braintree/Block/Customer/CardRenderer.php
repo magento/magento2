@@ -9,6 +9,9 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Block\AbstractCardRenderer;
 
+/**
+ * @api
+ */
 class CardRenderer extends AbstractCardRenderer
 {
     /**

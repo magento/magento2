@@ -13,6 +13,8 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 /**
  * Class ReviewDataProvider
  *
+ * @api
+ *
  * @method Collection getCollection
  */
 class ReviewDataProvider extends AbstractDataProvider

@@ -10,6 +10,9 @@ namespace Magento\GoogleOptimizer\Block\Code;
 
 use Magento\Framework\DataObject\IdentityInterface;
 
+/**
+ * @api
+ */
 class Product extends \Magento\GoogleOptimizer\Block\AbstractCode implements IdentityInterface
 {
     /**

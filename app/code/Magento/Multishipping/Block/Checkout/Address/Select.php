@@ -12,6 +12,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class Select
  * Multishipping checkout select billing address
+ *
+ * @api
  */
 class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {

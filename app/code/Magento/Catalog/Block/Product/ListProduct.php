@@ -17,6 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Product list
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ListProduct extends AbstractProduct implements IdentityInterface

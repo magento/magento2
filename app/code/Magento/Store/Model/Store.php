@@ -22,6 +22,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Store model
  *
+ * @api
  * @method Store setGroupId($value)
  * @method int getSortOrder()
  * @method int getStoreId()

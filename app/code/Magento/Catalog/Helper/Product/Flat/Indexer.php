@@ -8,6 +8,7 @@ namespace Magento\Catalog\Helper\Product\Flat;
 /**
  * Catalog Product Flat Indexer Helper
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

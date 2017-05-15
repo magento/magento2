@@ -14,6 +14,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements

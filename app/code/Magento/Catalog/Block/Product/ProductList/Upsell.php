@@ -12,6 +12,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog product upsell items block
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements IdentityInterface

@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)

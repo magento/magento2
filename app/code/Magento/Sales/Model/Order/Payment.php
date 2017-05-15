@@ -14,10 +14,12 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface;
+use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
 
 /**
  * Order payment information
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -110,6 +112,11 @@ class Payment extends Info implements OrderPaymentInterface
     private $orderStateResolver;
 
     /**
+     * @var CreditmemoManager
+     */
+    private $creditmemoManager = null;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -126,6 +133,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CreditmemoManager $creditmemoManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -144,7 +152,8 @@ class Payment extends Info implements OrderPaymentInterface
         OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CreditmemoManager $creditmemoManager = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->creditmemoFactory = $creditmemoFactory;
@@ -153,6 +162,7 @@ class Payment extends Info implements OrderPaymentInterface
         $this->transactionBuilder = $transactionBuilder;
         $this->orderPaymentProcessor = $paymentProcessor;
         $this->orderRepository = $orderRepository;
+        $this->creditmemoManager = $creditmemoManager ?: ObjectManager::getInstance()->get(CreditmemoManager::class);
         parent::__construct(
             $context,
             $registry,
@@ -778,7 +788,8 @@ class Payment extends Info implements OrderPaymentInterface
         )->addComment(
             __('The credit memo has been created automatically.')
         );
-        $creditmemo->save();
+
+        $this->creditmemoManager->refund($creditmemo, false);
 
         $this->_updateTotals(
             ['amount_refunded' => $creditmemo->getGrandTotal(), 'base_amount_refunded_online' => $amount]

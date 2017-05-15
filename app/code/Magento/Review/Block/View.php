@@ -8,6 +8,7 @@ namespace Magento\Review\Block;
 /**
  * Review detailed view block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct

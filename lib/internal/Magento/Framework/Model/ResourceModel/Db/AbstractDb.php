@@ -18,6 +18,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 abstract class AbstractDb extends AbstractResource
 {

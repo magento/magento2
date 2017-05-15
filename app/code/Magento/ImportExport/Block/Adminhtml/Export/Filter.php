@@ -11,8 +11,8 @@ use Magento\Eav\Model\Entity\Attribute;
 /**
  * Export filter block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {

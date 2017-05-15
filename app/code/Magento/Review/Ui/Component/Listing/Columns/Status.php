@@ -13,6 +13,8 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
  * Class Status
+ *
+ * @api
  */
 class Status extends Column implements OptionSourceInterface
 {

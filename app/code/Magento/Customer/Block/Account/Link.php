@@ -8,6 +8,7 @@ namespace Magento\Customer\Block\Account;
 /**
  * Class Link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface

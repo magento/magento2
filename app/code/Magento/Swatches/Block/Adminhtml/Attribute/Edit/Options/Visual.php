@@ -7,6 +7,7 @@ namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
 
 /**
  * Block Class for Visual Swatch
+ *
  * @api
  */
 class Visual extends AbstractSwatch
@@ -19,7 +20,9 @@ class Visual extends AbstractSwatch
     /**
      * Create store values
      *
-     * @codeCoverageIgnore
+     * Method not intended to escape HTML entities
+     * Escaping will be applied in template files
+     *
      * @param integer $storeId
      * @param integer $optionId
      * @return array
@@ -38,16 +41,16 @@ class Visual extends AbstractSwatch
         }
 
         if (isset($storeValues[$optionId])) {
-            $value['store' . $storeId] = $this->escapeHtml($storeValues[$optionId]);
+            $value['store' . $storeId] = $storeValues[$optionId];
         }
 
         if (isset($swatchStoreValue[$optionId])) {
-            $value['defaultswatch' . $storeId] = $this->escapeHtml($swatchStoreValue[$optionId]);
+            $value['defaultswatch' . $storeId] = $swatchStoreValue[$optionId];
         }
 
         $swatchStoreValue = $this->reformatSwatchLabels($swatchStoreValue);
         if (isset($swatchStoreValue[$optionId])) {
-            $value['swatch' . $storeId] = $this->escapeHtml($swatchStoreValue[$optionId]);
+            $value['swatch' . $storeId] = $swatchStoreValue[$optionId];
         }
 
         return $value;

@@ -14,7 +14,6 @@ use Magento\Store\Model\ScopeInterface;
  * Catalog product option default type
  *
  * @api
- *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

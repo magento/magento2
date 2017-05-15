@@ -16,6 +16,7 @@ use Magento\Paypal\Model\ResourceModel\Billing\Agreement as BillingAgreementReso
 
 /**
  * Adminhtml billing agreement related orders tab
+ * @api
  */
 class Orders extends ExtendedGrid implements TabInterface
 {

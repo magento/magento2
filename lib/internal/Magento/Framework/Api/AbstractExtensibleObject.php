@@ -9,6 +9,8 @@ namespace Magento\Framework\Api;
  * Base Class for extensible data Objects
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * TODO: This class can be split into Custom attribute and Extension attribute implementation classes
+ *
+ * @api
  */
 abstract class AbstractExtensibleObject extends AbstractSimpleObject implements CustomAttributesDataInterface
 {

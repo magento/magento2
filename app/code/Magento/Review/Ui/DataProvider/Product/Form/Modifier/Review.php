@@ -16,7 +16,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Form;
 
 /**
- * Class Review
+ * Review modifier for catalog product form
+ *
+ * @api
  */
 class Review extends AbstractModifier
 {

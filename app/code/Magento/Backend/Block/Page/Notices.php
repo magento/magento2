@@ -13,6 +13,9 @@ namespace Magento\Backend\Block\Page;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class Notices extends \Magento\Backend\Block\Template
 {
     /**

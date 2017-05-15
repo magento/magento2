@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Product type price model
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price

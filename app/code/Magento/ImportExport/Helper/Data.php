@@ -11,7 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * ImportExport data helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

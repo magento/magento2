@@ -13,6 +13,8 @@ use Magento\Paypal\Model\ConfigFactory;
 
 /**
  * Class Component
+ *
+ * @api
  */
 class Component extends Template
 {
