@@ -52,6 +52,8 @@ class Widget
     protected $conditionsHelper;
 
     /**
+     * Random data generator.
+     *
      * @var \Magento\Framework\Math\Random
      */
     private $mathRandom;
@@ -338,6 +340,8 @@ class Widget
     }
 
     /**
+     * Returns var name for widget page.
+     *
      * @param array $params
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
