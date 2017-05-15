@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
@@ -29,15 +29,24 @@ class GrandTest extends \PHPUnit_Framework_TestCase
 
         $totalMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address\Total::class,
-            ['getAllTotalAmounts', 'getAllBaseTotalAmounts', 'setGrandTotal', 'setBaseGrandTotal'],
+            [
+                'getAllTotalAmounts',
+                'getAllBaseTotalAmounts',
+                'setGrandTotal',
+                'setBaseGrandTotal',
+                'getGrandTotal',
+                'getBaseGrandTotal'
+            ],
             [],
             '',
             false
         );
+        $totalMock->expects($this->once())->method('getGrandTotal')->willReturn(2);
+        $totalMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(2);
         $totalMock->expects($this->once())->method('getAllTotalAmounts')->willReturn($totals);
         $totalMock->expects($this->once())->method('getAllBaseTotalAmounts')->willReturn($totalsBase);
-        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal);
-        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase);
+        $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal + 2);
+        $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase + 2);
 
         $this->model->collect(
             $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false),

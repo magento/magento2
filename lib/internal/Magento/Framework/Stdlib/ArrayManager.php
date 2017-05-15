@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
@@ -30,7 +30,7 @@ class ArrayManager
     /**
      * Check if node exists
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param string $delimiter
      * @return bool
@@ -43,7 +43,7 @@ class ArrayManager
     /**
      * Retrieve node
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param null $defaultValue
      * @param string $delimiter
@@ -57,7 +57,7 @@ class ArrayManager
     /**
      * Set value into node and return modified data
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param mixed $value
      * @param string $delimiter
@@ -75,7 +75,7 @@ class ArrayManager
     /**
      * Set value into existing node and return modified data
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param mixed $value
      * @param string $delimiter
@@ -93,7 +93,7 @@ class ArrayManager
     /**
      * Move value from one location to another
      *
-     * @param string $path
+     * @param array|string $path
      * @param string $targetPath
      * @param array $data
      * @param bool $overwrite
@@ -120,7 +120,7 @@ class ArrayManager
     /**
      * Merge value with node and return modified data
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param array $value
      * @param string $delimiter
@@ -141,7 +141,7 @@ class ArrayManager
     /**
      * Populate nested array if possible and needed
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param string $delimiter
      * @return array
@@ -156,7 +156,7 @@ class ArrayManager
     /**
      * Remove node and return modified data
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param string $delimiter
      * @return array
@@ -173,7 +173,7 @@ class ArrayManager
     /**
      * Finds node in nested array and saves its index and parent node reference
      *
-     * @param string $path
+     * @param array|string $path
      * @param array $data
      * @param string $delimiter
      * @param bool $populate
@@ -181,6 +181,10 @@ class ArrayManager
      */
     protected function find($path, array &$data, $delimiter, $populate = false)
     {
+        if (is_array($path)) {
+            $path = implode($delimiter, $path);
+        }
+
         if ($path === null) {
             return false;
         }

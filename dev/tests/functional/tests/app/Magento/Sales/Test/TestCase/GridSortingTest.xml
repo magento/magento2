@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridSortingTest" summary="Grid UI Component Sorting" ticketId="MAGETWO-41328">
         <variation name="SalesOrderGridSorting">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify sales order grid storting</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">-</item>
@@ -26,6 +28,8 @@
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridSorting"/>
         </variation>
         <variation name="SalesInvoiceGridSorting">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify sales invoince grid storting</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
@@ -43,6 +47,8 @@
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridSorting"/>
         </variation>
         <variation name="SalesShipmentGridSorting">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify sales shipment grid storting</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
@@ -60,6 +66,8 @@
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridSorting"/>
         </variation>
         <variation name="SalesCreditMemoGridSorting">
+            <data name="tag" xsi:type="string">severity:S3</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Verify sales credit memo grid storting</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product;
@@ -38,9 +38,7 @@ class Wizard extends Action
         $this->productBuilder->build($this->getRequest());
 
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultLayout->getLayout()->getUpdate()->removeHandle('default');
-
+        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         return $resultLayout;
     }
 }

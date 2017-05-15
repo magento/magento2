@@ -1,12 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'underscore',
     'uiRegistry',
@@ -23,14 +20,6 @@ define([
         });
 
         window.FORM_KEY = 'magentoFormKey';
-        registry.set('provName', {
-            on: function () {
-            },
-            get: function () {
-            },
-            set: function () {
-            }
-        });
 
         describe('"initElement" method', function () {
             it('Check for defined ', function () {
@@ -43,24 +32,34 @@ define([
             });
             it('Check returned value if method called with object argument', function () {
                 var arg = {
-                    initContainer: function () {
-                    },
-                    on: function () {
-                    },
-                    active: function () {
-                    }
+                    /** Stub */
+                    initContainer: function () {},
+
+                    /** Stub */
+                    on: function () {},
+
+                    /** Stub */
+                    active: function () {},
+
+                    /** Stub */
+                    activate: function () {}
                 };
 
                 expect(obj.initElement(arg)).toBeDefined();
             });
             it('Check returned value type if method called with object argument', function () {
                 var arg = {
-                        initContainer: function () {
-                        },
-                        on: function () {
-                        },
-                        active: function () {
-                        }
+                        /** Stub */
+                        initContainer: function () {},
+
+                        /** Stub */
+                        on: function () {},
+
+                        /** Stub */
+                        active: function () {},
+
+                        /** Stub */
+                        activate: function () {}
                     },
                     type = typeof obj.initElement(arg);
 
@@ -78,24 +77,34 @@ define([
             });
             it('Check returned value if method called with object argument', function () {
                 var arg = {
-                    initContainer: function () {
-                    },
-                    on: function () {
-                    },
-                    active: function () {
-                    }
+                    /** Stub */
+                    initContainer: function () {},
+
+                    /** Stub */
+                    on: function () {},
+
+                    /** Stub */
+                    active: function () {},
+
+                    /** Stub */
+                    activate: function () {}
                 };
 
                 expect(obj.initActivation(arg)).toBeDefined();
             });
             it('Check returned value type if method called with object argument', function () {
                 var arg = {
-                        initContainer: function () {
-                        },
-                        on: function () {
-                        },
-                        active: function () {
-                        }
+                        /** Stub */
+                        initContainer: function () {},
+
+                        /** Stub */
+                        on: function () {},
+
+                        /** Stub */
+                        active: function () {},
+
+                        /** Stub */
+                        activate: function () {}
                     },
                     type = typeof obj.initActivation(arg);
 
@@ -113,12 +122,17 @@ define([
             });
             it('Check called "argument.delegate" inner validate method', function () {
                 var arg = {
-                    initContainer: function () {
-                    },
-                    on: function () {
-                    },
-                    active: function () {
-                    },
+                    /** Stub */
+                    initContainer: function () {},
+
+                    /** Stub */
+                    on: function () {},
+
+                    /** Stub */
+                    active: function () {},
+
+                    /** Stub */
+                    activate: function () {},
                     delegate: jasmine.createSpy()
                 };
 
@@ -150,7 +164,7 @@ define([
                     return [];
                 });
                 obj.onValidate();
-                expect(obj.validate.calls.count()).toBe(3);
+                expect(obj.validate.calls.count()).toBe(1);
             });
         });
     });

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
 
 /**
  * Provide methods for collecting cart items information of specific sales model entity
+ *
+ * @api
  */
 class Cart
 {

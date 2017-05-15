@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,6 +31,7 @@ class CreateAdminUserEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const TEST_TYPE = 'extended_acceptance_test';
+    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -90,10 +91,10 @@ class CreateAdminUserEntityTest extends Injectable
      * @param string $isDuplicated
      * @return array
      */
-    public function test(User $user, User $adminUser, $isDuplicated)
+    public function test(User $user, User $adminUser, $isDuplicated = null)
     {
         // Prepare data
-        if ($isDuplicated != '-') {
+        if ($isDuplicated !== null) {
             $data = $user->getData();
             $data[$isDuplicated] = $adminUser->getData($isDuplicated);
             $data['role_id'] = ['role' => $user->getDataFieldConfig('role_id')['source']->getRole()];

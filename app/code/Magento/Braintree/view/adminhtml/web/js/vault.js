@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -14,7 +14,8 @@ define([
     return Class.extend({
         defaults: {
             $selector: null,
-            selector: 'edit_form'
+            selector: 'edit_form',
+            $container: null
         },
 
         /**
@@ -25,17 +26,18 @@ define([
             var self = this;
 
             self.$selector = $('#' + self.selector);
+            self.$container =  $('#' + self.container);
             self.$selector.on(
-                'setVaultNotActive',
+                'setVaultNotActive.' + self.getCode(),
                 function () {
-                    self.$selector.off('submitOrder.braintree_vault');
+                    self.$selector.off('submitOrder.' + self.getCode());
                 }
             );
-            this._super();
+            self._super();
 
-            this.initEventHandlers();
+            self.initEventHandlers();
 
-            return this;
+            return self;
         },
 
         /**
@@ -43,14 +45,14 @@ define([
          * @returns {String}
          */
         getCode: function () {
-            return 'braintree';
+            return this.code;
         },
 
         /**
          * Init event handlers
          */
         initEventHandlers: function () {
-            $('#' + this.container).find('[name="payment[token_switcher]"]')
+            $(this.$container).find('[name="payment[token_switcher]"]')
                 .on('click', this.selectPaymentMethod.bind(this));
         },
 
@@ -66,7 +68,7 @@ define([
          * Enable form event listeners
          */
         enableEventListeners: function () {
-            this.$selector.on('submitOrder.braintree_vault', this.submitOrder.bind(this));
+            this.$selector.on('submitOrder.' + this.getCode(), this.submitOrder.bind(this));
         },
 
         /**
@@ -129,7 +131,7 @@ define([
             this.createPublicHashSelector();
 
             this.$selector.find('[name="payment[public_hash]"]').val(this.publicHash);
-            this.$selector.find('#braintree_nonce').val(nonce);
+            this.$container.find('#' + this.getNonceSelectorName()).val(nonce);
         },
 
         /**
@@ -138,16 +140,16 @@ define([
         createPublicHashSelector: function () {
             var $input;
 
-            if (this.$selector.find('#braintree_nonce').size() === 0) {
+            if (this.$container.find('#' + this.getNonceSelectorName()).size() === 0) {
                 $input = $('<input>').attr(
                     {
                         type: 'hidden',
-                        id: 'braintree_nonce',
+                        id: this.getNonceSelectorName(),
                         name: 'payment[payment_method_nonce]'
                     }
                 );
 
-                $input.appendTo(this.$selector);
+                $input.appendTo(this.$container);
                 $input.prop('disabled', false);
             }
         },
@@ -160,6 +162,14 @@ define([
             alert({
                 content: message
             });
+        },
+
+        /**
+         * Get selector name for nonce input
+         * @returns {String}
+         */
+        getNonceSelectorName: function () {
+            return 'nonce_' + this.getCode();
         }
     });
 });

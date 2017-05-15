@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogWidget\Test\Unit\Block\Product\Widget;
@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Test class for \Magento\CatalogWidget\Block\Product\Widget\Conditions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConditionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -174,5 +175,117 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
                 'rule' => $this->ruleMock,
             ]
         );
+    }
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testRender()
+    {
+        $data = ['area' => 'backend'];
+        $abstractElementMock = $this->getMock(
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            ['getContainer'],
+            [],
+            '',
+            false
+        );
+        $eventManagerMock = $this->getMock(
+            \Magento\Framework\Event\ManagerInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $scopeConfigMock = $this->getMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $fieldsetMock = $this->getMock(
+            \Magento\Framework\Data\Form\Element\Fieldset::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $combineMock = $this->getMock(
+            \Magento\Rule\Model\Condition\Combine::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $resolverMock = $this->getMock(
+            \Magento\Framework\View\Element\Template\File\Resolver::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $filesystemMock = $this->getMock(
+            \Magento\Framework\Filesystem::class,
+            ['getDirectoryRead'],
+            [],
+            '',
+            false
+        );
+        $validatorMock = $this->getMock(
+            \Magento\Framework\View\Element\Template\File\Validator::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $templateEnginePoolMock = $this->getMock(
+            \Magento\Framework\View\TemplateEnginePool::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $templateEngineMock = $this->getMock(
+            \Magento\Framework\View\TemplateEngineInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $directoryReadMock = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->ruleMock->expects($this->once())->method('getConditions')->willReturn($combineMock);
+        $combineMock->expects($this->once())->method('setJsFormObject')->willReturnSelf();
+        $abstractElementMock->expects($this->any())->method('getContainer')->willReturn($fieldsetMock);
+        $filesystemMock->expects($this->once())->method('getDirectoryRead')->willReturn($directoryReadMock);
+        $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
+        $this->contextMock->expects($this->once())->method('getEnginePool')->willReturn($templateEnginePoolMock);
+        $templateEnginePoolMock->expects($this->once())->method('get')->willReturn($templateEngineMock);
+        $templateEngineMock->expects($this->once())->method('render')->willReturn('html');
+
+        $this->widgetConditions = $this->objectManagerHelper->getObject(
+            Conditions::class,
+            [
+                'context' => $this->contextMock,
+                'registry' => $this->registryMock,
+                'rule' => $this->ruleMock,
+                '_eventManager' => $eventManagerMock,
+                '_filesystem' => $filesystemMock,
+                '_scopeConfig' => $scopeConfigMock,
+                'validator' => $validatorMock,
+                'resolver' => $resolverMock,
+                'data' => $data
+            ]
+        );
+
+        $this->assertEquals($this->widgetConditions->render($abstractElementMock), 'html');
     }
 }

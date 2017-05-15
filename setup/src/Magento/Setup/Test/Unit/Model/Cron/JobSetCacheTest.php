@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -10,17 +10,21 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class JobSetCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider setCacheDataProvider
      * @param string $commandClass
-     * @param string $arrayInput
+     * @param array $arrayInput
      * @param string $jobName
      * @param array $params
      */
     public function testSetCache($commandClass, $arrayInput, $jobName, $params)
     {
+        $arrayInput = new ArrayInput($arrayInput);
         $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
         $objectManager =
             $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
@@ -62,18 +66,16 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function setCacheDataProvider()
     {
-        $cacheEnable = new ArrayInput(['command' => 'cache:enable', 'types' => ['cache1']]);
-        $cacheDisable = new ArrayInput(['command' => 'cache:disable']);
         return [
             [
                 \Magento\Backend\Console\Command\CacheEnableCommand::class,
-                $cacheEnable,
+                ['command' => 'cache:enable', 'types' => ['cache1']],
                 'setup:cache:enable',
                 ['cache1']
             ],
             [
                 \Magento\Backend\Console\Command\CacheDisableCommand::class,
-                $cacheDisable,
+                ['command' => 'cache:disable'],
                 'setup:cache:disable',
                 []
             ],

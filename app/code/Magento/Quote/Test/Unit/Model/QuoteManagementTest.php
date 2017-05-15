@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\CustomerManagement;
+use Magento\Framework\Exception\NoSuchEntityException;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\CustomerManagement;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -280,7 +280,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteIdMock = $this->getMock(\Magento\Quote\Model\QuoteIdMask::class, [], [], '', false);
         $quoteIdFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteIdMaskFactory::class, ['create'], [], '', false);
         $this->setPropertyValue($this->model, 'quoteIdMaskFactory', $quoteIdFactoryMock);
-
     }
 
     public function testCreateEmptyCartAnonymous()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,7 @@ class Item extends Sidebar
      *
      * @var string
      */
-    protected $price = '.product .price';
+    protected $price = '.minicart-price .price';
 
     /**
      * CSS selector for update button.
@@ -101,6 +101,13 @@ class Item extends Sidebar
      */
     public function getQty()
     {
+        $rootElement = $this->_rootElement;
+        $qtySelector = $this->qty;
+        $this->browser->waitUntil(
+            function () use ($rootElement, $qtySelector) {
+                return $rootElement->find($qtySelector)->isVisible() ? true : null;
+            }
+        );
         return $this->_rootElement->find($this->qty)->getValue();
     }
 

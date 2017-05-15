@@ -1,12 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'underscore',
     'uiRegistry',
@@ -18,11 +15,13 @@ define([
     describe('Magento_Ui/js/form/element/ui-select', function () {
 
         var obj = new Constr({
+            name: 'uiSelect',
             dataScope: '',
             provider: 'provider'
         });
 
         obj.value = ko.observableArray([]);
+        obj.cacheOptions.plain = [];
 
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
@@ -112,44 +111,26 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value type if method called without arguments', function () {
-                var event = {keyCode: 9},
+                var event = {
+                        keyCode: 9
+                    },
                     type = typeof obj.isTabKey(event);
 
                 expect(type).toEqual('boolean');
             });
             it('Must return false if pressed not tab key', function () {
-                var event = {keyCode: 9};
+                var event = {
+                    keyCode: 9
+                };
 
                 expect(obj.isTabKey(event)).toEqual(true);
             });
             it('Must return true if pressed tab key', function () {
-                var event = {keyCode: 33};
+                var event = {
+                    keyCode: 33
+                };
 
                 expect(obj.isTabKey(event)).toEqual(false);
-            });
-        });
-
-        describe('"initOptions" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('initOptions')).toBeDefined();
-            });
-            it('Check answer type', function () {
-                var type = typeof obj.initOptions;
-
-                expect(type).toEqual('function');
-            });
-            it('Check returned value if method called without arguments', function () {
-                expect(obj.initOptions()).toBeDefined();
-            });
-            it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.initOptions();
-
-                expect(type).toEqual('object');
-            });
-            it('Check "this.optionsConfig.options" property', function () {
-                obj.optionsConfig.options = null;
-                obj.initOptions();
-                expect(obj.optionsConfig.options).toEqual([]);
             });
         });
 
@@ -169,11 +150,6 @@ define([
                 var type = typeof obj.cleanHoveredElement();
 
                 expect(type).toEqual('object');
-            });
-            it('Check changes "this.hoverElIndex" observe variable', function () {
-                obj.hoverElIndex(5);
-                obj.cleanHoveredElement();
-                expect(obj.hoverElIndex()).toEqual(null);
             });
         });
         describe('"isSelected" method', function () {
@@ -212,10 +188,6 @@ define([
                 var type = typeof obj.isHovered();
 
                 expect(type).toEqual('boolean');
-            });
-            it('Must return false if "hoverElIndex" does not equal value', function () {
-                obj.hoverElIndex(1);
-                expect(obj.isHovered(2)).toEqual(false);
             });
         });
         describe('"toggleListVisible" method', function () {
@@ -256,57 +228,37 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called without arguments', function () {
-                var data = {value: 'label'};
+                var data = {
+                    value: 'label'
+                };
 
                 expect(obj.toggleOptionSelected(data)).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var data = {value: 'label'},
+                var data = {
+                    value: 'label'
+                },
                     type = typeof obj.toggleOptionSelected(data);
 
                 expect(type).toEqual('object');
             });
             it('Transmitted value must be in "selected" array if "selected" array has not this value', function () {
-                var data = {value: 'label'};
+                var data = {
+                    value: 'label'
+                };
 
                 obj.value(['magento']);
                 obj.toggleOptionSelected(data);
                 expect(obj.value()[1]).toEqual(data.value);
             });
             it('Transmitted value must be removed in "selected" array if "selected" array has this value', function () {
-                var data = {value: 'label'};
+                var data = {
+                    value: 'label'
+                };
 
                 obj.value(['label']);
                 obj.toggleOptionSelected(data);
                 expect(obj.value()).toEqual([]);
-            });
-        });
-        describe('"onHoveredIn" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('onHoveredIn')).toBeDefined();
-            });
-            it('Check answer type', function () {
-                var type = typeof obj.onHoveredIn;
-
-                expect(type).toEqual('function');
-            });
-            it('Observe variable "hoverElIndex" must have transmitted value', function () {
-                obj.onHoveredIn({}, 5);
-                expect(obj.hoverElIndex()).toEqual(5);
-            });
-        });
-        describe('"onHoveredOut" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('onHoveredOut')).toBeDefined();
-            });
-            it('Check answer type', function () {
-                var type = typeof obj.onHoveredOut;
-
-                expect(type).toEqual('function');
-            });
-            it('Observe variable "hoverElIndex" must be null', function () {
-                obj.onHoveredOut();
-                expect(obj.hoverElIndex()).toEqual(null);
             });
         });
         describe('"onFocusIn" method', function () {
@@ -319,7 +271,7 @@ define([
                 expect(type).toEqual('function');
             });
             it('Observe variable "multiselectFocus" must be true', function () {
-                obj.onFocusIn();
+                obj.onFocusIn({}, {});
                 expect(obj.multiselectFocus()).toEqual(true);
             });
         });
@@ -351,14 +303,6 @@ define([
                 obj.enterKeyHandler();
                 expect(obj.listVisible()).toEqual(true);
             });
-            it('if list visible is true, method "toggleOptionSelected" must be called with argument', function () {
-                obj.listVisible(true);
-                obj.hoverElIndex(0);
-                obj.options(['magento']);
-                obj.toggleOptionSelected = jasmine.createSpy();
-                obj.enterKeyHandler();
-                expect(obj.toggleOptionSelected).toHaveBeenCalledWith('magento');
-            });
         });
         describe('"escapeKeyHandler" method', function () {
             it('Check for defined ', function () {
@@ -388,23 +332,6 @@ define([
 
                 expect(type).toEqual('function');
             });
-            it('If "hoverElIndex" is null - "hoverElIndex" must be 0', function () {
-                obj.hoverElIndex(null);
-                obj.pageDownKeyHandler();
-                expect(obj.hoverElIndex()).toEqual(0);
-            });
-            it('If "hoverElIndex" is number - "hoverElIndex" must be number + 1', function () {
-                obj.hoverElIndex(1);
-                obj.options(['one', 'two', 'three']);
-                obj.pageDownKeyHandler();
-                expect(obj.hoverElIndex()).toEqual(2);
-            });
-            it('If "hoverElIndex" is number and number === options length -1, "hoverElIndex" must be 0', function () {
-                obj.hoverElIndex(1);
-                obj.options(['one', 'two']);
-                obj.pageDownKeyHandler();
-                expect(obj.hoverElIndex()).toEqual(0);
-            });
         });
         describe('"pageUpKeyHandler" method', function () {
             it('Check for defined ', function () {
@@ -414,24 +341,6 @@ define([
                 var type = typeof obj.pageUpKeyHandler;
 
                 expect(type).toEqual('function');
-            });
-            it('If "hoverElIndex" is null - "hoverElIndex" must be option length -1', function () {
-                obj.hoverElIndex(null);
-                obj.options(['one', 'two']);
-                obj.pageUpKeyHandler();
-                expect(obj.hoverElIndex()).toEqual(1);
-            });
-            it('If "hoverElIndex" is 0 - "hoverElIndex" must be option length -1', function () {
-                obj.hoverElIndex(0);
-                obj.options(['one', 'two']);
-                obj.pageUpKeyHandler();
-                expect(obj.hoverElIndex()).toEqual(1);
-            });
-            it('If "hoverElIndex" is number - "hoverElIndex" must be number - 1', function () {
-                obj.hoverElIndex(2);
-                obj.options(['one', 'two']);
-                obj.pageUpKeyHandler();
-                expect(obj.hoverElIndex()).toEqual(1);
             });
         });
         describe('"keydownSwitcher" method', function () {
@@ -445,31 +354,43 @@ define([
             });
             it('If press enter key must be called "enterKeyHandler" method', function () {
                 obj.enterKeyHandler = jasmine.createSpy();
-                obj.keydownSwitcher({}, {keyCode: 13});
+                obj.keydownSwitcher({}, {
+                    keyCode: 13
+                });
                 expect(obj.enterKeyHandler).toHaveBeenCalled();
             });
             it('If press escape key must be called "escapeKeyHandler" method', function () {
                 obj.escapeKeyHandler = jasmine.createSpy();
-                obj.keydownSwitcher({}, {keyCode: 27});
+                obj.keydownSwitcher({}, {
+                    keyCode: 27
+                });
                 expect(obj.escapeKeyHandler).toHaveBeenCalled();
             });
             it('If press space key must be called "enterKeyHandler" method', function () {
                 obj.enterKeyHandler = jasmine.createSpy();
-                obj.keydownSwitcher({}, {keyCode: 32});
+                obj.keydownSwitcher({}, {
+                    keyCode: 32
+                });
                 expect(obj.enterKeyHandler).toHaveBeenCalled();
             });
             it('If press pageup key must be called "pageUpKeyHandler" method', function () {
                 obj.pageUpKeyHandler = jasmine.createSpy();
-                obj.keydownSwitcher({}, {keyCode: 38});
+                obj.keydownSwitcher({}, {
+                    keyCode: 38
+                });
                 expect(obj.pageUpKeyHandler).toHaveBeenCalled();
             });
             it('If press pagedown key must be called "pageDownKeyHandler" method', function () {
                 obj.pageDownKeyHandler = jasmine.createSpy();
-                obj.keydownSwitcher({}, {keyCode: 40});
+                obj.keydownSwitcher({}, {
+                    keyCode: 40
+                });
                 expect(obj.pageDownKeyHandler).toHaveBeenCalled();
             });
             it('If object have not transmitted property must returned true', function () {
-                expect(obj.keydownSwitcher({}, {keyCode: 88})).toEqual(true);
+                expect(obj.keydownSwitcher({}, {
+                    keyCode: 88
+                })).toEqual(true);
             });
         });
         describe('"setCaption" method', function () {
@@ -537,10 +458,18 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value if selected', function () {
-                obj.cacheOptions = [{value: 'magento'}, {value: 'magento2'}];
+                obj.cacheOptions.plain = [{
+                    value: 'magento'
+                }, {
+                    value: 'magento2'
+                }];
                 obj.value(['magento', 'magento2']);
 
-                expect(obj.getSelected()).toEqual([{value: 'magento'}, {value: 'magento2'}]);
+                expect(obj.getSelected()).toEqual([{
+                    value: 'magento'
+                }, {
+                    value: 'magento2'
+                }]);
             });
             it('Check returned value type if method called without arguments', function () {
                 var type = typeof obj.getSelected();

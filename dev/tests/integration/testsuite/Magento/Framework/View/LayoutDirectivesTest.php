@@ -2,7 +2,7 @@
 /**
  * Set of tests of layout directives handling behavior
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
@@ -196,6 +196,18 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($layout->getBlock('no_name2'));
         $this->assertFalse($layout->getBlock('child_block1'));
         $this->assertTrue($layout->isBlock('child_block2'));
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testRemoveCancellation()
+    {
+        $layout = $this->_getLayoutModel('remove_cancellation.xml');
+        $this->assertTrue($layout->isContainer('container1'));
+        $this->assertTrue($layout->isBlock('child_block1'));
+        $this->assertTrue($layout->isBlock('no_name2'));
+        $this->assertFalse($layout->getBlock('not_exist'));
     }
 
     /**

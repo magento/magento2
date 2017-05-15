@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@
 
 /** @var $block \Magento\Framework\View\Element\Template */
 
+$parentBlock = $block->getParentBlock();
 $track = $block->getData('track');
 $email = $block->getData('storeSupportEmail');
 $fields = [
@@ -18,14 +19,15 @@ $fields = [
     'Service Type' => 'getService',
     'Weight' => 'getWeight',
 ];
+$number = is_object($track) ? $track->getTracking() : $track['number'];
 ?>
-<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $track->getTracking(); ?>">
+<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $number; ?>">
     <caption class="table-caption"><?php echo $block->escapeHtml(__('Order tracking')); ?></caption>
     <tbody>
     <?php if (is_object($track)): ?>
         <tr>
             <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Tracking Number:')); ?></th>
-            <td class="col value"><?php echo $block->escapeHtml($track->getTracking()); ?></td>
+            <td class="col value"><?php echo $block->escapeHtml($number); ?></td>
         </tr>
         <?php if ($track->getCarrierTitle()): ?>
             <tr>
@@ -38,8 +40,8 @@ $fields = [
                 <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Error:')); ?></th>
                 <td class="col error">
                     <?php echo $block->escapeHtml(__('Tracking information is currently not available. Please ')); ?>
-                    <?php if ($block->getContactUsEnabled()) : ?>
-                        <a href="<?php echo $block->escapeUrl($block->getContactUs()); ?>" target="_blank"
+                    <?php if ($parentBlock->getContactUsEnabled()) : ?>
+                        <a href="<?php echo $block->escapeUrl($parentBlock->getContactUs()); ?>" target="_blank"
                            title="<?php echo $block->escapeHtml(__('contact us')); ?>">
                             <?php echo $block->escapeHtml(__('contact us')); ?>
                         </a>
@@ -77,7 +79,7 @@ $fields = [
                 <tr>
                     <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Delivered on:')); ?></th>
                     <td class="col value">
-                        <?php /* @noEscape */ echo $block->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?>
+                        <?php /* @noEscape */ echo $parentBlock->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?>
                     </td>
                 </tr>
             <?php endif; ?>

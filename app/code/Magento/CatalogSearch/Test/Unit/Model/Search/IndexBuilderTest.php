@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
+
+use \Magento\Framework\Search\Request\QueryInterface;
+use \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\IndexBuilder
@@ -57,6 +60,16 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scopeInterface;
+
+    /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerStockFrontendResource;
+
+    /**
+     * @var FullTextSearchCheck|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fullTextSearchCheckMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -150,6 +163,24 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
             ->getMock();
 
+        $this->indexerStockFrontendResource = $this
+            ->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->indexerStockFrontendResource->expects($this->any())
+            ->method('getMainTable')
+            ->willReturn('cataloginventory_stock_status');
+
+        $this->fullTextSearchCheckMock = $this->getMockBuilder(
+            \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck::class
+        )->disableOriginalConstructor()
+        ->setMethods(['isRequiredForQuery'])
+        ->getMock();
+
+        $this->fullTextSearchCheckMock->expects($this->any())
+            ->method('isRequiredForQuery')
+            ->willReturn(true);
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->target = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Search\IndexBuilder::class,
@@ -160,7 +191,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver,
                 'tableMapper' => $this->tableMapper,
-                'dimensionScopeResolver' => $this->dimensionScopeResolver
+                'dimensionScopeResolver' => $this->dimensionScopeResolver,
+                'indexerStockFrontendResource' => $this->indexerStockFrontendResource,
+                'fullTextSearchCheck' => $this->fullTextSearchCheckMock
             ]
         );
 
@@ -186,6 +219,13 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->exactly(2))
             ->method('getDimensions')
             ->willReturn([]);
+
+        $queryMock = $this->getMockBuilder(QueryInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->request->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($queryMock);
 
         $result = $this->target->build($this->request);
         $this->assertSame($this->select, $result);
@@ -238,6 +278,13 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with('stock_index.stock_status = ?', 1)
             ->will($this->returnSelf());
+
+        $queryMock = $this->getMockBuilder(QueryInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->request->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($queryMock);
 
         $result = $this->target->build($this->request);
         $this->assertSame($this->select, $result);

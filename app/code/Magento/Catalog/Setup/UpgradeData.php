@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script
- * @codeCoverageIgnore
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
@@ -35,20 +35,32 @@ class UpgradeData implements UpgradeDataInterface
     private $eavSetupFactory;
 
     /**
-     * Init
+     * @var UpgradeWidgetData
+     */
+    private $upgradeWidgetData;
+
+    /**
+     * Constructor
      *
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
+     * @param UpgradeWidgetData $upgradeWidgetData
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        CategorySetupFactory $categorySetupFactory,
+        EavSetupFactory $eavSetupFactory,
+        UpgradeWidgetData $upgradeWidgetData
+    ) {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->upgradeWidgetData = $upgradeWidgetData;
     }
 
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -340,10 +352,10 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
-        
+
         if (version_compare($context->getVersion(), '2.0.7') < 0) {
-            /** @var EavSetup $eavSetupF */
-            $eavSetup= $this->eavSetupFactory->create(['setup' => $setup]);
+            /** @var EavSetup $eavSetup */
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
             $eavSetup->updateAttribute(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
@@ -353,7 +365,62 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
-        
+
+        if (version_compare($context->getVersion(), '2.1.3') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $this->changePriceAttributeDefaultScope($categorySetup);
+        }
+
+        if (version_compare($context->getVersion(), '2.1.5') < 0) {
+            $this->dissallowUsingHtmlForProductName($setup);
+        }
+
+        if ($context->getVersion() && version_compare($context->getVersion(), '2.2.1') < 0) {
+            $this->upgradeWidgetData->upgrade();
+        }
         $setup->endSetup();
+    }
+
+    /**
+     * Set to 'No' 'Is Allowed Html on Store Front' option on product name attribute, because product name
+     * is multi entity field (used in order, quote) and cannot be conditionally escaped in all places
+     *
+     * @param ModuleDataSetupInterface $categorySetup
+     * @return void
+     */
+    private function dissallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
+    {
+        /** @var CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'name');
+
+        $setup->getConnection()
+            ->update(
+                $setup->getTable('catalog_eav_attribute'),
+                ['is_html_allowed_on_front' => 0],
+                $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            );
+    }
+
+    /**
+     * @param \Magento\Catalog\Setup\CategorySetup $categorySetup
+     * @return void
+     */
+    private function changePriceAttributeDefaultScope($categorySetup)
+    {
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        foreach (['price', 'cost', 'special_price'] as $attributeCode) {
+            $attribute = $categorySetup->getAttribute($entityTypeId, $attributeCode);
+            if (isset($attribute['attribute_id'])) {
+                $categorySetup->updateAttribute(
+                    $entityTypeId,
+                    $attribute['attribute_id'],
+                    'is_global',
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+                );
+            }
+        }
     }
 }

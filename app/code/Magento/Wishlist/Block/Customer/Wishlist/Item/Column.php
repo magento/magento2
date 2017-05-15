@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 /**
  * Wishlist block customer item column
  *
+ * @api
  * @method \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface getItem()
  */
 class Column extends \Magento\Wishlist\Block\AbstractBlock

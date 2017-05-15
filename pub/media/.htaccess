@@ -11,6 +11,10 @@ php_flag engine 0
 AddHandler cgi-script .php .pl .py .jsp .asp .htm .shtml .sh .cgi
 Options -ExecCGI
 
+<FilesMatch ".+\.(ph(p[3457]?|t|tml)|[aj]sp|p[ly]|sh|cgi|shtml?|html?)$">
+SetHandler default-handler
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 
 ############################################

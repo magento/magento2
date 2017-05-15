@@ -2,12 +2,12 @@
 /**
  * Application config file resolver
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Module\Dir\Reader as DirReader;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
@@ -24,7 +24,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
     /**
      * Module configuration file reader
      *
-     * @var \Magento\Framework\Module\Dir\Reader
+     * @var DirReader
      */
     protected $moduleReader;
 
@@ -54,7 +54,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
     protected $resolver;
 
     /**
-     * @param Reader $moduleReader
+     * @param DirReader $moduleReader
      * @param FileIteratorFactory $iteratorFactory
      * @param DesignInterface $designInterface
      * @param DirectoryList $directoryList
@@ -62,7 +62,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
      * @param ResolverInterface $resolver
      */
     public function __construct(
-        Reader $moduleReader,
+        DirReader $moduleReader,
         FileIteratorFactory $iteratorFactory,
         DesignInterface $designInterface,
         DirectoryList $directoryList,

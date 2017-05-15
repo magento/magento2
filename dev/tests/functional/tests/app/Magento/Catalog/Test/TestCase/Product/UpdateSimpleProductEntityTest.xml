@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -134,16 +134,52 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
         </variation>
-        <variation name="EditSimpleProductTestVariation10">
-            <data name="description" xsi:type="string">Edit product with enabled flat</data>
+        <variation name="EditSimpleProductTestVariation10" summary="Edit product with enabled flat" ticketId="MAGETWO-21125">
             <data name="configData" xsi:type="string">product_flat</data>
             <data name="initialProduct/dataset" xsi:type="string">simple_10_dollar</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
             <data name="product/data/attribute_set_id/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
+        </variation>
+        <variation name="EditSimpleProductTestVariation11" summary="Update simple product with custom option">
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">245.00</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">200</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price</data>
+            <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_percent_price</data>
+            <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
+            <data name="product/data/weight" xsi:type="string">120.0000</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
+        </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation12" summary="Verify data overriding on Store View level" ticketId="MAGETWO-50640">
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNameOnDifferentStoreViews" />
+        </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation13" summary="Price overriding on Store View level" ticketId="MAGETWO-58861">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="configData" xsi:type="string">price_scope_website</data>
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="product/data/use_default_price" xsi:type="string">No</data>
+            <data name="product/data/price/value" xsi:type="string">9.99</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPriceOnDifferentStoreViews" />
+        </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation14" summary="An error appears on open tier price with locale formatting" ticketId="MAGETWO-62076">
+            <data name="initialProduct/dataset" xsi:type="string">simple_with_hight_tier_price</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductFormattingTierPrice" />
         </variation>
     </testCase>
 </config>

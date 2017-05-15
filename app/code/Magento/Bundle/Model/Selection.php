@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
@@ -28,6 +28,7 @@ namespace Magento\Bundle\Model;
  * @method \Magento\Bundle\Model\Selection setSelectionQty(float $value)
  * @method int getSelectionCanChangeQty()
  * @method \Magento\Bundle\Model\Selection setSelectionCanChangeQty(int $value)
+ * @api
  */
 class Selection extends \Magento\Framework\Model\AbstractModel
 {

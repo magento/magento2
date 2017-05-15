@@ -1,70 +1,66 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
-define(
-    [
-        'jquery',
-        'uiComponent',
-        'Magento_Ui/js/model/messageList'
-    ],
-    function ($, Component, messageList) {
-        'use strict';
 
-        return Component.extend({
-            defaults: {
-                template: 'Magento_Checkout/registration',
-                accountCreated: false,
-                creationStarted: false,
-                isFormVisible: true
-            },
+define([
+    'jquery',
+    'uiComponent',
+    'Magento_Ui/js/model/messageList'
+], function ($, Component, messageList) {
+    'use strict';
 
-            /**
-             * Initialize observable properties
-             */
-            initObservable: function () {
-                this._super()
-                    .observe('accountCreated')
-                    .observe('isFormVisible')
-                    .observe('creationStarted');
+    return Component.extend({
+        defaults: {
+            template: 'Magento_Checkout/registration',
+            accountCreated: false,
+            creationStarted: false,
+            isFormVisible: true
+        },
 
-                return this;
-            },
+        /**
+         * @inheritdoc
+         */
+        initObservable: function () {
+            this._super()
+                .observe('accountCreated')
+                .observe('isFormVisible')
+                .observe('creationStarted');
 
-            /**
-             * @return {*}
-             */
-            getEmailAddress: function () {
-                return this.email;
-            },
+            return this;
+        },
 
-            /**
-             * Create new user account
-             */
-            createAccount: function () {
-                this.creationStarted(true);
-                $.post(
-                    this.registrationUrl
-                ).done(
-                    function (response) {
+        /**
+         * @return {*}
+         */
+        getEmailAddress: function () {
+            return this.email;
+        },
 
-                        if (response.errors == false) {
-                            this.accountCreated(true)
-                        } else {
-                            messageList.addErrorMessage(response);
-                        }
-                        this.isFormVisible(false);
-                    }.bind(this)
-                ).fail(
-                    function (response) {
-                        this.accountCreated(false)
-                        this.isFormVisible(false);
+        /**
+         * Create new user account
+         */
+        createAccount: function () {
+            this.creationStarted(true);
+            $.post(
+                this.registrationUrl
+            ).done(
+                function (response) {
+
+                    if (response.errors == false) { //eslint-disable-line eqeqeq
+                        this.accountCreated(true);
+                    } else {
                         messageList.addErrorMessage(response);
-                    }.bind(this)
-                );
-            }
-        });
-    }
-);
+                    }
+                    this.isFormVisible(false);
+                }.bind(this)
+            ).fail(
+                function (response) {
+                    this.accountCreated(false);
+                    this.isFormVisible(false);
+                    messageList.addErrorMessage(response);
+                }.bind(this)
+            );
+        }
+    });
+});

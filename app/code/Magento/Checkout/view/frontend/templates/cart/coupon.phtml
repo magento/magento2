@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@
                                                "removeCouponSelector": "#remove-coupon",
                                                "applyButton": "button.action.apply",
                                                "cancelButton": "button.action.cancel"}}'>
-            <div class="fieldset coupon<?php strlen($block->getCouponCode()) ? ' applied' : ''?>">
+            <div class="fieldset coupon<?php echo strlen($block->getCouponCode()) ? ' applied' : ''?>">
                 <input type="hidden" name="remove" id="remove-coupon" value="0" />
                 <div class="field">
                     <label for="coupon_code" class="label"><span><?php /* @escapeNotVerified */ echo __('Enter discount code') ?></span></label>

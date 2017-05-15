@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -17,7 +17,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
     public function testGetItems()
     {
-        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $testAttributeCode = 'quantity_and_stock_status';
         $expectedOptions = [
             [
@@ -50,10 +49,10 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
+     * @dataProvider addDataProvider
      */
-    public function testAdd()
+    public function testAdd($optionData)
     {
-        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $testAttributeCode = 'select_attribute';
         $serviceInfo = [
             'rest' => [
@@ -64,18 +63,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
                 'operation' => self::SERVICE_NAME . 'add',
-            ],
-        ];
-
-        $optionData = [
-            AttributeOptionInterface::LABEL => 'new color',
-            AttributeOptionInterface::SORT_ORDER => 100,
-            AttributeOptionInterface::IS_DEFAULT => true,
-            AttributeOptionInterface::STORE_LABELS => [
-                [
-                    AttributeOptionLabelInterface::LABEL => 'DE label',
-                    AttributeOptionLabelInterface::STORE_ID => 1,
-                ],
             ],
         ];
 
@@ -97,11 +84,42 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * @return array
+     */
+    public function addDataProvider()
+    {
+        $optionPayload = [
+            AttributeOptionInterface::LABEL => 'new color',
+            AttributeOptionInterface::SORT_ORDER => 100,
+            AttributeOptionInterface::IS_DEFAULT => true,
+            AttributeOptionInterface::STORE_LABELS => [
+                [
+                    AttributeOptionLabelInterface::LABEL => 'DE label',
+                    AttributeOptionLabelInterface::STORE_ID => 1,
+                ],
+            ],
+            AttributeOptionInterface::VALUE => ''
+        ];
+
+        return [
+            'option_without_value_node' => [
+                $optionPayload
+            ],
+            'option_with_value_node_that_starts_with_text' => [
+                array_merge($optionPayload, [AttributeOptionInterface::VALUE => 'some_text'])
+            ],
+            'option_with_value_node_that_starts_with_a_number' => [
+                array_merge($optionPayload, [AttributeOptionInterface::VALUE => '123_some_text'])
+            ],
+
+        ];
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
      */
     public function testDelete()
     {
-        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $attributeCode = 'select_attribute';
         //get option Id
         $optionList = $this->getAttributeOptions($attributeCode);

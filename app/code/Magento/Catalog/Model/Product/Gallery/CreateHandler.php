@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Create handler for catalog product gallery
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -57,6 +59,11 @@ class CreateHandler implements ExtensionInterface
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $fileStorageDb;
+
+    /**
+     * @var array
+     */
+    private $mediaAttributeCodes;
 
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
@@ -145,9 +152,11 @@ class CreateHandler implements ExtensionInterface
         }
 
         /* @var $mediaAttribute \Magento\Catalog\Api\Data\ProductAttributeInterface */
-        foreach ($this->mediaConfig->getMediaAttributeCodes() as $mediaAttrCode) {
+        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
             $attrData = $product->getData($mediaAttrCode);
-
+            if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
+                continue;
+            }
             if (in_array($attrData, $clearImages)) {
                 $product->setData($mediaAttrCode, 'no_selection');
             }
@@ -157,15 +166,16 @@ class CreateHandler implements ExtensionInterface
                 $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
             }
 
-            if (in_array($attrData, array_keys($existImages))) {
+            if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
-
-            $product->addAttributeUpdate(
-                $mediaAttrCode,
-                $product->getData($mediaAttrCode),
-                $product->getStoreId()
-            );
+            if (!empty($product->getData($mediaAttrCode))) {
+                $product->addAttributeUpdate(
+                    $mediaAttrCode,
+                    $product->getData($mediaAttrCode),
+                    $product->getStoreId()
+                );
+            }
         }
 
         $product->setData($attrCode, $value);
@@ -287,7 +297,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 
@@ -392,5 +402,18 @@ class CreateHandler implements ExtensionInterface
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
             );
         }
+    }
+
+    /**
+     * Get Media Attribute Codes cached value
+     *
+     * @return array
+     */
+    private function getMediaAttributeCodes()
+    {
+        if ($this->mediaAttributeCodes === null) {
+            $this->mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
+        }
+        return $this->mediaAttributeCodes;
     }
 }

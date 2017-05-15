@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -9,6 +9,10 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
+ * Customer entity import
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Customer extends AbstractCustomer
@@ -370,10 +374,6 @@ class Customer extends AbstractCustomer
 
         // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
-            if ($newCustomer && !strlen($value)) {
-                continue;
-            }
-
             $attributeParameters = $this->_attributes[$attributeCode];
             if ('select' == $attributeParameters['type']) {
                 $value = isset($attributeParameters['options'][strtolower($value)])
@@ -573,11 +573,11 @@ class Customer extends AbstractCustomer
      */
     public function getValidColumnNames()
     {
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
+        return array_unique(
+            array_merge(
+                $this->validColumnNames,
+                $this->customerFields
+            )
         );
-
-        return $this->validColumnNames;
     }
 }

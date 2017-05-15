@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,5 +18,9 @@
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="ProcessPaymentVaultConfiguration" type="Magento\Vault\Plugin\PaymentVaultConfigurationProcess"/>
+        <plugin name="ProcessPaymentConfiguration" disabled="true"/>
     </type>
 </config>

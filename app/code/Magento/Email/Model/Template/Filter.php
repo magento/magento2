@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -14,6 +14,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 /**
  * Core Email Template Filter Model
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -217,31 +218,6 @@ class Filter extends \Magento\Framework\Filter\Template
     }
 
     /**
-     * @deprecated
-     * @return Css\Processor
-     */
-    private function getCssProcessor()
-    {
-        if (!$this->cssProcessor) {
-            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
-        }
-        return $this->cssProcessor;
-    }
-
-    /**
-     * @deprecated
-     * @param string $dirType
-     * @return ReadInterface
-     */
-    private function getPubDirectory($dirType)
-    {
-        if (!$this->pubDirectory) {
-            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
-        }
-        return $this->pubDirectory;
-    }
-
-    /**
      * Set use absolute links flag
      *
      * @param bool $flag
@@ -331,6 +307,31 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->designParams = $designParams;
         return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return Css\Processor
+     */
+    private function getCssProcessor()
+    {
+        if (!$this->cssProcessor) {
+            $this->cssProcessor = ObjectManager::getInstance()->get(Css\Processor::class);
+        }
+        return $this->cssProcessor;
+    }
+
+    /**
+     * @deprecated
+     * @param string $dirType
+     * @return ReadInterface
+     */
+    private function getPubDirectory($dirType)
+    {
+        if (!$this->pubDirectory) {
+            $this->pubDirectory = ObjectManager::getInstance()->get(Filesystem::class)->getDirectoryRead($dirType);
+        }
+        return $this->pubDirectory;
     }
 
     /**
@@ -1018,7 +1019,7 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this email.");
+                $value = __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }

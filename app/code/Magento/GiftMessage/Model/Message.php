@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
@@ -10,6 +10,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 /**
  * Gift Message model
  *
+ * @api
  * @method \Magento\GiftMessage\Model\ResourceModel\Message _getResource()
  * @method \Magento\GiftMessage\Model\ResourceModel\Message getResource()
  *
@@ -186,5 +187,6 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

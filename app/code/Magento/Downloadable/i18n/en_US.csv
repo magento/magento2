@@ -44,7 +44,7 @@ inline,inline
 Pending,Pending
 Invoiced,Invoiced
 "To enable the option set the weight to no","To enable the option set the weight to no"
-"Is this downloadable Product?","Is this downloadable Product?"
+"Is this a downloadable Product?","Is this a downloadable Product?"
 Links,Links
 Title,Title
 "Links can be purchased separately","Links can be purchased separately"

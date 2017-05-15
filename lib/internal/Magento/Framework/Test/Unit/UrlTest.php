@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Test\Unit;
+
+use Magento\Framework\Url\HostChecker;
 
 /**
  * Test class for Magento\Framework\Url
@@ -58,6 +58,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlModifier;
+
+    /**
+     * @var HostChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $hostChecker;
 
     protected function setUp()
     {
@@ -119,7 +124,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         );
         if ($resolve) {
             $routeParamsResolverFactoryMock->expects($this->once())->method('create')
-                    ->will($this->returnValue($this->routeParamsResolverMock));
+                ->will($this->returnValue($this->routeParamsResolverMock));
         }
         return $routeParamsResolverFactoryMock;
     }
@@ -283,6 +288,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
+
+        $this->urlModifier->expects($this->exactly(1))->method('execute');
 
         $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
     }
@@ -549,18 +556,17 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $result
-     * @param string $baseUrl
      * @param string $referrer
      * @dataProvider isOwnOriginUrlDataProvider
      */
-    public function testIsOwnOriginUrl($result, $baseUrl, $referrer)
+    public function testIsOwnOriginUrl($result, $referrer)
     {
         $requestMock = $this->getRequestMock();
-        $model = $this->getUrlModel(['scopeResolver' => $this->scopeResolverMock, 'request' => $requestMock]);
+        $this->hostChecker = $this->getMockBuilder(HostChecker::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->hostChecker->expects($this->once())->method('isOwnOrigin')->with($referrer)->willReturn($result);
+        $model = $this->getUrlModel(['hostChecker' => $this->hostChecker, 'request' => $requestMock]);
 
-        $this->scopeMock->expects($this->any())->method('getBaseUrl')->will($this->returnValue($baseUrl));
-        $this->scopeResolverMock->expects($this->any())->method('getScopes')
-            ->will($this->returnValue([$this->scopeMock]));
         $requestMock->expects($this->once())->method('getServer')->with('HTTP_REFERER')
             ->will($this->returnValue($referrer));
 
@@ -570,8 +576,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function isOwnOriginUrlDataProvider()
     {
         return [
-            'is origin url' => [true, 'http://localhost/', 'http://localhost/'],
-            'is not origin url' => [false, 'http://localhost/', 'http://example.com/'],
+            'is origin url' => [true, 'http://localhost/'],
+            'is not origin url' => [false, 'http://example.com/'],
         ];
     }
 
@@ -642,7 +648,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 'web/secure/base_url_secure_forced',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->scopeMock
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $this->scopeMock
             )
             ->will($this->returnValue('http://localhost/'));
         $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')

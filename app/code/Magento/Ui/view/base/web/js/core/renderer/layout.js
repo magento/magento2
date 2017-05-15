@@ -1,20 +1,30 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'jquery',
     'mageUtils',
     'uiRegistry',
-    './types'
-], function (_, $, utils, registry, types) {
+    './types',
+    '../../lib/logger/console-logger'
+], function (_, $, utils, registry, types, consoleLogger) {
     'use strict';
 
     var templates = registry.create(),
         layout = {},
         cachedConfig = {};
 
+    /**
+     * Build name from parent name and node name
+     *
+     * @param {Object} parent
+     * @param {Object} node
+     * @param {String} [name]
+     * @returns {String}
+     */
     function getNodeName(parent, node, name) {
         var parentName = parent && parent.name;
 
@@ -25,10 +35,24 @@ define([
         return utils.fullPath(parentName, name);
     }
 
+    /**
+     * Get node type from node or parent.
+     *
+     * @param {Object} parent
+     * @param {Object} node
+     * @returns {String}
+     */
     function getNodeType(parent, node) {
         return node.type || parent && parent.childType;
     }
 
+    /**
+     * Get data scope based on parent data scope and node data scope.
+     *
+     * @param {Object} parent
+     * @param {Object} node
+     * @returns {String}
+     */
     function getDataScope(parent, node) {
         var dataScope = node.dataScope,
             parentScope = parent && parent.dataScope;
@@ -40,8 +64,32 @@ define([
             dataScope || '';
     }
 
+    /**
+     * Load node dependencies on other instances.
+     *
+     * @param {Object} node
+     * @returns {jQueryPromise}
+     */
     function loadDeps(node) {
-        var loaded = $.Deferred();
+        var loaded = $.Deferred(),
+            loggerUtils = consoleLogger.utils;
+
+        if (node.deps) {
+            consoleLogger.utils.asyncLog(
+                loaded,
+                {
+                    data: {
+                        component: node.name,
+                        deps: node.deps
+                    },
+                    messages: loggerUtils.createMessages(
+                        'depsStartRequesting',
+                        'depsFinishRequesting',
+                        'depsLoadingFail'
+                    )
+                }
+            );
+        }
 
         registry.get(node.deps, function (deps) {
             node.provider = node.extendProvider ? deps && deps.name : node.provider;
@@ -51,23 +99,60 @@ define([
         return loaded.promise();
     }
 
+    /**
+     * Load node component file via requirejs.
+     *
+     * @param {Object} node
+     * @returns {jQueryPromise}
+     */
     function loadSource(node) {
         var loaded = $.Deferred(),
             source = node.component;
 
+        consoleLogger.info('componentStartLoading', {
+            component: node.component
+        });
+
         require([source], function (constr) {
+            consoleLogger.info('componentFinishLoading', {
+                component: node.component
+            });
             loaded.resolve(node, constr);
+        }, function () {
+            consoleLogger.error('componentLoadingFail', {
+                component: node.component
+            });
         });
 
         return loaded.promise();
     }
 
+    /**
+     * Create a new component instance and set it to the registry.
+     *
+     * @param {Object} node
+     * @param {Function} Constr
+     */
     function initComponent(node, Constr) {
         var component = new Constr(_.omit(node, 'children'));
+
+        consoleLogger.info('componentStartInitialization', {
+            component: node.component,
+            componentName: node.name
+        });
 
         registry.set(node.name, component);
     }
 
+    /**
+     * Application entry point.
+     *
+     * @param {Object} nodes
+     * @param {Object} parent
+     * @param {Boolean} cached
+     * @param {Boolean} merge
+     * @returns {Boolean|undefined}
+     */
     function run(nodes, parent, cached, merge) {
         if (_.isBoolean(merge) && merge) {
             layout.merge(nodes);
@@ -83,6 +168,12 @@ define([
     }
 
     _.extend(layout, {
+        /**
+         * Determines if node ready to be added or process it.
+         *
+         * @param {Object} parent
+         * @param {Object|String} node
+         */
         iterator: function (parent, node) {
             var action = _.isString(node) ?
                 this.addChild :
@@ -91,6 +182,14 @@ define([
             action.apply(this, arguments);
         },
 
+        /**
+         * Prepare component.
+         *
+         * @param {Object} parent
+         * @param {Object} node
+         * @param {String} name
+         * @returns {Object}
+         */
         process: function (parent, node, name) {
             if (!parent && node.parent) {
                 return this.waitParent(node, name);
@@ -115,6 +214,14 @@ define([
             return this;
         },
 
+        /**
+         * Detailed processing of component config.
+         *
+         * @param {Object} parent
+         * @param {Object} node
+         * @param {String} name
+         * @returns {Boolean|Object}
+         */
         build: function (parent, node, name) {
             var defaults    = parent && parent.childDefaults || {},
                 children    = node.children,
@@ -132,7 +239,7 @@ define([
             }
 
             if (node.config && node.config.deps || node.deps) {
-                extendDeps= false;
+                extendDeps = false;
             }
 
             node = utils.extend({
@@ -173,8 +280,8 @@ define([
                 node.isTemplate = false;
 
                 templates.set(node.name, node);
-                registry.get(node.parentName, function (parent) {
-                    parent.childTemplate = node;
+                registry.get(node.parentName, function (parentComp) {
+                    parentComp.childTemplate = node;
                 });
 
                 return false;
@@ -187,6 +294,12 @@ define([
             return node;
         },
 
+        /**
+         * Init component.
+         *
+         * @param {Object} node
+         * @returns {Object}
+         */
         initComponent: function (node) {
             if (!node.component) {
                 return this;
@@ -201,6 +314,13 @@ define([
     });
 
     _.extend(layout, {
+        /**
+         * Loading component marked as isTemplate.
+         *
+         * @param {Object} parent
+         * @param {Object} node
+         * @returns {Object}
+         */
         waitTemplate: function (parent, node) {
             var args = _.toArray(arguments);
 
@@ -211,6 +331,13 @@ define([
             return this;
         },
 
+        /**
+         * Waiting for parent component and process provided component.
+         *
+         * @param {Object} node
+         * @param {String} name
+         * @returns {Object}
+         */
         waitParent: function (node, name) {
             var process = this.process.bind(this);
 
@@ -221,6 +348,13 @@ define([
             return this;
         },
 
+        /**
+         * Processing component marked as isTemplate.
+         *
+         * @param {Object} parent
+         * @param {Object} node
+         * @param {String} name
+         */
         applyTemplate: function (parent, node, name) {
             var template = templates.get(node.nodeTemplate);
 
@@ -233,6 +367,12 @@ define([
     });
 
     _.extend(layout, {
+        /**
+         * Determines inserting strategy.
+         *
+         * @param {Object} node
+         * @returns {Object}
+         */
         manipulate: function (node) {
             var name = node.name;
 
@@ -251,6 +391,14 @@ define([
             return this;
         },
 
+        /**
+         * Insert component to provide target and position.
+         *
+         * @param {Object|String} item
+         * @param {Object} target
+         * @param {Number} position
+         * @returns {Object}
+         */
         insert: function (item, target, position) {
             registry.get(target, function (container) {
                 container.insertChild(item, position);
@@ -259,6 +407,13 @@ define([
             return this;
         },
 
+        /**
+         * Insert component into multiple targets.
+         *
+         * @param {Object} item
+         * @param {Array} targets
+         * @returns {Object}
+         */
         insertTo: function (item, targets) {
             _.each(targets, function (info, target) {
                 this.insert(item, target, info.position);
@@ -267,6 +422,13 @@ define([
             return this;
         },
 
+        /**
+         * Add provided child to parent.
+         *
+         * @param {Object} parent
+         * @param {Object|String} child
+         * @returns {Object}
+         */
         addChild: function (parent, child) {
             var name;
 
@@ -279,6 +441,11 @@ define([
             return this;
         },
 
+        /**
+         * Merge components configuration with cached configuration.
+         *
+         * @param {Array} components
+         */
         merge: function (components) {
             var cachedKey = _.keys(components)[0],
                 compared = utils.compare(cachedConfig[cachedKey], components),
@@ -331,10 +498,18 @@ define([
             run(components, undefined, true);
         },
 
+        /**
+         * Recursive dataSource assignment.
+         *
+         * @param {Object} config
+         * @param {String} parentPath
+         * @returns {Object}
+         */
         getDataSources: function (config, parentPath) {
             var dataSources = {},
                 key, obj;
 
+            /* eslint-disable no-loop-func, max-depth */
             for (key in config) {
                 if (config.hasOwnProperty(key)) {
                     if (
@@ -353,9 +528,18 @@ define([
                 }
             }
 
+            /* eslint-enable no-loop-func, max-depth */
+
             return dataSources;
         },
 
+        /**
+         * Configuration getter.
+         *
+         * @param {String} path
+         * @param {Object} config
+         * @returns {Boolean|Object}
+         */
         getFullConfig: function (path, config) {
             var index;
 
@@ -374,12 +558,29 @@ define([
             return config.config;
         },
 
+        /**
+         * Filter data by property and value.
+         *
+         * @param {Object} data
+         * @param {String} prop
+         * @param {*} propValue
+         */
         getByProperty: function (data, prop, propValue) {
             return _.filter(data, function (value) {
                 return value[prop] === propValue;
             });
         },
 
+        /**
+         * Filter components.
+         *
+         * @param {Array} data
+         * @param {Boolean} splitPath
+         * @param {Number} index
+         * @param {String} separator
+         * @param {String} keyName
+         * @returns {Array}
+         */
         filterComponents: function (data, splitPath, index, separator, keyName) {
             var result = [],
                 names, length;

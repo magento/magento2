@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-
-/**
- * Sign up for an alert when the product price changes grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
 
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Extended;
 
+/**
+ * Sign up for an alert when the product price changes grid
+ *
+ * @api
+ */
 class Stock extends Extended
 {
     /**

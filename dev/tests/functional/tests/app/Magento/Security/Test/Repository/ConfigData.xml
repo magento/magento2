@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -21,6 +21,14 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">10</item>
                 <item name="value" xsi:type="string">10</item>
+            </field>
+        </dataset>
+        <dataset name="default_required_character_classes_number">
+            <field name="customer/password/required_character_classes_number" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">10</item>
+                <item name="value" xsi:type="string">3</item>
             </field>
         </dataset>
         <dataset name="user_lockout_failures">

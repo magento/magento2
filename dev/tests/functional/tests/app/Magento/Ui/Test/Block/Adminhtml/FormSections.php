@@ -1,55 +1,32 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\ElementInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Is used to represent a new unified form with collapsible sections on the page.
+ * Is used to represent a new unified form with collapsible sections inside.
  */
 class FormSections extends AbstractFormContainers
 {
     /**
-     * CSS locator of the section collapsible title
+     * CSS locator of collapsed section.
      *
      * @var string
      */
-    protected $sectionTitle = '.fieldset-wrapper-title';
+    protected $collapsedSection = '[data-state-collapsible="closed"]';
 
     /**
-     * CSS locator of the section content
+     * CSS locator of expanded section.
      *
      * @var string
      */
-    protected $content = '.admin__fieldset-wrapper-content';
-
-    /**
-     * XPath locator of the collapsible fieldset
-     *
-     * @var string
-     */
-    protected $collapsible =
-        'div[contains(@class,"fieldset-wrapper")][contains(@class,"admin__collapsible-block-wrapper")]';
-
-    /**
-     * Locator for opened collapsible tab.
-     *
-     * @var string
-     */
-    protected $opened = '._show';
-
-    /**
-     * Locator for error messages.
-     *
-     * @var string
-     */
-    protected $errorMessages = '[data-ui-id="messages-message-error"]';
+    protected $expandedSection = '[data-state-collapsible="open"]';
 
     /**
      * Get Section class.
@@ -72,58 +49,44 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Get the section title element
-     *
-     * @param string $sectionName
-     * @return ElementInterface
-     */
-    protected function getSectionTitleElement($sectionName)
-    {
-        $container = $this->getContainerElement($sectionName);
-        return $container->find($this->sectionTitle);
-    }
-
-    /**
-     * Opens the section.
+     * Expand section by its name
      *
      * @param string $sectionName
      * @return $this
+     * @throws LocalizedException if section is not visible
      */
     public function openSection($sectionName)
     {
-        if ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName)) {
-            $this->getSectionTitleElement($sectionName)->click();
-        } else {
-            //Scroll to the top of the page so that the page actions header does not overlap any controls
-            $this->browser->find($this->header)->hover();
+        $container = $this->getContainerElement($sectionName);
+        if (!$container->isVisible()) {
+            throw new LocalizedException(__('Container is not found "' . $sectionName . '""'));
         }
+        $section = $container->find($this->collapsedSection);
+        if ($section->isVisible()) {
+            $section->click();
+        }
+
         return $this;
     }
 
     /**
-     * Checks if the section is collapsible on the form.
+     * Check if section is collapsible.
      *
+     * @deprecated
      * @param string $sectionName
      * @return bool
      */
     public function isCollapsible($sectionName)
     {
-        $title = $this->getSectionTitleElement($sectionName);
-        if (!$title->isVisible()) {
-            return false;
-        };
-        return $title->find('parent::' . $this->collapsible, Locator::SELECTOR_XPATH)->isVisible();
-    }
+        $section = $this->getContainerElement($sectionName);
 
-    /**
-     * Check if collapsible section is opened.
-     *
-     * @param string $sectionName
-     * @return bool
-     */
-    private function isCollapsed($sectionName)
-    {
-        return $this->getContainerElement($sectionName)->find($this->opened)->isVisible();
+        if ($section->find($this->collapsedSection)->isVisible()) {
+            return true;
+        } elseif ($section->find($this->expandedSection)->isVisible()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -151,11 +114,12 @@ class FormSections extends AbstractFormContainers
     /**
      * Check if section is visible.
      *
+     * @deprecated
      * @param string $sectionName
      * @return bool
      */
     public function isSectionVisible($sectionName)
     {
-        return ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName));
+        return !$this->getContainerElement($sectionName)->find($this->collapsedSection)->isVisible();
     }
 }

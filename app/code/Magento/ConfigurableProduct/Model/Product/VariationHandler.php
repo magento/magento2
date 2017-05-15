@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product;
@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class VariationHandler
 {
@@ -28,6 +29,9 @@ class VariationHandler
 
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
+
+    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[] */
+    private $attributes;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
@@ -70,6 +74,7 @@ class VariationHandler
     public function generateSimpleProducts($parentProduct, $productsData)
     {
         $generatedProductIds = [];
+        $this->attributes = null;
         $productsData = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
@@ -148,15 +153,22 @@ class VariationHandler
         \Magento\Catalog\Model\Product $parentProduct,
         $postData
     ) {
+        $typeId = isset($postData['weight']) && !empty($postData['weight'])
+            ? ProductType::TYPE_SIMPLE
+            : ProductType::TYPE_VIRTUAL;
+
         $product->setStoreId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
-            $postData['weight'] ? ProductType::TYPE_SIMPLE : ProductType::TYPE_VIRTUAL
+            $typeId
         )->setAttributeSetId(
             $parentProduct->getNewVariationsAttributeSetId()
         );
 
-        foreach ($product->getTypeInstance()->getSetAttributes($product) as $attribute) {
+        if ($this->attributes === null) {
+            $this->attributes = $product->getTypeInstance()->getSetAttributes($product);
+        }
+        foreach ($this->attributes as $attribute) {
             if ($attribute->getIsUnique() ||
                 $attribute->getAttributeCode() == 'url_key' ||
                 $attribute->getFrontend()->getInputType() == 'gallery' ||

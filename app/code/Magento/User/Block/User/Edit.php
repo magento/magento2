@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\User\Block\User;
 /**
  * User edit page
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -50,7 +51,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'label', __('Save User'));
         $this->buttonList->remove('delete');
 
-        $objId = $this->getRequest()->getParam($this->_objectId);
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
             $this->addButton(
@@ -58,12 +59,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Delete User'),
                     'class' => 'delete',
-                    'onclick' => sprintf(
-                        'deleteConfirm("%s", "%s", %s)',
-                        __('Are you sure you want to do this?'),
-                        $this->getUrl('adminhtml/*/delete'),
-                        json_encode(['data' => ['user_id' => $objId]])
-                    ),
+                    'data_attribute' => [
+                        'role' => 'delete-user'
+                    ]
                 ]
             );
 
@@ -77,6 +75,44 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
         }
+    }
+
+    /**
+     * Returns message that is displayed for admin when he deletes user from the system.
+     * To see this message admin must do the following:
+     * - open user's account for editing;
+     * - type current user's password in the "Current User Identity Verification" field
+     * - click "Delete User" at top left part of the page;
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getDeleteMessage()
+    {
+        return __('Are you sure you want to do this?');
+    }
+
+    /**
+     * Returns the URL that is used for user deletion.
+     * The following Action is executed if admin navigates to returned url
+     * Magento\User\Controller\Adminhtml\User\Delete
+     *
+     * @return string
+     */
+    public function getDeleteUrl()
+    {
+        return $this->getUrl('adminhtml/*/delete');
+    }
+
+    /**
+     * This method is used to get the ID of the user who's account the Admin is editing.
+     * It can be used to determine the reason Admin opens the page:
+     * to create a new user account OR to edit the previously created user account
+     *
+     * @return int
+     */
+    public function getObjectId()
+    {
+        return (int)$this->getRequest()->getParam($this->_objectId);
     }
 
     /**

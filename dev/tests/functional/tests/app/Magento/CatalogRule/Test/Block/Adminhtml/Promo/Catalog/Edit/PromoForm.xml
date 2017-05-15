@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <sections>
     <rule_information>
         <class>\Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='name']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="rule_information"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <is_active>
                 <input>select</input>
@@ -26,19 +26,20 @@
     </rule_information>
     <conditions>
         <class>\Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\Conditions</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::div[@class='rule-tree']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="block_promo_catalog_edit_tab_conditions"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <conditions>
                 <selector>[id^="catalog_rule_formrule_conditions_fieldset_"]</selector>
+                <strategy>css selector</strategy>
                 <input>conditions</input>
             </conditions>
         </fields>
     </conditions>
     <actions>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::select[@name='simple_action']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="actions"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <simple_action>
                 <input>select</input>

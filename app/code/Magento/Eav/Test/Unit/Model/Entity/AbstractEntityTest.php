@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AbstractEntityTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Entity model to be tested
-     * @var \Magento\Eav\Model\Entity\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -23,11 +27,11 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $arguments =  $objectManager->getConstructArguments(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             ['eavConfig' => $this->eavConfig]
         );
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             $arguments
         );
     }
@@ -113,7 +117,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
     /**
      * Get adapter mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected function _getConnectionMock()
     {
@@ -300,7 +304,7 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $arguments =  $objectManager->getConstructArguments(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             [
                 'eavConfig' => $eavConfig,
                 'data' => [
@@ -310,8 +314,8 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
+        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
@@ -352,5 +356,31 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
                 ['test_attr' => '99.9900']
             ]
         ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     */
+    public function testDuplicateExceptionProcessingOnSave()
+    {
+        $connection = $this->getMock(AdapterInterface::class);
+        $connection->expects($this->once())->method('rollback');
+
+        /** @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject $model */
+        $model = $this->getMockBuilder(AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnection'])
+            ->getMockForAbstractClass();
+        $model->expects($this->any())->method('getConnection')->willReturn($connection);
+
+        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $object->expects($this->once())->method('beforeSave')->willThrowException(new DuplicateException());
+        $object->expects($this->once())->method('setHasDataChanges')->with(true);
+
+        $model->save($object);
     }
 }
