@@ -488,13 +488,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [];
         $productsCount = $this->cacheLimit * 2;
 
-        $productMocks =  $this->getProductMocksForReducedCache();
+        $productMocks =  $this->getProductMocksForReducedCache($productsCount);
         $productFactoryInvMock = $this->productFactoryMock->expects($this->exactly($productsCount))
             ->method('create');
         call_user_func_array([$productFactoryInvMock, 'willReturnOnConsecutiveCalls'], $productMocks);
         $this->serializerMock->expects($this->atLeastOnce())->method('serialize');
 
-        for ($i = 1; $i <= $productsCount; $i ++) {
+        for ($i = 1; $i <= $productsCount; $i++) {
             $product = $this->model->getById($i, false, 0);
             $result[] = $product->getId();
             $expectedResult[] = $i;
@@ -506,13 +506,14 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Get product mocks for testGetByIdWhenCacheReduced() method.
      *
+     * @param int $productsCount
      * @return array
      */
-    private function getProductMocksForReducedCache()
+    private function getProductMocksForReducedCache($productsCount)
     {
         $productMocks = [];
 
-        for ($i = 1; $i <= $this->cacheLimit * 2; $i ++) {
+        for ($i = 1; $i <= $productsCount; $i++) {
             $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
                 ->disableOriginalConstructor()
                 ->setMethods([
