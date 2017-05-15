@@ -250,7 +250,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $this->productLinkFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturnCallback(function() {
+            ->willReturnCallback(function () {
                 return $this->getMockBuilder(ProductLink::class)
                     ->setMethods(null)
                     ->disableOriginalConstructor()
@@ -320,6 +320,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
             ],
+
             // Related links
             [
                 'single_store' => false,
@@ -613,6 +614,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResults, $result);
     }
 
+    /**
+     * @param array $types
+     * @return array
+     */
     private function assembleLinkTypes($types)
     {
         $linkTypes = [];
@@ -629,6 +634,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         return $linkTypes;
     }
 
+    /**
+     * @param array $links
+     */
     private function assembleProductRepositoryMock($links)
     {
         $repositoryReturnMap = [];
