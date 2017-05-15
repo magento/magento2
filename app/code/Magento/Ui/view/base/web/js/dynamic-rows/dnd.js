@@ -11,9 +11,8 @@ define([
     'jquery',
     'underscore',
     'uiElement',
-    'Magento_Ui/js/lib/view/utils/async',
-    'mageUtils'
-], function (ko, $, _, Element, bla, util) {
+    'Magento_Ui/js/lib/view/utils/async'
+], function (ko, $, _, Element) {
     'use strict';
 
     var transformProp,
