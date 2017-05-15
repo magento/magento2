@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\Payment\Block\Transparent\Iframe" name="authorizenet_directpost_iframe" template="Magento_Payment::transparent/iframe.phtml"/>
+        <block class="Magento\Payment\Block\Transparent\Iframe" name="authorizenet_directpost_iframe" template="Magento_Payment::transparent/backend-iframe.phtml"/>
     </container>
 </layout>

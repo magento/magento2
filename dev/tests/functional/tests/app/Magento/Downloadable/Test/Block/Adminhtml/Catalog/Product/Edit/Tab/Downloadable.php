@@ -33,6 +33,27 @@ class Downloadable extends Tab
     protected $downloadableBlock = '[data-tab-type="tab_content_downloadableInfo"]';
 
     /**
+     * Selector for content "Downloadable Information" tab.
+     *
+     * @var string
+     */
+    protected $downloadableTabContent = '#downloadable_items-content';
+
+    /**
+     * Selector for trigger show/hide "Downloadable Information" tab.
+     *
+     * @var string
+     */
+    protected $downloadableTabTrigger = '[data-tab=downloadable_items] [data-role=trigger]';
+
+    /**
+     * "Is Downloadable" checkbox.
+     *
+     * @var string
+     */
+    protected $isDownloadable = '#is-downloaodable';
+
+    /**
      * Get Downloadable block
      *
      * @param string $type
@@ -93,5 +114,53 @@ class Downloadable extends Tab
         }
 
         return $this;
+    }
+
+    /**
+     * Show "Downloadable Information" tab content.
+     *
+     * @return void
+     */
+    public function showContent()
+    {
+        $content = $this->_rootElement->find($this->downloadableTabContent);
+        if (!$content->isVisible()) {
+            $this->_rootElement->find($this->downloadableTabTrigger)->click();
+            $this->waitForElementVisible($this->downloadableTabTrigger);
+        }
+    }
+
+    /**
+     * Clear downloadable block data.
+     *
+     * @param string $block
+     * @return $this
+     */
+    public function clearDownloadableData($block)
+    {
+        $this->showContent();
+        if ($block) {
+            /** @var SimpleElement $downloadableBlock */
+            $downloadableBlock = $this->getDownloadableBlock($block);
+            if (method_exists($downloadableBlock, 'clearDownloadableData')) {
+                $downloadableBlock->clearDownloadableData();
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Set "Is this downloadable Product?" checkbox value.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setIsDownloadable($value = 'Yes')
+    {
+        $this->showContent();
+        $element = $this->_rootElement->find($this->isDownloadable, Locator::SELECTOR_CSS, 'checkbox');
+        if ($element->isVisible()) {
+            $element->setValue($value);
+        }
     }
 }

@@ -23,6 +23,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
@@ -99,6 +100,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * Customer fields that must be removed
+     *
+     * @var array
+     */
+    private $forbiddenCustomerFields = [
+        'password_hash',
+        'rp_token',
+        'confirmation',
+    ];
+
+    /**
      * DataProvider Constructor
      *
      * @param string $name
@@ -159,6 +171,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderData($customer, $result['customer']);
 
+            $result['customer'] = array_diff_key(
+                $result['customer'],
+                array_flip($this->forbiddenCustomerFields)
+            );
             unset($result['address']);
 
             /** @var Address $address */

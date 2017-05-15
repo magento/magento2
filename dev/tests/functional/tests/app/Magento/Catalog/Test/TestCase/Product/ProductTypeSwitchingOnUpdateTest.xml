@@ -62,7 +62,7 @@
         <variation name="ProductTypeSwitchingOnUpdateTestVariation7">
             <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
             <data name="product" xsi:type="string">downloadableProduct::default</data>
-            <data name="actionName" xsi:type="string">-</data>
+            <data name="actionName" xsi:type="string">setIsDownloadable</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
@@ -73,14 +73,14 @@
         <variation name="ProductTypeSwitchingOnUpdateTestVariation8">
             <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
-            <data name="actionName" xsi:type="string">-</data>
+            <data name="actionName" xsi:type="string">clearDownloadableData</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation9">
             <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
-            <data name="actionName" xsi:type="string">-</data>
+            <data name="actionName" xsi:type="string">clearDownloadableData</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid" />
@@ -99,7 +99,7 @@
         <variation name="ProductTypeSwitchingOnUpdateTestVariation11">
             <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
             <data name="product" xsi:type="string">downloadableProduct::default</data>
-            <data name="actionName" xsi:type="string">-</data>
+            <data name="actionName" xsi:type="string">setIsDownloadable</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />

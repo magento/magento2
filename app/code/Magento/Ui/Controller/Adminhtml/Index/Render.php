@@ -23,7 +23,15 @@ class Render extends AbstractAction
     public function execute()
     {
         $component = $this->factory->create($this->_request->getParam('namespace'));
+        $aclResource = $component->getData('acl');
+
+        if ($aclResource && !$this->_authorization->isAllowed($aclResource)) {
+            $this->_redirect('admin/noroute');
+            return;
+        }
+
         $this->prepareComponent($component);
+
         $this->_response->appendBody((string) $component->render());
     }
 

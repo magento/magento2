@@ -14,6 +14,7 @@ require([
 
 //<![CDATA[
 var couponTypeSpecific = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
+    couponTypeAuto = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO ?>',
     tmpButtonsActionsStorage = [];
 
 function disableEnableCouponsTabContent(disable) {
@@ -33,14 +34,15 @@ function disableEnableCouponsTabContent(disable) {
 
 function handleCouponsTabContentActivity() {
     jQuery('#couponCodesGrid').addClass('ignore-validate');
-    disableEnableCouponsTabContent(!$('rule_use_auto_generation').checked);
+    var disable = !($('rule_coupon_type').value === couponTypeAuto || $('rule_use_auto_generation').checked);
+    disableEnableCouponsTabContent(disable);
 }
 
 function handleCouponTypeChange() {
     $('rule_coupon_type').observe('change', function() {
-        var disable = $('rule_coupon_type').value != couponTypeSpecific;
-        if (!disable) {
-            disable = !$('rule_use_auto_generation').checked;
+        var disable = this.value !== couponTypeAuto;
+        if (disable) {
+            disable = !(this.value === couponTypeSpecific && $('rule_use_auto_generation').checked);
         }
         disableEnableCouponsTabContent(disable);
     });

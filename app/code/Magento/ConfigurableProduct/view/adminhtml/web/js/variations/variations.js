@@ -67,7 +67,7 @@ define([
          */
         initObservable: function () {
             var $form = $('[data-form="edit-product"]'),
-                formSubmitHandlers = $form.data('events').submit,
+                formSubmitHandlers,
                 pagingObservables = {
                     current: ko.getObservable(this.paging, 'current'),
                     pageSize: ko.getObservable(this.paging, 'pageSize')
@@ -101,7 +101,12 @@ define([
                     $form.validation('isValid');
                 }
             }.bind(this));
-            formSubmitHandlers.splice(0, 0, formSubmitHandlers.pop());
+
+            formSubmitHandlers = $form.data('events').submit || [];
+
+            if (formSubmitHandlers.length > 1) {
+                formSubmitHandlers.unshift(formSubmitHandlers.pop());
+            }
 
             return this;
         },

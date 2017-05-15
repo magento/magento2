@@ -389,6 +389,7 @@
             <data name="product/data/weight" xsi:type="string">68</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">0</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
+            <data name="product/data/website_ids" xsi:type="string">Main Website</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" />
@@ -427,6 +428,7 @@
             <data name="product/data/weight" xsi:type="string">1</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1000</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/website_ids" xsi:type="string">Main Website</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -442,6 +444,7 @@
             <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/stock_data/qty" xsi:type="string">1</data>
+            <data name="product/data/website_ids" xsi:type="string">Main Website</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />

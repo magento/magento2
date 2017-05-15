@@ -26,7 +26,7 @@ class Grid extends GridInterface
      *
      * @var string
      */
-    protected $selectItem = 'tbody tr .col-id';
+    protected $selectItem = 'tbody tr .col-name';
 
     /**
      * Filters param for grid

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\SwitchAdminInterfaceLocaleTest" summary="Verify success message after switching interface locale" ticketId="MAGETWO-65024">
+        <variation name="SwitchAdminInterfaceLocaleTestVariation1">
+            <data name="user/data/interface_locale" xsi:type="string">English (United Kingdom) / English (United Kingdom)</data>
+            <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="defaultUser/data/interface_locale" xsi:type="string">English (United States) / English (United States)</data>
+            <data name="defaultUser/data/current_password" xsi:type="string">%current_password%</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertInterfaceLocaleSuccessSaveMessage" />
+        </variation>
+    </testCase>
+</config>
