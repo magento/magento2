@@ -43,7 +43,6 @@ define([
 
         switch (optionType) {
             case 'text':
-
             case 'textarea':
                 changes[optionHash] = optionValue ? optionConfig.prices : {};
                 break;

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -48,8 +46,11 @@ class AlgorithmFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param array $algorithms
      */
-    public function __construct(ObjectManagerInterface $objectManager, ScopeConfigInterface $scopeConfig, array $algorithms)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        ScopeConfigInterface $scopeConfig,
+        array $algorithms
+    ) {
         $this->objectManager = $objectManager;
         $this->scopeConfig = $scopeConfig;
         $this->algorithms = $algorithms;
@@ -64,7 +65,10 @@ class AlgorithmFactory
      */
     public function create(array $data = [])
     {
-        $calculationType = $this->scopeConfig->getValue(self::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE);
+        $calculationType = $this->scopeConfig->getValue(
+            self::XML_PATH_RANGE_CALCULATION,
+            ScopeInterface::SCOPE_STORE
+        );
 
         if (!isset($this->algorithms[$calculationType])) {
             throw new LocalizedException(__('%1 was not found in algorithms', $calculationType));

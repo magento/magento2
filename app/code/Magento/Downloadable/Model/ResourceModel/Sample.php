@@ -10,7 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Downloadable Product  Samples resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

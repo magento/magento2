@@ -18,6 +18,7 @@ use Magento\Framework\Pricing\SaleableInterface;
 /**
  * Catalog product model
  *
+ * @api
  * @method Product setHasError(bool $value)
  * @method \Magento\Catalog\Model\ResourceModel\Product getResource()
  * @method null|bool getHasError()
@@ -1617,7 +1618,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isSalable()
     {
-        if ($this->hasData('salable') && !$this->_catalogProduct->getSkipSaleableCheck()) {
+        if ($this->_catalogProduct->getSkipSaleableCheck()) {
+            return true;
+        }
+        if (($this->getOrigData('status') != $this->getData('status'))
+            || $this->isStockStatusChanged()) {
+            $this->unsetData('salable');
+        }
+
+        if ($this->hasData('salable')) {
             return $this->getData('salable');
         }
         $this->_eventManager->dispatch('catalog_product_is_salable_before', ['product' => $this]);
@@ -1630,7 +1639,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             ['product' => $this, 'salable' => $object]
         );
         $this->setData('salable', $object->getIsSalable());
-        return $object->getIsSalable();
+        return $this->getData('salable');
     }
 
     /**
@@ -1640,7 +1649,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isAvailable()
     {
-        return $this->getTypeInstance()->isSalable($this) || $this->_catalogProduct->getSkipSaleableCheck();
+        return $this->_catalogProduct->getSkipSaleableCheck() || $this->getTypeInstance()->isSalable($this);
     }
 
     /**

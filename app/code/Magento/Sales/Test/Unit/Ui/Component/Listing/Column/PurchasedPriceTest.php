@@ -32,7 +32,7 @@ class PurchasedPriceTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->priceFormatterMock = $this->getMockForAbstractClass(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class
         );

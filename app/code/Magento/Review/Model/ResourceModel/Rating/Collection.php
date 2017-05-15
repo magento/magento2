@@ -8,6 +8,8 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 /**
  * Rating collection resource model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection

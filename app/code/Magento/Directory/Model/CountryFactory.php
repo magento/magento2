@@ -6,8 +6,6 @@
 
 /**
  * Country factory
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Directory\Model;
 

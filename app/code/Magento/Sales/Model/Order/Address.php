@@ -12,6 +12,7 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * Sales order address model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Address _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Address getResource()
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddressData()

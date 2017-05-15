@@ -1,7 +1,8 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([], function () {
     'use strict';
 
@@ -34,11 +35,11 @@ define([], function () {
             promise.state() === 'pending' ?
                 this.logger[levels.failed](messages.failed, config.data) :
                 this.logger[levels.loaded](messages.loaded, config.data);
-        }.bind(this), wait)
+        }.bind(this), wait);
     };
 
     /**
-     * Method that creats object of messages
+     * Method that creates object of messages
      * @param {String} requested - log message that showing that request for class is started
      * @param {String} loaded - log message that show when requested class is loaded
      * @param {String} failded - log message that show when requested class is failed
@@ -49,11 +50,11 @@ define([], function () {
             requested: requested || '',
             loaded: loaded || '',
             failed: failded || ''
-        }
+        };
     };
 
     /**
-     * Method that creats object of log levels
+     * Method that creates object of log levels
      * @param {String} requested - log message that showing that request for class is started
      * @param {String} loaded - log message that show when requested class is loaded
      * @param {String} failded - log message that show when requested class is failed
@@ -64,7 +65,7 @@ define([], function () {
             requested: requested || 'info',
             loaded: loaded || 'info',
             failed: failded || 'warn'
-        }
+        };
     };
 
     return LogUtils;

@@ -5,6 +5,9 @@
  */
 namespace Magento\User\Block\Role;
 
+/**
+ * @api
+ */
 class Edit extends \Magento\Backend\Block\Widget\Tabs
 {
     /**

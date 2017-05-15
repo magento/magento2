@@ -11,6 +11,9 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
+/**
+ * @api
+ */
 class Before extends \Magento\Backend\Block\Template
 {
     /**

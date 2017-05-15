@@ -11,6 +11,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 /**
  * Sales order shipment collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements ShipmentSearchResultInterface

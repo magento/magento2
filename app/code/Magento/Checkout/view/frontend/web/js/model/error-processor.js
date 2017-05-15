@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'mage/url',
     'Magento_Ui/js/model/messageList'

@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * @api
+ */
 interface ListsInterface extends OptionInterface
 {
     /**

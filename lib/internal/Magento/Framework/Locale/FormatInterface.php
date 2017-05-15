@@ -5,10 +5,13 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * @api
+ */
 interface FormatInterface
 {
     /**
-     * Returns the first found number from an string
+     * Returns the first found number from a string
      * Parsing depends on given locale (grouping and decimal)
      *
      * Examples for input:
@@ -27,7 +30,7 @@ interface FormatInterface
     public function getNumber($value);
 
     /**
-     * Functions returns array with price formatting info for js function
+     * Returns an array with price formatting info for js function
      * formatCurrency in js/varien/js.js
      *
      * @return array

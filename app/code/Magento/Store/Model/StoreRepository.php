@@ -11,8 +11,6 @@ use Magento\Framework\App\Config;
 
 /**
  * Information Expert in stores handling
- *
- * @package Magento\Store\Model
  */
 class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 {

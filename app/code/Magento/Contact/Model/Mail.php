@@ -49,6 +49,9 @@ class Mail implements MailInterface
      */
     public function send($replyTo, array $variables)
     {
+        /** @see \Magento\Contact\Controller\Index\Post::validatedParams() */
+        $replyToName = !empty($variables['data']['name']) ? $variables['data']['name'] : null;
+
         $this->inlineTranslation->suspend();
         try {
             $transport = $this->transportBuilder
@@ -62,7 +65,7 @@ class Mail implements MailInterface
                 ->setTemplateVars($variables)
                 ->setFrom($this->contactsConfig->emailSender())
                 ->addTo($this->contactsConfig->emailRecipient())
-                ->setReplyTo($replyTo)
+                ->setReplyTo($replyTo, $replyToName)
                 ->getTransport();
 
             $transport->sendMessage();

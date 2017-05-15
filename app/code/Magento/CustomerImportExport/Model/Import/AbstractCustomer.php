@@ -10,6 +10,9 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 
 /**
  * Import entity abstract customer model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav

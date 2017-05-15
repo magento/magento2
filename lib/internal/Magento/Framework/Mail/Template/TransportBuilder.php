@@ -9,11 +9,13 @@
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Mail\Message;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api
+ */
 class TransportBuilder
 {
     /**

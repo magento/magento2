@@ -11,6 +11,8 @@ namespace Magento\Catalog\Model\Product;
 /**
  * Catalog Product Mass Action processing model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Action extends \Magento\Framework\Model\AbstractModel

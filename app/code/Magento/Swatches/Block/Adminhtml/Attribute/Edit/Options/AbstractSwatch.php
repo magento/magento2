@@ -78,7 +78,9 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     /**
      * Create store values
      *
-     * @codeCoverageIgnore
+     * Method not intended to escape HTML entities
+     * Escaping will be applied in template files
+     *
      * @param integer $storeId
      * @param integer $optionId
      * @return array
@@ -88,10 +90,8 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
         $value = [];
         $storeValues = $this->getStoreOptionValues($storeId);
         $swatchStoreValue = isset($storeValues['swatch']) ? $storeValues['swatch'] : null;
-        $value['store' . $storeId] = isset($storeValues[$optionId]) ?
-            $this->escapeHtml($storeValues[$optionId]) : '';
-        $value['swatch' . $storeId] = isset($swatchStoreValue[$optionId]) ?
-            $this->escapeHtml($swatchStoreValue[$optionId]) : '';
+        $value['store' . $storeId] = isset($storeValues[$optionId]) ? $storeValues[$optionId] : '';
+        $value['swatch' . $storeId] = isset($swatchStoreValue[$optionId]) ? $swatchStoreValue[$optionId] : '';
 
         return $value;
     }

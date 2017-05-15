@@ -60,12 +60,19 @@ class DataProvider implements DataProviderInterface
     private $stateFactory;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
      * @param FrontendResource|null $indexerFrontendResource
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param FrontendResource $indexerStockFrontendResource
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Config $eavConfig,
@@ -73,7 +80,8 @@ class DataProvider implements DataProviderInterface
         ScopeResolverInterface $scopeResolver,
         Session $customerSession,
         FrontendResource $indexerFrontendResource = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
@@ -83,6 +91,8 @@ class DataProvider implements DataProviderInterface
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
             Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
         $this->stateFactory = $stateFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
     }
@@ -129,16 +139,16 @@ class DataProvider implements DataProviderInterface
             );
             $table .= $tableSufix;
             $subSelect = $select;
-            $subSelect->from(['main_table' => $table], ['main_table.value'])
+            $subSelect->from(['main_table' => $table], ['main_table.entity_id', 'main_table.value'])
+                ->distinct()
                 ->joinLeft(
-                    ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
+                    ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
                     'main_table.source_id = stock_index.product_id',
                     []
                 )
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ? ', $currentScopeId)
-                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK)
-                ->group(['main_table.entity_id', 'main_table.value']);
+                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK);
             $parentSelect = $this->getSelect();
             $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);
             $select = $parentSelect;

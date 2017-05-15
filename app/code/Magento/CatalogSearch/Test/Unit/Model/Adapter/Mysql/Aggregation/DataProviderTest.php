@@ -59,6 +59,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $frontendResourceStockMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $adapterMock;
 
     /**
@@ -73,6 +78,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->scopeResolverMock = $this->getMock(ScopeResolverInterface::class);
         $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
         $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
+        $this->frontendResourceStockMock = $this->getMock(FrontendResource::class, [], [], '', false);
         $this->adapterMock = $this->getMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->stateFactoryMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\StateFactory::class)
@@ -86,7 +92,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->scopeResolverMock,
             $this->sessionMock,
             $this->frontendResourceMock,
-            $this->stateFactoryMock
+            $this->stateFactoryMock,
+            $this->frontendResourceStockMock
         );
     }
 
@@ -151,6 +158,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $selectMock = $this->getMock(Select::class, [], [], '', false);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $selectMock->expects($this->any())->method('distinct')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $selectMock->expects($this->any())->method('columns')->willReturnSelf();
         $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();

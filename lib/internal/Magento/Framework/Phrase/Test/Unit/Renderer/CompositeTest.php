@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
 use \Magento\Framework\Phrase\Renderer\Composite;
@@ -53,27 +51,27 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->rendererOne->expects(
             $this->once()
         )->method(
-                'render'
-            )->with(
-                [$text],
-                $arguments
-            )->will(
-                $this->returnValue($resultAfterFirst)
-            );
+            'render'
+        )->with(
+            [$text],
+            $arguments
+        )->will(
+            $this->returnValue($resultAfterFirst)
+        );
 
         $this->rendererTwo->expects(
             $this->once()
         )->method(
-                'render'
-            )->with(
-                [
-                    $text,
-                    $resultAfterFirst,
-                ],
-                $arguments
-            )->will(
-                $this->returnValue($resultAfterSecond)
-            );
+            'render'
+        )->with(
+            [
+                $text,
+                $resultAfterFirst,
+            ],
+            $arguments
+        )->will(
+            $this->returnValue($resultAfterSecond)
+        );
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));
     }

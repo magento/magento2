@@ -14,7 +14,7 @@ use Magento\Downloadable\Api\Data\SampleInterface;
  * @method \Magento\Downloadable\Model\ResourceModel\Sample getResource()
  * @method int getProductId()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {

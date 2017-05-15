@@ -9,6 +9,8 @@ use Magento\ImportExport\Model\Import\AbstractEntity;
 
 /**
  * Data source with columns for Magento_ImportExport
+ *
+ * @api
  */
 abstract class AbstractSource implements \SeekableIterator
 {

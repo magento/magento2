@@ -11,11 +11,9 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Data collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ *
+ * @api
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -503,13 +501,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
+            $params = $args;
             if ($useItemCallback) {
                 $cb = [$item, $callback];
             } else {
                 $cb = $callback;
-                array_unshift($args, $item);
+                array_unshift($params, $item);
             }
-            $results[$id] = call_user_func_array($cb, $args);
+            $results[$id] = call_user_func_array($cb, $params);
         }
         return $results;
     }
