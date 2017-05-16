@@ -138,7 +138,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     }
 
     /**
-     * Retrieve product relations by children
+     * Retrieve product relations by children.
      *
      * @param int|array $childIds
      * @return array
