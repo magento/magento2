@@ -73,6 +73,8 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $indexScopeState;
 
     /**
+     * Holder for MetadatPool instance.
+     *
      * @var MetadataPool
      */
     private $metadataPool = null;
