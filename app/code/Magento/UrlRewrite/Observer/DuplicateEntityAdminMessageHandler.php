@@ -52,7 +52,7 @@ class DuplicateEntityAdminMessageHandler implements \Magento\Framework\Event\Obs
                 $newUrls[$adminEditUrl] = $url->getRequestPath();
             }
             $this->messageManager->addComplexErrorMessage(
-                'addUrlDuplicateWarningMessage',
+                'urlDuplicateMessage',
                 ['urls' => $newUrls]
             );
         }

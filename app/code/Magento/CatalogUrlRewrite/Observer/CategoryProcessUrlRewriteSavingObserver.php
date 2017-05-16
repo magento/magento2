@@ -15,8 +15,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 {
