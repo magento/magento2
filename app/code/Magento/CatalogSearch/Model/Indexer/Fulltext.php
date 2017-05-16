@@ -24,6 +24,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * Indexer ID in configuration
      */
     const INDEXER_ID = 'catalogsearch_fulltext';
+
     /**
      * @var array index structure
      */
