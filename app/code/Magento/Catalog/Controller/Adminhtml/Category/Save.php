@@ -212,16 +212,24 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
-            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->_eventManager->dispatch(
+                    'controller_action_entity_exception_save_after',
+                    ['controller' => $this, 'entity_type' => 'category', 'exception' => $e]
+                );
+                if (empty($this->messageManager->getMessages()->getErrors())) {
+                    $this->messageManager->addError($e->getMessage());
+                }
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                $this->_eventManager->dispatch(
+                    'controller_action_entity_exception_save_after',
+                    ['controller' => $this, 'entity_type' => 'category', 'exception' => $e]
+                );
+                if (empty($this->messageManager->getMessages()->getErrors())) {
+                    $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                }
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             }

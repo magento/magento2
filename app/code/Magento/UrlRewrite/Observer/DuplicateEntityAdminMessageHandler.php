@@ -39,21 +39,20 @@ class DuplicateEntityAdminMessageHandler implements \Magento\Framework\Event\Obs
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Catalog\Controller\Adminhtml\Product\Save $controller */
         $exception = $observer->getException();
         
         if ($exception instanceof \Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException) {
-            $newUrls = [];
+            $generatedUrls = [];
             foreach ($exception->getUrls() as $id => $url) {
                 $adminEditUrl = $this->backendUrl->getUrl(
                     'adminhtml/url_rewrite/edit',
                     ['id' => $id]
                 );
-                $newUrls[$adminEditUrl] = $url->getRequestPath();
+                $generatedUrls[$adminEditUrl] = $url->getRequestPath();
             }
             $this->messageManager->addComplexErrorMessage(
                 'urlDuplicateMessage',
-                ['urls' => $newUrls]
+                ['urls' => $generatedUrls]
             );
         }
     }

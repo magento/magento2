@@ -67,15 +67,24 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
                 throw new \Exception(__('Category is not available for requested store.'));
             }
             $category->move($parentNodeId, $prevNodeId);
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            $error = true;
-            $this->messageManager->addError(__('There was a category move error. %1', $e->getMessage()));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
-            $this->messageManager->addError($e->getMessage());
+            $this->_eventManager->dispatch(
+                'controller_action_entity_exception_save_after',
+                ['controller' => $this, 'entity_type' => 'category', 'exception' => $e]
+            );
+            if (empty($this->messageManager->getMessages()->getErrors())) {
+                $this->messageManager->addError($e->getMessage());
+            }
         } catch (\Exception $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a category move error.'));
+            $this->_eventManager->dispatch(
+                'controller_action_entity_exception_save_after',
+                ['controller' => $this, 'entity_type' => 'category', 'exception' => $e]
+            );
+            if (empty($this->messageManager->getMessages()->getErrors())) {
+                $this->messageManager->addError(__('There was a category move error.'));
+            }
             $this->logger->critical($e);
         }
 

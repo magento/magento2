@@ -145,8 +145,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_eventManager->dispatch(
-                    'controller_action_catalog_entity_exception_save_after',
-                    ['controller' => $this, 'product' => $product, 'exception' => $e]
+                    'controller_action_entity_exception_save_after',
+                    ['controller' => $this, 'entity_type' => 'product', 'exception' => $e]
                 );
                 if (empty($this->messageManager->getMessages()->getErrors())) {
                     $this->messageManager->addError($e->getMessage());
@@ -155,8 +155,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_eventManager->dispatch(
-                    'controller_action_catalog_entity_exception_save_after',
-                    ['controller' => $this, 'product' => $product, 'exception' => $e]
+                    'controller_action_entity_exception_save_after',
+                    ['controller' => $this, 'entity_type' => 'product', 'exception' => $e]
                 );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 if (empty($this->messageManager->getMessages()->getErrors())) {

@@ -119,13 +119,28 @@ class Save extends \Magento\Backend\App\Action
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->_eventManager->dispatch(
+                    'controller_action_entity_exception_save_after',
+                    ['controller' => $this, 'entity_type' => 'cms', 'exception' => $e]
+                );
+                if (empty($this->messageManager->getMessages()->getErrors())) {
+                    $this->messageManager->addError($e->getMessage());
+                }
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
+                $this->_eventManager->dispatch(
+                    'controller_action_entity_exception_save_after',
+                    ['controller' => $this, 'entity_type' => 'cms', 'exception' => $e]
+                );
+                if (empty($this->messageManager->getMessages()->getErrors())) {
+                    $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
+                }
             }
 
             $this->dataPersistor->set('cms_page', $data);
-            return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
+            return $resultRedirect->setPath(
+                '*/*/edit',
+                ['page_id' => $this->getRequest()->getParam('page_id')]
+            );
         }
         return $resultRedirect->setPath('*/*/');
     }
