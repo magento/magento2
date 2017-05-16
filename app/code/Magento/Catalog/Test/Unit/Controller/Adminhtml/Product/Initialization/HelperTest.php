@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
-use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Product;
@@ -97,7 +97,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
-            ->setMethods(['getById'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
