@@ -72,5 +72,13 @@
                 <item name="template" xsi:type="string">CMS Page Link Block Template</item>
             </field>
         </dataset>
+
+        <dataset name="for_new_products_all_pages">
+            <field name="0" xsi:type="array">
+                <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                <item name="block" xsi:type="string">Main Content Area</item>
+                <item name="template" xsi:type="string">New Products List Template</item>
+            </field>
+        </dataset>
     </repository>
 </config>
