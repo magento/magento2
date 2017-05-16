@@ -93,9 +93,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->_model->setForegroundCountries($foregroundCountries);
+        // @TODO: test must not contain logic
+        $expectedCount = count($optionsArray)
+            + (int)(!empty($emptyLabel) && !empty($foregroundCountries))
+            + (int)(!empty($emptyLabel));
         $result = $this->_model->toOptionArray($emptyLabel);
-        $this->assertCount(count($optionsArray) + (int)(!empty($emptyLabel) && !empty($foregroundCountries)) +
-            (int)(!empty($emptyLabel)), $result);
+        $this->assertCount($expectedCount, $result);
         foreach ($expectedResults as $index => $expectedResult) {
             $this->assertEquals($expectedResult, $result[$index]['label']);
         }

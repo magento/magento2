@@ -966,7 +966,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $object->isObjectNew(true);
         }
 
-
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }
