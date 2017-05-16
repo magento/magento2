@@ -53,7 +53,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
@@ -63,7 +63,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->method('setCacheAdapter');
 
         $metadata = $this->getMock(
-            'Magento\Framework\EntityManager\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connection);
 
         $metadataPool = $this->getMock(
-            'Magento\Framework\EntityManager\MetadataPool',
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',
@@ -85,21 +85,27 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         );
         $metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with('Magento\Catalog\Api\Data\ProductInterface')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->willReturn($metadata);
 
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $resource->expects($this->any())->method('getTableName')->willReturn('table');
         $this->resource = $objectManager->getObject(
-            'Magento\Catalog\Model\ResourceModel\Product\Gallery',
+            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
             [
                 'metadataPool' => $metadataPool,
                 'resource' => $resource
             ]
         );
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->attribute = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function testLoadDataFromTableByValueId()
@@ -436,5 +442,33 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
 
         $this->resource->deleteGalleryValueInStore($valueId, $entityId, $storeId);
+    }
+
+    public function testCountImageUses()
+    {
+        $results = [
+            [
+                'value_id' => '1',
+                'attribute_id' => 90,
+                'value' => '/d/o/download_7.jpg',
+                'media_type' => 'image',
+                'disabled' => '0',
+            ],
+        ];
+
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->select->expects($this->at(0))
+            ->method('from')
+            ->with(['main' => 'table'], 'count(*)')
+            ->willReturnSelf();
+        $this->select->expects($this->at(1))
+            ->method('where')
+            ->with('value = ?', 1)
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchOne')
+            ->with($this->select)
+            ->willReturn(count($results));
+        $this->assertEquals($this->resource->countImageUses(1), count($results));
     }
 }

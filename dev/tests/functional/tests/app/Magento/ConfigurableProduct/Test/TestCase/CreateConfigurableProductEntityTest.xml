@@ -54,7 +54,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation3" summary="Create product with special price">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:no</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_assigned_product_special_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_new_options_with_special_price</data>

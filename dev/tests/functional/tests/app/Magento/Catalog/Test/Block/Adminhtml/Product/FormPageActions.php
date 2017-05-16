@@ -66,18 +66,18 @@ class FormPageActions extends ParentFormPageActions
     private $storeSwitcherBlock = '.store-switcher';
 
     /**
-     * Dropdown block locator.
-     *
-     * @var string
-     */
-    private $dropdownBlock = '.dropdown';
-
-    /**
      * Selector for confirm.
      *
      * @var string
      */
     private $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
+     * Dropdown block locator.
+     *
+     * @var string
+     */
+    private $dropdownBlock = '.dropdown';
 
     /**
      * Click on "Save" button.
