@@ -222,6 +222,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         if ($this->metadataPool === null) {
             $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         }
+
         return $this->metadataPool;
     }
 }
