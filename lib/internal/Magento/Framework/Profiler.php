@@ -349,6 +349,7 @@ class Profiler
      * @param bool $isAjax
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
