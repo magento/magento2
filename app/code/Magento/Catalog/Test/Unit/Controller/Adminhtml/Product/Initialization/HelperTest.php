@@ -157,6 +157,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @param bool $isSingleStore
      * @param array $websiteIds
      * @param array $expWebsiteIds
@@ -283,6 +284,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function initializeDataProvider()
     {
