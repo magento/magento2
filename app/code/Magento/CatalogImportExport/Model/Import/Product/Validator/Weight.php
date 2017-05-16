@@ -12,14 +12,6 @@ class Weight extends AbstractImportValidator implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init($context)
-    {
-        return parent::init($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isValid($value)
     {
         $this->_clearMessages();
