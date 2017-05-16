@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+/**
+ * @api
+ */
 interface EnvelopeInterface
 {
     /**

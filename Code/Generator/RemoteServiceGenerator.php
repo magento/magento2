@@ -11,6 +11,7 @@ use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
+use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Code generator for remote services.
@@ -91,7 +92,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                         'description' => '\Magento\Framework\MessageQueue\PublisherInterface $publisher',
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -109,11 +110,11 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => '\\' . \Magento\Framework\MessageQueue\PublisherInterface::class
-                        ]
+                            'description' => '\\' . \Magento\Framework\MessageQueue\PublisherInterface::class,
+                        ],
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
@@ -125,29 +126,21 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
         $methods = [$this->_getDefaultConstructorDefinition()];
         $interfaceMethodsMap = $this->serviceMethodsMap->getMethodsMap($this->getSourceClassName());
         foreach (array_keys($interfaceMethodsMap) as $methodName) {
-            $sourceMethodParameters = $this->serviceMethodsMap->getMethodParams(
-                $this->getSourceClassName(),
-                $methodName
-            );
+            // Uses Zend Reflection instead MethodsMap service, because second does not support features of PHP 7.x
+            $methodReflection = new MethodReflection($this->getSourceClassName(), $methodName);
+            $sourceMethodParameters = $methodReflection->getParameters();
             $methodParameters = [];
             $topicParameters = [];
+            /** @var \Zend\Code\Reflection\ParameterReflection $methodParameter */
             foreach ($sourceMethodParameters as $methodParameter) {
-                $parameterName = $methodParameter[ServiceMethodsMap::METHOD_META_NAME];
+                $parameterName = $methodParameter->getName();
                 $parameter = [
                     'name' => $parameterName,
+                    'type' => $methodParameter->getType(),
                 ];
-                if ($methodParameter[ServiceMethodsMap::METHOD_META_TYPE] === 'array') {
-                    $parameter['type'] = 'array';
-                } else {
-                    $fullyQualifiedTypeName = '\\' . ltrim($methodParameter[ServiceMethodsMap::METHOD_META_TYPE], '\\');
-                    if (interface_exists($fullyQualifiedTypeName) || class_exists($fullyQualifiedTypeName)) {
-                        $parameter['type'] = $fullyQualifiedTypeName;
-                    }
-                }
-                if ($methodParameter[ServiceMethodsMap::METHOD_META_HAS_DEFAULT_VALUE]) {
-                    $parameter['defaultValue'] = $methodParameter[ServiceMethodsMap::METHOD_META_DEFAULT_VALUE] !== null
-                    ? $methodParameter[ServiceMethodsMap::METHOD_META_DEFAULT_VALUE]
-                    : $this->_getNullDefaultValue();
+                if ($methodParameter->isDefaultValueAvailable()) {
+                    $parameter['defaultValue'] = $methodParameter->getDefaultValue() !== null
+                        ? $methodParameter->getDefaultValue() : $this->_getNullDefaultValue();
                 }
                 $methodParameters[] = $parameter;
                 $topicParameters[] = "'{$parameterName}' => \${$parameterName}";
@@ -160,12 +153,14 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                 . "    [" . implode(', ', $topicParameters) . "]\n"
                 . ");";
             $annotations = [['name' => 'inheritdoc']];
-            $methods[] = [
+            $method = [
                 'name' => $methodName,
+                'returnType' => $methodReflection->getReturnType(),
                 'parameters' => $methodParameters,
                 'body' => $methodBody,
-                'docblock' => ['tags' => $annotations]
+                'docblock' => ['tags' => $annotations],
             ];
+            $methods[] = $method;
         }
         return $methods;
     }

@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
 namespace Magento\Framework\MessageQueue\Test\Unit\Code\Generator;
 
-use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
-use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
+use Composer\Autoload\ClassLoader;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
+use Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator;
+use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -16,171 +22,163 @@ use Magento\Framework\Communication\Config\ReflectionGenerator;
 class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CommunicationConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommunicationConfigInterface|MockObject
      */
-    protected $communicationConfigMock;
+    private $communicationConfig;
 
     /**
-     * @var ServiceMethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var RemoteServiceGenerator|MockObject
      */
-    protected $serviceMethodsMapMock;
+    private $generator;
 
     /**
-     * @var ReflectionGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager
      */
-    protected $reflectionGeneratorMock;
+    private $objectManager;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @inheritdoc
      */
-    protected $generator;
-
     protected function setUp()
     {
-        $this->communicationConfigMock = $this->getMockBuilder(\Magento\Framework\Communication\ConfigInterface::class)
+        $this->objectManager = new ObjectManager($this);
+
+        $this->communicationConfig = $this->getMockBuilder(CommunicationConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serviceMethodsMapMock = $this->getMockBuilder(\Magento\Framework\Reflection\MethodsMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->reflectionGeneratorMock = $this->getMockBuilder(ReflectionGenerator::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->generator = $objectManager->getObject(
-            \Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator::class,
-            [
-                'communicationConfig' => $this->communicationConfigMock,
-                'serviceMethodsMap' => $this->serviceMethodsMapMock,
-                'sourceClassName' => '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
-                'resultClassName' => '\\' . \Magento\Customer\Api\CustomerRepositoryInterfaceRemote::class,
-                'classGenerator' => null
-            ]
+        $loader = new ClassLoader();
+        $loader->addPsr4(
+            'Magento\\Framework\\MessageQueue\\Code\\Generator\\',
+            __DIR__ . '/_files'
         );
-        $objectManager->setBackwardCompatibleProperty(
-            $this->generator,
-            'reflectionGenerator',
-            $this->reflectionGeneratorMock
-        );
-        parent::setUp();
+        $loader->register();
     }
 
-    public function testGenerate()
+    /**
+     * Checks a test case when generator should be possible to generate code
+     * for a specified interface.
+     *
+     * @param string $sourceClassName
+     * @param string $resultClassName
+     * @param string $topicName
+     * @param string $fileName
+     * @dataProvider interfaceDataProvider
+     */
+    public function testGenerate($sourceClassName, $resultClassName, $topicName, $fileName)
     {
-        $this->serviceMethodsMapMock->expects($this->any())
-            ->method('getMethodsMap')
-            ->with('\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class)
-            ->willReturn(
-                [
-                    'save' => [],
-                    'get' => [],
-                    'getList' => [],
-                    'delete' => [],
-                ]
-            );
-        $this->serviceMethodsMapMock->expects($this->any())->method('getMethodParams')->willReturnMap(
-            [
-                [
-                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
-                    'save',
-                    [
-                        [
-                            'name' => 'customer',
-                            'type' => '\\' . \Magento\Customer\Api\Data\CustomerInterface::class,
-                            'isDefaultValueAvailable' => false,
-                            'defaultValue' => null,
-                        ],
-                        [
-                            'name' => 'passwordHash',
-                            'type' => 'string',
-                            'isDefaultValueAvailable' => true,
-                            'defaultValue' => 'default_string_value',
-                        ],
-                    ]
-                ],
-                [
-                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
-                    'get',
-                    [
-                        [
-                            'name' => 'email',
-                            'type' => 'string',
-                            'isDefaultValueAvailable' => false,
-                            'defaultValue' => null,
-                        ],
-                        [
-                            'name' => 'websiteId',
-                            'type' => 'int',
-                            'isDefaultValueAvailable' => true,
-                            'defaultValue' => null,
-                        ],
-                    ]
-                ],
-                [
-                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
-                    'getList',
-                    [
-                        [
-                            'name' => 'searchCriteria',
-                            'type' => '\\' . \Magento\Framework\Api\SearchCriteriaInterface::class,
-                            'isDefaultValueAvailable' => false,
-                            'defaultValue' => null,
-                        ],
-                    ]
-                ],
-                [
-                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
-                    'delete',
-                    [
-                        [
-                            'name' => 'customerId',
-                            'type' => 'void',
-                            'isDefaultValueAvailable' => false,
-                            'defaultValue' => null,
-                        ],
-                    ]
-                ],
-            ]
-        );
-        $this->reflectionGeneratorMock->expects($this->any())->method('generateTopicName')->willReturnMap(
-            [
-                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'save', 'topic.save'],
-                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'get', 'topic.get'],
-                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'getList', 'topic.getList'],
-                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'delete', 'topic.delete'],
-            ]
-        );
+        $this->createGenerator($sourceClassName, $resultClassName);
 
-        $this->communicationConfigMock->expects($this->any())
-            ->method('getTopic')
+        $this->communicationConfig->method('getTopic')
             ->willReturnMap(
                 [
-                    ['topic.save', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
-                    ['topic.get', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
-                    ['topic.getList', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
-                    ['topic.delete', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => false]],
+                    [$topicName . '.save', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    [$topicName . '.get', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    [$topicName . '.getById', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    [$topicName . '.getList', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    [$topicName . '.delete', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
+                    [$topicName . '.deleteById', [CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS => true]],
                 ]
             );
-        $expectedResult = file_get_contents(__DIR__ . '/_files/RemoteService.txt');
+        $expectedResult = file_get_contents(__DIR__ . '/_files/' . $fileName);
         $this->validateGeneratedCode($expectedResult);
     }
 
     /**
-     * Check if generated code matches provided expected result.
+     * Get list of variations for testing remote service generator.
+     *
+     * @return array
+     */
+    public function interfaceDataProvider()
+    {
+        return [
+            [
+                '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                '\\' . \Magento\Customer\Api\CustomerRepositoryInterfaceRemote::class,
+                'magento.customer.api.customerRepositoryInterface',
+                'RemoteService.txt'
+            ],
+            [
+                '\\' . \Magento\Framework\MessageQueue\Code\Generator\TRepositoryInterface::class,
+                '\\' . \Magento\Framework\MessageQueue\Code\Generator\TRepositoryInterfaceRemote::class,
+                'magento.framework.messageQueue.code.generator.tRepositoryInterface',
+                'TRemoteService.txt'
+            ]
+        ];
+    }
+
+    /**
+     * Checks if generated code matches provided expected result.
      *
      * @param string $expectedResult
      * @return void
      */
-    protected function validateGeneratedCode($expectedResult)
+    private function validateGeneratedCode($expectedResult)
     {
         $reflectionObject = new \ReflectionObject($this->generator);
         $reflectionMethod = $reflectionObject->getMethod('_generateCode');
         $reflectionMethod->setAccessible(true);
         $generatedCode = $reflectionMethod->invoke($this->generator);
-        $expectedResult = preg_replace('/\s+/', ' ', $expectedResult);
-        $generatedCode = preg_replace('/\s+/', ' ', $generatedCode);
-        $this->assertEquals($expectedResult, $generatedCode);
+        self::assertEquals($expectedResult, $generatedCode);
+    }
+
+    /**
+     * Creates instance of RemoveServiceGenerator::class with all required dependencies.
+     *
+     * @param string $sourceClassName
+     * @param string $resultClassName
+     */
+    private function createGenerator($sourceClassName, $resultClassName)
+    {
+        $methodMap = $this->createMethodMap();
+        $this->generator = $this->objectManager->getObject(
+            RemoteServiceGenerator::class,
+            [
+                'communicationConfig' => $this->communicationConfig,
+                'serviceMethodsMap' => $methodMap,
+                'sourceClassName' => $sourceClassName,
+                'resultClassName' => $resultClassName,
+                'classGenerator' => null
+            ]
+        );
+
+        $reflectionGenerator = $this->objectManager->getObject(ReflectionGenerator::class);
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->generator,
+            'reflectionGenerator',
+            $reflectionGenerator
+        );
+    }
+
+    /**
+     * Creates instance of MethodsMap::class.
+     *
+     * @return MethodsMap
+     */
+    private function createMethodMap()
+    {
+        $cache = $this->getMockBuilder(FrontendInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cache->method('load')
+            ->willReturn(false);
+
+        $serializer = $this->getMockBuilder(SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typeProcessor = $this->objectManager->getObject(TypeProcessor::class);
+
+        /** @var MethodsMap $serviceMethodMap */
+        $serviceMethodMap = $this->objectManager->getObject(MethodsMap::class, [
+            'cache' => $cache,
+            'typeProcessor' => $typeProcessor
+        ]);
+        $this->objectManager->setBackwardCompatibleProperty(
+            $serviceMethodMap,
+            'serializer',
+            $serializer
+        );
+
+        return $serviceMethodMap;
     }
 }
