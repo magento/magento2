@@ -15,35 +15,36 @@ define([
     'use strict';
 
     var cacheKey = 'checkout-data',
-        checkoutData,
-
-        /**
-         * @return {*}
-         */
-        getData = function () {
-            return storage.get(cacheKey)();
-        },
 
         /**
          * @param {Object} data
          */
         saveData = function (data) {
             storage.set(cacheKey, data);
-        };
+        },
 
-    if ($.isEmptyObject(getData())) {
-        checkoutData = {
-            'selectedShippingAddress': null,
-            'shippingAddressFromData': null,
-            'newCustomerShippingAddress': null,
-            'selectedShippingRate': null,
-            'selectedPaymentMethod': null,
-            'selectedBillingAddress': null,
-            'billingAddressFormData': null,
-            'newCustomerBillingAddress': null
+        /**
+         * @return {*}
+         */
+        getData = function () {
+            var data = storage.get(cacheKey)();
+
+            if ($.isEmptyObject(data)) {
+                data = {
+                    'selectedShippingAddress': null,
+                    'shippingAddressFromData': null,
+                    'newCustomerShippingAddress': null,
+                    'selectedShippingRate': null,
+                    'selectedPaymentMethod': null,
+                    'selectedBillingAddress': null,
+                    'billingAddressFormData': null,
+                    'newCustomerBillingAddress': null
+                };
+                saveData(data);
+            }
+
+            return data;
         };
-        saveData(checkoutData);
-    }
 
     return {
         /**
