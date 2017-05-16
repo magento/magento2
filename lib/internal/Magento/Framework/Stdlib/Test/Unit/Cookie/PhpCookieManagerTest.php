@@ -22,6 +22,8 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
 
     /**
      * Test PhpCookieManager
+     *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
     {
@@ -542,7 +544,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->willReturn($userAgent);
 
             $this->loggerMock->expects($this->once())
- 	            ->method('warning')
+                ->method('warning')
                 ->with(
                     new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                     array_merge($_COOKIE, ['user-agent' => $userAgent])
