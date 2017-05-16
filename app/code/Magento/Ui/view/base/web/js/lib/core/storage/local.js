@@ -87,7 +87,7 @@ define([
         var data = localStorage.getItem(root),
             result = {};
 
-        if (!_.isNull(data) && typeof(data) != 'undefined') {
+        if (!_.isNull(data) && typeof data != 'undefined') {
             result = JSON.parse(data);
         }
 
