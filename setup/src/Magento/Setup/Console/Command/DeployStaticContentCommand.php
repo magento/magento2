@@ -111,7 +111,7 @@ class DeployStaticContentCommand extends Command
                     . PHP_EOL . 'In "default" and "developer" modes static contents are being deployed '
                     . 'automatically on demand.'
                     . PHP_EOL . 'If you still want to deploy in these modes, use -f option: '
-                    . "'bin/magento setup:deploy:static-content -f'"
+                    . "'bin/magento setup:static-content:deploy -f'"
                 )
             );
         }
