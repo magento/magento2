@@ -356,7 +356,7 @@ class Profiler
 
         if (is_scalar($profilerConfig)) {
             $config['drivers'] = [
-                ['output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig)],
+                ['output' => is_numeric($profilerConfig) ? 'html' : $profilerConfig],
             ];
         } else {
             $config = array_merge($config, $profilerConfig);
