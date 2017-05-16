@@ -21,6 +21,10 @@
                 <max_failures_count>6</max_failures_count>
                 <timeout>1800</timeout>
             </authentication_lock>
+            <access_token_expiration_period>
+                <customer>259200</customer>
+                <admin>43200</admin>
+            </access_token_expiration_period>
         </oauth>
     </default>
 </config>

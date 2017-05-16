@@ -125,4 +125,32 @@ class Data
         );
         return $seconds > 0 ? $seconds : self::CONSUMER_POST_TIMEOUT_DEFAULT;
     }
+
+    /**
+     * Get expiration period for customer tokens from config.
+     *
+     * @return int minutes
+     */
+    public function getCustomerTokenExpirationPeriod()
+    {
+        $minutes = (int)$this->_scopeConfig->getValue(
+            'oauth/access_token_expiration_period/customer',
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+        );
+        return $minutes > 0 ? $minutes : 0;
+    }
+
+    /**
+     * Get expiration period for admin tokens from config.
+     *
+     * @return int minutes
+     */
+    public function getAdminTokenExpirationPeriod()
+    {
+        $minutes = (int)$this->_scopeConfig->getValue(
+            'oauth/access_token_expiration_period/admin',
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+        );
+        return $minutes > 0 ? $minutes : 0;
+    }
 }
