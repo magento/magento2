@@ -46,6 +46,43 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $setup->getConnection(self::$connectionName)->changeColumn(
+                $setup->getTable('quote_address', self::$connectionName),
+                'firstname',
+                'firstname',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 255,
+                    'comment' => 'Firstname'
+                ]
+            );
+        }
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $setup->getConnection(self::$connectionName)->changeColumn(
+                $setup->getTable('quote_address', self::$connectionName),
+                'middlename',
+                'middlename',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 40,
+                    'comment' => 'Middlename'
+                ]
+            );
+        }
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $setup->getConnection(self::$connectionName)->changeColumn(
+                $setup->getTable('quote_address', self::$connectionName),
+                'lastname',
+                'lastname',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 255,
+                    'comment' => 'Lastname'
+                ]
+            );
+        }
         //drop foreign key for single DB case
         if (version_compare($context->getVersion(), '2.0.3', '<')
             && $setup->tableExists($setup->getTable('quote_item'))
