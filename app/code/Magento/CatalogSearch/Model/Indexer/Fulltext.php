@@ -84,6 +84,8 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param array $data
      * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
+     *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         FullFactory $fullActionFactory,
