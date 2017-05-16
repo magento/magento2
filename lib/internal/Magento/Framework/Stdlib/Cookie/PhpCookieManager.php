@@ -52,14 +52,14 @@ class PhpCookieManager implements CookieManagerInterface
     private $reader;
 
     /**
-     * Logger for warning details
+     * Logger for warning details.
      *
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * Object that provides access to HTTP headers
+     * Object that provides access to HTTP headers.
      *
      * @var HttpHeader
      */
