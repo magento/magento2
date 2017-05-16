@@ -84,8 +84,8 @@ define([
      * @returns {Object}
      */
     function getRoot() {
-        var data = localStorage.getItem(root);
-        var result = {};
+        var data = localStorage.getItem(root),
+            result = {};
 
         if (!_.isNull(data) && typeof(data) != 'undefined') {
             result = JSON.parse(data);
