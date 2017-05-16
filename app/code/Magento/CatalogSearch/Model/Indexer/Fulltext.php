@@ -16,7 +16,9 @@ use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Provide functionality for Fulltext Search indexing
+ * Provide functionality for Fulltext Search indexing.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
@@ -85,8 +87,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @param array $data
      * @param IndexSwitcherInterface $indexSwitcher
      * @param Scope\State $indexScopeState
-     *
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         FullFactory $fullActionFactory,
