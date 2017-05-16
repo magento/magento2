@@ -143,28 +143,25 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
-            } catch (\Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException $e) {
-                $newUrls = [];
-                foreach ($e->getUrls() as $id => $url) {
-                    $adminEditUrl = $this->_backendUrl->getUrl(
-                        'adminhtml/url_rewrite/edit',
-                        ['id' => $id]
-                    );
-                    $newUrls[$adminEditUrl] = $url->getRequestPath();
-                }
-                $this->messageManager->addComplexErrorMessage(
-                    'addUrlDuplicateWarningMessage',
-                    ['urls' => $newUrls]
-                );
-                $this->getDataPersistor()->set('catalog_product', $data);
-                $redirectBack = $productId ? true : 'new';
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->_eventManager->dispatch(
+                    'controller_action_catalog_entity_exception_save_after',
+                    ['controller' => $this, 'product' => $product, 'exception' => $e]
+                );
+                if (empty($this->messageManager->getMessages()->getErrors())) {
+                    $this->messageManager->addError($e->getMessage());
+                }
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
+                $this->_eventManager->dispatch(
+                    'controller_action_catalog_entity_exception_save_after',
+                    ['controller' => $this, 'product' => $product, 'exception' => $e]
+                );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError($e->getMessage());
+                if (empty($this->messageManager->getMessages()->getErrors())) {
+                    $this->messageManager->addError($e->getMessage());
+                }
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
