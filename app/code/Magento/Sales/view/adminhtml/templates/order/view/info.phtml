@@ -101,8 +101,8 @@ $orderStoreDate = $block->formatDate(
                 <?php endif; ?>
                 <?php if ($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode() && $_order->getGlobalCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
                     <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode()) ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $_order->getBaseToOrderRate() ?></td>
+                        <th><?php echo $block->escapeHtml(__('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode())) ?></th>
+                        <td><?php echo $block->escapeHtml($_order->getBaseToOrderRate()) ?></td>
                     </tr>
                 <?php endif; ?>
             </table>
