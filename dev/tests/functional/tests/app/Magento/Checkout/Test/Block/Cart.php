@@ -184,7 +184,6 @@ class Cart extends Block
      */
     public function inContextPaypalCheckout()
     {
-        $this->waitForCheckoutButton();
         $this->_rootElement->find($this->inContextPaypalCheckoutButton)->click();
         $this->browser->selectWindow();
         $this->waitForFormLoaded();
