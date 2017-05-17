@@ -102,10 +102,10 @@ class CreateSalesRuleEntityTest extends Injectable
      *
      * @param SalesRule $salesRule
      * @param CatalogProductSimple $productForSalesRule1
-     * @param CatalogProductSimple $productForSalesRule2
-     * @param Customer $customer
-     * @param string $conditionEntity
-     * @param array $generateCouponsSettings
+     * @param CatalogProductSimple|null $productForSalesRule2
+     * @param Customer|null $customer
+     * @param null $conditionEntity
+     * @param array|null $generateCouponsSettings
      *
      * @return array
      */
@@ -137,7 +137,10 @@ class CreateSalesRuleEntityTest extends Injectable
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
 
-        if ($salesRule->getUseAutoGeneration() == 'Yes' && !empty($generateCouponsSettings)) {
+        if (
+            ($salesRule->getUseAutoGeneration() == 'Yes' || $salesRule->getCouponType() == "Auto")
+            && !empty($generateCouponsSettings)
+        ) {
             $this->promoQuoteNew->getFormPageActions()->saveAndContinue();
 
             /** @var PromoQuoteForm $salesRuleForm */

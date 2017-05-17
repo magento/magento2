@@ -137,6 +137,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * @param int|null $isLoggedIn
      * @param array $shipping
      * @param array $cartPrice
+     * @param array $couponCode
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -157,7 +158,8 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         Address $address = null,
         $isLoggedIn = null,
         array $shipping = [],
-        array $cartPrice = []
+        array $cartPrice = [],
+        $couponCodes = null
     ) {
         $this->checkoutCart = $checkoutCart;
         $this->cmsIndex = $cmsIndex;
@@ -179,10 +181,19 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
             $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($address);
             $this->checkoutCart->getShippingBlock()->selectShippingMethod($shipping);
         }
-        if ($salesRule->getCouponCode() || $salesRuleOrigin->getCouponCode()) {
-            $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode(
-                $salesRule->getCouponCode() ? $salesRule->getCouponCode() : $salesRuleOrigin->getCouponCode()
-            );
+
+        $couponCode = null;
+
+        if ($salesRule->getCouponCode()) {
+            $couponCode = $salesRule->getCouponCode();
+        } elseif ($salesRuleOrigin->getCouponCode()) {
+            $couponCode = $salesRuleOrigin->getCouponCode();
+        } elseif ($couponCodes && is_array($couponCodes)) {
+            $couponCode = isset($couponCodes[0]) ? $couponCodes[0]: null;
+        }
+
+        if ($salesRule->getCouponCode() || $salesRuleOrigin->getCouponCode() || $couponCode) {
+            $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode($couponCode);
         }
         $this->assert();
     }
