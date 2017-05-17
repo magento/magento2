@@ -173,7 +173,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Catalog\Model\View\Asset\ImageFactory
      */
-    private $viewAssetImageFactory;
+    protected $_viewAssetImageFactory;
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
@@ -198,6 +198,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -215,6 +216,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -226,6 +228,13 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
+        if ($viewAssetImageFactory == null) {
+            $this->_viewAssetImageFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\View\Asset\ImageFactory::class
+            );
+        } else {
+            $this->_viewAssetImageFactory = $viewAssetImageFactory;
+        }
     }
 
     /**
@@ -469,7 +478,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $this->_isBaseFilePlaceholder = false;
 
-        $this->imageAsset = $this->getViewAssetImageFactory()->create(
+        $this->imageAsset = $this->_viewAssetImageFactory->create(
             [
                 'miscParams' => $this->getMiscParams(),
                 'filePath' => $file,
@@ -892,20 +901,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
             $image = $this->imageAsset->getPath();
         }
         return getimagesize($image);
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\View\Asset\ImageFactory
-     */
-    private function getViewAssetImageFactory()
-    {
-        if ($this->viewAssetImageFactory == null) {
-            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\ImageFactory::class
-            );
-        }
-
-        return $this->viewAssetImageFactory;
     }
 
     /**
