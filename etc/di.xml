@@ -20,4 +20,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\MaintenanceMode">
+        <plugin name="amqp_maintenance_mode" type="Magento\MessageQueue\Model\Plugin\ResourceModel\Lock"/>
+    </type>
+    <virtualType name="RefreshLock" type="Magento\MessageQueue\Model\ResourceModel\Lock">
+        <arguments>
+            <argument name="interval" xsi:type="number">0</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MessageQueue\Model\Plugin\ResourceModel\Lock">
+        <arguments>
+            <argument name="lock" xsi:type="object">RefreshLock</argument>
+        </arguments>
+    </type>
 </config>

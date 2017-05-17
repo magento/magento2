@@ -7,6 +7,8 @@ namespace Magento\MessageQueue\Model;
 
 use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Consumer runner class is used to run consumer, which name matches the magic method invoked on this class.
@@ -27,13 +29,30 @@ class ConsumerRunner
     private $consumerFactory;
 
     /**
+     * @var MaintenanceMode
+     */
+    private $maintenanceMode;
+
+    /**
+     * @var integer
+     */
+    private $maintenanceSleepInterval;
+
+    /**
      * Initialize dependencies.
      *
      * @param ConsumerFactory $consumerFactory
+     * @param MaintenanceMode $maintenanceMode
+     * @param integer $maintenanceSleepInterval
      */
-    public function __construct(ConsumerFactory $consumerFactory)
-    {
+    public function __construct(
+        ConsumerFactory $consumerFactory,
+        MaintenanceMode $maintenanceMode = null,
+        $maintenanceSleepInterval = 30
+    ) {
         $this->consumerFactory = $consumerFactory;
+        $this->maintenanceMode = $maintenanceMode ?: ObjectManager::getInstance()->get(MaintenanceMode::class);
+        $this->maintenanceSleepInterval = $maintenanceSleepInterval;
     }
 
     /**
@@ -53,6 +72,10 @@ class ConsumerRunner
                 . 'must have corresponding consumer declared in some queue.xml.';
             throw new LocalizedException(__($errorMsg, ['callbackMethod' => $name]));
         }
-        $consumer->process();
+        if (!$this->maintenanceMode->isOn()) {
+            $consumer->process();
+        } else {
+            sleep($this->maintenanceSleepInterval);
+        }
     }
 }

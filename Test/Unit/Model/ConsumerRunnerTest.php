@@ -30,6 +30,11 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
     private $consumerFactoryMock;
 
     /**
+     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $maintenanceModeMock;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp()
@@ -38,9 +43,15 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
         $this->consumerFactoryMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->maintenanceModeMock = $this->getMockBuilder(\Magento\Framework\App\MaintenanceMode::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->consumerRunner = $this->objectManager->getObject(
             \Magento\MessageQueue\Model\ConsumerRunner::class,
-            ['consumerFactory' => $this->consumerFactoryMock]
+            [
+                'consumerFactory' => $this->consumerFactoryMock,
+                'maintenanceMode' => $this->maintenanceModeMock
+            ]
         );
         parent::setUp();
     }
@@ -52,6 +63,7 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testMagicMethod()
     {
+        $isMaintenanceModeOn = false;
         /** @var ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
         $consumerMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)->getMock();
         $consumerMock->expects($this->once())->method('process');
@@ -61,6 +73,7 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($consumerName)
             ->willReturn($consumerMock);
+        $this->maintenanceModeMock->expects($this->once())->method('isOn')->willReturn($isMaintenanceModeOn);
 
         $this->consumerRunner->$consumerName();
     }
@@ -80,6 +93,28 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($consumerName)
             ->willThrowException(new LocalizedException(new Phrase("Some exception")));
+
+        $this->consumerRunner->$consumerName();
+    }
+
+    /**
+     * Ensure that process method will not be invoked if maintenance mode isOn returns true
+     *
+     * @return void
+     */
+    public function testMagicMethodMaintenanceModeIsOn()
+    {
+        $isMaintenanceModeOn = true;
+        /** @var ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
+        $consumerMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)->getMock();
+        $consumerMock->expects($this->never())->method('process');
+        $consumerName = 'someConsumerName';
+        $this->consumerFactoryMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($consumerName)
+            ->willReturn($consumerMock);
+        $this->maintenanceModeMock->expects($this->once())->method('isOn')->willReturn($isMaintenanceModeOn);
 
         $this->consumerRunner->$consumerName();
     }
