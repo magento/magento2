@@ -16,17 +16,17 @@ use Magento\Framework\App\Filesystem;
 class SitemapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface.
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Sitemap\Model\Sitemap.
+     * @var \Magento\Sitemap\Model\Sitemap
      */
     private $sitemap;
 
     /**
-     * Remove cached configuration and reinitialize the application.
+     * Removes cached configuration and reinitialize the application.
      */
     private function refreshConfiguration()
     {
