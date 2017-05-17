@@ -14,7 +14,6 @@ use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
 /**
  * Importing configurable products
- * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -479,6 +478,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
 
             if (!empty($fieldAndValuePairs['sku'])) {
+                $position = 0;
                 $additionalRow['_super_products_sku'] = $fieldAndValuePairs['sku'];
                 unset($fieldAndValuePairs['sku']);
                 $additionalRow['display'] = isset($fieldAndValuePairs['display']) ? $fieldAndValuePairs['display'] : 1;
@@ -486,8 +486,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
                     $additionalRow['_super_attribute_code'] = $attrCode;
                     $additionalRow['_super_attribute_option'] = $attrValue;
+                    $additionalRow['_super_attribute_position'] = $position;
                     $additionalRows[] = $additionalRow;
                     $additionalRow = [];
+                    $position += 1;
                 }
             }
         }
@@ -690,7 +692,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $attrParams = $this->_superAttributes[$data['_super_attribute_code']];
         $this->_superAttributesData['attributes'][$productId][$attrParams['id']] = [
             'product_super_attribute_id' => $productSuperAttrId,
-            'position' => 0,
+            'position' => $data['_super_attribute_position'],
         ];
         $label = isset($variationLabels[$data['_super_attribute_code']])
                 ? $variationLabels[$data['_super_attribute_code']]
