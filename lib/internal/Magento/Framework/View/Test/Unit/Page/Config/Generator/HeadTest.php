@@ -83,10 +83,29 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             ->willReturn('http://magento.dev/customcss/render/css');
 
         $assets = [
-            'remoteCss' => ['src' => 'file-url-css', 'src_type' => 'url', 'media' => "all", 'content_type' => 'css'],
-            'remoteLink' => ['src' => 'file-url-link', 'src_type' => 'url', 'media' => "all"],
-            'controllerCss' => ['src' => 'customcss/render/css', 'src_type' => 'controller', 'content_type' => 'css', 'media' => 'all'],
-            'name' => ['src' => 'file-path', 'ie_condition' => 'lt IE 7', 'media' => "print", 'content_type' => 'css'],
+            'remoteCss' => [
+                'src' => 'file-url-css',
+                'src_type' => 'url',
+                'content_type' => 'css',
+                'media' => 'all',
+            ],
+            'remoteLink' => [
+                'src' => 'file-url-link',
+                'src_type' => 'url',
+                'media' => 'all',
+            ],
+            'controllerCss' => [
+                'src' => 'customcss/render/css',
+                'src_type' => 'controller',
+                'content_type' => 'css',
+                'media' => 'all',
+            ],
+            'name' => [
+                'src' => 'file-path',
+                'ie_condition' => 'lt IE 7',
+                'content_type' => 'css',
+                'media' => 'print',
+            ],
         ];
 
         $this->pageConfigMock->expects($this->at(0))
