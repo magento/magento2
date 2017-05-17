@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Sitemap\Model;
 
 use Magento\Framework\App\CacheInterface;
@@ -7,22 +10,23 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem;
 
 /**
- * Tests Magento\Framework\ComposerInformation
+ * Tests class for Magento\Sitemap\Model\Sitemap.
+ *
  */
 class SitemapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Framework\ObjectManagerInterface.
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Sitemap\Model\Sitemap
+     * @var \Magento\Sitemap\Model\Sitemap.
      */
     private $sitemap;
 
     /**
-     * Remove cached configuration and reinitialize the application
+     * Remove cached configuration and reinitialize the application.
      */
     private function refreshConfiguration()
     {
@@ -41,14 +45,13 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test generation sitemap when secure url is on
+     * Test generating sitemap.xml file when secure url option is on.
      *
      * @magentoDataFixture Magento/Sitemap/_files/sitemap_secure.php
      */
     public function testGenerationWithAdminSecureUrl()
     {
         self::refreshConfiguration();
-
         $this->sitemap->setData(
             [
                 'sitemap_id' => '1',
@@ -57,15 +60,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'store_id' => '1'
             ]
         );
-
         $result = $this->sitemap->generateXml();
-
         $filename = BP . $result->getSitemapPath() . $result->getSitemapFilename();
 
         $this->assertFileExists($filename, 'File not exists! ' . $filename);
-
         $file = $this->objectManager->get(\Magento\Framework\Filesystem\Io\File::class);
-
         $file_content = $file->read($filename);
 
         $this->assertNotContains('https', $file_content, "File must not contain https in sitemap file! ");
