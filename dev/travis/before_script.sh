@@ -75,19 +75,14 @@ case $TEST_SUITE in
         cat "$changed_files_ce" | sed 's/^/  + including /'
 
         cd ../../..
-        ;;
-    js)
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-        nvm install $NODE_JS_VERSION
-        nvm use $NODE_JS_VERSION
-        node --version
 
         cp package.json.sample package.json
         cp Gruntfile.js.sample Gruntfile.js
-        npm install -g yarn
-        yarn global add grunt-cli
+        yarn
+        ;;
+    js)
+        cp package.json.sample package.json
+        cp Gruntfile.js.sample Gruntfile.js
         yarn
 
         echo "Installing Magento"

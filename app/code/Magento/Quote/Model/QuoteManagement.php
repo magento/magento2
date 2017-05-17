@@ -301,11 +301,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function createCustomerCart($customerId, $storeId)
     {
-        $customer = $this->customerRepository->getById($customerId);
-
         try {
             $quote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $customer = $this->customerRepository->getById($customerId);
             /** @var \Magento\Quote\Model\Quote $quote */
             $quote = $this->quoteFactory->create();
             $quote->setStoreId($storeId);
