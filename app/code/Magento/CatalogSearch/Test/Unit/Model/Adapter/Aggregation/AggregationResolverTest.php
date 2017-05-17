@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Aggregation;
 
 use Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver;
+use Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface;
 use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Search\Request\BucketInterface;
@@ -49,8 +50,10 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
     private $aggregationResolver;
 
     /**
-     * @inheritdoc
+     * @var RequestCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
+    private $aggregationChecker;
+
     protected function setUp()
     {
         $this->attributeSetFinder = $this->getMockBuilder(AttributeSetFinderInterface::class)
@@ -68,6 +71,9 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
+        $this->aggregationChecker = $this->getMockBuilder(RequestCheckerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,
@@ -76,8 +82,20 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
                 'config' => $this->config,
                 'attributeCollection' => $this->attributeCollection,
+                'aggregationChecker' => $this->aggregationChecker
             ]
         );
+    }
+
+    public function testIsNotAplicable()
+    {
+        $documentIds = [1];
+        $this->aggregationChecker
+            ->expects($this->once())
+            ->method('isApplicable')
+            ->with($this->request)
+            ->willReturn(false);
+        $this->assertEquals([], $this->aggregationResolver->resolve($this->request, $documentIds));
     }
 
     public function testResolve()
@@ -93,6 +111,13 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $this->aggregationChecker
+            ->expects($this->once())
+            ->method('isApplicable')
+            ->with($this->request)
+            ->willReturn(true);
+
         $this->attributeSetFinder
             ->expects($this->once())
             ->method('findAttributeSetIdsByProductIds')
