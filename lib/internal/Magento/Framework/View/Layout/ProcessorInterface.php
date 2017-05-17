@@ -126,7 +126,15 @@ interface ProcessorInterface
     public function getContainers();
 
     /**
-     * Return cache ID based current area/package/theme/store and handles
+     * Add cache key for generating different cache id for same handles
+     *
+     * @param array|string $cacheKey
+     * @return ProcessorInterface
+     */
+    public function addCacheKey($cacheKey);
+
+    /**
+     * Return cache ID based current area/package/theme/store, handles and cache key(s)
      *
      * @return string
      */

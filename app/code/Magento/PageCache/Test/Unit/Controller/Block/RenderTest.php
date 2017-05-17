@@ -45,13 +45,19 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
+     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutProcessorMock;
+
+    /**
      * Set up before test
      */
     protected function setUp()
     {
-        $this->layoutMock = $this->getMockBuilder(
-            \Magento\Framework\View\Layout::class
-        )->disableOriginalConstructor()->getMock();
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->layoutProcessorMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\ProcessorInterface::class);
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()->getMock();
@@ -64,6 +70,8 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()->getMock();
+
+        $this->layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($this->layoutProcessorMock));
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
@@ -111,10 +119,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $blocks = ['block1', 'block2'];
-        $requestHandles = ['handle1', 'handle2'];
-        $additionalPageCacheHandle = 'mage_pagecache_additional_handle';
-        $pageCacheHandles = array_merge($requestHandles, [$additionalPageCacheHandle]);
-
+        $handles = ['handle1', 'handle2'];
         $originalRequest = '{"route":"route","controller":"controller","action":"action","uri":"uri"}';
         $expectedData = ['block1' => 'data1', 'block2' => 'data2'];
 
@@ -162,14 +167,20 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(base64_encode(json_encode($requestHandles))));
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($pageCacheHandles));
+            ->will($this->returnValue(base64_encode(json_encode($handles))));
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
         $this->layoutMock->expects($this->at(0))
+            ->method('getUpdate')
+            ->will($this->returnValue($this->layoutProcessorMock));
+        $this->layoutProcessorMock->expects($this->at(0))
+            ->method('addCacheKey')
+            ->willReturnSelf();
+        $this->layoutMock->expects($this->at(1))
             ->method('getBlock')
             ->with($this->equalTo($blocks[0]))
             ->will($this->returnValue($blockInstance1));
-        $this->layoutMock->expects($this->at(1))
+        $this->layoutMock->expects($this->at(2))
             ->method('getBlock')
             ->with($this->equalTo($blocks[1]))
             ->will($this->returnValue($blockInstance2));

@@ -40,6 +40,11 @@ class EsiTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
+     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutProcessorMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
@@ -52,6 +57,8 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
 
+        $this->layoutProcessorMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\ProcessorInterface::class);
+
         $contextMock =
             $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
                 ->disableOriginalConstructor()->getMock();
@@ -62,6 +69,8 @@ class EsiTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()->getMock();
+
+        $this->layoutMock->expects($this->any())->method('getUpdate')->will($this->returnValue($this->layoutProcessorMock));
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
@@ -89,11 +98,9 @@ class EsiTest extends \PHPUnit_Framework_TestCase
     public function testExecute($blockClass, $shouldSetHeaders)
     {
         $block = 'block';
-        $requestHandles = ['handle1', 'handle2'];
-        $additionalPageCacheHandle = 'mage_pagecache_additional_handle';
-        $pageCacheHandles = array_merge($requestHandles, [$additionalPageCacheHandle]);
+        $handles = ['handle1', 'handle2'];
         $html = 'some-html';
-        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($requestHandles))]];
+        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
 
         $blockInstance1 = $this->getMock(
             $blockClass,
@@ -108,9 +115,16 @@ class EsiTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($mapData));
 
-        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($pageCacheHandles));
+        $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
 
         $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
+
+        $this->layoutMock->expects($this->at(0))
+            ->method('getUpdate')
+            ->will($this->returnValue($this->layoutProcessorMock));
+        $this->layoutProcessorMock->expects($this->at(0))
+            ->method('addCacheKey')
+            ->willReturnSelf();
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')

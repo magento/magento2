@@ -30,7 +30,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * @var string
      */
-    private $additionalPageCacheHandle = 'mage_pagecache_additional_handle';
+    private $layoutCacheKey = 'mage_pagecache';
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -68,14 +68,12 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
-        if (is_array($handles)) {
-            $handles[] = $this->additionalPageCacheHandle;
-        }
+        $layout = $this->_view->getLayout();
+        $layout->getUpdate()->addCacheKey($this->layoutCacheKey);
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];
 
-        $layout = $this->_view->getLayout();
         foreach ($blocks as $blockName) {
             $blockInstance = $layout->getBlock($blockName);
             if (is_object($blockInstance)) {
