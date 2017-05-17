@@ -173,7 +173,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Catalog\Model\View\Asset\ImageFactory
      */
-    protected $_viewAssetImageFactory;
+    private $viewAssetImageFactory;
 
     /**
      * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
@@ -229,11 +229,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
         if ($viewAssetImageFactory == null) {
-            $this->_viewAssetImageFactory = ObjectManager::getInstance()->get(
+            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
                 \Magento\Catalog\Model\View\Asset\ImageFactory::class
             );
         } else {
-            $this->_viewAssetImageFactory = $viewAssetImageFactory;
+            $this->viewAssetImageFactory = $viewAssetImageFactory;
         }
     }
 
@@ -478,7 +478,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $this->_isBaseFilePlaceholder = false;
 
-        $this->imageAsset = $this->_viewAssetImageFactory->create(
+        $this->imageAsset = $this->viewAssetImageFactory->create(
             [
                 'miscParams' => $this->getMiscParams(),
                 'filePath' => $file,
