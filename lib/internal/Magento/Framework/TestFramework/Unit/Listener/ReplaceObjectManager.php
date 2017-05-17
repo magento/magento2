@@ -9,7 +9,6 @@ namespace Magento\Framework\TestFramework\Unit\Listener;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Model\ObjectManager as ObjectManagerMock;
 
 /**
  * The event listener which instantiates ObjectManager before test run
@@ -17,27 +16,22 @@ use Magento\Framework\TestFramework\Unit\Model\ObjectManager as ObjectManagerMoc
 class ReplaceObjectManager extends \PHPUnit_Framework_BaseTestListener
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * Replaces ObjectManager before run for each test
      *
-     * Replace existing instance of the Application's ObjectManager with an instance,
-     * defined in the Unit Test framework
+     * Replace existing instance of the Application's ObjectManager with the mock.
      *
      * This avoids the issue with a not initialized ObjectManager
-     * and allows to customize its behaviour with expected for unit testing
+     * and makes working with ObjectManager predictable as it always contains clear mock for each test
      *
      * @param \PHPUnit_Framework_Test $test
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function startTest(\PHPUnit_Framework_Test $test)
     {
-        if (!$this->objectManager) {
-            $this->objectManager = new ObjectManagerMock();
+        if ($test instanceof \PHPUnit_Framework_TestCase) {
+            $objectManagerMock = $test->getMockBuilder(ObjectManagerInterface::class)
+                ->getMockForAbstractClass();
+            ObjectManager::setInstance($objectManagerMock);
         }
-        ObjectManager::setInstance($this->objectManager);
     }
 }
