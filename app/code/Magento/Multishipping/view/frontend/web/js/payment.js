@@ -1,9 +1,7 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global alert*/
 
 define([
     'jquery',
@@ -22,6 +20,7 @@ define([
             tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.element.find('dd [name^="payment["]').prop('disabled', true).end()
                 .on('click', this.options.continueSelector, $.proxy(this._submitHandler, this))
@@ -37,7 +36,8 @@ define([
                     }
 
                     if (this.options.checkoutPrice <= this.options.minBalance) {
-                        // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
+                        // Add free input field, hide and disable unchecked
+                        // checkbox payment method and all radio button payment methods
                         this._disablePaymentMethods();
                     } else {
                         // Remove free input field, show all payment method
@@ -64,7 +64,8 @@ define([
 
             parentsDl.find('dt input:radio').prop('checked', false);
             parentsDl.find('.items').hide().find('[name^="payment["]').prop('disabled', true);
-            element.prop('checked', true).parent().nextUntil('dt').find('.items').show().find('[name^="payment["]').prop('disabled', false);
+            element.prop('checked', true).parent()
+                .nextUntil('dt').find('.items').show().find('[name^="payment["]').prop('disabled', false);
         },
 
         /**

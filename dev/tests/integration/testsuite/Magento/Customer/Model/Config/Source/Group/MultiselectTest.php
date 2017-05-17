@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Source\Group;
@@ -29,13 +29,16 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
             }
         }
         sort($optionsToCompare);
-        $this->assertEquals(
-            [
-                ['value' => 1, 'label' => 'General'],
-                ['value' => 2, 'label' => 'Wholesale'],
-                ['value' => 3, 'label' => 'Retailer'],
-            ],
-            $optionsToCompare
-        );
+        foreach ($optionsToCompare as $item) {
+            $this->assertContains(
+                $item,
+                [
+                    ['value' => 1, 'label' => 'Default (General)'],
+                    ['value' => 1, 'label' => 'General'],
+                    ['value' => 2, 'label' => 'Wholesale'],
+                    ['value' => 3, 'label' => 'Retailer'],
+                ]
+            );
+        }
     }
 }

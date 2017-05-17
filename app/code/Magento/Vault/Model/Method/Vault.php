@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Method;
@@ -27,8 +27,10 @@ use Magento\Vault\Model\VaultPaymentInterface;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
-final class Vault implements VaultPaymentInterface
+class Vault implements VaultPaymentInterface
 {
     /**
      * @deprecated

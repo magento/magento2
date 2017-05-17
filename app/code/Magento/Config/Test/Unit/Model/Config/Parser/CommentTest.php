@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Parser;
@@ -29,6 +29,9 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)

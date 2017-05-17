@@ -1,77 +1,85 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
  * Create/edit some category
  */
+
+/* global tree */
 define([
     'jquery',
     'prototype'
 ], function (jQuery) {
+    'use strict';
 
-    var categorySubmit = function (url, useAjax) {
-    var activeTab = $('active_tab_id');
-    if (activeTab) {
-        if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
-            activeTab.value = activeTab.tabsJsObject.tabs('activeAnchor').prop('id');
-        }
-    }
+    /** Category submit. */
+    var categorySubmit = function () {
+        var activeTab = $('active_tab_id'),
+            params = {},
+            fields, i,categoryId, isCreating, path, parentId, currentNode, oldClass, newClass;
 
-    var params = {};
-    var fields = $('category_edit_form').getElementsBySelector('input', 'select');
-    for (var i=0; i<fields.length; i++) {
-        if (!fields[i].name) {
-            continue;
-        }
-        params[fields[i].name] = fields[i].getValue();
-    }
-
-    // Get info about what we're submitting - to properly update tree nodes
-    var categoryId = params['general[id]'] ? params['general[id]'] : 0;
-    var isCreating = categoryId == 0; // Separate variable is needed because '0' in javascript converts to TRUE
-    var path = params['general[path]'].split('/');
-    var parentId = path.pop();
-    if (parentId == categoryId) { // Maybe path includes category id itself
-        parentId = path.pop();
-    }
-
-    // Make operations with category tree
-    if (isCreating) {
-        /* Some specific tasks for creating category */
-        if (!tree.currentNodeId) {
-            // First submit of form - select some node to be current
-            tree.currentNodeId = parentId;
-        }
-        tree.addNodeTo = parentId;
-    } else {
-        /* Some specific tasks for editing category */
-        // Maybe change category enabled/disabled style
-        if (tree && tree.storeId==0) {
-            var currentNode = tree.getNodeById(categoryId);
-
-            if (currentNode) {
-                if (parseInt(params['general[is_active]'])) {
-                    var oldClass = 'no-active-category';
-                    var newClass = 'active-category';
-                } else {
-                    var oldClass = 'active-category';
-                    var newClass = 'no-active-category';
-                }
-
-                Element.removeClassName(currentNode.ui.wrap.firstChild, oldClass);
-                Element.addClassName(currentNode.ui.wrap.firstChild, newClass);
+        if (activeTab) {
+            if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
+                activeTab.value = activeTab.tabsJsObject.tabs('activeAnchor').prop('id');
             }
         }
-    }
 
-    // Submit form
-    jQuery('#category_edit_form').trigger('submit');
-};
+        fields = $('category_edit_form').getElementsBySelector('input', 'select');
+
+        for (i = 0; i < fields.length; i++) {
+            if (!fields[i].name) {
+                continue;//jscs:ignore
+            }
+            params[fields[i].name] = fields[i].getValue();
+        }
+
+        // Get info about what we're submitting - to properly update tree nodes
+        categoryId = params['general[id]'] ? params['general[id]'] : 0;
+        isCreating = categoryId == 0; // eslint-disable-line eqeqeq
+        path = params['general[path]'].split('/');
+        parentId = path.pop();
+
+        if (parentId == categoryId) { // eslint-disable-line eqeqeq
+            parentId = path.pop();
+        }
+
+        // Make operations with category tree
+        if (isCreating) {
+            /* Some specific tasks for creating category */
+            if (!tree.currentNodeId) {
+                // First submit of form - select some node to be current
+                tree.currentNodeId = parentId;
+            }
+            tree.addNodeTo = parentId;
+        } else {
+            /* Some specific tasks for editing category */
+            // Maybe change category enabled/disabled style
+            if (tree && tree.storeId == 0) {// eslint-disable-line eqeqeq, no-lonely-if
+                currentNode = tree.getNodeById(categoryId);
+
+                if (currentNode) {//eslint-disable-line max-depth
+                    if (parseInt(params['general[is_active]'])) {//eslint-disable-line radix, max-depth
+                        oldClass = 'no-active-category';
+                        newClass = 'active-category';
+                    } else {
+                        oldClass = 'active-category';
+                        newClass = 'no-active-category';
+                    }
+
+                    Element.removeClassName(currentNode.ui.wrap.firstChild, oldClass);
+                    Element.addClassName(currentNode.ui.wrap.firstChild, newClass);
+                }
+            }
+        }
+
+        // Submit form
+        jQuery('#category_edit_form').trigger('submit');
+    };
 
     return function (config, element) {
         config = config || {};
-        jQuery(element).on('click', function (event) {
+        jQuery(element).on('click', function () {
             categorySubmit(config.url, config.ajax);
         });
     };

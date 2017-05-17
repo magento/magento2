@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Image extends AbstractHelper
@@ -432,7 +433,7 @@ class Image extends AbstractHelper
      *
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
@@ -543,7 +544,7 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     * 
+     *
      * @deprecated Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */

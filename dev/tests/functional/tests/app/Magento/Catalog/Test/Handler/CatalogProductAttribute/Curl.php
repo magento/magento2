@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,6 +49,10 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'Fixed Product Tax' => 'weee',
         ],
         'is_required' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
+        'is_searchable' => [
             'Yes' => 1,
             'No' => 0,
         ],

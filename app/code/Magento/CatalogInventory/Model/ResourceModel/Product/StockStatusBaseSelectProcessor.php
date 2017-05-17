@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Product;
@@ -10,6 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class StockStatusBaseSelectProcessor
@@ -22,11 +23,21 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $resource;
 
     /**
-     * @param ResourceConnection $resource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
-    public function __construct(ResourceConnection $resource)
-    {
+    private $indexerStockFrontendResource;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     */
+    public function __construct(
+        ResourceConnection $resource,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+    ) {
         $this->resource = $resource;
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -37,7 +48,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      */
     public function process(Select $select)
     {
-        $stockStatusTable = $this->resource->getTableName('cataloginventory_stock_status');
+        $stockStatusTable = $this->indexerStockFrontendResource->getMainTable();
 
         /** @var Select $select */
         $select->join(

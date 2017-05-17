@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/**  @var $block \Magento\Checkout\Block\Cart */
+/**  @var $block \Magento\Checkout\Block\Cart\Grid */
 ?>
 <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
 <?php echo $block->getChildHtml('form_before') ?>
@@ -17,6 +17,9 @@
           class="form form-cart">
     <?php echo $block->getBlockHtml('formkey'); ?>
     <div class="cart table-wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
+        <?php if ($block->getPagerHtml()): ?>
+            <div class="cart-products-toolbar cart-products-toolbar-top toolbar" data-attribute="cart-products-toolbar-top"><?php echo $block->getPagerHtml(); ?></div>
+        <?php endif ?>
         <table id="shopping-cart-table"
                class="cart items data table"
                data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
@@ -34,6 +37,9 @@
                 <?php echo $block->getItemHtml($_item) ?>
             <?php endforeach ?>
         </table>
+        <?php if ($block->getPagerHtml()): ?>
+            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar" data-attribute="cart-products-toolbar-bottom"><?php echo $block->getPagerHtml(); ?></div>
+        <?php endif ?>
     </div>
     <div class="cart main actions">
         <?php if ($block->getContinueShoppingUrl()): ?>

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -24,7 +24,7 @@
                 <selector>input[name='name']</selector>
             </name>
             <use_default_name>
-                <selector>[name="use_default[]"][value="name"]</selector>
+                <selector>[name="use_default[name]"]</selector>
                 <input>checkbox</input>
             </use_default_name>
         </fields>
@@ -111,7 +111,7 @@
         <strategy>css selector</strategy>
         <fields>
             <use_parent_category_settings>
-                <input>checkbox</input>
+                <input>switcher</input>
                 <selector>input[name='custom_use_parent_settings']</selector>
             </use_parent_category_settings>
             <theme>
@@ -127,7 +127,7 @@
                 <selector>textarea[name='custom_layout_update']</selector>
             </layout_update_xml>
             <apply_design_to_products>
-                <input>checkbox</input>
+                <input>switcher</input>
                 <selector>input[name='custom_apply_to_products']</selector>
             </apply_design_to_products>
         </fields>

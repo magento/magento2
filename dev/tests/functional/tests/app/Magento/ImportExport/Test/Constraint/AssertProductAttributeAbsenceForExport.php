@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\ImportExport\Test\Fixture\ImportExport;
+use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -22,13 +22,13 @@ class AssertProductAttributeAbsenceForExport extends AbstractConstraint
      *
      * @param AdminExportIndex $exportIndex
      * @param CatalogProductAttribute $attribute
-     * @param ImportExport $export
+     * @param ExportData $export
      * @return void
      */
     public function processAssert(
         AdminExportIndex $exportIndex,
         CatalogProductAttribute $attribute,
-        ImportExport $export
+        ExportData $export
     ) {
         $exportIndex->open();
         $exportIndex->getExportForm()->fill($export);
@@ -50,6 +50,6 @@ class AssertProductAttributeAbsenceForExport extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product Attribute is absent in Filter export grid';
+        return 'Product Attribute is absent in Filter export grid.';
     }
 }

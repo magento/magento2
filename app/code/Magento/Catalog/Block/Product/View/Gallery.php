@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,9 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Catalog\Helper\Image;
 
+/**
+ * @api
+ */
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**

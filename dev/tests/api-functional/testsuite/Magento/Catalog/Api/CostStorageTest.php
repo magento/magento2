@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,40 +59,6 @@ class CostStorageTest extends WebapiAbstract
 
         $this->assertNotEmpty($response);
         $this->assertEquals($product->getCost(), $cost);
-    }
-
-    /**
-     * Test get method, called with not existing SKUs.
-     */
-    public function testGetWithInvalidSku()
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/products/cost-information',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-            ],
-        ];
-        $expected = 'Requested products don\'t exist: %sku';
-
-        try {
-            $this->_webApiCall($serviceInfo, ['skus' => ['sku_of_not_exiting_product', 'invalid_sku']]);
-            $this->fail("Expected throwing exception");
-        } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expected,
-                $e->getMessage(),
-                "SoapFault does not contain expected message."
-            );
-        } catch (\Exception $e) {
-            $error = $this->processRestExceptionResult($e);
-            $this->assertEquals($expected, $error['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
-        }
     }
 
     /**
@@ -219,39 +185,5 @@ class CostStorageTest extends WebapiAbstract
         $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
         $this->assertTrue($response);
         $this->assertNull($product->getCost());
-    }
-
-    /**
-     * Test delete method, called with not existing SKUs.
-     */
-    public function testDeleteWithInvalidSku()
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/products/cost-delete',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Delete',
-            ],
-        ];
-        $expectedResponseMessage = 'Requested product doesn\'t exist: %sku';
-
-        try {
-            $this->_webApiCall($serviceInfo, ['skus' => ['sku_of_not_exiting_product']]);
-            $this->fail("Expected throwing exception");
-        } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expectedResponseMessage,
-                $e->getMessage(),
-                "SoapFault does not contain expected message."
-            );
-        } catch (\Exception $e) {
-            $error = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedResponseMessage, $error['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
-        }
     }
 }

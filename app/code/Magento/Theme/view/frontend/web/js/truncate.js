@@ -1,14 +1,19 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint jquery:true*/
+
+/**
+ * JQuery UI Widget declaration: 'mage.truncateOptions'
+ *
+ * @api
+ */
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
+
     $.widget('mage.truncateOptions', {
         options: {
             detailsLink: 'a.details',
@@ -18,21 +23,22 @@ define([
 
         /**
          * Establish the event handler for mouse events on the appropriate elements.
+         *
          * @private
          */
-        _create: function() {
+        _create: function () {
             this.element.on(this.options.mouseEvents, $.proxy(this._toggleShow, this))
                 .find(this.options.detailsLink).on(this.options.mouseEvents, $.proxy(this._toggleShow, this));
         },
 
         /**
          * Toggle the "show" class on the associated element.
+         *
          * @private
-         * @param event {Object} - Mouse over/out event.
+         * @param {jQuery.Event} event - Mouse over/out event.
          */
-        _toggleShow: function(event) {
+        _toggleShow: function (event) {
             $(event.currentTarget).find(this.options.truncatedFullValue).toggleClass('show');
         }
     });
-
 });

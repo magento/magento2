@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,9 +53,9 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     private $resource;
 
     /**
-     * @var \Magento\Sales\Model\Order\PaymentAdapterInterface
+     * @var \Magento\Sales\Model\Order\RefundAdapterInterface
      */
-    private $paymentAdapter;
+    private $refundAdapter;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
@@ -163,12 +163,6 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         $connection = $this->getResource()->getConnection('sales');
         $connection->beginTransaction();
         try {
-            $order = $this->getPaymentAdapter()->refund(
-                $creditmemo,
-                $creditmemo->getOrder(),
-                !$offlineRequested
-            );
-            $this->getOrderRepository()->save($order);
             $invoice = $creditmemo->getInvoice();
             if ($invoice && !$offlineRequested) {
                 $invoice->setIsUsedForRefund(true);
@@ -178,6 +172,12 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
                 $creditmemo->setInvoiceId($invoice->getId());
                 $this->getInvoiceRepository()->save($creditmemo->getInvoice());
             }
+            $order = $this->getRefundAdapter()->refund(
+                $creditmemo,
+                $creditmemo->getOrder(),
+                !$offlineRequested
+            );
+            $this->getOrderRepository()->save($order);
             $this->creditmemoRepository->save($creditmemo);
             $connection->commit();
         } catch (\Exception $e) {
@@ -219,17 +219,17 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\PaymentAdapterInterface
+     * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      *
      * @deprecated
      */
-    private function getPaymentAdapter()
+    private function getRefundAdapter()
     {
-        if ($this->paymentAdapter === null) {
-            $this->paymentAdapter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Sales\Model\Order\PaymentAdapterInterface::class);
+        if ($this->refundAdapter === null) {
+            $this->refundAdapter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Model\Order\RefundAdapterInterface::class);
         }
-        return $this->paymentAdapter;
+        return $this->refundAdapter;
     }
 
     /**

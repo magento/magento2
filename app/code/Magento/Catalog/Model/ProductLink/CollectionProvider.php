@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,9 +48,21 @@ class CollectionProvider
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
         $output = [];
+        $sorterItems = [];
         foreach ($products as $item) {
             $output[$item->getId()] = $converter->convert($item);
         }
-        return $output;
+
+        foreach ($output as $item) {
+            $itemPosition = $item['position'];
+            if (!isset($sorterItems[$itemPosition])) {
+                $sorterItems[$itemPosition] = $item;
+            } else {
+                $newPosition = $itemPosition + 1;
+                $sorterItems[$newPosition] = $item;
+            }
+        }
+        ksort($sorterItems);
+        return $sorterItems;
     }
 }

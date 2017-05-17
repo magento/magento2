@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,9 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
 use Magento\Store\Model\ResourceModel\Store\Collection;
 
+/**
+ * @api
+ */
 class Options extends \Magento\Backend\Block\Template
 {
     /**
@@ -84,7 +87,7 @@ class Options extends \Magento\Backend\Block\Template
 
     /**
      * Returns stores sorted by Sort Order
-     * 
+     *
      * @return array
      */
     public function getStoresSortedBySortOrder()

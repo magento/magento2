@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -87,15 +87,17 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function clearStaticDirectory()
     {
-        /** @var \SplFileInfo $file */
-        foreach ($this->collectFiles($this->pubStatic) as $file) {
-            @unlink($file->getPathname());
+        if (is_dir($this->pubStatic)) {
+            /** @var \SplFileInfo $file */
+            foreach ($this->collectFiles($this->pubStatic) as $file) {
+                @unlink($file->getPathname());
+            }
         }
     }
 
     /**
      * @param string $path
-     * @return \RegexIterator
+     * @return \RegexIterator|array
      */
     private function collectFiles($path)
     {

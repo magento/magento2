@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Config\Model\PreparedValueFactory;
 
 /**
  * Class ConfigWriter. Save configuration values into config file.
@@ -27,15 +30,25 @@ class ConfigWriter
     private $arrayManager;
 
     /**
+     * Creates a prepared instance of Value.
+     *
+     * @var PreparedValueFactory
+     */
+    private $preparedValueFactory;
+
+    /**
      * @param Writer $writer
      * @param ArrayManager $arrayManager
+     * @param PreparedValueFactory|null $valueFactory Creates a prepared instance of Value
      */
     public function __construct(
         Writer $writer,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        PreparedValueFactory $valueFactory = null
     ) {
         $this->writer = $writer;
         $this->arrayManager = $arrayManager;
+        $this->preparedValueFactory = $valueFactory ?: ObjectManager::getInstance()->get(PreparedValueFactory::class);
     }
 
     /**
@@ -52,13 +65,21 @@ class ConfigWriter
         $pathPrefix = $this->getPathPrefix($scope, $scopeCode);
         foreach ($values as $configPath => $configValue) {
             $fullConfigPath = $pathPrefix . $configPath;
+            $backendModel = $this->preparedValueFactory->create($configPath, $configValue, $scope, $scopeCode);
+
+            if ($backendModel instanceof Value) {
+                $backendModel->validateBeforeSave();
+                $backendModel->beforeSave();
+                $configValue = $backendModel->getValue();
+                $backendModel->afterSave();
+            }
+
             $config = $this->setConfig($config, $fullConfigPath, $configValue);
         }
 
-        $this->writer
-            ->saveConfig(
-                [ConfigFilePool::APP_CONFIG => $config]
-            );
+        $this->writer->saveConfig(
+            [ConfigFilePool::APP_ENV => $config]
+        );
     }
 
     /**
@@ -97,8 +118,7 @@ class ConfigWriter
     private function getPathPrefix($scope, $scopeCode)
     {
         $pathPrefixes = [System::CONFIG_TYPE, $scope];
-        if (
-            $scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             && !empty($scopeCode)
         ) {
             $pathPrefixes[] = $scopeCode;

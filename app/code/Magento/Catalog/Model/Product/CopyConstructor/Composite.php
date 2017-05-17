@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\CopyConstructor;
@@ -8,6 +8,11 @@ namespace Magento\Catalog\Model\Product\CopyConstructor;
 use Magento\Catalog\Model\Product\CopyConstructorFactory;
 use Magento\Catalog\Model\Product\CopyConstructorInterface;
 
+/**
+ * Performs duplication process by applying product type convertors
+ *
+ * @api
+ */
 class Composite implements CopyConstructorInterface
 {
     /**

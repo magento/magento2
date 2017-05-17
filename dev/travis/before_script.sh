@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright © 2013-2017 Magento, Inc. All rights reserved.
+# Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
 set -e
@@ -75,5 +75,21 @@ case $TEST_SUITE in
         cat "$changed_files_ce" | sed 's/^/  + including /'
 
         cd ../../..
+
+        cp package.json.sample package.json
+        cp Gruntfile.js.sample Gruntfile.js
+        yarn
+        ;;
+    js)
+        cp package.json.sample package.json
+        cp Gruntfile.js.sample Gruntfile.js
+        yarn
+
+        echo "Installing Magento"
+        mysql -uroot -e 'CREATE DATABASE magento2;'
+        php bin/magento setup:install -q --admin-user="admin" --admin-password="123123q" --admin-email="admin@example.com" --admin-firstname="John" --admin-lastname="Doe"
+
+        echo "Deploying Static Content"
+        php bin/magento setup:static-content:deploy -f -q -j=2 --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
         ;;
 esac

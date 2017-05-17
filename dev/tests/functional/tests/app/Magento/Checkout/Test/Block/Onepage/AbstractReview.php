@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,6 +134,27 @@ abstract class AbstractReview extends Block
     protected $waitElement = '.loading-mask';
 
     /**
+     * Selector for cart items block
+     *
+     * @var string
+     */
+    protected $itemsBlock = '.block.items-in-cart  > .title';
+
+    /**
+     * Selector for items counter
+     *
+     * @var string
+     */
+    protected $itemsCounterSelector = '.items-in-cart .title';
+
+    /**
+     * Selector for list of cart items
+     *
+     * @var string
+     */
+    protected $cartItemsContentSelector = '.content.minicart-items';
+
+    /**
      * @constructor
      * @param SimpleElement $element
      * @param BlockFactory $blockFactory
@@ -217,6 +238,52 @@ abstract class AbstractReview extends Block
         );
         $price = $productItem->find($this->itemSubInclTax);
         return $price->isVisible() ? $this->escapeCurrency($price->getText()) : null;
+    }
+
+    /**
+     * Get cart item.
+     *
+     * @param string $productName
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getItemElement($productName)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->productItemByName, $productName),
+            Locator::SELECTOR_XPATH
+        );
+    }
+
+    /**
+     * Click to expand cart items block
+     *
+     * @return void
+     */
+    public function expandItemsBlock()
+    {
+        if (!$this->_rootElement->find($this->cartItemsContentSelector)->isVisible()) {
+            $this->browser->find($this->itemsBlock)->click();
+        }
+    }
+
+    /**
+     * Returns checkout summary block items counter value
+     *
+     * @return string
+     */
+    public function getVisibleItemsCounter()
+    {
+        return $this->_rootElement->find($this->itemsCounterSelector)->getText();
+    }
+
+    /**
+     * Returns go to cart link element
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getGoToCartLink()
+    {
+        return $this->_rootElement->find('.action.viewcart');
     }
 
     /**

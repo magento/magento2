@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 /**
  * Adminhtml order totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block\Adminhtml\Order\AbstractOrder

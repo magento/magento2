@@ -1,20 +1,29 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
 /**
- * Class CartPriceRulesFixture
+ * Fixture for generating cart price rules
+ *
+ * Support the following format:
+ * <!-- Number of cart price rules -->
+ * <cart_price_rules>{int}</cart_price_rules>
+ *
+ * <!-- Number of conditions per rule -->
+ * <cart_price_rules_floor>{int}</cart_price_rules_floor>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  */
 class CartPriceRulesFixture extends Fixture
 {
     /**
      * @var int
      */
-    protected $priority = 70;
+    protected $priority = 80;
 
     /**
      * @var float
@@ -231,7 +240,7 @@ class CartPriceRulesFixture extends Fixture
                 'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
                 'operator'  => '==',
-                'value'     => $categoriesArray[($ruleId / 4 ) % count($categoriesArray)][0],
+                'value'     => $categoriesArray[($ruleId / 4) % count($categoriesArray)][0],
             ];
 
             $subtotal = [0, 5, 10, 15];

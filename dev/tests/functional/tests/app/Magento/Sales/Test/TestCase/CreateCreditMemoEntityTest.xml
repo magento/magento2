@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest" summary="Create Credit Memo for Offline Payment Methods" ticketId="MAGETWO-29116">
         <variation name="CreateCreditMemoEntityTestVariation1" summary="Assert items return to stock (partial refund)">
-            <data name="data/items_data/0/back_to_stock" xsi:type="string">Yes</data>
-            <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="data/form_data/send_email" xsi:type="string">Yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-65659: [FT] Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest fails randomly on Jenkins</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                            <item name="back_to_stock" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="send_email" xsi:type="string">Yes</item>
+                    </item>
+                </item>
+            </data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="order/data/price/dataset" xsi:type="string">partial_refund</data>
@@ -26,10 +38,22 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariation2" summary="Assert 0 shipping refund">
-            <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="data/form_data/shipping_amount" xsi:type="string">0</data>
-            <data name="data/form_data/adjustment_positive" xsi:type="string">5</data>
-            <data name="data/form_data/adjustment_negative" xsi:type="string">10</data>
+            <data name="issue" xsi:type="string">MAGETWO-65659: [FT] Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest fails randomly on Jenkins</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="shipping_amount" xsi:type="string">0</item>
+                        <item name="adjustment_positive" xsi:type="string">5</item>
+                        <item name="adjustment_negative" xsi:type="string">10</item>
+                    </item>
+                </item>
+            </data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">banktransfer</data>
             <data name="order/data/price/dataset" xsi:type="string">full_refund_with_zero_shipping_refund</data>
@@ -42,10 +66,21 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariationWithCashOnDeliveryPaymentMethod" summary="Assert 0 shipping refund with Cash on delivery payment method">
-            <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="data/form_data/shipping_amount" xsi:type="string">0</data>
-            <data name="data/form_data/adjustment_positive" xsi:type="string">5</data>
-            <data name="data/form_data/adjustment_negative" xsi:type="string">10</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="shipping_amount" xsi:type="string">0</item>
+                        <item name="adjustment_positive" xsi:type="string">5</item>
+                        <item name="adjustment_negative" xsi:type="string">10</item>
+                    </item>
+                </item>
+            </data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">cashondelivery</data>
             <data name="order/data/price/dataset" xsi:type="string">full_refund_with_zero_shipping_refund</data>
@@ -54,10 +89,21 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundedGrandTotalOnFrontend" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariationWithPurchaseOrderPaymentMethod" summary="Assert 0 shipping refund with Purchase Order payment method">
-            <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="data/form_data/shipping_amount" xsi:type="string">0</data>
-            <data name="data/form_data/adjustment_positive" xsi:type="string">5</data>
-            <data name="data/form_data/adjustment_negative" xsi:type="string">10</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="shipping_amount" xsi:type="string">0</item>
+                        <item name="adjustment_positive" xsi:type="string">5</item>
+                        <item name="adjustment_negative" xsi:type="string">10</item>
+                    </item>
+                </item>
+            </data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">purchaseorder</data>
             <data name="order/data/price/dataset" xsi:type="string">full_refund_with_zero_shipping_refund</data>

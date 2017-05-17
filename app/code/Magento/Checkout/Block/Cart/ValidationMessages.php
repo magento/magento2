@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Shopping cart validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {

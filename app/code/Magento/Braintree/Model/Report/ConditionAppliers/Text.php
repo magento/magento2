@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Report\ConditionAppliers;
@@ -25,7 +25,7 @@ class Text implements ApplierInterface
         $result = false;
 
         $value = trim($value, "% \r\n\t");
-        switch($condition) {
+        switch ($condition) {
             case ApplierInterface::EQ:
                 $field->is($value);
                 $result = true;

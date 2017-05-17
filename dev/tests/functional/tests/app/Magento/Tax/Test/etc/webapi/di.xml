@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="\Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface" type="\Magento\Tax\Test\Handler\TaxRule\Webapi" />
-    <preference for="\Magento\Tax\Test\Handler\TaxClass\TaxClassInterface" type="\Magento\Tax\Test\Handler\TaxClass\Webapi" />
-    <preference for="\Magento\Tax\Test\Handler\TaxRate\TaxRateInterface" type="\Magento\Tax\Test\Handler\TaxRate\Webapi" />
+    <preference for="Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface" type="Magento\Tax\Test\Handler\TaxRule\Webapi" />
+    <preference for="Magento\Tax\Test\Handler\TaxClass\TaxClassInterface" type="Magento\Tax\Test\Handler\TaxClass\Webapi" />
+    <preference for="Magento\Tax\Test\Handler\TaxRate\TaxRateInterface" type="Magento\Tax\Test\Handler\TaxRate\Webapi" />
 </config>

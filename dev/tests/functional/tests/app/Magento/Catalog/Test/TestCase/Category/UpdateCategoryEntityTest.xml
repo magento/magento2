@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -44,7 +44,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIsNotActive" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation4_ChangeCategoryNameOnStoreView" summary="Update Category with custom Store View.">
-            <data name="issue" xsi:type="string">Not implemented yet: MAGETWO-48516</data>
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
 	        <data name="category/data/use_default_name" xsi:type="string">No</data>
             <data name="category/data/name" xsi:type="string">Category %isolation%</data>
@@ -58,6 +57,14 @@
             <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomStore" />
+        </variation>
+        <variation name="UpdateCategoryEntityTestVariation6_CheckCategoryDefaultUrlOnStoreView" summary="Check default URL Key on the custom Store View." ticketId="MAGETWO-64337">
+            <data name="initialCategory/dataset" xsi:type="string">default_with_custom_url</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
+            <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
+            <data name="category/data/use_default_url_key" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
     </testCase>
 </config>

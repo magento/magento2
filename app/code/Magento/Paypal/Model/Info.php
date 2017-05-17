@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -698,8 +698,8 @@ class Info
                 'R' => __('N/A. Retry'),
                 'S' => __('N/A. Service not Supported'),
                 'U' => __('N/A. Unavailable'),
-                'W' => __('Matched whole nine-didgit ZIP (no Address)'),
-                'Y' => __('Yes. Matched Address and five-didgit ZIP'),
+                'W' => __('Matched whole nine-digit ZIP (no Address)'),
+                'Y' => __('Yes. Matched Address and five-digit ZIP'),
                 // Maestro and Solo
                 '0' => __('All the address information matched'),
                 '1' => __('None of the address information matched'),

@@ -1,25 +1,26 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command;
 
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Filesystem;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Tests the different flows of config:set command.
@@ -50,7 +51,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
-     * @var Reader
+     * @var FileReader
      */
     private $reader;
 
@@ -75,16 +76,22 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
+     * @var ReinitableConfigInterface
+     */
+    private $appConfig;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $this->reader = $this->objectManager->get(Reader::class);
+        $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->arrayManager = $this->objectManager->get(ArrayManager::class);
+        $this->appConfig = $this->objectManager->get(ReinitableConfigInterface::class);
 
         // Snapshot of configuration.
         $this->config = $this->loadConfig();
@@ -102,12 +109,13 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
             "<?php\n return array();\n"
         );
         /** @var Writer $writer */
         $writer = $this->objectManager->get(Writer::class);
-        $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $writer->saveConfig([ConfigFilePool::APP_ENV => $this->config]);
+        $this->appConfig->reinit();
     }
 
     /**
@@ -115,11 +123,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function loadConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_CONFIG,
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     /**
@@ -157,6 +161,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         /** @var ConfigSetCommand $command */
         $command = $this->objectManager->create(ConfigSetCommand::class);
         $status = $command->run($this->inputMock, $this->outputMock);
+        $this->appConfig->reinit();
 
         $this->assertSame(Cli::RETURN_SUCCESS, $status);
         $this->assertSame(
@@ -173,8 +178,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     public function runDataProvider()
     {
         return [
-            ['test/test/test', 'value'],
-            ['test/test/test2', 'value2', ScopeInterface::SCOPE_WEBSITE, 'base']
+            ['general/region/display_all', '1'],
+            ['general/region/state_required', 'BR,FR', ScopeInterface::SCOPE_WEBSITE, 'base'],
+            ['admin/security/use_form_key', '0'],
+            ['carriers/fedex/account', '123']
         ];
     }
 
@@ -222,6 +229,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($value, $this->arrayManager->get($configPath, $this->loadConfig()));
 
         $status = $command->run($this->inputMock, $this->outputMock);
+        $this->appConfig->reinit();
 
         $this->assertSame(Cli::RETURN_SUCCESS, $status);
     }
@@ -233,7 +241,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function runLockDataProvider()
     {
-        return $this->runDataProvider();
+        return [
+            ['general/region/display_all', '1'],
+            ['general/region/state_required', 'BR,FR', ScopeInterface::SCOPE_WEBSITE, 'base'],
+            ['admin/security/use_form_key', '0'],
+        ];
     }
 
     /**
@@ -312,6 +324,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         /** @var ConfigSetCommand $command */
         $command = $this->objectManager->create(ConfigSetCommand::class);
         $status = $command->run($input, $output);
+        $this->appConfig->reinit();
 
         $this->assertSame($expectedCode, $status);
     }
@@ -323,7 +336,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function runExtendedDataProvider()
     {
-        return $this->runDataProvider();
+        return $this->runLockDataProvider();
     }
 
     /**
@@ -378,8 +391,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                         ->method('writeln')
                         ->with('<info>Value was saved.</info>');
                 },
-                'test/test/test',
-                'value',
+                'general/region/state_required',
+                'CA',
                 ScopeInterface::SCOPE_WEBSITE,
                 'base'
             ],
@@ -415,6 +428,84 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 'value',
                 ScopeInterface::SCOPE_WEBSITE,
                 'invalid_scope_code'
+            ]
+        ];
+    }
+
+    /**
+     * Tests different scenarios for scope options.
+     *
+     * @param \Closure $expectations
+     * @param string $path
+     * @param string $value
+     * @param string $scope
+     * @param string $scopeCode
+     * @magentoDbIsolation enabled
+     * @dataProvider getRunPathValidationDataProvider
+     */
+    public function testRunPathValidation(
+        \Closure $expectations,
+        $path,
+        $value,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeCode = null
+    ) {
+        $this->inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, $path],
+                [ConfigSetCommand::ARG_VALUE, $value]
+            ]);
+        $this->inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_SCOPE, $scope],
+                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
+            ]);
+
+        $expectations($this->outputMock);
+
+        /** @var ConfigSetCommand $command */
+        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $command->run($this->inputMock, $this->outputMock);
+    }
+
+    /**
+     * Retrieves variations with callback, path, value, scope and scope code.
+     *
+     * @return array
+     */
+    public function getRunPathValidationDataProvider()
+    {
+        return [
+            [
+                function (Mock $output) {
+                    $output->expects($this->once())
+                        ->method('writeln')
+                        ->with('<info>Value was saved.</info>');
+                },
+                'web/unsecure/base_url',
+                'http://magento2.local/',
+            ],
+            [
+                function (Mock $output) {
+                    $output->expects($this->once())
+                        ->method('writeln')
+                        ->with(
+                            '<error>Invalid value. Value must be a URL or one of placeholders: {{base_url}}</error>'
+                        );
+                },
+                'web/unsecure/base_url',
+                'value',
+            ],
+            [
+                function (Mock $output) {
+                    $output->expects($this->once())
+                        ->method('writeln')
+                        ->with('<error>The "test/test/test" path does not exist</error>');
+                },
+                'test/test/test',
+                'value',
             ]
         ];
     }

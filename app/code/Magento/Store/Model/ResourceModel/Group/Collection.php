@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel\Group;
 
 /**
  * Store group collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -61,6 +63,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function setWithoutStoreViewFilter()
     {
         return $this->addFieldToFilter('main_table.default_store_id', ['gt' => 0]);
+    }
+
+    /**
+     * Filter to discard default group and groups with assigned category
+     *
+     * @return $this
+     */
+    public function setWithoutAssignedCategoryFilter()
+    {
+        return $this->addFieldToFilter('main_table.root_category_id', ['eq' => 0])
+            ->addFieldToFilter('main_table.group_id', ['neq' => 0]);
     }
 
     /**

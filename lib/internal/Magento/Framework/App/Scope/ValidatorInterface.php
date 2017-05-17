@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Scope;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Interface Validator for validating scope and scope code
+ */
 interface ValidatorInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,9 +32,10 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
     private $storeRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     *      |\PHPUnit_Framework_MockObject_MockObject
      */
-    private $invalidSkuChecker;
+    private $invalidSkuProcessor;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit_Framework_MockObject_MockObject
@@ -59,7 +60,8 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->storeRepository = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->invalidSkuChecker = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\InvalidSkuChecker::class)
+        $this->invalidSkuProcessor = $this
+            ->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor::class)
             ->disableOriginalConstructor()->getMock();
         $this->validationResult = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\Result::class)
             ->disableOriginalConstructor()->getMock();
@@ -75,7 +77,7 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
                 'specialPriceFactory' => $this->specialPriceFactory,
                 'productIdLocator' => $this->productIdLocator,
                 'storeRepository' => $this->storeRepository,
-                'invalidSkuChecker' => $this->invalidSkuChecker,
+                'invalidSkuProcessor' => $this->invalidSkuProcessor,
                 'validationResult' => $this->validationResult,
             ]
         );
@@ -113,10 +115,10 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
                 'price_to' => '2016-12-21 01:02:03',
             ],
         ];
+        $this->invalidSkuProcessor->expects($this->once())->method('filterSkuList')->with($skus, [])->willReturn($skus);
         $this->specialPriceResource->expects($this->once())->method('get')->willReturn($rawPrices);
         $this->specialPriceResource->expects($this->atLeastOnce())
             ->method('getEntityLinkField')->willReturn('entity_id');
-
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
         $price->expects($this->exactly(3))->method('setPrice');
@@ -138,19 +140,16 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
-
         $prices = [1 => $price];
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $price->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $price->expects($this->atLeastOnce())->method('getPriceFrom')->willReturn('2016-12-20 01:02:03');
         $price->expects($this->atLeastOnce())->method('getPriceTo')->willReturn('2016-12-21 01:02:03');
-
-        $this->invalidSkuChecker->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
+        $this->invalidSkuProcessor->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
         $this->storeRepository->expects($this->once())->method('getById');
         $this->validationResult->expects($this->never())->method('addFailedItem');
         $this->validationResult->expects($this->atLeastOnce())->method('getFailedRowIds')->willReturn([]);
-
         $this->specialPriceResource->expects($this->once())->method('update')->with($prices);
 
         $this->model->update($prices);
@@ -166,18 +165,36 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
         $prices = [1 => $price];
-
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $price->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $price->expects($this->atLeastOnce())->method('getPriceFrom')->willReturn('2016-12-20 01:02:03');
         $price->expects($this->atLeastOnce())->method('getPriceTo')->willReturn('2016-12-21 01:02:03');
-
-        $this->invalidSkuChecker->expects($this->once())->method('retrieveInvalidSkuList')->willReturn(['sku_1']);
+        $this->invalidSkuProcessor->expects($this->once())->method('retrieveInvalidSkuList')->willReturn(['sku_1']);
         $this->storeRepository->expects($this->once())->method('getById');
-        $this->validationResult->expects($this->once())->method('addFailedItem')->with(1);
+        $this->validationResult
+            ->expects($this->once())
+            ->method('addFailedItem')
+            ->with(
+                1,
+                __(
+                    'Requested product doesn\'t exist. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'SKU' => 'sku_1',
+                        'storeId' => 1,
+                        'priceFrom' => '2016-12-20 01:02:03',
+                        'priceTo' => '2016-12-21 01:02:03'
+                    ]
+                ),
+                [
+                    'SKU' => 'sku_1',
+                    'storeId' => 1,
+                    'priceFrom' => '2016-12-20 01:02:03',
+                    'priceTo' => '2016-12-21 01:02:03'
+                ]
+            );
         $this->validationResult->expects($this->atLeastOnce())->method('getFailedRowIds')->willReturn([1]);
-
         $this->specialPriceResource->expects($this->once())->method('update')->with([]);
 
         $this->model->update($prices);
@@ -193,18 +210,37 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
         $prices = [1 => $price];
-
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(null);
         $price->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $price->expects($this->atLeastOnce())->method('getPriceFrom')->willReturn('2016-12-20 01:02:03');
         $price->expects($this->atLeastOnce())->method('getPriceTo')->willReturn('2016-12-21 01:02:03');
-
-        $this->invalidSkuChecker->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
+        $this->invalidSkuProcessor->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
         $this->storeRepository->expects($this->once())->method('getById');
-        $this->validationResult->expects($this->once())->method('addFailedItem')->with(1);
+        $this->validationResult->expects($this->once())
+            ->method('addFailedItem')
+            ->with(
+                1,
+                __(
+                    'Invalid attribute Price = %price. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'price' => null,
+                        'SKU' => 'sku_1',
+                        'storeId' => 1,
+                        'priceFrom' => '2016-12-20 01:02:03',
+                        'priceTo' => '2016-12-21 01:02:03'
+                    ]
+                ),
+                [
+                    'price' => null,
+                    'SKU' => 'sku_1',
+                    'storeId' => 1,
+                    'priceFrom' => '2016-12-20 01:02:03',
+                    'priceTo' => '2016-12-21 01:02:03'
+                ]
+            );
         $this->validationResult->expects($this->atLeastOnce())->method('getFailedRowIds')->willReturn([1]);
-
         $this->specialPriceResource->expects($this->once())->method('update')->with([]);
 
         $this->model->update($prices);
@@ -220,19 +256,36 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
         $prices = [1 => $price];
-
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $price->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $price->expects($this->atLeastOnce())->method('getPriceFrom')->willReturn('2016-12-20 01:02:03');
         $price->expects($this->atLeastOnce())->method('getPriceTo')->willReturn('2016-12-21 01:02:03');
-
-        $this->invalidSkuChecker->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
+        $this->invalidSkuProcessor->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
         $this->storeRepository->expects($this->once())->method('getById')
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
-        $this->validationResult->expects($this->once())->method('addFailedItem')->with(1);
+        $this->validationResult->expects($this->once())
+            ->method('addFailedItem')
+            ->with(
+                1,
+                __(
+                    'Requested store is not found. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'SKU' => 'sku_1',
+                        'storeId' => 1,
+                        'priceFrom' => '2016-12-20 01:02:03',
+                        'priceTo' => '2016-12-21 01:02:03'
+                    ]
+                ),
+                [
+                    'SKU' => 'sku_1',
+                    'storeId' => 1,
+                    'priceFrom' => '2016-12-20 01:02:03',
+                    'priceTo' => '2016-12-21 01:02:03'
+                ]
+            );
         $this->validationResult->expects($this->atLeastOnce())->method('getFailedRowIds')->willReturn([1]);
-
         $this->specialPriceResource->expects($this->once())->method('update')->with([]);
 
         $this->model->update($prices);
@@ -248,18 +301,37 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
         $prices = [1 => $price];
-
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $price->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $price->expects($this->atLeastOnce())->method('getPriceFrom')->willReturn('incorrect');
         $price->expects($this->atLeastOnce())->method('getPriceTo')->willReturn('2016-12-21 01:02:03');
-
-        $this->invalidSkuChecker->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
+        $this->invalidSkuProcessor->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
         $this->storeRepository->expects($this->once())->method('getById');
-        $this->validationResult->expects($this->once())->method('addFailedItem')->with(1);
+        $this->validationResult->expects($this->once())
+            ->method('addFailedItem')
+            ->with(
+                1,
+                __(
+                    'Invalid attribute %label = %priceTo. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'label' => 'Price From',
+                        'SKU' => 'sku_1',
+                        'storeId' => 1,
+                        'priceFrom' => 'incorrect',
+                        'priceTo' => '2016-12-21 01:02:03'
+                    ]
+                ),
+                [
+                    'label' => 'Price From',
+                    'SKU' => 'sku_1',
+                    'storeId' => 1,
+                    'priceFrom' => 'incorrect',
+                    'priceTo' => '2016-12-21 01:02:03'
+                ]
+            );
         $this->validationResult->expects($this->atLeastOnce())->method('getFailedRowIds')->willReturn([1]);
-
         $this->specialPriceResource->expects($this->once())->method('update')->with([]);
 
         $this->model->update($prices);
@@ -275,18 +347,37 @@ class SpecialPriceStorageTest extends \PHPUnit_Framework_TestCase
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\SpecialPriceInterface::class)
             ->disableOriginalConstructor()->getMock();
         $prices = [1 => $price];
-
         $price->expects($this->atLeastOnce())->method('getSku')->willReturn('sku_1');
         $price->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $price->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
         $price->expects($this->atLeastOnce())->method('getPriceFrom')->willReturn('2016-12-21 01:02:03');
         $price->expects($this->atLeastOnce())->method('getPriceTo')->willReturn('incorrect');
-
-        $this->invalidSkuChecker->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
+        $this->invalidSkuProcessor->expects($this->once())->method('retrieveInvalidSkuList')->willReturn([]);
         $this->storeRepository->expects($this->once())->method('getById');
-        $this->validationResult->expects($this->once())->method('addFailedItem')->with(1);
+        $this->validationResult->expects($this->once())
+            ->method('addFailedItem')
+            ->with(
+                1,
+                __(
+                    'Invalid attribute %label = %priceTo. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'label' => 'Price To',
+                        'SKU' => 'sku_1',
+                        'storeId' => 1,
+                        'priceFrom' => '2016-12-21 01:02:03',
+                        'priceTo' => 'incorrect'
+                    ]
+                ),
+                [
+                    'label' => 'Price To',
+                    'SKU' => 'sku_1',
+                    'storeId' => 1,
+                    'priceFrom' => '2016-12-21 01:02:03',
+                    'priceTo' => 'incorrect'
+                ]
+            );
         $this->validationResult->expects($this->atLeastOnce())->method('getFailedRowIds')->willReturn([1]);
-
         $this->specialPriceResource->expects($this->once())->method('update')->with([]);
 
         $this->model->update($prices);

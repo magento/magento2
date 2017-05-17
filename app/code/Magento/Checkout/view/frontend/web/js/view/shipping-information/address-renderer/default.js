@@ -1,13 +1,14 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*global define*/
+
 define([
     'uiComponent',
     'Magento_Customer/js/customer-data'
-], function(Component, customerData) {
+], function (Component, customerData) {
     'use strict';
+
     var countryData = customerData.get('directory-data');
 
     return Component.extend({
@@ -15,8 +16,12 @@ define([
             template: 'Magento_Checkout/shipping-information/address-renderer/default'
         },
 
-        getCountryName: function(countryId) {
-            return (countryData()[countryId] != undefined) ? countryData()[countryId].name : "";
+        /**
+         * @param {*} countryId
+         * @return {String}
+         */
+        getCountryName: function (countryId) {
+            return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
         }
     });
 });

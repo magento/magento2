@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Result;
@@ -40,28 +40,29 @@ class MessagePlugin
     private $interpretationStrategy;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $jsonHelper;
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Framework\Json\Helper\Data $jsonHelper
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
-        $this->jsonHelper = $jsonHelper;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->interpretationStrategy = $interpretationStrategy;
     }
 
@@ -118,7 +119,7 @@ class MessagePlugin
 
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,
-                $this->jsonHelper->jsonEncode($messages),
+                $this->serializer->serialize($messages),
                 $publicCookieMetadata
             );
         }
@@ -149,14 +150,13 @@ class MessagePlugin
      */
     protected function getCookiesMessages()
     {
-        try {
-            $messages = $this->jsonHelper->jsonDecode(
-                $this->cookieManager->getCookie(self::MESSAGES_COOKIES_NAME, $this->jsonHelper->jsonEncode([]))
-            );
-            if (!is_array($messages)) {
-                $messages = [];
-            }
-        } catch (\Zend_Json_Exception $e) {
+        $messages = $this->serializer->unserialize(
+            $this->cookieManager->getCookie(
+                self::MESSAGES_COOKIES_NAME,
+                $this->serializer->serialize([])
+            )
+        );
+        if (!is_array($messages)) {
             $messages = [];
         }
         return $messages;

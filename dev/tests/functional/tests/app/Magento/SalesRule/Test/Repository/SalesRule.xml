@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -95,7 +95,6 @@
             <field name="discount_amount" xsi:type="string">50</field>
             <field name="stop_rules_processing" xsi:type="string">Yes</field>
         </dataset>
-
         <dataset name="active_sales_rule_with_complex_conditions">
             <field name="name" xsi:type="string">Cart Price Rule with with complex conditions %isolation%</field>
             <field name="description" xsi:type="string">Cart Price Rule with with complex conditions</field>

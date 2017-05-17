@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,9 +54,9 @@ class TierPriceValidator
     private $customerGroupsByCode = [];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
      */
-    private $invalidSkuChecker;
+    private $invalidSkuProcessor;
 
     /**
      * All groups value.
@@ -89,7 +89,7 @@ class TierPriceValidator
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
      * @param \Magento\Catalog\Model\Product\Price\TierPricePersistence $tierPricePersistence
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker
+     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -100,7 +100,7 @@ class TierPriceValidator
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
         \Magento\Catalog\Model\Product\Price\TierPricePersistence $tierPricePersistence,
         \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker,
+        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = []
     ) {
         $this->productIdLocator = $productIdLocator;
@@ -110,7 +110,7 @@ class TierPriceValidator
         $this->websiteRepository = $websiteRepository;
         $this->tierPricePersistence = $tierPricePersistence;
         $this->validationResult = $validationResult;
-        $this->invalidSkuChecker = $invalidSkuChecker;
+        $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
@@ -118,12 +118,11 @@ class TierPriceValidator
      * Validate SKU.
      *
      * @param array $skus
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return void
+     * @return array
      */
     public function validateSkus(array $skus)
     {
-        $this->invalidSkuChecker->isSkuListValid($skus, $this->allowedProductTypes);
+        return $this->invalidSkuProcessor->filterSkuList($skus, $this->allowedProductTypes);
     }
 
     /**
@@ -141,7 +140,7 @@ class TierPriceValidator
                 return $price->getSku();
             }, $prices)
         );
-        $skuDiff = $this->invalidSkuChecker->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
+        $skuDiff = $this->invalidSkuProcessor->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
         $idsBySku = $this->productIdLocator->retrieveProductIdsBySkus($skus);
 
         $pricesBySku = [];
@@ -158,7 +157,7 @@ class TierPriceValidator
             $this->checkQuantity($price, $key, $validationResult);
             $this->checkWebsite($price, $key, $validationResult);
             if (isset($pricesBySku[$price->getSku()])) {
-                $this->checkUnique($price, $pricesBySku[$price->getSku()], $key, $validationResult);
+                $this->checkUnique($price, $pricesBySku, $key, $validationResult);
             }
             $this->checkUnique($price, $existingPrices, $key, $validationResult);
             $this->checkGroup($price, $key, $validationResult);
@@ -186,10 +185,21 @@ class TierPriceValidator
             $validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute SKU = %SKU. '
+                    . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.',
+                    [
+                        'SKU' => '%SKU',
+                        'websiteId' => '%websiteId',
+                        'customerGroup' => '%customerGroup',
+                        'qty' => '%qty'
+                    ]
                 ),
-                ['fieldName' => 'SKU', 'fieldValue' => $price->getSku()]
+                [
+                    'SKU' => $price->getSku(),
+                    'websiteId' => $price->getWebsiteId(),
+                    'customerGroup' => $price->getCustomerGroup(),
+                    'qty' => $price->getQuantity()
+                ]
             );
         }
     }
@@ -204,8 +214,7 @@ class TierPriceValidator
      */
     private function checkPrice(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
     {
-        if (
-            null === $price->getPrice()
+        if (null === $price->getPrice()
             || $price->getPrice() < 0
             || ($price->getPriceType() === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 && $price->getPrice() > 100
@@ -214,10 +223,23 @@ class TierPriceValidator
             $validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute Price = %price. '
+                    . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.',
+                    [
+                        'price' => '%price',
+                        'SKU' => '%SKU',
+                        'websiteId' => '%websiteId',
+                        'customerGroup' => '%customerGroup',
+                        'qty' => '%qty'
+                    ]
                 ),
-                ['fieldName' => 'Price', 'fieldValue' => $price->getPrice()]
+                [
+                    'price' => $price->getPrice(),
+                    'SKU' => $price->getSku(),
+                    'websiteId' => $price->getWebsiteId(),
+                    'customerGroup' => $price->getCustomerGroup(),
+                    'qty' => $price->getQuantity()
+                ]
             );
         }
     }
@@ -237,24 +259,36 @@ class TierPriceValidator
         $key,
         Result $validationResult
     ) {
-        if (
-            !in_array(
-                $price->getPriceType(),
-                [
+        if (!in_array(
+            $price->getPriceType(),
+            [
                     \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
                     \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 ]
-            )
+        )
             || (array_search(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $ids)
                 && $price->getPriceType() !== \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT)
         ) {
             $validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute Price Type = %priceType. '
+                    . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.',
+                    [
+                        'price' => '%price',
+                        'SKU' => '%SKU',
+                        'websiteId' => '%websiteId',
+                        'customerGroup' => '%customerGroup',
+                        'qty' => '%qty'
+                    ]
                 ),
-                ['fieldName' => 'Price Type', 'fieldValue' => $price->getPriceType()]
+                [
+                    'priceType' => $price->getPriceType(),
+                    'SKU' => $price->getSku(),
+                    'websiteId' => $price->getWebsiteId(),
+                    'customerGroup' => $price->getCustomerGroup(),
+                    'qty' => $price->getQuantity()
+                ]
             );
         }
     }
@@ -273,10 +307,21 @@ class TierPriceValidator
             $validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute Quantity = %qty. '
+                    . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.',
+                    [
+                        'SKU' => '%SKU',
+                        'websiteId' => '%websiteId',
+                        'customerGroup' => '%customerGroup',
+                        'qty' => '%qty'
+                    ]
                 ),
-                ['fieldName' => 'Quantity', 'fieldValue' => $price->getQuantity()]
+                [
+                    'SKU' => $price->getSku(),
+                    'websiteId' => $price->getWebsiteId(),
+                    'customerGroup' => $price->getCustomerGroup(),
+                    'qty' => $price->getQuantity()
+                ]
             );
         }
     }
@@ -297,10 +342,21 @@ class TierPriceValidator
             $validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute Website ID = %websiteId. '
+                    . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.',
+                    [
+                        'SKU' => '%SKU',
+                        'websiteId' => '%websiteId',
+                        'customerGroup' => '%customerGroup',
+                        'qty' => '%qty'
+                    ]
                 ),
-                ['fieldName' => 'Website Id', 'fieldValue' => $price->getWebsiteId()]
+                [
+                    'SKU' => $price->getSku(),
+                    'websiteId' => $price->getWebsiteId(),
+                    'customerGroup' => $price->getCustomerGroup(),
+                    'qty' => $price->getQuantity()
+                ]
             );
         }
     }
@@ -320,40 +376,38 @@ class TierPriceValidator
         $key,
         Result $validationResult
     ) {
-        foreach ($prices as $price) {
-            if (
-                $price->getSku() === $tierPrice->getSku()
-                && strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
-                && $price->getQuantity() == $tierPrice->getQuantity()
-                && (
-                    ($price->getWebsiteId() == $this->allWebsitesValue
-                        || $tierPrice->getWebsiteId() == $this->allWebsitesValue)
-                    && $price->getWebsiteId() != $tierPrice->getWebsiteId()
-                )
-            ) {
-                $validationResult->addFailedItem(
-                    $key,
-                    __(
-                        'We found a duplicate website, tier price, customer group and quantity:'
-                        . ' %fieldName1 = %fieldValue1, %fieldName2 = %fieldValue2, %fieldName3 = %fieldValue3.',
+        if (isset($prices[$tierPrice->getSku()])) {
+            foreach ($prices[$tierPrice->getSku()] as $price) {
+                if (strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
+                    && $price->getQuantity() == $tierPrice->getQuantity()
+                    && (
+                        ($price->getWebsiteId() == $this->allWebsitesValue
+                            || $tierPrice->getWebsiteId() == $this->allWebsitesValue)
+                        && $price->getWebsiteId() != $tierPrice->getWebsiteId()
+                    )
+                ) {
+                    $validationResult->addFailedItem(
+                        $key,
+                        __(
+                            'We found a duplicate website, tier price, customer group and quantity: '
+                            . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
+                            . 'Row ID: SKU = %SKU, Website ID: %websiteId, '
+                            . 'Customer Group: %customerGroup, Quantity: %qty.',
+                            [
+                                'SKU' => '%SKU',
+                                'websiteId' => '%websiteId',
+                                'customerGroup' => '%customerGroup',
+                                'qty' => '%qty'
+                            ]
+                        ),
                         [
-                            'fieldName1' => '%fieldName1',
-                            'fieldValue1' => '%fieldValue1',
-                            'fieldName2' => '%fieldName2',
-                            'fieldValue2' => '%fieldValue2',
-                            'fieldName3' => '%fieldName3',
-                            'fieldValue3' => '%fieldValue3'
+                            'SKU' => $price->getSku(),
+                            'websiteId' => $price->getWebsiteId(),
+                            'customerGroup' => $price->getCustomerGroup(),
+                            'qty' => $price->getQuantity()
                         ]
-                    ),
-                    [
-                        'fieldName1' => 'Customer Group',
-                        'fieldValue1' => $price->getCustomerGroup(),
-                        'fieldName2' => 'Website Id',
-                        'fieldValue2' => $price->getWebsiteId(),
-                        'fieldName3' => 'Quantity',
-                        'fieldValue3' => $price->getQuantity(),
-                    ]
-                );
+                    );
+                }
             }
         }
     }
@@ -374,12 +428,20 @@ class TierPriceValidator
             $validationResult->addFailedItem(
                 $key,
                 __(
-                    'No such entity with %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'No such entity with Customer Group = %customerGroup. '
+                    . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.',
+                    [
+                        'SKU' => '%SKU',
+                        'websiteId' => '%websiteId',
+                        'customerGroup' => '%customerGroup',
+                        'qty' => '%qty'
+                    ]
                 ),
                 [
-                    'fieldName' => 'Customer Group',
-                    'fieldValue' => $customerGroup,
+                    'SKU' => $price->getSku(),
+                    'websiteId' => $price->getWebsiteId(),
+                    'customerGroup' => $price->getCustomerGroup(),
+                    'qty' => $price->getQuantity()
                 ]
             );
         }

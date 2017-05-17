@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Billing;
@@ -62,6 +62,9 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
      */
     private $block;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);

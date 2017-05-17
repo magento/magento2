@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,6 +25,7 @@ define([
                 data = {
                     key: 'value-prepared-before-save'
                 };
+
             expect(utils.filterFormData(data, suffix, separator)).toEqual(data);
             expect(utils.filterFormData(data, suffix)).toEqual(data);
             expect(utils.filterFormData(data)).toEqual(data);

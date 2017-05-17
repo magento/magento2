@@ -1,19 +1,26 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigShow;
 
+use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
+use Magento\Config\Model\Config\Backend\Encrypted;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\StructureFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Config\ScopeInterface;
-use Magento\Framework\App\Area;
-use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
+/**
+ * Test for ValueProcessor.
+ *
+ * @see ValueProcessor
+ */
 class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,6 +39,11 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
     private $structureFactoryMock;
 
     /**
+     * @var JsonSerializer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonSerializerMock;
+
+    /**
      * @var ValueProcessor
      */
     private $valueProcessor;
@@ -47,11 +59,15 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->jsonSerializerMock = $this->getMockBuilder(JsonSerializer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->valueProcessor = new ValueProcessor(
             $this->scopeMock,
             $this->structureFactoryMock,
-            $this->valueFactoryMock
+            $this->valueFactoryMock,
+            $this->jsonSerializerMock
         );
     }
 
@@ -59,13 +75,38 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
      * @param bool $hasBackendModel
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsGetBackendModel
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCreate
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsGetValue
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetPath
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetScope
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetScopeId
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSetValue
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsAfterLoad
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsSerialize
+     * @param string $expectsValue
+     * @param string $className
+     * @param string $value
+     * @param string|array $processedValue
      * @dataProvider processDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function testProcess($hasBackendModel, $expectsGetBackendModel, $expectsCreate)
-    {
+    public function testProcess(
+        $hasBackendModel,
+        $expectsGetBackendModel,
+        $expectsCreate,
+        $expectsGetValue,
+        $expectsSetPath,
+        $expectsSetScope,
+        $expectsSetScopeId,
+        $expectsSetValue,
+        $expectsAfterLoad,
+        $expectsSerialize,
+        $expectsValue,
+        $className,
+        $value,
+        $processedValue
+    ) {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
-        $value = 'someValue';
         $path = 'some/config/path';
         $oldConfigScope = 'oldConfigScope';
 
@@ -87,33 +128,33 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($structureMock);
 
-        /** @var Value|\PHPUnit_Framework_MockObject_MockObject $valueMock */
-        $backendModelMock = $this->getMockBuilder(Value::class)
+        /** @var Value|Encrypted|\PHPUnit_Framework_MockObject_MockObject $valueMock */
+        $backendModelMock = $this->getMockBuilder($className)
             ->disableOriginalConstructor()
             ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue', 'getValue', 'afterLoad'])
             ->getMock();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsSetPath)
             ->method('setPath')
             ->with($path)
             ->willReturnSelf();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsSetScope)
             ->method('setScope')
             ->with($scope)
             ->willReturnSelf();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsSetScopeId)
             ->method('setScopeId')
             ->with($scopeCode)
             ->willReturnSelf();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsSetValue)
             ->method('setValue')
             ->with($value)
             ->willReturnSelf();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsAfterLoad)
             ->method('afterLoad')
             ->willReturnSelf();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsGetValue)
             ->method('getValue')
-            ->willReturn($value);
+            ->willReturn($processedValue);
 
         /** @var Field|\PHPUnit_Framework_MockObject_MockObject $fieldMock */
         $fieldMock = $this->getMockBuilder(Field::class)
@@ -128,23 +169,122 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $this->valueFactoryMock->expects($expectsCreate)
             ->method('create')
             ->willReturn($backendModelMock);
+        $this->jsonSerializerMock->expects($expectsSerialize)
+            ->method('serialize')
+            ->with($processedValue)
+            ->willReturn($expectsValue);
 
         $structureMock->expects($this->once())
-            ->method('getElement')
+            ->method('getElementByConfigPath')
             ->with($path)
             ->willReturn($fieldMock);
 
-        $this->assertSame($value, $this->valueProcessor->process($scope, $scopeCode, $value, $path));
+        $this->assertSame($expectsValue, $this->valueProcessor->process($scope, $scopeCode, $value, $path));
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function processDataProvider()
     {
         return [
-            ['hasBackendModel' => true, 'expectsGetBackendModel' => $this->once(), 'expectsCreate' => $this->never()],
-            ['hasBackendModel' => false, 'expectsGetBackendModel' => $this->never(), 'expectsCreate' => $this->once()],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->once(),
+                'expectsSetPath' => $this->once(),
+                'expectsSetScope' => $this->once(),
+                'expectsSetScopeId' => $this->once(),
+                'expectsSetValue' => $this->once(),
+                'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->once(),
+                'expectsValue' => '{value:someValue}',
+                'className' => Value::class,
+                'value' => '{value:someValue}',
+                'processedValue' => ['someValue']
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->once(),
+                'expectsSetPath' => $this->once(),
+                'expectsSetScope' => $this->once(),
+                'expectsSetScopeId' => $this->once(),
+                'expectsSetValue' => $this->once(),
+                'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->never(),
+                'expectsValue' => 'someValue',
+                'className' => Value::class,
+                'value' => 'someValue',
+                'processedValue' => 'someValue'
+            ],
+            [
+                'hasBackendModel' => false,
+                'expectsGetBackendModel' => $this->never(),
+                'expectsCreate' => $this->once(),
+                'expectsGetValue' => $this->once(),
+                'expectsSetPath' => $this->once(),
+                'expectsSetScope' => $this->once(),
+                'expectsSetScopeId' => $this->once(),
+                'expectsSetValue' => $this->once(),
+                'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->never(),
+                'expectsValue' => 'someValue',
+                'className' => Value::class,
+                'value' => 'someValue',
+                'processedValue' => 'someValue'
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->never(),
+                'expectsSetPath' => $this->never(),
+                'expectsSetScope' => $this->never(),
+                'expectsSetScopeId' => $this->never(),
+                'expectsSetValue' => $this->never(),
+                'expectsAfterLoad' => $this->never(),
+                'expectsSerialize' => $this->never(),
+                'expectsValue' => ValueProcessor::SAFE_PLACEHOLDER,
+                'className' => Encrypted::class,
+                'value' => 'someValue',
+                'processedValue' => 'someValue'
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->once(),
+                'expectsSetPath' => $this->once(),
+                'expectsSetScope' => $this->once(),
+                'expectsSetScopeId' => $this->once(),
+                'expectsSetValue' => $this->once(),
+                'expectsAfterLoad' => $this->once(),
+                'expectsSerialize' => $this->never(),
+                'expectsValue' => null,
+                'className' => Value::class,
+                'value' => null,
+                'processedValue' => null
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->never(),
+                'expectsSetPath' => $this->never(),
+                'expectsSetScope' => $this->never(),
+                'expectsSetScopeId' => $this->never(),
+                'expectsSetValue' => $this->never(),
+                'expectsAfterLoad' => $this->never(),
+                'expectsSerialize' => $this->never(),
+                'expectsValue' => null,
+                'className' => Encrypted::class,
+                'value' => null,
+                'processedValue' => null
+            ],
         ];
     }
 }

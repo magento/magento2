@@ -2,7 +2,7 @@
 /**
  * RSS Backend Authentication plugin
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rss\App\Action\Plugin;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ use Magento\Framework\Exception\CronException;
  * @method array getCronExprArr()
  * @method \Magento\Cron\Model\Schedule setCronExprArr(array $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {

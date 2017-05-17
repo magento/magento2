@@ -1,11 +1,7 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
 
 define([
     'underscore',
@@ -28,10 +24,15 @@ define([
         window.FORM_KEY = 'magentoFormKey';
 
         registry.set('provName', {
+            /** Stub */
             on: function () {
             },
+
+            /** Stub */
             get: function () {
             },
+
+            /** Stub */
             set: function () {
             }
         });
@@ -78,7 +79,7 @@ define([
                 params = {
                     url: obj.urls.beforeSave,
                     data: _.extend(data, {
-                        form_key: 'magentoFormKey'
+                        'form_key': 'magentoFormKey'
                     }),
                     success: jasmine.any(Function),
                     complete: jasmine.any(Function)
@@ -101,7 +102,7 @@ define([
 
                 expect($.ajax).not.toHaveBeenCalled();
             });
-            it('Check call "beforeSave" method. Check "success" ajax callback with success response.' , function () {
+            it('Check call "beforeSave" method. Check "success" ajax callback with success response.', function () {
                 var request;
 
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {
@@ -111,11 +112,13 @@ define([
                 obj.urls.beforeSave = 'requestPath';
                 obj.save();
 
-                expect(request({error: false})).toBe(true);
+                expect(request({
+                    error: false
+                })).toBe(true);
                 expect($('body').notification).not.toHaveBeenCalledWith('clear');
             });
 
-            it('Check call "beforeSave" method. Check "success" ajax callback with error response.' , function () {
+            it('Check call "beforeSave" method. Check "success" ajax callback with error response.', function () {
                 var request,
                     notificationArguments;
 
@@ -139,7 +142,7 @@ define([
                 })).toBeUndefined();
                 expect($('body').notification.calls.allArgs()).toEqual([['clear'], ['add', notificationArguments]]);
             });
-            it('Check call "beforeSave" method. Check "complete" ajax callback.' , function () {
+            it('Check call "beforeSave" method. Check "complete" ajax callback.', function () {
                 var request;
 
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {

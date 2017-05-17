@@ -1,7 +1,8 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'mage/template',
@@ -26,11 +27,16 @@ define([
             tabAddressTemplateSelector: '[data-template="tab-address-content"]',
             formsSelector: '[data-container="address-forms"]',
             addAddressSelector: '[data-container="add-address"]',
-            formFirstNameSelector: ':input[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-firstname"]',
-            accountFirstNameSelector: ':input[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-firstname"]',
-            formLastNameSelector: ':input[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-lastname"]',
-            accountLastNameSelector: ':input[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-lastname"]',
-            accountWebsiteIdSelector: ':input[data-ui-id="store-switcher-form-renderer-fieldset-element-select-account-website-id"]',
+            formFirstNameSelector: ':input' +
+                '[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-firstname"]',
+            accountFirstNameSelector: ':input' +
+                '[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-firstname"]',
+            formLastNameSelector: ':input' +
+                '[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-lastname"]',
+            accountLastNameSelector: ':input' +
+                '[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-lastname"]',
+            accountWebsiteIdSelector: ':input' +
+                '[data-ui-id="store-switcher-form-renderer-fieldset-element-select-account-website-id"]',
             formCountrySelector: 'customer-edit-tab-addresses-fieldset-element-form-field-country-id',
             addAddressButtonSelector: ':button[data-ui-id="adminhtml-edit-tab-addresses-add-address-button"]'
         },
@@ -39,17 +45,19 @@ define([
          * This method adds a new address - tab and form to the widget.
          */
         _addNewAddress: function () {
+            var formName, newForm, formTemplate, itemTemplate, firstname, accountWebsiteId;
+
             this.options.itemCount++;
 
             // prevent duplication of ids
-            while (this.element.find("div[data-item=" + this.options.itemCount + "]").length) {
+            while (this.element.find('div[data-item=' + this.options.itemCount + ']').length) {
                 this.options.itemCount++;
             }
 
-            var formName = this.options.baseItemId + this.options.itemCount,
-                newForm = $('#form_' + formName),
-                formTemplate = this.element.find(this.options.formTemplateSelector).html(),
-                itemTemplate = this.element.find(this.options.tabTemplateSelector).html();
+            formName = this.options.baseItemId + this.options.itemCount;
+            newForm = $('#form_' + formName);
+            formTemplate = this.element.find(this.options.formTemplateSelector).html();
+            itemTemplate = this.element.find(this.options.tabTemplateSelector).html();
 
             formTemplate = mageTemplate(formTemplate, {
                 data: {
@@ -78,17 +86,18 @@ define([
             this.element.trigger('contentUpdated', $(formName));
 
             // pre-fill form with account firstname, lastname, and country
-            var firstname = newForm.find(this.options.formFirstNameSelector);
+            firstname = newForm.find(this.options.formFirstNameSelector);
             firstname.val($(this.options.accountFirstNameSelector).val());
             newForm.find(this.options.formLastNameSelector).val($(this.options.accountLastNameSelector).val());
 
-            var accountWebsiteId = $(this.options.accountWebsiteIdSelector).val();
+            accountWebsiteId = $(this.options.accountWebsiteIdSelector).val();
 
             if (accountWebsiteId !== '' && typeof this.options.defaultCountries[accountWebsiteId] !== 'undefined') {
                 newForm.find(this.options.formCountrySelector).val(this.options.defaultCountries[accountWebsiteId]);
             }
 
-            // .val does not trigger change event, so manually trigger. (Triggering change of any field will handle update of all fields.)
+            // .val does not trigger change event, so manually trigger.
+            // (Triggering change of any field will handle update of all fields.)
             firstname.trigger('change');
 
             this._bindCountryRegionRelation(newForm);
@@ -142,6 +151,8 @@ define([
             confirm({
                 content: this.options.deleteConfirmPrompt,
                 actions: {
+
+                    /** @inheritdoc */
                     confirm: function () {
                         self._deleteItem(data.item);
                     }
@@ -166,34 +177,36 @@ define([
          * @private
          */
         _syncFormData: function (container) {
-            if (container) {
-                var data = {};
+            var data = {},
+                itemContainer, tmpl;
 
+            if (container) {
                 $(container).find(':input').each(function (index, inputField) {
-                    var id = inputField.id;
+                    var id = inputField.id,
+                        value, tagName, values, l, j, o, option, text;
 
                     if (id) {
                         id = id.replace(/^(_item)?[0-9]+/, '');
                         id = id.replace(/^(id)?[0-9]+/, '');
-                        var value = inputField.getValue();
-                        var tagName = inputField.tagName.toLowerCase();
+                        value = inputField.getValue();
+                        tagName = inputField.tagName.toLowerCase();
 
                         if (tagName === 'select') {
-                            if (inputField.multiple) {
-                                var values = $([]);
-                                var l = inputField.options.length;
+                            if (inputField.multiple) { //eslint-disable-line max-depth
+                                values = $([]);
+                                l = inputField.options.length;
 
-                                for (var j = 0; j < l; j++) {
-                                    var o = inputField.options[j];
+                                for (j = 0; j < l; j++) { //eslint-disable-line max-depth
+                                    o = inputField.options[j];
 
-                                    if (o.selected === true) {
+                                    if (o.selected === true) { //eslint-disable-line max-depth
                                         values[values.length] = o.text.escapeHTML();
                                     }
                                 }
                                 data[id] = values.join(', ');
                             } else {
-                                var option = inputField.options[inputField.selectedIndex],
-                                    text = option.value == '0' || option.value === '' ? '' : option.text;
+                                option = inputField.options[inputField.selectedIndex];
+                                text = option.value == '0' || option.value === '' ? '' : option.text; //eslint-disable-line
                                 data[id] = text.escapeHTML();
                             }
                         } else if (value !== null) {
@@ -203,14 +216,13 @@ define([
                 });
 
                 // Set name of state to 'region' if list of states are in 'region_id' selectbox
-                if (!data.region && data.region_id) {
-                    data.region = data.region_id;
-                    delete data.region_id;
+                if (!data.region && data['region_id']) {
+                    data.region = data['region_id'];
+                    delete data['region_id'];
                 }
 
                 // Set data to html
-                var itemContainer = this.element.find("[aria-selected='true'] address"),
-                    tmpl;
+                itemContainer = this.element.find('[aria-selected="true"] address');
 
                 if (itemContainer.length && itemContainer[0]) {
                     tmpl = mageTemplate(this.options.tabAddressTemplateSelector, {
@@ -356,7 +368,7 @@ define([
                 $.each(data, function (idx, item) {
                     var regionOption = $('<option />').val(item.value).text(item.label);
 
-                    if (regionValue && regionValue == item.label) {
+                    if (regionValue && regionValue == item.label) { //eslint-disable-line eqeqeq
                         regionOption.attr('selected', 'selected');
                     }
 
@@ -444,12 +456,12 @@ define([
                         regionField.addClass('required');
                     }
 
-                    if (activeElement == currentElement) {
-                        if (!currentElement.hasClass('required-entry')) {
+                    if (activeElement == currentElement) { //eslint-disable-line eqeqeq
+                        if (!currentElement.hasClass('required-entry')) { //eslint-disable-line max-depth
                             currentElement.addClass('required-entry');
                         }
 
-                        if (currentElement.prop('tagName').toLowerCase() === 'select' &&
+                        if (currentElement.prop('tagName').toLowerCase() === 'select' && //eslint-disable-line max-depth
                             !currentElement.hasClass('validate-select')) {
                             currentElement.addClass('validate-select');
                         }
@@ -495,6 +507,7 @@ define([
             });
         },
 
+        /** @inheritdoc */
         _create: function () {
             this._super();
             this._bind();
@@ -529,13 +542,16 @@ define([
             });
         },
 
+        /** @inheritdoc */
         _create: function () {
-            this._super();            
+            var dataItemContainer;
+
+            this._super();
             this._bind();
 
             // if the item was not specified, find the data-item element wrapper
             if (this.options.item.length === 0) {
-                var dataItemContainer = this.element.parents('[data-item]');
+                dataItemContainer = this.element.parents('[data-item]');
 
                 if (dataItemContainer.length === 1) {
                     this.options.item = dataItemContainer.attr('data-item');

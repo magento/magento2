@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config\Scope;
@@ -13,6 +13,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Scope\Validator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @deprecated As tested model class was moved to another directory,
+ *             unit test was created in the appropriate directory.
+ * @see \Magento\Framework\App\Test\Unit\Scope\ValidatorTest
+ */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,6 +30,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeResolverPoolMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)

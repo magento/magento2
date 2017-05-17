@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute;
 
 /**
  * Catalog product EAV additional attribute resource collection
+ *
+ * @api
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
     /**
-     * Entity factory1
+     * Entity factory
      *
      * @var \Magento\Eav\Model\EntityFactory
      */

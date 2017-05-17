@@ -1,17 +1,16 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true, jquery:true*/
-/*global confirm:true*/
+
 define([
-    "jquery",
+    'jquery',
     'Magento_Ui/js/modal/confirm',
-    "jquery/ui",
-    "mage/translate"
-], function($, confirm){
-    "use strict";
-    
+    'jquery/ui',
+    'mage/translate'
+], function ($, confirm) {
+    'use strict';
+
     $.widget('mage.address', {
         /**
          * Options common to all instances of this widget.
@@ -25,16 +24,16 @@ define([
          * Bind event handlers for adding and deleting addresses.
          * @private
          */
-        _create: function() {
+        _create: function () {
             var options         = this.options,
                 addAddress      = options.addAddress,
                 deleteAddress   = options.deleteAddress;
 
-            if( addAddress ){
+            if (addAddress) {
                 $(document).on('click', addAddress, this._addAddress.bind(this));
             }
-            
-            if( deleteAddress ){
+
+            if (deleteAddress) {
                 $(document).on('click', deleteAddress, this._deleteAddress.bind(this));
             }
         },
@@ -43,30 +42,31 @@ define([
          * Add a new address.
          * @private
          */
-        _addAddress: function() {
+        _addAddress: function () {
             window.location = this.options.addAddressLocation;
         },
 
         /**
          * Delete the address whose id is specified in a data attribute after confirmation from the user.
          * @private
-         * @param {Event}
+         * @param {jQuery.Event} e
          * @return {Boolean}
          */
-        _deleteAddress: function(e) {
+        _deleteAddress: function (e) {
             var self = this;
 
             confirm({
                 content: this.options.deleteConfirmMessage,
                 actions: {
-                    confirm: function() {
+
+                    /** @inheritdoc */
+                    confirm: function () {
                         if (typeof $(e.target).parent().data('address') !== 'undefined') {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address')
-                                + '/form_key/' + $.mage.cookies.get('form_key');
-                        }
-                        else {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address')
-                                + '/form_key/' + $.mage.cookies.get('form_key');
+                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address') +
+                                '/form_key/' + $.mage.cookies.get('form_key');
+                        } else {
+                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address') +
+                                '/form_key/' + $.mage.cookies.get('form_key');
                         }
                     }
                 }
@@ -75,6 +75,6 @@ define([
             return false;
         }
     });
-    
+
     return $.mage.address;
 });

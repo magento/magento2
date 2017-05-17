@@ -1,16 +1,30 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Reflection;
+
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Casts values to the type given.
  */
 class TypeCaster
 {
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param Json $serializer
+     */
+    public function __construct(Json $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     /**
      * Cast the output type to the documented type. This helps for consistent output (e.g. JSON).
      *
@@ -24,6 +38,16 @@ class TypeCaster
     {
         if ($value === null) {
             return null;
+        }
+
+        /**
+         * Type caster does not complicated arrays according to restrictions in JSON/SOAP API
+         * but interface and class implementations should be processed as is.
+         * Function `class_exists()` is called to do not break code which return an array instead
+         * interface implementation.
+         */
+        if (is_array($value) && !interface_exists($type) && !class_exists($type)) {
+            return $this->serializer->serialize($value);
         }
 
         if ($type === "int" || $type === "integer") {

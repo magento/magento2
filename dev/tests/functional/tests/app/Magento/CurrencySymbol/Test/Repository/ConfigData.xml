@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -58,6 +58,28 @@
                 <item name="label" xsi:type="string">US Dollar</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="value" xsi:type="string">USD</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_currency_custom_website_eur">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="Euro" xsi:type="string">EUR</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Euro</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">EUR</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Euro</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">EUR</item>
             </field>
         </dataset>
 

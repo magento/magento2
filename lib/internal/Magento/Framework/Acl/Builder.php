@@ -1,14 +1,17 @@
 <?php
 /**
- * Access Control List Builder. Retrieves required role/rule/resource loaders
- * and uses them to populate provided ACL object. Acl object is put to cache after creation.
- * On consequent requests, ACL object is deserialized from cache.
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl;
 
+/**
+ * Access Control List Builder. Retrieves required role/rule/resource loaders
+ * and uses them to populate provided ACL object. Acl object is put to cache after creation.
+ * On consequent requests, ACL object is deserialized from cache.
+ *
+ * @api
+ */
 class Builder
 {
     /**
@@ -26,34 +29,23 @@ class Builder
     protected $_loaderPool;
 
     /**
-     * ACL cache
-     *
-     * @var \Magento\Framework\Acl\CacheInterface
-     * @deprecated
-     */
-    protected $_cache;
-
-    /**
      * @var \Magento\Framework\AclFactory
      */
     protected $_aclFactory;
 
     /**
      * @param \Magento\Framework\AclFactory $aclFactory
-     * @param \Magento\Framework\Acl\CacheInterface $cache
      * @param \Magento\Framework\Acl\LoaderInterface $roleLoader
      * @param \Magento\Framework\Acl\LoaderInterface $resourceLoader
      * @param \Magento\Framework\Acl\LoaderInterface $ruleLoader
      */
     public function __construct(
         \Magento\Framework\AclFactory $aclFactory,
-        \Magento\Framework\Acl\CacheInterface $cache,
         \Magento\Framework\Acl\LoaderInterface $roleLoader,
         \Magento\Framework\Acl\LoaderInterface $resourceLoader,
         \Magento\Framework\Acl\LoaderInterface $ruleLoader
     ) {
         $this->_aclFactory = $aclFactory;
-        $this->_cache = $cache;
         $this->_loaderPool = [$roleLoader, $resourceLoader, $ruleLoader];
     }
 

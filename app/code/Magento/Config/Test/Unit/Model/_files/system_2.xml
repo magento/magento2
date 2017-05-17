@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,6 +18,7 @@
                 <field id="field_2" translate="label" showInWebsite="1" type="text">
                     <label>Field 2</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <config_path>section/group/field2</config_path>
                 </field>
             </group>
             <group id="group_level_1" type="text">
@@ -70,7 +71,9 @@
                     </attribute>
                     <depends>
                         <field id="field_3">0</field>
+
                     </depends>
+                    <config_path>section/group/field4</config_path>
                 </field>
                 <field id="field_5" translate="label" showInWebsite="1" type="text">
                     <label></label>

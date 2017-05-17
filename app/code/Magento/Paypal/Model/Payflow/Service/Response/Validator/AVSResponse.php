@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
@@ -38,19 +38,19 @@ class AVSResponse implements ValidatorInterface
      */
     const IAVS = 'iavs';
 
-    /** Values of the response */
+    /**#@+ Values of the response */
     const RESPONSE_YES = 'y';
 
     const RESPONSE_NO = 'n';
 
     const RESPONSE_NOT_SUPPORTED = 'x';
-    /**  */
+    /**#@-*/
 
-    /** Values of the validation settings payments */
+    /**#@+ Values of the validation settings payments */
     const CONFIG_ON = 1;
 
     const CONFIG_OFF = 0;
-    /**  */
+    /**#@-*/
 
     /**
      * @var array

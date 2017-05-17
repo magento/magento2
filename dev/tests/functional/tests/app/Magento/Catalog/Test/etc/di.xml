@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -184,6 +184,11 @@
                     <item name="type" xsi:type="string">switcher</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertAdvancedPriceAbsentOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
 </config>

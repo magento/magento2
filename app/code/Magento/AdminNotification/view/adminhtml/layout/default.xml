@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,11 +16,11 @@
             <block class="Magento\AdminNotification\Block\Window"
                    name="notification_window"
                    as="notification_window"
-                   acl="Magento_AdminNotification::show_toolbar"
-                   template="notification/window.phtml"/>
+                   aclResource="Magento_AdminNotification::show_toolbar"
+                   template="Magento_AdminNotification::notification/window.phtml"/>
         </referenceContainer>
         <referenceContainer name="header">
-            <block class="Magento\AdminNotification\Block\ToolbarEntry" name="notification.messages" before="user" template="toolbar_entry.phtml"/>
+            <block class="Magento\AdminNotification\Block\ToolbarEntry" name="notification.messages" before="user" template="Magento_AdminNotification::toolbar_entry.phtml"/>
         </referenceContainer>
     </body>
 </page>

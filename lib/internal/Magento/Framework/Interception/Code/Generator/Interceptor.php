@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -110,7 +110,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         }
 
         $methodInfo = [
-            'name' => $method->getName(),
+            'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
             'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
             "if (!\$pluginInfo) {\n" .
@@ -120,6 +120,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "} else {\n" .
             "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
+            'returnType' => $method->getReturnType(),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 

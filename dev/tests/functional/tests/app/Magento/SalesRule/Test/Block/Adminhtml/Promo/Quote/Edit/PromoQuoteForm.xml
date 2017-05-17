@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -80,4 +80,9 @@
         <selector>[data-index="labels"]</selector>
         <strategy>css selector</strategy>
     </labels>
+    <manage_coupon_code>
+        <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode</class>
+        <selector>[data-index="block_promo_sales_rule_edit_tab_coupons"]</selector>
+        <strategy>css selector</strategy>
+    </manage_coupon_code>
 </sections>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*eslint max-nested-callbacks: 0*/
@@ -10,12 +10,7 @@ define([
     'use strict';
 
     describe('Ui/js/grid/columns/select', function () {
-        var opts = [{
-                label: 'a', value: 1
-            }, {
-                label: 'b', value: 2
-            }],
-        select;
+        var select;
 
         beforeEach(function () {
             select = new Select();

@@ -1,24 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
-    <scenario name="AcceptAnalyticsSubscriptionTest" firstStep="acceptSubscription">
-        <step name="acceptSubscription" module="Magento_Analytics" next="configAnalytics" />
-        <step name="configAnalytics" module="Magento_Analytics" />
-    </scenario>
-    <scenario name="DeclineAnalyticsSubscriptionTest" firstStep="declineSubscription">
-        <step name="declineSubscription" module="Magento_Analytics" next="configAnalytics" />
-        <step name="configAnalytics" module="Magento_Analytics" />
-    </scenario>
-    <scenario name="RestoreAnalyticsSubscriptionTest" firstStep="skipSubscription">
-        <step name="skipSubscription" module="Magento_Analytics" next="configAnalytics" />
-        <step name="configAnalytics" module="Magento_Analytics" next="restoreConfigAnalytics" />
-        <step name="restoreConfigAnalytics" module="Magento_Analytics" />
-    </scenario>
     <scenario name="AnalyticsSubscriptionCheckPermissionsTest" firstStep="createUser">
         <step name="createUser" module="Magento_User" next="loginUserOnBackend" />
         <step name="loginUserOnBackend" module="Magento_User" next="openDashboard" />

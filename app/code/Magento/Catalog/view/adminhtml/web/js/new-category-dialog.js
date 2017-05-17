@@ -1,8 +1,8 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 /*global FORM_KEY*/
 define([
     'jquery',
@@ -14,6 +14,7 @@ define([
 ], function ($) {
     'use strict';
 
+    /** Clear parent category. */
     var clearParentCategory = function () {
         $('#new_category_parent').find('option').each(function () {
             $('#new_category_parent-suggest').treeSuggest('removeOption', null, this);
@@ -21,8 +22,11 @@ define([
     };
 
     $.widget('mage.newCategoryDialog', {
+        /** @inheritdoc */
         _create: function () {
-            var widget = this;
+            var widget = this,
+                newCategoryForm;
+
             $('#new_category_parent').before($('<input>', {
                 id: 'new_category_parent-suggest',
                 placeholder: $.mage.__('start typing to search category')
@@ -37,8 +41,12 @@ define([
             $.validator.addMethod('validate-parent-category', function () {
                 return $('#new_category_parent').val() || $('#new_category_parent-suggest').val() === '';
             }, $.mage.__('Choose existing category.'));
-            var newCategoryForm = $('#new_category_form');
+            newCategoryForm = $('#new_category_form');
             newCategoryForm.mage('validation', {
+                /**
+                 * @param {jQuery} error
+                 * @param {*} element
+                 */
                 errorPlacement: function (error, element) {
                     error.insertAfter(element.is('#new_category_parent') ?
                         $('#new_category_parent-suggest').closest('.mage-suggest') :
@@ -46,6 +54,7 @@ define([
                 }
             }).on('highlight.validate', function (e) {
                 var options = $(this).validation('option');
+
                 if ($(e.target).is('#new_category_parent')) {
                     options.highlight($('#new_category_parent-suggest').get(0),
                         options.errorClass, options.validClass || '');
@@ -55,15 +64,20 @@ define([
                 type: 'slide',
                 modalClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
+
+                /** @inheritdoc */
                 opened: function () {
                     var enteredName = $('#category_ids-suggest').val();
 
                     $('#new_category_name').val(enteredName);
+
                     if (enteredName === '') {
                         $('#new_category_name').focus();
                     }
                     $('#new_category_messages').html('');
                 },
+
+                /** @inheritdoc */
                 closed: function () {
                     var validationOptions = newCategoryForm.validation('option');
 
@@ -76,11 +90,15 @@ define([
                 buttons: [{
                     text: $.mage.__('Create Category'),
                     class: 'action-primary',
+
+                    /** @inheritdoc */
                     click: function (e) {
+                        var thisButton;
+
                         if (!newCategoryForm.valid()) {
                             return;
                         }
-                        var thisButton = $(e.currentTarget);
+                        thisButton = $(e.currentTarget);
 
                         thisButton.prop('disabled', true);
                         $.ajax({
@@ -89,20 +107,22 @@ define([
                             data: {
                                 name: $('#new_category_name').val(),
                                 parent: $('#new_category_parent').val(),
-                                is_active: 1,
-                                include_in_menu: 1,
-                                use_config: ['available_sort_by', 'default_sort_by'],
-                                form_key: FORM_KEY,
-                                return_session_messages_only: 1
+                                'is_active': 1,
+                                'include_in_menu': 1,
+                                'use_config': ['available_sort_by', 'default_sort_by'],
+                                'form_key': FORM_KEY,
+                                'return_session_messages_only': 1
                             },
                             dataType: 'json',
                             context: $('body')
                         }).success(function (data) {
+                            var $suggest;
+
                             if (!data.error) {
-                                var $suggest = $('#category_ids-suggest');
+                                $suggest = $('#category_ids-suggest');
 
                                 $suggest.trigger('selectItem', {
-                                    id: data.category.entity_id,
+                                    id: data.category['entity_id'],
                                     label: data.category.name
                                 });
                                 $('#new_category_name, #new_category_parent-suggest').val('');

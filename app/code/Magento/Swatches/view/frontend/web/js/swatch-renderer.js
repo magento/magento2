@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -331,14 +331,17 @@ define([
         /**
          * Determine product id and related data
          *
-         * @returns {{productId: *, isInProductView: boolean}}
+         * @returns {{productId: *, isInProductView: bool}}
          * @private
          */
-        _determineProductData: function() {
+        _determineProductData: function () {
             // Check if product is in a list of products.
-            var productId = this.element.parents('.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id'),
+            var productId,
+                product,
                 isInProductView = false;
+
+            productId = this.element.parents('.product-item-details')
+                    .find('.price-box.price-final_price').attr('data-product-id');
 
             if (!productId) {
                 // Check individual product.
@@ -346,7 +349,10 @@ define([
                 isInProductView = productId > 0;
             }
 
-            return {productId: productId, isInProductView: isInProductView};
+            return {
+                productId: productId,
+                isInProductView: isInProductView
+            };
         },
 
         /**
@@ -861,13 +867,13 @@ define([
                 }
             );
 
-            if (result.oldPrice.amount !== result.finalPrice.amount) {
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
 
-            if (result.tierPrices.length) {
+            if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Config\Test\TestStep;
 
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Util\Command\Cli\Cache;
@@ -89,17 +90,19 @@ class SetupConfigurationStep implements TestStepInterface
         $result = [];
 
         foreach ($configData as $configDataSet) {
+            /** @var ConfigData $config */
             $config = $this->fixtureFactory->createByCode('configData', ['dataset' => $configDataSet . $prefix]);
             if ($config->hasData('section')) {
                 $config->persist();
-                $result[] = $config;
+                $result = array_merge($result, $config->getSection());
             }
             if ($this->flushCache) {
                 $this->cache->flush();
             }
         }
+        $config = $this->fixtureFactory->createByCode('configData', ['data' => $result]);
 
-        return ['config' => $result];
+        return ['config' => $config];
     }
 
     /**

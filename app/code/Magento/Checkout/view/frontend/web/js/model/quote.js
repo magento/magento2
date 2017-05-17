@@ -1,6 +1,9 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+/**
+ * @api
  */
 define([
     'ko',
@@ -8,17 +11,18 @@ define([
 ], function (ko, _) {
     'use strict';
 
-    var billingAddress = ko.observable(null);
-    var shippingAddress = ko.observable(null);
-    var shippingMethod = ko.observable(null);
-    var paymentMethod = ko.observable(null);
-    var quoteData = window.checkoutConfig.quoteData;
-    var basePriceFormat = window.checkoutConfig.basePriceFormat;
-    var priceFormat = window.checkoutConfig.priceFormat;
-    var storeCode = window.checkoutConfig.storeCode;
-    var totalsData = window.checkoutConfig.totalsData;
-    var totals = ko.observable(totalsData);
-    var collectedTotals = ko.observable({});
+    var billingAddress = ko.observable(null),
+        shippingAddress = ko.observable(null),
+        shippingMethod = ko.observable(null),
+        paymentMethod = ko.observable(null),
+        quoteData = window.checkoutConfig.quoteData,
+        basePriceFormat = window.checkoutConfig.basePriceFormat,
+        priceFormat = window.checkoutConfig.priceFormat,
+        storeCode = window.checkoutConfig.storeCode,
+        totalsData = window.checkoutConfig.totalsData,
+        totals = ko.observable(totalsData),
+        collectedTotals = ko.observable({});
+
     return {
         totals: totals,
         shippingAddress: shippingAddress,
@@ -27,52 +31,104 @@ define([
         paymentMethod: paymentMethod,
         guestEmail: null,
 
-        getQuoteId: function() {
-            return quoteData.entity_id;
+        /**
+         * @return {*}
+         */
+        getQuoteId: function () {
+            return quoteData['entity_id'];
         },
-        isVirtual: function() {
-            return !!Number(quoteData.is_virtual);
+
+        /**
+         * @return {Boolean}
+         */
+        isVirtual: function () {
+            return !!Number(quoteData['is_virtual']);
         },
-        getPriceFormat: function() {
+
+        /**
+         * @return {*}
+         */
+        getPriceFormat: function () {
             return priceFormat;
         },
-        getBasePriceFormat: function() {
+
+        /**
+         * @return {*}
+         */
+        getBasePriceFormat: function () {
             return basePriceFormat;
         },
-        getItems: function() {
+
+        /**
+         * @return {*}
+         */
+        getItems: function () {
             return window.checkoutConfig.quoteItemData;
         },
-        getTotals: function() {
+
+        /**
+         *
+         * @return {*}
+         */
+        getTotals: function () {
             return totals;
         },
-        setTotals: function(totalsData) {
-            if (_.isObject(totalsData) && _.isObject(totalsData.extension_attributes)) {
-                _.each(totalsData.extension_attributes, function(element, index) {
-                    totalsData[index] = element;
+
+        /**
+         * @param {Object} data
+         */
+        setTotals: function (data) {
+            if (_.isObject(data) && _.isObject(data['extension_attributes'])) {
+                _.each(data['extension_attributes'], function (element, index) {
+                    data[index] = element;
                 });
             }
-            totals(totalsData);
-            this.setCollectedTotals('subtotal_with_discount', parseFloat(totalsData.subtotal_with_discount));
+            totals(data);
+            this.setCollectedTotals('subtotal_with_discount', parseFloat(data['subtotal_with_discount']));
         },
-        setPaymentMethod: function(paymentMethodCode) {
+
+        /**
+         * @param {*} paymentMethodCode
+         */
+        setPaymentMethod: function (paymentMethodCode) {
             paymentMethod(paymentMethodCode);
         },
-        getPaymentMethod: function() {
+
+        /**
+         * @return {*}
+         */
+        getPaymentMethod: function () {
             return paymentMethod;
         },
-        getStoreCode: function() {
+
+        /**
+         * @return {*}
+         */
+        getStoreCode: function () {
             return storeCode;
         },
-        setCollectedTotals: function(code, value) {
-            var totals = collectedTotals();
-            totals[code] = value;
-            collectedTotals(totals);
+
+        /**
+         * @param {String} code
+         * @param {*} value
+         */
+        setCollectedTotals: function (code, value) {
+            var colTotals = collectedTotals();
+
+            colTotals[code] = value;
+            collectedTotals(colTotals);
         },
-        getCalculatedTotal: function() {
-            var total = 0.;
-            _.each(collectedTotals(), function(value) {
+
+        /**
+         * @return {Number}
+         */
+        getCalculatedTotal: function () {
+            var total = 0.; //eslint-disable-line no-floating-decimal
+
+            _.each(collectedTotals(), function (value) {
                 total += value;
             });
+
             return total;
         }
     };

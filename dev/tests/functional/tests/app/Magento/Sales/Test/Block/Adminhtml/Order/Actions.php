@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Order actions block.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Actions extends Block
 {
@@ -58,6 +61,13 @@ class Actions extends Block
     protected $hold = '[id$=hold-button]';
 
     /**
+     * 'Unhold' button.
+     *
+     * @var string
+     */
+    protected $unhold = '[id$=unhold-button]';
+
+    /**
      * 'Invoice' button.
      *
      * @var string
@@ -84,6 +94,13 @@ class Actions extends Block
      * @var string
      */
     protected $orderCreditMemo = '#order_creditmemo';
+
+    /**
+     * 'Get Payment Update' button on the order page.
+     *
+     * @var string
+     */
+    private $getPaymentUpdate = '#get_review_payment_update';
 
     /**
      * 'Credit Memo' button on the order invoice page.
@@ -138,6 +155,16 @@ class Actions extends Block
     public function invoice()
     {
         $this->_rootElement->find($this->invoice)->click();
+    }
+
+    /**
+     * Click 'Get Payment Update' button to fetch updates from 3rd party payment solution.
+     *
+     * @return void
+     */
+    public function paymentUpdate()
+    {
+        $this->_rootElement->find($this->getPaymentUpdate)->click();
     }
 
     /**
@@ -210,6 +237,16 @@ class Actions extends Block
     public function hold()
     {
         $this->_rootElement->find($this->hold)->click();
+    }
+
+    /**
+     * Unhold order.
+     *
+     * @return void
+     */
+    public function unhold()
+    {
+        $this->_rootElement->find($this->unhold)->click();
     }
 
     /**

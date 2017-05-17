@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Catalog entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
@@ -563,11 +566,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             }
         }
 
-        if (sizeof($attributesData) == 1) {
+        if (is_array($attributesData) && sizeof($attributesData) == 1) {
             $_data = each($attributesData);
             $attributesData = $_data[1];
         }
 
-        return $attributesData ? $attributesData : false;
+        return $attributesData === false ? false : $attributesData;
     }
 }

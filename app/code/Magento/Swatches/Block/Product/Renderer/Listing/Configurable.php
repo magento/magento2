@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer\Listing;
@@ -8,8 +8,7 @@ namespace Magento\Swatches\Block\Product\Renderer\Listing;
 /**
  * Swatch renderer block in Category page
  *
- * @codeCoverageIgnore
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
@@ -22,13 +21,17 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     }
 
     /**
+     * Render block hook
+     *
+     * Produce and return block's html output
+     *
      * @return string
      */
-    protected function getHtmlOutput()
+    protected function _toHtml()
     {
         $output = '';
-        if ($this->isProductHasSwatchAttribute) {
-            $output = parent::getHtmlOutput();
+        if ($this->isProductHasSwatchAttribute()) {
+            $output = parent::_toHtml();
         }
 
         return $output;

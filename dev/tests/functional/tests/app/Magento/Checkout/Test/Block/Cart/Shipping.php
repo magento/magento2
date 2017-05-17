@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -122,6 +122,11 @@ class Shipping extends Form
                 $this->openEstimateShippingAndTax();
             }
             $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+
+            if (!empty($element->getAttribute('checked'))) {
+                return;
+            }
+
             if (!$element->isDisabled()) {
                 $element->click();
             } else {

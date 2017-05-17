@@ -27,10 +27,18 @@ sub vcl_recv {
         if (client.ip !~ purge) {
             return (synth(405, "Method not allowed"));
         }
-        if (!req.http.X-Magento-Tags-Pattern) {
-            return (synth(400, "X-Magento-Tags-Pattern header required"));
+        # To use the X-Pool header for purging varnish during automated deployments, make sure the X-Pool header
+        # has been added to the response in your backend server config. This is used, for example, by the
+        # capistrano-magento2 gem for purging old content from varnish during it's deploy routine.
+        if (!req.http.X-Magento-Tags-Pattern && !req.http.X-Pool) {
+            return (synth(400, "X-Magento-Tags-Pattern or X-Pool header required"));
         }
-        ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern);
+        if (req.http.X-Magento-Tags-Pattern) {
+          ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern);
+        }
+        if (req.http.X-Pool) {
+          ban("obj.http.X-Pool ~ " + req.http.X-Pool);
+        }
         return (synth(200, "Purged"));
     }
 
@@ -90,7 +98,7 @@ sub vcl_recv {
     set req.url = regsuball(req.url,"&gclid=[^&]+",""); # strips when QS = "?foo=bar&gclid=AAA" or QS = "?foo=bar&gclid=AAA&bar=baz"
 
     # static files are always cacheable. remove SSL flag and cookie
-        if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
+        if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|html|css|js|jpg|jpeg|png|gif|tiff|bmp|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
         unset req.http.Https;
         unset req.http./* {{ ssl_offloaded_header }} */;
         unset req.http.Cookie;

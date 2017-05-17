@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -157,6 +157,11 @@ class Full
     private $iteratorFactory;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -175,6 +180,7 @@ class Full
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @param \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -195,7 +201,8 @@ class Full
         \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
-        \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory
+        \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -216,6 +223,8 @@ class Full
         $this->fulltextResource = $fulltextResource;
         $this->dimensionFactory = $dimensionFactory;
         $this->iteratorFactory = $indexIteratorFactory;
+        $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\EntityManager\MetadataPool::class);
     }
 
     /**
@@ -252,14 +261,22 @@ class Full
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
-        return $this->connection
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $fieldForParent = $metadata->getLinkField();
+
+        $select = $this->connection
             ->select()
-            ->from($this->getTable('catalog_product_relation'), 'parent_id')
+            ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
             ->where('parent_id NOT IN (?)', $entityIds)
-            ->query()
-            ->fetchAll(\Zend_Db::FETCH_COLUMN);
+            ->join(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                'relation.parent_id = cpe.' . $fieldForParent,
+                ['cpe.entity_id']
+            );
+        return $this->connection->fetchCol($select);
     }
 
     /**

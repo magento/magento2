@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-  <type name="Magento\ImportExport\Test\Constraint\AssertProductAttributeAbsenceForExport">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\ImportExport\Test\Constraint\AssertProductAttributeAbsenceForExport">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Test\Fixture\Import\File">
+        <arguments>
+            <argument name="generator" xsi:type="object">ImportCsvGenerator</argument>
+        </arguments>
+    </type>
+    <virtualType name="ImportCsvGenerator" type="Magento\Mtf\Util\Generate\File\Generator">
+        <arguments>
+            <argument name="directory" xsi:type="string">ImportExport/import</argument>
+        </arguments>
+    </virtualType>
 </config>

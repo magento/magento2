@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel;
@@ -12,7 +12,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 /**
  * Bundle Selection Resource Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

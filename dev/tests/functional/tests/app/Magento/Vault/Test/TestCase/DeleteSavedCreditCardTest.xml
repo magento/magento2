@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -17,6 +17,9 @@
             <data name="payments" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="method" xsi:type="string">braintree</item>
+                    <item name="arguments" xsi:type="array">
+                        <item name="paymentForm" xsi:type="string">braintree</item>
+                    </item>
                     <item name="creditCard" xsi:type="array">
                         <item name="dataset" xsi:type="string">visa_default</item>
                         <item name="data" xsi:type="array">
@@ -35,6 +38,9 @@
                 </item>
                 <item name="2" xsi:type="array">
                     <item name="method" xsi:type="string">braintree</item>
+                    <item name="arguments" xsi:type="array">
+                        <item name="paymentForm" xsi:type="string">braintree</item>
+                    </item>
                     <item name="creditCard" xsi:type="array">
                         <item name="dataset" xsi:type="string">visa_default</item>
                         <item name="data" xsi:type="array">

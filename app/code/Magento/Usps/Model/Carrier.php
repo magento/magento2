@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,11 +9,11 @@
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\Xml\Security;
 use Magento\Usps\Helper\Data as DataHelper;
 
 /**
@@ -413,7 +413,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($this->_isUSCountry($r->getDestCountryId())) {
             $xml = $this->_xmlElFactory->create(
-                
+
                 ['data' => '<?xml version="1.0" encoding="UTF-8"?><RateV4Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -461,7 +461,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $api = 'RateV4';
         } else {
             $xml = $this->_xmlElFactory->create(
-                
+
                 ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><IntlRateV2Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -490,6 +490,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $package->addChild('Length', $length);
             $package->addChild('Height', $height);
             $package->addChild('Girth', $girth);
+
+            $package->addChild('OriginZip', $r->getOrigPostal());
+            $package->addChild('AcceptanceDateTime', date('c'));
+            $package->addChild('DestinationPostalCode', $r->getDestPostal());
 
             $api = 'IntlRateV2';
         }
@@ -1902,7 +1906,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $response = $this->parseXml($response);
 
-        if($response !== false) {
+        if ($response !== false) {
             if ($response->getName() == 'Error') {
                 $debugData['result'] = [
                     'error' => $response->Description,
@@ -2099,7 +2103,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
             $data = $xml->asXML();
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return $data;
     }

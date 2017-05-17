@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,8 @@ namespace Magento\ConfigurableProduct\Test\Block\Product\View;
 
 use Magento\Catalog\Test\Block\Product\View\CustomOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
@@ -32,7 +30,7 @@ class ConfigurableOptions extends CustomOptions
      *
      * @var string
      */
-    protected $priceBlock = '//*[@class="product-info-main"]//*[contains(@class,"price-box")]';
+    protected $priceBlock = '.product-info-price .price-box';
 
     /**
      * Selector for tier prices.
@@ -40,6 +38,13 @@ class ConfigurableOptions extends CustomOptions
      * @var string
      */
     private $tierPricesSelector = '.prices-tier li';
+
+    /**
+     * Locator for configurable option element.
+     *
+     * @var string
+     */
+    private $configurableOptionElement = '#product-options-wrapper > * > .configurable';
 
     /**
      * Get configurable product options
@@ -153,10 +158,12 @@ class ConfigurableOptions extends CustomOptions
      */
     protected function getPriceBlock()
     {
-        return $this->blockFactory->create(
+        /** @var \Magento\Catalog\Test\Block\Product\Price $priceBlock */
+        $priceBlock = $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Product\Price::class,
-            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
+            ['element' => $this->_rootElement->find($this->priceBlock)]
         );
+        return $priceBlock;
     }
 
     /**
@@ -187,5 +194,33 @@ class ConfigurableOptions extends CustomOptions
             $optionTitle = $attributesData[$attribute]['options'][$option]['label'];
             $this->selectOption($attributeTitle, $optionTitle);
         }
+    }
+
+    /**
+     * Get present options
+     *
+     * @return array
+     */
+    public function getPresentOptions()
+    {
+        $options = [];
+
+        $optionElements = $this->_rootElement->getElements($this->configurableOptionElement);
+        foreach ($optionElements as $optionElement) {
+            $title = $optionElement->find($this->title)->getText();
+            $options[$title] = $optionElement;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Check if the options container is visible or not
+     *
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->_rootElement->find($this->optionsContext, Locator::SELECTOR_XPATH)->isVisible();
     }
 }

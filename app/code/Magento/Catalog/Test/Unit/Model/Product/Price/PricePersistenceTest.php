@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,56 +53,23 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->attributeResource = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Attribute::class,
-            ['getConnection', 'getTable'],
-            [],
-            '',
-            false
-        );
-        $this->attributeRepository = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['get']
-        );
-        $this->productIdLocator = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\ProductIdLocatorInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['retrieveProductIdsBySkus']
-        );
-        $this->metadataPool = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            ['getLinkField', 'getMetadata'],
-            [],
-            '',
-            false
-        );
-        $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['select', 'fetchAll', 'beginTransaction', 'insertOnDuplicate', 'commit', 'rollBack', 'delete']
-        );
-        $this->productAttribute = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\Data\ProductAttributeInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getAttributeId']
-        );
+        $this->attributeResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Attribute::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->attributeRepository = $this->getMockBuilder(
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkField', 'getMetadata'])
+            ->getMock();
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->productAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
+            ->disableOriginalConstructor()->getMockForAbstractClass();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -135,18 +102,13 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
                     2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
                 ]
         ];
-        $select = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            ['from', 'where'],
-            [],
-            '',
-            false
-        );
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()->getMock();
         $this->productIdLocator
             ->expects($this->once())
             ->method('retrieveProductIdsBySkus')->with($skus)
             ->willReturn($idsBySku);
-        $this->attributeResource->expects($this->exactly(2))->method('getConnection')->willReturn($this->connection);
+        $this->attributeResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->once())->method('select')->willReturn($select);
         $this->attributeResource
             ->expects($this->once())
@@ -157,7 +119,7 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
         $select
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('where')
             ->withConsecutive(['row_id IN (?)', [1, 2]], ['attribute_id = ?', $attributeId])
             ->willReturnSelf();
@@ -183,7 +145,7 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         ];
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->attributeResource->expects($this->exactly(2))->method('getConnection')->willReturn($this->connection);
+        $this->attributeResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->attributeResource
             ->expects($this->once())
@@ -228,7 +190,7 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         ];
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->attributeResource->expects($this->exactly(2))->method('getConnection')->willReturn($this->connection);
+        $this->attributeResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->attributeResource
             ->expects($this->once())
@@ -281,7 +243,7 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($idsBySku);
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->attributeResource->expects($this->exactly(2))->method('getConnection')->willReturn($this->connection);
+        $this->attributeResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->attributeResource
             ->expects($this->once())
@@ -331,7 +293,8 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($idsBySku);
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->attributeResource->expects($this->exactly(2))->method('getConnection')->willReturn($this->connection);
+        $this->attributeResource->expects($this->atLeastOnce(2))->method('getConnection')
+            ->willReturn($this->connection);
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->attributeResource
             ->expects($this->once())

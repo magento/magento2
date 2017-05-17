@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
@@ -205,7 +205,6 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
                 ->method('addError')->with(__('Please select indexers.'))
                 ->will($this->returnValue(1));
         } else {
-
             $this->objectManager->expects($this->any())
                 ->method('get')->with(\Magento\Framework\Indexer\IndexerRegistry::class)
                 ->will($this->returnValue($this->indexReg));

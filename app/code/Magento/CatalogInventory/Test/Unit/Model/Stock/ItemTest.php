@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
@@ -473,7 +473,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * We wan't to ensure that property $_eventPrefix used during event dispatching
+     * We want to ensure that property $_eventPrefix used during event dispatching
      *
      * @param $eventName
      * @param $methodName

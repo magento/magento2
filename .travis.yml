@@ -9,29 +9,34 @@ addons:
     - postfix
 language: php
 php:
-  - 5.6
   - 7.0
+  - 7.1
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
     - INTEGRATION_SETS=3
+    - NODE_JS_VERSION=6
   matrix:
     - TEST_SUITE=unit
     - TEST_SUITE=integration INTEGRATION_INDEX=1
     - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=static
-cache:
-  apt: true
-  directories: $HOME/.composer/cache
+    - TEST_SUITE=js
 matrix:
   exclude:
     - php: 7.0
       env: TEST_SUITE=static
+    - php: 7.0
+      env: TEST_SUITE=js
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.nvm
+    - $HOME/node_modules
+    - $HOME/yarn.lock
 before_install: ./dev/travis/before_install.sh
 install: composer install --no-interaction --prefer-dist
 before_script: ./dev/travis/before_script.sh
-script:
-  - cd dev/tests/$TEST_SUITE
-  - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
-  - phpunit $TEST_FILTER
+script: ./dev/travis/script.sh

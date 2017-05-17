@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,7 +29,11 @@
         <attribute code="price_type">
             <field code="is_searchable" locked="true" />
         </attribute>
+        <attribute code="name">
+            <field code="is_html_allowed_on_front" locked="true"/>
+        </attribute>
         <attribute code="category_ids">
+            <field code="is_global" locked="true" />
             <field code="is_searchable" locked="true" />
             <field code="used_for_sort_by" locked="true" />
             <field code="is_used_in_grid" locked="true" />
