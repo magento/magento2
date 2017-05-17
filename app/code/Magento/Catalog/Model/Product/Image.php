@@ -14,6 +14,7 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
+use Magento\Catalog\Model\View\Asset\ImageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -216,8 +217,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory = null,
-        array $data = []
+        array $data = [],
+        ImageFactory $viewAssetImageFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -228,13 +229,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
-        if ($viewAssetImageFactory == null) {
-            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\ImageFactory::class
-            );
-        } else {
-            $this->viewAssetImageFactory = $viewAssetImageFactory;
-        }
+        $this->viewAssetImageFactory = $viewAssetImageFactory
+            ?: ObjectManager::getInstance()->get(ImageFactory::class);
     }
 
     /**
