@@ -5,13 +5,11 @@
 define(
     [
         'uiComponent',
-        'Magento_Checkout/js/model/quote',
         'jquery',
         'domReady!'
     ],
     function (
         Component,
-        quote,
         $
     ) {
         return Component.extend({
@@ -31,23 +29,10 @@ define(
              * @returns {Object}
              */
             initEvents: function () {
-
-                $('.' + this.paypalButtonClass).off('click.' + this.id)
+                $('a[data-action="' + this.linkDataAction + '"]').off('click.' + this.id)
                     .on('click.' + this.id, this.click.bind(this));
 
-                quote.totals.subscribe(function (newValue) {
-                    // TODO: check for value
-                    this.showLink();
-                }, this);
-
                 return this;
-            },
-
-            /**
-             * Display PayPal in-context checkout link
-             */
-            showLink: function() {
-                $('.' + this.paypalButtonClass).show();
             },
 
             /**

@@ -62,7 +62,7 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $inContextPaypalCheckoutButton = 'ul.checkout-methods-items a.paypal-express-in-context-checkout';
+    protected $inContextPaypalCheckoutButton = 'ul.checkout-methods-items a[data-action="paypal-express-in-context-checkout"]';
 
     /**
      * Locator value for "Check out with Braintree PayPal" button.

@@ -26,7 +26,7 @@ class Button extends Template implements ShortcutInterface
 
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
-    const BUTTON_ELEMENT_CLASS_NAME = 'button_class';
+    const LINK_DATA_ACTION = 'link_data_action';
 
     const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
 
@@ -137,9 +137,9 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getButtonClassName()
+    public function getLinkAction()
     {
-        return $this->getData(self::BUTTON_ELEMENT_CLASS_NAME);
+        return $this->getData(self::LINK_DATA_ACTION);
     }
 
     /**
