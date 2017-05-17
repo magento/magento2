@@ -113,9 +113,6 @@ class ProductFieldMapper implements FieldMapperInterface
         $allAttributes = [];
         // List of attributes which are required to be indexable
         $alwaysIndexableAttributes = [
-            'media_gallery',
-            'quantity_and_stock_status',
-            'tier_price',
             'category_ids',
             'visibility',
         ];

@@ -22,6 +22,27 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="AdditionalFieldsForElasticsearchDataMapper" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
+        <arguments>
+            <argument name="fieldsProviders" xsi:type="array">
+                <item name="categories" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+                <item name="prices" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\PriceFieldsProvider</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper">
+        <arguments>
+            <argument name="additionalFieldsProvider" xsi:type="object">AdditionalFieldsForElasticsearchDataMapper</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver" />
+    <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperFactory">
+        <arguments>
+            <argument name="dataMappers" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Builder" />
     <preference for="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig" />
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">

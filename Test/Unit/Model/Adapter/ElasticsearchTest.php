@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\Model\Adapter\DataMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Psr\Log\LoggerInterface;
@@ -34,9 +34,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     protected $connectionManager;
 
     /**
-     * @var DataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchDataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $documentDataMapper;
+    protected $batchDocumentDataMapper;
 
     /**
      * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -159,12 +159,15 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ])
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->batchDocumentDataMapper = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->objectManager->getObject(
             \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
             [
                 'connectionManager' => $this->connectionManager,
-                'documentDataMapper' => $this->documentDataMapper,
+                'batchDocumentDataMapper' => $this->batchDocumentDataMapper,
                 'fieldMapper' => $this->fieldMapper,
                 'clientConfig' => $this->clientConfig,
                 'indexBuilder' => $this->indexBuilder,
@@ -211,7 +214,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareDocsPerStore()
     {
-        $this->documentDataMapper->expects($this->once())
+        $this->batchDocumentDataMapper->expects($this->once())
             ->method('map')
             ->willReturn([
                 'name' => 'Product Name',
@@ -350,7 +353,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
             [
                 'connectionManager' => $this->connectionManager,
-                'documentDataMapper' => $this->documentDataMapper,
+                'batchDocumentDataMapper' => $this->batchDocumentDataMapper,
                 'fieldMapper' => $this->fieldMapper,
                 'clientConfig' => $this->clientConfig,
                 'indexBuilder' => $this->indexBuilder,
@@ -386,7 +389,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
             [
                 'connectionManager' => $connectionManager,
-                'documentDataMapper' => $this->documentDataMapper,
+                'batchDocumentDataMapper' => $this->batchDocumentDataMapper,
                 'fieldMapper' => $this->fieldMapper,
                 'clientConfig' => $this->clientConfig,
                 'indexBuilder' => $this->indexBuilder,

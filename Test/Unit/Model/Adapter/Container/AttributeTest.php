@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Container;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -19,6 +20,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $attribute;
 
     /**
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionMockFactory;
+
+    /**
      * @var Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionMock;
@@ -28,6 +34,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->collectionMockFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -36,7 +46,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->attribute = $objectManager->getObject(
             \Magento\Elasticsearch\Model\Adapter\Container\Attribute::class,
             [
-                'attributeCollection' => $this->collectionMock,
+                'attributeCollectionFactory' => $this->collectionMockFactory,
             ]
         );
     }
@@ -86,22 +96,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $expected = 'options';
         $result = $this->attribute->getAttributeIdByCode($attributeCode);
         $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetMultipleAttributeIdsByCode()
-    {
-        $firstAttributeId = 100;
-        $firstAttributeCode = 'test_attribute_code_100';
-        $this->mockAttributeByCode($firstAttributeId, $firstAttributeCode, 0);
-        $this->assertEquals($firstAttributeId, $this->attribute->getAttributeIdByCode($firstAttributeCode));
-
-        $secondAttributeId = 200;
-        $secondAttributeCode = 'test_attribute_code_200';
-        $this->mockAttributeByCode($secondAttributeId, $secondAttributeCode, 0);
-        $this->assertEquals($secondAttributeId, $this->attribute->getAttributeIdByCode($secondAttributeCode));
     }
 
     /**
@@ -180,9 +174,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private function mockAttributes(array $attributes)
     {
-        $this->collectionMock->expects($this->once())
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($attributes));
+        $this->collectionMockFactory->expects($this->once())->method('create')->willReturn($collectionMock);
     }
 
     /**
@@ -194,10 +192,15 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private function mockAttributeById($attributeId, $attributeCode, $sequence = 0)
     {
         $attribute = $this->createAttributeMock($attributeId, $attributeCode);
-        $this->collectionMock->expects($this->at($sequence))
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->at($sequence))
             ->method('getItemById')
             ->with($attributeId)
             ->willReturn($attribute);
+        $this->collectionMockFactory->expects($this->once())->method('create')->willReturn($collectionMock);
+
         return $attribute;
     }
 
@@ -210,10 +213,15 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private function mockAttributeByCode($attributeId, $attributeCode, $sequence = 0)
     {
         $attribute = $this->createAttributeMock($attributeId, $attributeCode);
-        $this->collectionMock->expects($this->at($sequence))
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->at($sequence))
             ->method('getItemByColumnValue')
             ->with('attribute_code', $attributeCode)
             ->willReturn($attribute);
+        $this->collectionMockFactory->expects($this->once())->method('create')->willReturn($collectionMock);
+
         return $attribute;
     }
 

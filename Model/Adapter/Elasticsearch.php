@@ -5,6 +5,8 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Elasticsearch adapter
  */
@@ -26,6 +28,7 @@ class Elasticsearch
 
     /**
      * @var DataMapperInterface
+     * @deprecated Will be replaced with BatchDataMapperInterface
      */
     protected $documentDataMapper;
 
@@ -65,6 +68,11 @@ class Elasticsearch
     protected $preparedIndex = [];
 
     /**
+     * @var BatchDataMapperInterface
+     */
+    private $batchDocumentDataMapper;
+
+    /**
      * Constructor for Elasticsearch adapter.
      *
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
@@ -75,7 +83,7 @@ class Elasticsearch
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver
      * @param array $options
-     *
+     * @param BatchDataMapperInterface $batchDocumentDataMapper
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -86,7 +94,8 @@ class Elasticsearch
         \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
-        $options = []
+        $options = [],
+        BatchDataMapperInterface $batchDocumentDataMapper = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->documentDataMapper = $documentDataMapper;
@@ -95,6 +104,8 @@ class Elasticsearch
         $this->indexBuilder = $indexBuilder;
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
+        $this->batchDocumentDataMapper = $batchDocumentDataMapper ?:
+            ObjectManager::getInstance()->get(BatchDataMapperInterface::class);
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
@@ -135,14 +146,10 @@ class Elasticsearch
     {
         $documents = [];
         if (count($documentData)) {
-            foreach ($documentData as $documentId => $data) {
-                $document = $this->documentDataMapper->map(
-                    $documentId,
-                    $data,
-                    $storeId
-                );
-                $documents[$documentId] = $document;
-            }
+            $documents = $this->batchDocumentDataMapper->map(
+                $documentData,
+                $storeId
+            );
         }
         return $documents;
     }
