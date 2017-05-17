@@ -141,6 +141,8 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processAssert(
         CheckoutCart $checkoutCart,
