@@ -26,7 +26,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     private $sitemap;
 
     /**
-     * Removes cached configuration and reinitialize the application.
+     * Removes cached configuration and reinitializes the application.
      */
     private function refreshConfiguration()
     {
