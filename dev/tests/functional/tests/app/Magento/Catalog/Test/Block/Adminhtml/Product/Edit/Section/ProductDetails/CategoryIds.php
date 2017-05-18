@@ -47,6 +47,13 @@ class CategoryIds extends MultisuggestElement
     protected $advancedInventoryButton = '[data-index="advanced_inventory_button"]';
 
     /**
+     * Locator for MultiSelect element.
+     *
+     * @var string
+     */
+    protected $multiSelectElement = '.admin__action-multiselect-menu-inner-item';
+
+    /**
      * @constructor
      * @param BrowserInterface $browser
      * @param DriverInterface $driver
@@ -87,8 +94,15 @@ class CategoryIds extends MultisuggestElement
                     continue;
                 }
                 $this->keys([$value]);
+
+                // wait when some element of multiSelect will be visible.
+                $this->waitUntil(function () {
+                    return $this->find($this->multiSelectElement)->isVisible() ? true : null;
+                });
+
                 $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
                 $searchedItem->click();
+
                 $closeButton = $this->find($this->closeButton);
                 if ($closeButton->isVisible()) {
                     $closeButton->click();
