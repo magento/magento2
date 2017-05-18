@@ -18,7 +18,7 @@ use Magento\ImportExport\Test\Unit\Model\Import\Source\FileParser\FakeParserFact
 
 class FileFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGivenParserFactoryEmpty_WhenSourceIsCreatedByPath_NoSourceIsCreated()
+    public function testGivenParserFactoryEmptyWhenSourceIsCreatedByPathThenNoSourceIsCreated()
     {
         $this->setExpectedException(UnsupportedPathException::class, 'Path "test.csv" is not supported');
 
@@ -30,7 +30,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         $fileFactory->createFromFilePath('test.csv');
     }
 
-    public function testGivenParserFactoryConfigured_WhenSourceIsCreatedByPath_RightInstanceIsCreated()
+    public function testGivenParserFactoryConfiguredWhenSourceIsCreatedByPathThenRightInstanceIsCreated()
     {
         $fileFactory = new FileFactory(
             new FakeParserFactory(new FakeParser(['column1', 'column2'])),
@@ -43,7 +43,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGivenCsvParserOptions_WhenSource_IsCreatedByPath_OptionsArePassedToParser()
+    public function testWhenSourceIsCreatedByPathWithCsvOptionsThenOptionsArePassedToParser()
     {
         $objectManager = new FakeObjectManager();
         $filesystem = new Filesystem(
@@ -68,7 +68,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenSourceIsCreatedWithParser_FileIsCreated()
+    public function testWhenSourceIsCreatedWithParserThenFileIsCreated()
     {
         $fileFactory = new FileFactory(new FakeParserFactory(), new FakeObjectManager());
         $file = $fileFactory->createFromFileParser(new FakeParser(['column1', 'column2']));

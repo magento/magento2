@@ -12,48 +12,45 @@ use Magento\ImportExport\Model\Import\Source\FileParser;
 
 class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenZipIsDisabled_ParserIsNotCreated()
+    public function testWhenZipIsDisabledThenParserIsNotCreated()
     {
+        $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Zip extension is not available');
+
         $parser = new FileParser\ZipParserFactory(
             $this->createTestFilesystem(),
             new FakeParserFactory(),
             false
         );
 
-        $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Zip extension is not available');
-
         $parser->create('file.zip');
     }
 
-    public function testWhenCsvFileIsProvided_ParserIsNotCreated()
+    public function testWhenCsvFileIsProvidedThenParserIsNotCreated()
     {
-        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
-
         $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Path "file.csv" is not supported');
 
+        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
         $parser->create('file.csv');
     }
 
-    public function testWhenCorruptedZipFileIsProvided_ParserIsNotCreated()
+    public function testWhenCorruptedZipFileIsProvidedThenParserIsNotCreated()
     {
-        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
-
         $this->setExpectedException(FileParser\CorruptedFileException::class);
 
+        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
         $parser->create('corrupted.zip');
     }
 
-    public function testWhenZipFileDoesNotExists_ParserIsNotCreated()
+    public function testWhenZipFileDoesNotExistsThenParserIsNotCreated()
     {
-        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
-
         $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Path "unknown.zip" is not supported');
 
+        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
         $parser->create('unknown.zip');
     }
 
 
-    public function testWhenEmptyZipFileIsProvided_ParserIsNotCreated()
+    public function testWhenEmptyZipFileIsProvidedThenParserIsNotCreated()
     {
         $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Path "empty.zip" is not supported');
 
@@ -61,7 +58,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
         $parserFactory->create('empty.zip');
     }
 
-    public function testWhenProperZipFileIsProvided_FirstFileIsParsed()
+    public function testWhenProperZipFileIsProvidedThenFirstFileIsParsed()
     {
         $expectedParser = new FakeParser();
 
@@ -78,7 +75,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenProperZipFileWithAbsolutePathIsProvided_FirstFileIsParsed()
+    public function testWhenProperZipFileWithAbsolutePathIsProvidedThenFirstFileIsParsed()
     {
         $expectedParser = new FakeParser();
 
@@ -95,7 +92,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenProperZipFileIsProvided_SecondFileIsParsed()
+    public function testWhenProperZipFileIsProvidedThenSecondFileIsParsed()
     {
         $expectedParser = new FakeParser();
 
@@ -112,7 +109,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenProperZipFileIsProvidedWithOptions_CustomCsvFileIsParsed()
+    public function testWhenProperZipFileIsProvidedWithOptionsThenCustomCsvFileIsParsed()
     {
         $fileSystem = $this->createTestFilesystem();
 

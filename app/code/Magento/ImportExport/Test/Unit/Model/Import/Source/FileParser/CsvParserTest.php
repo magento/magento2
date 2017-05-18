@@ -10,13 +10,14 @@ use Magento\ImportExport\Model\Import\Source\FileParser;
 
 class CsvParserTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenCsvFileIsEmpty_ParserIsNotCreated()
+    public function testWhenCsvFileIsEmptyThenParserIsNotCreated()
     {
         $this->setExpectedException(\InvalidArgumentException::class, 'CSV file should contain at least 1 row');
+
         $this->createParser(new FakeFile([]));
     }
 
-    public function testWhenValidFileIsProvided_readColumnsFromFileHeader()
+    public function testWhenValidFileIsProvidedThenReadColumnsFromFileHeader()
     {
         $parser = $this->createParser(new FakeFile([
             'column1,column2,column3',
@@ -26,7 +27,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['column1', 'column2', 'column3'], $parser->getColumnNames());
     }
 
-    public function testWhenValidFileIsProvided_rowsAreFetchedAndHeaderIsSkipped()
+    public function testWhenValidFileIsProvidedThenRowsAreFetchedAndHeaderIsSkipped()
     {
         $parser = $this->createParser(new FakeFile([
             'column1,column2,column3',
@@ -43,7 +44,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenEndOfFileIsReached_NoMoreRowsCanBeFetched()
+    public function testWhenEndOfFileIsReachedThenNoMoreRowsCanBeFetched()
     {
         $parser = $this->createParser(new FakeFile([
             'column1,column2,column3',
@@ -56,7 +57,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($parser->fetchRow());
     }
 
-    public function testWhenFileWasAlreadyRead_ResetAllowsToReadItFromStart()
+    public function testWhenFileWasAlreadyReadThenResetAllowsToReadItFromStart()
     {
         $parser = $this->createParser(new FakeFile([
             'column1,column2,column3',
@@ -76,7 +77,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenCustomDelimiterIsSpecified_dataIsParsedUsingThisDelimiter()
+    public function testWhenCustomDelimiterIsSpecifiedThenDataIsParsedUsingThisDelimiter()
     {
         $parser = $this->createParser(
             new FakeFile([
@@ -96,7 +97,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenFileHasMissingRowValues_fetchedRowValuesAreSameAsNumberOfColumns()
+    public function testWhenFileHasMissingRowValuesThenFetchedRowValuesAreSameAsNumberOfColumns()
     {
         $parser = $this->createParser(new FakeFile([
             'column1,column2,column3',
@@ -118,7 +119,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testWhenNullPlaceholderIsSet_fetchedRowValueIsReplacedWithNull()
+    public function testWhenNullPlaceholderIsSetThenFetchedRowValueIsReplacedWithNull()
     {
         $parser = $this->createParser(
             new FakeFile([
@@ -138,7 +139,7 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenParserIsDestroyed_InternalFileDescriptorIsClosed()
+    public function testWhenParserIsDestroyedThenInternalFileDescriptorIsClosed()
     {
         $csvFile = new FakeFile([
             'column1,column2,column3'
@@ -150,15 +151,14 @@ class CsvParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($csvFile->isOpen());
     }
 
-    private function assertParsedFileContent($expectedParsedFileTable, $parser)
+    private function assertParsedFileContent($expectedCsvStructure, $parser)
     {
-        foreach ($expectedParsedFileTable as $rowNumber => $row) {
-            $this->assertSame(
-                $row,
-                $parser->fetchRow(),
-                sprintf('Unexpected data on row #%d', $rowNumber + 1)
-            );
+        $actualCsvStructure = [];
+        while ($row = $parser->fetchRow()) {
+            $actualCsvStructure[] = $row;
         }
+
+        $this->assertSame($expectedCsvStructure, $actualCsvStructure);
     }
 
     private function skipRows($numberOfRows, FileParser\CsvParser $parser)

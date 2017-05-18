@@ -10,31 +10,31 @@ use Magento\ImportExport\Model\Import\Source\FileParser\CorruptedFileException;
 
 class CorruptedPathExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenNoArgumentsAreProvided_FileNameIsEmpty()
+    public function testWhenNoArgumentsAreProvidedThenFileNameIsEmpty()
     {
-        $corruptedFileException = new CorruptedFileException();
+        $exception = new CorruptedFileException();
 
-        $this->assertEmpty($corruptedFileException->getFileName());
+        $this->assertEmpty($exception->getFileName());
     }
 
-    public function testWhenFileNameIsProvided_FileNameCanBeRetrievedLater()
+    public function testWhenFileNameIsProvidedThenFileNameCanBeRetrievedLater()
     {
-        $corruptedFileException = new CorruptedFileException('file.csv');
+        $exception = new CorruptedFileException('file.csv');
 
-        $this->assertSame('file.csv', $corruptedFileException->getFileName());
+        $this->assertSame('file.csv', $exception->getFileName());
     }
 
-    public function testWhenMessageIsProvided_MessageCanBeRetrievedLater()
+    public function testWhenMessageIsProvidedThenMessageCanBeRetrievedLater()
     {
-        $corruptedFileException = new CorruptedFileException('', 'My message');
+        $exception = new CorruptedFileException('', 'My message');
 
-        $this->assertSame('My message', $corruptedFileException->getMessage());
+        $this->assertSame('My message', $exception->getMessage());
     }
 
-    public function testWhenNoMessageIsProvided_MessageIsGeneratedFromPath()
+    public function testWhenNoMessageIsProvidedThenMessageIsGeneratedFromPath()
     {
-        $corruptedFileException = new CorruptedFileException('file.csv');
+        $exception = new CorruptedFileException('file.csv');
 
-        $this->assertSame('File "file.csv" is corrupted', $corruptedFileException->getMessage());
+        $this->assertSame('File "file.csv" is corrupted', $exception->getMessage());
     }
 }

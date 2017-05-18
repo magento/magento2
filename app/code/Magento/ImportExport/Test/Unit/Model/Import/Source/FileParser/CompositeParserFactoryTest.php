@@ -11,26 +11,24 @@ use Magento\ImportExport\Model\Import\Source\FileParser\UnsupportedPathException
 
 class CompositeParserFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenPathIsProvidedButNoFactoriesAreSetup_NoParserIsCreated()
+    public function testWhenPathIsProvidedButNoFactoriesAreSetupThenNoParserIsCreated()
     {
-        $compositeFactory = new CompositeParserFactory();
-
         $this->setExpectedException(UnsupportedPathException::class, 'Path "file.csv" is not supported');
 
+        $compositeFactory = new CompositeParserFactory();
         $compositeFactory->create('file.csv');
     }
 
-    public function testWhenPathIsNotSupportedByAnyFactory_NoParserIsCreated()
+    public function testWhenPathIsNotSupportedByAnyFactoryThenNoParserIsCreated()
     {
-        $compositeFactory = new CompositeParserFactory();
-        $compositeFactory->addParserFactory(new FakeParserFactory(['file.csv' => new FakeParser()]));
-
         $this->setExpectedException(UnsupportedPathException::class, 'Path "file.zip" is not supported');
 
+        $compositeFactory = new CompositeParserFactory();
+        $compositeFactory->addParserFactory(new FakeParserFactory(['file.csv' => new FakeParser()]));
         $compositeFactory->create('file.zip');
     }
 
-    public function testWhenPathIsSupportedByFirstFactory_ParserIsReturned()
+    public function testWhenPathIsSupportedByFirstFactoryThenParserIsReturned()
     {
         $expectedParser = new FakeParser();
 
@@ -41,7 +39,7 @@ class CompositeParserFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedParser, $compositeFactory->create('file.csv'));
     }
 
-    public function testWhenPathIsSupportedBySecondFactory_ParserIsReturned()
+    public function testWhenPathIsSupportedBySecondFactoryThenParserIsReturned()
     {
         $expectedParser = new FakeParser();
 
@@ -53,7 +51,7 @@ class CompositeParserFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testWhenFactoryIsProvidedViaConstructor_ParserIsReturned()
+    public function testWhenFactoryIsProvidedViaConstructorThenParserIsReturned()
     {
         $expectedParser = new FakeParser();
 

@@ -10,31 +10,31 @@ use Magento\ImportExport\Model\Import\Source\FileParser\UnsupportedPathException
 
 class UnsupportedPathExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenNoArgumentsAreProvided_FileNameIsEmpty()
+    public function testWhenNoArgumentsAreProvidedThenFileNameIsEmpty()
     {
-        $unsupportedPathException = new UnsupportedPathException();
+        $exception = new UnsupportedPathException();
 
-        $this->assertEmpty($unsupportedPathException->getPath());
+        $this->assertEmpty($exception->getPath());
     }
 
-    public function testWhenFileNameIsProvided_FileNameCanBeRetrievedLater()
+    public function testWhenFileNameIsProvidedThenFileNameCanBeRetrievedLater()
     {
-        $unsupportedPathException = new UnsupportedPathException('file.csv');
+        $exception = new UnsupportedPathException('file.csv');
 
-        $this->assertSame('file.csv', $unsupportedPathException->getPath());
+        $this->assertSame('file.csv', $exception->getPath());
     }
 
-    public function testWhenMessageIsProvided_MessageCanBeRetrievedLater()
+    public function testWhenMessageIsProvidedThenMessageCanBeRetrievedLater()
     {
-        $unsupportedPathException = new UnsupportedPathException('', 'My message');
+        $exception = new UnsupportedPathException('', 'My message');
 
-        $this->assertSame('My message', $unsupportedPathException->getMessage());
+        $this->assertSame('My message', $exception->getMessage());
     }
 
-    public function testWhenNoMessageIsProvided_MessageIsGeneratedFromPath()
+    public function testWhenNoMessageIsProvidedThenMessageIsGeneratedFromPath()
     {
-        $unsupportedPathException = new UnsupportedPathException('file.csv');
+        $exception = new UnsupportedPathException('file.csv');
 
-        $this->assertSame('Path "file.csv" is not supported', $unsupportedPathException->getMessage());
+        $this->assertSame('Path "file.csv" is not supported', $exception->getMessage());
     }
 }

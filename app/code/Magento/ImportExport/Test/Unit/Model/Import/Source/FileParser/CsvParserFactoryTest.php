@@ -12,40 +12,37 @@ use Magento\ImportExport\Model\Import\Source\FileParser;
 
 class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenFilePathIsNotCsv_NoParserIsCreated()
+    public function testWhenFilePathIsNotCsvThenNoParserIsCreated()
     {
-        $factory = $this->createCsvParserFactory();
-
         $this->setExpectedException(FileParser\UnsupportedPathException::class);
 
+        $factory = $this->createCsvParserFactory();
         $factory->create('test.zip');
     }
 
-    public function testWhenFileDoesNotExist_NoParserIsCreated()
+    public function testWhenFileDoesNotExistThenNoParserIsCreated()
     {
-        $factory = $this->createCsvParserFactory();
-
         $this->setExpectedException(
             \InvalidArgumentException::class,
             'File "non_existing_file.csv" does not exists'
         );
 
+        $factory = $this->createCsvParserFactory();
         $factory->create('non_existing_file.csv');
     }
 
-    public function testWhenFileIsNotAccesible_NoParserIsCreated()
+    public function testWhenFileIsNotAccesibleThenNoParserIsCreated()
     {
-        $factory = $this->createCsvParserFactory(tempnam(sys_get_temp_dir(), 'non_created'));
-
         $this->setExpectedException(
             \InvalidArgumentException::class,
             'File "test.csv" does not exists'
         );
 
+        $factory = $this->createCsvParserFactory(tempnam(sys_get_temp_dir(), 'non_created'));
         $factory->create('test.csv');
     }
 
-    public function testWhenValidFileIsProvided_ParserIsCreated()
+    public function testWhenValidFileIsProvidedThenParserIsCreated()
     {
         $factory = $this->createCsvParserFactory();
 
@@ -55,7 +52,7 @@ class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenAbsolutePathIsProvided_ParserIsCreated()
+    public function testWhenAbsolutePathIsProvidedThenParserIsCreated()
     {
         $factory = $this->createCsvParserFactory();
 
@@ -65,7 +62,7 @@ class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenCustomDirectoryIsProvided_ParserIsCreatedFromIt()
+    public function testWhenCustomDirectoryIsProvidedThenParserIsCreatedFromIt()
     {
         $factory = $this->createCsvParserFactory();
 
@@ -75,7 +72,7 @@ class CsvParserFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenCustomCSVOptionsProvided_ParserIsCreatedFromIt()
+    public function testWhenCustomCSVOptionsProvidedThenParserIsCreatedFromIt()
     {
         $factory = $this->createCsvParserFactory();
 

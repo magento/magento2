@@ -11,14 +11,14 @@ use Magento\ImportExport\Test\Unit\Model\Import\Source\FileParser\FakeParser;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWhenFileParserIsProvided_ColumnsAreReturnedProperly()
+    public function testWhenFileParserIsProvidedThenColumnsAreReturnedProperly()
     {
         $file = new File(new FakeParser(['column1', 'column2']));
 
         $this->assertSame(['column1', 'column2'], $file->getColNames());
     }
 
-    public function testWhenEmptyFileParserIsProvided_IteratorIsNotValid()
+    public function testWhenEmptyFileParserIsProvidedThenIteratorIsNotValid()
     {
         $file = new File(new FakeParser(
             ['column1', 'column2']
@@ -27,7 +27,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($file->valid());
     }
 
-    public function testWhenSomeDataInFileParserIsProvided_IteratorIsValid()
+    public function testWhenSomeDataInFileParserIsProvidedThenIteratorIsValid()
     {
         $file = new File(new FakeParser(
             ['column1', 'column2'],
@@ -40,7 +40,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($file->valid());
     }
 
-    public function testWhenSomeDataInFileParserIsProvided_IteratorRowIsReturned()
+    public function testWhenSomeDataInFileParserIsProvidedThenIteratorRowIsReturned()
     {
         $file = new File(new FakeParser(
             ['column1', 'column2'],
@@ -60,7 +60,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWhenSpecificPositionIsSet_ProperIteratorRowIsReturned()
+    public function testWhenSpecificPositionIsSetThenProperIteratorRowIsReturned()
     {
         $file = new File(new FakeParser(
             ['column1', 'column2'],
@@ -83,8 +83,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
-    public function testWhenIteratorIsRewinded_ParserRestarts()
+    public function testWhenIteratorIsRewindedThenParserRestarts()
     {
         $file = new File(new FakeParser(
             ['column1', 'column2'],
