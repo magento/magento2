@@ -77,7 +77,7 @@ define([
                     self.hostedFields(function (formComponent) {
                         formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
                         formComponent.additionalData['public_hash'] = self.publicHash;
-                        formComponent.code = self.code;
+                        formComponent.messageContainer = self.messageContainer;
                         formComponent.placeOrder();
                     });
                 })
