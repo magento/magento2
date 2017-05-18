@@ -337,7 +337,6 @@ define([
         _determineProductData: function () {
             // Check if product is in a list of products.
             var productId,
-                product,
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
