@@ -29,7 +29,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Path "file.csv" is not supported');
 
-        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
+        $parser = $this->createZipParserFactory();
         $parser->create('file.csv');
     }
 
@@ -37,7 +37,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(FileParser\CorruptedFileException::class);
 
-        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
+        $parser = $this->createZipParserFactory();
         $parser->create('corrupted.zip');
     }
 
@@ -45,7 +45,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Path "unknown.zip" is not supported');
 
-        $parser = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
+        $parser = $this->createZipParserFactory();
         $parser->create('unknown.zip');
     }
 
@@ -54,7 +54,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(FileParser\UnsupportedPathException::class, 'Path "empty.zip" is not supported');
 
-        $parserFactory = new FileParser\ZipParserFactory($this->createTestFilesystem(), new FakeParserFactory());
+        $parserFactory = $this->createZipParserFactory();
         $parserFactory->create('empty.zip');
     }
 
@@ -79,8 +79,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $expectedParser = new FakeParser();
 
-        $parserFactory = new FileParser\ZipParserFactory(
-            $this->createTestFilesystem(),
+        $parserFactory = $this->createZipParserFactory(
             new FakeParserFactory([
                 'test.csv' => $expectedParser
             ])
@@ -96,8 +95,7 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $expectedParser = new FakeParser();
 
-        $parserFactory = new FileParser\ZipParserFactory(
-            $this->createTestFilesystem(),
+        $parserFactory = $this->createZipParserFactory(
             new FakeParserFactory([
                 'test.tsv' => $expectedParser
             ])
@@ -111,11 +109,11 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testWhenProperZipFileIsProvidedWithOptionsThenCustomCsvFileIsParsed()
     {
-        $fileSystem = $this->createTestFilesystem();
-
-        $parserFactory = new FileParser\ZipParserFactory(
-            $fileSystem,
-            new FileParser\CsvParserFactory($fileSystem, new FakeObjectManager())
+        $parserFactory = $this->createZipParserFactory(
+            new FileParser\CsvParserFactory(
+                $this->createTestFilesystem(),
+                new FakeObjectManager()
+            )
         );
 
         $parser = $parserFactory->create(
@@ -139,5 +137,15 @@ class ZipParserFactoryTest extends \PHPUnit_Framework_TestCase
             new Filesystem\Directory\ReadFactory(new Filesystem\DriverPool()),
             new Filesystem\Directory\WriteFactory(new Filesystem\DriverPool())
         );
+    }
+
+    private function createZipParserFactory($parserFactory = null): FileParser\ZipParserFactory
+    {
+        $parser = new FileParser\ZipParserFactory(
+            $this->createTestFilesystem(),
+            $parserFactory ?: new FakeParserFactory()
+        );
+
+        return $parser;
     }
 }
