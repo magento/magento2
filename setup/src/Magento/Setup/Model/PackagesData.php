@@ -326,31 +326,6 @@ class PackagesData
     }
 
     /**
-     * Filter packages by allowed types
-     *
-     * @param array $packages
-     * @return array
-     */
-    private function filterPackagesList(array $packages)
-    {
-        return array_filter(
-            $packages,
-            function ($item) {
-                return in_array(
-                    $item['package_type'],
-                    [
-                        \Magento\Setup\Model\Grid\TypeMapper::LANGUAGE_PACKAGE_TYPE,
-                        \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE,
-                        \Magento\Setup\Model\Grid\TypeMapper::EXTENSION_PACKAGE_TYPE,
-                        \Magento\Setup\Model\Grid\TypeMapper::THEME_PACKAGE_TYPE,
-                        \Magento\Setup\Model\Grid\TypeMapper::METAPACKAGE_PACKAGE_TYPE
-                    ]
-                );
-            }
-        );
-    }
-
-    /**
      * Get MetaPackage for package
      *
      * @param array $packages
