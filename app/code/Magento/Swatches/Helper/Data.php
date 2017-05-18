@@ -158,7 +158,7 @@ class Data
         $additionalData = $this->serializer->unserialize($attribute->getData('additional_data'));
         if (isset($additionalData) && is_array($additionalData)) {
             foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                if (isset($additionalData[$key])) {
+                if (isset($additionalData[$key]) && null === $attribute->getData($key)) {
                     $attribute->setData($key, $additionalData[$key]);
                 }
             }
