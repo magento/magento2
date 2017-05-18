@@ -660,6 +660,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $multiLineSeparatorForRegexp;
 
     /**
+     * Container for filesystem object.
+     *
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -1984,7 +1991,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Trying to find file by it's path.
+     * Try to find file by it's path.
      *
      * @param string $fileName
      * @return string
@@ -1993,11 +2000,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $filePath = 'catalog' . DIRECTORY_SEPARATOR . 'product' . DIRECTORY_SEPARATOR . $fileName;
         /** @var Filesystem $filesystem */
-        $filesystem = ObjectManager::getInstance()->get(Filesystem::class);
+        $filesystem = $this->getFilesystem();
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $read */
         $read = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
         return $read->isExist($filePath) && $read->isReadable($filePath) ? $fileName : '';
+    }
+
+    /**
+     * Getter for singleton-like Filesystem object.
+     *
+     * @return Filesystem
+     */
+    protected function getFilesystem()
+    {
+        if (!$this->filesystem) {
+            $this->filesystem = ObjectManager::getInstance()->get(Filesystem::class);
+        }
+        return $this->filesystem;
     }
 
     /**
