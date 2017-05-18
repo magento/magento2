@@ -84,7 +84,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $productLimitationMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
