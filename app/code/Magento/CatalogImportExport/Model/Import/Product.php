@@ -2012,7 +2012,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return Filesystem
      */
-    protected function getFilesystem()
+    private function getFilesystem()
     {
         if (!$this->filesystem) {
             $this->filesystem = ObjectManager::getInstance()->get(Filesystem::class);
