@@ -24,6 +24,7 @@ class ReplaceObjectManager extends \PHPUnit_Framework_BaseTestListener
      * and makes working with ObjectManager predictable as it always contains clear mock for each test
      *
      * @param \PHPUnit_Framework_Test $test
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function startTest(\PHPUnit_Framework_Test $test)
