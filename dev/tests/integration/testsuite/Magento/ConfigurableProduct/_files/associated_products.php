@@ -4,6 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\Product::class);
@@ -15,14 +19,10 @@ $product
     ->setName('Simple Product 3')
     ->setSku('simple_3')
     ->setPrice(10)
-    ->setMetaTitle('meta title 3')
-    ->setMetaKeyword('meta keyword 3')
-    ->setMetaDescription('meta description 3')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1])
-    ->setQty(22)
-    ->save();
+    ->setQty(22);
+$product = $productRepository->save($product);
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\Product::class);
@@ -34,14 +34,10 @@ $product
     ->setName('Simple Product 14')
     ->setSku('simple_14')
     ->setPrice(10)
-    ->setMetaTitle('meta title 14')
-    ->setMetaKeyword('meta keyword 14')
-    ->setMetaDescription('meta description 14')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1])
-    ->setQty(22)
-    ->save();
+    ->setQty(22);
+$product = $productRepository->save($product);
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\Product::class);
@@ -53,14 +49,10 @@ $product
     ->setName('Simple Product 15')
     ->setSku('simple_15')
     ->setPrice(10)
-    ->setMetaTitle('meta title 15')
-    ->setMetaKeyword('meta keyword 15')
-    ->setMetaDescription('meta description 15')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1])
-    ->setQty(22)
-    ->save();
+    ->setQty(22);
+$product = $productRepository->save($product);
 
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\Product::class);
@@ -72,11 +64,7 @@ $product
     ->setName('Simple Product 92')
     ->setSku('simple_92')
     ->setPrice(10)
-    ->setMetaTitle('meta title 92')
-    ->setMetaKeyword('meta keyword 92')
-    ->setMetaDescription('meta description 92')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 22, 'is_in_stock' => 1])
-    ->setQty(22)
-    ->save();
+    ->setQty(22);
+$product = $productRepository->save($product);
