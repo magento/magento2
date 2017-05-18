@@ -25,7 +25,7 @@ define(
             defaults: {
                 clientConfig: {
 
-                    inited: false,
+                    checkoutInited: false,
 
                     /**
                      * @param {Object} event
@@ -35,9 +35,9 @@ define(
 
                         event.preventDefault();
 
-                        if (!this.clientConfig.inited) {
+                        if (!this.clientConfig.checkoutInited) {
                             paypalExpressCheckout.checkout.initXO();
-                            this.clientConfig.inited = true;
+                            this.clientConfig.checkoutInited = true;
                         } else {
                             paypalExpressCheckout.checkout.closeFlow();
                         }
