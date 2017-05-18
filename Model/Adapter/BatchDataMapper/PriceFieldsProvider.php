@@ -6,9 +6,9 @@
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
 use Magento\Elasticsearch\Model\ResourceModel\Index;
-use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 
 /**
  * Provide data mapping for price fields
@@ -21,9 +21,9 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
     private $resourceIndex;
 
     /**
-     * @var AttributeContainer
+     * @var DataProvider
      */
-    private $attributeContainer;
+    private $dataProvider;
 
     /**
      * @var StoreManagerInterface
@@ -32,16 +32,16 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
 
     /**
      * @param Index $resourceIndex
-     * @param AttributeContainer $attributeContainer
+     * @param DataProvider $dataProvider
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Index $resourceIndex,
-        AttributeContainer $attributeContainer,
+        DataProvider $dataProvider,
         StoreManagerInterface $storeManager
     ) {
         $this->resourceIndex = $resourceIndex;
-        $this->attributeContainer = $attributeContainer;
+        $this->dataProvider = $dataProvider;
         $this->storeManager = $storeManager;
     }
 
@@ -51,7 +51,7 @@ class PriceFieldsProvider implements AdditionalFieldsProviderInterface
     public function getFields(array $productIds, $storeId)
     {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $priceData = $this->attributeContainer->getSearchableAttribute('price')
+        $priceData = $this->dataProvider->getSearchableAttribute('price')
             ? $this->resourceIndex->getPriceIndexData($productIds, $websiteId)
             : [];
 
