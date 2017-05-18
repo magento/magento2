@@ -18,8 +18,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -1639,5 +1641,86 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->setSource($source)->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
+    }
+
+    /**
+     * Copy fixture images into pub/media/catalog/product directory
+     */
+    public static function mediaPresentImageFixture()
+    {
+        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
+        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Filesystem::class
+        )->getDirectoryWrite(
+            DirectoryList::MEDIA
+        );
+
+        $path = 'catalog' . DIRECTORY_SEPARATOR . 'product';
+        // Is required for using importDataForMediaTest method
+        $mediaDirectory->create('import');
+        $mediaDirectory->create($path);
+        $dirPath = $mediaDirectory->getAbsolutePath($path);
+
+        $items = [
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_image.jpg',
+                'dest' => $dirPath . '/magento_image.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_small_image.jpg',
+                'dest' => $dirPath . '/magento_small_image.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_thumbnail.jpg',
+                'dest' => $dirPath . '/magento_thumbnail.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_one.jpg',
+                'dest' => $dirPath . '/magento_additional_image_one.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/magento_additional_image_two.jpg',
+                'dest' => $dirPath . '/magento_additional_image_two.jpg',
+            ],
+        ];
+
+        foreach ($items as $item) {
+            copy($item['source'], $item['dest']);
+        }
+    }
+
+    /**
+     * Cleanup media catalog directory
+     */
+    public static function mediaPresentImageFixtureRollback()
+    {
+        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
+        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Filesystem::class
+        )->getDirectoryWrite(
+            DirectoryList::MEDIA
+        );
+        $mediaDirectory->delete('import');
+        $mediaDirectory->delete('catalog');
+    }
+
+    /**
+     * Tests situation when images for importing products are already present in filesystem.
+     *
+     * @magentoDataFixture mediaPresentImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithFilesystemImages()
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = ObjectManager::getInstance()->get(Filesystem::class);
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $writeAdapter */
+        $writeAdapter = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+
+        if (!$writeAdapter->isWritable()) {
+            $this->markTestSkipped('Due to unwritable media directory');
+        }
+
+        $this->importDataForMediaTest('import_media_existing_images.csv');
     }
 }

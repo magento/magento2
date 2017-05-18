@@ -11,9 +11,11 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
@@ -1645,6 +1647,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     foreach ($columnImages as $columnImageKey => $columnImage) {
                         if (!isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles($columnImage, true);
+                            $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
                             if ($uploadedFile) {
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
@@ -1978,6 +1981,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         } catch (\Exception $e) {
             return '';
         }
+    }
+
+    /**
+     * Trying to find file by it's path.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function getSystemFile($fileName)
+    {
+        $filePath = 'catalog' . DIRECTORY_SEPARATOR . 'product' . DIRECTORY_SEPARATOR . $fileName;
+        /** @var Filesystem $filesystem */
+        $filesystem = ObjectManager::getInstance()->get(Filesystem::class);
+        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $read */
+        $read = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+
+        return $read->isExist($filePath) && $read->isReadable($filePath) ? $fileName : '';
     }
 
     /**
