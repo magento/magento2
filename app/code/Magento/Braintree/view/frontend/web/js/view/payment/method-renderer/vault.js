@@ -52,7 +52,7 @@ define([
             var self = this;
 
             /**
-             * Define already callback
+             * Define onReady callback
              */
             Braintree.onReady = function () {
                 self.getPaymentMethodNonce();
@@ -77,6 +77,7 @@ define([
                     self.hostedFields(function (formComponent) {
                         formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
                         formComponent.additionalData['public_hash'] = self.publicHash;
+                        formComponent.code = self.code;
                         formComponent.messageContainer = self.messageContainer;
                         formComponent.placeOrder();
                     });
