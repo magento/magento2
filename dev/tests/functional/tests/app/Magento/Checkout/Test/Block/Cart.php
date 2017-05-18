@@ -273,6 +273,4 @@ class Cart extends Block
     {
         $this->waitForElementVisible($this->inContextPaypalCheckoutButton);
     }
-
-
 }
