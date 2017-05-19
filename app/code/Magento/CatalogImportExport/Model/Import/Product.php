@@ -760,6 +760,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_linkFactory = $linkFactory;
         $this->_proxyProdFactory = $proxyProdFactory;
         $this->_uploaderFactory = $uploaderFactory;
+        $this->filesystem = $filesystem;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_stockResItemFac = $stockResItemFac;
         $this->_localeDate = $localeDate;
@@ -1999,25 +2000,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function getSystemFile($fileName)
     {
         $filePath = 'catalog' . DIRECTORY_SEPARATOR . 'product' . DIRECTORY_SEPARATOR . $fileName;
-        /** @var Filesystem $filesystem */
-        $filesystem = $this->getFilesystem();
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $read */
-        $read = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $read = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
         return $read->isExist($filePath) && $read->isReadable($filePath) ? $fileName : '';
-    }
-
-    /**
-     * Getter for singleton-like Filesystem object.
-     *
-     * @return Filesystem
-     */
-    private function getFilesystem()
-    {
-        if (!$this->filesystem) {
-            $this->filesystem = ObjectManager::getInstance()->get(Filesystem::class);
-        }
-        return $this->filesystem;
     }
 
     /**
