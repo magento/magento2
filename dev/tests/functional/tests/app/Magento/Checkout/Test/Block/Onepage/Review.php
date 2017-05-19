@@ -20,7 +20,6 @@ class Review extends AbstractReview
      */
     private $giftCardTotalSelector = '//div[contains(@class, "opc-block-summary")]//tr[contains(@class, "giftcard")]';
 
-
     /**
      * Return if gift card is applied.
      *
