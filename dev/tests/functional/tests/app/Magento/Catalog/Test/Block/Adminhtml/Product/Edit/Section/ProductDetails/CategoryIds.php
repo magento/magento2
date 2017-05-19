@@ -51,7 +51,7 @@ class CategoryIds extends MultisuggestElement
      *
      * @var string
      */
-    protected $multiSelectElement = '.admin__action-multiselect-menu-inner-item';
+    private $multiSelectElement = '.admin__action-multiselect-menu-inner-item';
 
     /**
      * @constructor
