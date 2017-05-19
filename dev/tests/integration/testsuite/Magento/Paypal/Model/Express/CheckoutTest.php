@@ -14,7 +14,9 @@ use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Api\Nvp;
 
 /**
- * Class CheckoutTest
+ * Checkout test.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
