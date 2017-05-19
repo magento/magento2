@@ -1127,7 +1127,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $state = self::STATE_CANCELED;
             foreach ($this->getAllItems() as $item) {
                 if ($state != self::STATE_PROCESSING && $item->getQtyToRefund()) {
-                    if ($item->getQtyToShip() > $item->getQtyToCancel()) {
+                    if ($item->isProcessingAvailable()) {
                         $state = self::STATE_PROCESSING;
                     } else {
                         $state = self::STATE_COMPLETE;

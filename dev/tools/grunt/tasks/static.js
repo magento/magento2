@@ -17,7 +17,7 @@ module.exports = function (grunt) {
         };
 
     grunt.registerTask('static', function (target) {
-        var currentTarget = target || 'test',
+        var currentTarget = target || 'file',
             file = grunt.option('file'),
             tasks = [
                 'continue:on',

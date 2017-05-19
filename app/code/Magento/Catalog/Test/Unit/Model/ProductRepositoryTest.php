@@ -707,7 +707,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class, [], [], '', false);
-        $attributeCode = 'attribute_code';
         $collectionMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [],
@@ -715,28 +714,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $extendedSearchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $productAttributeSearchResultsMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
-            ->getMockForAbstractClass();
-        $productAttributeMock = $this->getMock(
-            \Magento\Catalog\Api\Data\ProductAttributeInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
-        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
-            ->willReturn($extendedSearchCriteriaMock);
-        $this->metadataServiceMock->expects($this->once())->method('getList')->with($extendedSearchCriteriaMock)
-            ->willReturn($productAttributeSearchResultsMock);
-        $productAttributeSearchResultsMock->expects($this->once())->method('getItems')
-            ->willReturn([$productAttributeMock]);
-        $productAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
-        $collectionMock->expects($this->once())->method('addAttributeToSelect')->with($attributeCode);
+
+        $collectionMock->expects($this->once())->method('addAttributeToSelect')->with('*');
         $collectionMock->expects($this->exactly(2))->method('joinAttribute')->withConsecutive(
             ['status', 'catalog_product/status', 'entity_id', null, 'inner'],
             ['visibility', 'catalog_product/visibility', 'entity_id', null, 'inner']

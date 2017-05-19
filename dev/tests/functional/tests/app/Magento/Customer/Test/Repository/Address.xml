@@ -213,6 +213,18 @@
             <field name="telephone" xsi:type="string">444-44-444-44</field>
         </dataset>
 
+        <dataset name="empty_UK_address_without_email">
+            <field name="firstname" xsi:type="string"/>
+            <field name="lastname" xsi:type="string"/>
+            <field name="company" xsi:type="string"/>
+            <field name="city" xsi:type="string"/>
+            <field name="street" xsi:type="string"/>
+            <field name="postcode" xsi:type="string"/>
+            <field name="country_id" xsi:type="string"/>
+            <field name="region" xsi:type="string"/>
+            <field name="telephone" xsi:type="string"/>
+        </dataset>
+
         <dataset name="UK_address_without_email_first_name_last_name">
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="city" xsi:type="string">London</field>

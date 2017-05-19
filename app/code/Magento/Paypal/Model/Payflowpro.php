@@ -15,6 +15,7 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
@@ -120,7 +121,23 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         'securetokenid' => 'securetokenid',
         'authcode' => 'authcode',
         'hostcode' => 'hostcode',
-        'pnref' => 'pnref'
+        'pnref' => 'pnref',
+        'cc_type' => 'cardtype'
+    ];
+
+    /**
+     * PayPal credit card type map.
+     * @see https://developer.paypal.com/docs/classic/payflow/integration-guide/#credit-card-transaction-responses
+     *
+     * @var array
+     */
+    private $ccTypeMap = [
+        '0' => 'VI',
+        '1' => 'MC',
+        '2' => 'DI',
+        '3' => 'AE',
+        '4' => 'DN',
+        '5' => 'JCB'
     ];
 
     /**
@@ -766,24 +783,36 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     public function mapGatewayResponse(array $postData, DataObject $response)
     {
         $response->setData(array_change_key_case($postData));
+
         foreach ($this->_responseParamsMappings as $originKey => $key) {
-            $data = $response->getData($key);
-            if (isset($data)) {
-                $response->setData($originKey, $data);
+            if ($response->getData($key) !== null) {
+                $response->setData($originKey, $response->getData($key));
             }
         }
-        // process AVS data separately
-        $avsAddr = $response->getData('avsaddr');
-        $avsZip = $response->getData('avszip');
-        if (isset($avsAddr) && isset($avsZip)) {
-            $response->setData('avsdata', $avsAddr . $avsZip);
-        }
-        // process Name separately
-        $firstnameParameter = $response->getData('billtofirstname');
-        $lastnameParameter = $response->getData('billtolastname');
-        if (isset($firstnameParameter) && isset($lastnameParameter)) {
-            $response->setData('name', $firstnameParameter . ' ' . $lastnameParameter);
-        }
+
+        $response->setData(
+            'avsdata',
+            $this->mapResponseAvsData(
+                $response->getData('avsaddr'),
+                $response->getData('avszip')
+            )
+        );
+
+        $response->setData(
+            'name',
+            $this->mapResponseBillToName(
+                $response->getData('billtofirstname'),
+                $response->getData('billtolastname')
+            )
+        );
+
+        $response->setData(
+            OrderPaymentInterface::CC_TYPE,
+            $this->mapResponseCreditCardType(
+                $response->getData(OrderPaymentInterface::CC_TYPE)
+            )
+        );
+
         return $response;
     }
 
@@ -904,5 +933,42 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $response = $this->postRequest($request, $this->getConfig());
 
         return $response;
+    }
+
+    /**
+     * Maps PayPal `avsdata` field.
+     *
+     * @param string|null $avsAddr
+     * @param string|null $avsZip
+     * @return string|null
+     */
+    private function mapResponseAvsData($avsAddr, $avsZip)
+    {
+        return isset($avsAddr, $avsZip) ? $avsAddr . $avsZip : null;
+    }
+
+    /**
+     * Maps PayPal `name` field.
+     *
+     * @param string|null $billToFirstName
+     * @param string|null $billToLastName
+     * @return string|null
+     */
+    private function mapResponseBillToName($billToFirstName, $billToLastName)
+    {
+        return isset($billToFirstName, $billToLastName)
+            ? implode(' ', [$billToFirstName, $billToLastName])
+            : null;
+    }
+
+    /**
+     * Map PayPal transaction response credit card type to Magento values if possible.
+     *
+     * @param string|null $ccType
+     * @return string|null
+     */
+    private function mapResponseCreditCardType($ccType)
+    {
+        return isset($this->ccTypeMap[$ccType]) ? $this->ccTypeMap[$ccType] : $ccType;
     }
 }
