@@ -7,6 +7,8 @@
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote as QuoteEntity;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @api
@@ -17,6 +19,22 @@ class QuoteValidator
      * Maximum available number
      */
     const MAXIMUM_AVAILABLE_NUMBER = 99999999;
+
+    /**
+     * @var AllowedCountries
+     */
+    private $allowedCountryReader;
+
+    /**
+     * QuoteValidator constructor.
+     *
+     * @param AllowedCountries|null $allowedCountryReader
+     */
+    public function __construct(AllowedCountries $allowedCountryReader = null)
+    {
+        $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
+            ->get(AllowedCountries::class);
+    }
 
     /**
      * Validate quote amount
@@ -69,6 +87,19 @@ class QuoteValidator
         if (!$quote->getPayment()->getMethod()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please select a valid payment method.'));
         }
+
+        // Checks if country id present in the allowed countries list.
+        if (
+            !in_array(
+                $quote->getShippingAddress()->getCountryId(),
+                $this->allowedCountryReader->getAllowedCountries()
+            )
+        ) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Some addresses cannot be used due to country-specific configurations.')
+            );
+        }
+
         return $this;
     }
 }
