@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,9 +41,7 @@ define([
                 }
             };
             injector.mock(mocks);
-            injector.require(
-                ['Magento_Braintree/js/view/payment/method-renderer/cc-form'],
-                function (Constr) {
+            injector.require(['Magento_Braintree/js/view/payment/method-renderer/cc-form'], function (Constr) {
                     braintreeCcForm = new Constr({
                         provider: 'provName',
                         name: 'test',
@@ -55,14 +53,15 @@ define([
         });
 
         it('Check if payment code and message container are restored after onActiveChange call.', function () {
-            var expectedMessageContainer = braintreeCcForm.messageContainer;
+            var expectedMessageContainer = braintreeCcForm.messageContainer,
+                expectedCode = braintreeCcForm.code;
 
             braintreeCcForm.code = 'braintree-vault';
             braintreeCcForm.messageContainer = new Messages();
 
             braintreeCcForm.onActiveChange(true);
 
-            expect(braintreeCcForm.getCode()).toEqual('braintree');
+            expect(braintreeCcForm.getCode()).toEqual(expectedCode);
             expect(braintreeCcForm.messageContainer).toEqual(expectedMessageContainer);
         });
     });
