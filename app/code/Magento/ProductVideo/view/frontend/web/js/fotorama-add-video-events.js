@@ -94,9 +94,10 @@ define([
         options: {
             videoData: '',
             videoSettings: '',
-            optionsVideoData: ''
+            optionsVideoData: '',
+            dataMergeStrategy: 'replace'
         },
-
+        defaultVideoData: [],
         PV: 'product-video', // [CONST]
         VU: 'video-unplayed',
         PVLOADED: 'fotorama__product-video--loaded', // [CONST]
@@ -117,7 +118,6 @@ define([
          * @private
          */
         _create: function () {
-
             $(this.element).on('gallery:loaded',  $.proxy(function () {
                 this.fotoramaItem = $(this.element).find('.fotorama-item');
                 this._initialize();
@@ -129,7 +129,11 @@ define([
          * @private
          */
         _initialize: function () {
-            this._loadVideoData();
+            if (!this.defaultVideoData.length) {
+                this.defaultVideoData = this.options.videoData;
+            }
+
+            this.clearEvents();
 
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
@@ -142,41 +146,51 @@ define([
         },
 
         /**
+         * Clear gallery events to prevent duplicated calls.
+         *
+         * @private
+         */
+        clearEvents: function () {
+            this.fotoramaItem.off(
+                'fotorama:show ' +
+                'fotorama:showend ' +
+                'fotorama:fullscreenenter ' +
+                'fotorama:fullscreenexit'
+            );
+        },
+
+        /**
          *
          * @param {Object} options
          * @private
          */
         _setOptions: function (options) {
-
             if (options.videoData && options.videoData.length) {
                 this.options.videoData = options.videoData;
             }
+
+            this._loadVideoData(options);
             this._initialize();
         },
 
         /**
+         * Set video data for configurable product.
          *
+         * @param {Object} options
          * @private
          */
-        _loadVideoData: function () {
-            var $widget = this;
-
-            if (!$widget.videoData) {
-                $widget.videoData = $widget.options.VideoData;
-            }
-
-            $('#product-options-wrapper').find('[option-selected]').each(function () {
-                var key = $(this).attr('attribute-code') + '_' + $(this).attr('option-selected');
-
-                if ($widget.options.optionsVideoData && $widget.options.optionsVideoData[key]) {
-                    $widget.options.VideoData = $widget.options.optionsVideoData[key];
+        _loadVideoData: function (options) {
+            if (options.selectedOption) {
+                if (options.dataMergeStrategy === 'prepend') {
+                    this.options.videoData = [].concat(
+                        this.options.optionsVideoData[options.selectedOption],
+                        this.options.videoData
+                    );
                 } else {
-                    $widget.options.VideoData = $widget.videoData;
+                    this.options.videoData = this.options.optionsVideoData[options.selectedOption];
                 }
-            });
-
-            if (!$('#product-options-wrapper').find('[option-selected]').length) {
-                $widget.options.VideoData = $widget.videoData;
+            } else {
+                this.options.videoData = this.defaultVideoData;
             }
         },
 
@@ -195,14 +209,13 @@ define([
          * @private
          */
         _listenForFullscreen: function () {
-            var self = this;
-
             this.fotoramaItem.on('fotorama:fullscreenenter', $.proxy(function () {
                 this.isFullscreen = true;
             }, this));
+
             this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function () {
                 this.isFullscreen = false;
-                self._hideVideoArrows();
+                this._hideVideoArrows();
             }, this));
         },
 
@@ -241,7 +254,7 @@ define([
 
                 tmpVideoData.isBase = tmpInputData.isBase;
 
-                if (tmpInputData.videoUrl != null) {
+                if (tmpInputData.videoUrl && tmpInputData.videoUrl !== null) {
                     dataUrl = tmpInputData.videoUrl;
                     dataUrl = parseURL(dataUrl);
                     tmpVideoData.id = dataUrl.id;
@@ -326,8 +339,9 @@ define([
             if (!this.options.videoSettings) {
                 return false;
             }
-            result = this._createVideoData(this.options.videoData, false),
-                checker = false;
+
+            result = this._createVideoData(this.options.videoData, false);
+            checker = false;
             videoSettings = this.options.videoSettings[0];
             videoSettings.playIfBase = parseInt(videoSettings.playIfBase, 10);
             videoSettings.showRelated = parseInt(videoSettings.showRelated, 10);
@@ -354,9 +368,15 @@ define([
             var allVideoData = this.options.videoData,
                 videoItem;
 
+            if (window.Froogaloop) { // prevent duplicated initialization
+                return;
+            }
+
             for (videoItem in allVideoData) {
                 if (allVideoData[videoItem].provider === this.VI) {
                     this._loadVimeoJSFramework();
+
+                    return;
                 }
             }
         },
@@ -425,8 +445,8 @@ define([
 
                 return null;
             }
-            fotorama.data.map($.proxy(this._setItemType, this));
 
+            fotorama.data.map($.proxy(this._setItemType, this));
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
 
@@ -480,6 +500,7 @@ define([
             this.fotoramaItem.on('fotorama:showend', $.proxy(function (e, fotorama) {
                 this._startPrepareForPlayer(e, fotorama);
             }, this));
+
             this.fotoramaItem.on('fotorama:show', $.proxy(function (e, fotorama) {
                 this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, true);
             }, this));
@@ -518,7 +539,6 @@ define([
                 videoEventIsSet = false;
 
             if ($image) {
-
                 !$image.type && this._setItemType($image, number - 1);
 
                 if ($image.type === 'image') {

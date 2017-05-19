@@ -246,6 +246,9 @@ define([
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
+            // Use ajax to get image data
+            useAjax: false,
+
             /**
              * Defines the mechanism of how images of a gallery should be
              * updated when user switches between configurations of a product.
@@ -284,9 +287,12 @@ define([
          * @private
          */
         _init: function () {
-            // creates debounced variant of _LoadProductMedia()
-            // to use it in events handlers instead of _LoadProductMedia()
-            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+            if (_.isEmpty(this.options.jsonConfig.images)) {
+                this.options.useAjax = true;
+                // creates debounced variant of _LoadProductMedia()
+                // to use it in events handlers instead of _LoadProductMedia()
+                this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+            }
 
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
@@ -640,6 +646,30 @@ define([
         },
 
         /**
+         * Load media gallery using ajax or json config.
+         *
+         * @private
+         */
+        _loadMedia: function () {
+            var $main = this.inProductList ?
+                    this.element.parents('.product-item-info') :
+                    this.element.parents('.column.main'),
+                images;
+
+            if (this.options.useAjax) {
+                this._debouncedLoadProductMedia()
+            }  else {
+                images = this.options.jsonConfig.images[this.getProduct()];
+
+                if (!images) {
+                    images = this.options.mediaGalleryInitial;
+                }
+
+                this.updateBaseImage(images, $main, !this.inProductList);
+            }
+        },
+
+        /**
          * Event for swatch options
          *
          * @param {Object} $this
@@ -685,7 +715,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            this._debouncedLoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -743,7 +773,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            this._debouncedLoadProductMedia();
+            $widget._loadMedia();
             $input.trigger('change');
         },
 
@@ -774,7 +804,6 @@ define([
          * @private
          */
         _Rebuild: function () {
-
             var $widget = this,
                 controls = $widget.element.find('.' + $widget.options.classes.attributeClass + '[attribute-id]'),
                 selected = controls.filter('[option-selected]');
@@ -958,6 +987,7 @@ define([
             mediaCallData = {
                 'product_id': this.getProduct()
             };
+
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
@@ -1080,7 +1110,9 @@ define([
                 images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
                 images.map(function (img) {
-                    img.type = 'image';
+                    if (!img.type) {
+                        img.type = 'image';
+                    }
                 });
             }
 
@@ -1108,10 +1140,16 @@ define([
                     imagesToUpdate = imagesToUpdate.concat(initialImages);
                 }
 
+                imagesToUpdate = this._setImageIndex(imagesToUpdate);
                 gallery.updateData(imagesToUpdate);
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                } else {
+                    $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                        selectedOption: this.getProduct(),
+                        dataMergeStrategy: this.options.gallerySwitchStrategy
+                    });
                 }
 
                 gallery.first();
@@ -1119,6 +1157,23 @@ define([
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**
