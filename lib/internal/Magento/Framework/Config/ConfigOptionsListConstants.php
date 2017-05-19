@@ -81,6 +81,7 @@ class ConfigOptionsListConstants
      * Array keys for Database configuration
      */
     const KEY_HOST = 'host';
+    const KEY_PORT = 'port';
     const KEY_NAME = 'dbname';
     const KEY_USER = 'username';
     const KEY_PASSWORD = 'password';
