@@ -6,10 +6,10 @@
 
 namespace Magento\Wishlist\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Wishlist\Test\Page\WishlistIndex;
-use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Assert that the correct option details are displayed on the "See Details" tooltip.

@@ -17,7 +17,9 @@
     <legend class="legend admin__legend"><span><?php /* @escapeNotVerified */ echo __('Downloadable Information') ?></span></legend><br />
     <?php $_links = $block->getLinks(); ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <div class="field admin__field link<?php if ($_isRequired) echo ' required _required' ?>">
+    <div class="field admin__field link<?php if ($_isRequired) {
+    echo ' required _required';
+} ?>">
         <label class="label admin__field-label"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></label>
         <div class="control admin__field-control" id="downloadable-links-list">
             <?php foreach ($_links as $_link): ?>
@@ -32,7 +34,7 @@
                     <label for="links_<?php /* @escapeNotVerified */ echo $_link->getId() ?>" class="label">
                         <?php echo $block->escapeHtml($_link->getTitle()) ?>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                            &nbsp;(<a href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php /* @escapeNotVerified */ echo __('sample') ?></a>)
+                            &nbsp;(<a href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : ''; ?>><?php /* @escapeNotVerified */ echo __('sample') ?></a>)
                         <?php endif; ?>
                         <?php if ($_linksPurchasedSeparately): ?>
                         <?php /* @escapeNotVerified */ echo $block->getFormattedLinkPrice($_link); ?>

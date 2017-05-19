@@ -13,7 +13,7 @@
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+<div class="field option <?php echo ($_option->getRequired()) ? ' required' : ''; ?>">
     <label class="label">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
@@ -36,7 +36,7 @@
                                id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
                                name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                                data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                               <?php echo ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
+                               <?php echo ($_default && $_default->isSalable()) ? '' : ' checked="checked" ' ?>
                                value=""/>
                         <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
                             <span><?php /* @escapeNotVerified */ echo __('None') ?></span>
@@ -48,11 +48,17 @@
                         <input type="radio"
                                class="radio product bundle option change-container-classname"
                                id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
-                               <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':true}"'?>
+                               <?php if ($_option->getRequired()) {
+    echo 'data-validate="{\'validate-one-required-by-name\':true}"';
+}?>
                                name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                                data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                               <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
-                               <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
+                               <?php if ($block->isSelected($_selection)) {
+    echo ' checked="checked"';
+} ?>
+                               <?php if (!$_selection->isSaleable()) {
+    echo ' disabled="disabled"';
+} ?>
                                value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"/>
                         <label class="label"
                                for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>">
@@ -67,9 +73,13 @@
                     <span><?php /* @escapeNotVerified */ echo __('Quantity') ?></span>
                 </label>
                 <div class="control">
-                    <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                    <input <?php if (!$_canChangeQty) {
+    echo ' disabled="disabled"';
+} ?>
                            id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"
-                           class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
+                           class="input-text qty<?php if (!$_canChangeQty) {
+    echo ' qty-disabled';
+} ?>"
                            type="number"
                            name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                            data-selector="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"

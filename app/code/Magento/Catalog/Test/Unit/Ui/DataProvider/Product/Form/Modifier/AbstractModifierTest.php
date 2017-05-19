@@ -7,10 +7,10 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AbstractDataProviderTest

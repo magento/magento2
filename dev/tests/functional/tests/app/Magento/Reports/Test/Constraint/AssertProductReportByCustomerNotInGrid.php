@@ -8,11 +8,11 @@ namespace Magento\Reports\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Reports\Test\Page\Adminhtml\CustomerReportReview;
 use Magento\Review\Test\Constraint\AssertProductReviewNotInGrid;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReportByCustomerNotInGrid

@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Api\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ExtensibleDataObjectConverterTest extends \PHPUnit_Framework_TestCase
 {

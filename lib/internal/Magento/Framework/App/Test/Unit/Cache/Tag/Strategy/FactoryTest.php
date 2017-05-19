@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
-use \Magento\Framework\App\Cache\Tag\Strategy\Factory;
+use Magento\Framework\App\Cache\Tag\Strategy\Factory;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,7 +67,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStrategyWithObject()
     {
-        $this->assertEquals($this->dummyStrategy, $this->model->getStrategy(new \StdClass));
+        $this->assertEquals($this->dummyStrategy, $this->model->getStrategy(new \StdClass()));
     }
 
     public function testGetStrategyWithIdentityInterface()

@@ -7,8 +7,8 @@
  */
 namespace Magento\Webapi\Routing;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {

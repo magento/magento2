@@ -46,9 +46,9 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->bootstrap = Bootstrap::getInstance();
         $this->bootstrap->loadArea(Area::AREA_FRONTEND);
         $this->objectManager = Bootstrap::getObjectManager();
-        
+
         $this->tokenComponentProvider = $this->objectManager->get(TokenUiComponentProvider::class);
-        
+
         $this->configProvider = $this->objectManager->create(
             TokensConfigProvider::class,
             [

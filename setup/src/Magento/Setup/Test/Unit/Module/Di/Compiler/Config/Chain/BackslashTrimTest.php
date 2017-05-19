@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
 
-use \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim;
+use Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim;
 
 class BackslashTrimTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,9 +8,9 @@ namespace Magento\Sales\Test\TestStep;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\SalesGuestForm;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Open sales order page on frontend for guest.

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Session\Test\Unit;
 
-use \Magento\Framework\Session\SaveHandlerFactory;
+use Magento\Framework\Session\SaveHandlerFactory;
 
 class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

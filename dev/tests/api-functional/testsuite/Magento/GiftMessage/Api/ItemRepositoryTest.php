@@ -5,8 +5,7 @@
  */
 namespace Magento\GiftMessage\Api;
 
-// @codingStandardsIgnoreFile
-
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ItemRepositoryTest extends WebapiAbstract
@@ -74,9 +73,8 @@ class ItemRepositoryTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
-        );
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         /** @var \Magento\Quote\Model\Quote $quote */
@@ -125,7 +123,7 @@ class ItemRepositoryTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message/' .  $itemId,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -162,9 +160,8 @@ class ItemRepositoryTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
-        );
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         // sales/gift_options/allow_items must be set to 1 in system configuration
@@ -178,7 +175,7 @@ class ItemRepositoryTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'mine/gift-message/' .  $itemId,
+                'resourcePath' => self::RESOURCE_PATH . 'mine/gift-message/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
                 'token' => $token,
             ],

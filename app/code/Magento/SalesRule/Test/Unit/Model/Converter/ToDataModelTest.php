@@ -218,7 +218,6 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayToConditionDataModel()
     {
-
         $array=[
             'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
             'attribute' => null,

@@ -6,7 +6,6 @@
 namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Model\Context;
-use Magento\Customer\Block\Account\SortLinkInterface;
 
 /**
  * Customer authorization link

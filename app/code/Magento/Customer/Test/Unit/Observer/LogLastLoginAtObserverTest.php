@@ -6,8 +6,6 @@
 namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Model\Logger;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Event\Observer;
 use Magento\Customer\Observer\LogLastLoginAtObserver;
 
 /**

@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\GroupManagement;
 
@@ -126,8 +124,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 function ($arg) {
                     return $arg -1;
                 }
-            )
-            );
+            ));
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
         $group = $this->getMock(
             \Magento\Customer\Model\Data\Group::class,
@@ -294,8 +291,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 function ($arg) {
                     return round(0.5 * $arg, 2);
                 }
-            )
-            );
+            ));
 
         $group = $this->getMock(
             \Magento\Customer\Model\Data\Group::class,

@@ -6,11 +6,10 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
-use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Test\Block\Form\Login;
-use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

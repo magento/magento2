@@ -6,9 +6,8 @@
 namespace Magento\TestFramework\Utility;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\TestFramework\Utility\File\RegexIteratorFactory;
-use Magento\TestFramework\Utility\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\TestFramework\Utility\File\RegexIteratorFactory;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {

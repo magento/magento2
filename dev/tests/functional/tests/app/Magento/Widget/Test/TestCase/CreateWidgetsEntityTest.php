@@ -7,7 +7,7 @@
 namespace Magento\Widget\Test\TestCase;
 
 use Magento\Mtf\Fixture\FixtureFactory;
-use \Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Widget\Test\Fixture\Widget;
 
 /**

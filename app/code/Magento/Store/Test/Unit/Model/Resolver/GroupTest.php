@@ -6,7 +6,7 @@
  */
 namespace Magento\Store\Test\Unit\Model\Resolver;
 
-use \Magento\Store\Model\Resolver\Group;
+use Magento\Store\Model\Resolver\Group;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

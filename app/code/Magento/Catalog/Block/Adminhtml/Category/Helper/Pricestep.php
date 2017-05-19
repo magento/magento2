@@ -54,13 +54,13 @@ class Pricestep extends \Magento\Framework\Data\Form\Element\Text
 
         $html .= ' <label for="' . $htmlId . '" class="normal">' . __('Use Config Settings') . '</label>';
         $html .= '<script>' .
-            'require(["prototype"], function(){'.
+            'require(["prototype"], function(){' .
             'toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .
             '\').parentNode);' .
-            '});'.
+            '});' .
             '</script>';
 
         return $html;

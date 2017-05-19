@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Api;
 
 class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract

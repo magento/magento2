@@ -7,8 +7,8 @@
 namespace Magento\User\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\User\Test\Fixture\User;
 
 /**
  * Verify whether customer has logged in to the Backend.

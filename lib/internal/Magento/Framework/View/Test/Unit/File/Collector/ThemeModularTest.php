@@ -6,8 +6,8 @@
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\View\File\Collector\ThemeModular;
 use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\View\File\Collector\ThemeModular;
 use Magento\Framework\View\File\Factory;
 
 class ThemeModularTest extends \PHPUnit_Framework_TestCase

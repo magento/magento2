@@ -5,11 +5,11 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
+use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\SignUpCommand;
-use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Config\Model\Config;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;

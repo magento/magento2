@@ -6,12 +6,12 @@
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Sitemap cms page collection model

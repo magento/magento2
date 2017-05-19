@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test of image path model
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Image;
 
-use \Magento\Theme\Model\Theme\Image\Path;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+
 use Magento\Framework\View\Design\Theme\Image\PathInterface;
+use Magento\Theme\Model\Theme\Image\Path;
 
 class PathTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +45,11 @@ class PathTest extends \PHPUnit_Framework_TestCase
     {
         $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->mediaDirectory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class, [], [], '', false
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
         $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);

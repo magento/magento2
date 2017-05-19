@@ -6,8 +6,8 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 
 class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
 {

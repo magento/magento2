@@ -6,15 +6,15 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Setup\Model\Installer;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\StoreConfigurationDataMapper;
-use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Framework\Validator\Currency as CurrencyValidator;
 use Magento\Framework\Validator\Locale as LocaleValidator;
 use Magento\Framework\Validator\Timezone as TimezoneValidator;
-use Magento\Framework\Validator\Currency as CurrencyValidator;
+use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
+use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use \Magento\Tax\Model\Calculation\UnitBaseCalculator;
+use Magento\Tax\Model\Calculation\UnitBaseCalculator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

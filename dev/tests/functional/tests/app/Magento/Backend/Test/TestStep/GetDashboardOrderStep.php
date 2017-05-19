@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Get order information from admin dashboard.

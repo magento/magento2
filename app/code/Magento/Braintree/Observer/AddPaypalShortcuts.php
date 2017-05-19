@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Observer;
 
-use Magento\Framework\Event\Observer;
 use Magento\Catalog\Block\ShortcutButtons;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**

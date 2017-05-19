@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory as CategoryFlatCollectionFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
 
 /**

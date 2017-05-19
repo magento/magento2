@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config\Initial;
 
-use Magento\Framework\Filesystem;
-
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -5,12 +5,12 @@
  */
 namespace Magento\Braintree\Controller\Paypal;
 
-use Magento\Checkout\Model\Session;
-use Magento\Framework\View\Result\Page;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
 
 /**
  * Class SaveShippingMethod

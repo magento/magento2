@@ -5,10 +5,10 @@
  */
 namespace Magento\Paypal\Model\Method\Checks;
 
-use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\Checks\SpecificationInterface;
-use Magento\Paypal\Model\Config;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Billing\AgreementFactory;
+use Magento\Paypal\Model\Config;
 use Magento\Quote\Model\Quote;
 
 /**

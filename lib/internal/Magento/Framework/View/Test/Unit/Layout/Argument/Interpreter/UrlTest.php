@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use \Magento\Framework\View\Layout\Argument\Interpreter\Url;
+use Magento\Framework\View\Layout\Argument\Interpreter\Url;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,18 +5,18 @@
  */
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository;
 
-use Magento\Quote\Model\QuoteRepository\SaveHandler;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
-use Magento\Quote\Model\Quote\Item\CartItemPersister;
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
-use Magento\Quote\Api\Data\CartExtensionInterface;
+use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\Quote\Item\CartItemPersister;
+use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
+use Magento\Quote\Model\QuoteRepository\SaveHandler;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -124,7 +124,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSaveForVirtualQuote()
     {
         $quoteItemMock = $this->createQuoteItemMock(false);
-        
+
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('getItems')
             ->willReturn([$quoteItemMock]);
@@ -156,7 +156,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->quoteMock)
             ->willReturnSelf();
-        
+
         $this->assertSame($this->quoteMock, $this->saveHandler->save($this->quoteMock));
     }
 

@@ -7,9 +7,8 @@
 namespace Magento\Security\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\ObjectManager;
-use Magento\User\Test\Fixture\User;
 use Magento\Security\Test\Page\UserAccountForgotPassword;
+use Magento\User\Test\Fixture\User;
 
 /**
  * Preconditions:

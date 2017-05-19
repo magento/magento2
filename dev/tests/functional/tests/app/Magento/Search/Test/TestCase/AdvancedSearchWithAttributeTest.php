@@ -6,26 +6,26 @@
 
 namespace Magento\Search\Test\TestCase;
 
-use Magento\Indexer\Test\Constraint\AssertUpdateByScheduleSuccessSaveMessage as AssertSuccessSaveMessage;
-use Magento\CatalogSearch\Test\Page\AdvancedSearch;
-use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Util\Command\Cli\Indexer;
-use Magento\CatalogSearch\Test\Constraint\AssertSearchAttributeTest;
-use Magento\Indexer\Test\Constraint\AssertIndexerStatus;
 use Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
-use Magento\CatalogSearch\Test\Page\AdvancedResult;
-use Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductResult;
 use Magento\Catalog\Test\Constraint\AssertProductSaveMessage;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
+use Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductResult;
+use Magento\CatalogSearch\Test\Constraint\AssertSearchAttributeTest;
+use Magento\CatalogSearch\Test\Page\AdvancedResult;
+use Magento\CatalogSearch\Test\Page\AdvancedSearch;
+use Magento\Indexer\Test\Constraint\AssertIndexerStatus;
+use Magento\Indexer\Test\Constraint\AssertUpdateByScheduleSuccessSaveMessage as AssertSuccessSaveMessage;
+use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Preconditions:

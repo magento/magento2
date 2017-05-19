@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\CopyConstructorFactory;
+use Magento\Catalog\Model\Product\CopyConstructorFactory;
 
 class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
 {

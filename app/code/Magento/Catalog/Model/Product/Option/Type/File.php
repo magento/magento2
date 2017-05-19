@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Exception as ProductException;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Catalog product option file type

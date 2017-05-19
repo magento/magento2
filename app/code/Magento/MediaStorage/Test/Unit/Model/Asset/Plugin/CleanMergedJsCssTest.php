@@ -41,7 +41,7 @@ class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTes
     public function testAfterCleanMergedJsCss()
     {
         $readDir = 'read directory';
-        $mergedDir = $readDir .  '/' . \Magento\Framework\View\Asset\Merged::getRelativeDir();
+        $mergedDir = $readDir . '/' . \Magento\Framework\View\Asset\Merged::getRelativeDir();
 
         $readDirectoryMock = $this->basicMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $readDirectoryMock->expects($this->any())->method('getAbsolutePath')->willReturn($readDir);

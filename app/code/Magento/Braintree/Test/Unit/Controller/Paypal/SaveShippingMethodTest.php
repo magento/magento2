@@ -5,21 +5,21 @@
  */
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
-use Magento\Quote\Model\Quote;
-use Magento\Framework\View\Layout;
+use Magento\Braintree\Block\Paypal\Checkout\Review;
+use Magento\Braintree\Controller\Paypal\SaveShippingMethod;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
 use Magento\Checkout\Model\Session;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\App\Response\RedirectInterface;
-use Magento\Braintree\Block\Paypal\Checkout\Review;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
-use Magento\Braintree\Controller\Paypal\SaveShippingMethod;
-use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Result\Page;
+use Magento\Quote\Model\Quote;
 
 /**
  * Class SaveShippingMethodTest

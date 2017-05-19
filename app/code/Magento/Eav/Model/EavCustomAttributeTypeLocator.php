@@ -7,11 +7,11 @@
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\ComplexType as ComplexTypeLocator;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
 /**
  * Class to locate types for Eav custom attributes

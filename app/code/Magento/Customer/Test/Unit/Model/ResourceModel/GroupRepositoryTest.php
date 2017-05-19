@@ -77,7 +77,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\ResourceModel\GroupRepository
      */
     protected $model;
-    
+
     protected function setUp()
     {
         $this->setupGroupObjects();

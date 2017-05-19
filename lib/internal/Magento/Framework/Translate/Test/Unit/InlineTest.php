@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Translate\Test\Unit;
 
-use \Magento\Framework\Translate\Inline;
+use Magento\Framework\Translate\Inline;
 
 class InlineTest extends \PHPUnit_Framework_TestCase
 {
@@ -149,10 +149,10 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         return [
             ['test', 'test'],
             ['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'aaaaaa'],
-            [['test1', 'test2'], ['test1', 'test2'],],
-            [['{{{aaaaaa}}', 'test3'], ['{{{aaaaaa}}', 'test3'],],
-            [['{{{aaaaaa}}{{bbbbb}}', 'test4'], ['{{{aaaaaa}}{{bbbbb}}', 'test4'],],
-            [['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'test5'], ['aaaaaa', 'test5'],],
+            [['test1', 'test2'], ['test1', 'test2']],
+            [['{{{aaaaaa}}', 'test3'], ['{{{aaaaaa}}', 'test3']],
+            [['{{{aaaaaa}}{{bbbbb}}', 'test4'], ['{{{aaaaaa}}{{bbbbb}}', 'test4']],
+            [['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'test5'], ['aaaaaa', 'test5']],
         ];
     }
 
@@ -168,7 +168,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $isJson = true;
         $this->prepareIsAllowed(true, true, true, $scope);
 
-        $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
+        $jsonCall = is_array($body) ? 2 * (count($body) + 1) : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(
@@ -230,7 +230,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $isJson = true;
         $this->prepareIsAllowed(true, true, true, $scope);
 
-        $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
+        $jsonCall = is_array($body) ? 2 * (count($body) + 1) : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(

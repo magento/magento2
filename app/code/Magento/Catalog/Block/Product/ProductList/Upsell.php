@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog product upsell items block
@@ -17,7 +15,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
+class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements IdentityInterface
 {
     /**
      * @var int
@@ -143,7 +141,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     public function getItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_items = $this->getItemCollection()->getItems();
         }
         return $this->_items;

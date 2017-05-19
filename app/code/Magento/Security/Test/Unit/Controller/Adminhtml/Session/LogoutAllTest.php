@@ -6,8 +6,8 @@
 
 namespace Magento\Security\Test\Unit\Controller\Adminhtml\Session;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Security\Test\Unit\Controller\Adminhtml\Session\LogoutAll testing

@@ -5,12 +5,12 @@
  */
 namespace Magento\TestModuleDefaultHydrator\Model\ResourceModel;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerExtensionFactory;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface;
 use Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterfaceFactory as ExtensionAttributeFactory;
 

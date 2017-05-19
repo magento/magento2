@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\License;
+use Magento\Setup\Model\License;
 
 class LicenseTest extends \PHPUnit_Framework_TestCase
 {

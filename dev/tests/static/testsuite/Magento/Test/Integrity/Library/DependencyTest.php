@@ -5,8 +5,8 @@
  */
 namespace Magento\Test\Integrity\Library;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
@@ -81,7 +81,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     $dependencyPath = implode('\\', $dependencyPaths);
                     $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
                     foreach ($libraryPaths as $libraryPath) {
-                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependencyPath . '.php');
+                        $filePath = str_replace('\\', '/', $libraryPath . '/' . $dependencyPath . '.php');
                         if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
                             $this->errors[$fileReflection->getFileName()][] = $dependency;
                         }

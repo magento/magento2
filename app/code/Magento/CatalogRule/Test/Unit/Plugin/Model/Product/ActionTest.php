@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Plugin\Model\Product;
 
-use \Magento\CatalogRule\Plugin\Model\Product\Action;
+use Magento\CatalogRule\Plugin\Model\Product\Action;
 
 class ActionTest extends \PHPUnit_Framework_TestCase
 {

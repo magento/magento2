@@ -8,8 +8,6 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Tax\Api\Data\TaxRateInterface;
-use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 

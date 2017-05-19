@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Oauth\Test\Unit;
 
-use \Magento\Framework\Oauth\OauthInputException;
+use Magento\Framework\Oauth\OauthInputException;
 use Magento\Framework\Phrase;
 
 class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase

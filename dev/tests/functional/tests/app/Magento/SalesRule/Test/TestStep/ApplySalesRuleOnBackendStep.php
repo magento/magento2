@@ -6,9 +6,9 @@
 
 namespace Magento\SalesRule\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\SalesRule\Test\Fixture\SalesRule;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Apply Sales Rule on backend.

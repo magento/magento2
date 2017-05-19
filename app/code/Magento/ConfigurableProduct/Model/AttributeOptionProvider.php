@@ -5,12 +5,12 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
-use Magento\Framework\App\ScopeInterface;
-use Magento\Framework\DB\Select;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Select;
 
 class AttributeOptionProvider implements AttributeOptionProviderInterface
 {

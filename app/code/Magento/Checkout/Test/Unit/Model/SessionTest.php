@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Checkout\Model\Session
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
-use \Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -366,9 +364,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_helper->getObject(
-            \Magento\Checkout\Model\Session::class, [
+            \Magento\Checkout\Model\Session::class,
+            [
             'storage' => new \Magento\Framework\Session\Storage()
-        ]);
+            ]
+        );
         $session->resetCheckout();
         $this->assertEquals(\Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN, $session->getCheckoutState());
     }
@@ -383,9 +383,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_helper->getObject(
-            \Magento\Checkout\Model\Session::class, [
+            \Magento\Checkout\Model\Session::class,
+            [
             'storage' => new \Magento\Framework\Session\Storage()
-        ]);
+            ]
+        );
         $session->setSteps($stepData);
         $this->assertEquals($stepData, $session->getStepData());
         $this->assertFalse($session->getStepData('invalid_key'));
@@ -403,9 +405,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var $session \Magento\Checkout\Model\Session */
         $session = $this->_helper->getObject(
-            \Magento\Checkout\Model\Session::class, [
+            \Magento\Checkout\Model\Session::class,
+            [
             'storage' => new \Magento\Framework\Session\Storage()
-        ]);
+            ]
+        );
         $session->setSteps($stepData);
 
         $session->setStepData('complex', 'key2', 'value2');

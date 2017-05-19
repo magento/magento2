@@ -10,8 +10,8 @@ use Magento\Backend\Test\Page\Adminhtml\EditStore;
 use Magento\Backend\Test\Page\Adminhtml\StoreDelete;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Test Creation for DeleteStoreEntity

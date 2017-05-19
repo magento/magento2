@@ -7,21 +7,20 @@ namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
-use Magento\UrlRewrite\Model\OptionProvider;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Framework\App\ObjectManager;
-use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class AfterImportDataObserver

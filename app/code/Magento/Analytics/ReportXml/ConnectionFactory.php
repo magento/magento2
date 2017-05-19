@@ -7,8 +7,8 @@
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ConnectionFactory

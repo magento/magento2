@@ -5,10 +5,8 @@
  */
 
 return [
-    'entity_0' =>
-        [
-            'data_0' =>
-                [
+    'entity_0' => [
+            'data_0' => [
                     'sku' => '%sku%',
                     'product_type' => "simple",
                     'name' => '%name%',
@@ -17,10 +15,8 @@ return [
                     'qty' => '999',
                 ],
         ],
-    'entity_1' =>
-        [
-            'data_0' =>
-                [
+    'entity_1' => [
+            'data_0' => [
                     'sku' => '%sku%',
                     'product_type' => "simple",
                     'name' => '%name%',
@@ -29,10 +25,8 @@ return [
                     'qty' => '999',
                 ],
         ],
-    'entity_2' =>
-        [
-            'data_0' =>
-                [
+    'entity_2' => [
+            'data_0' => [
                     'sku' => '%sku%',
                     'product_type' => "simple",
                     'name' => '%name%',

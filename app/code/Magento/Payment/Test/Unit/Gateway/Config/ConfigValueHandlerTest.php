@@ -5,8 +5,8 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Config;
 
-use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Config\ConfigValueHandler;
+use Magento\Payment\Gateway\ConfigInterface;
 
 /**
  * Class ConfigValueHandlerTest

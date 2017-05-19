@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\Boolean;
+use Magento\Framework\Data\Argument\Interpreter\Boolean;
 
 class BooleanTest extends \PHPUnit_Framework_TestCase
 {

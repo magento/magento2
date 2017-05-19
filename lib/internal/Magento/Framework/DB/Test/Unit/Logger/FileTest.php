@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Logger;
 
-use \Magento\Framework\DB\Logger\File;
+use Magento\Framework\DB\Logger\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {

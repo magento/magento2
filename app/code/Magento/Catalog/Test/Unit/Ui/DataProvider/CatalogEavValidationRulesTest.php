@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CatalogEavValidationRulesTest extends \PHPUnit_Framework_TestCase

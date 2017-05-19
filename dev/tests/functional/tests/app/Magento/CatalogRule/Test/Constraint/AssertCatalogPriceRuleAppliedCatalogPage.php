@@ -5,11 +5,10 @@
  */
 namespace Magento\CatalogRule\Test\Constraint;
 
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
  * Assert that Catalog Price Rule is applied for product(s) in Catalog.

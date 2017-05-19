@@ -6,8 +6,8 @@
 
 namespace Magento\ImportExport\Test\Block\Adminhtml\Export\Edit;
 
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

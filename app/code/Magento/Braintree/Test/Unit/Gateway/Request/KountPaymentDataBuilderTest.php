@@ -5,12 +5,12 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Request\KountPaymentDataBuilder;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Braintree\Gateway\Request\KountPaymentDataBuilder;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class KountPaymentDataBuilderTest

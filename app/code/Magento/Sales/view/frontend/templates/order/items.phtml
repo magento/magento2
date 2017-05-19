@@ -12,7 +12,7 @@
     <table class="data table table-order-items" id="my-orders-table" summary="<?php /* @escapeNotVerified */ echo __('Items Ordered') ?>">
         <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></caption>
         <thead>
-            <?php if($block->isPagerDisplayed()): ?>
+            <?php if ($block->isPagerDisplayed()): ?>
                 <tr>
                     <td colspan="5" data-block="order-items-pager-top" class="order-pager-wrapper order-pager-wrapper-top">
                         <?php echo $block->getPagerHtml() ?>
@@ -30,7 +30,9 @@
         <?php $items = $block->getItems(); ?>
         <?php $giftMessage = ''?>
         <?php foreach ($items as $item): ?>
-            <?php if ($item->getParentItem()) continue; ?>
+            <?php if ($item->getParentItem()) {
+    continue;
+} ?>
             <tbody>
                 <?php echo $block->getItemHtml($item) ?>
                 <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()): ?>
@@ -65,7 +67,7 @@
             </tbody>
         <?php endforeach; ?>
         <tfoot>
-            <?php if($block->isPagerDisplayed()): ?>
+            <?php if ($block->isPagerDisplayed()): ?>
                 <tr>
                     <td colspan="5" data-block="order-items-pager-bottom" class="order-pager-wrapper order-pager-wrapper-bottom">
                         <?php echo $block->getPagerHtml();?>

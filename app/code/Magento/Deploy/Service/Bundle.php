@@ -9,8 +9,8 @@ use Magento\Deploy\Config\BundleConfig;
 use Magento\Deploy\Package\BundleInterface;
 use Magento\Deploy\Package\BundleInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\RepositoryMap;
 

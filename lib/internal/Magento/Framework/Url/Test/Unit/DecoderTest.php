@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Url\Test\Unit;
 
-use \Magento\Framework\Url\Decoder;
-use \Magento\Framework\Url\Encoder;
+use Magento\Framework\Url\Decoder;
+use Magento\Framework\Url\Encoder;
 
 class DecoderTest extends \PHPUnit_Framework_TestCase
 {

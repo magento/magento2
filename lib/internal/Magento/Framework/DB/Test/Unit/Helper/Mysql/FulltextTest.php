@@ -6,7 +6,6 @@
 namespace Magento\Framework\DB\Test\Unit\Helper\Mysql;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
-use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FulltextTest extends \PHPUnit_Framework_TestCase

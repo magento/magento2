@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogWidget\Test\Unit\Block\Product\Widget;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogWidget\Block\Product\Widget\Conditions;
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Template\Context;
+use Magento\CatalogWidget\Block\Product\Widget\Conditions;
 use Magento\CatalogWidget\Model\Rule;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Test class for \Magento\CatalogWidget\Block\Product\Widget\Conditions

@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\Rule\Theme;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {

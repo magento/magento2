@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Newsletter\Test\Unit\Controller\Manage;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -85,7 +83,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->action = $objectManager->getObject(
-            \Magento\Newsletter\Controller\Manage\Save::class, [
+            \Magento\Newsletter\Controller\Manage\Save::class,
+            [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
                 'messageManager' => $this->messageManagerMock,
@@ -93,7 +92,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'formKeyValidator' => $this->formKeyValidatorMock,
                 'customerRepository' => $this->customerRepositoryMock
-            ]);
+            ]
+        );
     }
 
     public function testSaveActionInvalidFormKey()
@@ -141,14 +141,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->will($this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'customerId', 'value' => 'value']
-                        )
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'customerId', 'value' => 'value']
                     )
                 )
-            );
+            ));
         $this->redirectMock->expects($this->once())
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);

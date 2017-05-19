@@ -8,8 +8,8 @@ namespace Magento\Store\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\EditGroup;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
-use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Store\Test\Fixture\StoreGroup;
 
 /**
  * Class AssertStoreGroupForm

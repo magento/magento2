@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Model\AdminOrder;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Sales\Model\Order;
 use Magento\Framework\Registry;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

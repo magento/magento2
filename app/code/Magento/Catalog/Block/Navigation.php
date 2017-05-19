@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Customer\Model\Context;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog navigation
@@ -18,7 +17,7 @@ use Magento\Customer\Model\Context;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Navigation extends \Magento\Framework\View\Element\Template implements IdentityInterface
 {
     /**
      * @var Category

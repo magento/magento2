@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\File\Test\Unit\Transfer\Adapter;
 
-use \Magento\Framework\File\Transfer\Adapter\Http;
+use Magento\Framework\File\Transfer\Adapter\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {

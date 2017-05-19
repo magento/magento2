@@ -5,8 +5,8 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
-use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\Url as UrlValidator;
 
 class Baseurl extends \Magento\Framework\App\Config\Value
 {

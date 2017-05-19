@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -283,9 +281,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     public function checkAvailableShipCountries(\Magento\Framework\DataObject $request)
     {
         $speCountriesAllow = $this->getConfigData('sallowspecific');
-        /*
-         * for specific countries, the flag will be 1
-         */
+        // for specific countries, the flag will be 1
         if ($speCountriesAllow && $speCountriesAllow == 1) {
             $showMethod = $this->getConfigData('showmethod');
             $availableCountries = [];
@@ -312,9 +308,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
 
                 return $error;
             } else {
-                /*
-                 * The admin set not to show the shipping module if the delivery country is not within specific countries
-                 */
+                // The admin set not to show the shipping module
+                // if the delivery country is not within specific countries
                 return false;
             }
         }
@@ -446,7 +441,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         /**
          * if we did not get our free shipping method in response we must use its old price
          */
-        if (!is_null($price)) {
+        if ($price !== null) {
             $this->_result->getRateById($freeRateId)->setPrice($price);
         }
     }

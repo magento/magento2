@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\Navigation;
+use Magento\Setup\Model\Navigation;
 
 class NavigationTest extends \PHPUnit_Framework_TestCase
 {

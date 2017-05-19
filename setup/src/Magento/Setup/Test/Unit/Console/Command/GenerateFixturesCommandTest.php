@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Console\Command\GenerateFixturesCommand;
+use Magento\Setup\Fixtures\FixtureModel;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
@@ -44,7 +44,6 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidLanguageArgument()
     {
-
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
     }

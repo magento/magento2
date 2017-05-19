@@ -5,8 +5,6 @@
  */
 namespace Magento\Backend\Model\Session;
 
-use PHPUnit_Framework_TestCase;
-
 /**
  * Test class for \Magento\Backend\Model\Session\AdminConfig.
  *

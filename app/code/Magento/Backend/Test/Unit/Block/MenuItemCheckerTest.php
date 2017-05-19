@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Model\Menu;
 use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Item;
 
 class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
 {

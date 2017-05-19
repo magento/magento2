@@ -6,9 +6,9 @@
 
 namespace Magento\Shipping\Test\Block\Adminhtml\Form;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Sales\Test\Block\Adminhtml\Order\AbstractItemsNewBlock;
 use Magento\Shipping\Test\Block\Adminhtml\Form\Items\Product;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Adminhtml items to ship block.

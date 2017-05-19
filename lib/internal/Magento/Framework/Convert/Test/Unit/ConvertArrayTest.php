@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
-use \Magento\Framework\Convert\ConvertArray;
+use Magento\Framework\Convert\ConvertArray;
 
 class ConvertArrayTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Attribute\Data\Image;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator;
-use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\ComplexType as ComplexTypeLocator;
+use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
 
 /**
  * Unit test class for \Magento\Eav\Model\EavCustomAttributeTypeLocator
@@ -187,11 +186,8 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'attributeRepositoryResponse' => $attributeNoBackendModel,
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => 'image'],
-                'serviceBackendModelDataInterfaceMapData' =>
-                    [
-                        $serviceInterface =>
-                            [\Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
-                            ]
+                'serviceBackendModelDataInterfaceMapData' => [
+                        $serviceInterface => [Image::class => $mediaAttributeDataInterface]
                     ],
                 'expected' => $mediaAttributeDataInterface
             ]
@@ -240,7 +236,10 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
         ];
         $stringUtility = new \Magento\Framework\Stdlib\StringUtils();
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
-            $this->attributeRepository, $stringUtility, [], $serviceBackendModelDataInterfaceMapData
+            $this->attributeRepository,
+            $stringUtility,
+            [],
+            $serviceBackendModelDataInterfaceMapData
         );
         $this->assertEquals(
             ['ServiceDataInterfaceA', 'ServiceDataInterfaceB', 'ServiceDataInterfaceC', 'ServiceDataInterfaceD'],

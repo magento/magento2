@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**

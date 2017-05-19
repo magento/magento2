@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\CanUseForCurrency;
+use Magento\Payment\Model\Checks\CanUseForCurrency;
 
 class CanUseForCurrencyTest extends \PHPUnit_Framework_TestCase
 {

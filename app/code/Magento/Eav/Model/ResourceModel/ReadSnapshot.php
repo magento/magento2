@@ -6,7 +6,6 @@
 
 namespace Magento\Eav\Model\ResourceModel;
 
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\Model\Entity\ScopeInterface;
 
 /**

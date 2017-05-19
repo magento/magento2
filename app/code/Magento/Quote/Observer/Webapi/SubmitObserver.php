@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Observer\Webapi;
 
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 class SubmitObserver implements ObserverInterface
 {

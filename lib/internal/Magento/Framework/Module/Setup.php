@@ -7,9 +7,9 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
-use Magento\Framework\App\ResourceConnection;
 
 class Setup implements SetupInterface
 {

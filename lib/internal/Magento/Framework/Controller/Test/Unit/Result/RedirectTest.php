@@ -7,7 +7,7 @@
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
-use \Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\Redirect;
 
 class RedirectTest extends \PHPUnit_Framework_TestCase
 {

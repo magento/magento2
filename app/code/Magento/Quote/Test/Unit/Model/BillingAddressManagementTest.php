@@ -7,8 +7,8 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\BillingAddressManagement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\BillingAddressManagement;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

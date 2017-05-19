@@ -7,9 +7,9 @@ namespace Magento\Analytics\Cron;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\Connector;
-use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\FlagManager;
 
 /**
  * Class SignUp

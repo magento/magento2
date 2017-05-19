@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Model\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * Product type price model

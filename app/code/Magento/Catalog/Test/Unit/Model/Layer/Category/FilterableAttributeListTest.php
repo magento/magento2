@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
+
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 
 class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionFactory
      */
     protected $collectionFactoryMock;
 
@@ -28,7 +28,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -36,14 +36,17 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeManagerMock = $this->getMock(
-            \Magento\Store\Model\StoreManagerInterface::class, [], [], '', false
+            \Magento\Store\Model\StoreManagerInterface::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->model = new \Magento\Catalog\Model\Layer\Search\FilterableAttributeList(
             $this->collectionFactoryMock,
             $this->storeManagerMock
         );
-
     }
 
     public function testGetList()
@@ -55,7 +58,11 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
         $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class, [], [], '', false
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->collectionFactoryMock
             ->expects($this->once())

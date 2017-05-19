@@ -5,11 +5,11 @@
  */
 namespace Magento\Dhl\Block\Adminhtml;
 
-use Magento\Dhl\Model;
-use Magento\Shipping\Helper;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Dhl\Model;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Shipping\Helper;
 
 /**
  * Frontend model for DHL shipping methods for documentation

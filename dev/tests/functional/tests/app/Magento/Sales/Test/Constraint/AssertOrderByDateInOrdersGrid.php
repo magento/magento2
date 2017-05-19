@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that order is present in the grid after setting date from and date to in filter on the orders grid page.

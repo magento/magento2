@@ -10,7 +10,7 @@
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi */ ?>
 <?php $_option = $block->getOption() ?>
 <?php $_selections = $_option->getSelections() ?>
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+<div class="field option <?php echo ($_option->getRequired()) ? ' required' : ''; ?>">
     <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
@@ -27,14 +27,20 @@
                     name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
                     data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
                     class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> multiselect product bundle option change-container-classname"
-                    <?php if ($_option->getRequired()) echo 'data-validate={required:true}' ?>>
-                <?php if(!$_option->getRequired()): ?>
+                    <?php if ($_option->getRequired()) {
+    echo 'data-validate={required:true}';
+} ?>>
+                <?php if (!$_option->getRequired()): ?>
                     <option value=""><?php /* @escapeNotVerified */ echo __('None') ?></option>
                 <?php endif; ?>
                 <?php foreach ($_selections as $_selection): ?>
                     <option value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
-                            <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
-                            <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
+                            <?php if ($block->isSelected($_selection)) {
+    echo ' selected="selected"';
+} ?>
+                            <?php if (!$_selection->isSaleable()) {
+    echo ' disabled="disabled"';
+} ?>>
                         <?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>

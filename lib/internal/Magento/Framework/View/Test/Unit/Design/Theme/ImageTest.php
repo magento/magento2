@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test theme image model
  */
@@ -70,7 +68,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         );
         $this->_rootDirectoryMock = $this->getMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['isExist', 'copyFile', 'getRelativePath', 'delete'], [], '', false, false
+            ['isExist', 'copyFile', 'getRelativePath', 'delete'],
+            [],
+            '',
+            false,
+            false
         );
         $this->_filesystemMock = $this->getMock(
             \Magento\Framework\Filesystem::class,
@@ -107,14 +109,16 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
-            \Magento\Framework\View\Design\Theme\Image::class, [
+            \Magento\Framework\View\Design\Theme\Image::class,
+            [
             'filesystem' => $this->_filesystemMock,
             'imageFactory' => $imageFactory,
             'uploader' => $this->_uploaderMock,
             'themeImagePath' => $this->imagePathMock,
             'logger' => $logger,
             'theme' => $this->_themeMock
-        ]);
+            ]
+        );
     }
 
     protected function tearDown()

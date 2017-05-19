@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
-use \Magento\Setup\Module\I18n\Locale;
+use Magento\Setup\Module\I18n\Locale;
 
 class LocaleTest extends \PHPUnit_Framework_TestCase
 {

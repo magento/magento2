@@ -149,7 +149,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
         $this->roleMock->expects($this->once())
             ->method('load')
             ->with($roleName)
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->integrationAuthorizationService->removePermissions(self::INTEGRATION_ID);
     }
 
@@ -222,7 +222,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('setResources')
             ->with($this->resources)
             ->will($this->returnSelf());
-        $this->rulesMock->expects($this->any())->method('saveRel')->will($this->throwException(new \Exception));
+        $this->rulesMock->expects($this->any())->method('saveRel')->will($this->throwException(new \Exception()));
 
         $this->integrationAuthorizationService->grantPermissions(self::INTEGRATION_ID, $this->resources);
     }

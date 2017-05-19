@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
 /**
@@ -21,7 +19,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetOptionArray(array $expected, array $data)
     {
         $moduleManagerMock = $this->getMock(
-            \Magento\Framework\Module\Manager::class, ['isOutputEnabled'], [], '', false
+            \Magento\Framework\Module\Manager::class,
+            ['isOutputEnabled'],
+            [],
+            '',
+            false
         );
         $moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')

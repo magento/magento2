@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Pricing;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Render as PricingRender;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 

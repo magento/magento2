@@ -7,8 +7,8 @@ namespace Magento\Multishipping\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\ObjectManager;
-use Magento\Multishipping\Test\Page\MultishippingCheckoutAddresses;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Multishipping\Test\Page\MultishippingCheckoutAddresses;
 
 /**
  * Fill customer addresses form and proceed to next step.

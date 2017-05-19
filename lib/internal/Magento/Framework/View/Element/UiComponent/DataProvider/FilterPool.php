@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Data\Collection;
 
 /**
  * Class FilterPool

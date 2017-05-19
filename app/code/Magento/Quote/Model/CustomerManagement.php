@@ -6,9 +6,9 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\AccountManagementInterface as AccountManagement;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepository;
+use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Quote\Model\Quote as QuoteEntity;
 
 /**

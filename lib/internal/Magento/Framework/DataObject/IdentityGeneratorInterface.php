@@ -16,7 +16,7 @@ interface IdentityGeneratorInterface
      * @return string
      **/
     public function generateId();
-    
+
     /**
      * Generate id for data
      *

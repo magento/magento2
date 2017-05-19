@@ -514,7 +514,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($selectionConnection);
         $this->product->expects($this->any())
             ->method('getTypeInstance')->willReturn($typeInstance);
-        $this->product->expects($this->any())->method('getStoreId')  ->willReturn(0);
+        $this->product->expects($this->any())->method('getStoreId')->willReturn(0);
         $this->catalogProduct->expects($this->once())->method('getSkipSaleableCheck')->willReturn(true);
 
         $this->assertEquals($newOptions, $this->bundleBlock->getOptions($stripSelection));

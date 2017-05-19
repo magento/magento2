@@ -5,14 +5,14 @@
  */
 namespace Magento\PageCache\Test\Unit\Model\App\FrontController;
 
-use Magento\PageCache\Model\App\FrontController\VarnishPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\PageCache\Version;
-use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\PageCache\Version;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\PageCache\Model\App\FrontController\VarnishPlugin;
+use Magento\PageCache\Model\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

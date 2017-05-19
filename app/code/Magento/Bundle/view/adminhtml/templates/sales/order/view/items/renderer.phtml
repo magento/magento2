@@ -16,12 +16,12 @@
 
 <?php $_item = $block->getItem() ?>
 <?php $items = array_merge([$_item], $_item->getChildrenItems()); ?>
-<?php $_count = count ($items) ?>
+<?php $_count = count($items) ?>
 <?php $_index = 0 ?>
 
 <?php $_prevOptionId = '' ?>
 
-<?php if($block->getOrderOptions() || $_item->getDescription() || $block->canDisplayGiftmessage()): ?>
+<?php if ($block->getOrderOptions() || $_item->getDescription() || $block->canDisplayGiftmessage()): ?>
     <?php $_showlastRow = true ?>
 <?php else: ?>
     <?php $_showlastRow = false ?>
@@ -47,7 +47,7 @@
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?php echo (++$_index==$_count && !$_showlastRow)?' class="border"':'' ?>>
+    <tr<?php echo (++$_index==$_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title" id="order_item_<?php /* @escapeNotVerified */ echo $_item->getId() ?>_title">
@@ -170,8 +170,10 @@
         </td>
     </tr>
 <?php endforeach; ?>
-<?php if($_showlastRow): ?>
-    <tr<?php if (!$block->canDisplayGiftmessage()) echo ' class="border"' ?>>
+<?php if ($_showlastRow): ?>
+    <tr<?php if (!$block->canDisplayGiftmessage()) {
+    echo ' class="border"';
+} ?>>
         <td class="col-product">
             <?php if ($block->getOrderOptions()): ?>
                 <dl class="item-options">

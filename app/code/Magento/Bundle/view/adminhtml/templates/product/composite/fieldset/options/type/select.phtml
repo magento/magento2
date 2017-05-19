@@ -14,7 +14,9 @@
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field admin__field option<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?><?php if ($_option->getRequired()) echo ' required _required' ?>">
+<div class="field admin__field option<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?><?php if ($_option->getRequired()) {
+    echo ' required _required';
+} ?>">
     <label class="label admin__field-label"><span><?php echo $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if ($block->showSingle()): ?>
@@ -25,12 +27,18 @@
         <?php else:?>
             <select id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
                     name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                    class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?><?php if ($_option->getRequired()) echo ' required-entry' ?> select admin__control-select change-container-classname"
+                    class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?><?php if ($_option->getRequired()) {
+    echo ' required-entry';
+} ?> select admin__control-select change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
                 <option value=""><?php /* @escapeNotVerified */ echo __('Choose a selection...') ?></option>
                 <?php foreach ($_selections as $_selection): ?>
                     <option
-                        value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"<?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
+                        value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"<?php if ($block->isSelected($_selection)) {
+    echo ' selected="selected"';
+} ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) {
+    echo ' disabled="disabled"';
+} ?>
                         price="<?php /* @escapeNotVerified */ echo $block->getSelectionPrice($_selection) ?>"
                         qtyId="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"><?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selection, false) ?></option>
                 <?php endforeach; ?>
@@ -42,9 +50,13 @@
                 <label class="label admin__field-label"
                        for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"><span><?php /* @escapeNotVerified */ echo __('Quantity:') ?></span></label>
                 <div class="control admin__field-control">
-                    <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                    <input <?php if (!$_canChangeQty) {
+    echo ' disabled="disabled"';
+} ?>
                         id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"
-                        class="input-text admin__control-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>" type="text"
+                        class="input-text admin__control-text qty<?php if (!$_canChangeQty) {
+    echo ' qty-disabled';
+} ?>" type="text"
                         name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $_defaultQty ?>" />
                 </div>
             </div>

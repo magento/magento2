@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\App\ObjectManager\Environment;
 
-use Magento\Framework\App\EnvironmentInterface;
-use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\EnvironmentInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 
 class Developer extends AbstractEnvironment implements EnvironmentInterface
 {

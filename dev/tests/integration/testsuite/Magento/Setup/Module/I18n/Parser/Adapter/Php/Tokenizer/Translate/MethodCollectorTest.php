@@ -36,7 +36,7 @@ class MethodCollectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testParse()
     {
-        $file = __DIR__.'/../_files/methodsCode.php.txt';
+        $file = __DIR__ . '/../_files/methodsCode.php.txt';
         $this->methodCollector->parse($file);
         $expectation = [
             [

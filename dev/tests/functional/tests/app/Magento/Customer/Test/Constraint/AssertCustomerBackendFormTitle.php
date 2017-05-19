@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Page\CustomerAccountIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that edit page of customer account contains correct title.

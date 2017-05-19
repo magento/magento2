@@ -4,18 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Widget Instance page groups (predefined layouts group) to display on
  *
  * @method \Magento\Widget\Model\Widget\Instance getWidgetInstance()
  */
-class Layout extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Layout extends \Magento\Backend\Block\Template implements RendererInterface
 {
     /**
      * @var AbstractElement|null
@@ -242,7 +241,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getLayoutsChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout::class
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout::class
         )->setName(
             'widget_instance[<%- data.id %>][pages][layout_handle]'
         )->setId(
@@ -268,7 +267,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getPageLayoutsPageChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction::class
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction::class
         )->setName(
             'widget_instance[<%- data.id %>][page_layouts][layout_handle]'
         )->setId(

@@ -5,8 +5,8 @@
  */
 namespace Magento\Review\Test\Unit\Ui\Component\Listing\Columns;
 
-use Magento\Review\Ui\Component\Listing\Columns\Visibility;
 use Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns\AbstractColumnTest;
+use Magento\Review\Ui\Component\Listing\Columns\Visibility;
 use Magento\Store\Model\System\Store;
 
 /**

@@ -6,10 +6,10 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use Magento\Bundle\Pricing\Price\BundleOptionPrice;
-use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
+use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

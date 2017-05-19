@@ -5,10 +5,10 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
-use Magento\SalesRule\Model\ResourceModel\SaveHandler;
-use Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\ResourceModel\Rule;
+use Magento\SalesRule\Model\ResourceModel\SaveHandler;
 
 /**
  * Class SaveHandlerTest

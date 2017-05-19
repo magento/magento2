@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Adminhtml catalog product edit action attributes update tab block
  *
@@ -137,7 +135,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
         $checkboxLabel = __('Change');
         $html = <<<HTML
 <span class="attribute-change-checkbox">
-    <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName" class="checkbox" $nameAttributeHtml onclick="toogleFieldEditMode(this, '{$elementId}')" $dataAttribute />
+    <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName" class="checkbox" $nameAttributeHtml 
+           onclick="toogleFieldEditMode(this, '{$elementId}')" $dataAttribute />
     <label class="label" for="$dataCheckboxName">
         {$checkboxLabel}
     </label>

@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Filesystem;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+
+use Magento\Framework\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {

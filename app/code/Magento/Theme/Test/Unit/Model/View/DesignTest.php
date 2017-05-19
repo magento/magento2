@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Theme\Test\Unit\Model\View;
 
 use Magento\Store\Model\ScopeInterface;
@@ -57,7 +55,11 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->flyweightThemeFactory = $this->getMock(
-            \Magento\Framework\View\Design\Theme\FlyweightFactory::class, [], [], '', false
+            \Magento\Framework\View\Design\Theme\FlyweightFactory::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->config = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->themeFactory = $this->getMock(\Magento\Theme\Model\ThemeFactory::class, ['create'], [], '', false);

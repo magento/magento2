@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Model;
 
-use Magento\Payment\Model\MethodList;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodList;
 
 class MethodListTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +49,11 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
 
         $this->specificationFactoryMock = $this->getMock(
-            \Magento\Payment\Model\Checks\SpecificationFactory::class, [], [], '', false
+            \Magento\Payment\Model\Checks\SpecificationFactory::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->methodList = $this->objectManager->getObject(
             \Magento\Payment\Model\MethodList::class,

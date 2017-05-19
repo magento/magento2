@@ -5,8 +5,6 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model\Quote;
 
-use Magento\Framework\DataObject as MagentoObject;
-
 /**
  * Class DiscountTest
  *

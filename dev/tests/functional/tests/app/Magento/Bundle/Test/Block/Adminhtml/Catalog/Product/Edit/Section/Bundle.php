@@ -6,8 +6,8 @@
 
 namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Section;
 
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Bundle\Option;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Section;

@@ -6,8 +6,8 @@
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Zend\Code\Exception\InvalidArgumentException;

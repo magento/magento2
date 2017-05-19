@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Factory;
+use Magento\Catalog\Model\Factory;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

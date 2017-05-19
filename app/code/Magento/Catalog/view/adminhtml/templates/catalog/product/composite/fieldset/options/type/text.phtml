@@ -9,7 +9,9 @@
 ?>
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Text */ ?>
 <?php $_option = $block->getOption(); ?>
-<div class="field admin__field<?php if ($_option->getIsRequire()) echo ' required _required' ?>">
+<div class="field admin__field<?php if ($_option->getIsRequire()) {
+    echo ' required _required';
+} ?>">
     <label class="admin__field-label label">
         <?php echo  $block->escapeHtml($_option->getTitle()) ?>
         <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>

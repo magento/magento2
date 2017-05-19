@@ -7,10 +7,10 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Customer\Helper\Address as HelperAddress;
-use Magento\Customer\Model\Address\AbstractAddress;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
 
 /**
  * Customer Observer Model

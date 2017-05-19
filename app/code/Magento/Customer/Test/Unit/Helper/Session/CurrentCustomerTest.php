@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Helper\Session;
 
 class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
@@ -119,35 +117,35 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->moduleManagerMock->expects(
             $this->once()
         )->method(
-                'isEnabled'
-            )->with(
-                $this->equalTo('Magento_PageCache')
-            )->will(
-                $this->returnValue(true)
-            );
+            'isEnabled'
+        )->with(
+            $this->equalTo('Magento_PageCache')
+        )->will(
+            $this->returnValue(true)
+        );
         $this->customerSessionMock->expects(
             $this->once()
         )->method(
-                'getCustomerGroupId'
-            )->will(
-                $this->returnValue($this->customerGroupId)
-            );
+            'getCustomerGroupId'
+        )->will(
+            $this->returnValue($this->customerGroupId)
+        );
         $this->customerInterfaceFactoryMock->expects(
             $this->once()
         )->method(
-                'create'
-            )->will(
-                $this->returnValue($this->customerDataMock)
-            );
+            'create'
+        )->will(
+            $this->returnValue($this->customerDataMock)
+        );
         $this->customerDataMock->expects(
             $this->once()
         )->method(
-                'setGroupId'
-            )->with(
-                $this->equalTo($this->customerGroupId)
-            )->will(
-                $this->returnSelf()
-            );
+            'setGroupId'
+        )->with(
+            $this->equalTo($this->customerGroupId)
+        )->will(
+            $this->returnSelf()
+        );
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 
@@ -159,28 +157,28 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->moduleManagerMock->expects(
             $this->once()
         )->method(
-                'isEnabled'
-            )->with(
-                $this->equalTo('Magento_PageCache')
-            )->will(
-                $this->returnValue(false)
-            );
+            'isEnabled'
+        )->with(
+            $this->equalTo('Magento_PageCache')
+        )->will(
+            $this->returnValue(false)
+        );
         $this->customerSessionMock->expects(
             $this->once()
         )->method(
-                'getId'
-            )->will(
-                $this->returnValue($this->customerId)
-            );
+            'getId'
+        )->will(
+            $this->returnValue($this->customerId)
+        );
         $this->customerRepositoryMock->expects(
             $this->once()
         )->method(
-                'getById'
-            )->with(
-                $this->equalTo($this->customerId)
-            )->will(
-                $this->returnValue($this->customerDataMock)
-            );
+            'getById'
+        )->with(
+            $this->equalTo($this->customerId)
+        )->will(
+            $this->returnValue($this->customerDataMock)
+        );
         $this->assertEquals($this->customerDataMock, $this->currentCustomer->getCustomer());
     }
 }

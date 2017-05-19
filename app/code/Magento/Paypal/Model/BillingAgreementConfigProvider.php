@@ -6,8 +6,8 @@
 namespace Magento\Paypal\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 
 /**

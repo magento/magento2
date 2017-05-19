@@ -5,11 +5,10 @@
  */
 namespace Magento\Downloadable\Test\Unit\Observer;
 
-use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

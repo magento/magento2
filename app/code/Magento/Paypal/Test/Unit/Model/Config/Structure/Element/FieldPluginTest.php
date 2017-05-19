@@ -5,10 +5,10 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Config\Structure\Element;
 
-use Magento\Paypal\Model\Config\Structure\Element\FieldPlugin as FieldConfigStructurePlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\RequestInterface;
 use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructureMock;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\Config\Structure\Element\FieldPlugin as FieldConfigStructurePlugin;
 
 class FieldPluginTest extends \PHPUnit_Framework_TestCase
 {

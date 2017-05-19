@@ -12,7 +12,6 @@ namespace Magento\Test\Di {
      */
     class WrappedClass
     {
-
     }
 }
 
@@ -20,7 +19,6 @@ namespace Magento\Test\Di\WrappedClass {
 
     class Logger
     {
-
     }
 }
 //@codingStandardsIgnoreEnd

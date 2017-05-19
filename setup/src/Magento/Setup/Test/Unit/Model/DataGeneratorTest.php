@@ -10,7 +10,6 @@ use Magento\Setup\Model\DataGenerator;
 
 class DataGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-
     const PATH_TO_CSV_FILE = '/_files/dictionary.csv';
 
     /**

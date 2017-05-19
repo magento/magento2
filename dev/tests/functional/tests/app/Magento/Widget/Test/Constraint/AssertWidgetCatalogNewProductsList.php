@@ -6,12 +6,12 @@
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Widget\Test\Fixture\Widget;
 
 /**
  * Check that created Catalog New Products List widget displayed on frontend on Category Page.
@@ -24,7 +24,7 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
      * @var CatalogCategoryView
      */
     protected $catalogCategoryView;
-    
+
     /**
      * Assert that created Catalog New Products List widget displayed on frontend on Category Page.
      *
@@ -45,7 +45,7 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
         AdminCache $adminCache
     ) {
         $this->catalogCategoryView = $catalogCategoryView;
-        
+
         // Flush cache
         $adminCache->open();
         $adminCache->getActionsBlock()->flushMagentoCache();

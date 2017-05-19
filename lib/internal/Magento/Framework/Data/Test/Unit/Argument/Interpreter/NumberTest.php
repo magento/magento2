@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\Number;
+use Magento\Framework\Data\Argument\Interpreter\Number;
 
 class NumberTest extends \PHPUnit_Framework_TestCase
 {

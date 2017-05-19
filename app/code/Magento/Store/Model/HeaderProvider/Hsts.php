@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Model\HeaderProvider;
 
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Adds an Strict-Transport-Security (HSTS) header to HTTP responses.

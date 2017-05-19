@@ -5,8 +5,8 @@
  */
 namespace Magento\MediaStorage\Test\Unit\Helper\File\Storage;
 
-use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 class DatabaseTest extends \PHPUnit_Framework_TestCase
 {

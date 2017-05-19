@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Precondition:

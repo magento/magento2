@@ -5,12 +5,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Api;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {

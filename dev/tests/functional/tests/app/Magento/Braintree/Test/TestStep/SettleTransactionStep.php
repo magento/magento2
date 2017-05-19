@@ -5,12 +5,12 @@
  */
 namespace Magento\Braintree\Test\TestStep;
 
+use Braintree\Gateway;
 use Magento\Braintree\Test\Fixture\BraintreeSandboxCustomer;
+use Magento\Mtf\ObjectManagerFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\ObjectManagerFactory;
-use Braintree\Gateway;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Settle transaction for Braintree Credit Card.

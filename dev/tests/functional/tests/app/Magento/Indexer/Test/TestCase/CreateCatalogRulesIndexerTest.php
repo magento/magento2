@@ -6,22 +6,22 @@
 
 namespace Magento\Indexer\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\CatalogRule\Test\Fixture\CatalogRule;
-use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Util\Command\Cli\Cron;
-use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Mtf\Util\Command\Cli\Indexer;
-use Magento\Indexer\Test\Constraint\AssertIndexerStatus;
-use Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage;
-use Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage;
-use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\TestStep\CreateProductsStep;
+use Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage;
+use Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage;
+use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
-use Magento\Catalog\Test\TestStep\CreateProductsStep;
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Indexer\Test\Constraint\AssertIndexerStatus;
+use Magento\Indexer\Test\Page\Adminhtml\IndexManagement;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\Util\Command\Cli\Cron;
+use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Catalog rules indexer test.

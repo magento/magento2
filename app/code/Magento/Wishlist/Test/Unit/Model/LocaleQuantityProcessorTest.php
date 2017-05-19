@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Model;
 
-use \Magento\Wishlist\Model\LocaleQuantityProcessor;
+use Magento\Wishlist\Model\LocaleQuantityProcessor;
 
 class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
 {

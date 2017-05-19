@@ -5,8 +5,8 @@
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploader;
 
-use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
 
 class SaveTest extends \PHPUnit_Framework_TestCase
 {

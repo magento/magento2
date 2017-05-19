@@ -7,12 +7,12 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit;
 
-use \Magento\Framework\Webapi\ErrorProcessor;
-
 use Magento\Framework\Exception\AuthorizationException;
+
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 {

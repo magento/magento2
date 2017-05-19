@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\ResourceModel\Attribute;
 
-use Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save;
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Catalog\Plugin\Model\ResourceModel\Attribute\Save;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\PageCache\Model\Config;
 
 class SaveTest extends \PHPUnit_Framework_TestCase
 {

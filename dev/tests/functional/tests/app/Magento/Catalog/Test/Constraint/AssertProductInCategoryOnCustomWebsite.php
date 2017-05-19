@@ -7,10 +7,10 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Assert that product is present on the category page on the custom website.

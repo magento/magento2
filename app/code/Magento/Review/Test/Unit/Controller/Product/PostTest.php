@@ -5,8 +5,8 @@
  */
 namespace Magento\Review\Test\Unit\Controller\Product;
 
-use Magento\Review\Model\Review;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Model\Review;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

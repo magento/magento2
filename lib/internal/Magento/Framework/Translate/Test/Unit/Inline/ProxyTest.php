@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Translate\Test\Unit\Inline;
 
-use \Magento\Framework\Translate\Inline\Proxy;
+use Magento\Framework\Translate\Inline\Proxy;
 
 class ProxyTest extends \PHPUnit_Framework_TestCase
 {

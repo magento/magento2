@@ -15,7 +15,7 @@ class UpdateQuoteItemsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\ResourceModel\Quote
      */
-    private $quoteResource ;
+    private $quoteResource;
 
     protected function setUp()
     {

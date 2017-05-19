@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
-use Magento\Framework\Filesystem\DriverInterface;
-use Symfony\Component\Finder\Tests\Iterator\DateRangeFilterIteratorTest;
-
 /**
  * Filesystem client
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

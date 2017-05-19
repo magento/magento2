@@ -6,7 +6,6 @@
 namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Customer\Observer\CustomerLoginSuccessObserver;
 
 /**

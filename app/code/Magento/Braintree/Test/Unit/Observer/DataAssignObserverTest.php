@@ -5,11 +5,11 @@
  */
 namespace Magento\Braintree\Test\Unit\Observer;
 
+use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 
 /**

@@ -5,10 +5,10 @@
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Cms\Api\Data\PageInterface;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {

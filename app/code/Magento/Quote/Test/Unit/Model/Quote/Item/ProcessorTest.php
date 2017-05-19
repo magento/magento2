@@ -6,14 +6,13 @@
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\State;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Processor;
 use Magento\Quote\Model\Quote\ItemFactory;
-use Magento\Quote\Model\Quote\Item;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\App\State;
-use Magento\Framework\DataObject;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Tests for Magento\Quote\Model\Service\Quote\Processor

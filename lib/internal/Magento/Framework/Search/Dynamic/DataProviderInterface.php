@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Search\Dynamic;
 
-use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
 interface DataProviderInterface

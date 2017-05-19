@@ -8,8 +8,6 @@ namespace Magento\Customer\Test\Unit\Observer;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Observer\BeforeAddressSaveObserver;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\State as AppState;
 use Magento\Framework\Registry;
 
 class BeforeAddressSaveObserverTest extends \PHPUnit_Framework_TestCase

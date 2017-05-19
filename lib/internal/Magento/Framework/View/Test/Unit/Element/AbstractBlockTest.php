@@ -5,16 +5,16 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\View\Element\Context;
-use Magento\Framework\Config\View;
-use Magento\Framework\View\ConfigInterface;
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\View;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

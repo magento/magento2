@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -92,7 +90,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [],
             '',
-            false);
+            false
+        );
         $this->searchCriteriaBuilderMock =
             $this->getMock(\Magento\Framework\Api\SearchCriteriaBuilder::class, [], [], '', false);
         $this->searchResultMock =
@@ -109,7 +108,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 '',
-                false);
+                false
+            );
         $this->optionManagementMock =
             $this->getMock(\Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class, [], [], '', false);
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\ModuleStatus;
+use Magento\Setup\Model\ModuleStatus;
 
 class ModuleStatusTest extends \PHPUnit_Framework_TestCase
 {

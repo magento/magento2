@@ -8,9 +8,9 @@ namespace Magento\Deploy\Process;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Service\DeployPackage;
 use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Psr\Log\LoggerInterface;
 
 /**
  * Deployment Queue
@@ -201,8 +201,7 @@ class Queue
                 }
             }
         }
-        if (
-            $parentPackagesDeployed
+        if ($parentPackagesDeployed
             && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
         ) {
             unset($packages[$name]);
@@ -309,7 +308,6 @@ class Queue
                 }
                 return false;
             }
-
         }
         return $package->getState();
     }

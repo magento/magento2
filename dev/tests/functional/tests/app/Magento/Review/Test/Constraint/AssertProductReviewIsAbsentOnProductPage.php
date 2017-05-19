@@ -6,8 +6,8 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that product don't have a review on product page.

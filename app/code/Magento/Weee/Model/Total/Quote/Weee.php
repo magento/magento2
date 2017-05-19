@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -19,6 +17,7 @@ class Weee extends AbstractTotal
      * Constant for weee item code prefix
      */
     const ITEM_CODE_WEEE_PREFIX = 'weee';
+
     /**
      * Constant for weee item type
      */

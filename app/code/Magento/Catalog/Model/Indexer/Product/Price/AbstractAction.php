@@ -240,7 +240,7 @@ abstract class AbstractAction
         ];
         if ($linkField !== 'entity_id') {
             $baseColumns[] = 'cpe.' . $linkField;
-        };
+        }
         $subSelect = $this->_connection->select()->from(
             ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
             array_merge_recursive(

@@ -9,7 +9,7 @@ use Magento\Config\Model\Config\Processor\EnvironmentPlaceholder;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class EnvironmentPlaceholderTest extends \PHPUnit_Framework_TestCase
 {

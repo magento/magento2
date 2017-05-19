@@ -36,22 +36,25 @@
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()): ?>
-                <li class="store-switcher-all <?php if ( ! ($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) {
-                    echo "disabled";
-                } ?> <?php if ( ! $block->hasScopeSelected()) {
-                    ?> current<?php
-                } ?>">
+                <li class="store-switcher-all <?php if (! ($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) {
+    echo "disabled";
+} ?> <?php if (! $block->hasScopeSelected()) {
+    ?> current<?php
+
+} ?>">
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) {
-                        ?>
+    ?>
                         <a data-role="store-view-id" data-value="" href="#">
                             <?php /* @escapeNotVerified */ echo $block->getDefaultSelectionName() ?>
                         </a>
                     <?php
-                    } else {
-                        ?>
+
+} else {
+    ?>
                         <span><?php /* @escapeNotVerified */ echo $block->getDefaultSelectionName() ?></span>
                     <?php
-                    } ?>
+
+} ?>
                 </li>
             <?php endif; ?>
             <?php foreach ($websites as $website): ?>
@@ -61,60 +64,69 @@
                     <?php foreach ($block->getStores($group) as $store): ?>
                         <?php if ($showWebsite == false): ?>
                             <?php $showWebsite = true; ?>
-                            <li class="store-switcher-website <?php if ( ! ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website))) {
-                                echo "disabled";
-                            } ?> <?php if ($block->isWebsiteSelected($website)) {
-                                ?> current<?php
-                            } ?>">
+                            <li class="store-switcher-website <?php if (! ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website))) {
+    echo "disabled";
+} ?> <?php if ($block->isWebsiteSelected($website)) {
+    ?> current<?php
+
+} ?>">
                                 <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)) {
-                                    ?>
+    ?>
                                     <a data-role="website-id" data-value="<?php echo $block->escapeHtml($website->getId()) ?>" href="#">
                                         <?php echo $block->escapeHtml($website->getName()) ?>
                                     </a>
                                 <?php
-                                } else {
-                                    ?>
+
+} else {
+    ?>
                                     <span><?php echo $block->escapeHtml($website->getName()) ?></span>
                                 <?php
-                                } ?>
+
+} ?>
                             </li>
                         <?php endif; ?>
                         <?php if ($showGroup == false): ?>
                             <?php $showGroup = true; ?>
-                            <li class="store-switcher-store <?php if ( ! ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group))) {
-                                echo "disabled";
-                            } ?> <?php if ($block->isStoreGroupSelected($group)) {
-                                ?> current<?php
-                            } ?>">
+                            <li class="store-switcher-store <?php if (! ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group))) {
+    echo "disabled";
+} ?> <?php if ($block->isStoreGroupSelected($group)) {
+    ?> current<?php
+
+} ?>">
                                 <?php if ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group)) {
-                                    ?>
+    ?>
                                     <a data-role="store-group-id" data-value="<?php echo $block->escapeHtml($group->getId()) ?>" href="#">
                                         <?php echo $block->escapeHtml($group->getName()) ?>
                                     </a>
                                 <?php
-                                } else {
-                                    ?>
+
+} else {
+    ?>
                                     <span><?php echo $block->escapeHtml($group->getName()) ?></span>
                                 <?php
-                                } ?>
+
+} ?>
                             </li>
                         <?php endif; ?>
-                        <li class="store-switcher-store-view <?php if ( ! ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store))) {
-                            echo "disabled";
-                        } ?> <?php if ($block->isStoreSelected($store)) {
-                            ?> current<?php
-                        } ?>">
+                        <li class="store-switcher-store-view <?php if (! ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store))) {
+    echo "disabled";
+} ?> <?php if ($block->isStoreSelected($store)) {
+    ?> current<?php
+
+} ?>">
                             <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)) {
-                                ?>
+    ?>
                                 <a data-role="store-view-id" data-value="<?php echo $block->escapeHtml($store->getId()) ?>" href="#">
                                     <?php echo $block->escapeHtml($store->getName()) ?>
                                 </a>
                             <?php
-                            } else {
-                                ?>
+
+} else {
+    ?>
                                 <span><?php echo $block->escapeHtml($store->getName()) ?></span>
                             <?php
-                            } ?>
+
+} ?>
                         </li>
                     <?php endforeach; ?>
                 <?php endforeach; ?>

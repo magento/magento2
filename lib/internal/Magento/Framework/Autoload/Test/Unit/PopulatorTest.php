@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Autoload\Test\Unit;
 
-use \Magento\Framework\Autoload\Populator;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+
+use Magento\Framework\Autoload\Populator;
 
 class PopulatorTest extends \PHPUnit_Framework_TestCase
 {

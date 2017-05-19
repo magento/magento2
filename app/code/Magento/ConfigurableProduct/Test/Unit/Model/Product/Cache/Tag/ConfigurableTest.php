@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Cache\Tag;
 
-use \Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Cache\Tag\Configurable;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +43,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetTagsWithObject()
     {
         $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument must be a product');
-        $this->model->getTags(new \StdClass);
+        $this->model->getTags(new \StdClass());
     }
 
     public function testGetTagsWithVariation()

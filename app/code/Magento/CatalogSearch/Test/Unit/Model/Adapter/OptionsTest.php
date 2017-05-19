@@ -6,8 +6,8 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter;
 
 use Magento\CatalogSearch\Model\Adapter\Options;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,13 +6,13 @@
 
 namespace Magento\Catalog\Model\Attribute;
 
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Store\Model\Store;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 /**
  * Class ScopeOverriddenValue

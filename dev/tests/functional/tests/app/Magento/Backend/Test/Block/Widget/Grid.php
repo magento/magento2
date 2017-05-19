@@ -7,8 +7,8 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Factory\Factory;
 
 /**

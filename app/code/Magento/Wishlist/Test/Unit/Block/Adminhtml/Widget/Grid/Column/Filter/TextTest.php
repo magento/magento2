@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Filter;
 
-use \Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text;
+use Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text;
 
 class TextTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\SelectVersion;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\SelectVersion;
 
 class SelectVersionTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
@@ -374,7 +372,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Data\Form\Element\Fieldset::class,
             [],
             [],
-            '', false, false);
+            '',
+            false,
+            false
+        );
 
         $params = [
             'legend' => 'label',

@@ -80,7 +80,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock->expects($this->once())
             ->method('decode')
-            ->will($this->throwException(new \Zend_Json_Exception));
+            ->will($this->throwException(new \Zend_Json_Exception()));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue('production'));

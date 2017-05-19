@@ -5,13 +5,12 @@
  */
 namespace Magento\TestFramework\ObjectManager;
 
+use Magento\Backend\App\Config as BackendConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\MutableScopeConfig;
 use Magento\Framework\App\ReinitableConfig;
-use Magento\Framework\App\Config as AppConfig;
-use Magento\Backend\App\Config as BackendConfig;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class which hold configurations (preferences, etc...) of integration test framework

@@ -6,7 +6,6 @@
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Framework\App\ObjectManagerFactory;
 
 class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
 {

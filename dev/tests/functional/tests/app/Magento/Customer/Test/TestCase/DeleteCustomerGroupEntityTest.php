@@ -6,11 +6,11 @@
 
 namespace Magento\Customer\Test\TestCase;
 
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Preconditions:

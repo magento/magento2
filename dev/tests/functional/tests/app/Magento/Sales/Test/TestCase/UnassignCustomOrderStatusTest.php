@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Sales\Test\Fixture\OrderStatus;
 use Magento\Sales\Test\Page\Adminhtml\OrderStatusIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

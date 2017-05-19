@@ -7,10 +7,10 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use Magento\Store\Model\Store;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
 
 /**
  * Class AfterImportDataObserverTest
@@ -283,7 +283,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->objectManager = new ObjectManager($this);

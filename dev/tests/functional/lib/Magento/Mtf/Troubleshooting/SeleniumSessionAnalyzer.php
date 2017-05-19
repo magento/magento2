@@ -6,10 +6,10 @@
 
 namespace Magento\Mtf\Troubleshooting;
 
+use Magento\Mtf\Client\Driver\Selenium\Driver;
 use Magento\Mtf\ObjectManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Mtf\Client\Driver\Selenium\Driver;
 
 /**
  * Analyze if Selenium session connection is established.
@@ -63,8 +63,7 @@ class SeleniumSessionAnalyzer extends \Symfony\Component\Console\Command\Command
             $driver = $this->objectManager->create(Driver::class);
             $driver->closeWindow();
         } catch (\Exception $e) {
-            $output->outputMessages(['error' =>
-                [
+            $output->outputMessages(['error' => [
                     'The Selenium Server session cannot be established. Check if:'
                     . PHP_EOL . "\tSelenium server is launched."
                     . PHP_EOL . "\tSelenium server host and port configuration are correct in etc/config.xml."

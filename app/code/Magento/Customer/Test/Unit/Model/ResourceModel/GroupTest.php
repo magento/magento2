@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -63,7 +61,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             ['getDefaultGroup', 'getNotLoggedInGroup', 'isReadOnly', 'getLoggedInGroups', 'getAllCustomersGroup'],
             [],
             '',
-            false);
+            false
+        );
 
         $this->groupModel = $this->getMock(\Magento\Customer\Model\Group::class, [], [], '', false);
 
@@ -112,7 +111,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for save() method when we try to save entity with system's reserved ID.
-     * 
+     *
      * @return void
      */
     public function testSaveWithReservedId()

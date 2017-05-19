@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
+use Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
 
 class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +38,11 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filterMock = $this->getMock(
-            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class, [], [], '', false
+            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->filters = [$this->filterMock];
         $this->layerMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);

@@ -6,7 +6,6 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Checkout\Helper\Data as HelperData;
-use Magento\Checkout\Model\Cart;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Quote\Api\Data\CartItemInterface;

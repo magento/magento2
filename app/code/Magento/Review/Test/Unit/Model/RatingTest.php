@@ -6,8 +6,8 @@
 namespace Magento\Review\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Review\Model\Review;
 use Magento\Review\Model\Rating;
+use Magento\Review\Model\Review;
 
 class RatingTest extends \PHPUnit_Framework_TestCase
 {

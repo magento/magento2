@@ -17,7 +17,7 @@ class AddStockStatusToCollection
      * @var \Magento\CatalogInventory\Helper\Stock
      */
     protected $stockHelper;
-    
+
     /**
      * @param \Magento\CatalogInventory\Model\Configuration $configuration
      * @param \Magento\CatalogInventory\Helper\Stock $stockHelper

@@ -28,7 +28,7 @@
 
 <tbody class="gallery">
 
-<?php $i = 0; if (!is_null($block->getValues())): ?>
+<?php $i = 0; if ($block->getValues() !== null): ?>
     <?php foreach ($block->getValues() as $image): $i++; ?>
         <tr id="<?php echo $block->getElement()->getHtmlId() ?>_tr_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>

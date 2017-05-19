@@ -6,9 +6,9 @@
 
 namespace Magento\Newsletter\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertNewsletterInGrid

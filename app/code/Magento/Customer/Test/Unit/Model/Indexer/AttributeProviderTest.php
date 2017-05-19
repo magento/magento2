@@ -118,8 +118,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertEquals(
-            ['fields' =>
-                [
+            ['fields' => [
                     $existentName => $existentField,
                     $attrName => [
                         'name' => $attrName,
@@ -210,8 +209,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('canBeFilterableInGrid');
 
         $this->assertEquals(
-            ['fields' =>
-                [
+            ['fields' => [
                     $attrName => [
                         'name' => $attrName,
                         'handler' => 'handler',
@@ -320,8 +318,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertEquals(
-            ['fields' =>
-                [
+            ['fields' => [
                     $attrName => [
                         'name' => $attrName,
                         'handler' => \Magento\Framework\Indexer\Handler\AttributeHandler::class,

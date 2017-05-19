@@ -5,13 +5,13 @@
  */
 namespace Magento\Cron\Test\Unit\Console\Command;
 
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Cron\Console\Command\CronInstallCommand;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Crontab\CrontabManagerInterface;
 use Magento\Framework\Crontab\TasksProviderInterface;
-use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class CronInstallCommandTest extends \PHPUnit_Framework_TestCase
 {

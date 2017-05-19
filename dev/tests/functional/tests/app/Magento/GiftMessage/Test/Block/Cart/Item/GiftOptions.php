@@ -6,8 +6,8 @@
 
 namespace Magento\GiftMessage\Test\Block\Cart\Item;
 
-use Magento\Mtf\Block\BlockFactory;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
+use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Block\Mapper;
 use Magento\Mtf\Client\BrowserInterface;

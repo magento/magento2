@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Persistent\Test\Unit\Observer;
 
 /**
@@ -69,8 +67,8 @@ class UpdateCustomerCookiesObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new \Magento\Persistent\Observer\UpdateCustomerCookiesObserver(
-          $this->sessionHelperMock,
-          $this->customerRepository
+            $this->sessionHelperMock,
+            $this->customerRepository
         );
     }
 
@@ -89,7 +87,10 @@ class UpdateCustomerCookiesObserverTest extends \PHPUnit_Framework_TestCase
             $this->getMock(
                 \Magento\Framework\DataObject::class,
                 ['setCustomerId', 'setCustomerGroupId', '__wakeUp'],
-                [], '', false);
+                [],
+                '',
+                false
+            );
         $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
         $this->observerMock
             ->expects($this->once())

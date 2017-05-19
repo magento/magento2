@@ -433,7 +433,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function addProductDataProvider()
     {
-        $obj = new ObjectManagerHelper($this) ;
+        $obj = new ObjectManagerHelper($this);
         $data = ['qty' => 5.5, 'sku' => 'prod'];
 
         return [

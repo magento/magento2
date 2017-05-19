@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 class EraserTest extends \PHPUnit_Framework_TestCase
@@ -39,7 +37,9 @@ class EraserTest extends \PHPUnit_Framework_TestCase
         $this->indexerHelper = $this->getMock(
             \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             [],
-            [], '', false
+            [],
+            '',
+            false
         );
         $this->indexerHelper->expects($this->any())->method('getTable')->will($this->returnArgument(0));
         $this->indexerHelper->expects($this->any())->method('getFlatTableName')->will($this->returnValueMap([

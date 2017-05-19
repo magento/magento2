@@ -6,8 +6,8 @@
 
 namespace Magento\RequireJs\Test\Unit\Model;
 
-use \Magento\RequireJs\Model\FileManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\RequireJs\Model\FileManager;
 
 class FileManagerTest extends \PHPUnit_Framework_TestCase
 {

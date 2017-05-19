@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
@@ -264,6 +262,7 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Returns transaction parent
      *
+     * @param string $txnId
      * @return string
      */
     public function setParentTransactionId($txnId)
@@ -993,6 +992,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Triggers invoice pay and updates base_amount_paid_online total.
      *
      * @param \Magento\Sales\Model\Order\Invoice|false $invoice
+     * @return void
      */
     protected function updateBaseAmountPaidOnlineTotal($invoice)
     {
@@ -1007,6 +1007,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Sets order state to 'processing' with appropriate message
      *
      * @param \Magento\Framework\Phrase|string $message
+     * @return void
      */
     protected function setOrderStateProcessing($message)
     {
@@ -1020,6 +1021,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param Invoice|false $invoice
      * @param string $message
+     * @return void
      */
     protected function cancelInvoiceAndRegisterCancellation($invoice, $message)
     {
@@ -1035,6 +1037,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param string $message
      * @param int|null $transactionId
+     * @return void
      */
     protected function setOrderStatePaymentReview($message, $transactionId)
     {
@@ -1171,6 +1174,11 @@ class Payment extends Info implements OrderPaymentInterface
         return $builder->build($type);
     }
 
+    /**
+     * @param Transaction|null $transaction
+     * @param string $message
+     * @return void
+     */
     public function addTransactionCommentsToOrder($transaction, $message)
     {
         $order = $this->getOrder();
@@ -1247,14 +1255,13 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (
-                is_string($preparedMessage)
+            if (is_string($preparedMessage)
                 || $preparedMessage instanceof \Magento\Framework\Phrase
             ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
             } elseif (is_object(
-                    $preparedMessage
-                ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
+                $preparedMessage
+            ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
             ) {
                 $comment = $preparedMessage->getComment() . ' ' . $messagePrependTo;
                 $preparedMessage->setComment($comment);
@@ -1358,10 +1365,10 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * Prepare credit memo
      *
-     * @param $amount
-     * @param $baseGrandTotal
+     * @param float $amount
+     * @param float $baseGrandTotal
      * @param false|Invoice $invoice
-     * @return mixed
+     * @return Creditmemo
      */
     protected function prepareCreditMemo($amount, $baseGrandTotal, $invoice)
     {
@@ -1394,7 +1401,8 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->transactionManager->isTransactionExists(
             $this->getTransactionId(),
             $this->getId(),
-            $this->getOrder()->getId());
+            $this->getOrder()->getId()
+        );
     }
 
     /**
@@ -1414,8 +1422,8 @@ class Payment extends Info implements OrderPaymentInterface
         }
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
             if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
-                    $invoice->getId()
-                )
+                $invoice->getId()
+            )
             ) {
                 $invoice->setTransactionId($transactionId);
                 return $invoice;

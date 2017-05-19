@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
-use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Edit attribute form on catalog product edit page.

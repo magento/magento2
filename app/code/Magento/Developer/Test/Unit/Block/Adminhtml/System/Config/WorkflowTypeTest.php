@@ -5,11 +5,11 @@
  */
 namespace Magento\Developer\Test\Unit\Block\Adminhtml\System\Config;
 
-use Magento\Developer\Block\Adminhtml\System\Config\WorkflowType;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Backend\Block\Template\Context;
+use Magento\Developer\Block\Adminhtml\System\Config\WorkflowType;
 use Magento\Framework\App\State;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
 {

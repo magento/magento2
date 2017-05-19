@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Option;
 
-use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\NotEmpty;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

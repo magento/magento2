@@ -4,11 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
-
-use Magento\Framework\Exception\NoSuchEntityException;
 
 class ManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -218,7 +214,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->will($this->throwException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))));
+                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))
+            ));
         $this->model->setProductLinks($productSku, $links);
     }
 

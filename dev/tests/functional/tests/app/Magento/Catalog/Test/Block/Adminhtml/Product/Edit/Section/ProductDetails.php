@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
-use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
  * Product details section.

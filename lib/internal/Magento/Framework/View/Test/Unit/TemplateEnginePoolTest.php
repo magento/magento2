@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
-use \Magento\Framework\View\TemplateEnginePool;
+use Magento\Framework\View\TemplateEnginePool;
 
 class TemplateEnginePoolTest extends \PHPUnit_Framework_TestCase
 {

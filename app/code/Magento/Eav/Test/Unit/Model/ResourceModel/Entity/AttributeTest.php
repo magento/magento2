@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -308,8 +306,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue([
                 new \Magento\Framework\DataObject(['id' => 0]),
-                new \Magento\Framework\DataObject(['id' => 1]), ]
-            )
+                new \Magento\Framework\DataObject(['id' => 1]), ])
         );
 
         /** @var $resource \Magento\Framework\App\ResourceConnection */

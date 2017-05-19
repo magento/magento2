@@ -8,8 +8,8 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Adminhtml customer view personal information sales block.
@@ -158,7 +158,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
-
         $this->customerRegistry = $customerRegistry;
     }
 
@@ -170,7 +169,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getCustomerRegistry()
     {
-
         if (!($this->customerRegistry instanceof \Magento\Customer\Model\CustomerRegistry)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\CustomerRegistry::class

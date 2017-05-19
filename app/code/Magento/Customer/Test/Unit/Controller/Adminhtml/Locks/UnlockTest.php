@@ -7,8 +7,6 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Locks;
 
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\DataObject;
-use Magento\Framework\Phrase;
 
 /**
  * Test class for \Magento\Customer\Controller\Adminhtml\Locks\Unlock testing

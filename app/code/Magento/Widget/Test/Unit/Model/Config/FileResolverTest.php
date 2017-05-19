@@ -7,7 +7,7 @@
 namespace Magento\Widget\Test\Unit\Model\Config;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use \Magento\Widget\Model\Config\FileResolver;
+use Magento\Widget\Model\Config\FileResolver;
 
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {

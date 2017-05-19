@@ -5,13 +5,12 @@
  */
 namespace Magento\BundleImportExport\Model\Export;
 
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
-use Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Model\Import as ImportModel;
-use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class RowCustomizer

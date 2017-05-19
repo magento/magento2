@@ -8,9 +8,9 @@ namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
-use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Wishlist\Test\Page\WishlistIndex;
 
 /**
  * Assert that product is present in default wishlist.

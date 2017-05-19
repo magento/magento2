@@ -7,8 +7,8 @@
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 
 /**
  * Assert that category url rewrites are present in grid.

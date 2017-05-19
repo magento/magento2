@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Http;
 
-use \Magento\Framework\App\Http\Context;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class ContextTest extends \PHPUnit_Framework_TestCase

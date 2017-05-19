@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Catalog Template Filter Model
  *
@@ -13,6 +11,8 @@
  * @todo        Needs to be reimplemented to get rid of the copypasted methods
  */
 namespace Magento\Catalog\Model\Template;
+
+use Magento\Framework\UrlInterface;
 
 /**
  * Work with catalog(store, website) urls
@@ -128,7 +128,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function mediaDirective($construction)
     {
         $params = $this->getParameters($construction[2]);
-        return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
+        return $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**

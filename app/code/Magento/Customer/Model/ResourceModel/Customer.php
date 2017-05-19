@@ -7,8 +7,8 @@ namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Validator\Exception as ValidatorException;
 
 /**
  * Customer entity resource model

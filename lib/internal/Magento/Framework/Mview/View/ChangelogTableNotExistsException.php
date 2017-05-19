@@ -13,5 +13,4 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class ChangelogTableNotExistsException extends LocalizedException
 {
-
 }

@@ -6,8 +6,8 @@
 
 namespace Magento\Swagger\Test\Constraint;
 
-use Magento\Swagger\Test\Page\SwaggerUiPage;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Swagger\Test\Page\SwaggerUiPage;
 
 /**
  * Class AssertServiceContentDisplay

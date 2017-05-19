@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\IndexersStatesApplyFixture;
+use Magento\Setup\Fixtures\IndexersStatesApplyFixture;
 
 class IndexersStatesApplyFixtureTest extends \PHPUnit_Framework_TestCase
 {

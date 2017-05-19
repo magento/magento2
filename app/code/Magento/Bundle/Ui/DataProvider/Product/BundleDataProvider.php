@@ -5,9 +5,9 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product;
 
+use Magento\Bundle\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
-use Magento\Bundle\Helper\Data;
 
 class BundleDataProvider extends ProductDataProvider
 {

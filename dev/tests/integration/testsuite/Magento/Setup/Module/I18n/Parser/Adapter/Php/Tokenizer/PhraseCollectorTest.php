@@ -36,7 +36,7 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testParse()
     {
-        $file = __DIR__.'/_files/objectsCode.php.txt';
+        $file = __DIR__ . '/_files/objectsCode.php.txt';
         $this->phraseCollector->setIncludeObjects();
         $this->phraseCollector->parse($file);
         $expectation = [

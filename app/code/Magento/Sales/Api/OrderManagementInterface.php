@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Api;
 
 /**
@@ -26,6 +24,7 @@ interface OrderManagementInterface
      */
     public function cancel($id);
 
+    // @codingStandardsIgnoreStart
     /**
      * Lists comments for a specified order.
      *
@@ -33,6 +32,7 @@ interface OrderManagementInterface
      * @return \Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface Order status history search results interface.
      */
     public function getCommentsList($id);
+    // @codingStandardsIgnoreEnd
 
     /**
      * Adds a comment to a specified order.

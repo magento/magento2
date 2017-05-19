@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Product;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action as ProductActionIndexerPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action as ProductActionIndexerPlugin;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ActionTest extends \PHPUnit_Framework_TestCase
 {

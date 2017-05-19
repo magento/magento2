@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
-use Magento\Payment\Model\Method;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\Method;
 
 class InfoTest extends \PHPUnit_Framework_TestCase
 {

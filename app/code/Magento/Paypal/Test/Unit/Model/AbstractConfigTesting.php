@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
-use \Magento\Paypal\Model\AbstractConfig;
+use Magento\Paypal\Model\AbstractConfig;
 
 /**
  * Class AbstractConfigTesting
@@ -13,5 +13,4 @@ use \Magento\Paypal\Model\AbstractConfig;
  */
 class AbstractConfigTesting extends AbstractConfig
 {
-
 }

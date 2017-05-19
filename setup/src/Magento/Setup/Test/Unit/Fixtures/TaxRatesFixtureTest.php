@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\TaxRatesFixture;
+use Magento\Setup\Fixtures\TaxRatesFixture;
 
 class TaxRatesFixtureTest extends \PHPUnit_Framework_TestCase
 {

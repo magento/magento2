@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-use \Magento\Sales\Controller\Adminhtml\Order\Email;
-
 use Magento\Framework\App\Action\Context;
+
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Order\Email;
 
 /**
  * Class EmailTest

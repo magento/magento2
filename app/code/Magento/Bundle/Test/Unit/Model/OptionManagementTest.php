@@ -7,7 +7,7 @@
 
 namespace Magento\Bundle\Test\Unit\Model;
 
-use \Magento\Bundle\Model\OptionManagement;
+use Magento\Bundle\Model\OptionManagement;
 
 class OptionManagementTest extends \PHPUnit_Framework_TestCase
 {

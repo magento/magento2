@@ -5,8 +5,6 @@
  */
 namespace Magento\SalesRule\Test\Unit\Model;
 
-use Magento\Framework\Api\SortOrder;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

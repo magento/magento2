@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 class PriceModifierTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +33,11 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
         $this->productMock =
             $this->getMock(
                 \Magento\Catalog\Model\Product::class,
-                ['getData', 'setData', '__wakeup'], [], '', false);
+                ['getData', 'setData', '__wakeup'],
+                [],
+                '',
+                false
+            );
         $this->productRepositoryMock = $this->getMock(
             \Magento\Catalog\Model\ProductRepository::class,
             [],

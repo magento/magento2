@@ -5,15 +5,12 @@
  */
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Api\Data\GroupInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\ScopeTreeProvider;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Website;
 
 class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase

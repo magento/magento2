@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Catalog\Model\ResourceModel\CategoryFactory;
-use Magento\Catalog\Model\ResourceModel\Category;
-use Magento\Framework\DB\Select;
-use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\CategoryFactory;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class DataCategoryHashMapTest

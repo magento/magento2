@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Fixture\Category;
 
-use Magento\Mtf\Fixture\DataSource;
 use Magento\Cms\Test\Fixture\CmsBlock;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**

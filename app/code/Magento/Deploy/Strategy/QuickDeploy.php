@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Strategy;
 
-use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
 
 /**
@@ -90,8 +90,7 @@ class QuickDeploy implements StrategyInterface
             if ($level > 1) {
                 $parentPackage = null;
                 $packageId = $package->getArea() . '/' . $package->getTheme();
-                if (
-                    // use base package if it is not the same as current
+                if (// use base package if it is not the same as current
                     isset($this->baseLocalePackages[$packageId])
                     && $package !== $this->baseLocalePackages[$packageId]
                 ) {

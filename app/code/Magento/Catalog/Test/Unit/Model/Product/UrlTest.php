@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\Url;
+use Magento\Catalog\Model\Product\Url;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
 {

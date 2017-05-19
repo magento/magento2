@@ -5,9 +5,9 @@
  */
 namespace Magento\ProductAlert\Controller;
 
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 
 abstract class Add extends Action

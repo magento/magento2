@@ -6,8 +6,8 @@
 
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class MassDeleteTest extends \PHPUnit_Framework_TestCase
 {

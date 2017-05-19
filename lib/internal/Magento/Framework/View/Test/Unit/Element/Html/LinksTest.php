@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\View\Element\Template\Context;
 
 class LinksTest extends \PHPUnit_Framework_TestCase

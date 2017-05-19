@@ -5,7 +5,6 @@
  */
 namespace Magento\Deploy\Console;
 
-use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\Validator\Locale;
 use Symfony\Component\Console\Input\InputInterface;

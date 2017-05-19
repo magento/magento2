@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\CollectionProvider;
 use Magento\Catalog\Model\ProductLink\CollectionProviderInterface;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterInterface;
 use Magento\Catalog\Model\ProductLink\Converter\ConverterPool;
-use Magento\Catalog\Model\Product;
 
 class CollectionProviderTest extends \PHPUnit_Framework_TestCase
 {

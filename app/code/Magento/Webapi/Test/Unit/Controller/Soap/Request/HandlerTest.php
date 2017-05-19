@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Webapi\Test\Unit\Controller\Soap\Request;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -73,13 +71,15 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             [],
             [],
             '',
-            false);
+            false
+        );
         $this->_methodsMapProcessorMock = $this->getMock(
             \Magento\Framework\Reflection\MethodsMap::class,
             [],
             [],
             '',
-            false);
+            false
+        );
 
         /** Initialize SUT. */
         $this->_handler = new \Magento\Webapi\Controller\Soap\Request\Handler(

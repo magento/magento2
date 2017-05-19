@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\GiftMessageManager;
@@ -68,7 +66,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->quoteItemMock = $this->getMock(
             \Magento\Quote\Model\Quote\Item::class,
             [
@@ -79,7 +78,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->quoteAddressMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address::class,
@@ -92,7 +92,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->quoteAddressItemMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address\Item::class,
@@ -104,7 +105,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->giftMessageMock = $this->getMock(
             \Magento\GiftMessage\Model\Message::class,
@@ -123,7 +125,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
 
         $this->model = new \Magento\GiftMessage\Model\GiftMessageManager($this->messageFactoryMock);
     }

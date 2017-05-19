@@ -6,12 +6,12 @@
 
 namespace Magento\Cms\Test\Constraint;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Fixture\CmsBlock;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Assert that created CMS block non visible on frontend category page.

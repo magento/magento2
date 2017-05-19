@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Sales\Test\Block\Adminhtml\Order\AbstractItemsNewBlock;
 use Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form\Items\Product;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Block for items to invoice on new invoice page.

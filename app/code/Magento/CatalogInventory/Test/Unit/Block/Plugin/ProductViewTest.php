@@ -45,8 +45,7 @@ class ProductViewTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetQuantityValidators()
     {
         $result = [
-            'validate-item-quantity' =>
-                [
+            'validate-item-quantity' => [
                     'minAllowed' => 0.5,
                     'maxAllowed' => 5,
                     'qtyIncrements' => 3

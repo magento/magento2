@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Reload;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -14,7 +15,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Ui\Component\Wrapper\UiComponent;
 
 /**

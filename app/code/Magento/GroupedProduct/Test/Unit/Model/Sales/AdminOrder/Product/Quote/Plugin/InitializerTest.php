@@ -5,13 +5,13 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
-use Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer as QuoteInitializerPlugin;
-use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer as QuoteInitializer;
-use Magento\Quote\Model\Quote;
 use Magento\Catalog\Model\Product;
-use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer as QuoteInitializerPlugin;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer as QuoteInitializer;
 
 class InitializerTest extends \PHPUnit_Framework_TestCase
 {

@@ -96,12 +96,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,
             'Magento_SecondModule',
-            $this->_packPath. '/app/code/Magento/SecondModule'
+            $this->_packPath . '/app/code/Magento/SecondModule'
         );
         ComponentRegistrar::register(
             ComponentRegistrar::THEME,
             'adminhtml/default',
-            $this->_packPath. '/app/design/adminhtml/default'
+            $this->_packPath . '/app/design/adminhtml/default'
         );
 
         $this->_generator->generate($this->_dictionaryPath, $this->_locale);

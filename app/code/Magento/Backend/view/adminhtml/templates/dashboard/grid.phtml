@@ -61,8 +61,8 @@ deps.push('Magento_Sales/order/create/form');
 
 deps.push('mage/adminhtml/grid');
 
-require(deps, function(<?php echo ($block->getDependencyJsObject() ? 'registry' : '') ?>){
-    <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
+require(deps, function(<?php echo($block->getDependencyJsObject() ? 'registry' : '') ?>){
+    <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed?>
 
     <?php if ($block->getDependencyJsObject()): ?>
         registry.get('<?php /* @escapeNotVerified */ echo $block->getDependencyJsObject() ?>', function (<?php /* @escapeNotVerified */ echo $block->getDependencyJsObject() ?>) {

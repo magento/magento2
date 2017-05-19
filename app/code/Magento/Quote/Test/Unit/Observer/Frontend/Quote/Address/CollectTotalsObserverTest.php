@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
 /**
@@ -269,8 +267,7 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId')
-        );
+            ->will($this->returnValue('customerGroupId'));
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
         $this->groupManagementMock->expects($this->once())
             ->method('getDefaultGroup')
@@ -407,6 +404,5 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->execute($this->observerMock);
-
     }
 }

@@ -6,15 +6,15 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
-use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Framework\DB\Select;
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class TermDropdownStrategyTest.

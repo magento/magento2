@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Reader;
 
-use \Magento\Framework\ObjectManager\Config\Reader\DomFactory;
+use Magento\Framework\ObjectManager\Config\Reader\DomFactory;
 
 class DomFactoryTest extends \PHPUnit_Framework_TestCase
 {

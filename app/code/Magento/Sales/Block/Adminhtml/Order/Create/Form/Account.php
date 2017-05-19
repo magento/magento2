@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -167,7 +166,9 @@ class Account extends AbstractForm
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }
-        $data = isset($customer) ? $this->_extensibleDataObjectConverter->toFlatArray($customer, [], \Magento\Customer\Api\Data\CustomerInterface::class) : [];
+        $data = isset($customer)
+            ? $this->_extensibleDataObjectConverter->toFlatArray($customer, [], CustomerInterface::class)
+            : [];
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;

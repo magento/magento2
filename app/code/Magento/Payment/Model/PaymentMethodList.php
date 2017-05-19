@@ -61,7 +61,6 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
 
         $methodList = array_map(
             function (MethodInterface $methodInstance) use ($storeId) {
-
                 return $this->methodFactory->create([
                     'code' => (string)$methodInstance->getCode(),
                     'title' => (string)$methodInstance->getTitle(),

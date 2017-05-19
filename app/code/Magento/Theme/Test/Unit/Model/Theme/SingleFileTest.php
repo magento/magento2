@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
-use \Magento\Theme\Model\Theme\SingleFile;
+use Magento\Theme\Model\Theme\SingleFile;
 
 class SingleFileTest extends \PHPUnit_Framework_TestCase
 {

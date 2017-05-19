@@ -6,8 +6,6 @@
 
 namespace Magento\Reports\Model\ResourceModel\Quote\Item;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Collection of Magento\Quote\Model\Quote\Item
  *
@@ -193,7 +191,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         )->joinInner(
             ['product_price' => $productAttrPrice->getBackend()->getTable()],
             "product_price.{$linkField} = main_table.{$linkField}"
-            ." AND product_price.attribute_id = {$productAttrPriceId}",
+            . " AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value')]
         )->where("main_table.entity_id IN (?)", $productIds);
 

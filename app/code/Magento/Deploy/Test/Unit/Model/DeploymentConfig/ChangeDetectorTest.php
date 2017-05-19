@@ -5,10 +5,10 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 
 class ChangeDetectorTest extends \PHPUnit_Framework_TestCase
 {

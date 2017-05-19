@@ -7,10 +7,10 @@
 namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Cart\Item;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
 {

@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Review\Helper;
+
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Default review helper
@@ -76,7 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getIsGuestAllowToWrite()
     {
-        return $this->scopeConfig->isSetFlag(self::XML_REVIEW_GUETS_ALLOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->isSetFlag(self::XML_REVIEW_GUETS_ALLOW, ScopeInterface::SCOPE_STORE);
     }
 
     /**

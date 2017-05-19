@@ -6,10 +6,10 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Model\Product\Type;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Controller\Adminhtml\Product\Builder as CatalogProductBuilder;
 use Magento\Framework\App\RequestInterface;
 
 class Plugin

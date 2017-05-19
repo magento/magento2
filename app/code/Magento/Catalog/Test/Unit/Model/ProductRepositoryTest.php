@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -267,12 +265,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->contentValidatorMock = $this->getMockBuilder(
-            \Magento\Framework\Api\ImageContentValidatorInterface::class)
+            \Magento\Framework\Api\ImageContentValidatorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->linkTypeProviderMock = $this->getMock(
             \Magento\Catalog\Model\Product\LinkTypeProvider::class,
-            ['getLinkTypes'], [], '', false);
+            ['getLinkTypes'],
+            [],
+            '',
+            false
+        );
         $this->imageProcessorMock = $this->getMock(
             \Magento\Framework\Api\ImageProcessorInterface::class,
             [],
@@ -1289,8 +1292,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 2 => ['second'],
                 3 => ['third']
             ]);
-        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([1,2,3]);
-        $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn([2,3]);
+        $this->productMock->expects($this->once())->method('getWebsiteIds')->willReturn([1, 2, 3]);
+        $this->productMock->expects($this->once())->method('setWebsiteIds')->willReturn([2, 3]);
 
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }

@@ -6,9 +6,9 @@
 
 namespace Magento\Payment\Test\Unit\Helper;
 
-use \Magento\Payment\Helper\Data;
-
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
+
+use Magento\Payment\Helper\Data;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

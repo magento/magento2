@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
 /**
@@ -37,11 +35,11 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ),
             'calculatorFactory' => $this->getMock(
                 \Magento\Framework\Math\CalculatorFactory::class,
-                    [],
-                    [],
-                    '',
-                    false
-                ),
+                [],
+                [],
+                '',
+                false
+            ),
             'invoiceItemCollectionFactory' => $this->getMock(
                 \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class,
                 [],

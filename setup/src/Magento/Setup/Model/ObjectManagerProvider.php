@@ -6,11 +6,11 @@
 
 namespace Magento\Setup\Model;
 
-use Symfony\Component\Console\Application;
 use Magento\Framework\Console\CommandListInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Symfony\Component\Console\Application;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Object manager provider

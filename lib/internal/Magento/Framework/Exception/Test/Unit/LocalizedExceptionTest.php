@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Exception\Test\Unit;
 
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**

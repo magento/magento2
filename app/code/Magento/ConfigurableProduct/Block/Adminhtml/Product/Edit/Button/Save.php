@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Button;
 
-use Magento\Ui\Component\Control\Container;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
+use Magento\Ui\Component\Control\Container;
 
 /**
  * Class Save

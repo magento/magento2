@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\ArrayType;
+use Magento\Framework\Data\Argument\Interpreter\ArrayType;
 
 class ArrayTypeTest extends \PHPUnit_Framework_TestCase
 {

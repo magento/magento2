@@ -5,9 +5,8 @@
  */
 namespace Magento\Catalog\Api;
 
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CartItemRepositoryTest extends WebapiAbstract
 {
@@ -62,7 +61,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'sku' => $item->getSku(),
                 'qty' => $item->getQty(),
                 'name' => $item->getName(),
-                
+
                 'product_type' => $item->getProductType(),
                 'quote_id' => $item->getQuoteId(),
                 'product_option' => [

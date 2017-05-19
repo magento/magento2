@@ -12,8 +12,8 @@ use Magento\Deploy\Package\Processor\ProcessorInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\View\Url\CssResolver;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Url\CssResolver;
 
 /**
  * Post-processor scans through all CSS files and correct misleading URLs

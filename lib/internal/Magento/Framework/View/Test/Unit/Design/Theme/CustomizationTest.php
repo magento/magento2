@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
-use \Magento\Framework\View\Design\Theme\Customization;
+use Magento\Framework\View\Design\Theme\Customization;
 
 class CustomizationTest extends \PHPUnit_Framework_TestCase
 {

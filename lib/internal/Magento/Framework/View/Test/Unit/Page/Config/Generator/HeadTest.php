@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
-use \Magento\Framework\View\Page\Config\Generator\Head;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 use Magento\Framework\View\Page\Config as PageConfig;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Page\Config\Generator\Head;
 
 /**
  * Test for page config generator model

@@ -6,8 +6,8 @@
 
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
-use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\CustomerImportExport\Model\Import\Address;
+use Magento\ImportExport\Model\Import\AbstractEntity;
 
 /**
  * Class AddressTest

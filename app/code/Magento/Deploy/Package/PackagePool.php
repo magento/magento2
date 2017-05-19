@@ -8,8 +8,8 @@ namespace Magento\Deploy\Package;
 use Magento\Deploy\Collector\Collector;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\AppInterface;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Deployment Packages Pool class
@@ -185,8 +185,7 @@ class PackagePool
                     continue;
                 }
                 foreach ($inheritedThemes as $inheritedTheme) {
-                    if (
-                        $package->getTheme() === $inheritedTheme->getThemePath()
+                    if ($package->getTheme() === $inheritedTheme->getThemePath()
                         && $package->getArea() === $inheritedTheme->getArea()
                     ) {
                         $this->ensurePackage([

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Controller;
 
 use Magento\Framework\Message\MessageInterface;
@@ -359,12 +357,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
      * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
+    // @codingStandardsIgnoreEnd
     public function testForgotPasswordPostAction()
     {
         $email = 'customer@example.com';
@@ -458,8 +458,11 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
-        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
-            .'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />', $body);
+        $this->assertContains(
+            '<input type="checkbox" name="change_password" id="change-password" '
+            . 'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />',
+            $body
+        );
     }
 
     /**
@@ -483,11 +486,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoConfigFixture current_store customer/account_information/change_email_template customer_account_information_change_email_and_password_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
+    // @codingStandardsIgnoreEnd
     public function testEditPostAction()
     {
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
@@ -524,11 +529,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals('johndoe@email.com', $customer->getEmail());
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template customer_account_information_change_email_and_password_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
+    // @codingStandardsIgnoreEnd
     public function testChangePasswordEditPostAction()
     {
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
@@ -544,7 +551,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get(
-                    \Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
+                    \Magento\Framework\Data\Form\FormKey::class
+                )->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
@@ -605,7 +613,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get(
-                    \Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
+                    \Magento\Framework\Data\Form\FormKey::class
+                )->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
@@ -635,7 +644,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get(
-                    \Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
+                    \Magento\Framework\Data\Form\FormKey::class
+                )->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',

@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 use Magento\Framework\Serialize\SerializerInterface;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
-use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 
 /**
  * Gathers method metadata information.

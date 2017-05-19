@@ -6,9 +6,9 @@
 namespace Magento\Webapi\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 use Magento\Webapi\Model\Config;
 use Magento\Webapi\Model\Config\Reader;
-use Magento\Webapi\Model\Cache\Type\Webapi;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

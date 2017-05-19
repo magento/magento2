@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Model\Layer;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel;
 
 class Category extends \Magento\Catalog\Model\Layer
 {

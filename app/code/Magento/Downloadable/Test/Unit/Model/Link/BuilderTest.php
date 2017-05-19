@@ -6,9 +6,9 @@
 namespace Magento\Downloadable\Test\Unit\Model\Link;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
+use Magento\Downloadable\Helper\Download;
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Builder;
-use Magento\Downloadable\Helper\Download;
 
 /**
  * Class BuilderTest
@@ -68,7 +68,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->linkMock = $this->getMockBuilder(LinkInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $this->service = $objectManagerHelper->getObject(
             Builder::class,
             [

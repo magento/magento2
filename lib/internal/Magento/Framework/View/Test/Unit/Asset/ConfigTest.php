@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Config;
 use Magento\Store\Model\ScopeInterface;
 

@@ -6,10 +6,10 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Preconditions:

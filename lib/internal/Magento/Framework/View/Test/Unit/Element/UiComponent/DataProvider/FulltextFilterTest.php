@@ -9,18 +9,18 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
 use Magento\Framework\Mview\View\Collection as MviewCollection;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FulltextFilterTest

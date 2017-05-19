@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\Area;
+use Magento\Framework\App\Area;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

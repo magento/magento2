@@ -5,8 +5,8 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data;
 
-use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Model\InfoInterface;
 
 /**
@@ -40,11 +40,11 @@ class PaymentDataObjectTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrder()
     {
-        $this->assertSame($this->orderMock, $this->model->getOrder()) ;
+        $this->assertSame($this->orderMock, $this->model->getOrder());
     }
 
     public function testGetPayment()
     {
-        $this->assertSame($this->paymentMock, $this->model->getPayment()) ;
+        $this->assertSame($this->paymentMock, $this->model->getPayment());
     }
 }

@@ -33,7 +33,7 @@ class AssertCategoryForAssignedProducts extends AbstractConstraint
         $categoryUrlKey = $category->hasData('url_key')
             ? strtolower($category->getUrlKey())
             : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
-        
+
         $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
 
         $browser->open($_ENV['app_frontend_url'] . $categoryUrlKey . '.html');

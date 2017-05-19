@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner;

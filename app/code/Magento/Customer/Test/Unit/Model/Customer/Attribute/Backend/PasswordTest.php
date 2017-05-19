@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Backend;
 
+use Magento\Customer\Model\Customer\Attribute\Backend\Password;
 use Magento\Framework\DataObject;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Customer\Model\Customer\Attribute\Backend\Password;
 
 class PasswordTest extends \PHPUnit_Framework_TestCase
 {

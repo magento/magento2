@@ -6,7 +6,6 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;

@@ -5,14 +5,14 @@
  */
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order\Validation;
 
-use Magento\SalesInventory\Model\Order\ReturnValidator;
-use Magento\SalesInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments;
-use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
-use Magento\Sales\Model\ValidatorResultInterface;
-use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
+use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
+use Magento\Sales\Model\ValidatorResultInterface;
+use Magento\SalesInventory\Model\Order\ReturnValidator;
+use Magento\SalesInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments;
 
 /**
  * Class OrderRefundCreatetionArgumentsTest

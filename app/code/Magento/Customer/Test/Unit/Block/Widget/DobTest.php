@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Dob;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
 
 /**
@@ -337,10 +335,10 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects(
             $this->once()
         )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+            'getValidationRules'
+        )->will(
+            $this->returnValue($validationRules)
+        );
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -407,10 +405,10 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects(
             $this->once()
         )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+            'getValidationRules'
+        )->will(
+            $this->returnValue($validationRules)
+        );
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 
@@ -465,7 +463,8 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_block->getMaxDateRange());
     }
     
-    public function testGetHtmlExtraParamsWithoutRequiredOption() {
+    public function testGetHtmlExtraParamsWithoutRequiredOption()
+    {
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(false);
@@ -473,7 +472,8 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_block->getHtmlExtraParams(), 'data-validate="{\'validate-date-au\':true}"');
     }
 
-    public function testGetHtmlExtraParamsWithRequiredOption() {
+    public function testGetHtmlExtraParamsWithRequiredOption()
+    {
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Asset\MaterializationStrategy;
 
-use \Magento\Framework\App\View\Asset\MaterializationStrategy\Copy;
+use Magento\Framework\App\View\Asset\MaterializationStrategy\Copy;
 
 class CopyTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->copyPublisher = new Copy;
+        $this->copyPublisher = new Copy();
     }
 
     public function testPublishFile()

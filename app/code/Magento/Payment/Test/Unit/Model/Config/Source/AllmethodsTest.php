@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
-use \Magento\Payment\Model\Config\Source\Allmethods;
+use Magento\Payment\Model\Config\Source\Allmethods;
 
 class AllmethodsTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +35,9 @@ class AllmethodsTest extends \PHPUnit_Framework_TestCase
     {
         $expectedArray = ['key' => 'value'];
         $this->_paymentData->expects($this->once())->method('getPaymentMethodList')->with(
-            true, true, true
+            true,
+            true,
+            true
         )->will($this->returnValue($expectedArray));
         $this->assertEquals($expectedArray, $this->_model->toOptionArray());
     }

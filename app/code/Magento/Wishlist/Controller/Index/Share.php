@@ -5,7 +5,6 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 class Share extends \Magento\Wishlist\Controller\AbstractIndex

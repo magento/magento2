@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Validator;
 
-use Magento\Setup\Validator\DbValidator;
-use Magento\Setup\Module\ConnectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Validator\DbValidator;
 
 class DbValidatorTest extends \PHPUnit_Framework_TestCase
 {

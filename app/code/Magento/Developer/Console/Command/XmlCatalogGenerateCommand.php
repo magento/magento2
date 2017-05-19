@@ -9,8 +9,8 @@ namespace Magento\Developer\Console\Command;
 use Magento\Framework\Exception\InputException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -85,7 +85,7 @@ class XmlCatalogGenerateCommand extends Command
                     self::IDE_OPTION,
                     null,
                     InputOption::VALUE_REQUIRED,
-                    'Format in which catalog will be generated. Supported: ['.
+                    'Format in which catalog will be generated. Supported: [' .
                     implode(', ', $this->getSupportedFormats()) . ']',
                     'phpstorm'
                 ),

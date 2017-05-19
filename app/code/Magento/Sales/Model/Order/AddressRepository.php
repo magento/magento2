@@ -6,12 +6,12 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\Data\OrderAddressSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
  * Repository class for @see \Magento\Sales\Api\Data\OrderAddressInterface
@@ -93,7 +93,7 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
         $searchResult = $this->searchResultFactory->create();
         $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
-        
+
         return $searchResult;
     }
 

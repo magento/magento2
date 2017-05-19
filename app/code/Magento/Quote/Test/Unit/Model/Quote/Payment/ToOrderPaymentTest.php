@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
-use Magento\Payment\Model\Method\Substitution;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Model\Method\Substitution;
 
 /**
  * Class ToOrderPaymentTest tests converter to order payment
@@ -125,7 +123,11 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
         $this->orderPaymentRepositoryMock->expects($this->once())->method('create')->willReturn($orderPayment);
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($orderPayment, array_merge($paymentData, $data), \Magento\Sales\Api\Data\OrderPaymentInterface::class)
+            ->with(
+                $orderPayment,
+                array_merge($paymentData, $data),
+                \Magento\Sales\Api\Data\OrderPaymentInterface::class
+            )
             ->willReturnSelf();
 
         $this->assertSame($orderPayment, $this->converter->convert($this->paymentMock, $data));

@@ -20,6 +20,9 @@ try {
     /* Bootstrap the application */
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
+    $testFrameworkDir = __DIR__;
+    require_once __DIR__ . '/../../integration/framework/deployTestModules.php';
+
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
         $filesystem = new \Magento\Framework\Filesystem\Driver\File();
         $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
@@ -34,10 +37,7 @@ try {
     } else {
         $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
     }
-
-    $testFrameworkDir = __DIR__;
-    require_once __DIR__ . '/../../integration/framework/deployTestModules.php';
-
+  
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
     if (!file_exists($installConfigFile)) {
         $installConfigFile = $installConfigFile . '.dist';

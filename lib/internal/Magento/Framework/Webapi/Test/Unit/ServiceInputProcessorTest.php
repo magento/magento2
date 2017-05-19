@@ -8,18 +8,17 @@ namespace Magento\Framework\Webapi\Test\Unit;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
-use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
-use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
+use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
+use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
-use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -506,8 +505,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'custom_attributes' => [
                     TestService::CUSTOM_ATTRIBUTE_CODE => $objectManager->getObject(
                         \Magento\Framework\Api\AttributeValue::class,
-                        ['data' =>
-                            [
+                        ['data' => [
                                 'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
                                 'value' => $customAttributeValue
                             ]

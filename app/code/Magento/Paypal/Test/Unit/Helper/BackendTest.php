@@ -149,7 +149,6 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      */
     private function configurationCountryCodePrepareConfig($config)
     {
-
         $this->scopeDefiner->expects($this->once())
             ->method('getScope')
             ->willReturn(self::SCOPE);

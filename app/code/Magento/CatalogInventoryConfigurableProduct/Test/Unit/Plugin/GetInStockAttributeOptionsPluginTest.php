@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogInventoryConfigurableProduct\Test\Unit\Plugin;
 
+use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
+use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogInventoryConfigurableProduct\Plugin\GetInStockAttributeOptionsPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
-use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class GetInStockAttributeOptionsPluginTest extends \PHPUnit_Framework_TestCase
 {

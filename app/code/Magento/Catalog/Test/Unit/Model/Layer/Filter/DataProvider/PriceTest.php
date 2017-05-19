@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
-use \Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
+use Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;

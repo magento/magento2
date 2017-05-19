@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache;
 
-use \Magento\Framework\App\Cache\State;
+use Magento\Framework\App\Cache\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 
 class StateTest extends \PHPUnit_Framework_TestCase

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerFactory;
 
 class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

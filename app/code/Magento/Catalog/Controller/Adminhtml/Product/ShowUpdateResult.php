@@ -6,9 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Catalog\Helper\Product\Composite;
-use Magento\Backend\Model\Session;
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Helper\Product\Composite;
 
 class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
 {

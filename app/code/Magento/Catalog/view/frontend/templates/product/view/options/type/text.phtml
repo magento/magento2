@@ -33,9 +33,11 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             <input type="text"
                    id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text"
                    class="input-text product-custom-option"
-                   <?php if (!empty($_textValidate)) {?>
-                   data-validate="<?php echo  $block->escapeHtml(json_encode($_textValidate));?>"
-                   <?php } ?>
+                   <?php if (!empty($_textValidate)) {
+                ?>
+                   data-validate="<?php echo  $block->escapeHtml(json_encode($_textValidate)); ?>"
+                   <?php 
+            } ?>
                    name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                    data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                    value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
@@ -50,9 +52,11 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             ?>
             <textarea id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text"
                       class="product-custom-option"
-                    <?php if (!empty($_textAreaValidate)) {?>
-                        data-validate="<?php echo $block->escapeHtml(json_encode($_textAreaValidate));?>"
-                    <?php } ?>
+                    <?php if (!empty($_textAreaValidate)) {
+                ?>
+                        data-validate="<?php echo $block->escapeHtml(json_encode($_textAreaValidate)); ?>"
+                    <?php 
+            } ?>
                       name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                       data-selector="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                       rows="5"

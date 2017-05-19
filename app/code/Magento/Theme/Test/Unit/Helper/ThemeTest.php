@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Theme\Test\Unit\Helper;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +19,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
         $layoutMergeFactory = $this->_getLayoutMergeFactory($theme, $layoutStr);
         $assetRepo = $this->getMock(
-            \Magento\Framework\View\Asset\Repository::class, ['createAsset'], [], '', false
+            \Magento\Framework\View\Asset\Repository::class,
+            ['createAsset'],
+            [],
+            '',
+            false
         );
         $assetRepo->expects($this->any())
             ->method('createAsset')
@@ -76,7 +78,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         <arguments><argument name="file" xsi:type="string">testh.css</argument></arguments>
                     </block>
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
-                        <arguments><argument name="file" xsi:type="string">Magento_Theme::test.css</argument></arguments>
+                        <arguments>
+                            <argument name="file" xsi:type="string">Magento_Theme::test.css</argument>
+                        </arguments>
                     </block>
                 </referenceBlock>
                 <block type="Some_Block_Class">
@@ -130,7 +134,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
         $processorFactory = $this->getMock(
-            \Magento\Framework\View\Layout\ProcessorFactory::class, ['create'], [], '', false
+            \Magento\Framework\View\Layout\ProcessorFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $processorFactory->expects($this->any())
             ->method('create')

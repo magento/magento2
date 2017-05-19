@@ -5,10 +5,10 @@
  */
 namespace Magento\Customer\Model\Indexer;
 
-use Magento\Customer\Model\Customer;
-use Magento\Framework\Indexer\FieldsetInterface;
-use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Customer;
+use Magento\Eav\Model\Config;
+use Magento\Framework\Indexer\FieldsetInterface;
 
 class AttributeProvider implements FieldsetInterface
 {

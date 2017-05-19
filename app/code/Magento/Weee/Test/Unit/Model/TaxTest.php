@@ -5,8 +5,6 @@
  */
 namespace Magento\Weee\Test\Unit\Model;
 
-use Magento\Weee\Model\Tax;
-
 /**
  * Class TaxTest
  *

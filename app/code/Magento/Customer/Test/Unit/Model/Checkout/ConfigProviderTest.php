@@ -6,13 +6,13 @@
 namespace Magento\Customer\Test\Unit\Model\Checkout;
 
 use Magento\Customer\Model\Checkout\ConfigProvider;
-use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Form;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 {

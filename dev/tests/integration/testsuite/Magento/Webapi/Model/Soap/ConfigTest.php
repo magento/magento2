@@ -5,10 +5,10 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

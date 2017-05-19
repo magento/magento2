@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes;
 
-use Magento\Mtf\Client\Element\SuggestElement;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Mtf\Client\Element\SuggestElement;
 use Magento\Mtf\Client\Locator;
 
 /**

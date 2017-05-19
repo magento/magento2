@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\Block\Product\Grouped\AssociatedProducts;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Factory\Factory;
 
 /**

@@ -5,10 +5,10 @@
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
-use Magento\OfflinePayments\Model\InstructionsConfigProvider;
+use Magento\Framework\Escaper;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
-use Magento\Framework\Escaper;
+use Magento\OfflinePayments\Model\InstructionsConfigProvider;
 use Magento\Payment\Model\Method\AbstractMethod;
 
 class InstructionsConfigProviderTest extends \PHPUnit_Framework_TestCase

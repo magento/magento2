@@ -6,7 +6,6 @@
 
 namespace Magento\Ui\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 
 /**

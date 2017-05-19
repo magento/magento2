@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Test Cases:

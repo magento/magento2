@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section;
 
-use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
  * Category Products section.

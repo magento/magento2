@@ -10,7 +10,6 @@
 namespace Magento\Reports\Helper;
 
 use Magento\Framework\Data\Collection;
-use Magento\Framework\Stdlib\DateTime;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

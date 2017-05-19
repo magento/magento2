@@ -85,7 +85,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getQueryText')
             ->willReturn($queryString);
 
-         $itemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
+        $itemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTitle', 'toArray'])
             ->getMock();

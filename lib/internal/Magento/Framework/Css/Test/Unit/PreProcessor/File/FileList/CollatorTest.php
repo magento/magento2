@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\FileList;
 
-use \Magento\Framework\Css\PreProcessor\File\FileList\Collator;
+use Magento\Framework\Css\PreProcessor\File\FileList\Collator;
 
 class CollatorTest extends \PHPUnit_Framework_TestCase
 {

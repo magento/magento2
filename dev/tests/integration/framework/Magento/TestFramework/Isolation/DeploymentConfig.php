@@ -6,8 +6,8 @@
 
 namespace Magento\TestFramework\Isolation;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * A listener that watches for integrity of deployment configuration

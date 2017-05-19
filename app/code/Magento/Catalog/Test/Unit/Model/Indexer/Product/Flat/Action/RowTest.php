@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -71,27 +69,45 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
         $this->productIndexerHelper = $this->getMock(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class, [], [], '', false
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->flatItemEraser = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class, [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->flatItemWriter = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class, [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->flatTableBuilder = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class, [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            [
             'resource' => $this->resource,
             'storeManager' => $this->storeManager,
             'productHelper' => $this->productIndexerHelper,
             'flatItemEraser' => $this->flatItemEraser,
             'flatItemWriter' => $this->flatItemWriter,
             'flatTableBuilder' => $this->flatTableBuilder
-        ]);
+            ]
+        );
     }
 
     /**
@@ -126,4 +142,3 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->model->execute('product_id_1');
     }
 }
-

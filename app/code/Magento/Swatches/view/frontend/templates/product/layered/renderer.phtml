@@ -17,7 +17,8 @@
             <a href="<?php /* @escapeNotVerified */ echo $label['link'] ?>"
                aria-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
                class="swatch-option-link-layered">
-                <?php if (isset($swatchData['swatches'][$option]['type'])) { ?>
+                <?php if (isset($swatchData['swatches'][$option]['type'])) {
+    ?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
@@ -69,7 +70,8 @@
                                     ><?php /* @escapeNotVerified */ echo $swatchData['swatches'][$option]['value'] ?></div>
                             <?php    break;
                     } ?>
-                <?php } ?>
+                <?php 
+} ?>
             </a>
         <?php endforeach; ?>
     </div>

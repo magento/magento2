@@ -6,8 +6,8 @@
 
 namespace Magento\Search\Test\Constraint;
 
-use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 
 /**
  * Assert that after save block successful message appears.

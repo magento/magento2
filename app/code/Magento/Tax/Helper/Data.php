@@ -5,25 +5,23 @@
  */
 namespace Magento\Tax\Helper;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
-use Magento\Tax\Model\Config;
-use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Tax\Api\OrderTaxManagementInterface;
-use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
-use Magento\Sales\Model\EntityInterface;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Sales\Model\EntityInterface;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Store\Model\Store;
+use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
+use Magento\Tax\Api\OrderTaxManagementInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * Tax helper
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -575,7 +573,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *  )
      * )
      *
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice|\Magento\Sales\Model\Order\Creditmemo $source
+     * @param  \Magento\Sales\Model\Order|Invoice|Creditmemo $source
      * @return array
      */
     public function getCalculatedTaxes($source)

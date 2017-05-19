@@ -6,12 +6,12 @@
 
 namespace Magento\Analytics\Test\Unit\Model;
 
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Config\Model\Config;
-use Magento\Integration\Model\Integration;
 use Magento\Analytics\Model\IntegrationManager;
-use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Config\Model\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Model\Integration;
 
 /**
  * Class IntegrationManagerTest

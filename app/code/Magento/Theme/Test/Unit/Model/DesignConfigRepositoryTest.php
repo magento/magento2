@@ -5,9 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\DesignConfigRepository;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
 {

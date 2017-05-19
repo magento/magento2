@@ -6,9 +6,9 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Page;
 
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid for managing "CMS Page" entities.

@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * Assigned attributes sources.

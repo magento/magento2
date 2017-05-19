@@ -6,9 +6,8 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\Session\SaveHandler;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Session\Config\ConfigInterface;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {

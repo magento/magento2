@@ -8,9 +8,9 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class StockStatusBaseSelectProcessor

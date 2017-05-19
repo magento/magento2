@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback;
 
-use \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
-
 use Magento\Framework\View\Design\Fallback\RulePool;
+
+use Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
 
 class StaticFileTest extends \PHPUnit_Framework_TestCase
 {

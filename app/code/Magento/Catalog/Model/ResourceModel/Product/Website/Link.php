@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Website;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 
 class Link
 {

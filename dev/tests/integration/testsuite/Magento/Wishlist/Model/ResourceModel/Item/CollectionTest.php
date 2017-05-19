@@ -6,10 +6,10 @@
 
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 
+use Magento\Catalog\Model\Attribute\Config;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\Wishlist\Model\Wishlist;
-use Magento\Catalog\Model\Attribute\Config;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,8 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Image;
 
 use Magento\Catalog\Controller\Adminhtml\Category\Image\Upload as Model;
-use Magento\Framework\App\Request\Http as Request;
 use Magento\Catalog\Model\ImageUploader;
+use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 

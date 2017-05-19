@@ -24,9 +24,9 @@ $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
        ); return false;"
    class="action paypal about">
     <?php if ($block->getPaymentWhatIs()) {
-        echo $block->escapeHtml(__($block->getPaymentWhatIs()));
+    echo $block->escapeHtml(__($block->getPaymentWhatIs()));
 } else {
-        echo $block->escapeHtml(__('What is PayPal?'));
+    echo $block->escapeHtml(__('What is PayPal?'));
 } ?>
 </a>
 <!-- PayPal Logo -->

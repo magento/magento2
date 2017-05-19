@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Test\Unit\Model\Express;
 
+use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
-use Magento\Quote\Api\Data\CartExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -19,6 +17,7 @@ use Magento\Quote\Api\Data\CartExtensionInterface;
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
     const SHIPPING_METHOD = 'new_shipping_method';
+
     /**
      * @var \Magento\Paypal\Model\Express\Checkout | \Magento\Paypal\Model\Express\Checkout
      */
@@ -64,7 +63,11 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 'getId', 'assignCustomer', 'assignCustomerWithAddressChange', 'getBillingAddress',
                 'getShippingAddress', 'isVirtual', 'addCustomerAddress', 'collectTotals', '__wakeup',
                 'save', 'getCustomerData', 'getIsVirtual', 'getExtensionAttributes'
-            ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
         $this->customerAccountManagementMock = $this->getMock(
             \Magento\Customer\Model\AccountManagement::class,
             [],

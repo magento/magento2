@@ -7,9 +7,9 @@ namespace Magento\Sales\Model\Order\Validation;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\OrderValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
+use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
 use Magento\Sales\Model\Order\Shipment\Validation\TrackValidator;
 use Magento\Sales\Model\ValidatorResultMerger;
 
@@ -61,6 +61,7 @@ class ShipOrder implements ShipOrderInterface
      * @param array $packages
      * @param \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface|null $arguments
      * @return \Magento\Sales\Model\ValidatorResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(
         $order,
@@ -73,18 +74,10 @@ class ShipOrder implements ShipOrderInterface
         array $packages = [],
         \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $orderValidationResult = $this->orderValidator->validate(
-            $order,
-            [
-                CanShip::class
-            ]
-        );
+        $orderValidationResult = $this->orderValidator->validate($order, [CanShip::class]);
         $shipmentValidationResult = $this->shipmentValidator->validate(
             $shipment,
-            [
-                QuantityValidator::class,
-                TrackValidator::class
-            ]
+            [QuantityValidator::class, TrackValidator::class]
         );
 
         return $this->validatorResultMerger->merge($orderValidationResult, $shipmentValidationResult);

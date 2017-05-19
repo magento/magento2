@@ -18,7 +18,7 @@ $taxDisplay = $block->getTaxDisplayConfig();
 $priceDisplay = $block->isPriceIncludesTax();
 ?>
 
-<?php if ($block->showInclDescr() || $block->showExclDescrIncl()): // incl. + weee ||  excl. + weee + final ?>
+<?php if ($block->showInclDescr() || $block->showExclDescrIncl()): // incl. + weee ||  excl. + weee + final?>
     <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
         <?php if ($taxDisplay == Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX): ?>
             <span class="weee"
@@ -43,7 +43,7 @@ $priceDisplay = $block->isPriceIncludesTax();
     <?php endforeach; ?>
 <?php endif; ?>
 
-<?php if ($block->showExclDescrIncl()): // excl. + weee + final ?>
+<?php if ($block->showExclDescrIncl()): // excl. + weee + final?>
     <span class="price-final price-final_price"
           data-price-type="weeePrice"
           data-price-amount="<?php /* @escapeNotVerified */ echo $block->getRawFinalAmount(); ?>"

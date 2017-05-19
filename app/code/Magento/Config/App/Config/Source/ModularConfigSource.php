@@ -6,8 +6,8 @@
 namespace Magento\Config\App\Config\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\App\Config\Initial\Reader;
+use Magento\Framework\DataObject;
 
 /**
  * Class for retrieving initial configuration from modules

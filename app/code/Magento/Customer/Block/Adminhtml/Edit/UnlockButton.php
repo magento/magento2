@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
-use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class UnlockButton

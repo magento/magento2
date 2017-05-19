@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -40,10 +38,18 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->quoteMock = $this->getMock(
-            \Magento\Quote\Model\Quote::class, ['getCustomerNoteNotify'], [], '', false
+            \Magento\Quote\Model\Quote::class,
+            ['getCustomerNoteNotify'],
+            [],
+            '',
+            false
         );
         $this->sessionQuoteMock = $this->getMock(
-            \Magento\Backend\Model\Session\Quote::class, [], [], '', false
+            \Magento\Backend\Model\Session\Quote::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $this->sessionQuoteMock->expects($this->any())

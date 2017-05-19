@@ -5,8 +5,8 @@
  */
 namespace Magento\Ui\Component\Form;
 
-use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Collection

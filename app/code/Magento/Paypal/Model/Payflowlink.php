@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
+use Magento\Framework\UrlInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Store\Model\Store;
 
 /**
  * Payflow Link payment gateway model
@@ -574,11 +574,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             /** @var $website \Magento\Store\Model\Website */
             $website = $this->_websiteFactory->create()->load($this->_requestHttp->getParam('website'));
             $secure = $this->_scopeConfig->isSetFlag(
-                \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+                Store::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultStore()
             );
-            $path = $secure ? \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LINK_URL : \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL;
+            $path = $secure ? Store::XML_PATH_SECURE_BASE_LINK_URL : Store::XML_PATH_UNSECURE_BASE_LINK_URL;
             $websiteUrl = $this->_scopeConfig->getValue(
                 $path,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -586,10 +586,10 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             );
         } else {
             $secure = $this->_scopeConfig->isSetFlag(
-                \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
+                Store::XML_PATH_SECURE_IN_FRONTEND,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            $websiteUrl = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure);
+            $websiteUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_LINK, $secure);
         }
 
         return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;

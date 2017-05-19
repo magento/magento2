@@ -955,7 +955,7 @@ class GroupRepositoryTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
-        if (is_null($expectedResult)) {
+        if ($expectedResult === null) {
             $this->assertEquals(0, $searchResult['total_count']);
         } elseif (is_array($expectedResult)) {
             $this->assertGreaterThan(0, $searchResult['total_count']);
@@ -1050,7 +1050,7 @@ class GroupRepositoryTest extends WebapiAbstract
         ];
         $searchResult = $this->_webApiCall($serviceInfo);
 
-        if (is_null($expectedResult)) {
+        if ($expectedResult === null) {
             $this->assertEquals(0, $searchResult['total_count']);
         } elseif (is_array($expectedResult)) {
             $this->assertGreaterThan(0, $searchResult['total_count']);

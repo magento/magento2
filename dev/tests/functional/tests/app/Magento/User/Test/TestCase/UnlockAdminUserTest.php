@@ -9,8 +9,8 @@ namespace Magento\User\Test\TestCase;
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\User\Test\Fixture\User;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserLocks;
 
 /**

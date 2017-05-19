@@ -5,8 +5,8 @@
  */
 namespace Magento\SalesRule\Test\Unit\Block\Adminhtml\Promo\Quote\Edit;
 
-use Magento\SalesRule\Model\RegistryConstants;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\RegistryConstants;
 
 class DeleteButtonTest extends \PHPUnit_Framework_TestCase
 {

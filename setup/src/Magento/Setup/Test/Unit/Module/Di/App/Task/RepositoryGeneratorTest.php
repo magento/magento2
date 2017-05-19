@@ -6,9 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
-use Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator;
-use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
+use Magento\Setup\Module\Di\Code\Scanner;
 
 class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
 {

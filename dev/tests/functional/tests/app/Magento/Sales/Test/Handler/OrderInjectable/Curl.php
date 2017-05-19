@@ -10,12 +10,12 @@ use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Create new order via curl.

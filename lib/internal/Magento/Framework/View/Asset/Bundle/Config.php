@@ -9,8 +9,8 @@ namespace Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View;
 use Magento\Framework\View\Asset\Bundle;
-use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**

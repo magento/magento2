@@ -7,8 +7,8 @@
 namespace Magento\Mtf\Util\Command\File\Export;
 
 use Magento\Mtf\ObjectManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * File reader for Magento export files.

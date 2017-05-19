@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert Products Qty and Stock Status In Admin Panel.

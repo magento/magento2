@@ -6,9 +6,9 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

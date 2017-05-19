@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\BackupActionItems;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\BackupActionItems;
+use Magento\Setup\Controller\ResponseTypeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

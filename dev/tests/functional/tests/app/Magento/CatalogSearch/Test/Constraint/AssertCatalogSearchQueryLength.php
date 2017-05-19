@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that search query length truncated to 128 symbols.

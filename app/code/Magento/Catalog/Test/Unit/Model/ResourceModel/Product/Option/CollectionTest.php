@@ -5,12 +5,11 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
-use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,11 +82,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class, ['create'], [], '', false
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class, ['fetchAll'], [], '', false
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
+            ['fetchAll'],
+            [],
+            '',
+            false
         );
         $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
         $this->optionsFactoryMock = $this->getMock(
@@ -99,7 +106,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->joinProcessor = $this->getMockBuilder(
-            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class)
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resourceMock = $this->getMock(

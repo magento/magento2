@@ -6,10 +6,10 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
+use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Checkout\Test\Fixture\Cart;
 
 /**
  * Assert pagers summary text on checkout/cart/index page.
@@ -49,6 +49,6 @@ class AssertPagersSummaryText extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Pagers summary text on the shopping cart is correct.' ;
+        return 'Pagers summary text on the shopping cart is correct.';
     }
 }

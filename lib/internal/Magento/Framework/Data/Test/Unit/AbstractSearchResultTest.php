@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-use \Magento\Framework\Data\AbstractSearchResult;
+use Magento\Framework\Data\AbstractSearchResult;
 
 /**
  * Class AbstractSearchResultTest

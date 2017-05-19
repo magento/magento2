@@ -6,7 +6,7 @@
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
-use \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
+use Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
 
 class ImportTest extends \PHPUnit_Framework_TestCase
 {

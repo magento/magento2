@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * \Magento\Framework\Escaper test case

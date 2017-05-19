@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\Control;
 
-use Magento\Framework\View\Element\UiComponent\Control\DummyButton;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\UiComponent\Control\DummyButton;
 
 /**
  * Class DummyButtonTest

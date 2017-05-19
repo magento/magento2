@@ -59,7 +59,7 @@ class Decimal extends AbstractEav
         )->joinLeft(
             ['pds' => $this->getTable('catalog_product_entity_decimal')],
             sprintf(
-                'pds.%s = pdd.%s AND pds.attribute_id = pdd.attribute_id'.' AND pds.store_id=cs.store_id',
+                'pds.%s = pdd.%s AND pds.attribute_id = pdd.attribute_id' . ' AND pds.store_id=cs.store_id',
                 $productIdField,
                 $productIdField
             ),

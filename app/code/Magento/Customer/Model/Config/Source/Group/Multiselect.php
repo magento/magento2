@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Model\Config\Source\Group;
 
-use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\App\ObjectManager;
 
 class Multiselect implements \Magento\Framework\Option\ArrayInterface

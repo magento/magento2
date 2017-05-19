@@ -5,15 +5,15 @@
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
 
-use Magento\NewRelicReporting\Model\Cron\ReportCounts;
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
-use Magento\Catalog\Api\CategoryManagementInterface;
+use Magento\NewRelicReporting\Model\Cron\ReportCounts;
+use Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory;
 
 /**
  * Class ReportCountsTest
  *
- * @codingStandardsIgnoreFile
  */
 class ReportCountsTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +53,7 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
     protected $countsModelMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countsCollectionFactoryMock;
 
@@ -91,7 +91,7 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->countsCollectionFactoryMock = $this
-            ->getMockBuilder(\Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory::class)
+            ->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -8,8 +8,8 @@
 namespace Magento\Framework\Phrase\Renderer;
 
 use Magento\Framework\Phrase\RendererInterface;
-use Magento\Framework\TranslateInterface;
 use Magento\Framework\Translate\Inline\ProviderInterface;
+use Magento\Framework\TranslateInterface;
 use Psr\Log\LoggerInterface;
 
 class Inline implements RendererInterface

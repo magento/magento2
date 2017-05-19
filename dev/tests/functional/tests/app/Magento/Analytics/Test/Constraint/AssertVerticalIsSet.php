@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert Analytics Vertical is set in Stores > Configuration > General > Analytics > General menu.

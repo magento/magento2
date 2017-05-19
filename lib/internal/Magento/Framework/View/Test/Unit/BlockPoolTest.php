@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit;
 
-use \Magento\Framework\View\BlockPool;
+use Magento\Framework\View\BlockPool;
 
 /**
  * Test for view BlockPool model

@@ -6,9 +6,9 @@
 
 namespace Magento\Shipping\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert shipment with corresponding shipment/order ID is absent in shipments grid.

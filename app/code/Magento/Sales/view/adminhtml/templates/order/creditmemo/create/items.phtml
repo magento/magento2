@@ -45,10 +45,10 @@
             <?php endif; ?>
             <?php $i = 0; foreach ($_items as $_item): ?>
                 <?php if ($_item->getOrderItem()->getParentItem()) {
-                continue;
-            } else {
-                $i++;
-            } ?>
+    continue;
+} else {
+    $i++;
+} ?>
                 <tbody class="<?php /* @escapeNotVerified */ echo $i%2 ? 'even' : 'odd' ?>">
                     <?php echo $block->getItemHtml($_item) ?>
                     <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>

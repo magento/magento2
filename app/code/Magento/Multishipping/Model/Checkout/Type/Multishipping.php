@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Multishipping checkout model
@@ -880,7 +878,7 @@ class Multishipping extends \Magento\Framework\DataObject
     private function getDefaultAddressByDataKey($key, $defaultAddressIdFromCustomer)
     {
         $addressId = $this->getData($key);
-        if (is_null($addressId)) {
+        if ($addressId === null) {
             $addressId = $defaultAddressIdFromCustomer;
             if (!$addressId) {
                 /** Default address is not available, try to find any customer address */
@@ -910,7 +908,7 @@ class Multishipping extends \Magento\Framework\DataObject
     public function getCheckoutSession()
     {
         $checkout = $this->getData('checkout_session');
-        if (is_null($checkout)) {
+        if ($checkout === null) {
             $checkout = $this->_checkoutSession;
             $this->setData('checkout_session', $checkout);
         }
@@ -960,12 +958,12 @@ class Multishipping extends \Magento\Framework\DataObject
     /**
      * Check if specified address ID belongs to customer.
      *
-     * @param $addressId
+     * @param int $addressId
      * @return bool
      */
     protected function isAddressIdApplicable($addressId)
     {
-        $applicableAddressIds = array_map(function($address) {
+        $applicableAddressIds = array_map(function ($address) {
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());

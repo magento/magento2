@@ -40,7 +40,7 @@
                         <input type="radio" name="product[links_purchased_separately]" value="1"
                                class="admin__control-radio"
                                id="link-switcher1"
-                           <?php if($block->isProductLinksCanBePurchasedSeparately()): ?>
+                           <?php if ($block->isProductLinksCanBePurchasedSeparately()): ?>
                                checked="checked"
                            <?php endif; ?>
                             >
@@ -52,7 +52,7 @@
                         <input type="radio" name="product[links_purchased_separately]" value="0"
                                 class="admin__control-radio"
                                 id="link-switcher0"
-                            <?php if(!$block->isProductLinksCanBePurchasedSeparately()): ?>
+                            <?php if (!$block->isProductLinksCanBePurchasedSeparately()): ?>
                                 checked="checked"
                             <?php endif; ?>
                             >
@@ -120,7 +120,7 @@ require([
                 '<input type="hidden" class="__delete__" name="downloadable[link][<%- data.id %>][is_delete]" value="" />'+
                 '<input type="hidden" name="downloadable[link][<%- data.id %>][link_id]" value="<%- data.link_id %>" />'+
                 '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[link][<%- data.id %>][title]" value="<%- data.title %>" />'+
-                <?php if($_product->getStoreId()): ?>
+                <?php if ($_product->getStoreId()): ?>
                     '<div class="admin__field admin__field-option">'+
                     '<input type="checkbox" id="downloadable_link_<%- data.id %>_title" name="downloadable[link][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
                     '<label for="downloadable_link_<%- data.id %>_title" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+

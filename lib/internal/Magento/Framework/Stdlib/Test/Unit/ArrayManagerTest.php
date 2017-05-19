@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ArrayManagerTest extends \PHPUnit_Framework_TestCase
 {

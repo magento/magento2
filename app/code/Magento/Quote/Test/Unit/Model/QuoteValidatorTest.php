@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteValidator;
+use Magento\Quote\Model\QuoteValidator;
 
 /**
  * Class QuoteValidatorTest

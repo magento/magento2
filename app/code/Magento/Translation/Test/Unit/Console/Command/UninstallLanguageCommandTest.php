@@ -6,13 +6,13 @@
 
 namespace Magento\Translation\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Cache;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\App\Cache;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Translation\Console\Command\UninstallLanguageCommand;
 use Magento\Framework\Setup\BackupRollbackFactory;
+use Magento\Translation\Console\Command\UninstallLanguageCommand;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
 {

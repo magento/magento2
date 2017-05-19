@@ -6,12 +6,12 @@
 
 namespace Magento\Cms\Test\Fixture\CmsPage;
 
-use Magento\Mtf\Fixture\DataSource;
-use Magento\Cms\Test\Fixture\CmsBlock;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\Category;
-use Magento\Mtf\Repository\RepositoryFactory;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Cms\Test\Fixture\CmsBlock;
+use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Repository\RepositoryFactory;
 
 /**
  * Prepare content for cms page.

@@ -133,8 +133,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
                     'video_metadata' => 'meta two',
                     'role' => '',
                     'additional_store_data' => [
-                        0 =>
-                            [
+                        0 => [
                                 'store_id' => '0',
                                 'video_provider' => null,
                                 'video_url' => 'https://www.youtube.com/watch?v=ab123456',

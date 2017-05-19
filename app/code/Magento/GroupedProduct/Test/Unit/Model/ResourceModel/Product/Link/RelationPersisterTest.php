@@ -5,12 +5,12 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\ResourceModel\Product\Link;
 
-use Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister;
-use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\Product\Link;
+use Magento\Catalog\Model\ProductLink\LinkFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Link as LinkResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Link as LinkResourceModel;
+use Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister;
 
 class RelationPersisterTest extends \PHPUnit_Framework_TestCase
 {

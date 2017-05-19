@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Console\Command\UninstallCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class UninstallCommandTest extends \PHPUnit_Framework_TestCase
 {

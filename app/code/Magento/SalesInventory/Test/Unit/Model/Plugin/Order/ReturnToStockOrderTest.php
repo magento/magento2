@@ -7,15 +7,15 @@
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\SalesInventory\Model\Order\ReturnProcessor;
-use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
+use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
+use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
 
 /**
  * Class ReturnToStockOrderTest

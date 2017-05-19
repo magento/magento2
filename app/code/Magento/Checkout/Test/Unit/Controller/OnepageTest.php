@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Controller;
 
-use \Magento\Checkout\Controller\Onepage;
+use Magento\Checkout\Controller\Onepage;
 
 /**
  * Class OnepageTest
@@ -85,7 +85,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getEventManager')
             ->willReturn($this->eventManager);
-        
+
         $this->controller = $objectManager->getObject(
             \Magento\Checkout\Test\Unit\Controller\Stub\OnepageStub::class,
             [

@@ -7,14 +7,13 @@
 namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Controller\Adminhtml\Subscription\Postpone;
-use Magento\Framework\App\Request\Http;
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Intl\DateTimeFactory;
-use Psr\Log\LoggerInterface;
-use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class PostponeTest

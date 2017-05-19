@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
-use Magento\Quote\Model\Quote\Relation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Relation;
 
 class RelationTest extends \PHPUnit_Framework_TestCase
 {

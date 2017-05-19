@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\CustomerImportExport\Model\Import\Customer
  */
@@ -92,7 +90,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
                     'getErrorAggregator',
-                ])
+                ]
+            )
             ->getMock();
 
         $errorAggregator = $this->getMock(

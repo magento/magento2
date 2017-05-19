@@ -6,11 +6,11 @@
 
 namespace Magento\Braintree\Test\TestStep;
 
+use Magento\Braintree\Test\Fixture\Secure3dBraintree;
 use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Braintree\Test\Fixture\Secure3dBraintree;
 
 /**
  * Place order with 3D Secure step.

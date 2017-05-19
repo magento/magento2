@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Items;
 
-use \Magento\Sales\Block\Items\AbstractItems;
+use Magento\Sales\Block\Items\AbstractItems;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {

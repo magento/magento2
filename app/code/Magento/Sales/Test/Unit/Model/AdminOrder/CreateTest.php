@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -263,16 +261,17 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('addData')
             ->with(
-            [
+                [
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
-            ]
-        );
+                ]
+            );
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
             ->with(
                 $customerMock,
-                ['group_id' => 1], \Magento\Customer\Api\Data\CustomerInterface::class
+                ['group_id' => 1],
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));

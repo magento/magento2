@@ -5,9 +5,9 @@
  */
 namespace Magento\Webapi\Model;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
 {

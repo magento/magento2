@@ -5,22 +5,22 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Flag;
 use Magento\Framework\FlagFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Console\Cli;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

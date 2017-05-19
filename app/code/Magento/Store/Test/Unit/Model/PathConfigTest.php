@@ -4,25 +4,27 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PathConfigTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $scopeConfigMock;
+
     /** @var \Magento\Framework\Url\SecurityInfoInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $urlSecurityInfoMock;
+
     /** @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $storeManagerMock;
+
     /** @var Store | \PHPUnit_Framework_MockObject_MockObject*/
     private $storeMock;
+
     /** @var \Magento\Store\Model\RouteConfig */
     protected $model;
 

@@ -82,7 +82,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $attributes = [$attribute];
-        
+
         $iterator = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
         $iterator->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator($attributes));

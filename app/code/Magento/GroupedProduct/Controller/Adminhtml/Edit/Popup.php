@@ -7,10 +7,10 @@ namespace Magento\GroupedProduct\Controller\Adminhtml\Edit;
 
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
 use Magento\Catalog\Model\ProductFactory;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
 
 class Popup extends AbstractAction
 {

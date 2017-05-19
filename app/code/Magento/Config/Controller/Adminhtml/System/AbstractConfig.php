@@ -6,8 +6,6 @@
 
 namespace Magento\Config\Controller\Adminhtml\System;
 
-use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
-
 /**
  * System Configuration Abstract Controller
  */

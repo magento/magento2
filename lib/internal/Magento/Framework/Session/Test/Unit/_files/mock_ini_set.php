@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Session;
 
-use \Magento\Framework\Session\Test\Unit\SessionManagerTest;
+use Magento\Framework\Session\Test\Unit\SessionManagerTest;
 
 /**
  * Mock ini_set global function

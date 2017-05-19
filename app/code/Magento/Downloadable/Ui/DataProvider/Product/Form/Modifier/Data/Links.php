@@ -5,14 +5,14 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data;
 
-use \Magento\Framework\Escaper;
-use Magento\Downloadable\Model\Product\Type;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Downloadable\Helper\File as DownloadableFile;
-use Magento\Framework\UrlInterface;
-use Magento\Downloadable\Model\Link as LinkModel;
 use Magento\Downloadable\Api\Data\LinkInterface;
+use Magento\Downloadable\Helper\File as DownloadableFile;
+use Magento\Downloadable\Model\Link as LinkModel;
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class Links

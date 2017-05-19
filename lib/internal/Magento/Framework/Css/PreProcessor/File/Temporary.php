@@ -6,8 +6,8 @@
 namespace Magento\Framework\Css\PreProcessor\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Css\PreProcessor\Config;
+use Magento\Framework\Filesystem;
 
 class Temporary
 {

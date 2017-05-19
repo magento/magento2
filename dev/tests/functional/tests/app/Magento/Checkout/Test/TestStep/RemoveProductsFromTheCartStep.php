@@ -6,9 +6,9 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
+use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Checkout\Test\Page\CheckoutCart;
 
 /**
  * Remove products from the cart.

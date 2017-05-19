@@ -354,7 +354,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('getDataModel')
             ->willReturn($customerAddress);
-        
+
         $this->assertSame($customerAddress, $this->repository->getById(12));
     }
 

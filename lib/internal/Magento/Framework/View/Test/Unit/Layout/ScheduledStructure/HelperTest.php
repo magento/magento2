@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout\ScheduledStructure;
 
-use Magento\Framework\View\Layout;
 use Magento\Framework\App\State;
+use Magento\Framework\View\Layout;
 
 /**
  * Class HelperTest

@@ -6,14 +6,12 @@
 namespace Magento\Config\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 class BaseurlTest extends \PHPUnit_Framework_TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
     {
-
         $context = (new ObjectManager($this))->getObject(\Magento\Framework\Model\Context::class);
 
         $resource = $this->getMock(\Magento\Config\Model\ResourceModel\Config\Data::class, [], [], '', false);

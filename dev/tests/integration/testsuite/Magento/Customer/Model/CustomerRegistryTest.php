@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -72,8 +70,10 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
         //Verify presence of Customer in registry
         $this->assertEquals($customerBeforeDeletion, $this->_model->retrieve(self::CUSTOMER_ID));
         //Verify presence of Customer in email registry
-        $this->assertEquals($customerBeforeDeletion, $this->_model
-                ->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID));
+        $this->assertEquals(
+            $customerBeforeDeletion,
+            $this->_model->retrieveByEmail(self::CUSTOMER_EMAIL, self::WEBSITE_ID)
+        );
     }
 
     /**

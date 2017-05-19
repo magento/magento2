@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogInventory\Model\ResourceModel\Stock;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class StockTest

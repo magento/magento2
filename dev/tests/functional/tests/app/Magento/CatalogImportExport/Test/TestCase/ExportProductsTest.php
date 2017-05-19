@@ -7,10 +7,9 @@ namespace Magento\CatalogImportExport\Test\TestCase;
 
 use Magento\CatalogImportExport\Test\Constraint\AssertExportProduct;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Util\Command\File\Export;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\File\Export;
 
 /**
  * Preconditions:

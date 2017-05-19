@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
 use Magento\Review\Test\Fixture\Review;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReviewReportIsVisibleInGrid

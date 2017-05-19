@@ -6,12 +6,12 @@
 namespace Magento\Ui\Test\Unit\Model\Export;
 
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\MetadataProvider;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 {

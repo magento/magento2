@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -204,7 +202,7 @@ class NvpTest extends \PHPUnit_Framework_TestCase
         $this->model->callGetExpressCheckoutDetails();
         $address = $this->model->getExportedShippingAddress();
         $this->assertEquals('Ship To Name', $address->getData('firstname'));
-        $this->assertEquals(implode("\n", ['testStreet','testApartment']), $address->getStreet());
+        $this->assertEquals(implode("\n", ['testStreet', 'testApartment']), $address->getStreet());
         $this->assertEquals('testCompany', $address->getCompany());
         $this->assertEquals('testCity', $address->getCity());
         $this->assertEquals('223322', $address->getTelephone());

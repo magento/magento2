@@ -5,11 +5,11 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter;
+use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Eav\Model\Entity\Attribute\Set as EavAttributeSet;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
-use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
-use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AttributeSetTest extends \PHPUnit_Framework_TestCase

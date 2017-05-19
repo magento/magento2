@@ -9,9 +9,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
+use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {

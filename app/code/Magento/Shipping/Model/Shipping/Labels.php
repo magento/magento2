@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Model\Shipping;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Store\Model\ScopeInterface;
 use Magento\User\Model\User;
@@ -140,9 +138,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
             )
         ) {
             throw new LocalizedException(
-                __(
-                    'We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.'
-                )
+                __('We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.')
             );
         }
 
@@ -168,9 +164,9 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Shipping\Model\Shipment\Request $request
      * @param \Magento\User\Model\User $storeAdmin
      * @param \Magento\Framework\DataObject $store
-     * @param $shipmentStoreId
-     * @param $regionCode
-     * @param $originStreet
+     * @param int $shipmentStoreId
+     * @param string $regionCode
+     * @param string $originStreet
      * @return void
      */
     protected function setShipperDetails(

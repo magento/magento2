@@ -126,7 +126,7 @@ class SystemBackupTest extends \PHPUnit_Framework_TestCase
 
         $this->backupFactoryMock->expects($this->once())->method('create')->willReturn($this->backupDbMock);
 
-        $this->backupDbMock->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->backupDbMock->expects($this->once())->method('create')->willThrowException(new \Exception());
 
         $this->backupDataMock->expects($this->never())->method('getCreateSuccessMessageByType')->with($type);
         $this->loggerMock->expects($this->never())->method('info');

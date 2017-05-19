@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
-use Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Category\Flat\Collection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Category\Flat;
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
+use Magento\Catalog\Model\ResourceModel\Category\Flat\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 

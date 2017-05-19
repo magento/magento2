@@ -6,8 +6,8 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**

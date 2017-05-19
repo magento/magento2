@@ -7,7 +7,6 @@ namespace Magento\Theme\Test\Unit\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
@@ -93,7 +92,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $messages = array_merge($existingMessages, $messages);
-        
+
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()

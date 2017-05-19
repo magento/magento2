@@ -153,8 +153,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
                 'tooltip' => '',
                 'title' => 'Extended System',
                 'target' => null,
-                'sub_menu' =>
-                    [
+                'sub_menu' => [
                         [
                             'parent_id' => null,
                             'module_name' => 'Magento_Backend',

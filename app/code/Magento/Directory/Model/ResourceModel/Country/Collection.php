@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Directory\Model\ResourceModel\Country;
 
 use Magento\Directory\Model\AllowedCountries;
@@ -120,8 +118,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add top destinition countries to head of option array
      *
-     * @param $emptyLabel
-     * @param $options
+     * @param string|bool $emptyLabel
+     * @param array $options
      * @return array
      */
     private function addForegroundCountriesToOptionArray($emptyLabel, $options)

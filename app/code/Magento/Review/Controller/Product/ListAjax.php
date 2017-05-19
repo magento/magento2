@@ -5,9 +5,9 @@
  */
 namespace Magento\Review\Controller\Product;
 
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Controller\Product as ProductController;
-use Magento\Framework\Controller\ResultFactory;
 
 class ListAjax extends ProductController
 {

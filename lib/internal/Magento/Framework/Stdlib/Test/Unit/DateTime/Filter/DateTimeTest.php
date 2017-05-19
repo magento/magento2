@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
-use \Magento\Framework\Stdlib\DateTime\Filter\DateTime;
+use Magento\Framework\Stdlib\DateTime\Filter\DateTime;
 
 class DateTimeTest extends \PHPUnit_Framework_TestCase
 {

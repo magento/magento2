@@ -5,7 +5,6 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
 
-use Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

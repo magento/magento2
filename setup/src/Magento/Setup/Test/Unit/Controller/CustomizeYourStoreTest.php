@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\CustomizeYourStore;
+use Magento\Setup\Controller\CustomizeYourStore;
 
 class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,12 +5,12 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Config;
 
-use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Config\Model\Config\ScopeDefiner as ConfigScopeDefiner;
-use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Config\Model\Config\Structure as ConfigStructure;
 use Magento\Config\Model\Config\Structure\ElementInterface as ElementConfigStructure;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Helper\Backend as BackendHelper;
+use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
 
 class StructurePluginTest extends \PHPUnit_Framework_TestCase
 {

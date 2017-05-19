@@ -22,7 +22,6 @@ use PHP_CodeSniffer_Sniff;
  */
 class ClassNamingSniff implements PHP_CodeSniffer_Sniff
 {
-
     const STRING_HELPER_CLASSES_PREFIX = '_';
 
     const STRING_ALLOWED_UNDERSCORES = '__';

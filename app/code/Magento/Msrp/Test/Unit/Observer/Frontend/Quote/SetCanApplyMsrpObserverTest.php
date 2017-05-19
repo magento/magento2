@@ -5,8 +5,6 @@
  */
 namespace Magento\Msrp\Test\Unit\Observer\Frontend\Quote;
 
-use Magento\Quote\Model\Quote\Address;
-
 class SetCanApplyMsrpObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**

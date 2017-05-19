@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Session;
+use Magento\Setup\Controller\Session;
 
 class SessionTest extends \PHPUnit_Framework_TestCase
 {

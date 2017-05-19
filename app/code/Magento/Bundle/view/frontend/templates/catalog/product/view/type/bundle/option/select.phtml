@@ -13,7 +13,7 @@
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+<div class="field option <?php echo ($_option->getRequired()) ? ' required' : ''; ?>">
     <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
@@ -29,12 +29,18 @@
                     name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                     data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                     class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> product bundle option bundle-option-select change-container-classname"
-                <?php if ($_option->getRequired()) echo 'data-validate = {required:true}' ?>>
+                <?php if ($_option->getRequired()) {
+    echo 'data-validate = {required:true}';
+} ?>>
                 <option value=""><?php /* @escapeNotVerified */ echo __('Choose a selection...') ?></option>
                 <?php foreach ($_selections as $_selection): ?>
                     <option value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
-                        <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
-                        <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
+                        <?php if ($block->isSelected($_selection)) {
+    echo ' selected="selected"';
+} ?>
+                        <?php if (!$_selection->isSaleable()) {
+    echo ' disabled="disabled"';
+} ?>>
                         <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
@@ -46,9 +52,13 @@
                     <span><?php /* @escapeNotVerified */ echo __('Quantity') ?></span>
                 </label>
                 <div class="control">
-                    <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                    <input <?php if (!$_canChangeQty) {
+    echo ' disabled="disabled"';
+} ?>
                            id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"
-                           class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
+                           class="input-text qty<?php if (!$_canChangeQty) {
+    echo ' qty-disabled';
+} ?>"
                            type="number"
                            name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                            data-selector="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"

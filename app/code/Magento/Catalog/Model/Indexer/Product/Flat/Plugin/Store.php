@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 
 class Store
@@ -34,8 +32,10 @@ class Store
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(\Magento\Store\Model\ResourceModel\Store $subject, \Magento\Framework\Model\AbstractModel $object)
-    {
+    public function beforeSave(
+        \Magento\Store\Model\ResourceModel\Store $subject,
+        \Magento\Framework\Model\AbstractModel $object
+    ) {
         if (!$object->getId() || $object->dataHasChangedFor('group_id')) {
             $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
         }

@@ -34,8 +34,8 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
     public function fieldDataProvider()
     {
         return [
-            ['<'.'script>alert(\'XSS\')</script>', '' ],
-            ['10.64.202.22, <'.'script>alert(\'XSS\')</script>', '10.64.202.22' ]
+            ['<' . 'script>alert(\'XSS\')</script>', '' ],
+            ['10.64.202.22, <' . 'script>alert(\'XSS\')</script>', '10.64.202.22' ]
         ];
     }
 }

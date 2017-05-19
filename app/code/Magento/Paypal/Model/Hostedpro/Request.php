@@ -182,7 +182,7 @@ class Request extends DataObject
     private function getNonTaxableAmount(Order $order)
     {
         // PayPal denied transaction with 0 amount
-        $subtotal = $order->getBaseSubtotal() ? : $order->getPayment()->getBaseAmountAuthorized();
+        $subtotal = $order->getBaseSubtotal() ?: $order->getPayment()->getBaseAmountAuthorized();
 
         return [
             'subtotal' => $this->formatPrice($subtotal),

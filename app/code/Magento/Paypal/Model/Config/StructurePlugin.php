@@ -9,8 +9,8 @@ use Magento\Config\Model\Config\ScopeDefiner;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Config\Model\Config\Structure\ElementInterface;
-use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Paypal\Helper\Backend as BackendHelper;
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
 
 /**

@@ -5,14 +5,14 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Plugin;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
 use Magento\Catalog\Model\Plugin\QuoteItemProductOption as QuoteItemProductOptionPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
-use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
-use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
+use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
+use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

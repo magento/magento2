@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
-use Magento\Framework\DB\Query\Generator as QueryGenerator;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AbstractAction
@@ -442,7 +440,7 @@ abstract class AbstractAction
         )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
             'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0'
-                . ' AND cpsd.attribute_id = ' . $statusAttributeId,
+            . ' AND cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
@@ -563,6 +561,7 @@ abstract class AbstractAction
      * Populate the temporary category tree index table
      *
      * @param string $temporaryName
+     * @return void
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {

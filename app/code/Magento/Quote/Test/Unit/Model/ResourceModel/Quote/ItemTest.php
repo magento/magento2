@@ -6,8 +6,8 @@
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
-use Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\ResourceModel\Quote\Item;
 
 /**
  * Class ItemTest

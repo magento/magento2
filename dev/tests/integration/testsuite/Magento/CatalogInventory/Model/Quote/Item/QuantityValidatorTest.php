@@ -5,16 +5,15 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
-use Magento\Framework\Event\Observer;
-use Magento\CatalogInventory\Model\StockState;
-use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
-use Magento\CatalogInventory\Observer\QuantityValidatorObserver;
-use Magento\Framework\Event;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\DataObject;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
+use Magento\CatalogInventory\Model\StockState;
+use Magento\CatalogInventory\Observer\QuantityValidatorObserver;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class QuantityValidatorTest
@@ -153,6 +152,6 @@ class QuantityValidatorTest extends \PHPUnit_Framework_TestCase
                 return $quoteItem;
             }
         }
-        $this->fail('Test failed since no quoteItem found by productId '.$productId);
+        $this->fail('Test failed since no quoteItem found by productId ' . $productId);
     }
 }

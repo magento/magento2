@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -64,7 +62,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                     return json_decode($value, true);
                 }
             );
-        
+
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
             \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()->getMock();
@@ -85,7 +83,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->categoryUrlRewriteGenerator = (new ObjectManager($this))->getObject(

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreFile
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -57,10 +56,10 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
-        $this->currentUrlRewritesRegenerator = (new ObjectManager($this))->getObject(   
+        $this->currentUrlRewritesRegenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator::class,
             [
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,

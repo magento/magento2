@@ -53,7 +53,9 @@
                                             <?php if ($_sole) : ?>
                                                 <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php echo $block->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
                                             <?php else: ?>
-                                                <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$block->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
+                                                <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"<?php if ($_rate->getCode()===$block->getAddressShippingMethod($_address)) {
+    echo ' checked="checked"';
+} ?> class="radio" />
                                             <?php endif; ?>
                                         </div>
                                         <label for="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"><?php echo $block->escapeHtml($_rate->getMethodTitle()) ?>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Api\Data;
 
 /**
@@ -613,12 +611,14 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      */
     public function setItems($items);
 
+    // @codingStandardsIgnoreStart
     /**
      * Gets credit memo comments.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
      */
     public function getComments();
+    // @codingStandardsIgnoreEnd
 
     /**
      * Sets credit memo comments.

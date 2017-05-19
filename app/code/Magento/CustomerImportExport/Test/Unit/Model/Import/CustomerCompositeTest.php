@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
-use Magento\CustomerImportExport\Model\Import\CustomerComposite;
-use Magento\CustomerImportExport\Model\Import\Customer;
 use Magento\CustomerImportExport\Model\Import\Address;
+use Magento\CustomerImportExport\Model\Import\Customer;
+use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\ImportExport\Model\Import;
@@ -303,7 +301,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getCustomerEntityMock(array $mockedMethods = null)
     {
-        if (is_null($mockedMethods)) {
+        if ($mockedMethods === null) {
             $mockedMethods = $this->_entityMockedMethods;
         }
         $mockedMethods[] = 'getAttributeCollection';
@@ -339,7 +337,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAddressEntityMock(array $mockedMethods = null)
     {
-        if (is_null($mockedMethods)) {
+        if ($mockedMethods === null) {
             $mockedMethods = $this->_entityMockedMethods;
         }
         $mockedMethods[] = 'getAttributeCollection';
@@ -657,8 +655,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $directoryMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
         $directoryMock->expects($this->any())
             ->method('openFile')->will(
-            $this->returnValue(new Read($pathToCsvFile, new File()))
-        );
+                $this->returnValue(new Read($pathToCsvFile, new File()))
+            );
         $source = new Csv($pathToCsvFile, $directoryMock);
         $modelUnderTest->setSource($source);
         $modelUnderTest->validateData();

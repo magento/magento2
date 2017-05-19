@@ -5,10 +5,10 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
 
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Gateway\Http\Client\Zend;
 use Magento\Payment\Gateway\Http\ConverterInterface;
-use Magento\Framework\HTTP\ZendClientFactory;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Payment\Gateway\Http\TransferInterface;
 
 /**
@@ -102,7 +102,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
 
         $this->clientMock->expects($this->once())
             ->method('request')
-            ->willThrowException(new \Zend_Http_Client_Exception);
+            ->willThrowException(new \Zend_Http_Client_Exception());
 
         $this->converterMock->expects($this->never())->method('convert');
 

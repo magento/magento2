@@ -6,7 +6,6 @@
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\DataObject;
 
 /**
  * Eav Entity store resource model

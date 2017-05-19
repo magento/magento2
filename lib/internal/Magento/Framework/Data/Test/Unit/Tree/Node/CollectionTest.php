@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Data\Test\Unit\Tree\Node;
 
-use \Magento\Framework\Data\Tree\Node\Collection;
+use Magento\Framework\Data\Tree\Node\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote\Item;
 
-use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
 
 /**
  * Class CollectionTest

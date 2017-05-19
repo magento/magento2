@@ -8,17 +8,17 @@
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
 use Magento\Catalog\Model\Product\Type as ProductType;
-use Magento\Framework\Indexer\CacheContext;
-use Magento\Framework\Event\ManagerInterface as EventManager;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\BatchSizeManagementInterface;
-use Magento\Framework\Indexer\BatchProviderInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\BatchProviderInterface;
+use Magento\Framework\Indexer\BatchSizeManagementInterface;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**

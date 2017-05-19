@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Module;
 
-use \Magento\Setup\Module\ResourceFactory;
-use \Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Module\ResourceFactory;
 
 class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
 {

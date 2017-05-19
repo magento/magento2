@@ -5,12 +5,12 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Customer\Source;
 
-use Magento\Customer\Model\Customer\Source\Group;
-use Magento\Framework\Module\Manager;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Customer\Source\Group;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Module\Manager;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {

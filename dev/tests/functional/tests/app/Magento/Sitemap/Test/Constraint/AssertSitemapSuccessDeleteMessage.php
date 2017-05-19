@@ -6,8 +6,8 @@
 
 namespace Magento\Sitemap\Test\Constraint;
 
-use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
 
 /**
  * Class AssertSitemapSuccessDeleteMessage

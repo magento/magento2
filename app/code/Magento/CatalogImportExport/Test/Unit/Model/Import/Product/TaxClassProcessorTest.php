@@ -6,7 +6,6 @@
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
 {

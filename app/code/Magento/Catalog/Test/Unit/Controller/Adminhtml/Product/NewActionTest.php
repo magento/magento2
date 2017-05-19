@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

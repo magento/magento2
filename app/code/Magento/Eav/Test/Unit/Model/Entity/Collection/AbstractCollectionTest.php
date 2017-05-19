@@ -5,8 +5,6 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
 
-use Magento\Eav\Test\Unit\Model\Entity\Collection\AbstractCollectionStub;
-
 /**
  * AbstractCollection test
  *

@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\PayloadValidator;
+use Magento\Setup\Model\PayloadValidator;
 
 class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 {

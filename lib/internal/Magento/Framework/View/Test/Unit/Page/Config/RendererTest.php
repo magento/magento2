@@ -8,8 +8,8 @@ namespace Magento\Framework\View\Test\Unit\Page\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\GroupedCollection;
-use Magento\Framework\View\Page\Config\Renderer;
 use Magento\Framework\View\Page\Config\Generator;
+use Magento\Framework\View\Page\Config\Renderer;
 
 /**
  * Test for page config renderer model

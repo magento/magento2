@@ -264,7 +264,7 @@ class TotalsCollector
             /** @var CollectorInterface $collector */
             $collector->collect($quote, $shippingAssignment, $total);
         }
-        
+
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_after',
             [

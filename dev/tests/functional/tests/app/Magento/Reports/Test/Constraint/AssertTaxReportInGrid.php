@@ -6,10 +6,10 @@
 
 namespace Magento\Reports\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Reports\Test\Page\Adminhtml\SalesTaxReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Tax\Test\Fixture\TaxRule;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertTaxReportInGrid

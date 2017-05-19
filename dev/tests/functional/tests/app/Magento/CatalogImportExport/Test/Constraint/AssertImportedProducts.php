@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogImportExport\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
  * Assert that products data from CSV import file and data from product edit page are correct and match.

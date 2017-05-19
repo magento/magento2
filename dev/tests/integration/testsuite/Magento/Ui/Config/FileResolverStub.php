@@ -70,6 +70,6 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
         foreach ($files as $filePath) {
             $realPaths[] = $path . '/' . $filePath;
         }
-        return new FileIterator(new ReadFactory(new DriverPool), $realPaths);
+        return new FileIterator(new ReadFactory(new DriverPool()), $realPaths);
     }
 }

@@ -5,9 +5,6 @@
  */
 namespace Magento\Customer\Block;
 
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-
 /**
  * Customer front  newsletter manage block
  *

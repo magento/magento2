@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model\Installer;
 
-use \Magento\Setup\Model\Installer\ProgressFactory;
+use Magento\Setup\Model\Installer\ProgressFactory;
 
 class ProgressFactoryTest extends \PHPUnit_Framework_TestCase
 {

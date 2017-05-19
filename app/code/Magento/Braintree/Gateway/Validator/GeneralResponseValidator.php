@@ -7,8 +7,8 @@ namespace Magento\Braintree\Gateway\Validator;
 
 use Braintree\Result\Error;
 use Braintree\Result\Successful;
-use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 class GeneralResponseValidator extends AbstractValidator

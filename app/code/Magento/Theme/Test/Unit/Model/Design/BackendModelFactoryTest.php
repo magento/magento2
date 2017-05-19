@@ -5,8 +5,6 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design;
 
-// @codingStandardsIgnoreFile
-
 class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Theme\Model\Design\BackendModelFactory */
@@ -38,7 +36,7 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
-            )
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -49,7 +47,7 @@ class BackendModelFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setValue'])
             ->getMock();
-        
+
         $this->model = new \Magento\Theme\Model\Design\BackendModelFactory(
             $this->objectManagerMock,
             $this->metadataProviderMock,

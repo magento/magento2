@@ -10,7 +10,7 @@ use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Payment;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$addressData = require(__DIR__ . '/address_data.php');
+$addressData = require __DIR__ . '/address_data.php';
 $objManager = Bootstrap::getObjectManager();
 
 $billingAddress = $objManager

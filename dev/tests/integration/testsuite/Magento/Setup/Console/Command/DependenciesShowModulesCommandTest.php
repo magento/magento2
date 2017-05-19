@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +21,6 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-
         $modules = [
             'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
             'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
@@ -76,7 +74,7 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
             ',All,Hard,Soft' . PHP_EOL . '"Total number of dependencies",2,2,0' . PHP_EOL,
             $fileContents
         );
-        $this->assertContains('"Dependencies for each module:",All,Hard,Soft'. PHP_EOL, $fileContents);
+        $this->assertContains('"Dependencies for each module:",All,Hard,Soft' . PHP_EOL, $fileContents);
         $this->assertContains(
             'magento/module-a,1,1,0' . PHP_EOL . '" -- magento/module-b",,1,0' . PHP_EOL,
             $fileContents

@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog product related items block
@@ -17,7 +15,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
+class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements IdentityInterface
 {
     /**
      * @var Collection

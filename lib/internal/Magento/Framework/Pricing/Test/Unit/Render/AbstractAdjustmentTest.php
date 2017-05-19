@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\AbstractAdjustment;
+use Magento\Framework\Pricing\Render\AbstractAdjustment;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\AbstractAdjustment

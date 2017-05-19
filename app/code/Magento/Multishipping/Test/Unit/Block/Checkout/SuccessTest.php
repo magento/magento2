@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
 use Magento\Multishipping\Block\Checkout\Success;
@@ -27,6 +25,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -57,7 +56,8 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             \Magento\Multishipping\Block\Checkout\Success::class,
             [
                 'context' => $this->contextMock
-            ]);
+            ]
+        );
     }
 
     public function testGetOrderIdsWithoutId()

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Msrp\Test\Unit\Helper;
 
 /**
@@ -56,8 +54,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 function ($arg) {
                     return round(2 * $arg, 2);
                 }
-            )
-        );
+            ));
 
         $finalPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\FinalPrice::class)
             ->disableOriginalConstructor()

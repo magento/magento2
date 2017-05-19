@@ -6,7 +6,6 @@
 namespace Magento\Indexer\Model\Config;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Provides indexer configuration

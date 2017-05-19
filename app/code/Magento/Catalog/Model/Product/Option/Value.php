@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
@@ -181,7 +179,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getProduct()
     {
-        if (is_null($this->_product)) {
+        if ($this->_product === null) {
             $this->_product = $this->getOption()->getProduct();
         }
         return $this->_product;
@@ -241,7 +239,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function getRegularPrice()
     {
         if ($this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()
+                ->getPrice('regular_price')->getAmount()->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }

@@ -6,11 +6,10 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
-use \Magento\Framework\App\Cache\Tag\Strategy\Dummy;
+use Magento\Framework\App\Cache\Tag\Strategy\Dummy;
 
 class DummyTest extends \PHPUnit_Framework_TestCase
 {
-
     private $model;
 
     protected function setUp()
@@ -28,7 +27,7 @@ class DummyTest extends \PHPUnit_Framework_TestCase
     {
         $emptyArray = [];
 
-        $this->assertEquals($emptyArray, $this->model->getTags(new \StdClass));
+        $this->assertEquals($emptyArray, $this->model->getTags(new \StdClass()));
 
         $identityInterface = $this->getMockForAbstractClass(\Magento\Framework\DataObject\IdentityInterface::class);
         $this->assertEquals($emptyArray, $this->model->getTags($identityInterface));

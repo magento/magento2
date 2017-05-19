@@ -5,20 +5,20 @@
  */
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
-use Magento\Quote\Model\Quote;
-use Magento\Framework\View\Layout;
-use Magento\Checkout\Model\Session;
-use Magento\Framework\View\Result\Page;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
 use Magento\Braintree\Controller\Paypal\Review;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
-use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Result\Page;
+use Magento\Quote\Model\Quote;
 
 /**
  * Class ReviewTest

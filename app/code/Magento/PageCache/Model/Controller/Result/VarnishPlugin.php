@@ -5,12 +5,12 @@
  */
 namespace Magento\PageCache\Model\Controller\Result;
 
-use Magento\PageCache\Model\Config;
 use Magento\Framework\App\PageCache\Version;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Registry;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Magento\PageCache\Model\Config;
 
 /**
  * Plugin for processing varnish cache

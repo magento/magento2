@@ -5,8 +5,6 @@
  */
 namespace Magento\Review\Model\ResourceModel\Review;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Class ReviewTest
  */

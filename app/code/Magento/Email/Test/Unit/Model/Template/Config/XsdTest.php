@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +31,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'valid' => [
-                '<config><template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"/></config>',
+                '<config>
+                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"/>
+                </config>',
                 [],
             ],
             'empty root node' => [
@@ -50,13 +50,17 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'node "template" with value' => [
                 '<config>
-                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend">invalid</template>
+                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend">
+                        invalid
+                    </template>
                 </config>',
                 ["Element 'template': Character content is not allowed, because the content type is empty."],
             ],
             'node "template" with children' => [
                 '<config>
-                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"><invalid/></template>
+                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend"
+                        ><invalid/>
+                    </template>
                 </config>',
                 ["Element 'template': Element content is not allowed, because the content type is empty."],
             ],
@@ -77,7 +81,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 ["Element 'template': The attribute 'type' is required but missing."],
             ],
             'node "template" with invalid attribute "type"' => [
-                '<config><template id="test" label="Test" file="test.txt" type="invalid" module="Module" area="frontend"/></config>',
+                '<config>
+                    <template id="test" label="Test" file="test.txt" type="invalid" module="Module" area="frontend"/>
+                </config>',
                 [
                     "Element 'template', attribute 'type': " .
                     "[facet 'enumeration'] The value 'invalid' is not an element of the set {'html', 'text'}.",
@@ -90,7 +96,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 ["Element 'template': The attribute 'area' is required but missing."],
             ],
             'node "template" with invalid attribute "area"' => [
-                '<config><template id="test" label="Test" file="test.txt" type="text" module="Module" area="invalid"/></config>',
+                '<config>
+                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="invalid"/>
+                </config>',
                 [
                     "Element 'template', attribute 'area': " .
                     "[facet 'enumeration'] The value 'invalid' is not an element of the set {'frontend', 'adminhtml'}.",
@@ -100,7 +108,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'node "template" with unknown attribute' => [
                 '<config>
-                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend" unknown="true"/>
+                    <template id="test" label="Test" file="test.txt" type="text" module="Module" area="frontend" 
+                        unknown="true"/>
                 </config>',
                 ["Element 'template', attribute 'unknown': The attribute 'unknown' is not allowed."],
             ]

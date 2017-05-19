@@ -6,8 +6,8 @@
 namespace Magento\Deploy\Package;
 
 use Magento\Deploy\Package\Processor\ProcessorInterface;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Deployment Package

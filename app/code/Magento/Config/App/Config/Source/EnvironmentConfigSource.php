@@ -5,10 +5,10 @@
  */
 namespace Magento\Config\App\Config\Source;
 
-use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\DataObject;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
+use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**

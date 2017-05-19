@@ -5,9 +5,7 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class CompleteBackup extends AbstractActionController
@@ -17,7 +15,7 @@ class CompleteBackup extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;
@@ -28,7 +26,7 @@ class CompleteBackup extends AbstractActionController
      */
     public function progressAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTemplate('/magento/setup/complete-backup/progress.phtml');
         $view->setTerminal(true);
         return $view;

@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Fixture\Product;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Create and return Category.

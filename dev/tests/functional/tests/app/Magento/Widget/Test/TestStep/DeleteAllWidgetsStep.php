@@ -6,9 +6,9 @@
 
 namespace Magento\Widget\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceEdit;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Delete all widgets on backend

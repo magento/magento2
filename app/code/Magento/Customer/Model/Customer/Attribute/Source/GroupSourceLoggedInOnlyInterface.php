@@ -6,9 +6,8 @@
 
 namespace Magento\Customer\Model\Customer\Attribute\Source;
 
-use \Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 interface GroupSourceLoggedInOnlyInterface extends OptionSourceInterface
 {
-
 }

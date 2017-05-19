@@ -5,14 +5,14 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Address;
 
-use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Customer\Model\Address\Config as CustomerAddressConfig;
-use Magento\Framework\Event\ManagerInterface as EventManager;
-use Magento\Sales\Model\Order\Address as OrderAddress;
-use Magento\Sales\Model\Order;
 use Magento\Customer\Block\Address\Renderer\RendererInterface as CustomerAddressBlockRenderer;
+use Magento\Customer\Model\Address\Config as CustomerAddressConfig;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
 
 class RendererTest extends \PHPUnit_Framework_TestCase
 {

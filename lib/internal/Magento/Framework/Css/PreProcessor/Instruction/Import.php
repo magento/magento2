@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Css\PreProcessor\Instruction;
 
+use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\NotationResolver;
-use Magento\Framework\View\Asset\PreProcessorInterface;
-use Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * 'import' instruction preprocessor
@@ -22,9 +22,9 @@ class Import implements PreProcessorInterface
      */
     const REPLACE_PATTERN =
         '#@import[\s]*'
-        .'(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
-        .'(?P<path>[^\)\'\"]*?)'
-        .'(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
+        . '(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
+        . '(?P<path>[^\)\'\"]*?)'
+        . '(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module

@@ -7,9 +7,9 @@
 namespace Magento\Analytics\Test\Unit\Model\Condition;
 
 use Magento\Analytics\Model\Condition\CanViewNotification;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class CanViewNotificationTest

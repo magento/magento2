@@ -7,8 +7,8 @@
 namespace Magento\Store\Test\Fixture\StoreGroup;
 
 use Magento\Mtf\Fixture\DataSource;
-use Magento\Store\Test\Fixture\Website;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * Prepare WebsiteId for Store Group.

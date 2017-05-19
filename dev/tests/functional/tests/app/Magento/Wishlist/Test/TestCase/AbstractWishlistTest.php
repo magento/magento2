@@ -9,10 +9,10 @@ namespace Magento\Wishlist\Test\TestCase;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Wishlist\Test\Page\WishlistIndex;
 
 /**
  * Class AbstractWishlistTest

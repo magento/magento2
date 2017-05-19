@@ -49,8 +49,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit_Framework_TestCase
         $this->rendererPool = Bootstrap::getObjectManager()->create(RendererPool::class);
         $this->rendererPool->setData(
             [
-                'default' =>
-                    [
+                'default' => [
                         'default_amount_render_class' => Amount::class,
                         'default_amount_render_template' => 'Magento_Catalog::product/price/amount/default.phtml',
                     ],

@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Test\TestStep;
 
-use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
 use Magento\Checkout\Test\Constraint\AssertBillingAddressAbsentInPayment;
+use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;

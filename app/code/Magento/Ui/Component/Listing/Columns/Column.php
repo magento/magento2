@@ -5,13 +5,13 @@
  */
 namespace Magento\Ui\Component\Listing\Columns;
 
-use Magento\Ui\Component\AbstractComponent;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
- * Class Column
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Column extends AbstractComponent implements ColumnInterface
 {

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
-use \Magento\Tax\Model\TaxClass\Management;
+use Magento\Tax\Model\TaxClass\Management;
 
 class ManagementTest extends \PHPUnit_Framework_TestCase
 {

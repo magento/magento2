@@ -6,10 +6,10 @@
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
 use Magento\Framework\DataObject;
-use Magento\Paypal\Model\Payflow\Transparent;
-use Magento\Paypal\Model\Payflowpro;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
+use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Paypal\Model\Payflowpro;
 
 /**
  * Class ResponseValidator

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity;
+use Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity;
 
 class OrderCommentIdentityTest extends \PHPUnit_Framework_TestCase
 {

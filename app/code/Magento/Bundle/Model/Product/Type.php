@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -842,8 +840,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $usedOptions = $product->getData($this->_keyUsedOptions);
         $usedOptionsIds = $product->getData($this->_keyUsedOptionsIds);
 
-        if (
-            !$usedOptions
+        if (!$usedOptions
             || $this->serializer->serialize($usedOptionsIds) != $this->serializer->serialize($optionIds)
         ) {
             $usedOptions = $this->_bundleOption

@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 {

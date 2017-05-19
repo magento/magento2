@@ -5,9 +5,9 @@
  */
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\Convert\DataSize;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\PhpReadinessCheck;
-use Magento\Framework\Convert\DataSize;
 
 class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 {
@@ -323,7 +323,6 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckPhpSettingsMemoryLimitError()
     {
-
         $this->dataSize->expects($this->any())->method('convertSizeToBytes')->willReturnMap(
             [
                ['512M', 512],
@@ -399,7 +398,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpExtensions());
     }
-    
+
     /**
      * @return bool
      */

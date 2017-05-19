@@ -12,7 +12,7 @@ class BackendFrontnameGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $regexp = '/' . BackendFrontnameGenerator::ADMIN_AREA_PATH_PREFIX
-            . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH .'}/';
+            . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH . '}/';
 
         $this->assertRegExp($regexp, BackendFrontnameGenerator::generate(), 'Unexpected Backend Frontname pattern.');
     }

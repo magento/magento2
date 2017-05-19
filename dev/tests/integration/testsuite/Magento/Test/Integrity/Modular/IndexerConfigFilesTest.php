@@ -5,8 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Filesystem;
-
 class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**

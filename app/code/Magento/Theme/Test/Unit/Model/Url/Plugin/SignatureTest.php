@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Url\Plugin;
 
-use \Magento\Theme\Model\Url\Plugin\Signature;
+use Magento\Theme\Model\Url\Plugin\Signature;
 
 class SignatureTest extends \PHPUnit_Framework_TestCase
 {

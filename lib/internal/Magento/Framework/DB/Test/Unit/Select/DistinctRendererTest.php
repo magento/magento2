@@ -48,7 +48,7 @@ class DistinctRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $sql = 'SELECT';
-        $expectedResult = $sql . ' ' . Select::SQL_DISTINCT  . ' ';
+        $expectedResult = $sql . ' ' . Select::SQL_DISTINCT . ' ';
         $this->selectMock->expects($this->once())
             ->method('getPart')
             ->with(Select::DISTINCT)

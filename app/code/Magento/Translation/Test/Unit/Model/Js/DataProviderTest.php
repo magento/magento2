@@ -7,11 +7,11 @@ namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Framework\App\State;
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Filesystem;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\File\ReadInterface;
-use Magento\Translation\Model\Js\DataProvider;
-use Magento\Translation\Model\Js\Config;
 use Magento\Framework\Phrase\Renderer\Translate;
+use Magento\Translation\Model\Js\Config;
+use Magento\Translation\Model\Js\DataProvider;
 
 /**
  * Class DataProviderTest
@@ -75,8 +75,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'translate' => $this->translateMock,
                 'dirSearch' => $dirSearch,
                 'filesUtility' => $this->filesUtilityMock,
-                'componentRegistrar' =>
-                    $this->getMock(\Magento\Framework\Component\ComponentRegistrar::class, [], [], '', false)
+                'componentRegistrar' => $this->getMock(ComponentRegistrar::class, [], [], '', false)
             ]
         );
     }

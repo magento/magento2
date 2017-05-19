@@ -7,11 +7,6 @@
 namespace Magento\CatalogRuleConfigurable\Test\TestCase;
 
 use Magento\CatalogRule\Test\TestCase\ApplyCatalogPriceRulesTest;
-use Magento\CatalogRule\Test\Fixture\CatalogRule;
-use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Util\Command\Cli\Cron;
-use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleEdit;
-use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

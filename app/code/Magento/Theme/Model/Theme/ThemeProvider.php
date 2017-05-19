@@ -5,10 +5,10 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ListInterface;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Provide data for theme grid and for theme edit page

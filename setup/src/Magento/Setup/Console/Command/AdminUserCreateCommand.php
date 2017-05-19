@@ -6,12 +6,12 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\AdminAccount;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\User\Model\UserValidationRules;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AdminUserCreateCommand extends AbstractSetupCommand
@@ -57,7 +57,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     {
         $errors = $this->validate($input);
         if ($errors) {
-            $output->writeln('<error>' . implode('</error>' . PHP_EOL .  '<error>', $errors) . '</error>');
+            $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $errors) . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
@@ -113,7 +113,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
                 ? '' : $input->getOption(AdminAccount::KEY_PASSWORD)
             );
 
-        $validator = new \Magento\Framework\Validator\DataObject;
+        $validator = new \Magento\Framework\Validator\DataObject();
         $this->validationRules->addUserInfoRules($validator);
         $this->validationRules->addPasswordRules($validator);
 

@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column\Status;
 
-use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Sales\Ui\Component\Listing\Column\Status\Options;
 
 /**

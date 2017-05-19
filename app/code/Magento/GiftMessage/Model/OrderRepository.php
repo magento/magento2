@@ -9,8 +9,8 @@ namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 
 /**
  * Order gift message repository object.
@@ -104,7 +104,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         $order = $this->orderFactory->create()->load($orderId);
         if (!$order->getEntityId()) {
             throw new NoSuchEntityException(__('There is no order with provided id'));
-        };
+        }
 
         if (0 == $order->getTotalItemCount()) {
             throw new InputException(__('Gift Messages are not applicable for empty order'));

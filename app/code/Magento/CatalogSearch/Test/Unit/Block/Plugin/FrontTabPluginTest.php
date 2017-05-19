@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Block\Plugin;
 
-use Magento\CatalogSearch\Block\Plugin\FrontTabPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogSearch\Model\Source\Weight as WeightSource;
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front as ProductAttributeFrontTabBlock;
+use Magento\CatalogSearch\Block\Plugin\FrontTabPlugin;
+use Magento\CatalogSearch\Model\Source\Weight as WeightSource;
 use Magento\Framework\Data\Form;
-use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\AbstractBlock;
 
 /**

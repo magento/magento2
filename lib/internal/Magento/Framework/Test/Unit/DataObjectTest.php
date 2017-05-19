@@ -110,7 +110,7 @@ class DataObjectTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1',
             'key2' => [
                 'subkey2.1' => 'value2.1',
-                'subkey2.2' => 'multiline'. PHP_EOL .'string',
+                'subkey2.2' => 'multiline' . PHP_EOL . 'string',
                 'subkey2.3' => new \Magento\Framework\DataObject(['test_key' => 'test_value']),
             ],
             'key3' => 5,

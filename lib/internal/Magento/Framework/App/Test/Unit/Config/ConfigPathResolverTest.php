@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\Config\ScopeCodeResolver;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**

@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
-use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;

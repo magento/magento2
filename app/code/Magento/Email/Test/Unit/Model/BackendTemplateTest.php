@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for Magento\Email\Model\BackendTemplate.
  */
@@ -65,7 +63,8 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resourceModelMock->expects($this->any())->method('getSystemConfigByPathsAndTemplateId')->willReturn(['test_config' => 2015]);
+        $this->resourceModelMock->expects($this->any())->method('getSystemConfigByPathsAndTemplateId')
+            ->willReturn(['test_config' => 2015]);
         /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
         $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())

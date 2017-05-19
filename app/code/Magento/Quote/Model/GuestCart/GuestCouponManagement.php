@@ -6,8 +6,8 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Api\CouponManagementInterface;
+use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 

@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 
 /**
  * Class AssertNewAccountsReportTotalResult

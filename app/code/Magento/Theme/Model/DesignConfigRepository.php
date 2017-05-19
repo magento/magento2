@@ -5,11 +5,11 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Theme\Model\Data\Design\Config as DesignConfig;
 use Magento\Theme\Model\Design\Config\Storage as ConfigStorage;
 

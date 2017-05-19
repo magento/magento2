@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Config\Initial as Config;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Config\Initial as Config;
 
 class InitialTest extends \PHPUnit_Framework_TestCase
 {

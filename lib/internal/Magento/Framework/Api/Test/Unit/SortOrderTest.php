@@ -22,7 +22,7 @@ class SortOrderTest extends \PHPUnit_Framework_TestCase
     {
         $this->sortOrder = new SortOrder();
     }
-    
+
     public function testItReturnsNullIfNoOrderIsSet()
     {
         $this->assertNull($this->sortOrder->getDirection());
@@ -41,7 +41,7 @@ class SortOrderTest extends \PHPUnit_Framework_TestCase
     {
         return [[SortOrder::SORT_ASC], [SortOrder::SORT_DESC]];
     }
-    
+
     /**
      * @param mixed $invalidDirection
      * @dataProvider invalidSortDirectionProvider
@@ -70,7 +70,7 @@ class SortOrderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(SortOrder::SORT_ASC, $this->sortOrder->getDirection());
         $this->sortOrder->setDirection(strtoupper(SortOrder::SORT_ASC));
         $this->assertSame(SortOrder::SORT_ASC, $this->sortOrder->getDirection());
-        
+
         $this->sortOrder->setDirection(strtolower(SortOrder::SORT_DESC));
         $this->assertSame(SortOrder::SORT_DESC, $this->sortOrder->getDirection());
         $this->sortOrder->setDirection(strtoupper(SortOrder::SORT_DESC));

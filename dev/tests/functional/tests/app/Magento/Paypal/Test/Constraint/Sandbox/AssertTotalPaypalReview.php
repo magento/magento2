@@ -6,8 +6,8 @@
 
 namespace Magento\Paypal\Test\Constraint\Sandbox;
 
-use Magento\Paypal\Test\Page\Sandbox\ExpressReview;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Paypal\Test\Page\Sandbox\ExpressReview;
 
 /**
  * Assert that Order total is correct on PayPal Review page.

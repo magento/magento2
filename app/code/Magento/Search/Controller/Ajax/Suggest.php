@@ -7,8 +7,8 @@ namespace Magento\Search\Controller\Ajax;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Search\Model\AutocompleteInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Search\Model\AutocompleteInterface;
 
 class Suggest extends Action
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Strategy;
 
-use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
 
 /**

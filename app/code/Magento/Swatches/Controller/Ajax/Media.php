@@ -6,6 +6,7 @@
  */
 namespace Magento\Swatches\Controller\Ajax;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 

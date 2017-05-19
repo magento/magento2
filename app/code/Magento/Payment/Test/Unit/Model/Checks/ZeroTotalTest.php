@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\ZeroTotal;
+use Magento\Payment\Model\Checks\ZeroTotal;
 
 class ZeroTotalTest extends \PHPUnit_Framework_TestCase
 {

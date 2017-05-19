@@ -5,9 +5,9 @@
  */
 namespace Magento\Bundle\Model\Plugin;
 
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem

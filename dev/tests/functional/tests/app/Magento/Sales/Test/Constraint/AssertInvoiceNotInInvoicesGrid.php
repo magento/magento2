@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\InvoiceIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that invoice with corresponding order ID is absent in the invoices grid.

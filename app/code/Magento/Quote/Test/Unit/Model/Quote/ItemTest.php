@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 /**
@@ -936,7 +934,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             ['updateQtyOption']
-            );
+        );
         $productMock->expects($this->once())
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));

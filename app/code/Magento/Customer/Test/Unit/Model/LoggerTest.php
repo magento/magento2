@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Customer log data logger test.
  */

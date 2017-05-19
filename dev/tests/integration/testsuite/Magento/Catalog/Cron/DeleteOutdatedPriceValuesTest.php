@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Cron;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;

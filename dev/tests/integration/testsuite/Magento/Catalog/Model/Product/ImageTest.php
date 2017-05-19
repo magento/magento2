@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product;
 
 /**
@@ -25,7 +23,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
         $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Model\View\Asset\Placeholder::class,
+            ->create(
+                \Magento\Catalog\Model\View\Asset\Placeholder::class,
                 ['type' => 'image']
             );
 
@@ -78,7 +77,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ['save', 'keepAspectRatio', 'keepFrame', 'keepTransparency', 'constrainOnly', 'backgroundColor', 'quality',
                 'setWatermarkPosition', 'setWatermarkImageOpacity', 'setWatermarkWidth', 'setWatermarkHeight',
                 'watermark'],
-            [], '', false);
+            [],
+            '',
+            false
+        );
         $processor->expects($this->once())
             ->method('watermark')
             ->with($expectedFile);

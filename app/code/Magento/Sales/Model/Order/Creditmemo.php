@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -419,7 +417,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             /**
              * If we not retrieve negative answer from payment yet
              */
-            if (is_null($canVoid)) {
+            if ($canVoid === null) {
                 $canVoid = $this->getOrder()->getPayment()->canVoid();
                 if ($canVoid === false) {
                     $this->setCanVoidFlag(false);
@@ -439,7 +437,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public static function getStates()
     {
-        if (is_null(self::$_states)) {
+        if (self::$_states === null) {
             self::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
@@ -457,11 +455,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getStateName($stateId = null)
     {
-        if (is_null($stateId)) {
+        if ($stateId === null) {
             $stateId = $this->getState();
         }
 
-        if (is_null(self::$_states)) {
+        if (self::$_states === null) {
             self::getStates();
         }
         if (isset(self::$_states[$stateId])) {

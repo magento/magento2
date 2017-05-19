@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleList;
 
 class ModuleListTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,12 +6,12 @@
 
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
  * Final price model

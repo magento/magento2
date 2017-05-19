@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Setup\CategorySetup;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Catalog\Setup\CategorySetup;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation enabled

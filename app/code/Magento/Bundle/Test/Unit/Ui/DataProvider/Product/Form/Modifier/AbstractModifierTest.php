@@ -7,9 +7,9 @@ namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase

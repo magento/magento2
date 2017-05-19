@@ -5,12 +5,11 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\ItemCarrier;
-use Magento\Framework\Controller\ResultFactory;
 
 class Allcart extends \Magento\Wishlist\Controller\AbstractIndex
 {

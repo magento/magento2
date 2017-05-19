@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
-use \Magento\Payment\Model\Checks\CanUseForCountry;
+use Magento\Payment\Model\Checks\CanUseForCountry;
 
 class CanUseForCountryTest extends \PHPUnit_Framework_TestCase
 {

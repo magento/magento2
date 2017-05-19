@@ -5,8 +5,8 @@
  */
 namespace Magento\Backup\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @covers \Magento\Backup\Model\Backup

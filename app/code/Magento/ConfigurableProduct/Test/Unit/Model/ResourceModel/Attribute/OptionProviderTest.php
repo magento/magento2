@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Attribute;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class OptionProviderTest extends \PHPUnit_Framework_TestCase
 {

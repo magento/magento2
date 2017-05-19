@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Helper\Formatter;
@@ -13,13 +11,11 @@ use Magento\Payment\Helper\Formatter;
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
  * Works with PayPal-specific system configuration
-
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Config extends AbstractConfig
 {
-
     use Formatter;
 
     /**
@@ -559,7 +555,9 @@ class Config extends AbstractConfig
      * Locale codes supported by misc images (marks, shortcuts etc)
      *
      * @var string[]
+     * @codingStandardsIgnoreStart
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration#id089QD0O0TX4__id08AH904I0YK
+     * @codingStandardsIgnoreEnd
      */
     protected $_supportedImageLocales = [
         'de_DE',
@@ -866,9 +864,11 @@ class Config extends AbstractConfig
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return sprintf('https://www.%spaypal.com/checkoutnow%s',
+        return sprintf(
+            'https://www.%spaypal.com/checkoutnow%s',
             $this->getValue('sandboxFlag') ? 'sandbox.' : '',
-            '?token=' . urlencode($token));
+            '?token=' . urlencode($token)
+        );
     }
 
     /**
@@ -1195,7 +1195,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;

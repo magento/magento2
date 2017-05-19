@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\Catalog\Model\Product;
-use Magento\Sales\Model\Order\Address as OrderAddress;
-use Magento\Sales\Model\Order\Payment as OrderPayment;
-use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 require __DIR__ . '/../../Store/_files/core_fixturestore.php';
 

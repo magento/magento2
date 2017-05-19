@@ -6,9 +6,9 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\MaintenanceMode;
+use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Zend\Json\Json;
 
 class Maintenance extends AbstractActionController
 {

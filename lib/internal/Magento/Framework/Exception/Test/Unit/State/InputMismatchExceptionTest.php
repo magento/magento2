@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Exception\Test\Unit\State;
 
-use \Magento\Framework\Exception\State\InputMismatchException;
+use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Phrase;
 
 class InputMismatchExceptionTest extends \PHPUnit_Framework_TestCase

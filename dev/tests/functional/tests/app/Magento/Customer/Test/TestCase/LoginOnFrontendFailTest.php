@@ -6,10 +6,10 @@
 
 namespace Magento\Customer\Test\TestCase;
 
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Precondition:

@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
+use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Tester\CommandTester;

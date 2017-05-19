@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email;
 
-use \Magento\Sales\Model\Order\Email\SenderBuilder;
+use Magento\Sales\Model\Order\Email\SenderBuilder;
 
 class SenderBuilderTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-use \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner;
+use Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner;
 
 class ServiceDataAttributesScannerTest extends \PHPUnit_Framework_TestCase
 {

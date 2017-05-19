@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache;
 
-use \Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\Manager;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {

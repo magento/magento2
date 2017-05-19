@@ -6,15 +6,15 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\Component\Listing\AssociatedProduct\Columns;
 
 use Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price as PriceColumn;
+use Magento\Directory\Model\Currency as CurrencyModel;
+use Magento\Framework\Currency;
+use Magento\Framework\Locale\CurrencyInterface as LocaleCurrency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\Locale\CurrencyInterface as LocaleCurrency;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Currency;
-use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

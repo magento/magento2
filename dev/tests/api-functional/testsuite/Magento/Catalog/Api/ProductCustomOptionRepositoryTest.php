@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Model\ProductRepository;
@@ -182,7 +180,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $fixtureOptions[$item['type']] = [
                 'optionData' => $item,
             ];
-        };
+        }
 
         return $fixtureOptions;
     }
@@ -229,7 +227,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $fixtureOptions[$key] = [
                 'optionData' => $item,
             ];
-        };
+        }
 
         return $fixtureOptions;
     }

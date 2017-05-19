@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Setup\Model\PackagesData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\PackagesData;
 
 /**
  * Controller for extensions grid tasks

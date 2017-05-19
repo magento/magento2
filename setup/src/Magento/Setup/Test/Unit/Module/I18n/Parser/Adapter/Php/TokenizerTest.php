@@ -5,9 +5,9 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php;
 
-use \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer
@@ -91,7 +91,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
 
     protected function parseFile()
     {
-        $file = __DIR__.'/_files/objectsCode.php.txt';
+        $file = __DIR__ . '/_files/objectsCode.php.txt';
         $this->tokenizer->parse($file);
     }
 }

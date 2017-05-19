@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
@@ -203,7 +201,7 @@ abstract class AbstractData
      */
     public function getExtractedData($index = null)
     {
-        if (!is_null($index)) {
+        if ($index !== null) {
             if (isset($this->_extractedData[$index])) {
                 return $this->_extractedData[$index];
             }
@@ -260,9 +258,9 @@ abstract class AbstractData
      */
     protected function _dateFilterFormat($format = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             // get format
-            if (is_null($this->_dateFilterFormat)) {
+            if ($this->_dateFilterFormat === null) {
                 $this->_dateFilterFormat = \IntlDateFormatter::SHORT;
             }
             return $this->_localeDate->getDateFormat($this->_dateFilterFormat);

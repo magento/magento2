@@ -5,16 +5,16 @@
  */
 namespace Magento\PageCache\Test\Unit\Model\Controller\Result;
 
-use Magento\PageCache\Model\Controller\Result\BuiltinPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\PageCache\Model\Config;
 use Magento\Framework\App\PageCache\Kernel;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Registry;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\PageCache\Model\Cache\Type as CacheType;
+use Magento\PageCache\Model\Config;
+use Magento\PageCache\Model\Controller\Result\BuiltinPlugin;
+use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

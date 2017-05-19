@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Event\Test\Unit\Config;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Event\Config\Converter;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {

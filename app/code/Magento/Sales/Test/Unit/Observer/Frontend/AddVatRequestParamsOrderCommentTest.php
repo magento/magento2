@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
-use \Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment;
+use Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment

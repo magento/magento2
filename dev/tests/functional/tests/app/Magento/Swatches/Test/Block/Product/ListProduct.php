@@ -6,9 +6,9 @@
 
 namespace Magento\Swatches\Test\Block\Product;
 
+use Magento\Catalog\Test\Block\Product\ListProduct as CatalogListProduct;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Catalog\Test\Block\Product\ListProduct as CatalogListProduct;
 
 /**
  * Product list block.

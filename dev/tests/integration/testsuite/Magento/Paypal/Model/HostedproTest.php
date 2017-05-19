@@ -7,10 +7,7 @@ namespace Magento\Paypal\Model;
 
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Api\Nvp;
-use Magento\Paypal\Model\Config;
-use Magento\Paypal\Model\Hostedpro;
-use Magento\Paypal\Model\Hostedpro\RequestFactory;
-use Magento\Paypal\Model\ProFactory;
+
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 

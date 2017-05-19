@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\CollectionFilter;
+use Magento\Catalog\Model\Layer\Category\CollectionFilter;
 
 class CollectionFilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +28,11 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->visibilityMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Visibility::class, [], [], '', false
+            \Magento\Catalog\Model\Product\Visibility::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->catalogConfigMock = $this->getMock(\Magento\Catalog\Model\Config::class, [], [], '', false);
         $this->model = new CollectionFilter($this->visibilityMock, $this->catalogConfigMock);
@@ -43,7 +45,11 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $collectionMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class, [], [], '', false
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [],
+            [],
+            '',
+            false
         );
 
         $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);

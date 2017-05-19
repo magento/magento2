@@ -7,7 +7,6 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler;
-use Magento\Framework\EntityManager\MetadataPool;
 
 class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 {

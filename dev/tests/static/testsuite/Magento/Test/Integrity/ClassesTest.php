@@ -8,8 +8,8 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Classes;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class ClassesTest extends \PHPUnit_Framework_TestCase
 {

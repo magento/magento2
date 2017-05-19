@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
+use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 
 class ShipmentCommentIdentityTest extends \PHPUnit_Framework_TestCase
 {

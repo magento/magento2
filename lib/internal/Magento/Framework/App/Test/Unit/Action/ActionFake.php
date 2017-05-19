@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Action;
 
-use \Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Action;
 
 class ActionFake extends Action
 {

@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use \Magento\Framework\View\Asset\MergeStrategy\Direct;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+
+use Magento\Framework\View\Asset\MergeStrategy\Direct;
 
 class DirectTest extends \PHPUnit_Framework_TestCase
 {

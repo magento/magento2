@@ -6,8 +6,8 @@
 
 namespace Magento\Security\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCustomerIsLocked

@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
@@ -82,8 +80,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                     ['product', $product],
                     ['current_category', $category],
                 ]
-            )
-        );
+            ));
         $this->assertEquals(['cat_p_1', 'cat_c_1'], $this->view->getIdentities());
     }
 }

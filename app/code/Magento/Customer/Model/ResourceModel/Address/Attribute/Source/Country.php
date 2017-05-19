@@ -11,10 +11,8 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
-use Magento\Checkout\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Country.

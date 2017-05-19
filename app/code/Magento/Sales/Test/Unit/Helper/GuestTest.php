@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Test\Unit\Helper;
 
-use Magento\Sales\Helper\Guest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Helper\Guest;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

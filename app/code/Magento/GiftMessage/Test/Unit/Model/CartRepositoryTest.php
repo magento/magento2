@@ -6,8 +6,6 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
-
 use Magento\GiftMessage\Model\CartRepository;
 
 class CartRepositoryTest extends \PHPUnit_Framework_TestCase

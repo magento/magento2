@@ -7,7 +7,7 @@
 
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
-use \Magento\Bundle\Model\Product\LinksList;
+use Magento\Bundle\Model\Product\LinksList;
 
 class LinksListTest extends \PHPUnit_Framework_TestCase
 {

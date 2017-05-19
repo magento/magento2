@@ -8,9 +8,9 @@ namespace Magento\Review\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Review\Test\Fixture\Rating;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Review\Test\Fixture\Rating;
 
 /**
  * Class AssertProductRatingNotInProductPage

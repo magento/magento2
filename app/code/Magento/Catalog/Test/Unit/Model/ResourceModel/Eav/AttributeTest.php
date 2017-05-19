@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Eav;
+
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -66,13 +66,20 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $cacheInterfaceMock = $this->getMock(\Magento\Framework\App\CacheInterface::class, [], [], '', false);
 
         $actionValidatorMock = $this->getMock(
-            \Magento\Framework\Model\ActionValidator\RemoveAction::class, [], [], '', false
+            \Magento\Framework\Model\ActionValidator\RemoveAction::class,
+            [],
+            [],
+            '',
+            false
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
         $this->contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getActionValidator'],
+            [],
+            '',
+            false
         );
 
         $this->contextMock->expects($this->any())
@@ -116,7 +123,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-                [
+            [
                     'context' => $this->contextMock,
                     'productFlatIndexerProcessor' => $this->_processor,
                     'indexerEavProcessor' => $this->_eavProcessor,
@@ -141,9 +148,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->_model->setOrigData('is_global', \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE);
+        $this->_model->setOrigData('is_global', ScopedAttributeInterface::SCOPE_STORE);
         $this->_model->setOrigData('used_in_product_listing', 1);
-        $this->_model->setIsGlobal(\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL);
+        $this->_model->setIsGlobal(ScopedAttributeInterface::SCOPE_GLOBAL);
         $this->_model->afterSave();
     }
 
@@ -182,7 +189,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'indexerEavProcessor' => $this->_eavProcessor,
                 'resource' => $this->resourceMock,
                 'data' => [
-                    'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+                    'is_global' => ScopedAttributeInterface::SCOPE_GLOBAL
                 ]
             ]
         );
@@ -200,7 +207,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'indexerEavProcessor' => $this->_eavProcessor,
                 'resource' => $this->resourceMock,
                 'data' => [
-                    'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE
+                    'is_global' => ScopedAttributeInterface::SCOPE_WEBSITE
                 ]
             ]
         );

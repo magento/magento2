@@ -10,7 +10,6 @@ use Magento\Framework\Url\HostChecker;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,7 +89,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Data\Form\FormKey::class,
             ['getFormKey'],
             [],
-            '', false
+            '',
+            false
         );
         $this->_formKey->expects($this->any())->method('getFormKey')->will($this->returnValue('salt'));
 

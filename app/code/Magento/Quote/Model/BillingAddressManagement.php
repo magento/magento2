@@ -5,11 +5,10 @@
  */
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Quote\Api\BillingAddressManagementInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /** Quote billing address write service object. */
 class BillingAddressManagement implements BillingAddressManagementInterface

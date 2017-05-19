@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
@@ -46,11 +44,19 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         );
         $this->linkAttributeFactoryMock = $this->getMock(
             \Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory::class,
-            ['create'], [], '', false, false
+            ['create'],
+            [],
+            '',
+            false,
+            false
         );
         $this->linkFactoryMock = $this->getMock(
             \Magento\Catalog\Model\Product\LinkFactory::class,
-            ['create'], [], '', false, false
+            ['create'],
+            [],
+            '',
+            false,
+            false
         );
         $this->linkTypes = [
             'test_product_link_1' => 'test_code_1',

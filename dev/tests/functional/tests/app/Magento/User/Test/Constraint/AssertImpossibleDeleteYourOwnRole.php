@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 
 /**
  * Class AssertRoleSuccessSaveMessage

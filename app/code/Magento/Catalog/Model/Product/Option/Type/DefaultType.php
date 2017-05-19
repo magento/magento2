@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog product option default type
@@ -192,7 +191,7 @@ class DefaultType extends \Magento\Framework\DataObject
      */
     public function getConfigData($key)
     {
-        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue('catalog/custom_options/' . $key, ScopeInterface::SCOPE_STORE);
     }
 
     /**

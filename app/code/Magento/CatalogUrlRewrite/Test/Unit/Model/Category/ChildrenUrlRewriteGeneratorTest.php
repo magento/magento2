@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ChildrenUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +54,7 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->childrenUrlRewriteGenerator = (new ObjectManager($this))->getObject(

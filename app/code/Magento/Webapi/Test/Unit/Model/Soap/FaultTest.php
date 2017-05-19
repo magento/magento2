@@ -5,7 +5,7 @@
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap;
 
-use \Magento\Webapi\Model\Soap\Fault;
+use Magento\Webapi\Model\Soap\Fault;
 
 /**
  * Test SOAP fault model.

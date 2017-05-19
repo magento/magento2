@@ -4,13 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
-use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
 
 class AlternativeTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,8 +54,11 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException(array $alternativeExtensions)
     {
-        $this->setExpectedException('\InvalidArgumentException', "\$alternativeExtensions must be an array with format:"
-            . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]");
+        $this->setExpectedException(
+            '\InvalidArgumentException',
+            "\$alternativeExtensions must be an array with format:"
+            . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]"
+        );
 
         $readFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class, [], [], '', false);
         $rulePool = $this->getMock(\Magento\Framework\View\Design\Fallback\RulePool::class, [], [], '', false);

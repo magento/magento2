@@ -5,8 +5,8 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote;
+use Magento\TestFramework\Helper\Bootstrap;
 
 abstract class GridTestAbstract extends \PHPUnit_Framework_TestCase
 {

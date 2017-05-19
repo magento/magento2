@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Model\Plugin;
 
-use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
-use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
+use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
+use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
 
 /**
  * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem

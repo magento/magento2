@@ -6,10 +6,10 @@
 
 namespace Magento\Config\Test\Fixture\ConfigData;
 
+use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\Website;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\DataSource;
 
 /**
  * Prepare Section entity.

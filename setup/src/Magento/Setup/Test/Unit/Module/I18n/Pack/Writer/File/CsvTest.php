@@ -5,14 +5,14 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Pack\Writer\File;
 
-use Magento\Setup\Module\I18n\Context;
-use Magento\Setup\Module\I18n\Locale;
-use Magento\Setup\Module\I18n\Dictionary;
-use Magento\Setup\Module\I18n\Factory;
-use Magento\Setup\Module\I18n\Dictionary\Phrase;
-use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
-use Magento\Setup\Module\I18n\Dictionary\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Module\I18n\Context;
+use Magento\Setup\Module\I18n\Dictionary;
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Setup\Module\I18n\Dictionary\WriterInterface;
+use Magento\Setup\Module\I18n\Factory;
+use Magento\Setup\Module\I18n\Locale;
+use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
 
 require_once __DIR__ . '/_files/ioMock.php';
 

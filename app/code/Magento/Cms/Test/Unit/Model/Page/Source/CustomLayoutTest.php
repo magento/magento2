@@ -5,8 +5,6 @@
  */
 namespace Magento\Cms\Test\Unit\Model\Page\Source;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 class CustomLayoutTest extends PageLayoutTest
 {
     /**

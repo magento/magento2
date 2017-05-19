@@ -4,15 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Test\Unit\Helper;
 
-use \Magento\Checkout\Helper\Cart;
+use Magento\Checkout\Helper\Cart;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\DataObject;
-use Magento\Quote\Model\Quote\Item;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
@@ -158,7 +155,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $isRequestSecure = false;
         $productMock = $this->getMock(
             \Magento\Catalog\Model\Product::class,
-            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'], [], '', false);
+            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
         $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
         $productMock->expects($this->any())->method('getUrlDataObject')

@@ -67,8 +67,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     protected function _getSampleReflectionData()
     {
         return [
-            'documentation' =>
-                'Basic random string generator. This line is short description '.
+            'documentation' => 'Basic random string generator. This line is short description ' .
                 'This line is long description. This is still the long description.',
             'interface' => [
                 'in' => [

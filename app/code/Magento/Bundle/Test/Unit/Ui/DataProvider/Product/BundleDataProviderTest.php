@@ -5,12 +5,12 @@
  */
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Bundle\Helper\Data;
 use Magento\Bundle\Ui\DataProvider\Product\BundleDataProvider;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Bundle\Helper\Data;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BundleDataProviderTest extends \PHPUnit_Framework_TestCase
 {

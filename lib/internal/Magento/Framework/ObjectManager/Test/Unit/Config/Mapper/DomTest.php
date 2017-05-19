@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Mapper;
 
-use \Magento\Framework\ObjectManager\Config\Mapper\Dom;
+use Magento\Framework\ObjectManager\Config\Mapper\Dom;
 
 class DomTest extends \PHPUnit_Framework_TestCase
 {

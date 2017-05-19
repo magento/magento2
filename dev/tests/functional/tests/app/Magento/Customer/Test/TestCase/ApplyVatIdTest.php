@@ -8,9 +8,9 @@ namespace Magento\Customer\Test\TestCase;
 
 use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAddressEdit;
-use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Preconditions:

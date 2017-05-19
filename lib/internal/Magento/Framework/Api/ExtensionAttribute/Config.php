@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Api\ExtensionAttribute;
 
-use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Api\ExtensionAttribute\Config\Reader;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**

@@ -11,10 +11,10 @@ use Magento\Catalog\Model\Product\Image\Cache as ImageCache;
 use Magento\Catalog\Model\Product\Image\CacheFactory as ImageCacheFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Symfony\Component\Console\Tester\CommandTester;
-use \Magento\Framework\App\Area;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

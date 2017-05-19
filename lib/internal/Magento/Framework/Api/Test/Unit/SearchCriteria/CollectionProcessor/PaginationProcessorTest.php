@@ -13,7 +13,7 @@ class PaginationProcessorTest extends \PHPUnit_Framework_TestCase
 {
     public function testProcess()
     {
-        $model = new PaginationProcessor;
+        $model = new PaginationProcessor();
 
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)

@@ -6,11 +6,11 @@
 namespace Magento\Store\Test\Unit\Model\Message;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Store\Model\Message\EmptyGroupCategory;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\ResourceModel\Group\Collection;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\Message\EmptyGroupCategory;
+use Magento\Store\Model\ResourceModel\Group\Collection;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class EmptyGroupCategoryTest extends \PHPUnit_Framework_TestCase
 {

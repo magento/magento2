@@ -7,11 +7,10 @@ namespace Magento\Catalog\Test\Unit\Model\Category\Link;
 
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Model\Category\Link\SaveHandler;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Indexer\IndexerRegistry;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

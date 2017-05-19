@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CatalogPriceRulesFixture;
+use Magento\Setup\Fixtures\CatalogPriceRulesFixture;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

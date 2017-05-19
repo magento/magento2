@@ -6,8 +6,8 @@
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

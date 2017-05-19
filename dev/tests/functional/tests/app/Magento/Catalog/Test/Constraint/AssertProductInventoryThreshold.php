@@ -9,8 +9,8 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Assert that checks if threshold message setting is working correctly.

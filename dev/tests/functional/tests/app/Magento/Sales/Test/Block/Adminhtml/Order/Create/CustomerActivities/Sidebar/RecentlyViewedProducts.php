@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
-use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 use Magento\Mtf\Client\Locator;
+use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
 /**
  * Class RecentlyViewedProducts

@@ -6,9 +6,9 @@
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
-use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 
 /**
  * Class AssertUrlRewriteSuccessOutsideRedirect

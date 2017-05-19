@@ -5,9 +5,9 @@
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth\Token;
 
+use Magento\Integration\Model\Oauth\Token\RequestLog\Config as RequestLogConfig;
 use Magento\Integration\Model\Oauth\Token\RequestLog\ReaderInterface;
 use Magento\Integration\Model\Oauth\Token\RequestLog\WriterInterface;
-use Magento\Integration\Model\Oauth\Token\RequestLog\Config as RequestLogConfig;
 
 /**
  * Resource model for failed authentication attempts to retrieve admin/customer token.

@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
-use \Magento\Tax\Model\Sales\Total\Quote\Shipping;
+use Magento\Tax\Model\Sales\Total\Quote\Shipping;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

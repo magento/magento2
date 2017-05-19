@@ -73,7 +73,7 @@ class ReadHandler extends AbstractHandler
     protected function loadVideoDataById(array $ids, $storeId = null)
     {
         $mainTableAlias = $this->resourceModel->getMainTableAlias();
-        $joinConditions = $mainTableAlias.'.value_id = store_value.value_id';
+        $joinConditions = $mainTableAlias . '.value_id = store_value.value_id';
         if (null !== $storeId) {
             $joinConditions = implode(
                 ' AND ',
@@ -135,10 +135,10 @@ class ReadHandler extends AbstractHandler
     protected function substituteNullsWithDefaultValues(array $rowData)
     {
         foreach ($this->getVideoProperties(false) as $key) {
-            if (empty($rowData[$key]) && !empty($rowData[$key.'_default'])) {
-                $rowData[$key] = $rowData[$key.'_default'];
+            if (empty($rowData[$key]) && !empty($rowData[$key . '_default'])) {
+                $rowData[$key] = $rowData[$key . '_default'];
             }
-            unset($rowData[$key.'_default']);
+            unset($rowData[$key . '_default']);
         }
 
         return $rowData;

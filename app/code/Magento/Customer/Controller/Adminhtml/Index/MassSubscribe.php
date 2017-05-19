@@ -6,12 +6,12 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassSubscribe

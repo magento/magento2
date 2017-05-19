@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ImageProcessor;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 class Processor

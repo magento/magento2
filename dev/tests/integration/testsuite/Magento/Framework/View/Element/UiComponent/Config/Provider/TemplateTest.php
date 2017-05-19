@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider;
 
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 
 /**

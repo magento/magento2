@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Fixture\Product;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Base class for create related products.

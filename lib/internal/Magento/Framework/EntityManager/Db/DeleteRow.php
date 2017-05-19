@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\EntityManager\Db;
 
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class DeleteRow

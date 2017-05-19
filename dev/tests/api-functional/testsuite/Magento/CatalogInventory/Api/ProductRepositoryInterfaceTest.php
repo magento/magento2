@@ -46,7 +46,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(isset($response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM]));
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
-        $this->assertEquals($qty, $returnedQty, 'CREATE: Expected qty to be same: ' . $qty .', '. $returnedQty);
+        $this->assertEquals($qty, $returnedQty, 'CREATE: Expected qty to be same: ' . $qty . ', ' . $returnedQty);
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
 
@@ -55,7 +55,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
-        $this->assertEquals($qty, $returnedQty, 'GET: Expected qty to be same: ' . $qty .', '. $returnedQty);
+        $this->assertEquals($qty, $returnedQty, 'GET: Expected qty to be same: ' . $qty . ', ' . $returnedQty);
 
         // update the catalog inventory
         $qty = $this->getDifferent($qty);  // update the quantity
@@ -65,7 +65,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
-        $this->assertEquals($qty, $returnedQty, 'UPDATE 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
+        $this->assertEquals($qty, $returnedQty, 'UPDATE 1: Expected qty to be same: ' . $qty . ', ' . $returnedQty);
 
         // update the product without any mention of catalog inventory; no change expected for catalog inventory
         // note: $qty expected to be the same as previously set, above
@@ -79,7 +79,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(isset($response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM]));
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
-        $this->assertEquals($qty, $returnedQty, 'UPDATE 2: Expected qty to be same: ' . $qty .', '. $returnedQty);
+        $this->assertEquals($qty, $returnedQty, 'UPDATE 2: Expected qty to be same: ' . $qty . ', ' . $returnedQty);
         $this->assertEquals($newPrice, $response[ProductInterface::PRICE]);
 
         // delete the product; expect that all goes well
@@ -106,7 +106,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue(isset($response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM]));
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
-        $this->assertEquals($qty, $returnedQty, 'POST 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
+        $this->assertEquals($qty, $returnedQty, 'POST 1: Expected qty to be same: ' . $qty . ', ' . $returnedQty);
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
 
@@ -125,7 +125,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $returnedQty = $stockItemData[self::KEY_QTY];
-        $this->assertEquals($qty, $returnedQty, 'POST 2: Expected qty to be same: ' . $qty .', '. $returnedQty);
+        $this->assertEquals($qty, $returnedQty, 'POST 2: Expected qty to be same: ' . $qty . ', ' . $returnedQty);
 
         $returnedProductId = $stockItemData[self::KEY_PRODUCT_ID];
         $this->assertEquals($originalProductId, $returnedProductId);

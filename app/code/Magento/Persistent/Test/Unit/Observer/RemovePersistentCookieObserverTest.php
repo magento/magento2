@@ -5,11 +5,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use \Magento\Persistent\Observer\RemovePersistentCookieObserver;
+use Magento\Persistent\Observer\RemovePersistentCookieObserver;
 
 class RemovePersistentCookieObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,7 +59,8 @@ class RemovePersistentCookieObserverTest extends \PHPUnit_Framework_TestCase
             $this->persistentMock,
             $this->persistentDataMock,
             $this->customerSessionMock,
-            $this->quoteManagerMock);
+            $this->quoteManagerMock
+        );
     }
 
     public function testExecuteWithPersistentDataThatCanNotBeProcess()

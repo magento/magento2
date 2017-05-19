@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Initialization\Helper;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ProductLinksTest extends \PHPUnit_Framework_TestCase
 {

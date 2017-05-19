@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

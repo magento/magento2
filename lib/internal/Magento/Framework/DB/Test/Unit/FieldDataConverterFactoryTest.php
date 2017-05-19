@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\DB\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\FieldDataConverter;
-use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class FieldDataConverterFactoryTest extends \PHPUnit_Framework_TestCase
 {

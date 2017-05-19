@@ -84,7 +84,7 @@ class Reader
         }
 
         $config = [];
-        
+
         $this->fillThirdPartyInterfaces($areaConfig, $definitionsCollection);
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
 

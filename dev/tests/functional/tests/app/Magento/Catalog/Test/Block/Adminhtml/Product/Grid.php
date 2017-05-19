@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Backend catalog product grid.

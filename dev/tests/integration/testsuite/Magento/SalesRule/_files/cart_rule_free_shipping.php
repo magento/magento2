@@ -16,8 +16,7 @@ $row =
         'customer_group_ids' => [\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID],
         'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON,
         'conditions' => [
-            1 =>
-                [
+            1 => [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                     'attribute' => null,
                     'operator' => null,

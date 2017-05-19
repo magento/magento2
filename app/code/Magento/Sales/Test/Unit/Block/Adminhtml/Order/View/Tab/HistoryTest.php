@@ -90,7 +90,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemCreatedAtDate()
     {
-        $date = new \DateTime;
+        $date = new \DateTime();
         $item = ['created_at' => $date ];
 
         $this->localeDateMock->expects($this->once())
@@ -103,7 +103,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemCreatedAtTime()
     {
-        $date = new \DateTime;
+        $date = new \DateTime();
         $item = ['created_at' => $date ];
 
         $this->localeDateMock->expects($this->once())

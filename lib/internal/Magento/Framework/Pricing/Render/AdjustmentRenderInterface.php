@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Pricing\Render;
 
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Adjustment render interface

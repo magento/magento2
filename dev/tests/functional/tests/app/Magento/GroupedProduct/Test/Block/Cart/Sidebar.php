@@ -6,9 +6,9 @@
 
 namespace Magento\GroupedProduct\Test\Block\Cart;
 
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Checkout\Test\Block\Cart\Sidebar as MiniShoppingCart;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Mini shopping cart block.

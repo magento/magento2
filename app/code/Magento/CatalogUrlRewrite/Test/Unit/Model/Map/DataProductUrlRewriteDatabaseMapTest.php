@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Framework\DB\Select;
-use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\DB\TemporaryTableService;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class DataProductUrlRewriteDatabaseMapTest

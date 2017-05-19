@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Model\Indexer;
 class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
 {
     const INDEXER_ID = 'stub_indexer_id';
-    
+
     /**
      * @var \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub
      */

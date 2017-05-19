@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Mapper;
 
-use \Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser;
+use Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser;
 
 class ArgumentParserTest extends \PHPUnit_Framework_TestCase
 {

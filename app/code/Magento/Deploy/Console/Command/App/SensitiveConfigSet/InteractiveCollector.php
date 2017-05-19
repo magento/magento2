@@ -5,10 +5,10 @@
  */
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
 
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\QuestionFactory;
-use Symfony\Component\Console\Helper\QuestionHelper;
 
 /**
  * Class InteractiveCollector collects configuration values from user input

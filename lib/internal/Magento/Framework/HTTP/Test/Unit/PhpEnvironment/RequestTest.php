@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
-use \Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 
 use Zend\Stdlib\Parameters;
 

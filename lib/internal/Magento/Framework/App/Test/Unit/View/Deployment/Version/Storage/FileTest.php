@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Deployment\Version\Storage;
 
-use \Magento\Framework\App\View\Deployment\Version\Storage\File;
+use Magento\Framework\App\View\Deployment\Version\Storage\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {

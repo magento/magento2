@@ -43,8 +43,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAllInOrder()
     {
-        $message = [1 =>
-            [
+        $message = [1 => [
                 'from' => 'John Doe',
                 'to' => 'Jane Doe',
                 'message' => 'I love Magento',

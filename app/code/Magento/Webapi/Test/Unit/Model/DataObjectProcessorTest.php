@@ -6,8 +6,8 @@
 
 namespace Magento\Webapi\Test\Unit\Model;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Webapi\Model\Config as ModelConfig;
 
 class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
-use \Magento\Framework\Convert\DataObject;
+use Magento\Framework\Convert\DataObject;
 
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {

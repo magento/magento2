@@ -6,15 +6,15 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Backend\App\Action;
-use Magento\Framework\Registry;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Controller\Result\RawFactory;
 
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {

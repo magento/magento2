@@ -5,15 +5,15 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command;
 
+use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 use Magento\Config\Console\Command\ConfigShowCommand;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\Scope\ValidatorInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\Config\ConfigPathResolver;
-use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {

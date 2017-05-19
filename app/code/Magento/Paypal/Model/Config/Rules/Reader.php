@@ -6,10 +6,9 @@
 namespace Magento\Paypal\Model\Config\Rules;
 
 use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Config\ValidationStateInterface;
-use Magento\Framework\DataObject;
-use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Paypal\Helper\Backend;
 
 /**

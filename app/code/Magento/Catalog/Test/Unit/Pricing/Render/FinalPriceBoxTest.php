@@ -7,10 +7,10 @@
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Render\Amount;
-use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Class FinalPriceBoxTest

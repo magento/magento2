@@ -5,7 +5,7 @@
  */
 namespace Magento\CurrencySymbol\Test\Unit\Observer;
 
-use \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
+use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
 
 /**
  * Test for \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
@@ -79,7 +79,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCurrencyDisplayOptionsEmpty()
     {
-        $sampleCurrencyOptionObject = new \Magento\Framework\DataObject;
+        $sampleCurrencyOptionObject = new \Magento\Framework\DataObject();
         //Return invalid value
         $this->mockEvent->expects($this->once())->method('getBaseCode')->willReturn(null);
         $this->mockEvent->expects($this->once())->method('getCurrencyOptions')->willReturn($sampleCurrencyOptionObject);
@@ -93,7 +93,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCurrencyDisplayOptions()
     {
-        $sampleCurrencyOptionObject = new \Magento\Framework\DataObject;
+        $sampleCurrencyOptionObject = new \Magento\Framework\DataObject();
         $sampleCurrency = 'USD';
         $sampleCurrencySymbol = '$';
 

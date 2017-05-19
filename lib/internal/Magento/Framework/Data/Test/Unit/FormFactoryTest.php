@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-use \Magento\Framework\Data\FormFactory;
+use Magento\Framework\Data\FormFactory;
 
 /**
  * Tests for \Magento\Framework\Data\FormFactory

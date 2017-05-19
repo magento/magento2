@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Customer\Controller\RegistryConstants;
-
 class Cart extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**

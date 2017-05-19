@@ -5,8 +5,8 @@
  */
 namespace Magento\ImportExport\Test\Block\Adminhtml\Import\Edit;
 
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Import form.

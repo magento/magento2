@@ -5,13 +5,13 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
-use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Customer\Api\CustomerManagementInterface;
-use Magento\Store\Api\WebsiteManagementInterface;
 use Magento\Store\Api\StoreManagementInterface;
+use Magento\Store\Api\WebsiteManagementInterface;
 
 class Counter
 {

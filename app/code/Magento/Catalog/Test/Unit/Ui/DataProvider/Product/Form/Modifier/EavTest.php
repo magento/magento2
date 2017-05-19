@@ -5,38 +5,36 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Product\Type;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\EntityManager\EventManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection as GroupCollection;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
-use Magento\Eav\Model\Entity\Attribute\Group;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Group;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection as GroupCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Currency;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\Currency as CurrencyLocale;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Framework\Api\AttributeInterface;
-use Magento\Eav\Api\Data\AttributeGroupInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\Currency;
-use Magento\Framework\Locale\Currency as CurrencyLocale;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
-use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class EavTest
@@ -186,7 +184,7 @@ class EavTest extends AbstractModifierTest
      * @var ObjectManager
      */
     protected $objectManager;
-    
+
     /**
      * @var Eav
      */
@@ -322,7 +320,7 @@ class EavTest extends AbstractModifierTest
         $this->eavAttributeMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        
+
         $this->eav =$this->getModel();
         $this->objectManager->setBackwardCompatibleProperty(
             $this->eav,

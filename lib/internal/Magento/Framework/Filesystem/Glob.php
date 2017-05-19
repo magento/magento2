@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Filesystem;
 
-use Zend\Stdlib\Glob as ZendGlob;
 use Zend\Stdlib\Exception\RuntimeException as ZendRuntimeException;
+use Zend\Stdlib\Glob as ZendGlob;
 
 /**
  * Wrapper for Zend\Stdlib\Glob

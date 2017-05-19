@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
-use \Magento\UrlRewrite\Model\Storage\DbStorage;
-
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 class DbStorageTest extends \PHPUnit_Framework_TestCase
@@ -52,12 +49,20 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->getMock(
-            \Magento\Framework\Api\DataObjectHelper::class, [], [], '',
-            false);
+            \Magento\Framework\Api\DataObjectHelper::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->select = $this->getMock(
-            \Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect'], [], '',
-            false);
+            \Magento\Framework\DB\Select::class,
+            ['from', 'where', 'deleteFromSelect'],
+            [],
+            '',
+            false
+        );
         $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
 
         $this->resource->expects($this->any())
@@ -67,7 +72,8 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->select));
 
-        $this->storage = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Model\Storage\DbStorage::class,
+        $this->storage = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,

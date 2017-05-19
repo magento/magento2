@@ -5,9 +5,9 @@
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\CheckoutAgreements\Model\AgreementModeOptions;
+use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\Store\Model\ScopeInterface;
 
 class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\RequestDataConverter;
 use Magento\Setup\Validator\AdminCredentialsValidator;
 use Zend\Json\Json;

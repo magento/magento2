@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\App\State;
 
-use Magento\Framework\Filesystem;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
 
 /**
  * A service for cleaning up application state

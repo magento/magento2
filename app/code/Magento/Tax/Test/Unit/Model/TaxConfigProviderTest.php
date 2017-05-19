@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\Config;
+use Magento\Tax\Model\Config;
 
 class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
 {

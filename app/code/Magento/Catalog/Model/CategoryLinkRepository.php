@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 
 class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
 {

@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\GroupedProduct\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -216,7 +214,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
+            [],
+            '',
+            false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
         $contextMock->expects($this->any())->method('getEventDispatcher')->will($this->returnValue($eventManagerMock));
@@ -301,10 +302,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->linkTypeProviderMock = $this->getMock(
             \Magento\Catalog\Model\Product\LinkTypeProvider::class,
-            ['getLinkTypes'], [], '', false);
+            ['getLinkTypes'],
+            [],
+            '',
+            false
+        );
         $this->entityCollectionProviderMock = $this->getMock(
             \Magento\Catalog\Model\ProductLink\CollectionProvider::class,
-            ['getCollection'], [], '', false);
+            ['getCollection'],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -334,7 +343,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'data' => ['id' => 1]
             ]
         );
-
     }
 
     /**
@@ -373,7 +381,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $reflectionOfExtension = new \ReflectionClass(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
         $method->setAccessible(true);
-        $method->invokeArgs($groupExtension, array('qty', 1));
+        $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $outputGroupLink->setProductSku("Simple Product 1");

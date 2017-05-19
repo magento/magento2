@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model;
 
-use Magento\Backend\Block\Widget\Grid\Serializer;
 use Magento\Framework\Serialize\SerializerInterface;
 
 class DesignTest extends \PHPUnit_Framework_TestCase

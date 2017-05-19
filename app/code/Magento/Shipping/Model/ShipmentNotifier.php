@@ -6,9 +6,9 @@
 
 namespace Magento\Shipping\Model;
 
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class ShipmentNotifier

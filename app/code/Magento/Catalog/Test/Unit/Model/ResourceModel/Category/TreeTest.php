@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -180,12 +178,12 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $attributeConfig->expects(
             $this->once()
         )->method(
-                'getAttributeNames'
-            )->with(
-                'catalog_category'
-            )->will(
-                $this->returnValue($attributes)
-            );
+            'getAttributeNames'
+        )->with(
+            'catalog_category'
+        )->will(
+            $this->returnValue($attributes)
+        );
 
         $collection = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class,

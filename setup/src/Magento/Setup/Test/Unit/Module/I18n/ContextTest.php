@@ -6,7 +6,7 @@
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use \Magento\Setup\Module\I18n\Context;
+use Magento\Setup\Module\I18n\Context;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {

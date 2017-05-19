@@ -6,11 +6,11 @@
 
 namespace Magento\Indexer\Setup;
 
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Indexer\Model\IndexerFactory;
-use Magento\Framework\Indexer\ConfigInterface;
 
 /**
  * Recurring data upgrade for indexer module

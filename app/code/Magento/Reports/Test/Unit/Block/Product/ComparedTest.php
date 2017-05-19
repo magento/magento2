@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Unit\Block\Product;
 
-use \Magento\Reports\Block\Product\Compared;
-use \Magento\Reports\Model\Product\Index\Factory;
+use Magento\Reports\Block\Product\Compared;
+use Magento\Reports\Model\Product\Index\Factory;
 
 class ComparedTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModelException()
     {
-        $this->factoryMock->expects($this->once())->method('get')->willThrowException(new \InvalidArgumentException);
+        $this->factoryMock->expects($this->once())->method('get')->willThrowException(new \InvalidArgumentException());
 
         $this->sut->getModel();
     }

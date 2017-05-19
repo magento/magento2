@@ -8,8 +8,8 @@ namespace Magento\Reports\Test\TestCase;
 
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
-use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 
 /**
  * Preconditions:

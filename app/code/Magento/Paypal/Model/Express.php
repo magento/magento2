@@ -9,10 +9,10 @@ use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -669,7 +669,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     public function assignData(\Magento\Framework\DataObject $data)
     {
         parent::assignData($data);
-        
+
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
         if (!is_array($additionalData)) {

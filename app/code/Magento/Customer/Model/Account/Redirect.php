@@ -7,18 +7,18 @@ namespace Magento\Customer\Model\Account;
 
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Forward as ResultForward;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Url\HostChecker;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
-use Magento\Framework\Controller\Result\Forward as ResultForward;
-use Magento\Framework\Url\DecoderInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -7,7 +7,6 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Module\Setup\SetupCache;
 

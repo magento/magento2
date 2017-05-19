@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Helper;
 
-use \Magento\Sales\Helper\Reorder;
+use Magento\Sales\Helper\Reorder;
 
 class ReorderTest extends \PHPUnit_Framework_TestCase
 {

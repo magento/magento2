@@ -6,10 +6,10 @@
 
 namespace Magento\Tax\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertTaxRateForm

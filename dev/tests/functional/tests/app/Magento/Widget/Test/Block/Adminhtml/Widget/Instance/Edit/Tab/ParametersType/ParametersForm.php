@@ -6,11 +6,11 @@
 
 namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType;
 
+use Magento\Backend\Test\Block\Template;
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Backend\Test\Block\Template;
 
 /**
  * Responds for filling widget options form.

@@ -5,11 +5,11 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Search\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils as StdlibString;
+use Magento\Search\Helper\Data;
 
 class QueryFactory implements QueryFactoryInterface
 {

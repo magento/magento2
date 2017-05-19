@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework;
 
-use \Zend\Stdlib\ParametersInterface;
+use Zend\Stdlib\ParametersInterface;
 
 /**
  * HTTP request implementation that is used instead core one for testing

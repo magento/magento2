@@ -151,8 +151,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 ->with($testArgumentData['argument'])
                 ->willReturn($argumentData['argument']);
         } else {
-            $argumentInterpreter->expects($this->never())->method('evaluate')
-            ;
+            $argumentInterpreter->expects($this->never())->method('evaluate');
         }
 
         /** @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject $blockFactory */

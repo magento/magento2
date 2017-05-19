@@ -5,7 +5,6 @@
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**

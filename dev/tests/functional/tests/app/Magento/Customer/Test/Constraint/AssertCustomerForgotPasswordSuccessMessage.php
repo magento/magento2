@@ -7,8 +7,8 @@
 namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that customer forgot password message is present on customer account forgot password page.

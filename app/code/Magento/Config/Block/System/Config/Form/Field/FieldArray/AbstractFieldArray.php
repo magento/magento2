@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
 
 /**
@@ -84,7 +82,9 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             'class' => $this->_getParam($params, 'class'),
             'renderer' => false,
         ];
-        if (!empty($params['renderer']) && $params['renderer'] instanceof \Magento\Framework\View\Element\AbstractBlock) {
+        if (!empty($params['renderer'])
+            && $params['renderer'] instanceof \Magento\Framework\View\Element\AbstractBlock
+        ) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
     }
@@ -226,10 +226,10 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             '"' : '') .
             ' class="' .
             (isset(
-            $column['class']
-        ) ? $column['class'] : 'input-text') . '"' . (isset(
-            $column['style']
-        ) ? ' style="' . $column['style'] . '"' : '') . '/>';
+                $column['class']
+            ) ? $column['class'] : 'input-text') . '"' . (isset(
+                $column['style']
+            ) ? ' style="' . $column['style'] . '"' : '') . '/>';
     }
 
     /**

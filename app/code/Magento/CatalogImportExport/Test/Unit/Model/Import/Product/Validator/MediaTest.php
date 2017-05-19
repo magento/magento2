@@ -21,12 +21,11 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->media = $this->objectManagerHelper->getObject(
             Media::class,
             [
-                
+
             ]
         );
     }

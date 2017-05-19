@@ -11,8 +11,8 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config as InterceptionConfig;
-use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Framework\ObjectManager\InterceptableValidator;
+use Magento\Setup\Module\Di\Code\Reader\Type;
 
 class InterceptionConfigurationBuilder
 {

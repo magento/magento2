@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product\Copier;
 
 class CopierTest extends \PHPUnit_Framework_TestCase
 {
@@ -145,7 +145,8 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
         $duplicateMock->expects($this->any())->method('getData')->willReturnMap([
             ['linkField', null, '2'],
-        ]);        $this->optionRepositoryMock->expects($this->once())
+        ]);
+        $this->optionRepositoryMock->expects($this->once())
             ->method('duplicate')
             ->with($this->productMock, $duplicateMock);
         $resourceMock->expects($this->once())->method('duplicate')->with(1, 2);

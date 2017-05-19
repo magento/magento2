@@ -5,9 +5,9 @@
  */
 namespace Magento\Store\App\Request;
 
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Store\Model\ScopeInterface;
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 {

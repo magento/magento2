@@ -6,9 +6,9 @@
 
 namespace Magento\Tax\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class DeleteAllTaxRulesStep

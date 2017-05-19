@@ -6,9 +6,9 @@
 
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Directory\Model\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

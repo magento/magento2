@@ -6,11 +6,11 @@
 
 namespace Magento\Security\Test\Unit\Model\SecurityChecker;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 
 /**
  * Test class for \Magento\Security\Model\SecurityChecker\Quantity testing

@@ -73,7 +73,7 @@ class FetchReportsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($settlementMock);
 
         $settlementMock->expects($this->once())->method('getSftpCredentials')->with(true)->willReturn($sftpCredentials);
-        $settlementMock->expects($this->any())->method('fetchAndSave')->willThrowException(new \Exception);
+        $settlementMock->expects($this->any())->method('fetchAndSave')->willThrowException(new \Exception());
         $this->logger->expects($this->never())->method('critical');
 
         $this->fetchReports->execute();

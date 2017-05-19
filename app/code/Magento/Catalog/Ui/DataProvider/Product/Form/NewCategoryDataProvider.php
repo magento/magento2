@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form;
 
-use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\UrlInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * DataProvider for new category form

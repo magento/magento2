@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Model\HeaderProvider;
 
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Adds an Content-Security-Policy header to HTTP responses.

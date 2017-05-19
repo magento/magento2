@@ -5,7 +5,6 @@
  */
 namespace Magento\Tax\Test\Unit\Observer;
 
-use Magento\Tax\Observer\GetPriceConfigurationObserver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -189,16 +188,14 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 35.50],
                                     'basePrice' => ['amount' => 30.50],
                                 ],
                         ],
                         [
                             'optionId' => 2,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' =>['amount' => 333.50],
                                     'basePrice' => ['amount' => 300.50],
                                 ],
@@ -209,8 +206,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 35.50],
                                     'basePrice' => ['amount' => 35],
                                     'oldPrice' => ['amount' => 35],
@@ -218,8 +214,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                         ],
                         [
                             'optionId' => 2,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' =>['amount' => 333.50],
                                     'basePrice' => ['amount' => 300.50],
                                 ],

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
-use \Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Magento\Framework\Stdlib\DateTimeTest test case

@@ -5,8 +5,8 @@
  */
 namespace Magento\Multishipping\Test\Constraint;
 
-use Magento\Multishipping\Test\Page\MultishippingCheckoutSuccess;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Multishipping\Test\Page\MultishippingCheckoutSuccess;
 
 /**
  * Assert that success message for multiple address checkout is correct.

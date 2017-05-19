@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
 class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +33,8 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
     {
         $stockRegistryMock = $this->getMock(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
         $this->productExtensionFactoryMock = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductExtensionFactory::class)
+            \Magento\Catalog\Api\Data\ProductExtensionFactory::class
+        )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

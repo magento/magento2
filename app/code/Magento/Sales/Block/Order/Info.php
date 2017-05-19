@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Block\Order;
 
-use Magento\Sales\Model\Order\Address;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Renderer as AddressRenderer;
 
 /**

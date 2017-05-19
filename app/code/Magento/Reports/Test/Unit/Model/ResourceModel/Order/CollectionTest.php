@@ -485,8 +485,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'total' => 'SUM(main_table.base_grand_total * main_table.base_to_global_rate)',
             'invoiced' => 'SUM(main_table.base_total_paid * main_table.base_to_global_rate)',
             'refunded' => 'SUM(main_table.base_total_refunded * main_table.base_to_global_rate)',
-            'profit' => 'SUM(text *  main_table.base_to_global_rate) + SUM(text * main_table.base_to_global_rate) '.
-                '- SUM(text * main_table.base_to_global_rate) - SUM(text * main_table.base_to_global_rate) '.
+            'profit' => 'SUM(text *  main_table.base_to_global_rate) + SUM(text * main_table.base_to_global_rate) ' .
+                '- SUM(text * main_table.base_to_global_rate) - SUM(text * main_table.base_to_global_rate) ' .
                 '- SUM(text * main_table.base_to_global_rate)',
         ];
 

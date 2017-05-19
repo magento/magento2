@@ -6,8 +6,8 @@
 namespace Magento\Cms\Test\Unit\Controller\Page;
 
 use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
-use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 

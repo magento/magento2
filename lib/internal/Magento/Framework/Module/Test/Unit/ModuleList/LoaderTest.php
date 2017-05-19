@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
-use \Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Module\ModuleList\Loader;
 
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -114,12 +114,10 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadDataProvider()
     {
         return [
-            'Ordered modules list returned by registrar' =>
-                [[
+            'Ordered modules list returned by registrar' => [[
                     '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
                 ]],
-            'UnOrdered modules list returned by registrar' =>
-                [[
+            'UnOrdered modules list returned by registrar' => [[
                     '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
                 ]],
         ];

@@ -5,8 +5,8 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
-use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Model\Entity\Attribute;
 
 /**
  * Export filter block

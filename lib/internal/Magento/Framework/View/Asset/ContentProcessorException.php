@@ -12,5 +12,4 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class ContentProcessorException extends LocalizedException
 {
-
 }

@@ -8,13 +8,13 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Class DataProviderTest

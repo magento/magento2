@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Navigation
 {

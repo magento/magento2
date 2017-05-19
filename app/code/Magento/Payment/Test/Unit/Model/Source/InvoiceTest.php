@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\Source;
 
-use \Magento\Payment\Model\Source\Invoice;
+use Magento\Payment\Model\Source\Invoice;
 
 class InvoiceTest extends \PHPUnit_Framework_TestCase
 {

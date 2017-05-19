@@ -100,7 +100,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getActiveList')
             ->with($storeId)
             ->willReturn([$this->vaultPayment]);
-        
+
         $this->vaultPayment->expects(static::once())
             ->method('getProviderCode')
             ->willReturn($vaultProviderCode);
@@ -108,7 +108,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->customerTokenManagement->expects(static::once())
             ->method('getCustomerSessionTokens')
             ->willReturn([$token]);
-        
+
         $token->expects(static::once())
             ->method('getPaymentMethodCode')
             ->willReturn($vaultProviderCode);

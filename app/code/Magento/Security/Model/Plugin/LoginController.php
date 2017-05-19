@@ -5,8 +5,8 @@
  */
 namespace Magento\Security\Model\Plugin;
 
-use Magento\Security\Model\AdminSessionsManager;
 use Magento\Backend\Controller\Adminhtml\Auth\Login;
+use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * Magento\Backend\Controller\Adminhtml\Auth\Login decorator

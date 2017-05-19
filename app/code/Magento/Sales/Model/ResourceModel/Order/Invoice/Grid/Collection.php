@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      * @inheritdoc
      */
     protected $document = Document::class;
-    
+
     /**
      * Initialize dependencies.
      *

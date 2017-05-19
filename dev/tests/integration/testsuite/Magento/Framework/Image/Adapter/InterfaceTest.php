@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * @magentoAppIsolation enabled
  */

@@ -5,10 +5,9 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
+use Magento\ImportExport\Model\History as ModelHistory;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\History as ModelHistory;
 
 /**
  * Import controller

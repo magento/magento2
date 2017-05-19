@@ -5,11 +5,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\ShippingAddressManagement;
+use Magento\Quote\Model\ShippingAddressManagement;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -86,7 +85,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->validatorMock = $this->getMock(
-            \Magento\Quote\Model\QuoteAddressValidator::class, [], [], '', false
+            \Magento\Quote\Model\QuoteAddressValidator::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->totalsCollectorMock = $this->getMock(
             \Magento\Quote\Model\Quote\TotalsCollector::class,

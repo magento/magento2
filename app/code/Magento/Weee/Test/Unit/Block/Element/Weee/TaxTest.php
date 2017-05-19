@@ -43,7 +43,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        
+
         $currency = $this->getMock(
             \Magento\Framework\Currency::class,
             [],

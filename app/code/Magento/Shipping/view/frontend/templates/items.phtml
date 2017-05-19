@@ -69,8 +69,8 @@
         <?php $_count = count($_items) ?>
         <?php foreach ($_items as $_item): ?>
         <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} ?>
+                continue;
+            } ?>
         <tbody>
             <?php echo $block->getItemHtml($_item) ?>
         </tbody>

@@ -6,17 +6,17 @@
 
 namespace Magento\Catalog\Pricing\Render;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Pricing\Render\Amount;
-use Magento\Framework\App\State;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\View\TemplateEngine\Php;
 use Magento\Framework\View\TemplateEnginePool;
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -94,8 +94,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
         $this->rendererPool->setData(
             [
-                'default' =>
-                    [
+                'default' => [
                         'default_amount_render_class' => Amount::class,
                         'default_amount_render_template' => 'Magento_Catalog::product/price/amount/default.phtml'
                     ]

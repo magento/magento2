@@ -5,12 +5,11 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use Magento\Framework\Api\SortOrder;
-use \Magento\Tax\Model\Calculation\RateRepository;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
+
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Calculation\RateRepository;
 
 /**
  * Class RateRepositoryTest

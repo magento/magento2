@@ -5,8 +5,6 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Ui\Component\Listing\Columns;
-
 /**
  * Class Listing
  */

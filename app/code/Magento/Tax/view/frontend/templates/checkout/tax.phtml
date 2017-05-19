@@ -41,8 +41,8 @@
     <?php $isTop = 1; ?>
     <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
         <?php if (isset($info['hidden']) && $info['hidden']) {
-            continue;
-        } ?>
+    continue;
+} ?>
         <?php $percent = $info['percent']; ?>
         <?php $amount = $info['amount']; ?>
         <?php $rates = $info['rates']; ?>
@@ -52,13 +52,13 @@
             <tr class="totals-tax-details details-<?php /* @escapeNotVerified */ echo $taxIter; ?>">
                 <th class="mark" style="<?php /* @escapeNotVerified */ echo $_style ?>" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
                     <?php echo $block->escapeHtml($rate['title']); ?>
-                    <?php if (!is_null($rate['percent'])): ?>
+                    <?php if ($rate['percent'] !== null): ?>
                         (<?php echo (float)$rate['percent']; ?>%)
                     <?php endif; ?>
                 </th>
                 <?php if ($isFirst): ?>
                     <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>"
-                       data-th="<?php echo $block->escapeHtml($rate['title']); ?><?php if (!is_null($rate['percent'])): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
+                       data-th="<?php echo $block->escapeHtml($rate['title']); ?><?php if ($rate['percent'] !== null): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
                         <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
                     </td>
                 <?php endif; ?>

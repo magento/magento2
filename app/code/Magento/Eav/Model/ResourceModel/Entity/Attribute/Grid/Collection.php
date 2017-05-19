@@ -5,8 +5,6 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Grid;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-
 /**
  * Eav Resource Attribute Set Collection
  *

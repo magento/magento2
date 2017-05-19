@@ -18,10 +18,11 @@ class AbstractAgreementStub extends AbstractAgreement
     {
         return static::STUB_CODE;
     }
-    
+
     /**
      * @param object $quote
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isAvailable($quote)
     {

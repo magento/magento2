@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Filesystem;
 use Magento\Setup\Model\Cron\Queue;
 
 /**

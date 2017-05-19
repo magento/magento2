@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Element;
 
 /**
  * Tab "Advanced Attribute Properties".

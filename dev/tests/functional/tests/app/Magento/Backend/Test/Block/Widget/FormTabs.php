@@ -7,9 +7,8 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers;
 
 /**
  * Is used to represent any form with tabs on the page.

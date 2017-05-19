@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Observer\Backend;
 
 class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
@@ -132,15 +130,15 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
         $quoteMock = $this->getMockBuilder(
             \Magento\Quote\Model\Quote::class
         )->setMethods(
-                [
+            [
                     'setWebsite',
                     'setCustomerGroupId',
                     'getCustomerGroupId',
                     'collectTotals',
                     '__wakeup',
                 ]
-            )->disableOriginalConstructor(
-            )->getMock();
+        )->disableOriginalConstructor(
+        )->getMock();
         $websiteCount = count($websites);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')

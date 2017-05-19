@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\Event\Test\Unit;
 
-use \Magento\Framework\Event\WrapperFactory;
+use Magento\Framework\Event\WrapperFactory;
 
 /**
  * Class WrapperFactoryTest

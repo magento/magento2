@@ -4,24 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\App\Config\Element;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
-use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -968,7 +966,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $object->isObjectNew(true);
         }
 
-
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
     }
@@ -1233,7 +1230,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $origData = $this->_getOrigObject($newObject)->getOrigData();
             }
 
-            if (is_null($origData)) {
+            if ($origData === null) {
                 $origData = [];
             }
 
@@ -1874,6 +1871,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity load
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function afterLoad(\Magento\Framework\DataObject $object)
     {
@@ -1884,6 +1882,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions before entity save
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -1894,6 +1893,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity save
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function afterSave(\Magento\Framework\DataObject $object)
     {
@@ -1904,6 +1904,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions before entity delete
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -1914,6 +1915,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Perform actions after entity delete
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function afterDelete(\Magento\Framework\DataObject $object)
     {

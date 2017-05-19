@@ -10,14 +10,15 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\AssetInterface;
+use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\Merged;
 use Magento\Framework\View\Asset\MergeService;
-use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\MergeStrategy\Checksum;
 use Magento\Framework\View\Asset\MergeStrategy\FileExists;
 
 /**
  * Class MergeServiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MergeServiceTest extends \PHPUnit_Framework_TestCase
 {

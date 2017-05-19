@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Flat;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

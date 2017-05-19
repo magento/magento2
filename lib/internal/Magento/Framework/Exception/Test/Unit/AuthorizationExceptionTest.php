@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Exception\Test\Unit;
 
-use \Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Phrase;
 
 class AuthorizationExceptionTest extends \PHPUnit_Framework_TestCase

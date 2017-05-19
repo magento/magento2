@@ -9,9 +9,9 @@ namespace Magento\Downloadable\Model\Product\TypeHandler;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\ComponentInterface;
-use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Json\Helper\Data;
 
 /**
  * Class AbstractTypeHandler

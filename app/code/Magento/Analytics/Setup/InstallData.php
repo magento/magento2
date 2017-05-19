@@ -6,10 +6,10 @@
 
 namespace Magento\Analytics\Setup;
 
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Analytics\Model\NotificationTime;
 
 /**
  * @codeCoverageIgnore

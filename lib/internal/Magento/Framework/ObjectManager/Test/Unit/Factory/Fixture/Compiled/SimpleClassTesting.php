@@ -56,7 +56,6 @@ class SimpleClassTesting
         $globalValue = '',
         $nullValue = null
     ) {
-
         $this->nonSharedDependency = $nonSharedDependency;
         $this->sharedDependency = $sharedDependency;
         $this->value = $value;

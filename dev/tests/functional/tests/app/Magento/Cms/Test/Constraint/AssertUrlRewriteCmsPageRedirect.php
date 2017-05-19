@@ -7,10 +7,10 @@
 namespace Magento\Cms\Test\Constraint;
 
 use Magento\Cms\Test\Fixture\CmsPage;
-use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
+use Magento\Variable\Test\Page\Adminhtml\SystemVariableNew;
 
 /**
  * Assert that created CMS Page URL Rewrite lead to appropriate page in frontend.

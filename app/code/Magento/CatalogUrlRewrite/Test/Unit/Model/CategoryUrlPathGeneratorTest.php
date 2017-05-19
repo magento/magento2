@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
-use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Catalog\Model\Category;
-use Magento\Store\Model\ScopeInterface;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 {

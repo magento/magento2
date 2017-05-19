@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -37,7 +35,8 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
 
     public function testMultiServiceWsdl()
     {
-        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}"
+            . "?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
         $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
         $this->isSingleService = false;
@@ -506,11 +505,11 @@ FIRST_PORT_TYPE;
             $secondPortType = <<< SECOND_PORT_TYPE
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
-        $this->assertContains(
-            $this->_convertXmlToString($secondPortType),
-            $wsdlContent,
-            'Port type declaration is missing or invalid'
-        );
+            $this->assertContains(
+                $this->_convertXmlToString($secondPortType),
+                $wsdlContent,
+                'Port type declaration is missing or invalid'
+            );
         }
 
         if ($this->isSingleService) {
@@ -928,7 +927,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
     </xsd:sequence>
 </xsd:complexType>
 PARAMETERS_COMPLEX_TYPE;
-        // @codingStandardsIgnoreEnd
+
         $this->assertContains(
             $this->_convertXmlToString($detailsParametersType),
             $wsdlContent,
@@ -969,7 +968,6 @@ WRAPPED_ERRORS_COMPLEX_TYPE;
     </xsd:sequence>
 </xsd:complexType>
 WRAPPED_ERRORS_COMPLEX_TYPE;
-
         }
         // @codingStandardsIgnoreEnd
         $this->assertContains(

@@ -73,7 +73,7 @@ class DependencyReadinessCheck
     public function runReadinessCheck(array $packages)
     {
         $composerJson = $this->composerJsonFinder->findComposerJson();
-        $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) .  '/composer.json');
+        $this->file->copy($composerJson, $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/composer.json');
         $workingDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
         try {
             foreach ($packages as $package) {

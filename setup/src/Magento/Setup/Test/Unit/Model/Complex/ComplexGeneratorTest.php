@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Model\Complex;
 
-use Magento\Setup\Model\Complex\Pattern;
 use Magento\Setup\Model\Complex\Generator;
+use Magento\Setup\Model\Complex\Pattern;
 
 /**
  * Class ComplexGeneratorTest

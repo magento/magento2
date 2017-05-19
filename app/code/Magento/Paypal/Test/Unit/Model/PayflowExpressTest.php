@@ -6,8 +6,8 @@
 
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Paypal\Model\Payflow;
+use Magento\Sales\Model\Order\Payment\Transaction;
 
 class PayflowExpressTest extends \PHPUnit_Framework_TestCase
 {

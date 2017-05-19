@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Shipping;
 
-use Magento\Mtf\Block\Form;
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Adminhtml sales order create shipping address block.

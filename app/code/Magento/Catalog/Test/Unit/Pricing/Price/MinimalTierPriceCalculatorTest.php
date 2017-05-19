@@ -6,13 +6,13 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Catalog\Pricing\Price\TierPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MinimalTierPriceCalculatorTest extends \PHPUnit_Framework_TestCase
 {

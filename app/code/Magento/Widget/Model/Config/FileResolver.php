@@ -7,8 +7,8 @@
  */
 namespace Magento\Widget\Model\Config;
 
-use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {

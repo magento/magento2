@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Directory\Model;
 
 /**
@@ -17,6 +15,7 @@ namespace Magento\Directory\Model;
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Country extends \Magento\Framework\Model\AbstractModel
 {
@@ -198,6 +197,7 @@ T: {{telephone}}";
     /**
      * Get country name
      *
+     * @param string|null $locale
      * @return string
      */
     public function getName($locale = null)

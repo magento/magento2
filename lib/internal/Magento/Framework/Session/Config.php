@@ -11,7 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration

@@ -6,10 +6,10 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Checks that "Add to Cart" button is absent on product page.

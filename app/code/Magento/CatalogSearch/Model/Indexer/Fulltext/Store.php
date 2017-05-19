@@ -7,9 +7,9 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
-use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Search\Request\DimensionFactory;
 
 class Store implements ObserverInterface
 {

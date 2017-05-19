@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -413,7 +411,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($this->_isUSCountry($r->getDestCountryId())) {
             $xml = $this->_xmlElFactory->create(
-
                 ['data' => '<?xml version="1.0" encoding="UTF-8"?><RateV4Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -427,8 +424,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $service = $r->getService();
             }
 
-            if (
-                strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
                 strpos($r->getContainer(), 'FLAT RATE BOX') !== false
             ) {
                 $service = 'Priority';
@@ -461,7 +457,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $api = 'RateV4';
         } else {
             $xml = $this->_xmlElFactory->create(
-
                 ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><IntlRateV2Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -1075,12 +1070,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
                         $errorTitle = (string)$xml->Description;
                     } elseif (isset(
-                            $xml->TrackInfo
-                        ) && isset(
-                            $xml->TrackInfo->Error
-                        ) && isset(
-                            $xml->TrackInfo->Error->Description
-                        ) && (string)$xml->TrackInfo->Error->Description != ''
+                        $xml->TrackInfo
+                    ) && isset(
+                        $xml->TrackInfo->Error
+                    ) && isset(
+                        $xml->TrackInfo->Error->Description
+                    ) && (string)$xml->TrackInfo->Error->Description != ''
                     ) {
                         $errorTitle = (string)$xml->TrackInfo->Error->Description;
                     } else {
@@ -1946,7 +1941,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             return $this->_getAllowedContainers();
         }
 

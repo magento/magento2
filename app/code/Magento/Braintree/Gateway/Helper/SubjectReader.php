@@ -6,10 +6,9 @@
 namespace Magento\Braintree\Gateway\Helper;
 
 use Braintree\Transaction;
-use Magento\Quote\Model\Quote;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class SubjectReader

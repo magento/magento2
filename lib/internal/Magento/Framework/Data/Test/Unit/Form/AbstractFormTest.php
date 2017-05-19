@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Data\Test\Unit\Form;
 
-use \Magento\Framework\Data\Form\AbstractForm;
+use Magento\Framework\Data\Form\AbstractForm;
 
 class AbstractFormTest extends \PHPUnit_Framework_TestCase
 {

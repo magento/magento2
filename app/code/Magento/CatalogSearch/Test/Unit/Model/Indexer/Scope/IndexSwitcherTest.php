@@ -5,13 +5,12 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Scope;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class IndexSwitcherTest extends \PHPUnit_Framework_TestCase

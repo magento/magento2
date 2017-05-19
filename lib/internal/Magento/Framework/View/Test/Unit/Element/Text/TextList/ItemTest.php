@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 
-use \Magento\Framework\View\Element\Text\TextList\Item;
+use Magento\Framework\View\Element\Text\TextList\Item;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
 {

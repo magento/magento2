@@ -5,13 +5,13 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Container;
-use Magento\Ui\Component\Form;
-use Magento\Ui\Component\DynamicRows;
-use Magento\Ui\Component\Modal;
-use Magento\Framework\UrlInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Container;
+use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Data provider for Configurable panel
@@ -195,7 +195,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'autoRender' => false,
                                         'componentType' => 'insertListing',
                                         'component' => 'Magento_ConfigurableProduct/js'
-                                            .'/components/associated-product-insert-listing',
+                                            . '/components/associated-product-insert-listing',
                                         'dataScope' => $this->associatedListingPrefix
                                             . static::ASSOCIATED_PRODUCT_LISTING,
                                         'externalProvider' => $this->associatedListingPrefix
@@ -326,14 +326,12 @@ class ConfigurablePanel extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                        'targetName' => $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'trigger',
                                         'params' => ['active', true],
                                     ],
                                     [
-                                        'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                        'targetName' => $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'openModal',
                                     ],
                                 ],

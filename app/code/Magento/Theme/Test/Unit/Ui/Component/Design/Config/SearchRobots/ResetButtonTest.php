@@ -5,11 +5,11 @@
  */
 namespace Magento\Theme\Test\Unit\Ui\Component\Design\Config\SearchRobots;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton;
 use Magento\Ui\Component\Form\Field;
 
 class ResetButtonTest extends \PHPUnit_Framework_TestCase
@@ -77,7 +77,7 @@ class ResetButtonTest extends \PHPUnit_Framework_TestCase
             $this->scopeConfigMock
         );
     }
-    
+
     public function testPrepare()
     {
         $robotsContent = "Content";

@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Filesystem;
 
-use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class DirectoryListTest extends \PHPUnit_Framework_TestCase
 {

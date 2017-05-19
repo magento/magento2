@@ -5,8 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractElementTest extends \PHPUnit_Framework_TestCase

@@ -112,20 +112,14 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     private function getExpectedJsonConfig()
     {
         return [
-            0 =>
-                ['prices' =>
-                    ['oldPrice' =>
-                        ['amount' => 10, 'adjustments' => []],
+            0 => ['prices' => ['oldPrice' => ['amount' => 10, 'adjustments' => []],
                         'basePrice' => ['amount' => 10],
                         'finalPrice' => ['amount' => 10]
                     ],
                     'type' => 'fixed',
                     'name' => 'drop_down option 1',
                 ],
-            1 =>
-                ['prices' =>
-                    ['oldPrice' =>
-                        ['amount' => 40, 'adjustments' => []],
+            1 => ['prices' => ['oldPrice' => ['amount' => 40, 'adjustments' => []],
                         'basePrice' => ['amount' => 40],
                         'finalPrice' => ['amount' => 40],
                     ],

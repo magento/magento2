@@ -5,18 +5,18 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
+use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\Request\NonExistingRequestNameException;
-use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\Search\Response\QueryResponse;
 
 /**
  * Fulltext Collection
@@ -365,7 +365,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_totalRecords = $this->searchResult->getTotalCount();
 
         if ($this->order && 'relevance' === $this->order['field']) {
-            $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
+            $this->getSelect()->order('search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
         return parent::_renderFiltersBefore();
     }

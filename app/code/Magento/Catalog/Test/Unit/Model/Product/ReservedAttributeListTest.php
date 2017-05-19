@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\ReservedAttributeList;
+use Magento\Catalog\Model\Product\ReservedAttributeList;
 
 class ReservedAttributeListTest extends \PHPUnit_Framework_TestCase
 {

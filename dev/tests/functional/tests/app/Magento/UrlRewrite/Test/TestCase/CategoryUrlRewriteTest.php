@@ -6,9 +6,9 @@
 
 namespace Magento\UrlRewrite\Test\TestCase;
 
-use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Store\Test\Fixture\Store;
 

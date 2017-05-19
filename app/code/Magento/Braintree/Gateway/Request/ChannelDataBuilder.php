@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class BnCodeDataBuilder

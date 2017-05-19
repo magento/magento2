@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer;
 
-use Magento\Framework\View\Element\Template;
-
 /**
  * VAT ID element renderer
  *

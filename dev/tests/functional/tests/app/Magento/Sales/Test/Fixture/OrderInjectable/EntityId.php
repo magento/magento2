@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Fixture\OrderInjectable;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * EntityId data.

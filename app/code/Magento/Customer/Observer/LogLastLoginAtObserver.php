@@ -6,7 +6,6 @@
 namespace Magento\Customer\Observer;
 
 use Magento\Customer\Model\Logger;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 

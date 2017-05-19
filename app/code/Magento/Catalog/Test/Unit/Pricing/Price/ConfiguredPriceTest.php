@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\ConfiguredPrice;
+use Magento\Catalog\Pricing\Price\ConfiguredPrice;
 
 /**
  * Test for \Magento\Catalog\Pricing\Price\ConfiguredPrice

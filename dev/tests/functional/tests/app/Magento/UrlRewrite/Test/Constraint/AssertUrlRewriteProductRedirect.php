@@ -7,10 +7,10 @@
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 
 /**
  * Class AssertUrlRewriteProductRedirect

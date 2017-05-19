@@ -68,7 +68,7 @@
                         tooltip-html-unsafe="The time zone in which your online store operates. You can change this later in Magento Admin."
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
-                        <?php foreach ( $this->timezone as $value => $label ): ?>
+                        <?php foreach ($this->timezone as $value => $label): ?>
                             <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
                         <?php endforeach; ?>
                     </select>
@@ -92,7 +92,7 @@
                         tooltip-html-unsafe="The currency your store uses for price labeling, checkout, returns, credit and gift cards. You can change this later in Magento Admin."
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
-                        <?php foreach ( $this->currency as $value => $label ): ?>
+                        <?php foreach ($this->currency as $value => $label): ?>
                             <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
                         <?php endforeach; ?>
                     </select>
@@ -116,7 +116,7 @@
                         tooltip-html-unsafe="The language customers will see in your store. You can change this later in Magento Set Up Tool."
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
-                        <?php foreach ( $this->language as $value => $label ): ?>
+                        <?php foreach ($this->language as $value => $label): ?>
                             <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
                         <?php endforeach; ?>
                     </select>

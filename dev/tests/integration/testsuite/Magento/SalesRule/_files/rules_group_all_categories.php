@@ -31,8 +31,7 @@ $salesRule->getConditions()->loadArray([
     'value' => '1',
     'is_value_processed' => null,
     'aggregator' => 'all',
-    'conditions' =>
-        [
+    'conditions' => [
                 [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                     'attribute' => null,
@@ -40,8 +39,7 @@ $salesRule->getConditions()->loadArray([
                     'value' => '1',
                     'is_value_processed' => null,
                     'aggregator' => 'all',
-                    'conditions' =>
-                        [
+                    'conditions' => [
                                 [
                                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                     'attribute' => 'category_ids',
@@ -65,8 +63,7 @@ $salesRule->getConditions()->loadArray([
                     'value' => '1',
                     'is_value_processed' => null,
                     'aggregator' => 'all',
-                    'conditions' =>
-                        [
+                    'conditions' => [
                             [
                                 'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                 'attribute' => 'category_ids',

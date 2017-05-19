@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use \Magento\Sales\Model\Order\InvoiceNotifier;
-
 use Magento\Framework\Exception\MailException;
+
+use Magento\Sales\Model\Order\InvoiceNotifier;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 
 /**

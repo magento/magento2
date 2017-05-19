@@ -5,9 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\Area;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
 {

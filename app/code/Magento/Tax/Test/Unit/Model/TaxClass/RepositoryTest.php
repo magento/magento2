@@ -6,11 +6,10 @@
 
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
-use Magento\Framework\Api\SortOrder;
-use \Magento\Tax\Model\TaxClass\Repository;
-
 use Magento\Framework\Exception\CouldNotDeleteException;
+
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Tax\Model\TaxClass\Repository;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

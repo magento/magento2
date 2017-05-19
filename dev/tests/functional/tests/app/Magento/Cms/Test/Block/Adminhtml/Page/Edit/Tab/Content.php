@@ -6,11 +6,11 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Page\Edit\Tab;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Widget\Test\Block\Adminhtml\WidgetForm;
 use Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Widget\Test\Block\Adminhtml\WidgetForm;
 
 /**
  * Backend cms page content tab.

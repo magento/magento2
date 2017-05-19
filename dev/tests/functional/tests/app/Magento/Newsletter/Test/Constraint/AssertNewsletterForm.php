@@ -6,10 +6,10 @@
 
 namespace Magento\Newsletter\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateEdit;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
-use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertNewsletterForm

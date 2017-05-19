@@ -6,10 +6,10 @@
 namespace Magento\Developer\Model\Logger\Handler;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Enable/disable debug logging based on the store config setting

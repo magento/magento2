@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 /**
@@ -78,7 +76,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_responseMock->headersSentThrowsException = false;
         $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $constructArguments = $objectManager->getConstructArguments(\Magento\Backend\Model\Session::class,
+        $constructArguments = $objectManager->getConstructArguments(
+            \Magento\Backend\Model\Session::class,
             ['storage' => new \Magento\Framework\Session\Storage()]
         );
         $this->_sessionMock = $this->getMock(
@@ -87,7 +86,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $constructArguments
         );
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class)
+            \Magento\Backend\Model\View\Result\ForwardFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -95,7 +95,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class)
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -133,7 +134,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $context = $helper->getObject(\Magento\Backend\App\Action\Context::class, $arguments);
 
         $this->memoLoaderMock = $this->getMock(
-            \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class, [], [], '', false
+            \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class,
+            [],
+            [],
+            '',
+            false
         );
         $this->_controller = $helper->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save::class,
@@ -190,7 +195,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_controller->execute()
         );
     }

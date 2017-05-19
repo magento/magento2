@@ -6,11 +6,11 @@
 namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 
 /**

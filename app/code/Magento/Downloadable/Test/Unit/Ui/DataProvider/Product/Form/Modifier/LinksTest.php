@@ -5,16 +5,16 @@
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Links as LinksData;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Downloadable\Model\Source\TypeUpload;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Downloadable\Model\Source\Shareable;
-use Magento\Framework\UrlInterface;
+use Magento\Downloadable\Model\Source\TypeUpload;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Links as LinksData;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class LinksTest

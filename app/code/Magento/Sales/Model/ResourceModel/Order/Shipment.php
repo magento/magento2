@@ -5,9 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Framework\App\ResourceConnection as AppResource;
-use Magento\SalesSequence\Model\Manager;
-use Magento\Sales\Model\ResourceModel\Attribute;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Spi\ShipmentResourceInterface;
 

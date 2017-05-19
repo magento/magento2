@@ -5,10 +5,9 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\Cron\ComponentUninstallerFactory;
-use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\Cron\JobComponentUninstall;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

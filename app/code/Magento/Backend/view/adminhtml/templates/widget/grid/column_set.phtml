@@ -60,7 +60,7 @@ $numColumns = sizeof($block->getColumns());
                             $_rowspan = $block->getRowspan($_item, $_column);
                           ?><td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
                                 <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
-                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td><?php
@@ -80,7 +80,7 @@ $numColumns = sizeof($block->getColumns());
                     <tr data-role="row">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns($_i) as $_column):
                             ?><td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                            class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns-1 ? 'last' : '' ?>"
+                            class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : ''?> <?php echo ++$i == $numColumns-1 ? 'last' : '' ?>"
                         >
                             <?php echo(($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                         </td><?php
@@ -92,7 +92,7 @@ $numColumns = sizeof($block->getColumns());
                     <tr class="subtotals">
                         <?php $i = 0; foreach ($block->getMultipleRowColumns() as $_column): ?>
                             <td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php /* @escapeNotVerified */ echo $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel()
                                     : $_column->getRowField($block->getSubTotals($_item));
@@ -108,7 +108,7 @@ $numColumns = sizeof($block->getColumns());
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
                         <?php if ($block->shouldRenderCell($_item, $_column)):?>
                             <td data-column="<?php /* @escapeNotVerified */ echo $_column->getId() ?>"
-                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell': ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                                class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php /* @escapeNotVerified */ echo $_column->getId() == 'massaction' ? 'data-grid-checkbox-cell' : ''?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
                             >
                                 <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                             </td>

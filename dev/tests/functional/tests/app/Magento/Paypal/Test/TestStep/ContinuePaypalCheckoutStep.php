@@ -7,9 +7,9 @@
 namespace Magento\Paypal\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Paypal\Test\Constraint\Sandbox\AssertTotalPaypalReview;
 use Magento\Paypal\Test\Fixture\SandboxCustomer;
 use Magento\Paypal\Test\Page\Sandbox\ExpressReview;
-use Magento\Paypal\Test\Constraint\Sandbox\AssertTotalPaypalReview;
 
 /**
  * Review order on PayPal side and continue.

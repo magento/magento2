@@ -5,10 +5,9 @@
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product;
 
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
-use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
-use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;

@@ -5,11 +5,11 @@
  */
 namespace Magento\TestModuleDefaultHydrator\Model\ResourceModel\Address;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 class ReadHandler implements ExtensionInterface
 {

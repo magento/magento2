@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\App;
 
-use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\ObjectManager\FactoryInterface;
 
 /**
  * Interface for ObjectManager Environment

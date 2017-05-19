@@ -6,10 +6,9 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Asset\MaterializationStrategy;
 
-use \Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Asset;
+
+use Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink;
 
 class SymlinkTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +19,7 @@ class SymlinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->symlinkPublisher = new Symlink;
+        $this->symlinkPublisher = new Symlink();
     }
 
     public function testPublishFile()

@@ -5,8 +5,7 @@
  */
 namespace Magento\Framework\Backup;
 
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {

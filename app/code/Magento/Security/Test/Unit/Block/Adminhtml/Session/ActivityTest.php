@@ -6,9 +6,9 @@
 
 namespace Magento\Security\Test\Unit\Block\Adminhtml\Session;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for \Magento\Security\Block\Adminhtml\Session\Activity testing

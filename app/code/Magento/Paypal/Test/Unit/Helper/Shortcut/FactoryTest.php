@@ -6,8 +6,8 @@
 
 namespace Magento\Paypal\Test\Unit\Helper\Shortcut;
 
-use Magento\Paypal\Helper\Shortcut\Factory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Helper\Shortcut\Factory;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\WebLogger;
+use Magento\Setup\Model\WebLogger;
 
 class WebLoggerTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 
 class ImageExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {

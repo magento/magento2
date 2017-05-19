@@ -14,11 +14,11 @@
 
 <h2>Page not found</h2>
 
-<?php if ( isset( $this->reason ) && $this->reason ): ?>
+<?php if (isset($this->reason) && $this->reason): ?>
 
     <?php
     $reasonMessage = '';
-    switch ( $this->reason ) {
+    switch ($this->reason) {
         case 'error-controller-cannot-dispatch':
             $reasonMessage = 'The requested controller was unable to dispatch the request.';
             break;
@@ -41,17 +41,17 @@
 
 <?php endif ?>
 
-<?php if ( isset( $this->controller ) && $this->controller ): ?>
+<?php if (isset($this->controller) && $this->controller): ?>
 
     <dl>
         <dt>Controller:</dt>
-        <dd><?php echo $this->escapeHtml( $this->controller ) ?>
+        <dd><?php echo $this->escapeHtml($this->controller) ?>
             <?php
-            if ( isset( $this->controller_class )
+            if (isset($this->controller_class)
                  && $this->controller_class
                  && $this->controller_class != $this->controller
             ) {
-                echo '(' . sprintf( 'resolves to %s', $this->escapeHtml( $this->controller_class ) ) . ')';
+                echo '(' . sprintf('resolves to %s', $this->escapeHtml($this->controller_class)) . ')';
             }
             ?>
         </dd>
@@ -59,12 +59,12 @@
 
 <?php endif ?>
 
-<?php if ( isset( $this->display_exceptions ) && $this->display_exceptions ): ?>
+<?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
 
-    <?php if ( isset( $this->exception ) && $this->exception instanceof Exception ): ?>
+    <?php if (isset($this->exception) && $this->exception instanceof Exception): ?>
         <hr/>
         <h2>Additional information:</h2>
-        <h3><?php echo get_class( $this->exception ); ?></h3>
+        <h3><?php echo get_class($this->exception); ?></h3>
         <dl>
             <dt>File:</dt>
             <dd>
@@ -83,14 +83,14 @@
         </dl>
         <?php
         $e = $this->exception->getPrevious();
-        if ( $e ) :
+        if ($e) :
             ?>
             <hr/>
             <h2>Previous exceptions:</h2>
             <ul class="unstyled">
-                <?php while ( $e ) : ?>
+                <?php while ($e) : ?>
                     <li>
-                        <h3><?php echo get_class( $e ); ?></h3>
+                        <h3><?php echo get_class($e); ?></h3>
                         <dl>
                             <dt>File:</dt>
                             <dd>

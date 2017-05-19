@@ -7,10 +7,10 @@
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 
 /**
