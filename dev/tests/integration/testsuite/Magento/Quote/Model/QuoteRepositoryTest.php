@@ -50,6 +50,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchCriteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $this->filterBuilder = $this->objectManager->create(FilterBuilder::class);
     }
+
     /**
      * Tests getting list of quotes according to search criteria.
      * @magentoDataFixture Magento/Sales/_files/quote.php
