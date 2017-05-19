@@ -3,15 +3,26 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable max-nested-callbacks */
 define([
-    'jquery',
-    'Magento_Paypal/js/in-context/express-checkout'
-], function ($, ExpressCheckout) {
+    'squire',
+    'jquery'
+], function (Squire, $) {
     'use strict';
 
     describe('Magento_Paypal/js/in-context/express-checkout', function () {
 
-        var model, event;
+        var model,
+            event,
+            paypalExpressCheckout,
+            injector = new Squire(),
+            mocks = {
+                'paypalInContextExpressCheckout': {
+                    checkout: jasmine.createSpyObj('checkout',
+                        ['setup', 'initXO', 'startFlow', 'closeFlow']
+                    )
+                }
+            };
 
         /**
          * Run before each test method
@@ -19,14 +30,21 @@ define([
          * @return void
          */
         beforeEach(function (done) {
-            model = new ExpressCheckout();
-
             event = {
                 /** Stub */
-                preventDefault: function () {}
+                preventDefault: jasmine.createSpy('preventDefault')
             };
 
-            done();
+            injector.mock(mocks);
+
+            injector.require([
+                'paypalInContextExpressCheckout',
+                'Magento_Paypal/js/in-context/express-checkout'], function (PayPal, Constr) {
+                    paypalExpressCheckout = PayPal;
+                    model = new Constr();
+
+                    done();
+                });
         });
 
         describe('clientConfig.click method', function () {
@@ -48,23 +66,26 @@ define([
 
             it('Check call "click" method', function () {
 
-                $.ajax = jasmine.createSpy().and.callFake(function () {
+                spyOn(jQuery.fn, 'trigger');
+                spyOn(jQuery, 'get').and.callFake(function () {
                     var d = $.Deferred();
 
                     d.resolve({
-                        'success': true
+                        'url': true
                     });
 
                     return d.promise();
                 });
 
-                $.fn.trigger = jasmine.createSpy();
-
                 model.clientConfig.click(event);
 
-                expect($.ajax).toHaveBeenCalled();
-                expect($('body').trigger).toHaveBeenCalledWith('processStop');
+                expect(event.preventDefault).toHaveBeenCalled();
+                expect(paypalExpressCheckout.checkout.initXO).toHaveBeenCalled();
                 expect(model.clientConfig.checkoutInited).toEqual(true);
+                expect(jQuery.get).toHaveBeenCalled();
+                expect(jQuery('body').trigger).toHaveBeenCalledWith(
+                    jasmine.arrayContaining(['processStart'], ['processStop'])
+                );
             });
         });
     });
