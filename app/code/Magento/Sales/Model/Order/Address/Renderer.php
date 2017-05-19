@@ -16,11 +16,15 @@ use Magento\Sales\Model\Order\Address;
 class Renderer
 {
     /**
+     * Addres config instance.
+     *
      * @var AddressConfig
      */
     protected $addressConfig;
 
     /**
+     * Event manager instance.
+     *
      * @var EventManager
      */
     protected $eventManager;
@@ -40,7 +44,7 @@ class Renderer
     }
 
     /**
-     * Format address in a specific way
+     * Format address in a specific way.
      *
      * @param Address $address
      * @param string $type
@@ -48,6 +52,7 @@ class Renderer
      */
     public function format(Address $address, $type)
     {
+        $this->addressConfig->setStore($address->getOrder()->getStoreId());
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;
