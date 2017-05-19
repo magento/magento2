@@ -35,6 +35,10 @@ matrix:
       env: TEST_SUITE=static
     - php: 7.0
       env: TEST_SUITE=js
+    - php: 7.0
+      env: TEST_SUITE=functional ACCEPTANCE_INDEX=1
+    - php: 7.0
+      env: TEST_SUITE=functional ACCEPTANCE_INDEX=2
 cache:
   apt: true
   directories:
