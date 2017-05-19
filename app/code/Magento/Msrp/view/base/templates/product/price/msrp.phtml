@@ -56,7 +56,7 @@ if ($product->isSaleable()) {
         $data = ['addToCart' => [
             'origin'=> 'msrp',
             'popupId' => '#' . $popupId,
-            'productName' => $block->escapeHtml($product->getName()),
+            'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
             'productId' => $productId,
             'productIdInput' => 'input[type="hidden"][name="product"]',
             'realPrice' => $block->getRealPriceHtml(),
