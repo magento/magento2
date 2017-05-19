@@ -28,6 +28,19 @@ class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample 
     /**
      * {@inheritdoc}
      */
+    public function setValue($value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
+        if (!$pluginInfo) {
+            return parent::setValue($value);
+        } else {
+            return $this->___callPlugins('setValue', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function & getReference()
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getReference');

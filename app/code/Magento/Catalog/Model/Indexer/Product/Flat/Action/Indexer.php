@@ -137,7 +137,13 @@ class Indexer
                             ['t.option_id', 't.value']
                         )->where(
                             $this->_connection->quoteInto('t.option_id IN (?)', $valueIds)
-                        );
+                        )->where(
+                            $this->_connection->quoteInto('t.store_id IN(?)', [
+                                \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                                $storeId
+                            ])
+                        )
+                        ->order('t.store_id ASC');
                         $cursor = $this->_connection->query($select);
                         while ($row = $cursor->fetch(\Zend_Db::FETCH_ASSOC)) {
                             $valueColumnName = $valueColumns[$row['option_id']];
