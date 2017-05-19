@@ -21,8 +21,6 @@ use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\QuoteRepository\LoadHandler;
 
 /**
- * Class QuoteRepository
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
@@ -72,8 +70,15 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      */
     private $loadHandler;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var CollectionProcessorInterface
+     */
     private $collectionProcessor;
+
+    /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
+     */
+    private $quoteCollectionFactory;
 
     /**
      * @param QuoteFactory $quoteFactory
@@ -81,7 +86,8 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
+     * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory|null $quoteCollectionFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -90,13 +96,17 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection,
         \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $quoteCollectionFactory = null
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
         $this->searchResultsDataFactory = $searchResultsDataFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\SearchCriteria\CollectionProcessor::class);
+        $this->quoteCollectionFactory = $quoteCollectionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Quote\Model\ResourceModel\Quote\CollectionFactory::class);
     }
 
     /**
@@ -208,16 +218,13 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * Get quote collection
-     * Temporary method to support release backward compatibility.
      *
      * @deprecated
      * @return QuoteCollection
      */
     protected function getQuoteCollection()
     {
-        /** @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory */
-        $collectionFactory = ObjectManager::getInstance()->get(QuoteCollectionFactory::class);
-        return $collectionFactory->create();
+        return $this->quoteCollectionFactory->create();
     }
 
     /**
@@ -287,21 +294,5 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
             $this->loadHandler = ObjectManager::getInstance()->get(LoadHandler::class);
         }
         return $this->loadHandler;
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessor::class
-            );
-        }
-        return $this->collectionProcessor;
     }
 }

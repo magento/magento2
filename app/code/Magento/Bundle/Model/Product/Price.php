@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
- * Bundle Price Model
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -48,7 +48,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     private $serializer;
 
     /**
-     * Price constructor.
+     * Constructor
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -61,6 +61,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -74,10 +75,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
     ) {
         $this->_catalogData = $catalogData;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $ruleFactory,
@@ -88,7 +90,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $priceCurrency,
             $groupManagement,
             $tierPriceFactory,
-            $config
+            $config,
+            $tierPriceExtensionFactory
         );
     }
 

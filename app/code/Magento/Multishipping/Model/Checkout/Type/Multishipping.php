@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -16,10 +13,12 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Multishipping checkout model
+ *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Multishipping extends \Magento\Framework\DataObject
 {
@@ -174,6 +173,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $data
+     * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -198,7 +198,8 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
-        array $data = []
+        array $data = [],
+        \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -221,6 +222,8 @@ class Multishipping extends \Magento\Framework\DataObject
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
         $this->totalsCollector = $totalsCollector;
+        $this->cartExtensionFactory = $cartExtensionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Quote\Api\Data\CartExtensionFactory::class);
         parent::__construct($data);
         $this->_init();
     }
@@ -980,7 +983,7 @@ class Multishipping extends \Magento\Framework\DataObject
     {
         $cartExtension = $quote->getExtensionAttributes();
         if ($cartExtension === null) {
-            $cartExtension = $this->getCartExtensionFactory()->create();
+            $cartExtension = $this->cartExtensionFactory->create();
         }
         /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $this->getShippingAssignmentProcessor()->create($quote);
@@ -990,18 +993,6 @@ class Multishipping extends \Magento\Framework\DataObject
         $shippingAssignment->setShipping($shipping);
         $cartExtension->setShippingAssignments([$shippingAssignment]);
         return $quote->setExtensionAttributes($cartExtension);
-    }
-
-    /**
-     * @return \Magento\Quote\Api\Data\CartExtensionFactory
-     */
-    private function getCartExtensionFactory()
-    {
-        if (!$this->cartExtensionFactory) {
-            $this->cartExtensionFactory = ObjectManager::getInstance()
-                ->get(\Magento\Quote\Api\Data\CartExtensionFactory::class);
-        }
-        return $this->cartExtensionFactory;
     }
 
     /**

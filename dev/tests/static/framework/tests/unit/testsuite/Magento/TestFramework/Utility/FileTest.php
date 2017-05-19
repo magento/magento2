@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Files|PHPUnit_Framework_MockObject_MockObject
+     * @var Files|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fileUtilitiesMock;
 
     /**
-     * @var RegexIteratorFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var RegexIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $regexIteratorFactoryMock;
 
@@ -53,7 +53,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             'file2'
         ];
         $setupFiles = [
-            'file3'
+            ['file3']
         ];
         $expected = [
             'file1' => ['file1'],
@@ -70,12 +70,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->fileUtilitiesMock->expects($this->once())
             ->method('getPhpFiles')
             ->with(
-                Files::INCLUDE_APP_CODE
-                | Files::INCLUDE_PUB_CODE
-                | Files::INCLUDE_LIBS
-                | Files::INCLUDE_TEMPLATES
-                | Files::INCLUDE_TESTS
-                | Files::INCLUDE_NON_CLASSES
+                File::INCLUDE_APP_CODE
+                | File::INCLUDE_PUB_CODE
+                | File::INCLUDE_LIBS
+                | File::INCLUDE_TEMPLATES
+                | File::INCLUDE_TESTS
+                | File::INCLUDE_NON_CLASSES
+                | File::INCLUDE_SETUP
             )
             ->willReturn($appFiles);
         $this->assertEquals($expected, $this->file->getPhpFiles());

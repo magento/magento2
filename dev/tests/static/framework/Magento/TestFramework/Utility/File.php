@@ -13,6 +13,18 @@ use Magento\TestFramework\Utility\File\RegexIteratorFactory;
  */
 class File
 {
+    /**@#+
+     * File types offset flags
+     */
+    const INCLUDE_APP_CODE = Files::INCLUDE_APP_CODE;
+    const INCLUDE_PUB_CODE = Files::INCLUDE_PUB_CODE;
+    const INCLUDE_LIBS = Files::INCLUDE_LIBS;
+    const INCLUDE_TEMPLATES = Files::INCLUDE_TEMPLATES;
+    const INCLUDE_TESTS = Files::INCLUDE_TESTS;
+    const INCLUDE_NON_CLASSES = Files::INCLUDE_NON_CLASSES;
+    const INCLUDE_SETUP = 256;
+    /**#@-*/
+
     /**
      * @var RegexIteratorFactory
      */
@@ -43,19 +55,24 @@ class File
      * @return array
      * @throws \Exception
      */
-    public function getPhpFiles()
+    public function getPhpFiles($flags = null)
     {
-        $files = array_merge(
-            $this->fileUtilities->getPhpFiles(
-                Files::INCLUDE_APP_CODE
-                | Files::INCLUDE_PUB_CODE
-                | Files::INCLUDE_LIBS
-                | Files::INCLUDE_TEMPLATES
-                | Files::INCLUDE_TESTS
-                | Files::INCLUDE_NON_CLASSES
-            ),
-            $this->getSetupPhpFiles()
-        );
+        if (!$flags) {
+            $flags = Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_PUB_CODE
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_TEMPLATES
+            | Files::INCLUDE_TESTS
+            | Files::INCLUDE_NON_CLASSES
+            | self::INCLUDE_SETUP;
+        }
+        $files = $this->fileUtilities->getPhpFiles($flags);
+        if ($flags & self::INCLUDE_SETUP) {
+            $files = array_merge(
+                $files,
+                $this->getSetupPhpFiles()
+            );
+        }
         return Files::composeDataSets($files);
     }
 
@@ -70,10 +87,10 @@ class File
         $files = [];
         $regexIterator = $this->regexIteratorFactory->create(
             BP . '/setup',
-            '/.*php^/'
+            '/.*php$/'
         );
         foreach ($regexIterator as $file) {
-            $files = array_merge($files, [$file]);
+            $files[] = $file[0];
         }
         return $files;
     }

@@ -118,3 +118,6 @@ DoubleColon
 \Magento\TestModuleMessageQueueConfiguration\SyncHandler
 \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
 \Magento\Mtf\Client\ElementInterface
+BarFactory
+PartialNamespace\BarFactory
+Product\OptionFactory

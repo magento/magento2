@@ -12,8 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Zend\Mvc\MvcEvent;
 
 /**
- * Tests Magento\Setup\Mvc\Bootstrap\InitParamListener
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InitParamListenerTest extends \PHPUnit_Framework_TestCase
@@ -266,33 +264,11 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $omProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
+        $objectManagerProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $adminAppStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sessionConfigMock = $this->getMockBuilder(\Magento\Backend\Model\Session\AdminConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendAppListMock = $this->getMockBuilder(\Magento\Backend\App\BackendAppList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendAppMock = $this->getMockBuilder(\Magento\Backend\App\BackendApp::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendUrlFactoryMock = $this->getMockBuilder(\Magento\Backend\Model\UrlFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendUrlMock = $this->getMockBuilder(\Magento\Backend\Model\Url::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $authenticationMock = $this->getMockBuilder(\Magento\Backend\Model\Auth::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $adminSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
+        $authenticationMock = $this->getMockBuilder(\Magento\Setup\Mvc\Bootstrap\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
         $responseMock = $this->getMockBuilder(\Zend\Http\Response::class)
@@ -326,7 +302,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
                     [
                         \Magento\Setup\Model\ObjectManagerProvider::class,
                         true,
-                        $omProvider,
+                        $objectManagerProvider,
                     ],
                 ]
             );
@@ -334,58 +310,21 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnMap(
                 [
-                    [
-                        \Magento\Framework\App\State::class,
-                        $adminAppStateMock,
-                    ],
-                    [
-                        \Magento\Backend\Model\Session\AdminConfig::class,
-                        $sessionConfigMock,
-                    ],
-                    [
-                        \Magento\Backend\App\BackendAppList::class,
-                        $backendAppListMock,
-                    ],
-                    [
-                        \Magento\Backend\Model\UrlFactory::class,
-                        $backendUrlFactoryMock,
-                    ],
-                    [
-                        \Magento\Backend\Model\Auth::class,
+                     [
+                         \Magento\Setup\Mvc\Bootstrap\Authorization::class,
                         $authenticationMock,
                     ],
                 ]
             );
-        $objectManagerMock->expects($this->any())
-            ->method('create')
-            ->willReturn($adminSessionMock);
-        $omProvider->expects($this->once())
+        $objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManagerMock);
-        $adminAppStateMock->expects($this->once())
-            ->method('setAreaCode')
-            ->with(\Magento\Framework\App\Area::AREA_ADMINHTML);
         $applicationMock->expects($this->once())
             ->method('getServiceManager')
             ->willReturn($serviceManagerMock);
-        $backendAppMock->expects($this->once())
-            ->method('getCookiePath')
-            ->willReturn('');
-        $backendUrlFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($backendUrlMock);
-        $backendAppListMock->expects($this->once())
-            ->method('getBackendApp')
-            ->willReturn($backendAppMock);
         $authenticationMock->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
-        $adminSessionMock->expects($this->once())
-            ->method('isAllowed')
-            ->with('Magento_Backend::setup_wizard', null)
+            ->method('authorize')
             ->willReturn(false);
-        $adminSessionMock->expects($this->once())
-            ->method('destroy');
         $eventMock->expects($this->once())
             ->method('getResponse')
             ->willReturn($responseMock);
