@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 /**
  * Adminhtml creditmemo bar
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder

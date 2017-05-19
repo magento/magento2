@@ -763,8 +763,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function getItemsPerPage()
     {
         if ($this->_itemsPerPage === null) {
-            $memoryLimit = trim(ini_get('memory_limit'));
-            $lastMemoryLimitLetter = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
+            $memoryLimitConfigValue = trim(ini_get('memory_limit'));
+            $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
+            $memoryLimit = (int) $memoryLimitConfigValue;
             switch ($lastMemoryLimitLetter) {
                 case 'g':
                     $memoryLimit *= 1024;

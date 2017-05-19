@@ -12,6 +12,7 @@ use Magento\Customer\Model\Address\Mapper;
 /**
  * Customer address book block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Book extends \Magento\Framework\View\Element\Template

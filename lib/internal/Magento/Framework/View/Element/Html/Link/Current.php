@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Element\Html\Link;
  * Block representing link with two possible states.
  * "Current" state means link leads to URL equivalent to URL of currently displayed page.
  *
+ * @api
  * @method string                          getLabel()
  * @method string                          getPath()
  * @method string                          getTitle()

@@ -7,6 +7,9 @@
  */
 namespace Magento\GoogleAdwords\Block;
 
+/**
+ * @api
+ */
 class Code extends \Magento\Framework\View\Element\Template
 {
     /**
