@@ -1416,6 +1416,7 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="dataset" xsi:type="string">default</item>

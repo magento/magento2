@@ -9,9 +9,6 @@
     <event name="catalog_product_upsell">
         <observer name="bundle_observer" instance="Magento\Bundle\Observer\AppendUpsellProductsObserver"/>
     </event>
-    <event name="catalog_product_collection_load_after">
-        <observer name="bundle_observer" instance="Magento\Bundle\Observer\LoadProductOptionsObserver"/>
-    </event>
     <event name="product_option_renderer_init">
         <observer name="bundle_observer" instance="Magento\Bundle\Observer\InitOptionRendererObserver"/>
     </event>
