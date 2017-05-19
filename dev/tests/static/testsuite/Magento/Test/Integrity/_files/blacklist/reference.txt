@@ -105,6 +105,8 @@ DoubleColon
 \Magento\Framework\ObjectManager\Code\Generator\SampleConverter
 \Magento\Observer
 \Magento\Framework\MessageQueue\Model\TestConsumer
+\Magento\Framework\MessageQueue\Code\Generator\TInterface
+\Magento\Framework\MessageQueue\Code\Generator\TSearchResultsInterface
 \Magento\Catalog\Api\Data\Product
 \Magento\Framework\ObjectManager\Code\Generator\Sample
 \Magento\Framework\ObjectManager\Code\Generator\Sample

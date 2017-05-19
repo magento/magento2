@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Exception\Plugin;
 
+/**
+ * @api
+ */
 class AuthenticationException extends \Magento\Framework\Exception\AuthenticationException
 {
 }

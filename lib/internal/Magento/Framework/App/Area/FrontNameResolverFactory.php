@@ -1,13 +1,16 @@
 <?php
 /**
- * Application area front name resolver factory
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Area;
 
 /**
+ * Application area front name resolver factory
+ *
+ * Since front-name resolver is a service, a Pool object would suit better than factory.
+ * Keeping it for backward compatibility
+ *
  * @api
  */
 class FrontNameResolverFactory

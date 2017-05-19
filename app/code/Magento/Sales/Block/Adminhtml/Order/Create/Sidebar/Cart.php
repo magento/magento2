@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 /**
  * Adminhtml sales order create sidebar cart block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar

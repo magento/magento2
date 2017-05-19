@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Widget\Setup;
 
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
@@ -18,26 +18,26 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var FieldDataConverterFactory
-     */
-    private $fieldDataConverterFactory;
-
-    /**
      * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
     private $queryModifierFactory;
-    
+
+    /**
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldConverter;
+
     /**
      * UpgradeData constructor
-     * 
-     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     *
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
      * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory,
+        AggregatedFieldDataConverter $aggregatedFieldConverter,
         \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
     ) {
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
         $this->queryModifierFactory = $queryModifierFactory;
     }
 
@@ -59,17 +59,7 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function upgradeVersionTwoZeroOne(ModuleDataSetupInterface $setup)
     {
-        // upgrade widget_parameters field in widget_instance table
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('widget_instance'),
-            'instance_id',
-            'widget_parameters'
-        );
-
-        // upgrade xml field in layout_update table if there is conditions in a widget instance
-        $queryModifier = $this->queryModifierFactory->create(
+        $layoutUpdateQueryModifier = $this->queryModifierFactory->create(
             'like',
             [
                 'values' => [
@@ -77,14 +67,23 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             ]
         );
-
-        $xmlFieldDataConverter = $this->fieldDataConverterFactory->create(LayoutUpdateConverter::class);
-        $xmlFieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('layout_update'),
-            'layout_update_id',
-            'xml',
-            $queryModifier
+        $this->aggregatedFieldConverter->convert(
+            [
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $setup->getTable('widget_instance'),
+                    'instance_id',
+                    'widget_parameters'
+                ),
+                new FieldToConvert(
+                    LayoutUpdateConverter::class,
+                    $setup->getTable('layout_update'),
+                    'layout_update_id',
+                    'xml',
+                    $layoutUpdateQueryModifier
+                ),
+            ],
+            $setup->getConnection()
         );
     }
 }

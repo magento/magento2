@@ -12,7 +12,9 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 
 /**
- * Data object converter for REST
+ * Data object converter
+ *
+ * @api
  */
 class ServiceOutputProcessor implements ServicePayloadConverterInterface
 {

@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+/**
+ * Catalog flat indexer
+ *
+ * @api
+ */
 class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**

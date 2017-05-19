@@ -12,7 +12,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 /**
  * Bundle Selection Resource Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

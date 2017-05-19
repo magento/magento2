@@ -19,6 +19,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Catalog product option model
  *
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
@@ -29,34 +30,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  */
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
-    const OPTION_GROUP_TEXT = 'text';
-
-    const OPTION_GROUP_FILE = 'file';
-
-    const OPTION_GROUP_SELECT = 'select';
-
-    const OPTION_GROUP_DATE = 'date';
-
-    const OPTION_TYPE_FIELD = 'field';
-
-    const OPTION_TYPE_AREA = 'area';
-
-    const OPTION_TYPE_FILE = 'file';
-
-    const OPTION_TYPE_DROP_DOWN = 'drop_down';
-
-    const OPTION_TYPE_RADIO = 'radio';
-
-    const OPTION_TYPE_CHECKBOX = 'checkbox';
-
-    const OPTION_TYPE_MULTIPLE = 'multiple';
-
-    const OPTION_TYPE_DATE = 'date';
-
-    const OPTION_TYPE_DATE_TIME = 'date_time';
-
-    const OPTION_TYPE_TIME = 'time';
-
     /**
      * @var Option\Repository
      */

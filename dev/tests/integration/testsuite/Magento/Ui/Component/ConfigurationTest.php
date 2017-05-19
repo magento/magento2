@@ -53,9 +53,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         'argument[@name="data"]/item[@name="config"]/item[@name="multiple"]' => [
             '//*[@formElement="select"]',
             '//*[substring(@component, string-length(@component) - string-length("ui-group") +1) = "ui-group"]'
-        ],
-        'argument[@name="block"]' => [
-            '//*[@name="html_content"]'
         ]
     ];
 

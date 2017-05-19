@@ -11,6 +11,8 @@ use \Magento\Customer\Block\Account\SortLinkInterface;
 
 /**
  * Class for sorting links in navigation panels.
+ *
+ * @api
  */
 class Navigation extends Links
 {

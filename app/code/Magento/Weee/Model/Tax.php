@@ -13,6 +13,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {

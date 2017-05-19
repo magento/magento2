@@ -489,9 +489,12 @@
     </type>
     <type name="Magento\Framework\View\Layout\Reader\UiComponent">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
             <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\ConfigCondition">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -582,11 +585,6 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Generator\Block">
-        <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Layout\Generator\UiComponent">
         <arguments>
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
@@ -1230,9 +1228,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
-        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
-    </type>
     <type name="Magento\Framework\EntityManager\CompositeMapper">
         <arguments>
             <argument name="mappers" xsi:type="array">
@@ -1255,6 +1250,7 @@
             <argument name="queryModifiers" xsi:type="array">
                 <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
                 <item name="like" xsi:type="string">Magento\Framework\DB\Select\LikeQueryModifier</item>
+                <item name="composite" xsi:type="string">Magento\Framework\DB\Select\CompositeQueryModifier</item>
             </argument>
         </arguments>
     </type>

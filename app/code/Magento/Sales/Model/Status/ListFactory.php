@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model\Status;
 
+/**
+ * Class ListFactory
+ * @internal
+ */
 class ListFactory
 {
     /**

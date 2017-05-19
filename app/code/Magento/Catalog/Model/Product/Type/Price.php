@@ -14,6 +14,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * Product type price model
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price

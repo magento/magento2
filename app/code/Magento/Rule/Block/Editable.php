@@ -8,6 +8,9 @@ namespace Magento\Rule\Block;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 
+/**
+ * @api
+ */
 class Editable extends AbstractBlock implements RendererInterface
 {
     /**
