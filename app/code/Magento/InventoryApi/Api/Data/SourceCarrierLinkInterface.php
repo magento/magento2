@@ -5,34 +5,63 @@
  */
 namespace Magento\InventoryApi\Api\Data;
 
-use Magento\Shipping\Model\Carrier\CarrierInterface;
+use \Magento\Framework\Api\ExtensibleDataInterface;
 
-/**
- * Linkage interface between sources and carrier.
- * @api
- */
-interface SourceCarrierLinkInterface
+interface SourceCarrierLinkInterface extends ExtensibleDataInterface
 {
-    /**
-     * Set source.
-     *
-     * @param SourceInterface $source
-     * @return void
+
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    public function setSource(SourceInterface $source);
+    const CARRIER_CODE = 'carrier_code';
+    const POSITION = 'position';
+    /**#@-*/
+
 
     /**
-     * Set carrier.
+     * Get carrier code.
      *
-     * @param CarrierInterface $carrier
-     * @return void
+     * @return string
      */
-    public function setCarrier(CarrierInterface $carrier);
+    public function getCarrierCode();
 
     /**
-     * Get link.
+     * Set carrier code.
      *
+     * @param string $carrierCode
      * @return $this
      */
-    public function getSourceCarrierLink();
+    public function setCarrierCode($carrierCode);
+
+    /**
+     * Get position.
+     *
+     * @return int|null
+     */
+    public function getPosition();
+
+    /**
+     * Set position.
+     *
+     * @param int|null $position
+     * @return $this
+     */
+    public function setPosition($position);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
+    );
 }

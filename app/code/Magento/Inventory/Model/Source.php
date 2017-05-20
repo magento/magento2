@@ -322,7 +322,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getCarrierLinks()
     {
-        // TODO: Implement getCarrierLinks() method.
+        return $this->getData(SourceInterface::PRIORITY);
     }
 
     /**
@@ -330,7 +330,8 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function setCarrierLinks($carrierLinks)
     {
-        // TODO: Implement setCarrierLinks() method.
+        $this->setData(SourceInterface::CARRIER_LINKS, $carrierLinks);
+        return $this;
     }
 
     /**
