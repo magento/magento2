@@ -113,7 +113,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->source->setPriority(), SourceTest::TEST_ID);
     }
 
-    public function testCarrierLinkds()
+    public function testCarrierLinks()
     {
         $carrierLink1 = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
