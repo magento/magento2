@@ -37,12 +37,12 @@ class SourceCarrierLinkTest extends \PHPUnit_Framework_TestCase
     public function testCarrierCode()
     {
         $this->sourceCarrierLink->setCarrierCode(SourceCarrierLinkTest::TEST_STRING);
-        $this->assertEquals($this->source->getCarrierCode(), SourceCarrierLinkTest::TEST_STRING);
+        $this->assertEquals($this->sourceCarrierLink->getCarrierCode(), SourceCarrierLinkTest::TEST_STRING);
     }
 
     public function testPosition()
     {
         $this->sourceCarrierLink->setPosition(SourceCarrierLinkTest::TEST_POSITION);
-        $this->assertEquals($this->source->getName(), SourceCarrierLinkTest::TEST_POSITION);
+        $this->assertEquals($this->sourceCarrierLink->getPosition(), SourceCarrierLinkTest::TEST_POSITION);
     }
 }

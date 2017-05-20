@@ -68,13 +68,13 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     public function testDescription()
     {
         $this->source->setDescription(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->getDescription(), SourceTest::TEST_IS_ACTIVE);
+        $this->assertEquals($this->source->getDescription(), SourceTest::TEST_STRING);
     }
 
     public function testLatitude()
     {
         $this->source->setLatitude(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->getLatitude(), SourceTest::TEST_IS_ACTIVE);
+        $this->assertEquals($this->source->getLatitude(), SourceTest::TEST_STRING);
     }
 
     public function testCountryId()
@@ -86,40 +86,40 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     public function testRegion()
     {
         $this->source->setRegion(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->getRegion(), SourceTest::TEST_ID);
+        $this->assertEquals($this->source->getRegion(), SourceTest::TEST_STRING);
     }
 
     public function testStreet()
     {
         $this->source->setStreet(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->getStreet(), SourceTest::TEST_ID);
+        $this->assertEquals($this->source->getStreet(), SourceTest::TEST_STRING);
     }
 
     public function testPhone()
     {
         $this->source->setPhone(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->getPhone(), SourceTest::TEST_ID);
+        $this->assertEquals($this->source->getPhone(), SourceTest::TEST_STRING);
     }
 
     public function testFax()
     {
         $this->source->setFax(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->getFax(), SourceTest::TEST_ID);
+        $this->assertEquals($this->source->getFax(), SourceTest::TEST_STRING);
     }
 
     public function testPriority()
     {
         $this->source->setPriority(SourceTest::TEST_STRING);
-        $this->assertEquals($this->source->setPriority(), SourceTest::TEST_ID);
+        $this->assertEquals($this->source->getPriority(), SourceTest::TEST_STRING);
     }
 
     public function testCarrierLinks()
     {
-        $carrierLink1 = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $carrierLink1 = $this->getMock(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $carrierLink2 = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $carrierLink2 = $this->getMock(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
