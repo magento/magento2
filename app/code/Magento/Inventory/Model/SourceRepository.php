@@ -10,6 +10,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
@@ -50,33 +51,25 @@ class SourceRepository implements SourceRepositoryInterface
     private $sourceSearchResultsFactory;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * SourceRepository constructor.
      * @param ResourceSource $resource
      * @param SourceFactory $sourceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
      * @param SourceSearchResultsFactory $sourceSearchResultsFactory
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         ResourceSource $resource,
         SourceFactory $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $collectionFactory,
-        SourceSearchResultsFactory $sourceSearchResultsFactory,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SourceSearchResultsFactory $sourceSearchResultsFactory
     ) {
         $this->resource = $resource;
         $this->sourceFactory = $sourceFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->collectionFactory = $collectionFactory;
         $this->sourceSearchResultsFactory = $sourceSearchResultsFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -100,6 +93,11 @@ class SourceRepository implements SourceRepositoryInterface
         /** @var SourceInterface|AbstractModel $model */
         $model = $this->sourceFactory->create();
         $this->resource->load($model, SourceInterface::SOURCE_ID, $sourceId);
+
+        if (!$model->getId()) {
+            NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
+        }
+
         return $model;
     }
 

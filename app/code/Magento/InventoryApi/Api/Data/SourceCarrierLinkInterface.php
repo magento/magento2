@@ -1,16 +1,17 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nhp
- * Date: 5/20/17
- * Time: 2:52 PM
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\InventoryApi\Api\Data;
 
-
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 
+/**
+ * Interface SourceCarrierLinkInterface
+ * @package Magento\InventoryApi\Api\Data
+ */
 interface SourceCarrierLinkInterface
 {
     /**
