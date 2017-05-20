@@ -26,32 +26,32 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @var ResourceSource
      */
-    protected $resource;
+    private $resource;
 
     /**
      * @var SourceFactory
      */
-    protected $sourceFactory;
+    private $sourceFactory;
 
     /**
      * @var CollectionProcessorInterface
      */
-    protected $collectionProcessor;
+    private $collectionProcessor;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var SourceSearchResultsFactory
      */
-    protected $sourceSearchResultsFactory;
+    private $sourceSearchResultsFactory;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * SourceRepository constructor.
