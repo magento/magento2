@@ -234,7 +234,9 @@ class Data
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
         $allAttributesArray = [];
         foreach ($configurableAttributes as $attribute) {
-            $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            if (!empty($attribute['default_value'])) {
+                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            }
         }
 
         $resultAttributesToFilter = array_merge(
