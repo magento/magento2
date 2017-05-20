@@ -427,7 +427,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getCarrierLinks()
     {
-        // TODO: Implement getCarrierLinks() method.
+        return $this->getData(SourceInterface::PRIORITY);
     }
 
     /**
@@ -437,7 +437,8 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function setCarrierLinks($carrierLinks)
     {
-        // TODO: Implement setCarrierLinks() method.
+        $this->setData(SourceInterface::CARRIER_LINKS, $carrierLinks);
+        return $this;
     }
 
     /**
@@ -447,7 +448,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getExtensionAttributes()
     {
-        // TODO: Implement getExtensionAttributes() method.
+        return $this->getData(SourceInterface::EXTENSION_ATTRIBUTES_KEY);
     }
 
     /**
@@ -460,6 +461,7 @@ class Source extends AbstractModel implements SourceInterface
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
     ) {
-        // TODO: Implement setExtensionAttributes() method.
+        $this->setData(SourceInterface::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
+        return $this;
     }
 }

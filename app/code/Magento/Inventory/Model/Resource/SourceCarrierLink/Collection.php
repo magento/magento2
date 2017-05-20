@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\Resource\Source;
+namespace Magento\Inventory\Model\Resource\SourceCarrierLink;
 
-use Magento\Inventory\Model\Resource\Source as ResourceSource;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Inventory\Model\Source as SourceModel;
+use Magento\Inventory\Model\SourceCarrierLink as SourceCarrierLinkModel;
 
 class Collection extends AbstractCollection
 {
@@ -21,7 +21,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(SourceModel::class, ResourceSource::class);
+        $this->_init(SourceCarrierLinkModel::class, ResourceSourceCarrierLink::class);
     }
 
     /**
@@ -31,6 +31,6 @@ class Collection extends AbstractCollection
      */
     public function getIdFieldName()
     {
-        return SourceInterface::SOURCE_ID;
+        return 'source_carrier_link_id';
     }
 }
