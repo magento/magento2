@@ -18,14 +18,14 @@ class Source extends AbstractModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    protected $_collectionName = 'Magento\Inventory\Model\Resource\Source\Collection';
+    protected $_collectionName = \Magento\Inventory\Model\Resource\Source\Collection::class;
 
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init('Magento\Inventory\Model\Resource\Source');
+        $this->_init(\Magento\Inventory\Model\Resource\Source::class);
     }
 
     /**
@@ -338,7 +338,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getExtensionAttributes()
     {
-        // TODO: Implement getExtensionAttributes() method.
+        return $this->_getExtensionAttributes();
     }
 
     /**
@@ -347,6 +347,6 @@ class Source extends AbstractModel implements SourceInterface
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
     ) {
-        // TODO: Implement setExtensionAttributes() method.
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
