@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Inventory\Model\Resource\Source;
 
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
 use Magento\InventoryApi\Api\Data\SourceInterface;

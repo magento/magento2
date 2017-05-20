@@ -11,24 +11,23 @@ use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 class Source extends AbstractModel implements SourceInterface
 {
-
     /**
-     * Name of the resource collection model
+     * Name of the resource collection model.
      *
      * @codingStandardsIgnore
      * @var string
      */
-    protected $_collectionName = 'Magento\Inventory\Model\Resource\Source\Collection';
+    protected $_collectionName = \Magento\Inventory\Model\Resource\Source\Collection::class;
 
     /**
-     * Initialize resource model
+     * Initialize resource model.
      *
      * @codingStandardsIgnore
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Inventory\Model\Resource\Source');
+        $this->_init(\Magento\Inventory\Model\Resource\Source::class);
     }
 
     /**
@@ -45,7 +44,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source id.
      *
      * @param int $sourceId
-     *
      * @return $this
      */
     public function setSourceId($sourceId)
@@ -68,7 +66,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source name.
      *
      * @param string $name
-     *
      * @return $this
      */
     public function setName($name)
@@ -78,7 +75,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source email
+     * Get source email.
      *
      * @return string
      */
@@ -90,8 +87,7 @@ class Source extends AbstractModel implements SourceInterface
     /**
      * Set source email
      *
-     * @param string $email
-     *
+     * @param string $email.
      * @return $this
      */
     public function setEmail($email)
@@ -102,7 +98,6 @@ class Source extends AbstractModel implements SourceInterface
 
     /**
      * Get source contact name.
-     *
      * @return string
      */
     public function getContactName()
@@ -114,7 +109,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source contact name.
      *
      * @param string $contactName
-     *
      * @return $this
      */
     public function setContactName($contactName)
@@ -137,7 +131,6 @@ class Source extends AbstractModel implements SourceInterface
      * Enable or disable source.
      *
      * @param bool $active
-     *
      * @return $this
      */
     public function setIsActive($active)
@@ -160,7 +153,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source description.
      *
      * @param string $description
-     *
      * @return $this
      */
     public function setDescription($description)
@@ -183,7 +175,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source latitude.
      *
      * @param float $latitude
-     *
      * @return $this
      */
     public function setLatitude($latitude)
@@ -206,7 +197,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source longitude.
      *
      * @param int $longitude
-     *
      * @return $this
      */
     public function setLongitude($longitude)
@@ -229,7 +219,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source country id.
      *
      * @param string $countryId
-     *
      * @return $this
      */
     public function setCountryId($countryId)
@@ -252,7 +241,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set region id if source has registered region.
      *
      * @param int $regionId
-     *
      * @return $this
      */
     public function setRegionId($regionId)
@@ -262,7 +250,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get region title if source has custom region
+     * Get region title if source has custom region.
      *
      * @return string
      */
@@ -275,7 +263,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source region title.
      *
      * @param string $region
-     *
      * @return $this
      */
     public function setRegion($region)
@@ -298,7 +285,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source city.
      *
      * @param string $city
-     *
      * @return $this
      */
     public function setCity($city)
@@ -321,7 +307,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source street name.
      *
      * @param string $street
-     *
      * @return $this
      */
     public function setStreet($street)
@@ -344,7 +329,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source post code.
      *
      * @param string $postcode
-     *
      * @return $this
      */
     public function setPostcode($postcode)
@@ -367,7 +351,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source phone number.
      *
      * @param string $phone
-     *
      * @return $this
      */
     public function setPhone($phone)
@@ -390,7 +373,6 @@ class Source extends AbstractModel implements SourceInterface
      * Set source fax.
      *
      * @param string $fax
-     *
      * @return $this
      */
     public function setFax($fax)
@@ -400,7 +382,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source priority
+     * Get source priority.
      *
      * @return int
      */
@@ -410,10 +392,9 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source priority
+     * Set source priority.
      *
      * @param int $priority
-     *
      * @return $this
      */
     public function setPriority($priority)
@@ -422,8 +403,7 @@ class Source extends AbstractModel implements SourceInterface
         return $this;
     }
 
-    /**
-     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]
+    /** @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]
      */
     public function getCarrierLinks()
     {
@@ -432,7 +412,6 @@ class Source extends AbstractModel implements SourceInterface
 
     /**
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[] $carrierLinks
-     *
      * @return $this
      */
     public function setCarrierLinks($carrierLinks)
@@ -447,7 +426,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getExtensionAttributes()
     {
-        // TODO: Implement getExtensionAttributes() method.
+        return $this->_getExtensionAttributes();
     }
 
     /**
@@ -460,6 +439,6 @@ class Source extends AbstractModel implements SourceInterface
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
     ) {
-        // TODO: Implement setExtensionAttributes() method.
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
