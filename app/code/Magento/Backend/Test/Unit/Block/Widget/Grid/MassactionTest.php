@@ -237,6 +237,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
         $this->_block->setUseSelectAll(true);
+        $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
 
         $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
@@ -254,7 +255,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             ->with(0)
             ->willReturnSelf();
         $collectionMock->expects($this->once())
-            ->method('getAllIds')
+            ->method('getColumnValues')
+            ->with($massActionIdField)
             ->willReturn($items);
 
         $this->assertEquals($result, $this->_block->getGridIdsJson());
