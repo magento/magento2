@@ -19,6 +19,7 @@ class SourceRepositoryTest extends WebapiAbstract
     public function testCreateSource()
     {
         //TODO: Implement testCreateSource
+        $this->fail(__METHOD__ . " is not implemented yet.");
     }
 
     /**
@@ -27,6 +28,7 @@ class SourceRepositoryTest extends WebapiAbstract
     public function testGetSource()
     {
         //TODO: Implement testGetSource
+        $this->fail(__METHOD__ . " is not implemented yet.");
     }
 
     /**
@@ -35,6 +37,7 @@ class SourceRepositoryTest extends WebapiAbstract
     public function testGetSourcesList()
     {
         //TODO: Implement testGetSourcesList
+        $this->fail(__METHOD__ . " is not implemented yet.");
     }
 
     /**
@@ -43,6 +46,7 @@ class SourceRepositoryTest extends WebapiAbstract
     public function testUpdateSource()
     {
         //TODO: Implement testUpdateSource
+        $this->fail(__METHOD__ . " is not implemented yet.");
     }
 
     /**
@@ -51,5 +55,6 @@ class SourceRepositoryTest extends WebapiAbstract
     public function testUpdateSourceWithoutCarriers()
     {
         //TODO: Implement testUpdateSourceWithoutCarriers
+        $this->fail(__METHOD__ . " is not implemented yet.");
     }
 }
