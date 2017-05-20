@@ -8,9 +8,6 @@
 
 namespace Magento\InventoryApi\Api\Data;
 
-
-use Magento\Shipping\Model\Carrier\CarrierInterface;
-
 interface SourceCarrierLinkInterface
 {
     /**
