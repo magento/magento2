@@ -6,7 +6,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
@@ -60,20 +59,20 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::NAME, Table::TYPE_TEXT, null, $options, 'Source Name');
+            $table->addColumn(SourceInterface::NAME, Table::TYPE_TEXT, 255, $options, 'Source Name');
 
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::CONTACT_NAME, Table::TYPE_TEXT, null, $options, 'Contact Name');
+            $table->addColumn(SourceInterface::CONTACT_NAME, Table::TYPE_TEXT, 255, $options, 'Contact Name');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::EMAIL, Table::TYPE_TEXT, null, $options, 'Email');
+            $table->addColumn(SourceInterface::EMAIL, Table::TYPE_TEXT, 255, $options, 'Email');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
@@ -90,32 +89,30 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::DESCRIPTION, Table::TYPE_TEXT, null, $options, 'Description');
+            $table->addColumn(SourceInterface::DESCRIPTION, Table::TYPE_TEXT, 255, $options, 'Description');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::LATITUDE, Table::TYPE_TEXT, null, $options, 'Latitude');
+            $table->addColumn(SourceInterface::LATITUDE, Table::TYPE_TEXT, 255, $options, 'Latitude');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::LONGITUDE, Table::TYPE_TEXT, null, $options, 'Longitude');
+            $table->addColumn(SourceInterface::LONGITUDE, Table::TYPE_TEXT, 255, $options, 'Longitude');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_DEFAULT => 1
+                InstallSchema::OPTION_UNSIGNED => true
             ];
 
             $table->addColumn(SourceInterface::COUNTRY_ID, Table::TYPE_SMALLINT, null, $options, 'Country Id');
 
             $options = [
-                InstallSchema::OPTION_NULLABLE => false,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_DEFAULT => 1
+                InstallSchema::OPTION_NULLABLE => true,
+                InstallSchema::OPTION_UNSIGNED => true
             ];
 
             $table->addColumn(SourceInterface::REGION_ID, Table::TYPE_SMALLINT, null, $options, 'Region Id');
@@ -124,42 +121,41 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::REGION, Table::TYPE_TEXT, null, $options, 'Region');
+            $table->addColumn(SourceInterface::REGION, Table::TYPE_TEXT, 255, $options, 'Region');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::CITY, Table::TYPE_TEXT, null, $options, 'City');
+            $table->addColumn(SourceInterface::CITY, Table::TYPE_TEXT, 255, $options, 'City');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::STREET, Table::TYPE_TEXT, null, $options, 'Street');
+            $table->addColumn(SourceInterface::STREET, Table::TYPE_TEXT, 255, $options, 'Street');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::POSTCODE, Table::TYPE_TEXT, null, $options, 'Postcode');
+            $table->addColumn(SourceInterface::POSTCODE, Table::TYPE_TEXT, 255, $options, 'Postcode');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::PHONE, Table::TYPE_TEXT, null, $options, 'Phone');
+            $table->addColumn(SourceInterface::PHONE, Table::TYPE_TEXT, 255, $options, 'Phone');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
-            $table->addColumn(SourceInterface::FAX, Table::TYPE_TEXT, null, $options, 'Fax');
+            $table->addColumn(SourceInterface::FAX, Table::TYPE_TEXT, 255, $options, 'Fax');
 
             $options = [
-                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_NULLABLE => true,
                 InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_DEFAULT => 1
             ];
 
             $table->addColumn(SourceInterface::PRIORITY, Table::TYPE_SMALLINT, null, $options, 'Priority');
@@ -170,22 +166,10 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getConnection()->createTable($table);
         }
 
-        $tableNamePipelineEntity = $installer->getTable(InstallSchema::TABLE_NAME_SOURCE);
-        if (!$installer->getConnection()->isTableExists($tableNamePipelineEntity)) {
+        $tableNameCarrierLinkEntity = $installer->getTable(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK);
+        if (!$installer->getConnection()->isTableExists($tableNameCarrierLinkEntity)) {
 
-            $table = $installer->getConnection()->newTable($tableNameSourceEntity);
-
-            $options = [
-                InstallSchema::OPTION_IDENTITY => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-                InstallSchema::OPTION_NULLABLE => false,
-            ];
-            $table->addColumn('source_carrier_link_id',
-                Table::TYPE_INTEGER,
-                null,
-                $options,
-                'Source ID'
-            );
+            $table = $installer->getConnection()->newTable($tableNameCarrierLinkEntity);
 
             $options = [
                 InstallSchema::OPTION_IDENTITY => true,
@@ -193,23 +177,51 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_PRIMARY => true
             ];
+            $table->addColumn('source_carrier_link_id',
+                Table::TYPE_INTEGER,
+                null,
+                $options,
+                'Source Carrier Link ID'
+            );
+
+            $options = [
+                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_UNSIGNED => true,
+            ];
             $table->addColumn(SourceInterface::SOURCE_ID, Table::TYPE_INTEGER, null, $options, 'Source ID');
 
             $options = [
                 InstallSchema::OPTION_NULLABLE => false,
                 InstallSchema::OPTION_DEFAULT => ''
             ];
+            $table->addColumn('carrier_code', Table::TYPE_TEXT, 255, $options, 'Carrier Code');
 
-            $table->addColumn(
+            $options = [
+                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_UNSIGNED => true,
+            ];
 
-                Table::TYPE_TEXT,
-                null,
-                $options,
-                'Source Name'
+            $table->addColumn('position', Table::TYPE_SMALLINT, null, $options, 'Position');
+
+            // Add foreign key for Pipeline ID field
+            $foreignKeyName = $installer->getConnection()->getForeignKeyName(
+                $tableNameCarrierLinkEntity,
+                SourceInterface::SOURCE_ID,
+                $tableNameCarrierLinkEntity,
+                SourceInterface::SOURCE_ID
+            );
+            $table->addForeignKey(
+                $foreignKeyName,
+                SourceInterface::SOURCE_ID,
+                $tableNameSourceEntity,
+                SourceInterface::SOURCE_ID,
+                Table::ACTION_CASCADE
             );
 
+            $table->setComment('Inventory Source Carrier Link Entity Table')->setOption('type', 'InnoDB')->setOption('charset',
+                'utf8');
+            $installer->getConnection()->createTable($table);
         }
-
 
         $setup->endSetup();
     }
