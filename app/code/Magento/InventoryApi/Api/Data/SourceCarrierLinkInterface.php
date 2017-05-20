@@ -9,7 +9,24 @@
 namespace Magento\InventoryApi\Api\Data;
 
 
+use Magento\Shipping\Model\Carrier\CarrierInterface;
+
 interface SourceCarrierLinkInterface
 {
+    /**
+     * @param SourceInterface $source
+     * @return void
+     */
+    public function setSource(SourceInterface $source);
 
+    /**
+     * @param CarrierInterface $carrier
+     * @return void
+     */
+    public function setCarrier(CarrierInterface $carrier);
+
+    /**
+     * @return $this
+     */
+    public function getSourceCarrierLink();
 }
