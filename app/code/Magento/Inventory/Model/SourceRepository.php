@@ -6,7 +6,6 @@
 
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -15,6 +14,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Inventory\Model\SourceSearchResultsFactory;
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
 use Magento\Inventory\Model\Resource\Source\CollectionFactory;
 use Magento\Inventory\Model\SourceFactory;
@@ -94,7 +94,7 @@ class SourceRepository implements SourceRepositoryInterface
         $model = $this->sourceFactory->create();
         $this->resource->load($model, SourceInterface::SOURCE_ID, $sourceId);
 
-        if (!$model->getId()) {
+        if (!$model->getSourceId()) {
             NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
         }
 
