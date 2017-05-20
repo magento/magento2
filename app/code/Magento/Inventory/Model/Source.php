@@ -9,22 +9,19 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Model\AbstractModel;
 use \Magento\InventoryApi\Api\Data\SourceInterface;
 
+/**
+ * Class Source
+ * @package Magento\Inventory\Model
+ */
 class Source extends AbstractModel implements SourceInterface
 {
-
     /**
-     * Name of the resource collection model
-     *
-     * @codingStandardsIgnore
-     * @var string
+     * @inheritdoc
      */
     protected $_collectionName = 'Magento\Inventory\Model\Resource\Source\Collection';
 
     /**
-     * Initialize resource model
-     *
-     * @codingStandardsIgnore
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -32,9 +29,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source id.
-     *
-     * @return int|null
+     * @inheritdoc
      */
     public function getSourceId()
     {
@@ -42,11 +37,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source id.
-     *
-     * @param int $sourceId
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setSourceId($sourceId)
     {
@@ -55,9 +46,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source name.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getName()
     {
@@ -65,11 +54,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source name.
-     *
-     * @param string $name
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -78,9 +63,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source email
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getEmail()
     {
@@ -88,11 +71,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source email
-     *
-     * @param string $email
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setEmail($email)
     {
@@ -101,9 +80,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source contact name.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getContactName()
     {
@@ -111,11 +88,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source contact name.
-     *
-     * @param string $contactName
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setContactName($contactName)
     {
@@ -124,9 +97,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Check if source is enabled.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function getIsActive()
     {
@@ -134,11 +105,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Enable or disable source.
-     *
-     * @param bool $active
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setIsActive($active)
     {
@@ -147,9 +114,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source description.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDescription()
     {
@@ -157,11 +122,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source description.
-     *
-     * @param string $description
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -170,9 +131,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source latitude.
-     *
-     * @return float
+     * @inheritdoc
      */
     public function getLatitude()
     {
@@ -180,11 +139,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source latitude.
-     *
-     * @param float $latitude
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setLatitude($latitude)
     {
@@ -193,9 +148,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source longitude.
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getLongitude()
     {
@@ -203,11 +156,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source longitude.
-     *
-     * @param int $longitude
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setLongitude($longitude)
     {
@@ -216,9 +165,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source country id.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getCountryId()
     {
@@ -226,11 +173,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source country id.
-     *
-     * @param string $countryId
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setCountryId($countryId)
     {
@@ -239,9 +182,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get region id if source has registered region.
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getRegionId()
     {
@@ -249,11 +190,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set region id if source has registered region.
-     *
-     * @param int $regionId
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setRegionId($regionId)
     {
@@ -262,9 +199,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get region title if source has custom region
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getRegion()
     {
@@ -272,11 +207,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source region title.
-     *
-     * @param string $region
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setRegion($region)
     {
@@ -285,9 +216,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source city.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getCity()
     {
@@ -295,11 +224,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source city.
-     *
-     * @param string $city
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setCity($city)
     {
@@ -308,9 +233,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source street name.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getStreet()
     {
@@ -318,11 +241,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source street name.
-     *
-     * @param string $street
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setStreet($street)
     {
@@ -331,9 +250,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source post code.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getPostcode()
     {
@@ -341,11 +258,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source post code.
-     *
-     * @param string $postcode
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setPostcode($postcode)
     {
@@ -354,9 +267,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source phone number.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getPhone()
     {
@@ -364,11 +275,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source phone number.
-     *
-     * @param string $phone
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setPhone($phone)
     {
@@ -377,9 +284,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source fax.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getFax()
     {
@@ -387,11 +292,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source fax.
-     *
-     * @param string $fax
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setFax($fax)
     {
@@ -400,9 +301,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Get source priority
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getPriority()
     {
@@ -410,11 +309,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set source priority
-     *
-     * @param int $priority
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setPriority($priority)
     {
@@ -423,7 +318,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]
+     * @inheritdoc
      */
     public function getCarrierLinks()
     {
@@ -431,9 +326,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[] $carrierLinks
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setCarrierLinks($carrierLinks)
     {
@@ -441,9 +334,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
-     *
-     * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface|null
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -451,11 +342,7 @@ class Source extends AbstractModel implements SourceInterface
     }
 
     /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
-     *
-     * @return $this
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes

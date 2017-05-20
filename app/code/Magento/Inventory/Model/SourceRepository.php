@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -79,12 +80,7 @@ class SourceRepository implements SourceRepositoryInterface
     }
 
     /**
-     * Save Source data.
-     *
-     * @param SourceInterface $source
-     * @return SourceInterface
-     *
-     * @throws CouldNotSaveException
+     * @inheritdoc
      */
     public function save(SourceInterface $source)
     {
@@ -97,10 +93,7 @@ class SourceRepository implements SourceRepositoryInterface
     }
 
     /**
-     * Load Source data by given sourceId.
-     *
-     * @param int $sourceId
-     * @return SourceInterface
+     * @inheritdoc
      */
     public function get($sourceId)
     {
@@ -111,10 +104,7 @@ class SourceRepository implements SourceRepositoryInterface
     }
 
     /**
-     * Load source data collection by given search criteria
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SourceSearchResultsInterface
+     * @inheritdoc
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
