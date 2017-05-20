@@ -33,7 +33,6 @@ class SourceCarrierLinkTest extends \PHPUnit_Framework_TestCase
         $this->sourceCarrierLink = $this->objectManager->getObject(SourceCarrierLink::class);
     }
 
-
     public function testCarrierCode()
     {
         $this->sourceCarrierLink->setCarrierCode(SourceCarrierLinkTest::TEST_STRING);

@@ -134,7 +134,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $carrierLinks = [$carrierLink1, $carrierLink2];
 
         $this->source->setCarrierLinks($carrierLinks);
-        $this->assertEquals($this->source->getCarrierLinks(), $carrierLinks);
+        $this->assertEquals($carrierLinks, $this->source->getCarrierLinks());
     }
 
 }

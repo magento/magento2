@@ -322,7 +322,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getCarrierLinks()
     {
-        return $this->getData(SourceInterface::PRIORITY);
+        return $this->getData(SourceInterface::CARRIER_LINKS);
     }
 
     /**

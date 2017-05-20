@@ -37,7 +37,7 @@ class SourceCarrierLink extends AbstractModel implements SourceCarrierLinkInterf
      */
     public function getCarrierCode()
     {
-        $this->getData(SourceCarrierLinkInterface::CARRIER_CODE);
+        return $this->getData(SourceCarrierLinkInterface::CARRIER_CODE);
     }
 
     /**
@@ -54,7 +54,7 @@ class SourceCarrierLink extends AbstractModel implements SourceCarrierLinkInterf
      */
     public function getPosition()
     {
-        $this->getData(SourceCarrierLinkInterface::POSITION);
+        return $this->getData(SourceCarrierLinkInterface::POSITION);
     }
 
     /**
