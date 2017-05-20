@@ -478,7 +478,10 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptions()
     {
         $data = $this->_getData('product_options');
-        return is_string($data) ? $this->serializer->unserialize($data) : $data;
+        if (is_string($data)) {
+            $data = $this->serializer->unserialize($data);
+        }
+        return $data;
     }
 
     /**
