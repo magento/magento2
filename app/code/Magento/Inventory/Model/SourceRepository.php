@@ -9,6 +9,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -103,7 +104,10 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function get($sourceId)
     {
-        
+        /** @var SourceInterface|AbstractModel $model */
+        $model = $this->sourceFactory->create();
+        $this->resource->load($model, SourceInterface::SOURCE_ID, $sourceId);
+        return $model;
     }
 
     /**
