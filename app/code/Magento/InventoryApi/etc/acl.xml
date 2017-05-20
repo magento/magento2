@@ -9,8 +9,8 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="InventoryApi::source" title="Inventory Sources" translate="title" sortOrder="10">
-                    <resource id="InventoryApi::source_edit" title="Edit Inventory Sources" translate="title" sortOrder="10" />
+                <resource id="Magento_InventoryApi::source" title="Inventory Sources" translate="title" sortOrder="10">
+                    <resource id="Magento_InventoryApi::source_edit" title="Edit Inventory Sources" translate="title" sortOrder="10" />
                 </resource>
             </resource>
         </resources>

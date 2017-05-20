@@ -110,16 +110,9 @@ class SourceRepository implements SourceRepositoryInterface
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var SourceInterface[] $sources */
-        $sources = [];
-        /** @var SourceInterface $source */
-        foreach ($collection->getItems() as $source) {
-            $sources[] = $source;
-        }
-
         /** @var SourceSearchResultsInterface $searchResults */
         $searchResults = $this->sourceSearchResultsFactory->create();
-        $searchResults->setItems($sources);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;

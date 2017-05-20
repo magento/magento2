@@ -9,14 +9,12 @@ use \Magento\Framework\Api\ExtensibleDataInterface;
 
 interface SourceCarrierLinkInterface extends ExtensibleDataInterface
 {
-
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const CARRIER_CODE = 'carrier_code';
     const POSITION = 'position';
     /**#@-*/
-
 
     /**
      * Get carrier code.
