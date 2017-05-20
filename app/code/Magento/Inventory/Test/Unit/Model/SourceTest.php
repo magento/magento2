@@ -115,13 +115,21 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
     public function testCarrierLinks()
     {
-        $carrierLink1 = $this->getMock(\Magento\Customer\Model\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $carrierLink1 = $this->getMock(
+            \Magento\Inventory\Model\SourceCarrierLink::class,
+            [],
+            [],
+            '',
+            false
+        );
 
-        $carrierLink2 = $this->getMock(\Magento\Customer\Model\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $carrierLink2 = $this->getMock(
+            \Magento\Inventory\Model\SourceCarrierLink::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $carrierLinks = [$carrierLink1, $carrierLink2];
 

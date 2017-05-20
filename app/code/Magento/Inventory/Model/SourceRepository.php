@@ -95,7 +95,7 @@ class SourceRepository implements SourceRepositoryInterface
         $this->resource->load($model, SourceInterface::SOURCE_ID, $sourceId);
 
         if (!$model->getSourceId()) {
-            NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
+            throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
         }
 
         return $model;
@@ -114,7 +114,7 @@ class SourceRepository implements SourceRepositoryInterface
         $sources = [];
         /** @var SourceInterface $source */
         foreach ($collection->getItems() as $source) {
-            $addresses[] = $source;
+            $sources[] = $source;
         }
 
         /** @var SourceSearchResultsInterface $searchResults */

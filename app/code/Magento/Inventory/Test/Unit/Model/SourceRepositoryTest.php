@@ -96,8 +96,9 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveSuccessful()
     {
         /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel */
-        $sourceModel = $this->getMockForAbstractClass(
+        $sourceModel = $this->getMock(
             \Magento\Inventory\Model\Source::class,
+            [],
             [],
             '',
             false
@@ -111,8 +112,9 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveErrorExpectsException()
     {
         /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel */
-        $sourceModel = $this->getMockForAbstractClass(
+        $sourceModel = $this->getMock(
             \Magento\Inventory\Model\Source::class,
+            [],
             [],
             '',
             false
@@ -132,9 +134,10 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $sourceId = 345;
 
         /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel */
-        $sourceModel = $this->getMockForAbstractClass(
+        $sourceModel = $this->getMock(
             \Magento\Inventory\Model\Source::class,
-            ['getSourceId'],
+            [],
+            [],
             '',
             false
         );
@@ -165,9 +168,10 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $sourceId = 345;
 
         /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel */
-        $sourceModel = $this->getMockForAbstractClass(
+        $sourceModel = $this->getMock(
             \Magento\Inventory\Model\Source::class,
-            ['getSourceId'],
+            [],
+            [],
             '',
             false
         );
@@ -191,5 +195,75 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
 
         $this->sourceRepository->get($sourceId);
+    }
+
+    public function testGetList()
+    {
+        /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel1 */
+        $sourceModel1 = $this->getMock(
+            \Magento\Inventory\Model\Source::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel2 */
+        $sourceModel2 = $this->getMock(
+            \Magento\Inventory\Model\Source::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $searchCriteria = $this->getMock(
+            \Magento\Framework\Api\SearchCriteriaInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $collection = $this->getMock(
+            \Magento\Inventory\Model\Resource\Source\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->collectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($collection));
+
+        $sources = [
+            $sourceModel1,
+            $sourceModel2
+        ];
+
+        $collection->expects($this->atLeastOnce())
+            ->method('getItems')
+            ->will($this->returnValue($sources));
+
+        $searchResults = $this->getMock(
+            \Magento\Inventory\Model\SourceSearchResults::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->sourceSearchResultsFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($searchResults));
+
+        $searchResults->expects($this->once())
+            ->method('setItems')
+            ->with($sources);
+
+        $result = $this->sourceRepository->getList($searchCriteria);
+
+        $this->assertSame($searchResults, $result);
     }
 }
