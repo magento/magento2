@@ -1,11 +1,16 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\InventoryApi\Api\Data;
+
+use \Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
  */
-interface SourceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface SourceInterface extends ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
