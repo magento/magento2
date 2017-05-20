@@ -71,7 +71,7 @@ class SourceCarrierLink extends AbstractModel implements SourceCarrierLinkInterf
      */
     public function getExtensionAttributes()
     {
-        $this->getData(SourceCarrierLinkInterface::EXTENSION_ATTRIBUTES_KEY);
+        return $this->_getExtensionAttributes();
     }
 
     /**
@@ -80,7 +80,6 @@ class SourceCarrierLink extends AbstractModel implements SourceCarrierLinkInterf
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
     ) {
-        $this->getData(SourceCarrierLinkInterface::EXTENSION_ATTRIBUTES_KEY);
-        return $this;
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

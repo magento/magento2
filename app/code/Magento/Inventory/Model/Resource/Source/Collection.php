@@ -10,14 +10,14 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\Source as SourceModel;
 
+/**
+ * Class Collection
+ * @package Magento\Inventory\Model\Resource\Source
+ */
 class Collection extends AbstractCollection
 {
     /**
-     * Initialize resource model
-     * @return void
-     *
-     * @codingStandardsIgnore
-     * @codeCoverageIgnore
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -25,9 +25,7 @@ class Collection extends AbstractCollection
     }
 
     /**
-     * Id field name getter
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getIdFieldName()
     {

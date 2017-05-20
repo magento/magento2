@@ -13,12 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 class Source extends AbstractDb
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
-     *
-     * @codingStandardsIgnore
-     * @codeCoverageIgnore
+     * @inheritdoc
      */
     protected function _construct()
     {

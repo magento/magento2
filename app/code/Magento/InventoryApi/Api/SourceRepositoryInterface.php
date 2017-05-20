@@ -5,6 +5,12 @@
  */
 namespace Magento\InventoryApi\Api;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
+
 /**
  * @api
  */
@@ -13,26 +19,27 @@ interface SourceRepositoryInterface
     /**
      * Save Source data.
      *
-     * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
-     * @return \Magento\InventoryApi\Api\Data\SourceInterface
+     * @param SourceInterface $source
+     * @return SourceInterface
      *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws CouldNotSaveException
      */
-    public function save(\Magento\InventoryApi\Api\Data\SourceInterface $source);
+    public function save(SourceInterface $source);
 
     /**
      * Load Source data by given sourceId.
      *
      * @param int $sourceId
-     * @return \Magento\InventoryApi\Api\Data\SourceInterface
+     * @return SourceInterface
+     * @throws NoSuchEntityException
      */
     public function get($sourceId);
 
     /**
      * Load Source data collection by given search criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface
-     * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SourceSearchResultsInterface
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null);
+    public function getList(SearchCriteriaInterface $searchCriteria = null);
 }
