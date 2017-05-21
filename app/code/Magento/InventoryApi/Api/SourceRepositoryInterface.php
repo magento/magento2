@@ -20,7 +20,7 @@ interface SourceRepositoryInterface
      * Save Source data.
      *
      * @param SourceInterface $source
-     * @return SourceInterface
+     * @return void
      *
      * @throws CouldNotSaveException
      */

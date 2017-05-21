@@ -19,12 +19,4 @@ class Collection extends AbstractCollection
     {
         $this->_init(SourceModel::class, ResourceSource::class);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getIdFieldName()
-    {
-        return SourceInterface::SOURCE_ID;
-    }
 }

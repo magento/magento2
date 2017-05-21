@@ -8,10 +8,6 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Api\SearchResults;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 
-/**
- * Class SourceSearchResults
- * @package Magento\Inventory\Model
- */
 class SourceSearchResults extends SearchResults implements SourceSearchResultsInterface
 {
 
