@@ -46,6 +46,25 @@ define([
         },
 
         /**
+         * build a unique id for the term checkbox
+         *
+         * @param {Object} ko context
+         * @param {Int} agreementId
+         */
+        getCheckboxId: function(context, agreementId) {
+          var paymentMethodName = '';
+          // fetch corresponding payment method from parent context
+          var paymentMethodRenderer = context.$parents[1];
+
+          if (paymentMethodRenderer) {
+            // item looks like this: {title: "Check / Money order", method: "checkmo"}
+            paymentMethodName = (paymentMethodRenderer.item) ?
+              paymentMethodRenderer.item.method : '';
+          }
+          return 'agreement_' + paymentMethodName + '_' + agreementId;
+        },
+
+        /**
          * Init modal window for rendered element
          *
          * @param {Object} element
