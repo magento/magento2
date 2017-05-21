@@ -8,10 +8,10 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">magento_inventory_source.magento_inventory_source_data_source</item>
-            <item name="deps" xsi:type="string">magento_inventory_source.magento_inventory_source_data_source</item>
+            <item name="provider" xsi:type="string">inventory_source_listing.inventory_source_listing_data_source</item>
+            <item name="deps" xsi:type="string">inventory_source_listing.inventory_source_listing_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">magento_inventory_source_columns</item>
+        <item name="spinner" xsi:type="string">inventory_source_listing_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
@@ -21,10 +21,10 @@
             </item>
         </item>
     </argument>
-    <dataSource name="magento_inventory_source_data_source">
+    <dataSource name="inventory_source_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Inventory\Ui\Component\Listing\DataProviders\Magento\Inventory\Source</argument>
-            <argument name="name" xsi:type="string">magento_inventory_source_data_source</argument>
+            <argument name="name" xsi:type="string">inventory_source_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">source_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
@@ -45,7 +45,7 @@
     <listingToolbar name="listing_top">
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="magento_inventory_source_columns">
+    <columns name="inventory_source_listing_columns">
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -56,7 +56,7 @@
                 </item>
             </argument>
         </selectionsColumn>
-        <column name="source_id">
+        <column name="source_id" sortOrder="20">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
