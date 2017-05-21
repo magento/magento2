@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Ui\Component\Listing\Column\Magentoinventorysource;
+namespace Magento\Inventory\Ui\Component\Listing\Columns;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class PageActions
+ * Class SourceActions
  */
-class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
+class SourceActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
 
     /**
-     * Add new edit action for the ui grid.   
+     * Add new edit action for the ui grid.
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -29,7 +29,7 @@ class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
                 }
 
                 $href = $this->getContext()->getUrl(
-                    "magento_inventory_source/page/edit",
+                    "inventory/sources/edit",
                     [SourceInterface::SOURCE_ID => $id]
                 );
 

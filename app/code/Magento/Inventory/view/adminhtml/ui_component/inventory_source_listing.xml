@@ -43,6 +43,24 @@
         </argument>
     </dataSource>
     <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Delete selected items?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="catalog/product/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="inventory_source_listing_columns">
@@ -65,7 +83,7 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Column\Magentoinventorysource\PageActions">
+        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Columns\SourceActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>

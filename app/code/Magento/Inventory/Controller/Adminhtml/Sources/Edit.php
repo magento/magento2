@@ -6,9 +6,9 @@
 namespace Magento\Inventory\Controller\Adminhtml\Sources;
 
 /**
- * Class Index
+ * Class Edit
  */
-class Index extends \Magento\Backend\App\Action
+class Edit extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -16,7 +16,8 @@ class Index extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * Index constructor.
+     * Edit constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
