@@ -7,7 +7,9 @@ namespace Magento\InventoryApi\Api;
 
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -18,7 +20,7 @@ class SourceRepositoryTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/inventory/source/';
 
     /**
-     * @var \Magento\InventoryApi\Api\Data\SourceInterfaceFactory
+     * @var SourceInterfaceFactory
      */
     private $sourceFactory;
 
@@ -28,9 +30,14 @@ class SourceRepositoryTest extends WebapiAbstract
     private $countryInformationAcquirer;
 
     /**
-     * @var \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory
+     * @var SourceCarrierLinkInterfaceFactory
      */
     private $sourceCarrierLinkFactory;
+
+    /**
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
 
     /**
      * Execute per test initialization.
@@ -38,11 +45,16 @@ class SourceRepositoryTest extends WebapiAbstract
     public function setUp()
     {
         $this->sourceFactory = Bootstrap::getObjectManager()
-            ->create(\Magento\InventoryApi\Api\Data\SourceInterfaceFactory::class);
+            ->create(SourceInterfaceFactory::class);
+
         $this->countryInformationAcquirer = Bootstrap::getObjectManager()
             ->create(CountryInformationAcquirerInterface::class);
+
         $this->sourceCarrierLinkFactory = Bootstrap::getObjectManager()
-            ->create(\Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory::class);
+            ->create(SourceCarrierLinkInterfaceFactory::class);
+
+        $this->sourceRepository = Bootstrap::getObjectManager()
+            ->create(SourceRepositoryInterface::class);
     }
 
     /**
@@ -51,6 +63,8 @@ class SourceRepositoryTest extends WebapiAbstract
     public function testCreateSource()
     {
         $country = $this->countryInformationAcquirer->getCountryInfo('DE');
+        $regions = $country->getAvailableRegions();
+        $region = $regions[0];
 
         $name = 'Source name';
         $description = 'Some description for source';
@@ -69,43 +83,38 @@ class SourceRepositoryTest extends WebapiAbstract
         $carrierCode1 = 'CAR-1';
         $carrierCode2 = 'CAR-2';
 
-        /** @var SourceCarrierLinkInterface $carrierLink1 */
-        $carrierLink1 = $this->sourceCarrierLinkFactory->create();
-        $carrierLink1->setPosition(1)
+        /** @var SourceCarrierLinkInterface $expectedCarrierLink1 */
+        $expectedCarrierLink1 = $this->sourceCarrierLinkFactory->create();
+        $expectedCarrierLink1->setPosition(1)
             ->setCarrierCode($carrierCode1);
 
-        /** @var SourceCarrierLinkInterface $carrierLink2*/
-        $carrierLink2 = $this->sourceCarrierLinkFactory->create();
-        $carrierLink2->setPosition(2)
+        /** @var SourceCarrierLinkInterface $expectedCarrierLink2 */
+        $expectedCarrierLink2 = $this->sourceCarrierLinkFactory->create();
+        $expectedCarrierLink2->setPosition(2)
             ->setCarrierCode($carrierCode2);
 
-        /** @var  \Magento\InventoryApi\Api\Data\SourceInterface $sourceDataObject */
-        $sourceDataObject = $this->sourceFactory->create();
-        $sourceDataObject->setName($name)
-            ->setDescription($description)
+        /** @var  \Magento\InventoryApi\Api\Data\SourceInterface $expectedSource */
+        $expectedSource = $this->sourceFactory->create();
+        $expectedSource->setName($name)
             ->setCity($city)
             ->setPostcode($postcode)
             ->setContactName($contactName)
             ->setCountryId($country->getId())
+            ->setDescription($description)
             ->setEmail($email)
+            ->setStreet($street)
             ->setFax($fax)
             ->setPhone($phone)
+            ->setRegion($region->getName())
+            ->setRegionId($region->getId())
             ->setLatitude($latitude)
             ->setLongitude($longitude)
             ->setIsActive($isActive)
             ->setPriority($priority)
-            ->setStreet($street)
             ->setCarrierLinks([
-                $carrierLink1,
-                $carrierLink2
+                $expectedCarrierLink1,
+                $expectedCarrierLink2
             ]);
-
-        $regions = $country->getAvailableRegions();
-        if ($regions) {
-            $region = $regions[0];
-            $sourceDataObject->setRegion($region->getName());
-            $sourceDataObject->setRegionId($region->getId());
-        }
 
         $serviceInfo = [
             'rest' => [
@@ -119,20 +128,67 @@ class SourceRepositoryTest extends WebapiAbstract
             ],
         ];
 
-
         $requestData = [
             'source' => [
-                SourceInterface::CITY => $sourceDataObject->getCity(),
-                SourceInterface::CONTACT_NAME => $sourceDataObject->getContactName(),
-                SourceInterface::COUNTRY_ID => $sourceDataObject->getCountryId(),
-                SourceInterface::DESCRIPTION => $sourceDataObject->getDescription(),
-                SourceInterface::NAME => $sourceDataObject->getName(),
-                SourceInterface::EMAIL => $sourceDataObject->getEmail(),
+                SourceInterface::NAME => $expectedSource->getName(),
+                SourceInterface::CITY => $expectedSource->getCity(),
+                SourceInterface::POSTCODE => $expectedSource->getPostcode(),
+                SourceInterface::CONTACT_NAME => $expectedSource->getContactName(),
+                SourceInterface::COUNTRY_ID => $expectedSource->getCountryId(),
+                SourceInterface::DESCRIPTION => $expectedSource->getDescription(),
+                SourceInterface::EMAIL => $expectedSource->getEmail(),
+                SourceInterface::STREET => $expectedSource->getStreet(),
+                SourceInterface::FAX => $expectedSource->getFax(),
+                SourceInterface::PHONE => $expectedSource->getPhone(),
+                SourceInterface::REGION => $expectedSource->getRegion(),
+                SourceInterface::REGION_ID => $expectedSource->getRegionId(),
+                SourceInterface::LATITUDE => $expectedSource->getLatitude(),
+                SourceInterface::LONGITUDE => $expectedSource->getLongitude(),
+                SourceInterface::IS_ACTIVE => $expectedSource->getIsActive(),
+                SourceInterface::PRIORITY => $expectedSource->getPriority(),
+                SourceInterface::CARRIER_LINKS => [
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => $expectedCarrierLink1->getCarrierCode(),
+                        SourceCarrierLinkInterface::POSITION => $expectedCarrierLink1->getPosition(),
+                    ],
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => $expectedCarrierLink2->getCarrierCode(),
+                        SourceCarrierLinkInterface::POSITION => $expectedCarrierLink2->getPosition(),
+                    ]
+                ]
             ],
         ];
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
-        var_dump($result);
+        $this->assertNotNull($result['source_id']);
+
+        $createdSource = $this->sourceRepository->get($result['source_id']);
+        $this->assertEquals($expectedSource->getName(), $createdSource->getName());
+        $this->assertEquals($expectedSource->getCity(), $createdSource->getCity());
+        $this->assertEquals($expectedSource->getPostcode(), $createdSource->getPostcode());
+        $this->assertEquals($expectedSource->getContactName(), $createdSource->getContactName());
+        $this->assertEquals($expectedSource->getCountryId(), $createdSource->getCountryId());
+        $this->assertEquals($expectedSource->getDescription(), $createdSource->getDescription());
+        $this->assertEquals($expectedSource->getEmail(), $createdSource->getEmail());
+        $this->assertEquals($expectedSource->getStreet(), $createdSource->getStreet());
+        $this->assertEquals($expectedSource->getFax(), $createdSource->getFax());
+        $this->assertEquals($expectedSource->getPhone(), $createdSource->getPhone());
+        $this->assertEquals($expectedSource->getRegion(), $createdSource->getRegion());
+        $this->assertEquals($expectedSource->getRegionId(), $createdSource->getRegionId());
+        $this->assertEquals($expectedSource->getLatitude(), $createdSource->getLatitude());
+        $this->assertEquals($expectedSource->getLongitude(), $createdSource->getLongitude());
+        $this->assertEquals($expectedSource->getIsActive(), $createdSource->getIsActive());
+        $this->assertEquals($expectedSource->getPriority(), $createdSource->getPriority());
+
+        $createdCarrierLinks = $createdSource->getCarrierLinks();
+
+        $createdCarrierLink1 = $createdCarrierLinks[0];
+        $this->assertEquals($expectedCarrierLink1->getCarrierCode(), $createdCarrierLink1->getCarrierCode());
+        $this->assertEquals($expectedCarrierLink1->getPosition(), $createdCarrierLink1->getPosition());
+
+        $createdCarrierLink2 = $createdCarrierLinks[1];
+        $this->assertEquals($expectedCarrierLink2->getCarrierCode(), $createdCarrierLink2->getCarrierCode());
+        $this->assertEquals($expectedCarrierLink2->getPosition(), $createdCarrierLink2->getPosition());
     }
 
     /**

@@ -12,12 +12,12 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\Inventory\Model\SourceSearchResultsFactory;
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
 use Magento\Inventory\Model\Resource\Source\CollectionFactory;
-use Magento\Inventory\Model\SourceFactory;
 
 /**
  * Class SourceRepository
@@ -31,7 +31,7 @@ class SourceRepository implements SourceRepositoryInterface
     private $resource;
 
     /**
-     * @var SourceFactory
+     * @var SourceInterfaceFactory
      */
     private $sourceFactory;
 
@@ -46,24 +46,24 @@ class SourceRepository implements SourceRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var SourceSearchResultsFactory
+     * @var SourceSearchResultsInterfaceFactory
      */
     private $sourceSearchResultsFactory;
 
     /**
      * SourceRepository constructor.
      * @param ResourceSource $resource
-     * @param SourceFactory $sourceFactory
+     * @param SourceInterfaceFactory $sourceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
-     * @param SourceSearchResultsFactory $sourceSearchResultsFactory
+     * @param SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory
      */
     public function __construct(
         ResourceSource $resource,
-        SourceFactory $sourceFactory,
+        SourceInterfaceFactory $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $collectionFactory,
-        SourceSearchResultsFactory $sourceSearchResultsFactory
+        SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory
     ) {
         $this->resource = $resource;
         $this->sourceFactory = $sourceFactory;
@@ -92,7 +92,7 @@ class SourceRepository implements SourceRepositoryInterface
     {
         /** @var SourceInterface|AbstractModel $model */
         $model = $this->sourceFactory->create();
-        $this->resource->load($model, SourceInterface::SOURCE_ID, $sourceId);
+        $this->resource->load($model, $sourceId, SourceInterface::SOURCE_ID);
 
         if (!$model->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
