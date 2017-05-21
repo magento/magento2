@@ -48,6 +48,8 @@
         </settings>
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
         <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="delete">
                 <settings>
@@ -64,32 +66,39 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="inventory_source_listing_columns">
-        <selectionsColumn name="ids">
+        <selectionsColumn name="ids" sortOrder="10">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
                     <item name="indexField" xsi:type="string">source_id</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
         </selectionsColumn>
         <column name="source_id" sortOrder="20">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="label" xsi:type="string" translate="true">ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Columns\SourceActions">
+        <column name="name" sortOrder="30">
+            <settings>
+                <addField>true</addField>
+                <filter>text</filter>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+        <column name="email" sortOrder="40">
+            <settings>
+                <addField>true</addField>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Columns\SourceActions" sortOrder="150">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
                     <item name="indexField" xsi:type="string">source_id</item>
-                    <item name="sortOrder" xsi:type="number">200</item>
                 </item>
             </argument>
         </actionsColumn>
