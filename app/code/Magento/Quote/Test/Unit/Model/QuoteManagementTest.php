@@ -124,7 +124,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
      */
-    protected $minimumAmountErrorMessage;
+    private $minimumAmountMessage;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -256,7 +256,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->minimumAmountErrorMessage = $this->getMock(
+        $this->minimumAmountMessage = $this->getMock(
             \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class,
             ['getMessage'],
             [],
@@ -288,7 +288,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountErrorMessage' => $this->minimumAmountErrorMessage
+                'minimumAmountMessage' => $this->minimumAmountMessage
             ]
         );
 
@@ -724,7 +724,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(true);
 
-        $this->minimumAmountErrorMessage->expects($this->never())->method('getMessage');
+        $this->minimumAmountMessage->expects($this->never())->method('getMessage');
 
         $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, ['getEmail'], [], '', false);
         $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
@@ -760,7 +760,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountErrorMessage' => $this->minimumAmountErrorMessage
+                'minimumAmountMessage' => $this->minimumAmountMessage
             ]
         );
         $orderMock = $this->getMock(
@@ -819,7 +819,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountErrorMessage' => $this->minimumAmountErrorMessage
+                'minimumAmountMessage' => $this->minimumAmountMessage
             ]
         );
         $orderMock = $this->getMock(
@@ -854,7 +854,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(true);
 
-        $this->minimumAmountErrorMessage->expects($this->never())->method('getMessage');
+        $this->minimumAmountMessage->expects($this->never())->method('getMessage');
 
         $service->expects($this->once())->method('submit')->willReturn($orderMock);
 
@@ -894,7 +894,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(false);
 
-        $this->minimumAmountErrorMessage->expects($this->once())
+        $this->minimumAmountMessage->expects($this->once())
             ->method('getMessage')
             ->willReturn(__('Incorrect amount'));
 
@@ -928,7 +928,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountErrorMessage' => $this->minimumAmountErrorMessage
+                'minimumAmountMessage' => $this->minimumAmountMessage
             ]
         );
 

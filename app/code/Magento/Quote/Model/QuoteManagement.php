@@ -140,7 +140,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
      */
-    private $minimumAmountErrorMessage;
+    private $minimumAmountMessage;
 
     /**
      * @param EventManager $eventManager
@@ -163,7 +163,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param QuoteFactory $quoteFactory
-     * @param Quote\Validator\MinimumOrderAmount\ValidationMessage $minimumAmountErrorMessage
+     * @param Quote\Validator\MinimumOrderAmount\ValidationMessage $minimumAmountMessage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -187,7 +187,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage $minimumAmountErrorMessage
+        \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage $minimumAmountMessage = null
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -209,7 +209,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
         $this->quoteFactory = $quoteFactory;
-        $this->minimumAmountErrorMessage = $minimumAmountErrorMessage;
+        $this->minimumAmountMessage = $minimumAmountMessage ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class);
     }
 
     /**
@@ -330,7 +331,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->minimumAmountErrorMessage->getMessage());
+            throw new InputException($this->minimumAmountMessage->getMessage());
         }
 
         if ($paymentMethod) {
