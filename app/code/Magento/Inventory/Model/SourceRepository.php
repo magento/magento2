@@ -18,10 +18,13 @@ use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
 use Magento\Inventory\Model\Resource\Source\CollectionFactory;
+use \Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
- * @package Magento\Inventory\Model
+ *
+ * Provides implementation of CQRS for sourcemodel
+ *
  */
 class SourceRepository implements SourceRepositoryInterface
 {
@@ -51,6 +54,11 @@ class SourceRepository implements SourceRepositoryInterface
     private $sourceSearchResultsFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * SourceRepository constructor.
      * @param ResourceSource $resource
      * @param SourceInterfaceFactory $sourceFactory
@@ -63,13 +71,15 @@ class SourceRepository implements SourceRepositoryInterface
         SourceInterfaceFactory $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $collectionFactory,
-        SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory
+        SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory,
+        LoggerInterface $logger
     ) {
         $this->resource = $resource;
         $this->sourceFactory = $sourceFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->collectionFactory = $collectionFactory;
         $this->sourceSearchResultsFactory = $sourceSearchResultsFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -80,9 +90,9 @@ class SourceRepository implements SourceRepositoryInterface
         try {
             $this->resource->save($source);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            $this->logger->error($exception->getMessage());
+            throw new CouldNotSaveException(__('Could not save source'));
         }
-        return $source;
     }
 
     /**
@@ -91,14 +101,14 @@ class SourceRepository implements SourceRepositoryInterface
     public function get($sourceId)
     {
         /** @var SourceInterface|AbstractModel $model */
-        $model = $this->sourceFactory->create();
-        $this->resource->load($model, $sourceId, SourceInterface::SOURCE_ID);
+        $source = $this->sourceFactory->create();
+        $this->resource->load($source, $sourceId, SourceInterface::SOURCE_ID);
 
-        if (!$model->getSourceId()) {
+        if (!$source->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
         }
 
-        return $model;
+        return $source;
     }
 
     /**
@@ -108,7 +118,11 @@ class SourceRepository implements SourceRepositoryInterface
     {
         /** @var \Magento\Inventory\Model\Resource\Source\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection);
+
+        // if there is a searchCriteria defined, use it to add its creterias to the collection
+        if (!is_null($searchCriteria)) {
+            $this->collectionProcessor->process($searchCriteria, $collection);
+        }
 
         /** @var SourceSearchResultsInterface $searchResults */
         $searchResults = $this->sourceSearchResultsFactory->create();

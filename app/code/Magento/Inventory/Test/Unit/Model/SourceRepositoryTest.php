@@ -10,7 +10,6 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
  * Class SourceRepositoryTest
- * @package Magento\Inventory\Test\Unit\Model
  */
 class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 {

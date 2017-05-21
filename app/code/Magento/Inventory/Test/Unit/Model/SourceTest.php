@@ -8,6 +8,9 @@ namespace Magento\Inventory\Test\Unit\Model;
 
 use \Magento\Inventory\Model\Source;
 
+/**
+ * Class SourceTest
+ */
 class SourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -20,12 +23,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var Source
      */
-    protected $source;
+    private $source;
 
     protected function setUp()
     {

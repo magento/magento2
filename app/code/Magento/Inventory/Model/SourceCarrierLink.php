@@ -12,14 +12,6 @@ use \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrierLinkInterface
 {
     /**
-     * Name of the resource collection model
-     *
-     * @codingStandardsIgnore
-     * @var string
-     */
-    protected $_collectionName = \Magento\Inventory\Model\Resource\SourceCarrierLink\Collection::class;
-
-    /**
      * Initialize resource model
      *
      * @codingStandardsIgnore

@@ -165,7 +165,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source country id.
      *
-     * @param string $countryId
+     * @param int $countryId
      * @return $this
      */
     public function setCountryId($countryId);
