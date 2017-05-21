@@ -19,7 +19,7 @@ interface SourceRepositoryInterface
      * Save Source data.
      *
      * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
-     * @return void
+     * @return int
      *
      * @throws CouldNotSaveException
      */
