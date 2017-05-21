@@ -7,7 +7,6 @@
 namespace Magento\Inventory\Test\Unit\Model;
 
 use \Magento\Inventory\Model\Source;
-use \Magento\Inventory\Model\SourceCarrierLink;
 
 class SourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -133,18 +132,26 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
     public function testCarrierLinks()
     {
-        $carrierLink1 = $this->getMock(\Magento\Customer\Model\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $carrierLink1 = $this->getMock(
+            \Magento\Inventory\Model\SourceCarrierLink::class,
+            [],
+            [],
+            '',
+            false
+        );
 
-        $carrierLink2 = $this->getMock(\Magento\Customer\Model\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $carrierLink2 = $this->getMock(
+            \Magento\Inventory\Model\SourceCarrierLink::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $carrierLinks = [$carrierLink1, $carrierLink2];
 
         $this->source->setCarrierLinks($carrierLinks);
-        $this->assertEquals($this->source->getCarrierLinks(), $carrierLinks);
+        $this->assertEquals($carrierLinks, $this->source->getCarrierLinks());
     }
 
 }

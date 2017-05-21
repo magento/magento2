@@ -14,4 +14,5 @@ use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
  */
 class SourceSearchResults extends SearchResults implements SourceSearchResultsInterface
 {
+
 }

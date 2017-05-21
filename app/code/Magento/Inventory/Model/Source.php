@@ -6,14 +6,14 @@
 
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
  * Class Source
  * @package Magento\Inventory\Model
  */
-class Source extends AbstractModel implements SourceInterface
+class Source extends AbstractExtensibleModel implements SourceInterface
 {
     /**
      * @inheritdoc
@@ -322,7 +322,7 @@ class Source extends AbstractModel implements SourceInterface
      */
     public function getCarrierLinks()
     {
-        return $this->getData(SourceInterface::PRIORITY);
+        return $this->getData(SourceInterface::CARRIER_LINKS);
     }
 
     /**

@@ -6,7 +6,6 @@
 
 namespace Magento\Inventory\Test\Unit\Model;
 
-use \Magento\Inventory\Model\Source;
 use \Magento\Inventory\Model\SourceCarrierLink;
 
 class SourceCarrierLinkTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +31,6 @@ class SourceCarrierLinkTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sourceCarrierLink = $this->objectManager->getObject(SourceCarrierLink::class);
     }
-
 
     public function testCarrierCode()
     {
