@@ -48,20 +48,21 @@ define([
         /**
          * build a unique id for the term checkbox
          *
-         * @param {Object} ko context
-         * @param {Int} agreementId
+         * @param {Object} context - the ko context
+         * @param {Number} agreementId
          */
-        getCheckboxId: function(context, agreementId) {
-          var paymentMethodName = '';
-          // fetch corresponding payment method from parent context
-          var paymentMethodRenderer = context.$parents[1];
+        getCheckboxId: function (context, agreementId) {
+            var paymentMethodName = '',
+                paymentMethodRenderer = context.$parents[1];
 
-          if (paymentMethodRenderer) {
-            // item looks like this: {title: "Check / Money order", method: "checkmo"}
-            paymentMethodName = (paymentMethodRenderer.item) ?
-              paymentMethodRenderer.item.method : '';
-          }
-          return 'agreement_' + paymentMethodName + '_' + agreementId;
+            // corresponding payment method fetched from parent context
+            if (paymentMethodRenderer) {
+                // item looks like this: {title: "Check / Money order", method: "checkmo"}
+                paymentMethodName = paymentMethodRenderer.item ?
+                  paymentMethodRenderer.item.method : '';
+            }
+
+            return 'agreement_' + paymentMethodName + '_' + agreementId;
         },
 
         /**
