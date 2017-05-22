@@ -131,10 +131,8 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
-        $this->_block->setUseSelectAll(true);
-        
+        $this->_block->setUseSelectAll(true);        
         $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
-
         $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
