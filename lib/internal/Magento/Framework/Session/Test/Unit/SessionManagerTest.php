@@ -77,9 +77,11 @@ namespace Magento\Framework\Session\Test\Unit {
 
         public function testSessionManagerConstructor()
         {
+            global $mockPHPFunctions;
             self::$isIniSetInvoked = false;
             $this->objectManager->getObject(\Magento\Framework\Session\SessionManager::class);
             $this->assertTrue(SessionManagerTest::$isIniSetInvoked);
+            $this->assertTrue($mockPHPFunctions);
         }
 
         protected function tearDown()
