@@ -48,12 +48,9 @@ namespace Magento\Framework\Session\Test\Unit {
 
         protected function setUp()
         {
-            global $mockPHPFunctions;
-            $mockPHPFunctions = true;
             require_once __DIR__ . '/_files/mock_ini_set.php';
             require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
 
-            $mockPHPFunctions = true;
             $this->mockSessionConfig = $this->getMockBuilder(\Magento\Framework\Session\Config\ConfigInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -78,6 +75,7 @@ namespace Magento\Framework\Session\Test\Unit {
         public function testSessionManagerConstructor()
         {
             global $mockPHPFunctions;
+            $mockPHPFunctions = true;
             self::$isIniSetInvoked = false;
             $this->objectManager->getObject(\Magento\Framework\Session\SessionManager::class);
             $this->assertTrue(SessionManagerTest::$isIniSetInvoked);
