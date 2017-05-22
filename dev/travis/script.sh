@@ -12,4 +12,7 @@ case $TEST_SUITE in
     js)
         grunt spec
         ;;
+    *)
+        phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER;
+        ;;
 esac
