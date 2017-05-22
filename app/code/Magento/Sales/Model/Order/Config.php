@@ -251,6 +251,8 @@ class Config
     protected function _getStatuses($visibility)
     {
         if ($this->statuses == null) {
+            $this->statuses[true] = [];
+            $this->statuses[false] = [];
             foreach ($this->_getCollection() as $item) {
                 $visible = (bool) $item->getData('visible_on_front');
                 $this->statuses[$visible][] = $item->getData('status');
