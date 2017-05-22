@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
-namespace {
-    $mockPHPFunctions = true;
-}
-
 namespace Magento\Framework\Session\Test\Unit {
     // @codingStandardsIgnoreEnd
 
@@ -53,6 +49,7 @@ namespace Magento\Framework\Session\Test\Unit {
         protected function setUp()
         {
             global $mockPHPFunctions;
+            $mockPHPFunctions = true;
             require_once __DIR__ . '/_files/mock_ini_set.php';
             require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
 
@@ -83,6 +80,12 @@ namespace Magento\Framework\Session\Test\Unit {
             self::$isIniSetInvoked = false;
             $this->objectManager->getObject(\Magento\Framework\Session\SessionManager::class);
             $this->assertTrue(SessionManagerTest::$isIniSetInvoked);
+        }
+
+        protected function tearDown()
+        {
+            global $mockPHPFunctions;
+            $mockPHPFunctions = false;
         }
     }
 }
