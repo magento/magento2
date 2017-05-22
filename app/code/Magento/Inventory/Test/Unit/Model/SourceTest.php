@@ -7,8 +7,10 @@
 namespace Magento\Inventory\Test\Unit\Model;
 
 use \Magento\Inventory\Model\Source;
-use \Magento\Inventory\Model\SourceCarrierLink;
 
+/**
+ * Class SourceTest
+ */
 class SourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -21,12 +23,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var Source
      */
-    protected $source;
+    private $source;
 
     protected function setUp()
     {
@@ -77,6 +79,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->source->getLatitude(), SourceTest::TEST_STRING);
     }
 
+    public function testLongitude()
+    {
+        $this->source->setLongitude(SourceTest::TEST_STRING);
+        $this->assertEquals($this->source->getLongitude(), SourceTest::TEST_STRING);
+    }
+
     public function testCountryId()
     {
         $this->source->setCountryId(SourceTest::TEST_ID);
@@ -89,6 +97,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->source->getRegion(), SourceTest::TEST_STRING);
     }
 
+    public function testCity()
+    {
+        $this->source->setCity(SourceTest::TEST_STRING);
+        $this->assertEquals($this->source->getCity(), SourceTest::TEST_STRING);
+    }
+
     public function testStreet()
     {
         $this->source->setStreet(SourceTest::TEST_STRING);
@@ -99,6 +113,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     {
         $this->source->setPhone(SourceTest::TEST_STRING);
         $this->assertEquals($this->source->getPhone(), SourceTest::TEST_STRING);
+    }
+
+    public function testPostcode()
+    {
+        $this->source->setPostcode(SourceTest::TEST_STRING);
+        $this->assertEquals($this->source->getPostcode(), SourceTest::TEST_STRING);
     }
 
     public function testFax()

@@ -17,11 +17,14 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Inventory\Model\SourceSearchResultsFactory;
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
 use Magento\Inventory\Model\Resource\Source\CollectionFactory;
-use Magento\Inventory\Model\SourceFactory;
+use Magento\Inventory\Model\SourceFactoryInterface;
+use \Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
- * @package Magento\Inventory\Model
+ *
+ * Provides implementation of CQRS for sourcemodel
+ *
  */
 class SourceRepository implements SourceRepositoryInterface
 {
@@ -31,7 +34,7 @@ class SourceRepository implements SourceRepositoryInterface
     private $resource;
 
     /**
-     * @var SourceFactory
+     * @var SourceFactoryInterface
      */
     private $sourceFactory;
 
@@ -51,25 +54,33 @@ class SourceRepository implements SourceRepositoryInterface
     private $sourceSearchResultsFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * SourceRepository constructor.
      * @param ResourceSource $resource
-     * @param SourceFactory $sourceFactory
+     * @param SourceFactoryInterface $sourceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
      * @param SourceSearchResultsFactory $sourceSearchResultsFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceSource $resource,
-        SourceFactory $sourceFactory,
+        SourceFactoryInterface $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $collectionFactory,
-        SourceSearchResultsFactory $sourceSearchResultsFactory
+        SourceSearchResultsFactory $sourceSearchResultsFactory,
+        LoggerInterface $logger
     ) {
         $this->resource = $resource;
         $this->sourceFactory = $sourceFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->collectionFactory = $collectionFactory;
         $this->sourceSearchResultsFactory = $sourceSearchResultsFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -80,9 +91,9 @@ class SourceRepository implements SourceRepositoryInterface
         try {
             $this->resource->save($source);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            $this->logger->error($exception->getMessage());
+            throw new CouldNotSaveException(__('Could not save source'));
         }
-        return $source;
     }
 
     /**
@@ -91,14 +102,14 @@ class SourceRepository implements SourceRepositoryInterface
     public function get($sourceId)
     {
         /** @var SourceInterface|AbstractModel $model */
-        $model = $this->sourceFactory->create();
-        $this->resource->load($model, SourceInterface::SOURCE_ID, $sourceId);
+        $source = $this->sourceFactory->create();
+        $this->resource->load($source, SourceInterface::SOURCE_ID, $sourceId);
 
-        if (!$model->getSourceId()) {
+        if (!$source->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
         }
 
-        return $model;
+        return $source;
     }
 
     /**
@@ -108,18 +119,15 @@ class SourceRepository implements SourceRepositoryInterface
     {
         /** @var \Magento\Inventory\Model\Resource\Source\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var SourceInterface[] $sources */
-        $sources = [];
-        /** @var SourceInterface $source */
-        foreach ($collection->getItems() as $source) {
-            $sources[] = $source;
+        // if there is a searchCriteria defined, use it to add its creterias to the collection
+        if (!is_null($searchCriteria)) {
+            $this->collectionProcessor->process($searchCriteria, $collection);
         }
 
         /** @var SourceSearchResultsInterface $searchResults */
         $searchResults = $this->sourceSearchResultsFactory->create();
-        $searchResults->setItems($sources);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;

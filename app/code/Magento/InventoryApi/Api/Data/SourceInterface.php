@@ -143,14 +143,14 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Get source longitude.
      *
-     * @return int
+     * @return float
      */
     public function getLongitude();
 
     /**
      * Set source longitude.
      *
-     * @param int $longitude
+     * @param float $longitude
      * @return $this
      */
     public function setLongitude($longitude);
@@ -165,7 +165,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source country id.
      *
-     * @param string $countryId
+     * @param int $countryId
      * @return $this
      */
     public function setCountryId($countryId);

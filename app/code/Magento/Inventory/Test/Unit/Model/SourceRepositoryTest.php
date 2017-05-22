@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Test\Unit\Model;
+
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
  * Class SourceRepositoryTest
- * @package Magento\Inventory\Test\Unit\Model
  */
 class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -120,6 +121,9 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->resource->expects($this->atLeastOnce())
+            ->method('save');
+
         $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
 
         $this->resource->expects($this->atLeastOnce())
@@ -129,7 +133,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->sourceRepository->save($sourceModel);
     }
 
-    public function testGetSuccessfull()
+    public function testGetSuccessful()
     {
         $sourceId = 345;
 

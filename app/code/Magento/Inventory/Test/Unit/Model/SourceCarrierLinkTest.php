@@ -6,9 +6,11 @@
 
 namespace Magento\Inventory\Test\Unit\Model;
 
-use \Magento\Inventory\Model\Source;
 use \Magento\Inventory\Model\SourceCarrierLink;
 
+/**
+ * Class SourceCarrierLinkTest
+ */
 class SourceCarrierLinkTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -20,12 +22,12 @@ class SourceCarrierLinkTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var SourceCarrierLink
      */
-    protected $sourceCarrierLink;
+    private $sourceCarrierLink;
 
     protected function setUp()
     {

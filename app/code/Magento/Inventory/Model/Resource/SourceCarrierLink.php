@@ -8,7 +8,6 @@ namespace Magento\Inventory\Model\Resource;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Inventory\Setup\InstallSchema;
-use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
 class SourceCarrierLink extends AbstractDb
 {
@@ -16,9 +15,6 @@ class SourceCarrierLink extends AbstractDb
      * Initialize resource model
      *
      * @return void
-     *
-     * @codingStandardsIgnore
-     * @codeCoverageIgnore
      */
     protected function _construct()
     {

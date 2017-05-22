@@ -6,20 +6,11 @@
 
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
-class SourceCarrierLink extends AbstractModel implements SourceCarrierLinkInterface
+class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrierLinkInterface
 {
-
-    /**
-     * Name of the resource collection model
-     *
-     * @codingStandardsIgnore
-     * @var string
-     */
-    protected $_collectionName = 'Magento\Inventory\Model\Resource\SourceCarrierLink\Collection';
-
     /**
      * Initialize resource model
      *
@@ -28,9 +19,8 @@ class SourceCarrierLink extends AbstractModel implements SourceCarrierLinkInterf
      */
     protected function _construct()
     {
-        $this->_init('Magento\Inventory\Model\Resource\SourceCarrierLink');
+        $this->_init(\Magento\Inventory\Model\Resource\SourceCarrierLink::class);
     }
-    
 
     /**
      * @inheritDoc

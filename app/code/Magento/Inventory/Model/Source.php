@@ -6,20 +6,17 @@
 
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class Source
- * @package Magento\Inventory\Model
+ * Class Source,
+ * provides implementation of the SourceInterface which adds the possibilty
+ * for a Merchant to map existing physical sources to some particular sales channels
+ * this model holds the information like name and description of this physical sources
  */
-class Source extends AbstractModel implements SourceInterface
+class Source extends AbstractExtensibleModel implements SourceInterface
 {
-    /**
-     * @inheritdoc
-     */
-    protected $_collectionName = \Magento\Inventory\Model\Resource\Source\Collection::class;
-
     /**
      * @inheritdoc
      */
