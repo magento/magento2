@@ -5,11 +5,10 @@
  */
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteValidator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Paymen;
+use Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Model\QuoteValidator;
 
 /**
  * Class QuoteValidatorTest
@@ -27,11 +26,20 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
+     * @var AllowedCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedCountryReader;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator();
+        $this->allowedCountryReader = $this->getMockBuilder(AllowedCountries::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator($this->allowedCountryReader);
 
         $this->quoteMock = $this->getMock(
             \Magento\Quote\Model\Quote::class,
@@ -128,21 +136,18 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateBeforeSubmitThrowsExceptionIfShippingRateIsNotSelected()
     {
         $shippingMethod = 'checkmo';
-        $shippingAddressMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [
-                'validate',
-                'getShippingMethod',
-                'getShippingRateByCode',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+        $shippingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->allowedCountryReader->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+
         $this->quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($shippingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(false);
         $shippingAddressMock->expects($this->any())->method('validate')->willReturn(true);
+        $shippingAddressMock->method('getCountryId')
+            ->willReturn('US');
         $shippingAddressMock->expects($this->any())->method('getShippingMethod')->willReturn($shippingMethod);
         $shippingAddressMock->expects($this->once())->method('getShippingRateByCode')->with($shippingMethod);
 
@@ -188,22 +193,18 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfCountrySpecificConfigurations()
     {
-        $objectManagerHelper = new ObjectManager($this);
-        $allowedCountryReader = $this->getMockBuilder(AllowedCountries::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllowedCountries'])
-            ->getMock();
-        $allowedCountryReader->method('getAllowedCountries')
+        $this->allowedCountryReader->method('getAllowedCountries')
             ->willReturn(['EE' => 'EE']);
 
         $addressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountryId'])
             ->getMock();
+        $addressMock->method('validate')
+            ->willReturn(true);
         $addressMock->method('getCountryId')
             ->willReturn('EU');
 
-        $paymentMock = $this->getMockBuilder(Paymen::class)
+        $paymentMock = $this->getMockBuilder(Payment::class)
             ->setMethods(['getMethod'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -220,17 +221,12 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->method('getShippingAddress')
             ->willReturn($addressMock);
         $this->quoteMock->method('isVirtual')
-            ->willReturn(true);
+            ->willReturn(false);
         $this->quoteMock->method('getBillingAddress')
             ->willReturn($billingAddressMock);
         $this->quoteMock->method('getPayment')
             ->willReturn($paymentMock);
 
-        $quoteValidator = $objectManagerHelper->getObject(
-            QuoteValidator::class,
-            ['allowedCountryReader' => $allowedCountryReader]
-        );
-
-        $quoteValidator->validateBeforeSubmit($this->quoteMock);
+        $this->quoteValidator->validateBeforeSubmit($this->quoteMock);
     }
 }

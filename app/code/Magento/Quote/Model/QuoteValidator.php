@@ -70,6 +70,17 @@ class QuoteValidator
                     )
                 );
             }
+
+            // Checks if country id present in the allowed countries list.
+            if (!in_array(
+                $quote->getShippingAddress()->getCountryId(),
+                $this->allowedCountryReader->getAllowedCountries()
+            )) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Some addresses cannot be used due to country-specific configurations.')
+                );
+            }
+
             $method = $quote->getShippingAddress()->getShippingMethod();
             $rate = $quote->getShippingAddress()->getShippingRateByCode($method);
             if (!$method || !$rate) {
@@ -86,18 +97,6 @@ class QuoteValidator
         }
         if (!$quote->getPayment()->getMethod()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please select a valid payment method.'));
-        }
-
-        // Checks if country id present in the allowed countries list.
-        if (
-            !in_array(
-                $quote->getShippingAddress()->getCountryId(),
-                $this->allowedCountryReader->getAllowedCountries()
-            )
-        ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Some addresses cannot be used due to country-specific configurations.')
-            );
         }
 
         return $this;
