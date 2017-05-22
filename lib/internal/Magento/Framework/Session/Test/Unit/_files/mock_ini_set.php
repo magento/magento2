@@ -18,10 +18,12 @@ use \Magento\Framework\Session\Test\Unit\SessionManagerTest;
 function ini_set($varName, $newValue)
 {
     global $mockPHPFunctions;
+    echo "MOCK INI_SET CALL 1";
     if ($mockPHPFunctions) {
         SessionManagerTest::$isIniSetInvoked = true;
         SessionManagerTest::assertSame(SessionManagerTest::SESSION_USE_ONLY_COOKIES, $varName);
         SessionManagerTest::assertSame(SessionManagerTest::SESSION_USE_ONLY_COOKIES_ENABLE, $newValue);
+        echo "MOCK INI_SET CALL 2";
         return true;
     }
     return call_user_func_array('\ini_set', func_get_args());
