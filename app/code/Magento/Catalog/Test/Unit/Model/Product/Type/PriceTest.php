@@ -236,12 +236,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
         }
 
-        $tierPriceExtention = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
+        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
             ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
             ->getMock();
-        $tierPriceExtention->expects($this->any())->method('getPercentageValue')->willReturn(50);
-        $tierPriceExtention->expects($this->any())->method('setWebsiteId');
-        $this->tierPriceExtensionFactoryMock->expects($this->any())->method('create')->willReturn($tierPriceExtention);
+        $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(50);
+        $tierPriceExtensionMock->expects($this->any())->method('setWebsiteId');
+        $this->tierPriceExtensionFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($tierPriceExtensionMock);
 
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);

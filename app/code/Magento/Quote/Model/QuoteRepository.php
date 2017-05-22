@@ -47,6 +47,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
+     * @deprecated
      */
     protected $quoteCollection;
 
@@ -81,6 +82,8 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     private $quoteCollectionFactory;
 
     /**
+     * Constructor
+     *
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection
@@ -232,7 +235,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        $this->quoteCollection = $this->getQuoteCollection();
+        $this->quoteCollection = $this->quoteCollectionFactory->create();
         /** @var \Magento\Quote\Api\Data\CartSearchResultsInterface $searchData */
         $searchData = $this->searchResultsDataFactory->create();
         $searchData->setSearchCriteria($searchCriteria);

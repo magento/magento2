@@ -29,24 +29,32 @@ class ClassNameExtractorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'class_foo1.txt',
+                'class_with_namespace.txt',
                 'Magento\ModuleName\SubDirectoryName\Foo'
             ],
             [
-                'class_foo2.txt',
+                'class_implements_interface.txt',
                 'Magento\ModuleName\SubDirectoryName\Foo'
             ],
             [
-                'class_foo3.txt',
+                'class_with_comment.txt',
                 'Magento\ModuleName\SubDirectoryName\Foo'
             ],
             [
-                'class_foo4.txt',
+                'missing_class_keyword.txt',
                 false
             ],
             [
-                'class_foo5.txt',
-                false
+                'class_without_namespace.txt',
+                'Foo'
+            ],
+            [
+            'implements_keyword_on_different_line.txt',
+                'Foo'
+            ],
+            [
+                'extra_whitespaces.txt',
+                'Foo'
             ]
         ];
     }
@@ -73,13 +81,21 @@ class ClassNameExtractorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'class_foo1.txt',
+                'class_with_namespace.txt',
                 'Foo'
             ],
             [
-                'class_foo4.txt',
+                'missing_class_keyword.txt',
                 false
             ],
+            [
+                'implements_keyword_on_different_line.txt',
+                'Foo'
+            ],
+            [
+                'extra_whitespaces.txt',
+                'Foo'
+            ]
         ];
     }
 
@@ -105,13 +121,13 @@ class ClassNameExtractorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'class_foo4.txt',
+                'missing_class_keyword.txt',
                 'Magento\ModuleName\SubDirectoryName'
             ],
             [
-                'class_foo5.txt',
+                'class_without_namespace.txt',
                 false
-            ],
+            ]
         ];
     }
 

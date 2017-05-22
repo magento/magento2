@@ -143,7 +143,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         if (!$model) {
             $id = $this->getRequest()->getParam('id');
-            $model = $this->getRuleFactory()->create();
+            $model = $this->ruleFactory->create();
             $model->load($id);
         }
         $conditionsFieldSetId = $model->getConditionsFieldSetId($formName);

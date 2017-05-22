@@ -17,8 +17,8 @@ class ClassNameExtractor
     {
         $namespace = $this->getNamespace($fileContent);
         $name = $this->getName($fileContent);
-        if ($namespace && $name) {
-            return $namespace . '\\' . $name;
+        if ($name) {
+            return $namespace ? $namespace . '\\' . $name : $name;
         }
         return false;
     }
@@ -34,7 +34,7 @@ class ClassNameExtractor
         $namespace = $this->getNamespace($fileContent);
         if (isset($namespace)) {
             preg_match_all(
-                '/^(class|abstract\sclass|interface)\s([a-z0-9]+)(\sextends|\simplements|$)/im',
+                '/^\s*(class|abstract\sclass|interface)\s+([a-z0-9]+)(\s+(extends|implements)|\s*$)/im',
                 $fileContent,
                 $classMatches
             );

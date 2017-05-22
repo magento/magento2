@@ -21,7 +21,8 @@ class FileTest extends AbstractFormTestCase
      */
     private $urlEncode;
 
-    /**@var \PHPUnit_Framework_MockObject_MockObject|NotProtectedExtension
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|NotProtectedExtension
      */
     private $fileValidatorMock;
 
