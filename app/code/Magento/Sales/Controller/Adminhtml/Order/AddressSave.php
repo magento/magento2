@@ -28,8 +28,8 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
     /** @var RegionFactory $regionFactory */
-    protected $regionFactory;
-    
+    private $regionFactory;
+
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -59,9 +59,8 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        RegionFactory $regionFactory
+        RegionFactory $regionFactory = null
     ) {
-        $this->regionFactory = $regionFactory;
         parent::__construct(
             $context,
             $coreRegistry,
@@ -75,8 +74,9 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
             $orderRepository,
             $logger
         );
+        $this->regionFactory = $regionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()->get('\Magento\Directory\Model\RegionFactory');
     }
-    
+
     /**
      * Save order address
      *
