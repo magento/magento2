@@ -8,10 +8,10 @@ var config = {
         '*': {
             loadPlayer: 'Magento_ProductVideo/js/load-player',
             fotoramaVideoEvents: 'Magento_ProductVideo/js/fotorama-add-video-events',
-			vimeoAPI: 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js'
+            vimeoAPI: 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js'
         }
     },
-	shim: {
-		vimeoAPI: {}
-	}
+    shim: {
+        vimeoAPI: {}
+    }
 };
