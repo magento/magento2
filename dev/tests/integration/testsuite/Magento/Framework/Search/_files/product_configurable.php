@@ -126,7 +126,7 @@ try {
         'product_id = ' . $productToDelete->getId()
     );
 } catch (\Exception $e) {
-// Nothing to remove
+    // Nothing to remove
 }
 
 $registry->unregister('isSecureArea');

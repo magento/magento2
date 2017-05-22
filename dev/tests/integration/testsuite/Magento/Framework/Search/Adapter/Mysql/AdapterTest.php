@@ -12,6 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class AdapterTest
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Framework/Search/_files/products.php

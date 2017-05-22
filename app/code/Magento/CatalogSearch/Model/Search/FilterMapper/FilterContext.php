@@ -35,13 +35,13 @@ class FilterContext implements FilterStrategyInterface
      *
      * @var TermDropdownStrategy
      */
-   private $termDropdownStrategy;
+    private $termDropdownStrategy;
 
-   /**
-    * Strategy for handling static attributes.
-    *
-    * @var StaticAttributeStrategy
-    */
+    /**
+     * Strategy for handling static attributes.
+     *
+     * @var StaticAttributeStrategy
+     */
     private $staticAttributeStrategy;
 
     /**

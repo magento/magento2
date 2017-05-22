@@ -62,7 +62,7 @@ class StaticAttributeStrategy implements FilterStrategyInterface
         $select->joinInner(
             [$alias => $attribute->getBackendTable()],
             'search_index.entity_id = '
-                . $this->resourceConnection->getConnection()->quoteIdentifier("$alias.entity_id"),
+            . $this->resourceConnection->getConnection()->quoteIdentifier("$alias.entity_id"),
             []
         );
 
