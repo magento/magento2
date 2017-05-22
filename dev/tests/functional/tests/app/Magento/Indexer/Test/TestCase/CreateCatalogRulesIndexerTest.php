@@ -58,7 +58,7 @@ use Magento\Catalog\Test\TestStep\CreateProductsStep;
 class CreateCatalogRulesIndexerTest extends Injectable
 {
     /* tags */
-    const SEVERITY = 'S1';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
