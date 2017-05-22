@@ -46,8 +46,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
-
-        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+        //drop foreign key for single DB case
+        if (version_compare($context->getVersion(), '2.0.3', '<')
+            && $setup->tableExists($setup->getTable('quote_item'))
+        ) {
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('quote_item'),
+                $setup->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id')
+            );
+        }
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
             $setup->getConnection(self::$connectionName)->changeColumn(
                 $setup->getTable('quote_address', self::$connectionName),
                 'firstname',
@@ -58,8 +66,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'comment' => 'Firstname'
                 ]
             );
-        }
-        if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $setup->getConnection(self::$connectionName)->changeColumn(
                 $setup->getTable('quote_address', self::$connectionName),
                 'middlename',
@@ -70,8 +76,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'comment' => 'Middlename'
                 ]
             );
-        }
-        if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $setup->getConnection(self::$connectionName)->changeColumn(
                 $setup->getTable('quote_address', self::$connectionName),
                 'lastname',
@@ -81,15 +85,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'length' => 255,
                     'comment' => 'Lastname'
                 ]
-            );
-        }
-        //drop foreign key for single DB case
-        if (version_compare($context->getVersion(), '2.0.3', '<')
-            && $setup->tableExists($setup->getTable('quote_item'))
-        ) {
-            $setup->getConnection()->dropForeignKey(
-                $setup->getTable('quote_item'),
-                $setup->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id')
             );
         }
         $setup->endSetup();
