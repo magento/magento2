@@ -12,6 +12,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Abstract resource model
+ *
+ * @api
  */
 abstract class AbstractResource
 {
@@ -139,11 +141,16 @@ abstract class AbstractResource
      */
     protected function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
-        $value = $this->getSerializer()->unserialize($object->getData($field));
-        if (empty($value)) {
-            $object->setData($field, $defaultValue);
+        $value = $object->getData($field);
+        if ($value) {
+            $value = $this->getSerializer()->unserialize($object->getData($field));
+            if (empty($value)) {
+                $object->setData($field, $defaultValue);
+            } else {
+                $object->setData($field, $value);
+            }
         } else {
-            $object->setData($field, $value);
+            $object->setData($field, $defaultValue);
         }
     }
 

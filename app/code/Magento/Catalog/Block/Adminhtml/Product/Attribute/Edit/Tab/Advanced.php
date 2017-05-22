@@ -19,6 +19,9 @@ use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * @api
+ */
 class Advanced extends Generic
 {
     /**

@@ -11,6 +11,9 @@ namespace Magento\Theme\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @api
+ */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

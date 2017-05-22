@@ -2591,7 +2591,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->mockBundleCollection();
         $product = $this->getProductMock();
         $product->method('getCustomOption')->willReturnMap([
-            ['bundle_selection_ids', new DataObject(['value' => ''])],
+            ['bundle_selection_ids', new DataObject(['value' => '[]'])],
             ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => ''])])],
         ]);
         $product->setCustomOption(json_encode([]));

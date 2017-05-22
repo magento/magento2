@@ -10,6 +10,8 @@ use Magento\Security\Model\ConfigInterface;
 
 /**
  * Block Session Activity
+ *
+ * @api
  */
 class Activity extends \Magento\Backend\Block\Template
 {

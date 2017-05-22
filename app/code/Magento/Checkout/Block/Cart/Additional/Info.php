@@ -6,6 +6,9 @@
 
 namespace Magento\Checkout\Block\Cart\Additional;
 
+/**
+ * @api
+ */
 class Info extends \Magento\Framework\View\Element\Template
 {
     /**

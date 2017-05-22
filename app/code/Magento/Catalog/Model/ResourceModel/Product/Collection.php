@@ -24,7 +24,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\Fronten
  * Product collection
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -1842,55 +1841,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->columns('visibility', 'cat_index');
         }
 
-        $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
-        if (!isset($fromPart['store_index'])) {
-            $this->getSelect()->joinLeft(
-                ['store_index' => $this->getTable('store')],
-                'store_index.store_id = ' . $filters['store_table'] . '.store_id',
-                []
-            );
-        }
-        if (!isset($fromPart['store_group_index'])) {
-            $this->getSelect()->joinLeft(
-                ['store_group_index' => $this->getTable('store_group')],
-                'store_index.group_id = store_group_index.group_id',
-                []
-            );
-        }
-        if (!isset($fromPart['store_cat_index'])) {
-            $this->getSelect()->joinLeft(
-                ['store_cat_index' => $this->categoryProductIndexerFrontend->getMainTable()],
-                join(
-                    ' AND ',
-                    [
-                        'store_cat_index.product_id = e.entity_id',
-                        'store_cat_index.store_id = ' . $filters['store_table'] . '.store_id',
-                        'store_cat_index.category_id=store_group_index.root_category_id'
-                    ]
-                ),
-                ['store_visibility' => 'visibility']
-            );
-        }
         // Avoid column duplication problems
         $this->_resourceHelper->prepareColumnsList($this->getSelect());
 
-        $whereCond = join(
-            ' OR ',
-            [
-                $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility']),
-                $this->getConnection()->quoteInto('store_cat_index.visibility IN(?)', $filters['visibility'])
-            ]
-        );
-
+        $whereCond = $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility']);
         $wherePart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
-        $hasCond = false;
-        foreach ($wherePart as $cond) {
-            if ($cond == '(' . $whereCond . ')') {
-                $hasCond = true;
-            }
-        }
-
-        if (!$hasCond) {
+        if (array_search('(' . $whereCond . ')', $wherePart) === false) {
             $this->getSelect()->where($whereCond);
         }
 
@@ -2219,9 +2175,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         foreach ($this->getItems() as $item) {
             $productId = $item->getData($this->getLinkField());
-            if (isset($tierPrices[$productId])) {
-                $this->getBackend()->setPriceData($item, $tierPrices[$productId]);
-            }
+            $this->getBackend()->setPriceData($item, isset($tierPrices[$productId]) ? $tierPrices[$productId] : []);
         }
     }
 

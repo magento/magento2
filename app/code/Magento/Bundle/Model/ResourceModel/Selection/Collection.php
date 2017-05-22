@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Bundle Selections Resource Collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -333,7 +334,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         $this->getSelect()->reset(Select::ORDER);
-        $this->getSelect()->order($orderByValue . ($searchMin ? Select::SQL_ASC : Select::SQL_DESC));
+        $this->getSelect()->order(new \Zend_Db_Expr($orderByValue . ($searchMin ? Select::SQL_ASC : Select::SQL_DESC)));
         $this->getSelect()->limit(1);
         return $this;
     }

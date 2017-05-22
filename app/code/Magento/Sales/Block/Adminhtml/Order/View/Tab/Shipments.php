@@ -7,6 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 /**
  * Order Shipments grid
+ *
+ * @api
  */
 class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
