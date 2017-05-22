@@ -4,7 +4,7 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/confirm',
+    'confirm',
     'Magento_Customer/js/customer-data'
 ], function ($, confirm, customerData) {
     'use strict';

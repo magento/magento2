@@ -8,7 +8,7 @@ define([
     'mageUtils',
     'uiRegistry',
     './column',
-    'Magento_Ui/js/modal/confirm'
+    'confirm'
 ], function (_, utils, registry, Column, confirm) {
     'use strict';
 

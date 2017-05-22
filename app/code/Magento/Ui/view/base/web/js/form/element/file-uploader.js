@@ -6,7 +6,7 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/abstract',
     'jquery/file-uploader'

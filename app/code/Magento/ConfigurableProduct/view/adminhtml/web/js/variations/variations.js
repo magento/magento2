@@ -9,7 +9,7 @@ define([
     'jquery',
     'ko',
     'underscore',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'uiRegistry',
     'mage/translate'
 ], function (Component, $, ko, _, alert, registry, $t) {

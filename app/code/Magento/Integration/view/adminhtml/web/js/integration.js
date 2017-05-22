@@ -7,10 +7,10 @@
 /*global integration*/
 define([
     "jquery",
-    "Magento_Ui/js/modal/alert",
+    "alert",
     "jquery/ui",
     "mage/translate",
-    "Magento_Ui/js/modal/modal"
+    "modal"
 ], function($, alert){
     "use strict";
 

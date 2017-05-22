@@ -12,7 +12,7 @@ define([
     'underscore',
     'Magento_Ui/js/lib/collapsible',
     'mage/template',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'Magento_Catalog/js/product-gallery',
     'jquery/file-uploader',
     'mage/translate',

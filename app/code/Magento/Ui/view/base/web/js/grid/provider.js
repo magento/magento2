@@ -9,7 +9,7 @@ define([
     'mageUtils',
     'rjsResolver',
     'uiLayout',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'mage/translate',
     'uiElement'
 ], function ($, _, utils, resolver, layout, alert, $t, Element) {

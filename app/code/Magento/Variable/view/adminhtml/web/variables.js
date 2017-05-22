@@ -5,7 +5,7 @@
 define([
     'jquery',
     'mage/translate',
-    'Magento_Ui/js/modal/modal',
+    'modal',
     'jquery/ui',
     'prototype',
 ], function(jQuery, $t){

@@ -7,7 +7,7 @@ define([
     'jquery',
     'mage/template',
     'text!Magento_Ui/templates/grid/cells/thumbnail/preview.html',
-    'Magento_Ui/js/modal/modal'
+    'modal'
 ], function (Column, $, mageTemplate, thumbnailPreviewTemplate) {
     'use strict';
 

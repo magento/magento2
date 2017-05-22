@@ -6,7 +6,7 @@
 /*global confirm:true*/
 define([
     "jquery",
-    'Magento_Ui/js/modal/confirm',
+    'confirm',
     "jquery/ui",
     "mage/translate"
 ], function($, confirm){

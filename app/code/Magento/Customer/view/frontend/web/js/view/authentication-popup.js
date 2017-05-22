@@ -14,7 +14,7 @@ define(
         'Magento_Customer/js/model/authentication-popup',
         'mage/translate',
         'mage/url',
-        'Magento_Ui/js/modal/alert',
+        'alert',
         'mage/validation'
     ],
     function ($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {

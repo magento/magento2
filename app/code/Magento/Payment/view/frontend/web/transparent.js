@@ -6,7 +6,7 @@
 define([
     'jquery',
     'mage/template',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'jquery/ui',
     'Magento_Payment/js/model/credit-card-validation/validator'
 ], function ($, mageTemplate, alert) {

@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/modal/modal',
+    'modal',
     'mage/translate'
 ], function ($, modal, $t) {
     'use strict';

@@ -7,7 +7,7 @@
 define([
     'jquery',
     'uiComponent',
-    'Magento_Ui/js/modal/alert'
+    'alert'
 ], function ($, Class, alert) {
     'use strict';
 

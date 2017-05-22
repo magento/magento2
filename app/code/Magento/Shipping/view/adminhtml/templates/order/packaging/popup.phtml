@@ -18,7 +18,7 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         "jquery",
         "prototype",
         "Magento_Shipping/order/packaging",
-        "Magento_Ui/js/modal/modal"
+        "modal"
     ], function(jQuery){
 
         packaging = new Packaging(<?php /* @escapeNotVerified */ echo $block->getConfigDataJson() ?>);

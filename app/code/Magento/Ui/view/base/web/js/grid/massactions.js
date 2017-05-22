@@ -8,8 +8,8 @@ define([
     'uiRegistry',
     'mageUtils',
     'Magento_Ui/js/lib/collapsible',
-    'Magento_Ui/js/modal/confirm',
-    'Magento_Ui/js/modal/alert',
+    'confirm',
+    'alert',
     'mage/translate'
 ], function (_, registry, utils, Collapsible, confirm, alert, $t) {
     'use strict';

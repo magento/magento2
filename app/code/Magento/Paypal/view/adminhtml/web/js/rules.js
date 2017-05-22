@@ -4,7 +4,7 @@
  */
 define([
     'uiClass',
-    'Magento_Ui/js/modal/alert'
+    'alert'
 ], function (Class, alert) {
     'use strict';
 

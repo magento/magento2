@@ -8,7 +8,7 @@ define([
     'uiRegistry',
     'uiComponent',
     'uiLayout',
-    'Magento_Ui/js/modal/confirm'
+    'confirm'
 ], function (_, utils, registry, Component, layout, confirm) {
     'use strict';
 

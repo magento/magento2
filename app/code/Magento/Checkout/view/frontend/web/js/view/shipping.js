@@ -22,7 +22,7 @@ define(
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Ui/js/modal/modal',
+        'modal',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Checkout/js/checkout-data',
         'uiRegistry',

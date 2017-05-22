@@ -7,13 +7,13 @@
 define([
     'jquery',
     'mage/template',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'jquery/ui',
     'useDefault',
     'collapsable',
     'mage/translate',
     'mage/backend/validation',
-    'Magento_Ui/js/modal/modal'
+    'modal'
 ], function ($, mageTemplate, alert) {
     'use strict';
 

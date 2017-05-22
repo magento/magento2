@@ -7,7 +7,7 @@
 define([
     'jquery',
     'jquery/ui',
-    'Magento_Ui/js/modal/modal',
+    'modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation'
