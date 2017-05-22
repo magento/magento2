@@ -12,6 +12,8 @@ define(
         Component,
         $
     ) {
+        'use strict';
+
         return Component.extend({
 
             defaults: {},
