@@ -11,6 +11,9 @@
  */
 namespace Magento\Framework\Event\Observer;
 
+/**
+ * @api
+ */
 class Collection
 {
     /**

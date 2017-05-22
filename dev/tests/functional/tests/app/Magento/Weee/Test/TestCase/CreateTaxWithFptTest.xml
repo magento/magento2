@@ -117,8 +117,6 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation6" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-64832: "Order Total Excl. Tax" is not calculated(=0) on Shopping Cart and Checkout pages</data>
             <data name="description" xsi:type="string">Check taxed FPT display set to Including FPT and Description on product with with custom option catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_incl, display_including_tax</data>
             <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -137,8 +135,6 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation7" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-64832: "Order Total Excl. Tax" is not calculated(=0) on Shopping Cart and Checkout pages</data>
             <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with special price catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_incl, display_including_tax</data>
             <data name="productData" xsi:type="string">with_special_price_and_fpt</data>

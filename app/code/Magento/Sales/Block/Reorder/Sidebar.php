@@ -9,6 +9,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * Last ordered items sidebar
+ *
+ * @api
  */
 class Sidebar extends \Magento\Framework\View\Element\Template
 {

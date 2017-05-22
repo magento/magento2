@@ -11,6 +11,8 @@ use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
 /**
  * Abstract Resource Collection
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb

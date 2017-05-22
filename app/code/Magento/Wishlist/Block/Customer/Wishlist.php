@@ -11,6 +11,9 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
+/**
+ * @api
+ */
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**

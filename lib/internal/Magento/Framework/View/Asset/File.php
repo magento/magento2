@@ -10,6 +10,8 @@ namespace Magento\Framework\View\Asset;
  * A locally available static view file asset that can be referred with a file path
  *
  * This class is a value object with lazy loading of some of its data (content, physical file path)
+ *
+ * @api
  */
 class File implements MergeableInterface
 {
