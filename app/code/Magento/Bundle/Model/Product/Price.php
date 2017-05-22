@@ -169,7 +169,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         $customOption = $product->getCustomOption('bundle_selection_ids');
         if ($customOption) {
             $selectionIds = $this->serializer->unserialize($customOption->getValue());
-            if (!empty($selectionIds) && is_array($selectionIds)) {
+            if (is_array($selectionIds) && !empty($selectionIds)) {
                 return $selectionIds;
             }
         }
