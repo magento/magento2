@@ -5,7 +5,7 @@
  */
 // @codingStandardsIgnoreStart
 namespace {
-    $mockPHPFunctions = false;
+    $mockPHPFunctions = true;
 }
 
 namespace Magento\Framework\Session\Test\Unit {
