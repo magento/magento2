@@ -4,6 +4,10 @@
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
+namespace {
+    $mockPHPFunctions = false;
+}
+
 namespace Magento\Framework\Session\Test\Unit {
     // @codingStandardsIgnoreEnd
 
