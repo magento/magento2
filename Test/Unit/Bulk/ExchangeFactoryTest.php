@@ -38,9 +38,9 @@ class ExchangeFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->amqpExchangeFactory = $this
-            ->getMockBuilder(\Magento\Framework\Amqp\Bulk\ExchangeFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(\Magento\Framework\Amqp\ExchangeFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->exchangeFactory = $objectManager->getObject(
