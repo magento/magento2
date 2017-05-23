@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * Adminhtml backup page content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Backup extends \Magento\Backend\Block\Template

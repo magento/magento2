@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Layer\Filter\Item as FilterItem;
 
 /**
  * Class RenderLayered Render Swatches at Layered Navigation
- *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RenderLayered extends Template

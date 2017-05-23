@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\Indexer;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 abstract class AbstractFlatState
 {
     /**

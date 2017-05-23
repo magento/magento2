@@ -12,6 +12,8 @@
                 type="Magento\Customer\Model\ResourceModel\CustomerRepository" />
     <preference for="Magento\Customer\Api\GroupManagementInterface"
                 type="Magento\Customer\Model\GroupManagement" />
+    <preference for="Magento\Customer\Api\CustomerGroupConfigInterface"
+                type="Magento\Customer\Model\CustomerGroupConfig" />
     <preference for="Magento\Customer\Api\GroupRepositoryInterface"
                 type="Magento\Customer\Model\ResourceModel\GroupRepository" />
     <preference for="Magento\Customer\Api\Data\CustomerInterface" type="Magento\Customer\Model\Data\Customer" />

@@ -15,6 +15,9 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Catalog\Helper\Image;
 
+/**
+ * @api
+ */
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
@@ -115,6 +118,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
             ];
         }
         if (empty($imagesItems)) {
@@ -125,6 +130,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
             ];
         }
         return json_encode($imagesItems);

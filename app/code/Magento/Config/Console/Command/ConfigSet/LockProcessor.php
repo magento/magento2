@@ -22,28 +22,28 @@ use Magento\Framework\Stdlib\ArrayManager;
 class LockProcessor implements ConfigSetProcessorInterface
 {
     /**
-     * The factory for prepared value.
+     * The factory for prepared value
      *
      * @var PreparedValueFactory
      */
     private $preparedValueFactory;
 
     /**
-     * The deployment configuration writer.
+     * The deployment configuration writer
      *
      * @var DeploymentConfig\Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * An array manager for different manipulations with arrays.
+     * An array manager for different manipulations with arrays
      *
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
-     * The resolver for configuration paths according to source type.
+     * The resolver for configuration paths according to source type
      *
      * @var ConfigPathResolver
      */

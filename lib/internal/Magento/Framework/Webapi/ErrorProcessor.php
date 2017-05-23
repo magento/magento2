@@ -21,6 +21,7 @@ use Magento\Framework\Webapi\Exception as WebapiException;
  * Helper for errors processing.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ErrorProcessor
 {

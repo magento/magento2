@@ -193,6 +193,7 @@
                         <item name="add_variables" xsi:type="boolean">false</item>
                         <item name="add_widgets" xsi:type="boolean">false</item>
                         <item name="add_images" xsi:type="boolean">false</item>
+                        <item name="add_directives" xsi:type="boolean">true</item>
                     </item>
                     <item name="source" xsi:type="string">category</item>
                 </item>
@@ -424,7 +425,7 @@
         </settings>
         <container name="assign_products_container" sortOrder="160">
             <htmlContent name="html_content">
-                <argument name="block" xsi:type="object">Magento\Catalog\Block\Adminhtml\Category\AssignProducts</argument>
+                <block name="gallery" class="Magento\Catalog\Block\Adminhtml\Category\AssignProducts"/>
             </htmlContent>
         </container>
     </fieldset>

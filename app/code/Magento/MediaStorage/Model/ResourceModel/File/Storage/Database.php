@@ -7,6 +7,8 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
 /**
  * Class Database
+ *
+ * @api
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {

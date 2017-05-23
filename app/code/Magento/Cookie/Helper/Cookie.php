@@ -7,6 +7,7 @@ namespace Magento\Cookie\Helper;
 
 /**
  * Cookie helper
+ * @api
  */
 class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 {

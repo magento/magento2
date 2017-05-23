@@ -835,6 +835,8 @@
         <arguments>
             <argument name="customFilters" xsi:type="array">
                 <item name="category_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductCategoryFilter</item>
+                <item name="store" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductStoreFilter</item>
+                <item name="website_id" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\ProductWebsiteFilter</item>
             </argument>
         </arguments>
     </virtualType>
@@ -1024,8 +1026,39 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source">
         <arguments>
+            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>
             <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction">
+        <arguments>
+            <argument name="frontendResources" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</item>
+                <item name="decimal" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\EavDecimal\FrontendResource</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalBatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceBatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator">
+        <arguments>
+            <argument name="batchSizes" xsi:type="array">
+                <item name="decimal" xsi:type="number">1000</item>
+                <item name="source" xsi:type="number">1000</item>
+            </argument>
+            <argument name="batchSizeManagers" xsi:type="array">
+                <item name="decimal" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalBatchSizeManagement</item>
+                <item name="source" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceBatchSizeManagement</item>
+            </argument>
         </arguments>
     </type>
 </config>

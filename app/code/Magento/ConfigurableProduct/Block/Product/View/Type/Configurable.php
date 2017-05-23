@@ -9,10 +9,14 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -58,6 +62,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $configurableAttributeData;
 
     /**
+     * @var Format
+     */
+    private $localeFormat;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -67,6 +76,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param PriceCurrencyInterface $priceCurrency
      * @param ConfigurableAttributeData $configurableAttributeData
      * @param array $data
+     * @param Format|null $localeFormat
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -77,7 +88,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         CurrentCustomer $currentCustomer,
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
-        array $data = []
+        array $data = [],
+        Format $localeFormat = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -85,6 +97,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->catalogProduct = $catalogProduct;
         $this->currentCustomer = $currentCustomer;
         $this->configurableAttributeData = $configurableAttributeData;
+        $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(Format::class);
+
         parent::__construct(
             $context,
             $arrayUtils,
@@ -195,22 +209,21 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
             'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
+            'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->_registerJsPrice($regularPrice->getAmount()->getValue()),
+                    'amount' => $this->localeFormat->getNumber($regularPrice->getAmount()->getValue()),
                 ],
                 'basePrice' => [
-                    'amount' => $this->_registerJsPrice(
-                        $finalPrice->getAmount()->getBaseAmount()
-                    ),
+                    'amount' => $this->localeFormat->getNumber($finalPrice->getAmount()->getBaseAmount()),
                 ],
                 'finalPrice' => [
-                    'amount' => $this->_registerJsPrice($finalPrice->getAmount()->getValue()),
+                    'amount' => $this->localeFormat->getNumber($finalPrice->getAmount()->getValue()),
                 ],
             ],
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
-            'images' => isset($options['images']) ? $options['images'] : [],
+            'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
@@ -221,6 +234,35 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = array_merge($config, $this->_getAdditionalConfig());
 
         return $this->jsonEncoder->encode($config);
+    }
+
+    /**
+     * Get product images for configurable variations
+     *
+     * @return array
+     */
+    protected function getOptionImages()
+    {
+        $images = [];
+        foreach ($this->getAllowProducts() as $product) {
+
+            $productImages = $this->helper->getGalleryImages($product) ?: [];
+            foreach ($productImages as $image) {
+                $images[$product->getId()][] =
+                    [
+                        'thumb' => $image->getData('small_image_url'),
+                        'img' => $image->getData('medium_image_url'),
+                        'full' => $image->getData('large_image_url'),
+                        'caption' => $image->getLabel(),
+                        'position' => $image->getPosition(),
+                        'isMain' => $image->getFile() == $product->getImage(),
+                        'type' => str_replace('external-', '', $image->getMediaType()),
+                        'videoUrl' => $image->getVideoUrl(),
+                    ];
+            }
+        }
+
+        return $images;
     }
 
     /**
@@ -236,26 +278,28 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $tierPricesList = $tierPriceModel->getTierPriceList();
             foreach ($tierPricesList as $tierPrice) {
                 $tierPrices[] = [
-                    'qty' => $this->_registerJsPrice($tierPrice['price_qty']),
-                    'price' => $this->_registerJsPrice($tierPrice['price']->getValue()),
-                    'percentage' => $this->_registerJsPrice($tierPriceModel->getSavePercent($tierPrice['price'])),
+                    'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
+                    'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                    'percentage' => $this->localeFormat->getNumber(
+                        $tierPriceModel->getSavePercent($tierPrice['price'])
+                    ),
                 ];
             }
 
             $prices[$product->getId()] =
                 [
                     'oldPrice' => [
-                        'amount' => $this->_registerJsPrice(
+                        'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('regular_price')->getAmount()->getValue()
                         ),
                     ],
                     'basePrice' => [
-                        'amount' => $this->_registerJsPrice(
+                        'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
                         ),
                     ],
                     'finalPrice' => [
-                        'amount' => $this->_registerJsPrice(
+                        'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('final_price')->getAmount()->getValue()
                         ),
                     ],
@@ -268,6 +312,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
+     * @deprecated Will be removed in major release
      * @param float $price
      * @return string
      */

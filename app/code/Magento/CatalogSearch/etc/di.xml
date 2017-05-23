@@ -13,6 +13,7 @@
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
     <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
     <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
+    <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
@@ -311,6 +312,24 @@
     <type name="Magento\CatalogSearch\Model\Search\IndexBuilder">
         <arguments>
             <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite">
+        <arguments>
+            <argument name="queryCheckers" xsi:type="array">
+                <item name="advanced_search_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch</item>
+                <item name="catalog_view_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch">
+        <arguments>
+            <argument name="name" xsi:type="string">advanced_search_container</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView">
+        <arguments>
+            <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
     </type>
 </config>

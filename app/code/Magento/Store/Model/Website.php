@@ -8,6 +8,7 @@ namespace Magento\Store\Model;
 /**
  * Core Website model
  *
+ * @api
  * @method \Magento\Store\Model\ResourceModel\Website _getResource()
  * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getGroupTitle()

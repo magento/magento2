@@ -7,6 +7,8 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 
 /**
  * Class RelatedDataProvider
+ *
+ * @api
  */
 class RelatedDataProvider extends AbstractDataProvider
 {

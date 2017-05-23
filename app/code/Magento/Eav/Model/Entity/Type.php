@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Entity;
 /**
  * Entity type model
  *
+ * @api
  * @method \Magento\Eav\Model\ResourceModel\Entity\Type _getResource()
  * @method \Magento\Eav\Model\ResourceModel\Entity\Type getResource()
  * @method \Magento\Eav\Model\Entity\Type setEntityTypeCode(string $value)

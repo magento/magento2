@@ -8,6 +8,8 @@ namespace Magento\Shipping\Block\Adminhtml\View;
 
 /**
  * Adminhtml sales item renderer
+ *
+ * @api
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

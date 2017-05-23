@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
 
 /**
  * New product attribute created on product edit page
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
-
 class Created extends \Magento\Backend\Block\Widget
 {
     /**

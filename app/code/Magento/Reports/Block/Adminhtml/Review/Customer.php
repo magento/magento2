@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Review;
 /**
  * Adminhtml cms blocks content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Customer extends \Magento\Backend\Block\Widget\Grid\Container

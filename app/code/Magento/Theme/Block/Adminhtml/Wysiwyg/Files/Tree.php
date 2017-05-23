@@ -8,6 +8,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files;
 /**
  * Files tree block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tree extends \Magento\Backend\Block\Template
@@ -23,19 +24,29 @@ class Tree extends \Magento\Backend\Block\Template
     protected $urlEncoder;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Theme\Helper\Storage $storageHelper,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_storageHelper = $storageHelper;
         $this->urlEncoder = $urlEncoder;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $data);
     }
 
@@ -57,7 +68,7 @@ class Tree extends \Magento\Backend\Block\Template
      */
     public function getTreeJson($data)
     {
-        return \Zend_Json::encode($data);
+        return $this->serializer->serialize($data);
     }
 
     /**
