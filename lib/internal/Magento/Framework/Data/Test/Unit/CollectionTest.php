@@ -173,4 +173,85 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_model->removeAllItems();
         $this->assertEquals([], $this->_model->getItems());
     }
+
+    public function testEachCallsMethodOnEachItemWithNoArgs()
+    {
+        for ($i = 0; $i < 3; $i++) {
+            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item->expects($this->once())->method('testCallback')->with();
+            $this->_model->addItem($item);
+        }
+        $this->_model->each('testCallback');
+    }
+    
+    public function testEachCallsMethodOnEachItemWithArgs()
+    {
+        for ($i = 0; $i < 3; $i++) {
+            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item->expects($this->once())->method('testCallback')->with('a', 'b', 'c');
+            $this->_model->addItem($item);
+        }
+        $this->_model->each('testCallback', ['a', 'b', 'c']);
+    }
+
+    public function testCallsClosureWithEachItemAndNoArgs()
+    {
+        for ($i = 0; $i < 3; $i++) {
+            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item->expects($this->once())->method('testCallback')->with();
+            $this->_model->addItem($item);
+        }
+        $this->_model->each(function ($item) {
+            $item->testCallback();
+        });
+    }
+
+    public function testCallsClosureWithEachItemAndArgs()
+    {
+        for ($i = 0; $i < 3; $i++) {
+            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
+            $this->_model->addItem($item);
+        }
+        $this->_model->each(function ($item, ...$args) {
+            $item->testItemCallback(...$args);
+        }, ['a', 'b', 'c']);
+    }
+
+    public function testCallsCallableArrayWithEachItemNoArgs()
+    {
+        $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
+            ->setMethods(['testObjCallback'])
+            ->getMock();
+        $mockCallbackObject->method('testObjCallback')->willReturnCallback(function ($item, ...$args) {
+            $item->testItemCallback(...$args);
+        });
+
+        for ($i = 0; $i < 3; $i++) {
+            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item->expects($this->once())->method('testItemCallback')->with();
+            $this->_model->addItem($item);
+        }
+
+        $this->_model->each([$mockCallbackObject, 'testObjCallback']);
+    }
+
+    public function testCallsCallableArrayWithEachItemAndArgs()
+    {
+        $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
+            ->setMethods(['testObjCallback'])
+            ->getMock();
+        $mockCallbackObject->method('testObjCallback')->willReturnCallback(function ($item, ...$args) {
+            $item->testItemCallback(...$args);
+        });
+
+        for ($i = 0; $i < 3; $i++) {
+            $item = $this->getMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
+            $this->_model->addItem($item);
+        }
+
+        $callback = [$mockCallbackObject, 'testObjCallback'];
+        $this->_model->each($callback, ['a', 'b', 'c']);
+    }
 }
