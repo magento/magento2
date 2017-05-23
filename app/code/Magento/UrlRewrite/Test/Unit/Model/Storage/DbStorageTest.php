@@ -244,7 +244,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     * @expectedException \Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException
      */
     public function testReplaceIfThrewDuplicateEntryException()
     {
