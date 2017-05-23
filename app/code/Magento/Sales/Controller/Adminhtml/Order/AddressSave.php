@@ -74,8 +74,9 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
             $orderRepository,
             $logger
         );
-        $this->regionFactory = 
-            $regionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()->get('\Magento\Directory\Model\RegionFactory');
+        $this->regionFactory = $regionFactory ?:
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Directory\Model\RegionFactory');
     }
 
     /**
