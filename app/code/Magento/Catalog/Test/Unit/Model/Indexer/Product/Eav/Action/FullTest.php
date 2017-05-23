@@ -95,7 +95,6 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $eavSource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->atLeastOnce())->method('getConnection')->willReturn($connectionMock);
 
-
         $eavDecimal->expects($this->once())
             ->method('reindexEntities')
             ->with($ids);
@@ -124,7 +123,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $batchProviderMock = $this->getMock(\Magento\Framework\Indexer\BatchProviderInterface::class);
         $batchProviderMock->expects($this->atLeastOnce())
             ->method('getBatches')
-            ->willReturn([['from' =>10, 'to' => 100]]);
+            ->willReturn([['from' => 10, 'to' => 100]]);
         $batchProviderMock->expects($this->atLeastOnce())
             ->method('getBatchIds')
             ->willReturn($ids);
@@ -136,7 +135,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $selectMock =  $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
