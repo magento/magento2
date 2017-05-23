@@ -29,6 +29,7 @@ class GeneratedClassesAutoloader
      * Load class
      *
      * @param string $className
+     * @return void
      */
     public function load($className)
     {
