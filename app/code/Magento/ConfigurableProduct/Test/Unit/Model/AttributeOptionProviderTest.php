@@ -6,17 +6,15 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
-use Magento\Framework\DB\Select;
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
+use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\ScopeInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
-use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
+
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,11 +30,6 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
-
-    /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataMock;
 
     /**
      * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -69,71 +62,40 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
     private $attributeResource;
 
     /**
-     * @var StockStatusRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionSelectBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stockStatusRepository;
-
-    /**
-     * @var StockStatusCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockStatusCriteriaFactory;
-
-    /**
-     * @var StockStatusCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockStatusCriteriaInterface;
-
-    /**
-     * @var StockStatusCollectionInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockStatusCollection;
+    private $optionSelectBuilderInterface;
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select', 'fetchAll'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where'])
+            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
 
-        $this->metadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->attributeResource = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getTable', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeResource->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-        $this->stockStatusRepository = $this->getMockBuilder(StockStatusRepositoryInterface::class)
+
+        $this->optionSelectBuilderInterface = $this->getMockBuilder(OptionSelectBuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->stockStatusCriteriaFactory = $this->getMockBuilder(StockStatusCriteriaInterfaceFactory::class)
-            ->setMethods(['create'])
+        
+        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockStatusCriteriaInterface = $this->getMockBuilder(StockStatusCriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->stockStatusCollection = $this->getMockBuilder(StockStatusCollectionInterface::class)
-            ->disableOriginalConstructor()
+            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -141,48 +103,46 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             AttributeOptionProvider::class,
             [
                 'attributeResource' => $this->attributeResource,
-                'stockStatusRepository' => $this->stockStatusRepository,
-                'stockStatusCriteriaFactory' => $this->stockStatusCriteriaFactory,
                 'scopeResolver' => $this->scopeResolver,
+                'optionSelectBuilderInterface' => $this->optionSelectBuilderInterface,
             ]
         );
     }
 
     /**
      * @param array $options
-     * @dataProvider testOptionsDataProvider
+     * @dataProvider getAttributeOptionsDataProvider
      */
     public function testGetAttributeOptions(array $options)
     {
-        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
-        $this->scope->expects($this->any())->method('getId')->willReturn(123);
-
-        $this->select->expects($this->any())->method('from')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->select->expects($this->any())->method('where')->willReturnSelf();
-
-        $this->abstractAttribute->expects($this->any())
-            ->method('getBackendTable')
-            ->willReturn('getBackendTable value');
-        $this->abstractAttribute->expects($this->any())
-            ->method('getAttributeId')
-            ->willReturn('getAttributeId value');
+        $this->scopeResolver->expects($this->any())
+            ->method('getScope')
+            ->willReturn($this->scope);
+        
+        $this->optionSelectBuilderInterface->expects($this->any())
+            ->method('getSelect')
+            ->with($this->abstractAttribute, 4, $this->scope)
+            ->willReturn($this->select);
+        
+        $this->attributeResource->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
+            ->with($this->select)
             ->willReturn($options);
 
         $this->assertEquals(
             $options,
-            $this->model->getAttributeOptions($this->abstractAttribute, 1)
+            $this->model->getAttributeOptions($this->abstractAttribute, 4)
         );
     }
 
     /**
      * @return array
      */
-    public function testOptionsDataProvider()
+    public function getAttributeOptionsDataProvider()
     {
         return [
             [
