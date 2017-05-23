@@ -10,17 +10,17 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
 
 /**
- * AttributeOptionSelectBuilderInterface
+ * Interface to build select for retrieving configurable options.
  */
 interface OptionSelectBuilderInterface
 {
     /**
-     * Get load options for attribute select
+     * Get load options for attribute select.
      *
      * @param AbstractAttribute $superAttribute
      * @param int $productId
      * @param ScopeInterface $scope
      * @return Select
      */
-    public function getSelect(AbstractAttribute $superAttribute, $productId, ScopeInterface $scope);
+    public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope);
 }

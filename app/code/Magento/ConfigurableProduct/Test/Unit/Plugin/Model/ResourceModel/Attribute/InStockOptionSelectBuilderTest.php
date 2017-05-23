@@ -8,17 +8,14 @@ namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel\Attri
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder;
-use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
+use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-/**
- * Class OptionSelectBuilderInterfaceTest.
- */
-class OptionSelectBuilderInterfaceTest extends \PHPUnit_Framework_TestCase
+class InStockOptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var OptionSelectBuilderInterface
+     * @var InStockOptionSelectBuilder
      */
     private $model;
 
@@ -59,7 +56,7 @@ class OptionSelectBuilderInterfaceTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
-            OptionSelectBuilderInterface::class,
+            InStockOptionSelectBuilder::class,
             [
                 'stockStatusResource' => $this->stockStatusResourceMock,
             ]

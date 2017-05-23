@@ -64,7 +64,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var OptionSelectBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $optionSelectBuilderInterface;
+    private $optionSelectBuilder;
 
     protected function setUp()
     {
@@ -89,7 +89,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->optionSelectBuilderInterface = $this->getMockBuilder(OptionSelectBuilderInterface::class)
+        $this->optionSelectBuilder = $this->getMockBuilder(OptionSelectBuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         
@@ -104,7 +104,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             [
                 'attributeResource' => $this->attributeResource,
                 'scopeResolver' => $this->scopeResolver,
-                'optionSelectBuilderInterface' => $this->optionSelectBuilderInterface,
+                'optionSelectBuilder' => $this->optionSelectBuilder,
             ]
         );
     }
@@ -119,7 +119,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->willReturn($this->scope);
         
-        $this->optionSelectBuilderInterface->expects($this->any())
+        $this->optionSelectBuilder->expects($this->any())
             ->method('getSelect')
             ->with($this->abstractAttribute, 4, $this->scope)
             ->willReturn($this->select);

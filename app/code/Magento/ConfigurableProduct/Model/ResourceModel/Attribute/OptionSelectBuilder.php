@@ -11,7 +11,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
 
 /**
- * Class AttributeOptionSelectBuilder.
+ * Build select object for retrieving configurable options.
  */
 class OptionSelectBuilder implements OptionSelectBuilderInterface
 {
@@ -30,8 +30,6 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     private $attributeOptionProvider;
 
     /**
-     * Constructor.
-     * 
      * @param Attribute $attributeResource
      * @param OptionProvider $attributeOptionProvider
      */
@@ -44,7 +42,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelect(AbstractAttribute $superAttribute, $productId, ScopeInterface $scope)
+    public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope)
     {
         $select = $this->attributeResource->getConnection()->select()->from(
             ['super_attribute' => $this->attributeResource->getTable('catalog_product_super_attribute')],

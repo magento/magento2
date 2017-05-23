@@ -15,6 +15,6 @@
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
-        <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\OptionSelectBuilderInterface"/>
+        <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
     </type>
 </config>

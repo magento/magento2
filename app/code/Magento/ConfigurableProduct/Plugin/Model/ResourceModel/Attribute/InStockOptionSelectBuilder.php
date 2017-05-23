@@ -6,14 +6,13 @@
 namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute;
 
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
-use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface as OptionSelectBuilder;
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
 use Magento\Framework\DB\Select;
-
 
 /**
  * Plugin for Class OptionSelectBuilderInterface.
  */
-class OptionSelectBuilderInterface
+class InStockOptionSelectBuilder
 {
     /**
      * CatalogInventory Stock Status Resource Model
@@ -33,13 +32,13 @@ class OptionSelectBuilderInterface
     /**
      * Add stock status filter to select.
      *
-     * @param OptionSelectBuilder $subject
+     * @param OptionSelectBuilderInterface $subject
      * @param Select $select
      * @return Select
      * 
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetSelect(OptionSelectBuilder $subject, Select $select)
+    public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select)
     {
         $select->joinInner(
             ['stock' => $this->stockStatusResource->getMainTable()],

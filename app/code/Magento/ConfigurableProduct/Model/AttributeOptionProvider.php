@@ -12,7 +12,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\Framework\DB\Select;
 
 /**
- * Class AttributeOptionProvider.
+ * Provider for retrieving configurable options.
  */
 class AttributeOptionProvider implements AttributeOptionProviderInterface
 {
@@ -29,23 +29,21 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     /**
      * @var OptionSelectBuilderInterface
      */
-    private $optionSelectBuilderInterface;
+    private $optionSelectBuilder;
 
     /**
-     * AttributeOptionProvider constructor.
-     * 
      * @param Attribute $attributeResource
      * @param ScopeResolverInterface $scopeResolver,
-     * @param OptionSelectBuilderInterface $optionSelectBuilderInterface
+     * @param OptionSelectBuilderInterface $optionSelectBuilder
      */
     public function __construct(
         Attribute $attributeResource,
         ScopeResolverInterface $scopeResolver,
-        OptionSelectBuilderInterface $optionSelectBuilderInterface
+        OptionSelectBuilderInterface $optionSelectBuilder
     ) {
         $this->attributeResource = $attributeResource;
         $this->scopeResolver = $scopeResolver;
-        $this->optionSelectBuilderInterface = $optionSelectBuilderInterface;
+        $this->optionSelectBuilder = $optionSelectBuilder;
     }
 
     /**
@@ -54,7 +52,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
         $scope  = $this->scopeResolver->getScope();
-        $select = $this->optionSelectBuilderInterface->getSelect($superAttribute, $productId, $scope);
+        $select = $this->optionSelectBuilder->getSelect($superAttribute, $productId, $scope);
 
         return $this->attributeResource->getConnection()->fetchAll($select);
     }
