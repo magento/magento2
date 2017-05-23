@@ -220,17 +220,6 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     }
 
     /**
-     * Get quote collection
-     *
-     * @deprecated
-     * @return QuoteCollection
-     */
-    protected function getQuoteCollection()
-    {
-        return $this->quoteCollectionFactory->create();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)

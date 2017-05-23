@@ -7,6 +7,14 @@ namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ConfigFactory;
+use Magento\Eav\Api\AttributeGroupRepositoryInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -20,63 +28,66 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
     private $attributeManagement;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $setRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $entityTypeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeResourceMock;
+
+    /**
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCollectionFactoryMock;
 
     protected function setUp()
     {
         $this->setRepositoryMock =
-            $this->getMock(\Magento\Eav\Api\AttributeSetRepositoryInterface::class, [], [], '', false);
+            $this->getMock(AttributeSetRepositoryInterface::class, [], [], '', false);
         $this->attributeCollectionMock =
-            $this->getMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class, [], [], '', false);
+            $this->getMock(Collection::class, [], [], '', false);
         $this->eavConfigMock =
-            $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+            $this->getMock(Config::class, [], [], '', false);
         $this->entityTypeFactoryMock =
-            $this->getMock(\Magento\Eav\Model\ConfigFactory::class, ['create', '__wakeup'], [], '', false);
+            $this->getMock(ConfigFactory::class, ['create', '__wakeup'], [], '', false);
         $this->groupRepositoryMock =
-            $this->getMock(\Magento\Eav\Api\AttributeGroupRepositoryInterface::class, [], [], '', false);
+            $this->getMock(AttributeGroupRepositoryInterface::class, [], [], '', false);
         $this->attributeRepositoryMock =
-            $this->getMock(\Magento\Eav\Api\AttributeRepositoryInterface::class, [], [], '', false);
+            $this->getMock(AttributeRepositoryInterface::class, [], [], '', false);
         $this->attributeResourceMock =
-            $this->getMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class, [], [], '', false);
-        $this->attributeCollectionFactoryMock = $this->getMockBuilder(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory::class
-            )
+            $this->getMock(Attribute::class, [], [], '', false);
+        $this->attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeManagement = new \Magento\Eav\Model\AttributeManagement(
+        $this->attributeManagement = new AttributeManagement(
             $this->setRepositoryMock,
             $this->attributeCollectionMock,
             $this->eavConfigMock,

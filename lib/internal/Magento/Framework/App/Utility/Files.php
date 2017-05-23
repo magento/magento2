@@ -20,27 +20,52 @@ use Magento\Framework\Filesystem\Glob;
  */
 class Files
 {
-    /**@#+
-     * File types offset flags
+    /**
+     * Include app code
      */
     const INCLUDE_APP_CODE = 1;
-    const INCLUDE_TESTS = 2;
-    const INCLUDE_DEV_TOOLS = 4;
-    const INCLUDE_TEMPLATES = 8;
-    const INCLUDE_LIBS = 16;
-    const INCLUDE_PUB_CODE = 32;
-    const INCLUDE_NON_CLASSES = 64;
-    const INCLUDE_SETUP = 128;
-    /**#@-*/
 
     /**
-     * Return as DataSet offset flag
+     * Include tests
+     */
+    const INCLUDE_TESTS = 2;
+
+    /**
+     * Include dev tools
+     */
+    const INCLUDE_DEV_TOOLS = 4;
+
+    /**
+     * Include templates
+     */
+    const INCLUDE_TEMPLATES = 8;
+
+    /**
+     * Include lib files
+     */
+    const INCLUDE_LIBS = 16;
+
+    /**
+     * Include pub code
+     */
+    const INCLUDE_PUB_CODE = 32;
+
+    /**
+     * Include non classes
+     */
+    const INCLUDE_NON_CLASSES = 64;
+
+    /**
+     * Include setup
+     */
+    const INCLUDE_SETUP = 128;
+
+    /**
+     * Return as data set
      */
     const AS_DATA_SET = 1024;
 
     /**
-     * Component registrar
-     *
      * @var ComponentRegistrar
      */
     protected $componentRegistrar;
@@ -51,22 +76,16 @@ class Files
     protected static $_instance = null;
 
     /**
-     * In-memory cache for the data sets
-     *
      * @var array
      */
     protected static $_cache = [];
 
     /**
-     * Dir search for registered components
-     *
      * @var DirSearch
      */
     private $dirSearch;
 
     /**
-     * Theme list for registered themes
-     *
      * @var ThemePackageList
      */
     private $themePackageList;
