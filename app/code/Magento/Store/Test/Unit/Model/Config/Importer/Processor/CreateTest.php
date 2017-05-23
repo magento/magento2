@@ -114,7 +114,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         ];
         $data = [
             'websites' => $websites,
-            'groups' => [],
             'stores' => [],
         ];
 
@@ -179,7 +178,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $data = [
             'websites' => $websites,
             'groups' => $groups,
-            'stores' => [],
         ];
 
         $this->dataDifferenceCalculatorMock->expects($this->any())

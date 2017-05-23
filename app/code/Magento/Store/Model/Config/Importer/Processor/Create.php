@@ -92,6 +92,10 @@ class Create implements ProcessorInterface
             ];
 
             foreach ($entities as $scope) {
+                if (!isset($data[$scope])) {
+                    continue;
+                }
+
                 $items = $this->dataDifferenceCalculator->getItemsToCreate($scope, $data[$scope]);
 
                 if (!$items) {
