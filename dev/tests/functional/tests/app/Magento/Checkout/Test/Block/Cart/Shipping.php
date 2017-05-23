@@ -136,6 +136,45 @@ class Shipping extends Form
     }
 
     /**
+     * Reset the address fields in the shipping and tax form.
+     *
+     * @return void
+     */
+    public function resetAddress()
+    {
+        $this->openEstimateShippingAndTax();
+        $fields = [
+           'country_id' => [
+               'selector' => '[name=country_id]',
+               'strategy' => 'css selector',
+               'input' => 'select',
+               'class' => null,
+               'value' => 'United States'
+           ],
+            'region_id' => [
+                'selector' => '[name=region_id]',
+                'strategy' => 'css selector',
+                'input' => 'select',
+                'class' => null,
+                'value' => 'Please select a region, state or province.'
+            ],
+            'postcode' => [
+                'selector' => '[name=postcode]',
+                'strategy' => 'css selector',
+                'input' => null,
+                'class' => null,
+                'value' => ''
+            ]
+        ];
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($fields as $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
+        }
+    }
+
+    /**
      * Fill shipping and tax form.
      *
      * @param Address $address
