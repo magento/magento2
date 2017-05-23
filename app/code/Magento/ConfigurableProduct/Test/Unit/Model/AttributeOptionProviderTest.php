@@ -15,7 +15,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -58,8 +58,7 @@ class OptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
      * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $scope;
-
-
+    
     protected function setUp()
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
