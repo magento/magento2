@@ -96,6 +96,11 @@ sub vcl_recv {
     set req.url = regsuball(req.url,"\?gclid=[^&]+&","?"); # strips when QS = "?gclid=AAA&foo=bar"
     set req.url = regsuball(req.url,"&gclid=[^&]+",""); # strips when QS = "?foo=bar&gclid=AAA" or QS = "?foo=bar&gclid=AAA&bar=baz"
 
+    # static files must not be cached by default
+    if (req.url ~ "^/(pub/)?(media|static)/.*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|html|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$") {
+        return (pass);
+    }
+
     return (hash);
 }
 
