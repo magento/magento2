@@ -8,6 +8,9 @@ namespace Magento\Customer\Block\Account;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class AuthenticationPopup extends \Magento\Framework\View\Element\Template
 {
     /**

@@ -55,26 +55,19 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadAllAttributes()
     {
-        $attributeCodes = ['foo'];
         $defaultAttributes = ['bar'];
-        $attributeModel = Attribute::class;
         $entityTypeId = 1;
         $dataObject = new DataObject();
         $this->entityMock->expects($this->any())
             ->method('getEntityType')
             ->willReturn($this->entityTypeMock);
-        $this->configMock->expects($this->once())
-            ->method('getEntityAttributeCodes')
-            ->willReturn($attributeCodes, $dataObject);
+
         $this->entityMock->expects($this->once())
             ->method('getDefaultAttributes')
             ->willReturn($defaultAttributes);
         $this->entityTypeMock->expects($this->any())
             ->method('getId')
             ->willReturn($entityTypeId);
-        $this->entityTypeMock->expects($this->once())
-            ->method('getAttributeModel')
-            ->willReturn($attributeModel);
         $attributeMock = $this->getMock(
             \Magento\Eav\Model\Attribute::class,
             [
@@ -88,58 +81,47 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($attributeModel)
-            ->willReturn($attributeMock);
-        $attributeMock->expects($this->once())
-            ->method('setAttributeCode')
-            ->with($defaultAttributes[0])
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())
-            ->method('setBackendType')
-            ->with(AbstractAttribute::TYPE_STATIC)
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())
-            ->method('setIsGlobal')
-            ->with(1)
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())
-            ->method('setEntityType')
-            ->with($this->entityTypeMock)
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())
-            ->method('setEntityTypeId')
-            ->with($entityTypeId)
-            ->willReturnSelf();
+        $this->configMock->expects($this->once())
+            ->method('getEntityAttributes')
+            ->willReturn(['bar' => $attributeMock]);
         $this->entityMock->expects($this->once())
             ->method('addAttribute')
             ->with($attributeMock);
-        $this->entityMock->expects($this->once())
-            ->method('getAttribute')
-            ->with($attributeCodes[0]);
         $this->attributeLoader->loadAllAttributes($this->entityMock, $dataObject);
     }
 
     public function testLoadAllAttributesAttributeCodesPresentInDefaultAttributes()
     {
-        $attributeCodes = ['bar'];
+        $attributeMock = $this->getMock(
+            \Magento\Eav\Model\Attribute::class,
+            [
+                'setAttributeCode',
+                'setBackendType',
+                'setIsGlobal',
+                'setEntityType',
+                'setEntityTypeId'
+            ],
+            [],
+            '',
+            false
+        );
+        $attributeCodes = ['bar'=>$attributeMock];
         $defaultAttributes = ['bar'];
         $dataObject = new DataObject();
         $this->entityMock->expects($this->any())
             ->method('getEntityType')
             ->willReturn($this->entityTypeMock);
         $this->configMock->expects($this->once())
-            ->method('getEntityAttributeCodes')
+            ->method('getEntityAttributes')
             ->willReturn($attributeCodes, $dataObject);
         $this->entityMock->expects($this->once())
             ->method('getDefaultAttributes')
             ->willReturn($defaultAttributes);
+        $this->entityMock->expects($this->atLeastOnce())
+            ->method('addAttribute')->with($attributeMock);
+
         $this->objectManagerMock->expects($this->never())
             ->method('create');
-        $this->entityMock->expects($this->once())
-            ->method('getAttribute')
-            ->with($attributeCodes[0]);
         $this->attributeLoader->loadAllAttributes($this->entityMock, $dataObject);
     }
 }

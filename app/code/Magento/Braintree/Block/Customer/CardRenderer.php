@@ -10,6 +10,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Block\AbstractCardRenderer;
 
+/**
+ * @api
+ */
 class CardRenderer extends AbstractCardRenderer
 {
     /**

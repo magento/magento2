@@ -7,7 +7,7 @@ define([
     'jquery',
     'jquery/ui',
     'catalogGallery',
-    'Magento_ProductVideo/js/load-player'
+    'loadPlayer'
 ], function ($) {
     'use strict';
 

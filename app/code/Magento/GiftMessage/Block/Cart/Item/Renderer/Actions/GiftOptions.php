@@ -9,6 +9,9 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\Json\Encoder;
 
+/**
+ * @api
+ */
 class GiftOptions extends Generic
 {
     /**

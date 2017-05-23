@@ -114,7 +114,7 @@ define([
                 if (shippingAddressData) {
                     checkoutProvider.set(
                         'shippingAddress',
-                        $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
@@ -153,9 +153,7 @@ define([
                         class: buttons.cancel.class ? buttons.cancel.class : 'action secondary action-hide-popup',
 
                         /** @inheritdoc */
-                        click: function () {
-                            this.closeModal();
-                        }
+                        click: this.onClosePopUp.bind(this)
                     }
                 ];
 
@@ -163,10 +161,29 @@ define([
                 this.popUpForm.options.closed = function () {
                     self.isFormPopUpVisible(false);
                 };
+
+                this.popUpForm.options.modalCloseBtnHandler = this.onClosePopUp.bind(this);
+                this.popUpForm.options.keyEventHandlers = {
+                    escapeKey: this.onClosePopUp.bind(this)
+                };
+
+                /** @inheritdoc */
+                this.popUpForm.options.opened = function () {
+                    // Store temporary address for revert action in case when user click cancel action
+                    self.temporaryAddress = $.extend(true, {}, checkoutData.getShippingAddressFromData());
+                };
                 popUp = modal(this.popUpForm.options, $(this.popUpForm.element));
             }
 
             return popUp;
+        },
+
+        /**
+         * Revert address and close modal.
+         */
+        onClosePopUp: function () {
+            checkoutData.setShippingAddressFromData($.extend(true, {}, this.temporaryAddress));
+            this.getPopUp().closeModal();
         },
 
         /**
@@ -195,7 +212,7 @@ define([
                 newShippingAddress = createShippingAddress(addressData);
                 selectShippingAddress(newShippingAddress);
                 checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
-                checkoutData.setNewCustomerShippingAddress(addressData);
+                checkoutData.setNewCustomerShippingAddress($.extend(true, {}, addressData));
                 this.getPopUp().closeModal();
                 this.isNewAddressAdded(true);
             }

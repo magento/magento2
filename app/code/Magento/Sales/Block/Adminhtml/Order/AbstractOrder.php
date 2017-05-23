@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order;
 /**
  * Adminhtml order abstract block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class AbstractOrder extends \Magento\Backend\Block\Widget

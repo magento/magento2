@@ -21,6 +21,8 @@ use Magento\Framework\Data\Collection;
  * Supports some fancy filters.
  *
  * At least one target directory must be set
+ *
+ * @api
  */
 class Filesystem extends \Magento\Framework\Data\Collection
 {

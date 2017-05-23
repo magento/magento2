@@ -9,6 +9,8 @@ use Magento\Customer\Model\AccountManagement;
 
 /**
  * Customer reset password form
+ *
+ * @api
  */
 class Resetpassword extends \Magento\Framework\View\Element\Template
 {

@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
 
 /**
  * Adminhtml block for showing product options fieldsets
  *
- * @author    Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
-
 class Error extends \Magento\Framework\View\Element\Template
 {
     /**

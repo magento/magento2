@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml;
 
+/**
+ * @api
+ */
 class Product extends \Magento\Backend\Block\Widget\Container
 {
     /**
