@@ -25,6 +25,11 @@ class GeneratedClassesAutoloader
         $this->generator = $generator;
     }
 
+    /**
+     * Load class
+     *
+     * @param string $className
+     */
     public function load($className)
     {
         $this->generator->generateClass($className);

@@ -83,54 +83,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect(array $prevInvoicesData, $orderShipping, $invoiceShipping, $expectedShipping)
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $arguments = [
-            'productFactory' => $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false),
-            'orderItemCollectionFactory' => $this->getMock(
-                \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'serviceOrderFactory' => $this->getMock(
-                \Magento\Sales\Model\Service\OrderFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'currencyFactory' => $this->getMock(
-                \Magento\Directory\Model\CurrencyFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'orderHistoryFactory' => $this->getMock(
-                \Magento\Sales\Model\Order\Status\HistoryFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-            'orderTaxCollectionFactory' => $this->getMock(
-                \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory::class,
-                [],
-                [],
-                '',
-                false
-            ),
-        ];
-        $orderConstructorArgs = $objectManager->getConstructArguments(\Magento\Sales\Model\Order::class, $arguments);
-        /** @var $order \Magento\Sales\Model\Order|PHPUnit_Framework_MockObject_MockObject */
-        $order = $this->getMock(
-            \Magento\Sales\Model\Order::class,
-            ['_init', 'getInvoiceCollection', '__wakeup'],
-            $orderConstructorArgs,
-            '',
-            false
-        );
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $order->setData('shipping_amount', $orderShipping);
         $order->expects(
             $this->any()

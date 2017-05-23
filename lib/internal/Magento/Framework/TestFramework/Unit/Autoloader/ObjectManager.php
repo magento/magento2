@@ -16,7 +16,7 @@ use Magento\Framework\ObjectManagerInterface;
 class ObjectManager implements ObjectManagerInterface
 {
     /**
-     * Create an instance
+     * Create an instance of specified type
      *
      * @param string $type
      * @param array $arguments
@@ -37,8 +37,11 @@ class ObjectManager implements ObjectManagerInterface
     }
 
     /**
+     * This implementation does not keep references to created objects
+     *
      * @param string $type
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function get($type)
     {
@@ -46,8 +49,11 @@ class ObjectManager implements ObjectManagerInterface
     }
 
     /**
+     * This implementation does not support configuration
+     *
      * @param array $configuration
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function configure(array $configuration)
     {
