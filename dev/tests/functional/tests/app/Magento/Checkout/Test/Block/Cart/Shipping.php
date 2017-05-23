@@ -70,7 +70,7 @@ class Shipping extends Form
      *
      * @var string
      */
-    protected $commonShippingPriceSelector = '.shipping .price';
+    protected $commonShippingPriceSelector = '.totals.shipping .price';
 
     /**
      * Open estimate shipping and tax form.
