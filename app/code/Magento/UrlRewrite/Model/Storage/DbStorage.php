@@ -11,7 +11,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Psr\Log\LoggerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
-use Magento\Framework\UrlInterface;
 
 class DbStorage extends AbstractStorage
 {
@@ -102,10 +101,16 @@ class DbStorage extends AbstractStorage
             $urlData[UrlRewrite::ENTITY_TYPE] = $type;
             $this->deleteByData($urlData);
         }
-        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
-        $urlConflicted = [];
+        $data = [];
         foreach ($urls as $url) {
-            if (!$this->insertUrl($url->toArray())) {
+            $data[] = $url->toArray();
+        }
+        try {
+            $this->insertMultiple($data);
+        } catch (\Exception $e) {
+            /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
+            $urlConflicted = [];
+            foreach ($urls as $url) {
                 $urlFound = $this->doFindOneByData(
                     [
                         UrlRewriteData::REQUEST_PATH => $url->getRequestPath(),
@@ -114,14 +119,15 @@ class DbStorage extends AbstractStorage
                 );
                 $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url;
             }
+            if (!empty($urlConflicted)) {
+                throw new \Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException(
+                    __('URL key for specified store already exists.'),
+                    null,
+                    $urlConflicted
+                );
+            }
         }
-        if (!empty($urlConflicted)) {
-            throw new \Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException(
-                __('URL key for specified store already exists.'),
-                null,
-                $urlConflicted
-            );
-        }
+
         return $urls;
     }
 
@@ -132,7 +138,6 @@ class DbStorage extends AbstractStorage
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Exception
-     * @deprecated
      */
     protected function insertMultiple($data)
     {
@@ -143,48 +148,10 @@ class DbStorage extends AbstractStorage
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
                 throw new \Magento\Framework\Exception\AlreadyExistsException(
-                    __('A conflict has occurred between the entity\'s URL(s) and other URL(s).')
+                    __('URL key for specified store already exists.')
                 );
             }
             throw $e;
-        }
-    }
-
-    /**
-     * Inserts a url as array to database and returns conflict status
-     *
-     * @param array $data
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function insertUrl(array $data)
-    {
-        try {
-            return $this->connection->insert($this->resource->getTableName(self::TABLE_NAME), $data) > 0;
-        } catch (\Exception $e) {
-            if (isset($data['request_path'])
-                && isset($data['entity_type'])
-                && isset($data['store_id'])
-                && isset($data['entity_id'])
-                && $e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY
-                && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
-            ) {
-                $this->logger->critical(
-                    __(
-                        'Could not insert a conflicting URL when trying to insert \'%1\' for %2 '
-                        .'with entity id %3 on store %4',
-                        $data['request_path'],
-                        $data['entity_type'],
-                        $data['entity_id'],
-                        $data['store_id']
-                    )
-                );
-                return false;
-            } else {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while inserting a url key.')
-                );
-            }
         }
     }
 
