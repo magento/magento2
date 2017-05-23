@@ -10,12 +10,12 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilde
 use Magento\Framework\DB\Select;
 
 /**
- * Plugin for Class OptionSelectBuilderInterface.
+ * Plugin for OptionSelectBuilderInterface to add stock status filter.
  */
 class InStockOptionSelectBuilder
 {
     /**
-     * CatalogInventory Stock Status Resource Model
+     * CatalogInventory Stock Status Resource Model.
      *
      * @var Status
      */
