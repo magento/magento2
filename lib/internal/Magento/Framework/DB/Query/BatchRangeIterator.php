@@ -3,35 +3,30 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Query;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 
 /**
- * Query batch iterator
+ * Query batch range iterator.
+ *
+ * It is used for processing selects which will obtain values from  $rangeField with relation one-to-many.
+ * This iterator makes chunks with operator LIMIT...OFFSET,
+ * starting with zero offset and finishing on OFFSET + LIMIT = TOTAL_COUNT.
+ *
+ * @see \Magento\Framework\DB\Query\Generator
+ * @see \Magento\Framework\DB\Query\BatchIteratorFactory
+ * @see \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
+ * @see \Magento\Framework\DB\Adapter\Pdo\Mysql
  */
-class BatchIterator implements BatchIteratorInterface
+class BatchRangeIterator implements BatchIteratorInterface
 {
-    /**
-     * @var int
-     */
-    private $batchSize;
-
     /**
      * @var Select
      */
-    private $select;
-
-    /**
-     * @var int
-     */
-    private $minValue = 0;
-
-    /**
-     * @var string
-     */
-    private $correlationName;
+    private $currentSelect;
 
     /**
      * @var string
@@ -39,9 +34,9 @@ class BatchIterator implements BatchIteratorInterface
     private $rangeField;
 
     /**
-     * @var Select
+     * @var int
      */
-    private $currentSelect;
+    private $batchSize;
 
     /**
      * @var AdapterInterface
@@ -51,12 +46,27 @@ class BatchIterator implements BatchIteratorInterface
     /**
      * @var int
      */
+    private $currentBatch = 0;
+
+    /**
+     * @var int
+     */
+    private $totalItemCount;
+
+    /**
+     * @var int
+     */
     private $iteration = 0;
+
+    /**
+     * @var Select
+     */
+    private $select;
 
     /**
      * @var string
      */
-    private $rangeFieldAlias;
+    private $correlationName;
 
     /**
      * @var bool
@@ -92,30 +102,9 @@ class BatchIterator implements BatchIteratorInterface
      */
     public function current()
     {
-        if (null == $this->currentSelect) {
+        if (null === $this->currentSelect) {
+            $this->isValid = ($this->currentBatch + $this->batchSize) < $this->totalItemCount;
             $this->currentSelect = $this->initSelectObject();
-            $itemsCount = $this->calculateBatchSize($this->currentSelect);
-            $this->isValid = $itemsCount > 0;
-        }
-        return $this->currentSelect;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        if (null == $this->currentSelect) {
-            $this->current();
-        }
-        $select = $this->initSelectObject();
-        $itemsCountInSelect = $this->calculateBatchSize($select);
-        $this->isValid = $itemsCountInSelect > 0;
-        if ($this->isValid) {
-            $this->iteration++;
-            $this->currentSelect = $select;
-        } else {
-            $this->currentSelect = null;
         }
         return $this->currentSelect;
     }
@@ -131,9 +120,20 @@ class BatchIterator implements BatchIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function next()
     {
-        return $this->isValid;
+        if (null === $this->currentSelect) {
+            $this->current();
+        }
+        $this->isValid = ($this->batchSize + $this->currentBatch) < $this->totalItemCount;
+        $select = $this->initSelectObject();
+        if ($this->isValid) {
+            $this->iteration++;
+            $this->currentSelect = $select;
+        } else {
+            $this->currentSelect = null;
+        }
+        return $this->currentSelect;
     }
 
     /**
@@ -141,52 +141,49 @@ class BatchIterator implements BatchIteratorInterface
      */
     public function rewind()
     {
-        $this->minValue = 0;
         $this->currentSelect = null;
         $this->iteration = 0;
         $this->isValid = true;
+        $this->totalItemCount = 0;
     }
 
     /**
-     * Calculate batch size for select.
-     *
-     * @param Select $select
-     * @return int
+     * {@inheritdoc}
      */
-    private function calculateBatchSize(Select $select)
+    public function valid()
     {
-        $wrapperSelect = $this->connection->select();
-        $wrapperSelect->from(
-            $select,
-            [
-                new \Zend_Db_Expr('MAX(' . $this->rangeFieldAlias . ') as max'),
-                new \Zend_Db_Expr('COUNT(*) as cnt')
-            ]
-        );
-        $row = $this->connection->fetchRow($wrapperSelect);
-        $this->minValue = $row['max'];
-        return intval($row['cnt']);
+        return $this->isValid;
     }
 
     /**
      * Initialize select object.
+     *
+     * Return sub-select which is limited by current batch value and return items from n page of SQL request.
      *
      * @return \Magento\Framework\DB\Select
      */
     private function initSelectObject()
     {
         $object = clone $this->select;
-        $object->where(
-            $this->connection->quoteIdentifier($this->correlationName)
-            . '.' . $this->connection->quoteIdentifier($this->rangeField)
-            . ' > ?',
-            $this->minValue
-        );
-        $object->limit($this->batchSize);
-        /**
-         * Reset sort order section from origin select object
-         */
+
+        if (!$this->totalItemCount) {
+            $wrapperSelect = $this->connection->select();
+            $wrapperSelect->from(
+                $object,
+                [
+                    new \Zend_Db_Expr('COUNT(*) as cnt')
+                ]
+            );
+            $row = $this->connection->fetchRow($wrapperSelect);
+
+            $this->totalItemCount = intval($row['cnt']);
+        }
+
+        //Reset sort order section from origin select object.
         $object->order($this->correlationName . '.' . $this->rangeField . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
+        $object->limit($this->currentBatch, $this->batchSize);
+        $this->currentBatch += $this->batchSize;
+
         return $object;
     }
 }
