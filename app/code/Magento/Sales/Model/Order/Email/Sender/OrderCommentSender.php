@@ -68,13 +68,14 @@ class OrderCommentSender extends NotifySender
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
         ];
+        $transport = new \Magento\Framework\DataObject($transport);
 
         $this->eventManager->dispatch(
             'email_order_comment_set_template_vars_before',
             ['sender' => $this, 'transport' => $transport]
         );
 
-        $this->templateContainer->setTemplateVars($transport);
+        $this->templateContainer->setTemplateVars($transport->getData());
 
         return $this->checkAndSend($order, $notify);
     }

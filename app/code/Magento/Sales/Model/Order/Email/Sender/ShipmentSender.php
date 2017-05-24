@@ -113,13 +113,14 @@ class ShipmentSender extends Sender
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
             ];
+            $transport = new \Magento\Framework\DataObject($transport);
 
             $this->eventManager->dispatch(
                 'email_shipment_set_template_vars_before',
                 ['sender' => $this, 'transport' => $transport]
             );
 
-            $this->templateContainer->setTemplateVars($transport);
+            $this->templateContainer->setTemplateVars($transport->getData());
 
             if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
