@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FullTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecuteWithAdapterErrorThrowsException()

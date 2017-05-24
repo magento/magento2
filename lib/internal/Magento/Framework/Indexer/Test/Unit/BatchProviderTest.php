@@ -67,8 +67,10 @@ class BatchProviderTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->once())->method('limit')->with(91)->willReturnSelf();
 
         $adapterMock->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
-        $adapterMock->expects($this->once())->method('fetchCol')->with($selectMock, [])->willReturn([1,2,3]);
-        $this->assertEquals([1,2,3], $this->model->getBatchIds($adapterMock, $selectMock, ['from' => 10, 'to' => 100]));
-
+        $adapterMock->expects($this->once())->method('fetchCol')->with($selectMock, [])->willReturn([1, 2, 3]);
+        $this->assertEquals(
+            [1, 2, 3],
+            $this->model->getBatchIds($adapterMock, $selectMock, ['from' => 10, 'to' => 100])
+        );
     }
 }
