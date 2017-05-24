@@ -7,8 +7,6 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Checkout\Test\TestStep\AddProductsToTheCartStep;
 use Magento\Checkout\Test\TestStep\FillShippingAddressStep;
 use Magento\Checkout\Test\TestStep\FillShippingMethodStep;
@@ -16,7 +14,6 @@ use Magento\Checkout\Test\TestStep\PlaceOrderStep;
 use Magento\Checkout\Test\TestStep\ProceedToCheckoutStep;
 use Magento\Checkout\Test\TestStep\SelectPaymentMethodStep;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Customer\Test\Fixture\Address;
 
 /**
@@ -32,21 +29,21 @@ class AssertProductSuccessUpdate extends AbstractConstraint
     /**
      * Test step factory.
      *
-     * @var TestStepFactory
+     * @var \Magento\Mtf\TestStep\TestStepFactory
      */
     private $testStepFactory;
 
     /**
      * Product page with a grid.
      *
-     * @var CatalogProductIndex
+     * @var \Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex
      */
     protected $productGrid;
 
     /**
      * Page to update a product.
      *
-     * @var CatalogProductEdit
+     * @var \Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit
      */
     protected $editProductPage;
 
@@ -55,9 +52,9 @@ class AssertProductSuccessUpdate extends AbstractConstraint
      *
      * @param CatalogProductSimple $product
      * @param Address $shippingAddress
-     * @param TestStepFactory $testStepFactory
-     * @param CatalogProductIndex $productGrid
-     * @param CatalogProductEdit $editProductPage
+     * @param \Magento\Mtf\TestStep\TestStepFactory $testStepFactory
+     * @param \Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex $productGrid
+     * @param \Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit $editProductPage
      * @param array $shipping
      * @param array $payment
      * @param CatalogProductSimple $updatedProduct
@@ -65,9 +62,9 @@ class AssertProductSuccessUpdate extends AbstractConstraint
     public function processAssert(
         CatalogProductSimple $product,
         Address $shippingAddress,
-        TestStepFactory $testStepFactory,
-        CatalogProductIndex $productGrid,
-        CatalogProductEdit $editProductPage,
+        \Magento\Mtf\TestStep\TestStepFactory $testStepFactory,
+        \Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex $productGrid,
+        \Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit $editProductPage,
         array $shipping,
         array $payment,
         CatalogProductSimple $updatedProduct
