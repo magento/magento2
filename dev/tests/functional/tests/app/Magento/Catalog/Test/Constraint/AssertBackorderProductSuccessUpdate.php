@@ -17,9 +17,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Fixture\Address;
 
 /**
- * Assert that product with qty<0 can be updated.
+ * Assert that backorder product can be updated.
  */
-class AssertProductSuccessUpdate extends AbstractConstraint
+class AssertBackorderProductSuccessUpdate extends AbstractConstraint
 {
     /**
      * Text value to be checked.
@@ -48,7 +48,7 @@ class AssertProductSuccessUpdate extends AbstractConstraint
     protected $editProductPage;
 
     /**
-     * Assert that product with qty<0 can be updated.
+     * Assert that backorder product can be updated.
      *
      * @param CatalogProductSimple $product
      * @param Address $shippingAddress
@@ -58,6 +58,8 @@ class AssertProductSuccessUpdate extends AbstractConstraint
      * @param array $shipping
      * @param array $payment
      * @param CatalogProductSimple $updatedProduct
+     *
+     * @return void
      */
     public function processAssert(
         CatalogProductSimple $product,
@@ -96,6 +98,8 @@ class AssertProductSuccessUpdate extends AbstractConstraint
      * @param Address $address
      * @param array $shipping
      * @param array $payment
+     *
+     * @return void
      */
     private function placeOrder(
         CatalogProductSimple $product,
@@ -127,6 +131,8 @@ class AssertProductSuccessUpdate extends AbstractConstraint
      *
      * @param CatalogProductSimple $product
      * @param CatalogProductSimple $updatedProduct
+     *
+     * @return void
      */
     private function updateProduct(
         CatalogProductSimple $product,
@@ -147,6 +153,6 @@ class AssertProductSuccessUpdate extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Assertion that product success save message is present.';
+        return 'Backorder product updated successfully.';
     }
 }

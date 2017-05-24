@@ -476,7 +476,7 @@
             <data name="updatedProduct/data/description" xsi:type="string">Qty of this product now has to be less than 0</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessUpdate" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertBackorderProductSuccessUpdate" />
         </variation>
     </testCase>
 </config>
