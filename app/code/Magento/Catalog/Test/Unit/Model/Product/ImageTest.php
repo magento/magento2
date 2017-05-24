@@ -54,11 +54,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     private $factory;
 
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fileSystem;
-
-    /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mediaDirectory;
@@ -108,7 +103,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->mediaDirectory));
         $this->factory = $this->getMock(\Magento\Framework\Image\Factory::class, [], [], '', false);
-        $this->fileSystem = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
 
         $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
@@ -127,7 +121,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'coreFileStorageDatabase' => $this->coreFileHelper,
                 'filesystem' => $this->filesystem,
                 'imageFactory' => $this->factory,
-                'viewFileSystem' => $this->fileSystem,
                 'viewAssetImageFactory' => $this->viewAssetImageFactory,
                 'viewAssetPlaceholderFactory' => $this->viewAssetPlaceholderFactory
             ]
