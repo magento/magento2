@@ -77,7 +77,7 @@
             <action name="delete">
                 <settings>
                     <confirm>
-                        <message translate="true">Are you sure you wan't to delete selected items?</message>
+                        <message translate="true">Are you sure you want to delete selected items?</message>
                         <title translate="true">Delete items</title>
                     </confirm>
                     <url path="cms/page/massDelete"/>
