@@ -8,30 +8,45 @@ namespace Magento\Quote\Model;
 
 /**
  * Class ShippingMethodManagementTest
+ *
+ * @magentoDbIsolation enabled
  */
 class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store carriers/tablerate/active 1
      * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * @return void
      */
-    public function testEstimateByAddressWithCartPriceRule()
+    public function testEstimateByAddressWithCartPriceRuleByItem()
     {
         $this->executeTestFlow(0, 0);
     }
 
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store carriers/tablerate/active 1
+     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_by_cart.php
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * @return void
+     */
+    public function testEstimateByAddressWithCartPriceRuleByShipment()
+    {
+        // Rule applied to entire shipment should not overwrite flat or table rate shipping prices
+        // Only rules applied to specific items should modify those prices (MAGETWO-63844)
+        $this->executeTestFlow(5, 10);
+    }
+
+    /**
      * @magentoConfigFixture current_store carriers/tablerate/active 1
      * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * @return void
      */
     public function testEstimateByAddress()
     {
@@ -43,6 +58,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      *
      * @param int $flatRateAmount
      * @param int $tableRateAmount
+     * @return void
      */
     private function executeTestFlow($flatRateAmount, $tableRateAmount)
     {
