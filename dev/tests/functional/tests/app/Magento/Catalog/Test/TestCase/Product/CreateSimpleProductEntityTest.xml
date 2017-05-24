@@ -468,15 +468,10 @@
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation27"  summary="It's possible to specify negative value in 'Quantity' field for product." ticketId="MAGETWO-69432">
             <data name="configData" xsi:type="string">enable_backorders</data>
-            <data name="product/dataset" xsi:type="string">simple_with_qty_1</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
-            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
-            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="updatedProduct/data/description" xsi:type="string">Qty of this product now has to be less than 0</data>
+            <data name="product/dataset" xsi:type="string">simple_with_negative_qty</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertBackorderProductSuccessUpdate" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
     </testCase>
 </config>

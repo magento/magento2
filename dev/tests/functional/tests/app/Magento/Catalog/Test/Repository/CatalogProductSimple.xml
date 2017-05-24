@@ -37,7 +37,7 @@
             </field>
         </dataset>
 
-        <dataset name="simple_with_qty_1">
+        <dataset name="simple_with_negative_qty">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -46,7 +46,7 @@
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">1</item>
+                <item name="qty" xsi:type="string">-2</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="price" xsi:type="array">
