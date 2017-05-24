@@ -45,7 +45,6 @@ class Editor extends Textarea
             $this->setType('textarea');
             $this->setExtType('textarea');
         }
-
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
@@ -65,9 +64,23 @@ class Editor extends Textarea
     }
 
     /**
+     * @return bool|string
+     * @throws \InvalidArgumentException
+     */
+    private function getJsonConfig()
+    {
+        if (is_object($this->getConfig()) && method_exists($this->getConfig(), 'toJson')) {
+            return $this->getConfig()->toJson();
+        } else {
+            return $this->serializer->serialize(
+                $this->getConfig()
+            );
+        }
+    }
+
+    /**
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \InvalidArgumentException
      */
     public function getElementHtml()
     {
@@ -145,7 +158,7 @@ class Editor extends Textarea
                 ], function(jQuery){' .
                 "\n" .
                 '  (function($) {$.mage.translate.add(' .
-                \Zend_Json::encode(
+                $this->serializer->serialize(
                     $this->getButtonTranslations()
                 ) .
                 ')})(jQuery);' .
@@ -154,9 +167,7 @@ class Editor extends Textarea
                 ' = new tinyMceWysiwygSetup("' .
                 $this->getHtmlId() .
                 '", ' .
-                $this->serializer->serialize(
-                    $this->getConfig()
-                ) .
+                $this->getJsonConfig() .
                 ');' .
                 $forceLoad .
                 '
@@ -438,7 +449,7 @@ class Editor extends Textarea
      * Translate string using defined helper
      *
      * @param string $string String to be translated
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function translate($string)
     {
