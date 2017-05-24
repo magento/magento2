@@ -18,11 +18,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\UrlRewrite;
 
 /**
  * Class ProductTest
@@ -829,6 +832,73 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $simpleProduct->load($id);
         $this->assertTrue(count($simpleProduct->getWebsiteIds()) == 2);
         $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
+    }
+
+    /**
+     * Test url keys properly generated in multistores environment.
+     *
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testGenerateUrlsWithMultipleStores()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_two_stores.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+        $this->assertProductRequestPath('default', 'category-defaultstore/product-default.html');
+        $this->assertProductRequestPath('fixturestore', 'category-fixturestore/product-fixture.html');
+    }
+
+    /**
+     * Check product request path considering store scope.
+     *
+     * @param string $storeCode
+     * @param string $expected
+     * @return void
+     */
+    private function assertProductRequestPath($storeCode, $expected)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var Store $storeCode */
+        $store = $objectManager->get(Store::class);
+        $storeId = $store->load($storeCode)->getId();
+
+        /** @var Category $category */
+        $category = $objectManager->get(Category::class);
+        $category->setStoreId($storeId);
+        $category->load(555);
+
+        /** @var Registry $registry */
+        $registry = $objectManager->get(Registry::class);
+        $registry->register('current_category', $category);
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+        $id = $product->getIdBySku('product');
+        $product->setStoreId($storeId);
+        $product->load($id);
+        $product->getProductUrl();
+        self::assertEquals($expected, $product->getRequestPath());
+        $registry->unregister('current_category');
     }
 
     /**
@@ -1661,5 +1731,63 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         }
 
         $this->importDataForMediaTest('import_media_existing_images.csv');
+    }
+
+    /**
+     * Test if we can change attribute set for product via import.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     */
+    public function testImportDataChangeAttributeSet()
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_new_attribute_set.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        /** @var \Magento\Catalog\Model\Product[] $products */
+        $products[] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
+        $products[] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple2');
+
+        /** @var \Magento\Catalog\Model\Config $catalogConfig */
+        $catalogConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\Config::class);
+
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Eav\Model\Config::class);
+
+        $entityTypeId = (int)$eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
+            ->getId();
+
+        foreach ($products as $product) {
+            $attributeSetName = $catalogConfig->getAttributeSetName($entityTypeId, $product->getAttributeSetId());
+            $this->assertEquals('attribute_set_test', $attributeSetName);
+        }
     }
 }
