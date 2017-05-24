@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -19,8 +19,8 @@
             <data name="shipping/shipping_method" xsi:type="string">Express easy</data>
             <data name="cart/data/shipping_method" xsi:type="string">Express easy</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_GB, config_base_currency_gb</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />

@@ -1,21 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Phrase;
 
 /**
- * Abstract resource model class
+ * Abstract resource model
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 abstract class AbstractDb extends AbstractResource
 {
@@ -131,13 +134,15 @@ abstract class AbstractDb extends AbstractResource
     protected $objectRelationProcessor;
 
     /**
-     * Class constructor
+     * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
      */
-    public function __construct(\Magento\Framework\Model\ResourceModel\Db\Context $context, $connectionName = null)
-    {
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        $connectionName = null
+    ) {
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
@@ -332,6 +337,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
+        $object->beforeLoad($value, $field);
         if ($field === null) {
             $field = $this->getIdFieldName();
         }
@@ -348,7 +354,10 @@ abstract class AbstractDb extends AbstractResource
 
         $this->unserializeFields($object);
         $this->_afterLoad($object);
-
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
+        
         return $this;
     }
 
@@ -375,6 +384,7 @@ abstract class AbstractDb extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
+     * @throws AlreadyExistsException
      * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
@@ -409,6 +419,10 @@ abstract class AbstractDb extends AbstractResource
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
+        } catch (DuplicateException $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -142,9 +142,10 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
      *
      * @param Customer $customer
      * @param string $products
+     * @param bool $productsIsConfigured
      * @return array
      */
-    public function test(Customer $customer, $products)
+    public function test(Customer $customer, $products, $productsIsConfigured = false)
     {
         // Preconditions
         // Create product
@@ -168,6 +169,6 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $activitiesBlock->getRecentlyComparedProductsBlock()->addProductsToOrder($products);
         $activitiesBlock->updateChanges();
 
-        return ['products' => $products, 'productsIsConfigured' => false];
+        return ['products' => $products, 'productsIsConfigured' => $productsIsConfigured];
     }
 }

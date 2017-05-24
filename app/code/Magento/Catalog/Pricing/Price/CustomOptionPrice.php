@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product\Option\Value;
-use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Pricing\Price;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -93,7 +92,9 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                             $min = $price;
                         }
                         $type = $optionItem->getType();
-                        if ($type == Option::OPTION_TYPE_CHECKBOX || $type == Option::OPTION_TYPE_MULTIPLE) {
+                        if ($type == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX ||
+                            $type == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE
+                        ) {
                             $max += $price;
                         } elseif ($price > $max) {
                             $max = $price;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
@@ -108,6 +108,8 @@ namespace Magento\Quote\Model\Quote\Address;
  * @method string getLimitCarrier()
  * @method \Magento\Quote\Model\Quote\Address\RateRequest setLimitMethod(string $value)
  * @method string getLimitMethod()
+ *
+ * @api
  */
 class RateRequest extends \Magento\Framework\DataObject
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Ui\PayPal;
@@ -28,12 +28,23 @@ class ConfigProvider implements ConfigProviderInterface
      */
     private $resolver;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param Config $config
+     * @param ResolverInterface $resolver
+     */
     public function __construct(Config $config, ResolverInterface $resolver)
     {
         $this->config = $config;
         $this->resolver = $resolver;
     }
 
+    /**
+     * Retrieve assoc array of checkout configuration
+     *
+     * @return array
+     */
     public function getConfig()
     {
         return [

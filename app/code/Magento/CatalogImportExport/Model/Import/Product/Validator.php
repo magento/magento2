@@ -1,13 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
-use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\Validator\AbstractValidator;
 
+/**
+ * Class Validator
+ *
+ * @api
+ */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
     /**
@@ -69,6 +74,32 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $this->_addMessages([RowValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH]);
         }
         return $valid;
+    }
+
+    /**
+     * Check if value is valid attribute option
+     *
+     * @param string $attrCode
+     * @param array $possibleOptions
+     * @param string $value
+     * @return bool
+     */
+    private function validateOption($attrCode, $possibleOptions, $value)
+    {
+        if (!isset($possibleOptions[strtolower($value)])) {
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(
+                            RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
+                        ),
+                        $attrCode
+                    )
+                ]
+            );
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -166,23 +197,15 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 break;
             case 'select':
             case 'boolean':
+                $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
+                break;
             case 'multiselect':
-                $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
-                $valid = true;
+                $values = $this->context->parseMultiselectValues($rowData[$attrCode]);
                 foreach ($values as $value) {
-                    $valid = $valid && isset($attrParams['options'][strtolower($value)]);
-                }
-                if (!$valid) {
-                    $this->_addMessages(
-                        [
-                            sprintf(
-                                $this->context->retrieveMessageTemplate(
-                                    RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION
-                                ),
-                                $attrCode
-                            )
-                        ]
-                    );
+                    $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
+                    if (!$valid) {
+                        break;
+                    }
                 }
                 break;
             case 'datetime':
@@ -205,13 +228,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
-        
+
         if (!$valid) {
             $this->setInvalidAttribute($attrCode);
         }
 
         return (bool)$valid;
-
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -22,7 +22,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="Tax/VAT number"', $block->toHtml());
+        $this->assertContains('title="Tax&#x2F;VAT&#x20;number"', $block->toHtml());
         $this->assertNotContains('required', $block->toHtml());
     }
 
@@ -44,7 +44,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="Tax/VAT number"', $block->toHtml());
+        $this->assertContains('title="Tax&#x2F;VAT&#x20;number"', $block->toHtml());
         $this->assertContains('required', $block->toHtml());
     }
 

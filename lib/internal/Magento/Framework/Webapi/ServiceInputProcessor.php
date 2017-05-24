@@ -2,27 +2,28 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
-use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
-use Zend\Code\Reflection\ClassReflection;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Exception as WebapiException;
+use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
@@ -145,6 +146,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
+        // convert to string directly to avoid situations when $className is object
+        // which implements __toString method like \ReflectionObject
+        $className = (string) $className;
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -258,9 +262,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
-        } else if (!$customAttributeCode) {
+        } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );

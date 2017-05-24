@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Account;
@@ -12,7 +12,6 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -127,13 +126,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $scopeConfigMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn('test@host.com');
-
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -157,11 +149,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             'emailNotification',
             $this->emailNotification
         );
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'scopeConfig',
-            $scopeConfigMock
-        );
+
         $objectManager->setBackwardCompatibleProperty(
             $this->model,
             'authentication',
@@ -216,7 +204,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();
-
         $currentCustomerMock = $this->getCurrentCustomerMock($customerId, $address);
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
 
@@ -412,7 +399,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             [
                 'testNumber' => 2,
                 'exceptionClass' => \Magento\Framework\Exception\State\UserLockedException::class,
-                'errorMessage' => __('The account is locked. Please wait and try again or contact %1.', 'test@host.com')
+                'errorMessage' => __('You did not sign in correctly or your account is temporarily disabled.')
             ]
         ];
     }

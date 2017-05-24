@@ -1,18 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Setup;
 
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\FieldToConvert;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Widget\Setup\LayoutUpdateConverter;
 
 class UpgradeData implements UpgradeDataInterface
 {
+    /**
+     * @deprecated
+     */
     const PRIVACY_COOKIE_PAGE_ID = 4;
 
     /**
@@ -21,11 +30,124 @@ class UpgradeData implements UpgradeDataInterface
     private $pageFactory;
 
     /**
-     * @param PageFactory $pageFactory
+     * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
-    public function __construct(PageFactory $pageFactory)
-    {
+    private $queryModifierFactory;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldConverter;
+
+    /**
+     * UpgradeData constructor.
+     *
+     * @param PageFactory $pageFactory
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
+     * @param MetadataPool $metadataPool
+     */
+    public function __construct(
+        PageFactory $pageFactory,
+        AggregatedFieldDataConverter $aggregatedFieldConverter,
+        \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory,
+        MetadataPool $metadataPool
+    ) {
         $this->pageFactory = $pageFactory;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
+        $this->queryModifierFactory = $queryModifierFactory;
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
+     * Upgrades data for a module
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @return void
+     */
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $this->upgradeVersionTwoZeroOne();
+        }
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $this->convertWidgetConditionsToJson($setup);
+        }
+    }
+
+    /**
+     * Upgrade data to version 2.0.2
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function convertWidgetConditionsToJson(ModuleDataSetupInterface $setup)
+    {
+        $queryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'content' => '%conditions_encoded%'
+                ]
+            ]
+        );
+        $layoutUpdateXmlFieldQueryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'layout_update_xml' => '%conditions_encoded%'
+                ]
+            ]
+        );
+        $customLayoutUpdateXmlFieldQueryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'custom_layout_update_xml' => '%conditions_encoded%'
+                ]
+            ]
+        );
+        $blockMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        $pageMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+        $this->aggregatedFieldConverter->convert(
+            [
+                new FieldToConvert(
+                    ContentConverter::class,
+                    $setup->getTable('cms_block'),
+                    $blockMetadata->getIdentifierField(),
+                    'content',
+                    $queryModifier
+                ),
+                new FieldToConvert(
+                    ContentConverter::class,
+                    $setup->getTable('cms_page'),
+                    $pageMetadata->getIdentifierField(),
+                    'content',
+                    $queryModifier
+                ),
+                new FieldToConvert(
+                    LayoutUpdateConverter::class,
+                    $setup->getTable('cms_page'),
+                    $pageMetadata->getIdentifierField(),
+                    'layout_update_xml',
+                    $layoutUpdateXmlFieldQueryModifier
+                ),
+                new FieldToConvert(
+                    LayoutUpdateConverter::class,
+                    $setup->getTable('cms_page'),
+                    $pageMetadata->getIdentifierField(),
+                    'custom_layout_update_xml',
+                    $customLayoutUpdateXmlFieldQueryModifier
+                ),
+            ],
+            $setup->getConnection()
+        );
     }
 
     /**
@@ -39,18 +161,14 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Upgrades data for a module
+     * Upgrade data to version 2.0.1,
      *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    private function upgradeVersionTwoZeroOne()
     {
-        $setup->startSetup();
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $newPageContent = <<<EOD
+        $newPageContent = <<<EOD
 <div class="privacy-policy cms-content">
     <div class="message info">
         <span>
@@ -234,13 +352,14 @@ class UpgradeData implements UpgradeDataInterface
     </table>
 </div>
 EOD;
-            $privacyAndCookiePolicyPage = $this->createPage()->load(self::PRIVACY_COOKIE_PAGE_ID);
-            $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
-            if ($privacyAndCookiePolicyPageId) {
-                $privacyAndCookiePolicyPage->setContent($newPageContent);
-                $privacyAndCookiePolicyPage->save();
-            }
+        $privacyAndCookiePolicyPage = $this->createPage()->load(
+            'privacy-policy-cookie-restriction-mode',
+            'identifier'
+        );
+        $privacyAndCookiePolicyPageId = $privacyAndCookiePolicyPage->getId();
+        if ($privacyAndCookiePolicyPageId) {
+            $privacyAndCookiePolicyPage->setContent($newPageContent);
+            $privacyAndCookiePolicyPage->save();
         }
-        $setup->endSetup();
     }
 }

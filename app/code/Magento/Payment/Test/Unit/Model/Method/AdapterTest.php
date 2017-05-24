@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Method;
@@ -51,6 +51,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     private $paymentDataObjectFactory;
 
     /**
+     * @var MockObject
+     */
+    private $logger;
+
+    /**
      * @var string
      */
     private $code;
@@ -84,6 +89,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->formBlockType = '\FormBlock';
         $this->infoBlockType = '\InfoBlock';
 
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->getMock();
         $this->adapter = new Adapter(
             $this->eventManager,
             $this->valueHandlerPool,
@@ -92,7 +99,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             $this->formBlockType,
             $this->infoBlockType,
             $this->commandPool,
-            $this->validatorPool
+            $this->validatorPool,
+            null,
+            $this->logger
         );
     }
 
@@ -221,7 +230,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             '\InfoBlock',
             null,
             null,
-            $commandManager
+            $commandManager,
+            $this->logger
         );
 
         $valueHandler = $this->getMock(ValueHandlerInterface::class);
@@ -274,7 +284,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             'CODE',
             '\FormBlock',
             '\InfoBlock',
-            $commandPool
+            $commandPool,
+            null,
+            null,
+            $this->logger
         );
 
         $valueHandler = $this->getMock(ValueHandlerInterface::class);
@@ -304,5 +317,19 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         $adapter->authorize($paymentInfo, 10);
+    }
+
+    public function testValidationExceptionLogged()
+    {
+        $exception = new \Exception('We can test exception logging!');
+
+        $this->validatorPool->expects(static::once())
+            ->method('get')
+            ->with('global')
+            ->willThrowException($exception);
+        $this->logger->expects(static::once())
+            ->method('critical')
+            ->with($exception);
+        $this->adapter->validate();
     }
 }

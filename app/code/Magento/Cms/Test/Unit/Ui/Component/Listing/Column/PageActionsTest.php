@@ -1,11 +1,12 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Cms\Ui\Component\Listing\Column\PageActions;
+use Magento\Framework\Escaper;
 
 class PageActionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +24,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
 
         /** @var \Magento\Cms\Ui\Component\Listing\Column\PageActions $model */
         $model = $objectManager->getObject(
@@ -34,12 +35,20 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['escapeHtml'])
+            ->getMock();
+        $objectManager->setBackwardCompatibleProperty($model, 'escaper', $escaper);
+
         // Define test input and expectations
+        $title = 'page title';
         $items = [
             'data' => [
                 'items' => [
                     [
-                        'page_id' => $pageId
+                        'page_id' => $pageId,
+                        'title' => $title
                     ]
                 ]
             ]
@@ -48,6 +57,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         $expectedItems = [
             [
                 'page_id' => $pageId,
+                'title' => $title,
                 $name => [
                     'edit' => [
                         'href' => 'test/url/edit',
@@ -57,13 +67,18 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                         'href' => 'test/url/delete',
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ${ $.$data.title }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
+                            'title' => __('Delete %1', $title),
+                            'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
                     ]
                 ],
             ]
         ];
+
+        $escaper->expects(static::once())
+            ->method('escapeHtml')
+            ->with($title)
+            ->willReturn($title);
 
         // Configure mocks and object data
         $urlBuilderMock->expects($this->any())

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -32,8 +32,8 @@
         <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress" />
     </scenario>
     <scenario name="CreateOrderBackendTest">
-        <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />
-        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" next="fillBillingAddress" />
+        <step name="createSalesRule" module="Magento_SalesRule" prev="fillShippingAddress" next="applySalesRuleOnBackend" />
+        <step name="applySalesRuleOnBackend" module="Magento_SalesRule" />
     </scenario>
     <scenario name="CreateOrderFromCustomerPageTest">
         <step name="createSalesRule" module="Magento_SalesRule" next="applySalesRuleOnBackend" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,6 +31,13 @@ class SelectVersion extends Form
     protected $firstField = '#selectVersion';
 
     /**
+     * Show all versions checkbox
+     *
+     * @var string
+     */
+    private $showAllVersions = '#showUnstable';
+
+    /**
      * Click on 'Next' button.
      *
      * @return void
@@ -50,7 +57,22 @@ class SelectVersion extends Form
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $this->waitForElementVisible($this->firstField);
+        $this->chooseShowAllVersions();
+
         return parent::fill($fixture, $element);
+    }
+
+    /**
+     * Show all versions include unstable
+     *
+     * @return void
+     */
+    private function chooseShowAllVersions()
+    {
+        $element = $this->_rootElement->find($this->showAllVersions, Locator::SELECTOR_CSS);
+        if ($element->isVisible()) {
+            $element->click();
+        }
     }
 
     /**

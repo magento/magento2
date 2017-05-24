@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Block\Info;
@@ -49,20 +49,13 @@ class Checkmo extends \Magento\Payment\Block\Info
     }
 
     /**
-     * Enter description here...
-     *
+     * @deprecated
      * @return $this
      */
     protected function _convertAdditionalData()
     {
-        $details = @unserialize($this->getInfo()->getAdditionalData());
-        if (is_array($details)) {
-            $this->_payableTo = isset($details['payable_to']) ? (string)$details['payable_to'] : '';
-            $this->_mailingAddress = isset($details['mailing_address']) ? (string)$details['mailing_address'] : '';
-        } else {
-            $this->_payableTo = '';
-            $this->_mailingAddress = '';
-        }
+        $this->_payableTo = $this->getInfo()->getAdditionalInformation('payable_to');
+        $this->_mailingAddress = $this->getInfo()->getAdditionalInformation('mailing_address');
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Pack\Writer\File;
@@ -121,6 +121,11 @@ abstract class AbstractFile implements WriterInterface
                 } catch (\InvalidArgumentException $e) {
                     throw new \InvalidArgumentException($e->getMessage() . ' Row #' . ($key + 1) . '.');
                 }
+
+                if (null === $path) {
+                    continue;
+                }
+
                 $filename = $path . $this->_locale . '.' . $this->_getFileExtension();
                 $files[$filename][$phrase->getPhrase()] = $phrase;
             }

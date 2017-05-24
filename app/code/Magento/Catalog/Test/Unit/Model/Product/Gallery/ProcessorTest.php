@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
@@ -165,7 +165,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'attr_code';
         $attribute = $this->getMock(
             \Magento\Eav\Model\Entity\Attribute::class,
-            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntityType', '__wakeup'],
+            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity', '__wakeup'],
             [],
             '',
             false
@@ -178,7 +178,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getIsRequired')->will($this->returnValue(true));
         $attribute->expects($this->any())->method('isValueEmpty')->will($this->returnValue($value));
         $attribute->expects($this->any())->method('getIsUnique')->will($this->returnValue(true));
-        $attribute->expects($this->any())->method('getEntityType')->will($this->returnValue($attributeEntity));
+        $attribute->expects($this->any())->method('getEntity')->will($this->returnValue($attributeEntity));
         $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->will($this->returnValue(true));
 
         $this->attributeRepository->expects($this->once())
@@ -195,6 +195,58 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         return [
             [true],
             [false]
+        ];
+    }
+
+    /**
+     * @param int $setDataExpectsCalls
+     * @param string|null $setDataArgument
+     * @param array|string $mediaAttribute
+     * @dataProvider clearMediaAttributeDataProvider
+     */
+    public function testClearMediaAttribute($setDataExpectsCalls, $setDataArgument, $mediaAttribute)
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->exactly($setDataExpectsCalls))
+            ->method('setData')
+            ->with($setDataArgument, 'no_selection');
+
+        $this->mediaConfig->expects($this->once())
+            ->method('getMediaAttributeCodes')
+            ->willReturn(['image', 'small_image']);
+
+        $this->assertSame($this->model, $this->model->clearMediaAttribute($productMock, $mediaAttribute));
+    }
+
+    /**
+     * @return array
+     */
+    public function clearMediaAttributeDataProvider()
+    {
+        return [
+            [
+                'setDataExpectsCalls' => 1,
+                'setDataArgument' => 'image',
+                'mediaAttribute' => 'image',
+            ],
+            [
+                'setDataExpectsCalls' => 1,
+                'setDataArgument' => 'image',
+                'mediaAttribute' => ['image'],
+            ],
+            [
+                'setDataExpectsCalls' => 0,
+                'setDataArgument' => null,
+                'mediaAttribute' => 'some_image',
+            ],
+            [
+                'setDataExpectsCalls' => 0,
+                'setDataArgument' => null,
+                'mediaAttribute' => ['some_image'],
+            ],
         ];
     }
 }

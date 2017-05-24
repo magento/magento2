@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
@@ -15,38 +15,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @return $this
-     * @throws \Exception
+     * @inheritdoc
      */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-
-        $this->beginTransaction();
-        try {
-            $this->_prepareBundlePrice();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return $this
-     */
-    public function reindexEntity($entityIds)
+    protected function reindex($entityIds = null)
     {
         $this->_prepareBundlePrice($entityIds);
-
-        return $this;
     }
 
     /**
@@ -491,7 +464,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             null
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            "i.entity_id=e.$linkField",
+            "i.entity_id=e.entity_id",
             []
         )->where(
             'e.type_id=?',
@@ -502,7 +475,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
 
         $select = $connection->select()->from(
             ['tp' => $this->getTable('catalog_product_entity_tier_price')],
-            [$linkField]
+            ['e.entity_id']
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
             "tp.{$linkField} = e.{$linkField}",
@@ -523,11 +496,11 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         )->columns(
             new \Zend_Db_Expr('MIN(tp.value)')
         )->group(
-            ["tp.{$linkField}", 'cg.customer_group_id', 'cw.website_id']
+            ['e.entity_id', 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
-            $select->where("tp.{$linkField} IN(?)", $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds);
         }
 
         $query = $select->insertFromSelect($this->_getTierPriceIndexTable());

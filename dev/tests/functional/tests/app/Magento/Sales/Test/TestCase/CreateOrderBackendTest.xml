@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendTest" summary="Create Order from Admin within Offline Payment Methods" ticketId="MAGETWO-28696">
-        <variation name="CreateOrderBackendTestVariation1">
+        <variation name="CreateOrderBackendTestVariation1" ticketId="MAGETWO-17063">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Cash on Delivery payment method</data>
-            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::with_one_custom_option</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">565.00</item>
+                <item name="grandTotal" xsi:type="string">425.00</item>
             </data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <data name="status" xsi:type="string">Pending</data>
@@ -27,6 +27,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductQtyDecreased" />
         </variation>
         <variation name="CreateOrderBackendTestVariation2">
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Check/Money Order payment method</data>
@@ -47,8 +48,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
-        <variation name="CreateOrderBackendTestVariation3">
-            <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Bank Transfer payment method</data>
+        <variation name="CreateOrderBackendTestVariation3" ticketId="MAGETWO-45396" summary="Create order with simple product for registered US customer using Fixed shipping method and Bank Transfer payment method, check order in grid with applied date filter">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
@@ -67,8 +67,10 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderByDateInOrdersGrid" />
         </variation>
         <variation name="CreateOrderBackendTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Bank Transfer payment method</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -146,6 +148,38 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+        </variation>
+        <variation name="CreateOrderBackendTestVariation18" summary="Create order with condition available product qty = ordered product qty" ticketId="MAGETWO-12798">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="saveAddress" xsi:type="string">No</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">375.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">cashondelivery</data>
+            <data name="configData" xsi:type="string">cashondelivery</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
+        </variation>
+        <variation name="CreateOrderBackendTestVariation19" summary="'Reorder' button is not visible for customer if ordered item is out of stock" ticketId="MAGETWO-63924">
+            <data name="products/0" xsi:type="string">catalogProductSimple::default_qty_1</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="saveAddress" xsi:type="string">No</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">565.00</item>
+            </data>
+            <data name="payment/method" xsi:type="string">cashondelivery</data>
+            <data name="configData" xsi:type="string">cashondelivery</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertReorderButtonIsNotVisibleOnFrontend" />
         </variation>
     </testCase>
 </config>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Authorizenet\Test\Repository\TransactionSearch">
+        <dataset name="unsettled">
+            <field name="settlement_date_from" xsi:type="string">Unsettled</field>
+            <field name="settlement_date_to" xsi:type="string">Unsettled</field>
+        </dataset>
+    </repository>
+</config>

@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+      <link src="Magento_ConfigurableProduct::js/configurable-customer-data.js"/>
+    </head>
     <update handle="catalog_product_view_type_configurable"/>
     <body/>
 </page>

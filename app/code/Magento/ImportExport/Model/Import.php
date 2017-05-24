@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  *
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
@@ -77,6 +77,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import multiple value separator.
      */
     const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
+
+    /**
+     * Allow multiple values wrapping in double quotes for additional attributes.
+     */
+    const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**#@-*/
 
@@ -216,7 +221,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getEntityAdapter()
     {
-
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
             if (isset($entities[$this->getEntity()])) {
@@ -428,7 +432,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->importHistoryModel->invalidateReport($this);
         }
 
-
         return $result;
     }
 
@@ -557,7 +560,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Validates source file and returns validation result.
+     * Validates source file and returns validation result
+     *
+     * Before validate data the method requires to initialize error aggregator (ProcessingErrorAggregatorInterface)
+     * with 'validation strategy' and 'allowed error count' values to allow using this parameters in validation process.
      *
      * @param \Magento\ImportExport\Model\Import\AbstractSource $source
      * @return bool
@@ -565,11 +571,17 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
+
+        $errorAggregator = $this->getErrorAggregator();
+        $errorAggregator->initValidationStrategy(
+            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+        );
+
         try {
             $adapter = $this->_getEntityAdapter()->setSource($source);
-            $errorAggregator = $adapter->validateData();
+            $adapter->validateData();
         } catch (\Exception $e) {
-            $errorAggregator = $this->getErrorAggregator();
             $errorAggregator->addError(
                 \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                 ProcessingError::ERROR_LEVEL_CRITICAL,
@@ -605,7 +617,10 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         foreach (array_keys($relatedIndexers) as $indexerId) {
             try {
                 $indexer = $this->indexerRegistry->get($indexerId);
-                $indexer->invalidate();
+
+                if (!$indexer->isScheduled()) {
+                    $indexer->invalidate();
+                }
             } catch (\InvalidArgumentException $e) {
             }
         }
@@ -740,7 +755,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         }
         return $this;
     }
-
 
     /**
      * Get count of created items

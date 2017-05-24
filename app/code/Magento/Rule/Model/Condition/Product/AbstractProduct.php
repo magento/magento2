@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\Condition\Product;
 
 /**
  * Abstract Rule product condition data model
  *
- * @author Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Rule\Model\Condition\Product;
-
-/**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -602,7 +600,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     public function getMappedSqlField()
     {
-        if (!$this->isAttributeSetOrCategory()) {
+        if ($this->getAttribute() == 'sku') {
+            $mappedSqlField = 'e.sku';
+        } elseif (!$this->isAttributeSetOrCategory()) {
             $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';

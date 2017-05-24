@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,48 +34,15 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $this->directory
-            ->expects($this->once())
+        $this->directory->expects($this->once())
+            ->method('isReadable')
+            ->with('fixture_file.txt')
+            ->willReturn(true);
+        $this->directory->expects($this->once())
             ->method('readFile')
             ->with('fixture_file.txt')
-            ->will($this->returnValue('123'));
+            ->willReturn('123');
         $this->assertEquals('123', $this->object->load());
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Exception to be propagated
-     */
-    public function testLoadExceptionPropagation()
-    {
-        $this->directory
-            ->expects($this->once())
-            ->method('readFile')
-            ->with('fixture_file.txt')
-            ->will($this->throwException(new \Exception('Exception to be propagated')));
-        $this->object->load();
-    }
-
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Unable to retrieve deployment version of static files from the file system
-     */
-    public function testLoadExceptionWrapping()
-    {
-        $filesystemException = new \Magento\Framework\Exception\FileSystemException(
-            new \Magento\Framework\Phrase('File does not exist')
-        );
-        $this->directory
-            ->expects($this->once())
-            ->method('readFile')
-            ->with('fixture_file.txt')
-            ->will($this->throwException($filesystemException));
-        try {
-            $this->object->load();
-        } catch (\Exception $e) {
-            $this->assertSame($filesystemException, $e->getPrevious(), 'Wrapping of original exception is expected');
-            throw $e;
-        }
     }
 
     public function testSave()

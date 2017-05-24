@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
@@ -52,7 +52,16 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         );
         $this->category = $this->getMock(
             \Magento\Catalog\Model\Category::class,
-            ['setUrlKey', 'setUrlPath', 'dataHasChangedFor', 'isObjectNew', 'getResource', 'getUrlKey', 'getStoreId'],
+            [
+                'setUrlKey',
+                'setUrlPath',
+                'dataHasChangedFor',
+                'isObjectNew',
+                'getResource',
+                'getUrlKey',
+                'getStoreId',
+                'getData'
+            ],
             [],
             '',
             false
@@ -96,7 +105,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('setUrlKey')->with('urk_key')->willReturnSelf();
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')->willReturn('url_path');
         $this->category->expects($this->once())->method('setUrlPath')->with('url_path')->willReturnSelf();
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->category->expects($this->exactly(2))->method('isObjectNew')->willReturn(true);
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
@@ -106,6 +115,26 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('getUrlKey')->willReturn(false);
         $this->category->expects($this->never())->method('setUrlKey');
         $this->category->expects($this->never())->method('setUrlPath');
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid URL key
+     */
+    public function testExecuteWithException()
+    {
+        $categoryName = 'test';
+        $categoryData = ['url_key' => 0];
+        $this->category->expects($this->once())->method('getUrlKey')->willReturn($categoryName);
+        $this->category->expects($this->once())
+            ->method('getData')
+            ->with('use_default')
+            ->willReturn($categoryData);
+        $this->categoryUrlPathGenerator->expects($this->once())
+            ->method('getUrlKey')
+            ->with($this->category)
+            ->willReturn(null);
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
 
@@ -120,7 +149,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('setUrlKey')->with('url_key')->willReturnSelf();
         $this->category->expects($this->once())->method('setUrlPath')->with('url_path')->willReturnSelf();
         // break code execution
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->category->expects($this->exactly(2))->method('isObjectNew')->willReturn(true);
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
@@ -134,7 +163,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
 
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->category->expects($this->exactly(2))->method('isObjectNew')->willReturn(true);
         $this->categoryResource->expects($this->never())->method('saveAttribute');
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
@@ -148,7 +177,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('getUrlKey')->willReturn('not_formatted_url_key');
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->exactly(2))->method('isObjectNew')->willReturn(false);
 
         $this->categoryResource->expects($this->once())->method('saveAttribute')->with($this->category, 'url_path');
 
@@ -168,7 +197,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('getUrlKey')->willReturn('not_formatted_url_key');
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->exactly(2))->method('isObjectNew')->willReturn(false);
         // break code execution
         $this->category->expects($this->once())->method('dataHasChangedFor')->with('url_path')->willReturn(false);
 
@@ -183,7 +212,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('getUrlKey')->willReturn('not_formatted_url_key');
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
-        $this->category->expects($this->any())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->exactly(2))->method('isObjectNew')->willReturn(false);
         $this->category->expects($this->any())->method('dataHasChangedFor')->willReturn(true);
         // only for specific store
         $this->category->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);

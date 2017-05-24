@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Helper;
 
 /**
  * Cookie helper
+ * @api
  */
 class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -84,7 +85,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAcceptedSaveCookiesWebsiteIds()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        $acceptedSaveCookiesWebsites[$this->_website->getId()] = 1;
+        $acceptedSaveCookiesWebsites[(int)$this->_website->getId()] = 1;
         return json_encode($acceptedSaveCookiesWebsites);
     }
 

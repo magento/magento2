@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <update handle="checkout_item_price_renderers"/>
     <body>
         <referenceBlock name="checkout.onepage.review.item.renderers">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="Magento_Checkout::onepage/review/item.phtml"/>
         </referenceBlock>
     </body>
 </page>

@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -8,7 +8,7 @@
     <!-- ko foreach: getRegion('before-fields') -->
     <!-- ko template: getTemplate() --><!-- /ko -->
     <!--/ko-->
-    <form data-hasrequired="* Required Fields">
+    <form data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
         <fieldset id="billing-new-address-form" class="fieldset address">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->

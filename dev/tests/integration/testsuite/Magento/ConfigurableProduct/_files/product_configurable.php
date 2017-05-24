@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -131,3 +131,12 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 
 $productRepository->save($product);
+
+/** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+$categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2]
+);

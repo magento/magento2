@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,7 @@ return [
             \Magento\Setup\Controller\Environment::class,
             \Magento\Setup\Controller\DependencyCheck::class,
             \Magento\Setup\Controller\DatabaseCheck::class,
+            \Magento\Setup\Controller\UrlCheck::class,
             \Magento\Setup\Controller\ValidateAdminCredentials::class,
             \Magento\Setup\Controller\AddDatabase::class,
             \Magento\Setup\Controller\WebConfiguration::class,
@@ -47,7 +48,7 @@ return [
         'instance' => [
             'preference' => [
                 \Zend\EventManager\EventManagerInterface::class => 'EventManager',
-                \Zend\ServiceManager\ServiceLocatorInterface::class => 'ServiceManager',
+                \Zend\ServiceManager\ServiceLocatorInterface::class => \Zend\ServiceManager\ServiceManager::class,
                 \Magento\Framework\DB\LoggerInterface::class => \Magento\Framework\DB\Logger\Quiet::class,
                 \Magento\Framework\Locale\ConfigInterface::class => \Magento\Framework\Locale\Config::class,
                 \Magento\Framework\Filesystem\DriverInterface::class =>

@@ -15,7 +15,7 @@ Delete,Delete
 "Upload a file","Upload a file"
 Clear,Clear
 "Step 2: Attribute Values","Step 2: Attribute Values"
-"Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU."
+"Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU."
 "Sort Variations","Sort Variations"
 Options,Options
 "Select All","Select All"

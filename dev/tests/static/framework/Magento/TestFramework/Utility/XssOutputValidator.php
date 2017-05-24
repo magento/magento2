@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -160,7 +160,7 @@ class XssOutputValidator
     private function prepareEchoCommand($command)
     {
         $command = preg_replace('/<[?]=(.*?)[?]>/sim', '\1', $command);
-        return ltrim(explode(';', $command)[0], 'echo');
+        return trim(ltrim(explode(';', $command)[0], 'echo'));
     }
 
     /**
@@ -170,7 +170,7 @@ class XssOutputValidator
     private function isNotEscapeMarkedBlock($contentBeforeString)
     {
         return !preg_match(
-            '%('. self::ESCAPE_NOT_VERIFIED_PATTERN . '|' . self::ESCAPED_PATTERN. ')$%sim',
+            '%(' . self::ESCAPE_NOT_VERIFIED_PATTERN . '|' . self::ESCAPED_PATTERN . ')$%sim',
             trim($contentBeforeString)
         );
     }
@@ -198,7 +198,7 @@ class XssOutputValidator
     private function isNotEscapeMarkedCommand($command)
     {
         return !preg_match(
-            '%' . self::ESCAPE_NOT_VERIFIED_PATTERN . '|'. self::ESCAPED_PATTERN . '%sim',
+            '%' . self::ESCAPE_NOT_VERIFIED_PATTERN . '|' . self::ESCAPED_PATTERN . '%sim',
             $command
         );
     }
@@ -213,8 +213,7 @@ class XssOutputValidator
     {
         $command = trim($command);
 
-        switch (true)
-        {
+        switch (true) {
             case preg_match(
                 '/->(' . implode('|', $this->escapeFunctions) . '|.*html.*)\(/simU',
                 $this->getLastMethod($command)
@@ -302,14 +301,24 @@ class XssOutputValidator
         $replacements = [];
         if (preg_match_all('/<[?](php|=)(.*?)[?]>/sm', $fileContent, $phpBlockMatches)) {
             foreach ($phpBlockMatches[2] as $phpBlock) {
-
                 $phpBlockQuoteReplaced = preg_replace(
                     ['/([^\\\\])\'\'/si', '/([^\\\\])""/si'],
                     ["\1'-*=single=*-'", '\1"-*=double=*-"'],
                     $phpBlock
                 );
 
-                $this->addQuoteOriginsReplacements($phpBlockQuoteReplaced);
+                $this->addQuoteOriginsReplacements(
+                    $phpBlockQuoteReplaced,
+                    [
+                        '/([^\\\\])([\'])(.*?)([^\\\\])([\'])/sim'
+                    ]
+                );
+                $this->addQuoteOriginsReplacements(
+                    $phpBlockQuoteReplaced,
+                    [
+                        '/([^\\\\])(["])(.*?)([^\\\\])(["])/sim',
+                    ]
+                );
 
                 $origins[] = $phpBlock;
                 $replacements[]  = str_replace(
@@ -354,15 +363,11 @@ class XssOutputValidator
      * Add replacements for expressions in single and double quotes
      *
      * @param string $phpBlock
+     * @param array $patterns
      * @return void
      */
-    private function addQuoteOriginsReplacements($phpBlock)
+    private function addQuoteOriginsReplacements($phpBlock, array $patterns)
     {
-        $patterns = [
-            '/([^\\\\])(["])(.*?)([^\\\\])(["])/sim',
-            '/([^\\\\])([\'])(.*?)([^\\\\])([\'])/sim'
-        ];
-
         foreach ($patterns as $pattern) {
             if (preg_match_all($pattern, $phpBlock, $quoteMatches, PREG_SET_ORDER)) {
                 foreach ($quoteMatches as $quoteMatch) {

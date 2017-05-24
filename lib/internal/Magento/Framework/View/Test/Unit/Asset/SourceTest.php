@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,11 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,7 +34,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $varDir;
+    private $tmpDir;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -96,8 +98,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->chain);
 
-        $themeList = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Theme\ListInterface::class);
-        $themeList->expects($this->any())
+        $themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $themeProvider->expects($this->any())
             ->method('getThemeByFullPath')
             ->with('frontend/magento_theme')
             ->willReturn($this->theme);
@@ -112,14 +114,14 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $this->initFilesystem();
 
-        $this->object = new Source(
-            $this->filesystem,
-            $this->readFactory,
-            $this->preProcessorPool,
-            $this->viewFileResolution,
-            $themeList,
-            $this->chainFactory
-        );
+        $this->object = (new ObjectManager($this))->getObject(Source::class, [
+            'filesystem' => $this->filesystem,
+            'readFactory' => $this->readFactory,
+            'preProcessorPool' => $this->preProcessorPool,
+            'fallback' => $this->viewFileResolution,
+            'themeProvider' => $themeProvider,
+            'chainFactory' => $this->chainFactory
+        ]);
     }
 
     /**
@@ -160,18 +162,18 @@ class SourceTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->once())
                 ->method('getTargetAssetPath')
                 ->willReturn($filePath);
-            $this->varDir->expects($this->once())
+            $this->tmpDir->expects($this->once())
                 ->method('writeFile')
-                ->with('view_preprocessed/source/some/file.ext', 'processed');
-            $this->varDir->expects($this->once())
+                ->with('some/file.ext', 'processed');
+            $this->tmpDir->expects($this->once())
                 ->method('getAbsolutePath')
-                ->willReturn('var');
+                ->willReturn('view_preprocessed');
             $read->expects($this->once())
                 ->method('getAbsolutePath')
-                ->with('view_preprocessed/source/some/file.ext')
+                ->with('some/file.ext')
                 ->willReturn('result');
         } else {
-            $this->varDir->expects($this->never())->method('writeFile');
+            $this->tmpDir->expects($this->never())->method('writeFile');
             $read->expects($this->at(1))
                 ->method('getAbsolutePath')
                 ->with('file.ext')
@@ -235,12 +237,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->staticDirRead = $this->getMockForAbstractClass(
             \Magento\Framework\Filesystem\Directory\ReadInterface::class
         );
-        $this->varDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $this->tmpDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
 
         $readDirMap = [
             [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirRead],
             [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->staticDirRead],
-            [DirectoryList::VAR_DIR, DriverPool::FILE, $this->varDir],
+            [DirectoryList::TMP_MATERIALIZATION_DIR, DriverPool::FILE, $this->tmpDir],
         ];
 
         $this->filesystem->expects($this->any())
@@ -248,8 +250,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($readDirMap);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
-            ->willReturn($this->varDir);
+            ->with(DirectoryList::TMP_MATERIALIZATION_DIR)
+            ->willReturn($this->tmpDir);
     }
 
     /**

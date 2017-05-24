@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Order creditmemo model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
@@ -532,11 +533,24 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function isLast()
     {
-        foreach ($this->getAllItems() as $item) {
+        $items = $this->getAllItems();
+        foreach ($items as $item) {
             if (!$item->isLast()) {
                 return false;
             }
         }
+
+        if (empty($items)) {
+            $order = $this->getOrder();
+            if ($order) {
+                foreach ($order->getItems() as $orderItem) {
+                    if ($orderItem->canRefund()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         return true;
     }
 
@@ -653,6 +667,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns discount_description
      *
@@ -1510,5 +1525,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

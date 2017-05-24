@@ -1,29 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Template model
- *
- * Example:
- *
- * // Loading of template
- * \Magento\Email\Model\TemplateFactory $templateFactory
- * $templateFactory->create()->load($this->_scopeConfig->getValue(
- *  'path_to_email_template_id_config',
- *  \Magento\Store\Model\ScopeInterface::SCOPE_STORE
- *  ));
- * $variables = array(
- *    'someObject' => $this->_coreResourceEmailTemplate
- *    'someString' => 'Some string value'
- * );
- * $emailTemplate->send('some@domain.com', 'Name Of User', $variables);
  *
  * @method \Magento\Email\Model\ResourceModel\Template _getResource()
  * @method \Magento\Email\Model\ResourceModel\Template getResource()
@@ -50,6 +35,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method string getOrigTemplateVariables()
  * @method \Magento\Email\Model\Template setOrigTemplateVariables(string $value)
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template extends AbstractTemplate implements \Magento\Framework\Mail\TemplateInterface
@@ -63,6 +50,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
 
     /**
      * Config path to mail sending setting that shows if email communications are disabled
+     * @deprecated
+     * @see \Magento\Email\Model\Mail\TransportInterfacePlugin::XML_PATH_SYSTEM_SMTP_DISABLE
      */
     const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
@@ -105,7 +94,12 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     private $filterFactory;
 
     /**
-     * Initialize dependencies.
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Template constructor.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
@@ -121,6 +115,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param Template\FilterFactory $filterFactory
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -138,9 +134,12 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->filterFactory = $filterFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $context,
             $design,
@@ -196,8 +195,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(Template::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
-            && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
+        return $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
     /**
@@ -303,7 +301,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $variables = [];
         if ($variablesString && is_string($variablesString)) {
             $variablesString = str_replace("\n", '', $variablesString);
-            $variables = \Zend_Json::decode($variablesString);
+            $variables = $this->serializer->unserialize($variablesString);
         }
         return $variables;
     }
@@ -344,7 +342,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         if ($this->_getResource()->checkCodeUsage($this)) {
             throw new \Magento\Framework\Exception\MailException(__('Duplicate Of Template Name'));
         }
-        return parent::beforeSave();
+        parent::beforeSave();
+        return $this;
     }
 
     /**

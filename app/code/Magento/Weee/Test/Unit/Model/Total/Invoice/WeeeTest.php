@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\Total\Invoice;
+
+use Magento\Framework\Serialize\Serializer\Json;
 
 class WeeeTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,11 +53,13 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $serializer = $this->getMock(Json::class, null);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
         $this->model = $this->objectManager->getObject(
             \Magento\Weee\Model\Total\Invoice\Weee::class,
             [
                 'weeeData' => $this->weeeData,
+                'serializer' => $serializer
             ]
         );
 
@@ -151,9 +155,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             $invoiceItem = $invoiceItems[$itemKey];
             foreach ($itemData as $key => $value) {
                 if ($key == 'tax_ratio') {
-                    $taxRatio = unserialize($invoiceItem->getData($key));
-                    $expectedTaxRatio = unserialize($itemData[$key]);
-                    $this->assertEquals($expectedTaxRatio['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
+                    $taxRatio = json_decode($invoiceItem->getData($key), true);
+                    $this->assertEquals($value['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
                 } else {
                     $this->assertEquals(
                         $value,
@@ -258,7 +261,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         ],
                         'weee_tax_applied_row_amount' => 30,
                         'base_weee_tax_applied_row_amount' => 30,
-                        'tax_ratio' => serialize(['weee' => 1.0]),
+                        'tax_ratio' => ["weee" => 1.0],
                     ],
                 ],
                 'invoice_data' => [
@@ -357,7 +360,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount_incl_tax' => 21.65,
                             ],
                         ],
-                        'tax_ratio' => serialize(['weee' => 1.65 / 2.47]),
+                        'tax_ratio' => ['weee' => 1.65 / 2.47],
                         'weee_tax_applied_row_amount' => 20,
                         'base_weee_tax_applied_row_amount' => 20,
                     ],
@@ -459,7 +462,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount_incl_tax' => 10.82,
                             ],
                         ],
-                        'tax_ratio' => serialize(['weee' => 0.82 / 2.47]),
+                        'tax_ratio' => ['weee' => 0.82 / 2.47],
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
                     ],
@@ -561,7 +564,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount_incl_tax' => 10.82,
                             ],
                         ],
-                        'tax_ratio' => serialize(['weee' => 0.83 / 2.47]),
+                        'tax_ratio' => ['weee' => 0.83 / 2.47],
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
 

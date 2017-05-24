@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Customer\PayPal;
@@ -13,6 +13,8 @@ use Magento\Vault\Block\AbstractTokenRenderer;
 
 /**
  * Class VaultTokenRenderer
+ *
+ * @api
  */
 class VaultTokenRenderer extends AbstractTokenRenderer
 {
@@ -21,6 +23,13 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      */
     private $config;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param Template\Context $context
+     * @param Config $config
+     * @param array $data
+     */
     public function __construct(
         Template\Context $context,
         Config $config,

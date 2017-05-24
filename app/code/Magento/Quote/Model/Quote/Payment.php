@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 /**
  * Quote payment information
  *
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Payment _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Payment getResource()
  * @method int getQuoteId()
@@ -32,8 +33,6 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartYear(int $value)
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
@@ -61,6 +60,21 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     protected $methodSpecificationFactory;
 
     /**
+     * @var array
+     */
+    private $additionalChecks;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * @var \Magento\Framework\Serialize\JsonValidator
+     */
+    private $jsonValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -71,6 +85,9 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param array $additionalChecks
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Framework\Serialize\JsonValidator|null $jsonValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -83,9 +100,17 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        array $additionalChecks = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Framework\Serialize\JsonValidator $jsonValidator = null
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
+        $this->additionalChecks = $additionalChecks;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->jsonValidator = $jsonValidator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\JsonValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -162,7 +187,8 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
          */
         $quote->collectTotals();
 
-        $methodSpecification = $this->methodSpecificationFactory->create($data->getChecks());
+        $checks = array_merge($data->getChecks(), $this->additionalChecks);
+        $methodSpecification = $this->methodSpecificationFactory->create($checks);
         if (!$method->isAvailable($quote) || !$methodSpecification->isApplicable($method, $quote)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The requested Payment Method is not available.')
@@ -316,13 +342,14 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     public function getAdditionalData()
     {
         $additionalDataValue = $this->getData(self::KEY_ADDITIONAL_DATA);
-        if (is_string($additionalDataValue)) {
-            $additionalData = @unserialize($additionalDataValue);
+        if (is_array($additionalDataValue)) {
+            return $additionalDataValue;
+        }
+        if (is_string($additionalDataValue) && $this->jsonValidator->isValid($additionalDataValue)) {
+            $additionalData = $this->serializer->unserialize($additionalDataValue);
             if (is_array($additionalData)) {
                 return $additionalData;
             }
-        } elseif (is_array($additionalDataValue)) {
-            return $additionalDataValue;
         }
         return null;
     }
@@ -337,6 +364,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
     {
         return $this->setData(self::KEY_ADDITIONAL_DATA, $additionalData);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

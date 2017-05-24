@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class LockerProcess
@@ -59,7 +59,6 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @inheritdoc
-     * @throws FileSystemException
      */
     public function lockProcess($lockName)
     {
@@ -84,7 +83,7 @@ class LockerProcess implements LockerProcessInterface
     public function unlockProcess()
     {
         if ($this->getState()->getMode() == State::MODE_PRODUCTION) {
-            return ;
+            return;
         }
 
         $this->tmpDirectory->delete($this->lockFilePath);
@@ -94,15 +93,18 @@ class LockerProcess implements LockerProcessInterface
      * Check whether generation process has already locked
      *
      * @return bool
-     * @throws FileSystemException
      */
     private function isProcessLocked()
     {
         if ($this->tmpDirectory->isExist($this->lockFilePath)) {
-            $lockTime = (int) $this->tmpDirectory->readFile($this->lockFilePath);
-            if ((time() - $lockTime) >= self::MAX_LOCK_TIME) {
-                $this->tmpDirectory->delete($this->lockFilePath);
+            try {
+                $lockTime = (int)$this->tmpDirectory->readFile($this->lockFilePath);
+                if ((time() - $lockTime) >= self::MAX_LOCK_TIME) {
+                    $this->tmpDirectory->delete($this->lockFilePath);
 
+                    return false;
+                }
+            } catch (FileSystemException $e) {
                 return false;
             }
 

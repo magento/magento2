@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
@@ -8,6 +8,8 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Api\CreditmemoManagementInterface;
+use Magento\Sales\Model\Order\Creditmemo;
 
 /**
  * Class PaymentTest
@@ -19,7 +21,15 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 {
     const TRANSACTION_ID = 'ewr34fM49V0';
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $mockContext;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $orderStateResolverMock;
 
     /**
      * @var Payment
@@ -59,6 +69,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Invoice | \PHPUnit_Framework_MockObject_MockObject $orderMock */
     private $invoiceMock;
 
+    /**
+     * @var string
+     */
     private $transactionId;
 
     /**
@@ -101,6 +114,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\OrderRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderRepository;
+
+    /**
+     * @var CreditmemoManagementInterface
+     */
+    private $creditmemoManagerMock;
 
     /**
      * @return void
@@ -258,27 +276,37 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->creditMemoMock = $this->getMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            [
-                'setPaymentRefundDisallowed',
-                'getItemsCollection',
-                'getItems',
-                'setAutomaticallyCreated',
-                'register',
-                'addComment',
-                'save',
-                'getGrandTotal',
-                'getBaseGrandTotal',
-                'getDoTransaction',
-                'getInvoice'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->orderStateResolverMock = $this->getMockBuilder(Order\OrderStateResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->creditMemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setPaymentRefundDisallowed',
+                    'getItemsCollection',
+                    'getItems',
+                    'setAutomaticallyCreated',
+                    'register',
+                    'addComment',
+                    'save',
+                    'getGrandTotal',
+                    'getBaseGrandTotal',
+                    'getDoTransaction',
+                    'getInvoice',
+                    'getOrder',
+                    'getPaymentRefundDisallowed'
+                ]
+            )
+            ->getMock();
+
+        $this->creditmemoManagerMock = $this->getMockBuilder(CreditmemoManagementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->payment = $this->initPayment();
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper->setBackwardCompatibleProperty($this->payment, 'orderStateResolver', $this->orderStateResolverMock);
         $this->payment->setMethod('any');
         $this->payment->setOrder($this->orderMock);
         $this->transactionId = self::TRANSACTION_ID;
@@ -1346,7 +1374,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects($this->once())->method('setPaymentRefundDisallowed')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('setAutomaticallyCreated')->willReturnSelf();
         $this->creditMemoMock->expects($this->once())->method('addComment')->willReturnSelf();
-        $this->creditMemoMock->expects($this->once())->method('save')->willReturnSelf();
+
+        $this->creditmemoManagerMock->expects($this->once())
+            ->method('refund')
+            ->with($this->creditMemoMock, false)
+            ->willReturn($this->creditMemoMock);
+
         $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
 
         $parentTransaction = $this->getMock(
@@ -1465,6 +1498,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->creditMemoMock->expects(static::once())
             ->method('getInvoice')
             ->willReturn($this->invoiceMock);
+        $this->creditMemoMock->expects(static::once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
 
         $captureTranId = self::TRANSACTION_ID . '-' . Transaction::TYPE_CAPTURE;
         $captureTransaction = $this->getMockBuilder(Transaction::class)
@@ -1499,7 +1535,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $status = 'status';
         $message = 'We refunded ' . $amount . ' online. Transaction ID: "' . $refundTranId . '"';
-        $this->mockGetDefaultStatus(Order::STATE_PROCESSING, $status);
+        $this->orderStateResolverMock->expects($this->once())->method('getStateForOrder')
+            ->with($this->orderMock)
+            ->willReturn(Order::STATE_CLOSED);
+        $this->mockGetDefaultStatus(Order::STATE_CLOSED, $status);
         $this->assertOrderUpdated(Order::STATE_PROCESSING, $status, $message);
 
         static::assertSame($this->payment, $this->payment->refund($this->creditMemoMock));
@@ -1526,7 +1565,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $partialAmount = 12.00;
 
         $this->orderMock->expects(static::exactly(2))
-            ->method('getTotalDue')
+            ->method('getBaseTotalDue')
             ->willReturn($amount);
 
         static::assertFalse($this->payment->isCaptureFinal($partialAmount));
@@ -1559,7 +1598,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'transactionManager' => $this->transactionManagerMock,
                 'transactionBuilder' => $this->transactionBuilderMock,
                 'paymentProcessor' => $this->paymentProcessor,
-                'orderRepository' => $this->orderRepository
+                'orderRepository' => $this->orderRepository,
+                'creditmemoManager' => $this->creditmemoManagerMock
             ]
         );
     }

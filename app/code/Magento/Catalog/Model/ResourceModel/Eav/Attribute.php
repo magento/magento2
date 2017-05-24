@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Catalog attribute model
  *
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Attribute _getResource()
  * @method \Magento\Catalog\Model\ResourceModel\Attribute getResource()
  * @method \Magento\Catalog\Model\ResourceModel\Eav\Attribute getFrontendInputRenderer()
@@ -32,7 +33,8 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
-    \Magento\Catalog\Api\Data\ProductAttributeInterface, \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
+    \Magento\Catalog\Api\Data\ProductAttributeInterface,
+    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
     const MODULE_NAME = 'Magento_Catalog';
 
@@ -351,14 +353,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function getApplyTo()
     {
-        if ($this->getData(self::APPLY_TO)) {
-            if (is_array($this->getData(self::APPLY_TO))) {
-                return $this->getData(self::APPLY_TO);
-            }
-            return explode(',', $this->getData(self::APPLY_TO));
-        } else {
-            return [];
+        $applyTo = $this->_getData(self::APPLY_TO) ?: [];
+        if (!is_array($applyTo)) {
+            $applyTo = explode(',', $applyTo);
         }
+        return $applyTo;
     }
 
     /**
@@ -419,6 +418,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         // exclude price attribute
         if ($this->getAttributeCode() == 'price') {
             return false;
+        }
+        if ($this->getAttributeCode() == 'visibility') {
+            return true;
         }
 
         if (!$this->getIsFilterableInSearch() && !$this->getIsVisibleInAdvancedSearch() && !$this->getIsFilterable()) {
@@ -617,6 +619,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     {
         return $this->getData(self::IS_VISIBLE);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

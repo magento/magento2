@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Newsletter\Test\TestCase\PreviewNewsletterTemplateEntityTest" summary="Newsletter Template Preview" ticketId="MAGETWO-51979">
         <variation name="PreviewNewsletterTemplateEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="newsletter/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterPreview" />
         </variation>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Controller\Adminhtml\Widget;
@@ -140,7 +140,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $widgetType = 'Magento\SomeWidget';
-        $conditionsEncoded = 'a:3:{s:5:"value";i:1;s:8:"operator";s:2:"==";s:9:"attribute";s:2:"id";}';
+        $conditionsEncoded = 'encoded conditions';
         $conditionsDecoded = [
             'value' => 1,
             'operator' => '==',

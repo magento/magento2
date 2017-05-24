@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
-
-use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule
      */
@@ -60,7 +62,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->rule = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -117,7 +119,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
+        $associatedEntitiesMap = $this->getMock(
+            \Magento\Framework\DataObject::class,
+            ['getData'],
+            [],
+            '',
+            false
+        );
         $associatedEntitiesMap->expects($this->once())
             ->method('getData')
             ->willReturn(
@@ -135,19 +143,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->prepareObjectManager([
-            [
-                \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class,
-                $associatedEntitiesMap
-            ],
-        ]);
-
-        $this->model = $objectManager->getObject(
+        $this->model = $this->objectManager->getObject(
             \Magento\SalesRule\Model\ResourceModel\Rule::class,
             [
                 'context' => $context,
                 'connectionName' => $connectionName,
                 'entityManager' => $this->entityManager,
+                'associatedEntityMapInstance' => $associatedEntitiesMap
             ]
         );
     }
@@ -186,18 +188,60 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $map
+     * Check that can parse JSON string correctly.
+     *
+     * @param string $testString
+     * @param array $expects
+     * @dataProvider dataProviderForProductAttributes
      */
-    private function prepareObjectManager($map)
+    public function testGetProductAttributes($testString, $expects)
     {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
+        $result = $this->model->getProductAttributes($testString);
+        $this->assertEquals($expects, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForProductAttributes()
+    {
+        return [
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                [
+                    'some_attribute',
+                ]
+            ],
+            [
+                json_encode([
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute',
+                    ],
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute2',
+                    ],
+                ]),
+                [
+                    'some_attribute',
+                    'some_attribute2',
+                ]
+            ],
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                []
+            ],
+            [
+                json_encode([]),
+                []
+            ],
+        ];
     }
 }

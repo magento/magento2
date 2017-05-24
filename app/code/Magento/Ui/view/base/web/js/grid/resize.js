@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'Magento_Ui/js/lib/view/utils/async',
     'ko',
@@ -86,8 +89,7 @@ define([
          * @returns {Object} Chainable
          */
         initTable: function (table) {
-            if ($(table).is(this.mainTableSelector))
-            {
+            if ($(table).is(this.mainTableSelector)) {
                 this.table = table;
                 this.tableWidth = $(table).outerWidth();
                 $(window).resize(this.checkAfterResize);
@@ -215,8 +217,7 @@ define([
          */
         initColumn: function (column) {
             var model = ko.dataFor(column),
-                ctxIndex = this.getCtxIndex(ko.contextFor(column)),
-                table = this.table;
+                ctxIndex = this.getCtxIndex(ko.contextFor(column));
 
             model.width = this.getDefaultWidth(column);
 
@@ -602,7 +603,7 @@ define([
          *
          * @param {Object} elem - cur column element
          * @param {Boolean} returned - need return column object or not
-         * @return {Boolean} if returned param is false, returned boolean falue, else return current object data
+         * @return {Boolean|Object} if returned param is false, returned boolean value, else return current object data
          */
         hasRow: function (elem, returned) {
             var i = 0,
@@ -610,10 +611,8 @@ define([
                 length = el.length;
 
             for (i; i < length; i++) {
-
                 if (this.maxRowsHeight()[i].elem === elem) {
-
-                    if (returned) {
+                    if (returned) {//eslint-disable-line max-depth
                         return this.maxRowsHeight()[i];
                     }
 
@@ -630,8 +629,7 @@ define([
          * @param {Object} ctx
          * @return {String}
          */
-        getCtxIndex: function (ctx)
-        {
+        getCtxIndex: function (ctx) {
             return ctx ? ctx.$parents.reduce(function (pv, cv) {
                 return (pv.index || pv) + (cv || {}).index;
             }) : ctx;

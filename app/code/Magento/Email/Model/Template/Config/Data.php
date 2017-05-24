@@ -1,22 +1,31 @@
 <?php
 /**
- * Email templates configuration data container. Provides email templates configuration data.
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
+/**
+ * Provides email templates configuration
+ */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
+     * Constructor
+     *
      * @param \Magento\Email\Model\Template\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Reader $reader,
-        \Magento\Framework\Config\CacheInterface $cache
+        \Magento\Framework\Config\CacheInterface $cache,
+        $cacheId = 'email_templates',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, 'email_templates');
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 }

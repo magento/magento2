@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Adminhtml\Stock;
@@ -18,6 +18,7 @@ use Magento\Catalog\Model\Product;
  * Catalog Inventory Stock Model for adminhtml area
  * @method \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Item extends \Magento\CatalogInventory\Model\Stock\Item implements IdentityInterface
 {
