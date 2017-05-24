@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Shipment\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Shipment\SenderInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Email notification sender for Shipment.
@@ -106,7 +107,7 @@ class EmailSender extends Sender implements SenderInterface
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
             ];
-            $transport = new \Magento\Framework\DataObject($transport);
+            $transport = new DataObject($transport);
 
             $this->eventManager->dispatch(
                 'email_shipment_set_template_vars_before',

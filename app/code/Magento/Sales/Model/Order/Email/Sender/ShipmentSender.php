@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class ShipmentSender
@@ -113,7 +114,7 @@ class ShipmentSender extends Sender
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
             ];
-            $transport = new \Magento\Framework\DataObject($transport);
+            $transport = new DataObject($transport);
 
             $this->eventManager->dispatch(
                 'email_shipment_set_template_vars_before',

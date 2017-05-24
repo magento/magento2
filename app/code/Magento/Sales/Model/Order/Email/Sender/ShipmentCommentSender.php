@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class ShipmentCommentSender
@@ -71,7 +72,7 @@ class ShipmentCommentSender extends NotifySender
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
         ];
-        $transport = new \Magento\Framework\DataObject($transport);
+        $transport = new DataObject($transport);
 
         $this->eventManager->dispatch(
             'email_shipment_comment_set_template_vars_before',
