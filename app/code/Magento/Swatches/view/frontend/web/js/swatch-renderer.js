@@ -657,7 +657,7 @@ define([
                 images;
 
             if (this.options.useAjax) {
-                this._debouncedLoadProductMedia()
+                this._debouncedLoadProductMedia();
             }  else {
                 images = this.options.jsonConfig.images[this.getProduct()];
 
