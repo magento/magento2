@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog image helper
@@ -127,21 +128,30 @@ class Image extends AbstractHelper
     protected $attributes = [];
 
     /**
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
+     */
+    private $viewAssetPlaceholderFactory;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\ConfigInterface $viewConfig
+        \Magento\Framework\View\ConfigInterface $viewConfig,
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
+        $this->viewAssetPlaceholderFactory = $placeholderFactory ?:
+            ObjectManager::getInstance()->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
     }
 
     /**
@@ -544,14 +554,16 @@ class Image extends AbstractHelper
     /**
      * @param null|string $placeholder
      * @return string
-     *
-     * @deprecated Returns only default placeholder.
-     * Does not take into account custom placeholders set in Configuration.
      */
     public function getDefaultPlaceholderUrl($placeholder = null)
     {
         try {
-            $url = $this->_assetRepo->getUrl($this->getPlaceholder($placeholder));
+            $imageAsset = $this->viewAssetPlaceholderFactory->create(
+                [
+                    'type' => $placeholder ?: $this->_getModel()->getDestinationSubdir(),
+                ]
+            );
+            $url = $imageAsset->getUrl();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $url = $this->_urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
