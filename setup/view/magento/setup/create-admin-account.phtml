@@ -162,10 +162,14 @@ $passwordWizard = sprintf(
                 ng-class="{'invalid': account.adminPassword.$invalid && account.submitted}"
                 required
                 check-Password
+                check-Email-Password
                 >
             <div class="error-container">
                 <span ng-show="account.adminPassword.$error.checkPassword">
                     Please enter a mix of at least 7 alpha-numeric characters.
+                </span>
+                <span ng-show="account.adminPassword.$error.checkEmailPasswordDifferent">
+                    Password cannot be the same as the user name.
                 </span>
                 <span ng-show="account.adminPassword.$error.required">
                     Please enter your new password.

@@ -44,20 +44,23 @@ angular.module('create-admin-account', ['ngStorage'])
         $scope.validateCredentials = function () {
             var data = {
                 'db': $localStorage.db,
-                'admin': $localStorage.admin,
+                'admin': $scope.admin,
                 'store': $localStorage.store,
                 'config': $localStorage.config
             };
-            $http.post('index.php/validate-admin-credentials', data)
-                .success(function (data) {
-                    $scope.validateCredentials.result = data;
-                    if ($scope.validateCredentials.result.success) {
-                        $scope.nextState();
-                    }
-                })
-                .error(function (data) {
-                    $scope.validateCredentials.failed = data;
-                });
+            $scope.validate();
+            if ($scope.valid) {
+                $http.post('index.php/validate-admin-credentials', data)
+                    .success(function (data) {
+                        $scope.validateCredentials.result = data;
+                        if ($scope.validateCredentials.result.success) {
+                            $scope.nextState();
+                        }
+                    })
+                    .error(function (data) {
+                        $scope.validateCredentials.failed = data;
+                    });
+            }
         };
 
         $scope.$on('nextState', function () {
@@ -77,7 +80,7 @@ angular.module('create-admin-account', ['ngStorage'])
                 $scope.$emit('validation-response', false);
                 $scope.account.submitted = true;
             }
-        }
+        };
 
         // Update 'submitted' flag
         $scope.$watch(function() { return $scope.account.$valid }, function(valid) {
@@ -99,6 +102,32 @@ angular.module('create-admin-account', ['ngStorage'])
                     return value;
                 };
                 
+                ctrl.$parsers.unshift(validator);
+                ctrl.$formatters.unshift(validator);
+            }
+        };
+    })
+    .directive('checkEmailPassword', function() {
+        return{
+            require: "ngModel",
+            link: function(scope, elm, attrs, ctrl){
+
+                var validator = function(value){
+                    var password = value,
+                        userName = scope.account.adminUsername.$viewValue;
+
+                    if (password) {
+                        password = password.toLowerCase();
+                    }
+                    if (userName) {
+                        userName = scope.account.adminUsername.$viewValue.toLowerCase();
+                    }
+
+                    ctrl.$setValidity('checkEmailPasswordDifferent', password !== userName);
+
+                    return value;
+                };
+
                 ctrl.$parsers.unshift(validator);
                 ctrl.$formatters.unshift(validator);
             }

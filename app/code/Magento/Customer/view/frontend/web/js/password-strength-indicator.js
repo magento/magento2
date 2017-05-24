@@ -19,7 +19,9 @@ define([
             cache: {},
             passwordSelector: '[type=password]',
             passwordStrengthMeterSelector: '[data-role=password-strength-meter]',
-            passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]'
+            passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]',
+            formSelector: 'form',
+            emailSelector: 'input[type="email"]'
         },
 
         /**
@@ -30,11 +32,14 @@ define([
             this.options.cache.input = $(this.options.passwordSelector, this.element);
             this.options.cache.meter = $(this.options.passwordStrengthMeterSelector, this.element);
             this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
+
+            // We need to look outside the module for backward compatibility, since someone can already use the module.
+            this.options.cache.email = $(this.options.formSelector).find(this.options.emailSelector);
             this._bind();
         },
 
         /**
-         * Event binding, will monitor scroll and resize events (resize events left for backward compat)
+         * Event binding, will monitor change, keyup and paste events.
          * @private
          */
         _bind: function () {
@@ -43,6 +48,14 @@ define([
                 'keyup': this._calculateStrength,
                 'paste': this._calculateStrength
             });
+
+            if (this.options.cache.email.length) {
+                this._on(this.options.cache.email, {
+                    'change': this._calculateStrength,
+                    'keyup': this._calculateStrength,
+                    'paste': this._calculateStrength
+                });
+            }
         },
 
         /**
@@ -52,7 +65,7 @@ define([
         _calculateStrength: function () {
             var password = this._getPassword(),
                 isEmpty = password.length === 0,
-                zxcvbnScore = zxcvbn(password).score,
+                zxcvbnScore,
                 displayScore,
                 isValid;
 
@@ -60,8 +73,17 @@ define([
             if (isEmpty) {
                 displayScore = 0;
             } else {
-                isValid  = $.validator.validateSingleElement(this.options.cache.input);
-                displayScore = isValid ? zxcvbnScore : 1;
+                this.options.cache.input.rules('add', {
+                    'password-not-equal-to-email': this.options.cache.email.val()
+                });
+
+                if (password.toLowerCase() === this.options.cache.email.val().toLowerCase()) {
+                    displayScore = 1;
+                } else {
+                    isValid = $.validator.validateSingleElement(this.options.cache.input);
+                    zxcvbnScore = zxcvbn(password).score;
+                    displayScore = isValid ? zxcvbnScore : 1;
+                }
             }
 
             // Update label
@@ -75,32 +97,32 @@ define([
          */
         _displayStrength: function (displayScore) {
             var strengthLabel = '',
-                className = 'password-';
+                className;
 
             switch (displayScore) {
                 case 0:
                     strengthLabel = $t('No Password');
-                    className += 'none';
+                    className = 'password-none';
                     break;
 
                 case 1:
                     strengthLabel = $t('Weak');
-                    className += 'weak';
+                    className = 'password-weak';
                     break;
 
                 case 2:
                     strengthLabel = $t('Medium');
-                    className += 'medium';
+                    className = 'password-medium';
                     break;
 
                 case 3:
                     strengthLabel = $t('Strong');
-                    className += 'strong';
+                    className = 'password-strong';
                     break;
 
                 case 4:
                     strengthLabel = $t('Very Strong');
-                    className += 'very-strong';
+                    className = 'password-very-strong';
                     break;
             }
 
