@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Model\Product\Visibility;
@@ -28,6 +25,7 @@ use Magento\Catalog\Model\Config as CatalogConfig;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
