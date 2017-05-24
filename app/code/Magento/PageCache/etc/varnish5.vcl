@@ -97,9 +97,15 @@ sub vcl_recv {
     set req.url = regsuball(req.url,"\?gclid=[^&]+&","?"); # strips when QS = "?gclid=AAA&foo=bar"
     set req.url = regsuball(req.url,"&gclid=[^&]+",""); # strips when QS = "?foo=bar&gclid=AAA" or QS = "?foo=bar&gclid=AAA&bar=baz"
 
-    # static files must not be cached by default
+    # Static files caching
     if (req.url ~ "^/(pub/)?(media|static)/.*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|html|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$") {
+        # Static files should not be cached by default
         return (pass);
+
+        # But if you use a few locales and don't use CDN you can enable caching static files by commenting previous line (#return (pass);) and uncommenting next 3 lines
+        #unset req.http.Https;
+        #unset req.http./* {{ ssl_offloaded_header }} */;
+        #unset req.http.Cookie;
     }
 
     return (hash);
