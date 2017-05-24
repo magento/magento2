@@ -49,9 +49,6 @@ class InitialConfigSource implements ConfigSourceInterface
     public function get($path = '')
     {
         $data = new DataObject($this->reader->load());
-        if ($path !== '' && $path !== null) {
-            $path = '/' . $path;
-        }
-        return $data->getData($this->configType . $path) ?: [];
+        return $data->getData($this->configType) ?: [];
     }
 }

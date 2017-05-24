@@ -16,6 +16,11 @@ namespace Magento\Store\Model\ResourceModel;
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var array
+     */
+    private $websitesCache;
+
+    /**
      * Define main table
      *
      * @return void
@@ -34,6 +39,20 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->_uniqueFields = [['field' => 'code', 'title' => __('Website with the same code')]];
         return $this;
+    }
+
+    /**
+     * Read information about all websites
+     *
+     * @return array
+     */
+    public function readAllWebsites()
+    {
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('store_website'));
+
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
