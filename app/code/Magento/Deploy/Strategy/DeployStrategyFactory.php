@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Strategy;
@@ -10,8 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract factory class for instances of @see \Magento\Deploy\Strategy\StrategyInterface
- *
- * @api
  */
 class DeployStrategyFactory
 {

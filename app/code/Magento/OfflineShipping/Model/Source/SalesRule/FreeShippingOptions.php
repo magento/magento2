@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Source\SalesRule;
@@ -8,6 +8,9 @@ namespace Magento\OfflineShipping\Model\Source\SalesRule;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\OfflineShipping\Model\SalesRule\Rule;
 
+/**
+ * @api
+ */
 class FreeShippingOptions implements OptionSourceInterface
 {
     /**

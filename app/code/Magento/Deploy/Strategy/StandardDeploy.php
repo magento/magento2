@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Strategy;
 
 use Magento\Deploy\Package\PackagePool;
-use Magento\Deploy\Process\Queue;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Process\Queue;
 
 /**
- * Class StandardDeploy
- *
- * @api
+ * Standard deployment strategy implementation
  */
 class StandardDeploy implements StrategyInterface
 {

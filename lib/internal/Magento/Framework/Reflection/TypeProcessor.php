@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
@@ -542,8 +542,8 @@ class TypeProcessor
      */
     public function getParamType(ParameterReflection $param)
     {
-        $type = $param->getType();
-        if ($param->getType() == 'null') {
+        $type = $param->detectType();
+        if ($type == 'null') {
             throw new \LogicException(sprintf(
                 '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
                 . ' First declared type should not be null. E.g. string|null',

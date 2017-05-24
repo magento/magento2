@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
 
 /**
  * Import history model
+ *
+ * @api
  *
  * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
  * @method \Magento\ImportExport\Model\ResourceModel\History getResource()

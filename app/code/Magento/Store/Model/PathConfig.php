@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -26,7 +26,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         StoreManagerInterface $storeManager
     ) {
-
         $this->scopeConfig = $scopeConfig;
         $this->urlSecurityInfo = $urlSecurityInfo;
         $this->storeManager = $storeManager;

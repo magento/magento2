@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting;
 
-use Magento\Ui\Test\Block\Adminhtml\Modal;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Subscription block.

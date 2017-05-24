@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Source;
@@ -9,11 +9,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Deploy\Package\PackageFileFactory;
 
 /**
- * Class Modules
- *
- * Provides files collected from all modules
- *
- * @api
+ * Collect files eligible for deployment from  modules
  */
 class Modules implements SourceInterface
 {

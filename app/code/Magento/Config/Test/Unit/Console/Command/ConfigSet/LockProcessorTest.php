@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
@@ -33,9 +31,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var DeploymentConfig
+     * @var PreparedValueFactory|Mock
      */
-    private $deploymentConfigMock;
+    private $preparedValueFactory;
 
     /**
      * @var DeploymentConfig\Writer|Mock
@@ -53,31 +51,16 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $configPathResolver;
 
     /**
-     * @var Structure|Mock
-     */
-    private $structureMock;
-
-    /**
      * @var Value|Mock
      */
     private $valueMock;
-
-    /**
-     * @var ValueFactory|Mock
-     */
-    private $valueFactoryMock;
-
-    /**
-     * @var Field|Mock
-     */
-    private $fieldMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+        $this->preparedValueFactory = $this->getMockBuilder(PreparedValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->deploymentConfigWriterMock = $this->getMockBuilder(DeploymentConfig\Writer::class)
@@ -89,37 +72,16 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->configPathResolver = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->setMethods(['validateBeforeSave', 'beforeSave', 'setValue', 'getValue', 'afterSave'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->structureMock->expects($this->any())
-            ->method('getElement')
-            ->willReturn($this->fieldMock);
-        $this->deploymentConfigMock->expects($this->any())
-            ->method('isAvailable')
-            ->willReturn(true);
-        $this->valueFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->valueMock);
-
         $this->model = new LockProcessor(
-            $this->deploymentConfigMock,
+            $this->preparedValueFactory,
             $this->deploymentConfigWriterMock,
             $this->arrayManagerMock,
-            $this->configPathResolver,
-            $this->structureMock,
-            $this->valueFactoryMock
+            $this->configPathResolver
         );
     }
 
@@ -134,11 +96,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($path, $value, $scope, $scopeCode)
     {
-        $this->fieldMock->expects($this->once())
-            ->method('hasBackendModel')
-            ->willReturn(true);
-        $this->fieldMock->expects($this->once())
-            ->method('getBackendModel')
+        $this->preparedValueFactory->expects($this->once())
+            ->method('create')
+            ->with($path, $value, $scope, $scopeCode)
             ->willReturn($this->valueMock);
         $this->configPathResolver->expects($this->once())
             ->method('resolve')
@@ -200,58 +160,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testProcessBackendModelNotExists()
-    {
-        $path = 'test/test/test';
-        $value = 'value';
-
-        $this->fieldMock->expects($this->once())
-            ->method('hasBackendModel')
-            ->willReturn(false);
-        $this->fieldMock->expects($this->never())
-            ->method('getBackendModel');
-        $this->configPathResolver->expects($this->once())
-            ->method('resolve')
-            ->willReturn('system/default/test/test/test');
-        $this->arrayManagerMock->expects($this->once())
-            ->method('set')
-            ->with('system/default/test/test/test', [], $value)
-            ->willReturn([
-                'system' => [
-                    'default' => [
-                        'test' => [
-                            'test' => [
-                                'test' => $value
-                            ]
-                        ]
-                    ]
-                ]
-            ]);
-        $this->valueMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($value);
-        $this->deploymentConfigWriterMock->expects($this->once())
-            ->method('saveConfig')
-            ->with(
-                [
-                    ConfigFilePool::APP_ENV => [
-                        'system' => [
-                            'default' => [
-                                'test' => [
-                                    'test' => [
-                                        'test' => $value
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-                false
-            );
-
-        $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
-    }
-
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Filesystem is not writable.
@@ -261,11 +169,8 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->fieldMock->expects($this->once())
-            ->method('hasBackendModel')
-            ->willReturn(true);
-        $this->fieldMock->expects($this->once())
-            ->method('getBackendModel')
+        $this->preparedValueFactory->expects($this->once())
+            ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
             ->method('getValue')
@@ -293,15 +198,12 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->fieldMock->expects($this->once())
-            ->method('hasBackendModel')
-            ->willReturn(true);
-        $this->fieldMock->expects($this->once())
-            ->method('getBackendModel')
-            ->willReturn($this->valueMock);
         $this->configPathResolver->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
+        $this->preparedValueFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->valueMock);
         $this->arrayManagerMock->expects($this->never())
             ->method('set');
         $this->valueMock->expects($this->never())

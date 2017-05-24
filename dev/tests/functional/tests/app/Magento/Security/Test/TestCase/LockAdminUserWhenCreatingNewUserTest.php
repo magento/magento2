@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\TestCase;
 
-use Magento\User\Test\Page\Adminhtml\UserEdit;
-use Magento\User\Test\Page\Adminhtml\UserIndex;
+use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\User\Test\Fixture\User;
-use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\User\Test\Page\Adminhtml\UserEdit;
+use Magento\User\Test\Page\Adminhtml\UserIndex;
 
 /**
  * Preconditions:

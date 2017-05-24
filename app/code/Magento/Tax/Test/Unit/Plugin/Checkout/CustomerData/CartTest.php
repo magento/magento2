@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Plugin\Checkout\CustomerData;
@@ -65,8 +65,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetSectionData()
     {
-        $input = ['items' =>
-            [
+        $input = ['items' => [
                 [
                     'item_id' => 1,
                     'product_price' => ''

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 class ImporterFactoryTest extends \PHPUnit_Framework_TestCase
 {

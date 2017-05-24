@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Phrase;
-use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\CustomAttributesDataInterface;
-use Magento\Framework\Api\SimpleDataObjectConverter;
-use Zend\Code\Reflection\ClassReflection;
+use Magento\Framework\Phrase;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Data object processor for array serialization using class reflection
+ *
+ * @api
  */
 class DataObjectProcessor
 {

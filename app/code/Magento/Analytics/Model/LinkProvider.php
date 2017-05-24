@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model;
 
 use Magento\Analytics\Api\Data\LinkInterfaceFactory;
 use Magento\Analytics\Api\LinkProviderInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\Webapi\Exception;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -75,7 +75,7 @@ class LinkProvider implements LinkProviderInterface
     {
         $fileInfo = $this->fileInfoManager->load();
         if (!$this->isFileReady($fileInfo)) {
-            throw new \Magento\Framework\Exception\NotFoundException(__('File is not ready yet.'));
+            throw new NoSuchEntityException(__('File is not ready yet.'));
         }
         return $this->linkFactory->create(
             [

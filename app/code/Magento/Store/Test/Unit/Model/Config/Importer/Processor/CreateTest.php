@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
-use Magento\Store\Model\GroupFactory;
-use Magento\Store\Model\Group;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreFactory;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\WebsiteFactory;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\Config\Importer\Processor\Create;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
+use Magento\Store\Model\Config\Importer\Processor\Create;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\GroupFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

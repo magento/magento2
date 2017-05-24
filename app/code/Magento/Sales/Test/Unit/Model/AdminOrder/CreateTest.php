@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,8 @@
 
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
-use Magento\Sales\Model\AdminOrder\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\AdminOrder\Product;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

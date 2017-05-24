@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Model\Config\Backend;
@@ -20,6 +20,11 @@ use Magento\Framework\Registry;
  */
 class Enabled extends Value
 {
+    /**
+     * Path to field subscription enabled into config structure.
+     */
+    const XML_ENABLED_CONFIG_STRUCTURE_PATH = 'analytics/general/enabled';
+
     /**
      * Service for processing of activation/deactivation MBI subscription.
      *

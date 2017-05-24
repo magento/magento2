@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Model\Cache\Type\Webapi;
-use Magento\Framework\Webapi\Authorization;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 
 /**
  * Abstract API schema generator.
@@ -75,22 +75,13 @@ abstract class AbstractSchemaGenerator
     }
 
     /**
-     * Retrieve a list of services visible to current user.
+     * Retrieve a list of all services.
      *
      * @return string[]
      */
     public function getListOfServices()
     {
-        $listOfAllowedServices = [];
-        foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
-            foreach ($service[ServiceMetadata::KEY_SERVICE_METHODS] as $method) {
-                if ($this->authorization->isAllowed($method[ServiceMetadata::KEY_ACL_RESOURCES])) {
-                    $listOfAllowedServices[] = $serviceName;
-                    break;
-                }
-            }
-        }
-        return $listOfAllowedServices;
+        return array_keys($this->serviceMetadata->getServicesConfig());
     }
 
     /**

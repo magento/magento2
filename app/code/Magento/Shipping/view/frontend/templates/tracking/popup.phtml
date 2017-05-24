@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ $results = $block->getTrackingInfo();
                     </div>
                     <?php if (is_object($track) && !empty($track->getProgressdetail())): ?>
                         <?php
-                            $block->addChild('shipping.tracking.progress.'. $counter, Template::class, [
+                            $block->addChild('shipping.tracking.progress.' . $counter, Template::class, [
                                 'track' => $track,
                                 'template' => 'Magento_Shipping::tracking/progress.phtml'
                             ]);

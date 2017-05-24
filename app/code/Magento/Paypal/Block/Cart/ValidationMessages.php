@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Cart;
@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * PayPal order review page validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
@@ -58,7 +60,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
         }
         return parent::_prepareLayout();
     }
-    
+
     /**
      * Add quote messages
      *

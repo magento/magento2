@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
@@ -56,11 +54,6 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-//        StringUtils $string,
-//        DateTime $dateTime,
-//        LoggerInterface $logger,
-//        SelectFactory $selectFactory,
-//        array $config = []
         $this->_mockAdapter = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['beginTransaction', 'getTransactionLevel'],
@@ -80,8 +73,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_mockAdapter->expects($this->any())
-             ->method('getTransactionLevel')
-             ->will($this->returnValue(1));
+            ->method('getTransactionLevel')
+            ->will($this->returnValue(1));
 
         $this->_adapter = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
@@ -471,7 +464,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         $connectionMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
+            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'],
+            [],
+            '',
+            false
         );
 
         $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));

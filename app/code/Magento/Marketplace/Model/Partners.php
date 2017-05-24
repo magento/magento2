@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Marketplace\Model;
@@ -9,6 +9,9 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Marketplace\Helper\Cache;
 use Magento\Backend\Model\UrlInterface;
 
+/**
+ * @api
+ */
 class Partners
 {
     /**

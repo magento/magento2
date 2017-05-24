@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
+namespace Magento\Widget\Block\Adminhtml;
 
 /**
  * WYSIWYG widget plugin main block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Widget\Block\Adminhtml;
-
 class Widget extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

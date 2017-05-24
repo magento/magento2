@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory;
-use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 
 /**
  * Class Context

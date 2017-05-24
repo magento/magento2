@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Setup;
@@ -8,25 +8,9 @@ namespace Magento\Store\Setup;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Store\Model\Group;
-use Magento\Store\Model\ResourceModel\Group\CollectionFactory as GroupCollectionFactory;
 
 class UpgradeData implements UpgradeDataInterface
 {
-    /**
-     * @var GroupCollectionFactory
-     */
-    private $groupCollectionFactory;
-
-    /**
-     * @param GroupCollectionFactory $groupCollectionFactory
-     */
-    public function __construct(
-        GroupCollectionFactory $groupCollectionFactory
-    ) {
-        $this->groupCollectionFactory = $groupCollectionFactory;
-    }
-
     /**
      * Upgrades data for a Store module.
      *
@@ -38,26 +22,31 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.1.0', '<')) {
-            $this->updateStoreGroupCodes();
+            $this->updateStoreGroupCodes($setup);
         }
     }
 
     /**
      * Update column 'code' in store_group table.
      *
+     * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function updateStoreGroupCodes()
+    private function updateStoreGroupCodes($setup)
     {
-        $collection = $this->groupCollectionFactory->create();
-        $collection->setLoadDefault(true);
+        $storeGroupTable = $setup->getTable('store_group');
+        $select = $setup->getConnection()->select()->from(
+            $storeGroupTable,
+            ['group_id', 'name']
+        );
+
+        $groupList = $setup->getConnection()->fetchPairs($select);
 
         $codes = [];
-        /** @var Group $group */
-        foreach ($collection as $group) {
-            $code = preg_replace('/[^a-zA-Z0-9-_\s]/', '', strtolower($group->getName()));
+        foreach ($groupList as $groupId => $groupName) {
+            $code = preg_replace('/\s+/', '_', $groupName);
+            $code = preg_replace('/[^a-z0-9-_]/', '', strtolower($code));
             $code = preg_replace('/^[^a-z]+/', '', $code);
-            $code = str_replace(' ', '_', $code);
 
             if (empty($code)) {
                 $code = 'store_group';
@@ -67,11 +56,13 @@ class UpgradeData implements UpgradeDataInterface
                 $codes[$code]++;
                 $code = $code . $codes[$code];
             }
-
             $codes[$code] = 1;
 
-            $group->setCode($code);
-            $group->save();
+            $setup->getConnection()->update(
+                $storeGroupTable,
+                ['code' => $code],
+                ['group_id = ?' => $groupId]
+            );
         }
     }
 }

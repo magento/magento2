@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Plugin;
@@ -12,7 +12,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Model\Product\Option as ProductOption;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Analytics\Model\FlagManager;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Framework\FlagManager;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
@@ -45,14 +46,14 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
     private $loggerMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $responseMock;
-
-    /**
      * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $flagManagerMock;
+
+    /**
+     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $responseResolverMock;
 
     protected function setUp()
     {
@@ -76,7 +77,7 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->responseMock =  $this->getMockBuilder(\Zend_Http_Response::class)
+        $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,7 +86,8 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
             $this->httpClientMock,
             $this->configMock,
             $this->loggerMock,
-            $this->flagManagerMock
+            $this->flagManagerMock,
+            $this->responseResolverMock
         );
     }
 
@@ -94,7 +96,6 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
         $url = "old.localhost.com";
         $configVal = "Config val";
         $token = "Secret token!";
-        $requestJson = sprintf('{"url":"%s","new-url":"%s","access-token":"%s"}', $url, $configVal, $token);
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);
@@ -117,13 +118,16 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
             ->with(
                 ZendClient::PUT,
                 $configVal,
-                $requestJson,
-                ['Content-Type: application/json']
-            )->willReturn($this->responseMock);
+                [
+                    'url' => $url,
+                    'new-url' => $configVal,
+                    'access-token' => $token
+                ]
+            )->willReturn(new \Zend_Http_Response(200, []));
 
-        $this->responseMock->expects($this->once())
-            ->method('getStatus')
-            ->willReturn(201);
+        $this->responseResolverMock->expects($this->once())
+            ->method('getResult')
+            ->willReturn(true);
 
         $this->assertTrue($this->updateCommand->execute());
     }

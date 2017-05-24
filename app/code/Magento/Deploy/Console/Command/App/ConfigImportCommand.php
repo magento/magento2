@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App;
@@ -8,10 +8,9 @@ namespace Magento\Deploy\Console\Command\App;
 use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
-use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
+use Magento\Deploy\Console\Command\App\ConfigImport\Processor;
 
 /**
  * Runs the process of importing configuration data from shared source to appropriate application sources
@@ -30,16 +29,16 @@ class ConfigImportCommand extends Command
     /**
      * Configuration importer.
      *
-     * @var Importer
+     * @var Processor
      */
-    private $importer;
+    private $processor;
 
     /**
-     * @param Importer $importer the configuration importer
+     * @param Processor $processor the configuration importer
      */
-    public function __construct(Importer $importer)
+    public function __construct(Processor $processor)
     {
-        $this->importer = $importer;
+        $this->processor = $processor;
 
         parent::__construct();
     }
@@ -61,7 +60,7 @@ class ConfigImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->importer->import($input, $output);
+            $this->processor->execute($input, $output);
         } catch (RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 

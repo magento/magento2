@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -163,7 +163,7 @@ class Mapper
             $indexBuilder
         );
 
-        $select->limit($request->getSize());
+        $select->limit($request->getSize(), $request->getFrom());
         $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }

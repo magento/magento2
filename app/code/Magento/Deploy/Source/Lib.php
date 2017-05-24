@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Source;
@@ -12,11 +12,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Deploy\Package\PackageFileFactory;
 
 /**
- * Class Lib
+ * Collect files eligible for deployment from library
  *
  * Provides files collected from web library
- *
- * @api
  */
 class Lib implements SourceInterface
 {

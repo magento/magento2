@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model\Plugin;
 
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Config\Model\Config\Backend\Baseurl;
+use Magento\Framework\FlagManager;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
@@ -117,7 +117,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
                 BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH,
                 '0 * * * *'
             );
-        
+
         $this->assertEquals(
             $this->configValueMock,
             $this->plugin->afterAfterSave($this->configValueMock, $this->configValueMock)

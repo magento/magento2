@@ -1,11 +1,7 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Product variations matrix block
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
@@ -15,6 +11,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
+ * Product variations matrix block
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Matrix extends \Magento\Backend\Block\Template

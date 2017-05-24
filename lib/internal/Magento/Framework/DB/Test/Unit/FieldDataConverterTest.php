@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit;
@@ -42,18 +42,23 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
     private $queryModifierMock;
 
     /**
+     * @var SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $selectFactoryMock;
+
+    /**
      * @var FieldDataConverter
      */
     private $fieldDataConverter;
 
     /**
-     * @var \Magento\Framework\DB\SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager
      */
-    private $selectFactoryMock;
+    private $objectManager;
 
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->connectionMock = $this->getMock(AdapterInterface::class);
         $this->queryGeneratorMock = $this->getMock(Generator::class, [], [], '', false);
         $this->dataConverterMock = $this->getMock(DataConverterInterface::class);
@@ -61,14 +66,13 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
         $this->queryModifierMock = $this->getMock(QueryModifierInterface::class);
         $this->selectFactoryMock = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $this->fieldDataConverter = $objectManager->getObject(
+        $this->fieldDataConverter = $this->objectManager->getObject(
             FieldDataConverter::class,
             [
                 'queryGenerator' => $this->queryGeneratorMock,
                 'dataConverter' => $this->dataConverterMock,
-                'selectFactory' => $this->selectFactoryMock
+                'selectFactory' => $this->selectFactoryMock,
             ]
         );
     }
@@ -85,12 +89,7 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
         $field = 'field';
         $where = $field . ' IS NOT NULL';
         $iterator = ['query 1'];
-        $rows = [
-            [
-                $identifier => 1,
-                $field => 'value'
-            ]
-        ];
+        $rows = [1 => 'value'];
         $convertedValue = 'converted value';
         $this->selectFactoryMock->expects($this->once())
             ->method('create')
@@ -115,19 +114,19 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
             ->with($identifier, $this->selectMock)
             ->willReturn($iterator);
         $this->connectionMock->expects($this->once())
-            ->method('fetchAll')
+            ->method('fetchPairs')
             ->with($iterator[0])
             ->willReturn($rows);
         $this->dataConverterMock->expects($this->once())
             ->method('convert')
-            ->with($rows[0][$field])
+            ->with($rows[1])
             ->willReturn($convertedValue);
         $this->connectionMock->expects($this->once())
             ->method('update')
             ->with(
                 $table,
                 [$field => $convertedValue],
-                [$identifier . ' = ?' => $rows[0][$identifier]]
+                [$identifier . ' IN (?)' => [1]]
             );
         $this->fieldDataConverter->convert(
             $this->connectionMock,
@@ -144,8 +143,122 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
     public function convertDataProvider()
     {
         return [
-            [false, 0],
+            [false, 0, ],
             [true, 1]
+        ];
+    }
+
+    /**
+     * @param null|int $envBatchSize
+     * @dataProvider convertBatchSizeFromEnvDataProvider
+     */
+    public function testConvertBatchSizeFromEnv($envBatchSize, $usedBatchSize)
+    {
+        $table = 'table';
+        $identifier = 'id';
+        $field = 'field';
+        $where = $field . ' IS NOT NULL';
+        $this->selectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->connectionMock)
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                $table,
+                [$identifier, $field]
+            )
+            ->willReturnSelf();
+        $this->selectMock->expects($this->once())
+            ->method('where')
+            ->with($where)
+            ->willReturnSelf();
+        $this->queryGeneratorMock->expects($this->once())
+            ->method('generate')
+            ->with($identifier, $this->selectMock, $usedBatchSize)
+            ->willReturn([]);
+        $fieldDataConverter = $this->objectManager->getObject(
+            FieldDataConverter::class,
+            [
+                'queryGenerator' => $this->queryGeneratorMock,
+                'dataConverter' => $this->dataConverterMock,
+                'selectFactory' => $this->selectFactoryMock,
+                'envBatchSize' => $envBatchSize
+            ]
+        );
+        $fieldDataConverter->convert(
+            $this->connectionMock,
+            $table,
+            $identifier,
+            $field
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function convertBatchSizeFromEnvDataProvider()
+    {
+        return [
+            [null, FieldDataConverter::DEFAULT_BATCH_SIZE],
+            [100000, 100000],
+        ];
+    }
+
+    /**
+     * @param string|int $batchSize
+     * @expectedException \InvalidArgumentException
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessage Invalid value for environment variable DATA_CONVERTER_BATCH_SIZE. Should be integer, >= 1 and < value of PHP_INT_MAX
+     * @codingStandardsIgnoreEnd
+     * @dataProvider convertBatchSizeFromEnvInvalidDataProvider
+     */
+    public function testConvertBatchSizeFromEnvInvalid($batchSize)
+    {
+        $table = 'table';
+        $identifier = 'id';
+        $field = 'field';
+        $where = $field . ' IS NOT NULL';
+        $this->selectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->connectionMock)
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                $table,
+                [$identifier, $field]
+            )
+            ->willReturnSelf();
+        $this->selectMock->expects($this->once())
+            ->method('where')
+            ->with($where)
+            ->willReturnSelf();
+        $fieldDataConverter = $this->objectManager->getObject(
+            FieldDataConverter::class,
+            [
+                'queryGenerator' => $this->queryGeneratorMock,
+                'dataConverter' => $this->dataConverterMock,
+                'selectFactory' => $this->selectFactoryMock,
+                'envBatchSize' => $batchSize
+            ]
+        );
+        $fieldDataConverter->convert(
+            $this->connectionMock,
+            $table,
+            $identifier,
+            $field
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function convertBatchSizeFromEnvInvalidDataProvider()
+    {
+        return [
+            ['value'],
+            [bcadd(PHP_INT_MAX, 1)],
         ];
     }
 }

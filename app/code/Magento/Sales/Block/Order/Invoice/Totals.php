@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
 use Magento\Sales\Model\Order;
 
+/**
+ * @api
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**

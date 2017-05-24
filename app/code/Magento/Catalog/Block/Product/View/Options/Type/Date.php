@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\View\Options\Type;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
 /**
  * Product options text type block
  *
- * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
  */
 class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -317,7 +317,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_///\\\\*]{3,}" />
+            <xs:pattern value="[a-zA-Z0-9_///\\*]{3,}" />
             <xs:minLength value="3" />
         </xs:restriction>
     </xs:simpleType>
@@ -395,7 +395,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_\\\\]{1,}" />
+            <xs:pattern value="[a-zA-Z0-9_\\]{1,}" />
             <xs:minLength value="3" />
         </xs:restriction>
     </xs:simpleType>
@@ -408,7 +408,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_\\\\]{1,}" />
+            <xs:pattern value="[a-zA-Z0-9_\\]{1,}" />
             <xs:minLength value="2" />
         </xs:restriction>
     </xs:simpleType>
@@ -433,7 +433,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}[_\\\\][A-Z]+[A-Z0-9a-z]{1,}" />
+            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}[_\\][A-Z]+[A-Z0-9a-z]{1,}" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -445,7 +445,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z0-9_\\\\:]+" />
+            <xs:pattern value="[A-Za-z0-9_\\:]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -473,14 +473,14 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_\\\\]+/[a-zA-Z0-9_\\\\]+/[a-zA-Z0-9_\\\\]+" />
+            <xs:pattern value="[a-zA-Z0-9_\\]+/[a-zA-Z0-9_\\]+/[a-zA-Z0-9_\\]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="typeUploadDirRestriction">
         <xs:restriction base="xs:string">
-            <xs:pattern value="([a-zA-Z0-9_\\\\]+/{0,1}){1,}" />
+            <xs:pattern value="([a-zA-Z0-9_\\]+/{0,1}){1,}" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="typeUploadDir">

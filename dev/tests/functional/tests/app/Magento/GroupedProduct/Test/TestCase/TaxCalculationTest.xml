@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest" summary="Apply Taxes for grouped products" ticketId="MAGETWO-60576">
         <variation name="TaxCalculationTestGroupedProduct">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="issue" xsi:type="string">MAGETWO-64832: "Order Total Excl. Tax" is not calculated(=0) on Shopping Cart and Checkout pages</data>
             <data name="product" xsi:type="string">groupedProduct::grouped_product_with_special_price</data>
             <data name="taxRule" xsi:type="string">us_full_tax_rule</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>

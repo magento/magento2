@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config\Processor;
@@ -9,9 +9,7 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Store\App\Config\Type\Scopes;
 
 /**
- * Fallback throguh different scopes and merge them
- *
- * @package Magento\Store\Model\Config\Processor
+ * Fallback through different scopes and merge them
  */
 class Fallback implements PostProcessorInterface
 {

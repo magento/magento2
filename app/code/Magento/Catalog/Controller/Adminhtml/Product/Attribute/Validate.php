@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -154,7 +154,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     private function checkUniqueOption(DataObject $response, array $options = null)
     {
-        if (is_array($options) && !$this->isUniqueAdminValues($options['value'], $options['delete'])) {
+        if (is_array($options)
+            && !empty($options['value'])
+            && !empty($options['delete'])
+            && !$this->isUniqueAdminValues($options['value'], $options['delete'])
+        ) {
             $this->setMessageToResponse($response, [__("The value of Admin must be unique.")]);
             $response->setError(true);
         }

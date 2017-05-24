@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -548,7 +548,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
         if (!function_exists('imagettfbbox')
-            || (getenv('TRAVIS') && getenv('TRAVIS_PHP_VERSION') == '5.6.29')
+            || (getenv('TRAVIS') && getenv('TRAVIS_PHP_VERSION') == '7.1')
         ) {
             $this->markTestSkipped('Workaround for problem with imagettfbbox() function on Travis');
         }

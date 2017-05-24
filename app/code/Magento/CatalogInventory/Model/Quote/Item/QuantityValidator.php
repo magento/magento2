@@ -2,23 +2,23 @@
 /**
  * Product inventory data validator
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
-use Magento\CatalogInventory\Model\Stock;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Helper\Data;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class QuantityValidator
+ * @api
  */
 class QuantityValidator
 {
@@ -71,18 +71,18 @@ class QuantityValidator
      */
     private function addErrorInfoToQuote($result, $quoteItem)
     {
-            $quoteItem->addErrorInfo(
-                'cataloginventory',
-                Data::ERROR_QTY,
-                $result->getMessage()
-            );
+        $quoteItem->addErrorInfo(
+            'cataloginventory',
+            Data::ERROR_QTY,
+            $result->getMessage()
+        );
 
-            $quoteItem->getQuote()->addErrorInfo(
-                $result->getQuoteMessageIndex(),
-                'cataloginventory',
-                Data::ERROR_QTY,
-                $result->getQuoteMessage()
-            );
+        $quoteItem->getQuote()->addErrorInfo(
+            $result->getQuoteMessageIndex(),
+            'cataloginventory',
+            Data::ERROR_QTY,
+            $result->getQuoteMessage()
+        );
     }
 
     /**
@@ -230,30 +230,31 @@ class QuantityValidator
         }
 
         $quote = $item->getQuote();
-        $quoteItems = $quote->getItemsCollection();
-        $canRemoveErrorFromQuote = true;
+        if ($quote->getHasError()) {
+            $quoteItems = $quote->getItemsCollection();
+            $canRemoveErrorFromQuote = true;
+            foreach ($quoteItems as $quoteItem) {
+                if ($quoteItem->getItemId() == $item->getItemId()) {
+                    continue;
+                }
 
-        foreach ($quoteItems as $quoteItem) {
-            if ($quoteItem->getItemId() == $item->getItemId()) {
-                continue;
-            }
+                $errorInfos = $quoteItem->getErrorInfos();
+                foreach ($errorInfos as $errorInfo) {
+                    if ($errorInfo['code'] == $code) {
+                        $canRemoveErrorFromQuote = false;
+                        break;
+                    }
+                }
 
-            $errorInfos = $quoteItem->getErrorInfos();
-            foreach ($errorInfos as $errorInfo) {
-                if ($errorInfo['code'] == $code) {
-                    $canRemoveErrorFromQuote = false;
+                if (!$canRemoveErrorFromQuote) {
                     break;
                 }
             }
 
-            if (!$canRemoveErrorFromQuote) {
-                break;
+            if ($canRemoveErrorFromQuote) {
+                $params = ['origin' => 'cataloginventory', 'code' => $code];
+                $quote->removeErrorInfosByParams(null, $params);
             }
-        }
-
-        if ($quote->getHasError() && $canRemoveErrorFromQuote) {
-            $params = ['origin' => 'cataloginventory', 'code' => $code];
-            $quote->removeErrorInfosByParams(null, $params);
         }
     }
 }

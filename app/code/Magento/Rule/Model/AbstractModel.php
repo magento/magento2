@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model;
@@ -10,7 +10,9 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Abstract Rule entity data model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,10 @@
  */
 namespace Magento\Sales\Model\Config\Source\Order;
 
+/**
+ * Class Status
+ * @api
+ */
 class Status implements \Magento\Framework\Option\ArrayInterface
 {
     const UNDEFINED_OPTION_LABEL = '-- Please Select --';

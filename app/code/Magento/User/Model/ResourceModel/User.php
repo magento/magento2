@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,9 @@ use Magento\User\Model\User as ModelUser;
 
 /**
  * ACL user resource
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

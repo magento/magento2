@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,13 @@ class AddressModal extends Form
      * @var string
      */
     private $saveButton = '.action-save-address';
+
+    /**
+     * CSS Selector for Cancel button.
+     *
+     * @var string
+     */
+    private $cancelButton = '.action-hide-popup';
 
     /**
      * Selector for field's error message.
@@ -49,6 +56,16 @@ class AddressModal extends Form
     public function save()
     {
         $this->_rootElement->find($this->saveButton)->click();
+    }
+
+    /**
+     * Click on 'Cancel' button.
+     *
+     * @return void
+     */
+    public function cancel()
+    {
+        $this->_rootElement->find($this->cancelButton)->click();
     }
 
     /**

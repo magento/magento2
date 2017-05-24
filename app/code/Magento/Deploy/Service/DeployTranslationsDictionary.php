@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Service;
@@ -10,9 +10,7 @@ use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Psr\Log\LoggerInterface;
 
 /**
- * Service to deploy translations dictionary file for JavaScript
- *
- * @api
+ * Deploy translation dictionaries service
  */
 class DeployTranslationsDictionary
 {
