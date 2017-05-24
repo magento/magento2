@@ -101,14 +101,6 @@
             </field>
         </dataset>
 
-        <dataset name="simple_order_backorders">
-            <field name="qty" xsi:type="string">3</field>
-            <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">560</item>
-                <item name="subtotal" xsi:type="string">1680</item>
-            </field>
-        </dataset>
-
         <dataset name="simple_two_products">
             <field name="qty" xsi:type="string">2</field>
             <field name="cartItem" xsi:type="array">
