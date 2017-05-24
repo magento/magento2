@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
+// @codingStandardsIgnoreFile
+
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
