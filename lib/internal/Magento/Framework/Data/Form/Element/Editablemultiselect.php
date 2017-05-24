@@ -13,8 +13,35 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\Escaper;
+
 class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multiselect
 {
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Editablemultiselect constructor.
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
+    public function __construct(
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+    }
+
     /**
      * Name of the default JavaScript class that is used to make multiselect editable
      *
@@ -41,7 +68,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
             $elementJsClass = $this->getData('element_js_class');
         }
 
-        $selectConfigJson = \Zend_Json::encode($selectConfig);
+        $selectConfigJson = $this->serializer->serialize($selectConfig);
         $jsObjectName = $this->getJsObjectName();
 
         // TODO: TaxRateEditableMultiselect should be moved to a static .js module.
