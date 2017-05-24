@@ -3,30 +3,29 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/**
- * @var Magento\Catalog\Api\ProductRepositoryInterface $productRepository
- */
+/** @var $quote \Magento\Quote\Model\Quote */
+$quote = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
+$quote->load('test01', 'reserved_order_id');
+if ($quote->getId()) {
+    $quote->delete();
+}
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
-    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+    ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
 try {
     $product = $productRepository->get('simple', false, null, true);
     $productRepository->delete($product);
-} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-    //Product already removed
-}
-
-try {
-    $customDesignProduct = $productRepository->get('custom-design-simple-product', false, null, true);
-    $productRepository->delete($customDesignProduct);
-} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
 }
 
