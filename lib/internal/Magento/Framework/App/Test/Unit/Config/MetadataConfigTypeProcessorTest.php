@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-use Magento\Config\App\Config\Source\EnvironmentConfigSource;
 use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Data\ProcessorInterface;
 use Magento\Framework\App\Config\Initial;
@@ -36,9 +36,9 @@ class MetadataConfigTypeProcessorTest extends \PHPUnit_Framework_TestCase
     protected $_backendModelMock;
 
     /**
-     * @var EnvironmentConfigSource|MockObject
+     * @var ConfigSourceInterface|MockObject
      */
-    private $environmentConfigSourceMock;
+    private $configSourceMock;
 
     /**
      * @var ConfigPathResolver|MockObject
@@ -55,9 +55,8 @@ class MetadataConfigTypeProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->_backendModelMock= $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
-        $this->environmentConfigSourceMock = $this->getMockBuilder(EnvironmentConfigSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
+            ->getMockForAbstractClass();
         $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,7 +71,7 @@ class MetadataConfigTypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_model = new MetadataConfigTypeProcessor(
             $this->_modelPoolMock,
             $this->_initialConfigMock,
-            $this->environmentConfigSourceMock,
+            $this->configSourceMock,
             $this->configPathResolverMock
         );
     }
@@ -97,7 +96,7 @@ class MetadataConfigTypeProcessorTest extends \PHPUnit_Framework_TestCase
                 'websites/website_one/some/config/path2',
                 'websites/website_one/some/config/path3'
             );
-        $this->environmentConfigSourceMock->expects($this->exactly(6))
+        $this->configSourceMock->expects($this->exactly(6))
             ->method('get')
             ->withConsecutive(
                 ['default/some/config/path1'],

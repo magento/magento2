@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\App\Config;
 
-use Magento\Config\App\Config\Source\EnvironmentConfigSource;
 use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -25,11 +24,11 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     protected $_metadata = [];
 
     /**
-     * The environment configuration
+     * Source of configurations
      *
-     * @var EnvironmentConfigSource
+     * @var ConfigSourceInterface
      */
-    private $environmentConfigSource;
+    private $configSource;
 
     /**
      * The resolver for configuration paths
@@ -41,19 +40,19 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     /**
      * @param ProcessorFactory $processorFactory
      * @param Initial $initialConfig
-     * @param EnvironmentConfigSource $environmentConfigSource The environment configuration
+     * @param ConfigSourceInterface $configSource Source of configurations
      * @param ConfigPathResolver $configPathResolver The resolver for configuration paths
      */
     public function __construct(
         ProcessorFactory $processorFactory,
         Initial $initialConfig,
-        EnvironmentConfigSource $environmentConfigSource = null,
+        ConfigSourceInterface $configSource = null,
         ConfigPathResolver $configPathResolver = null
     ) {
         $this->_processorFactory = $processorFactory;
         $this->_metadata = $initialConfig->getMetadata();
-        $this->environmentConfigSource = $environmentConfigSource
-            ?: ObjectManager::getInstance()->get(EnvironmentConfigSource::class);
+        $this->configSource = $configSource
+            ?: ObjectManager::getInstance()->get(ConfigSourceInterface::class);
         $this->configPathResolver = $configPathResolver
             ?: ObjectManager::getInstance()->get(ConfigPathResolver::class);
     }
@@ -116,7 +115,7 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     ) {
         foreach ($this->_metadata as $path => $metadata) {
             $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode);
-            if (!empty($this->environmentConfigSource->get($configPath))) {
+            if (!empty($this->configSource->get($configPath))) {
                 continue;
             }
             /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */

@@ -31,13 +31,6 @@ class EnvironmentConfigSource implements ConfigSourceInterface
     private $placeholder;
 
     /**
-     * Variable for caching loaded environment config.
-     *
-     * @var DataObject
-     */
-    private $data;
-
-    /**
      * @param ArrayManager $arrayManager
      * @param PlaceholderFactory $placeholderFactory
      */
@@ -54,11 +47,8 @@ class EnvironmentConfigSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        if ($this->data === null) {
-            $this->data = new DataObject($this->loadConfig());
-        }
-
-        return $this->data->getData($path) ?: [];
+        $data = new DataObject($this->loadConfig());
+        return $data->getData($path) ?: [];
     }
 
     /**
