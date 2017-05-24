@@ -58,9 +58,9 @@ define([
          */
         validateAddressData: function (address) {
             if (checkoutConfig.activeCarriers.length === 0 && !utils.isEmpty(address['country_id'])) {
-
                 return true;
             }
+            
             return validators.some(function (validator) {
                 return validator.validate(address);
             });
