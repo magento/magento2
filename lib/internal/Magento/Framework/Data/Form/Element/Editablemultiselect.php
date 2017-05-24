@@ -29,6 +29,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      * @param Escaper $escaper
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Factory $factoryElement,
@@ -53,6 +54,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      * Retrieve HTML markup of the element
      *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getElementHtml()
     {

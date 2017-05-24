@@ -16,16 +16,25 @@ use Magento\Framework\Escaper;
 class Editor extends Textarea
 {
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Editor constructor.
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
@@ -36,6 +45,9 @@ class Editor extends Textarea
             $this->setType('textarea');
             $this->setExtType('textarea');
         }
+
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -55,6 +67,7 @@ class Editor extends Textarea
     /**
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \InvalidArgumentException
      */
     public function getElementHtml()
     {
@@ -141,7 +154,7 @@ class Editor extends Textarea
                 ' = new tinyMceWysiwygSetup("' .
                 $this->getHtmlId() .
                 '", ' .
-                \Zend_Json::encode(
+                $this->serializer->serialize(
                     $this->getConfig()
                 ) .
                 ');' .
@@ -180,7 +193,7 @@ class Editor extends Textarea
                     //<![CDATA[
                     require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
                         (function($) {
-                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
+                            $.mage.translate.add(' . $this->serializer->serialize($this->getButtonTranslations()) . ')
                         })(jQuery);
                     });
                     //]]>
@@ -425,7 +438,7 @@ class Editor extends Textarea
      * Translate string using defined helper
      *
      * @param string $string String to be translated
-     * @return \Magento\Framework\Phrase
+     * @return string
      */
     public function translate($string)
     {
