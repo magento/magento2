@@ -664,6 +664,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @var array
+     */
+    private $storeLabelsCache = [];
+
+    /**
      * Retrieve store labels by given attribute id
      *
      * @param int $attributeId
@@ -671,16 +676,19 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getStoreLabelsByAttributeId($attributeId)
     {
-        $connection = $this->getConnection();
-        $bind = [':attribute_id' => $attributeId];
-        $select = $connection->select()->from(
-            $this->getTable('eav_attribute_label'),
-            ['store_id', 'value']
-        )->where(
-            'attribute_id = :attribute_id'
-        );
+        if (!isset($this->storeLabelsCache[$attributeId])) {
+            $connection = $this->getConnection();
+            $bind = [':attribute_id' => $attributeId];
+            $select = $connection->select()->from(
+                $this->getTable('eav_attribute_label'),
+                ['store_id', 'value']
+            )->where(
+                'attribute_id = :attribute_id'
+            );
+            $this->storeLabelsCache[$attributeId] = $connection->fetchPairs($select, $bind);
+        }
 
-        return $connection->fetchPairs($select, $bind);
+        return $this->storeLabelsCache[$attributeId];
     }
 
     /**
