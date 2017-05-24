@@ -13,6 +13,9 @@ define([
             scopeConfig: {}
         },
 
+        initialize: function () {
+            this._super();
+        },
         /**
          * Takes website id from current customer data and compare it with current website id
          * If customer belongs to another scope, we need to invalidate current section
