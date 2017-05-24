@@ -9,7 +9,9 @@ interface FeedImporterInterface
 {
 
     /**
-     * @throws \Magento\Framework\Exception\FeedImporterException
+     * Returns FeedInterface object from a custom array
+     * 
+     * @throws \Magento\Framework\Exception\RuntimeException
      * @param  array  $data
      * @param  string $format
      * @return FeedInterface

@@ -8,6 +8,7 @@ namespace Magento\Rss\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\FeedImporterInterface;
 
 class Rss
 {
@@ -35,17 +36,17 @@ class Rss
      * Rss constructor
      *
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Framework\App\FeedImporterInterface $feedImporter
      * @param SerializerInterface|null $serializer
+     * @param FeedImporterInterface|null $feedImporter
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\FeedImporterInterface $feedImporter,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        FeedImporterInterface $feedImporter = null
     ) {
         $this->cache = $cache;
-        $this->feedImporter = $feedImporter;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->feedImporter = $feedImporter ?: ObjectManager::getInstance()->get(FeedImporterInterface::class);
     }
 
     /**

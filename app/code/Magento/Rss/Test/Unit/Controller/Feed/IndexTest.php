@@ -94,7 +94,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $rssModel = $this->getMock(\Magento\Rss\Model\Rss::class, ['setDataProvider', 'createRssXml'], [], '', false);
         $rssModel->expects($this->once())->method('setDataProvider')->will($this->returnSelf());
 
-        $exceptionMock = new \Magento\Framework\Exception\FeedImporterException(
+        $exceptionMock = new \Magento\Framework\Exception\RuntimeException(
             new \Magento\Framework\Phrase('Any message')
         );
 
@@ -106,7 +106,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->rssFactory->expects($this->once())->method('create')->will($this->returnValue($rssModel));
         $this->rssManager->expects($this->once())->method('getProvider')->will($this->returnValue($dataProvider));
 
-        $this->setExpectedException(\Magento\Framework\Exception\FeedImporterException::class);
+        $this->setExpectedException(\Magento\Framework\Exception\RuntimeException::class);
         $this->controller->execute();
     }
 }

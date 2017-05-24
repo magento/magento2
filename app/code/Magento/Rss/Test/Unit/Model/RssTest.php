@@ -19,7 +19,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $feedData = [
+    private $feedData = [
         'title' => 'Feed Title',
         'link' => 'http://magento.com/rss/link',
         'description' => 'Feed Description',
@@ -36,7 +36,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $feedXml = '<?xml version="1.0" encoding="UTF-8"?>
+    private $feedXml = '<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
     <title><![CDATA[Feed Title]]></title>
