@@ -130,8 +130,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
-                'type' => str_replace('external-', '', $image->getMediaType()),
-                'videoUrl' => $image->getVideoUrl(),
+                'type' => 'image',
+                'videoUrl' => null,
             ];
         }
         return json_encode($imagesItems);

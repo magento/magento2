@@ -112,6 +112,12 @@ define([
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
         videoData: null,
+        videoDataPlaceholder: [{
+            id: '',
+            isBase: true,
+            mediaType: 'image',
+            provider: ''
+        }],
 
         /**
          * Creates widget
@@ -131,6 +137,12 @@ define([
         _initialize: function () {
             if (!this.defaultVideoData.length) {
                 this.defaultVideoData = this.options.videoData;
+            }
+
+            // If product does not have images, no video data generated,
+            // but for configurable product we still need a video data, in case of 'prepend' gallery strategy.
+            if (!this.defaultVideoData.length && !this.options.videoData.length) {
+                this.defaultVideoData = this.options.videoData = this.videoDataPlaceholder;
             }
 
             this.clearEvents();
