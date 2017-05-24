@@ -57,6 +57,11 @@
             </filterSelect>
         </filters>
         <massaction name="listing_massaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
+                </item>
+            </argument>
             <action name="cancel">
                 <settings>
                     <url path="sales/order/massCancel"/>
