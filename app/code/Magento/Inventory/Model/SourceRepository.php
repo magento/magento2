@@ -12,13 +12,14 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Inventory\Model\SourceSearchResultsFactory;
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
 use Magento\Inventory\Model\Resource\Source\CollectionFactory;
 use Magento\Inventory\Model\SourceFactoryInterface;
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
@@ -34,7 +35,7 @@ class SourceRepository implements SourceRepositoryInterface
     private $resource;
 
     /**
-     * @var SourceFactoryInterface
+     * @var SourceInterfaceFactory
      */
     private $sourceFactory;
 
@@ -61,7 +62,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * SourceRepository constructor.
      * @param ResourceSource $resource
-     * @param SourceFactoryInterface $sourceFactory
+     * @param SourceInterfaceFactory $sourceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
      * @param SourceSearchResultsFactory $sourceSearchResultsFactory
@@ -69,7 +70,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function __construct(
         ResourceSource $resource,
-        SourceFactoryInterface $sourceFactory,
+        SourceInterfaceFactory $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $collectionFactory,
         SourceSearchResultsFactory $sourceSearchResultsFactory,
@@ -94,6 +95,8 @@ class SourceRepository implements SourceRepositoryInterface
             $this->logger->error($exception->getMessage());
             throw new CouldNotSaveException(__('Could not save source'));
         }
+
+        return $source;
     }
 
     /**
