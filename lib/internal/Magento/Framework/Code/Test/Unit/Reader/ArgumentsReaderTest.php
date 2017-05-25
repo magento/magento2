@@ -86,6 +86,20 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $actualResult);
     }
 
+    public function testGetConstructorArgumentsWhenInputTypeIsInterfaceWithParam()
+    {
+        $class = new \ReflectionClass('InterfaceTypeWithConstructorMethodAndParams');
+        $actualResult = $this->_model->getConstructorArguments($class);
+        $this->assertEquals([], $actualResult);
+    }
+
+    public function testGetConstructorArgumentsWhenInputTypeIsInterfaceWithoutParam()
+    {
+        $class = new \ReflectionClass('InterfaceTypeWithConstructorMethodWithoutParams');
+        $actualResult = $this->_model->getConstructorArguments($class);
+        $this->assertEquals([], $actualResult);
+    }
+
     public function testGetConstructorArgumentsClassWithoutOwnConstructorInheritedTrue()
     {
         $expectedResult = [

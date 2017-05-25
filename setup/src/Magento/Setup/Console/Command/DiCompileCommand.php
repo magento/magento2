@@ -227,6 +227,7 @@ class DiCompileCommand extends Command
 
         $excludedModulePaths = [
             '#^(?:' . join('|', $basePathsRegExps) . ')/Test#',
+            '#^(?:' . join('|', $basePathsRegExps) . ')/tests#',
         ];
         return $excludedModulePaths;
     }
@@ -241,6 +242,7 @@ class DiCompileCommand extends Command
     {
         $excludedLibraryPaths = [
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
+            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests#',
         ];
         return $excludedLibraryPaths;
     }
