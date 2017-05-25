@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -809,7 +809,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->_model->getSelectedAttributesInfo($productMock),
-            [['label' => 'attr_store_label', 'value' => '']]
+            [
+                [
+                    'label' => 'attr_store_label',
+                    'value' => '',
+                    'option_id' => 1,
+                    'option_value' => ''
+                ]
+            ]
         );
     }
 
