@@ -91,9 +91,16 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
     /**
      * Cart prices to compare.
      *
-     * @array cartPrice
+     * @var array
      */
     protected $cartPrice;
+
+    /**
+     * Login customer on frontend step.
+     *
+     * @var \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep
+     */
+    private $logInStep;
 
     /**
      * Implementation assert.
@@ -137,7 +144,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * @param int|null $isLoggedIn
      * @param array $shipping
      * @param array $cartPrice
-     * @param array $couponCode
+     * @param array $couponCodes
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -198,6 +205,10 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
             $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode($couponCode);
         }
         $this->assert();
+
+        if ($isLoggedIn) {
+            $this->logout();
+        }
     }
 
     /**
@@ -207,10 +218,23 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      */
     protected function login()
     {
-        $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+        $this->logInStep = $this->objectManager->create(
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
-        )->run();
+        );
+        $this->logInStep->run();
+    }
+
+    /**
+     * LogOut customer.
+     *
+     * @return void
+     */
+    protected function logout()
+    {
+        if ($this->logInStep) {
+            $this->logInStep->cleanup();
+        }
     }
 
     /**
