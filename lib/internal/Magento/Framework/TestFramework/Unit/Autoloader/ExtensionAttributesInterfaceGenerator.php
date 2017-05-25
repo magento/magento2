@@ -32,7 +32,7 @@ class ExtensionAttributesInterfaceGenerator implements GeneratorInterface
         }
         $interfaceGenerator = new InterfaceGenerator();
         $interfaceGenerator->setName($className)
-            ->setExtendedClass('\Magento\Framework\Api\ExtensionAttributesInterface');
+            ->setExtendedClass(\Magento\Framework\Api\ExtensionAttributesInterface::class);
         return $interfaceGenerator->generate();
     }
 
