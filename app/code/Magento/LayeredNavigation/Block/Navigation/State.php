@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Layered navigation state
- */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Layered navigation state
+ *
+ * @api
+ */
 class State extends \Magento\Framework\View\Element\Template
 {
     /**

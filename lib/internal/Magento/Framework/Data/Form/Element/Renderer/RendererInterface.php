@@ -11,6 +11,9 @@
  */
 namespace Magento\Framework\Data\Form\Element\Renderer;
 
+/**
+ * @api
+ */
 interface RendererInterface
 {
     /**

@@ -10,7 +10,7 @@
 namespace Magento\Cron\Observer;
 
 use Magento\Framework\App\State;
-use Magento\Framework\Console\CLI;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
 use \Magento\Cron\Model\Schedule;
 
@@ -188,7 +188,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                     ) == 1
                 )) {
                 $this->_shell->execute(
-                    $phpPath . ' %s cron:run --group=' . $groupId . ' --' . CLI::INPUT_KEY_BOOTSTRAP . '='
+                    $phpPath . ' %s cron:run --group=' . $groupId . ' --' . Cli::INPUT_KEY_BOOTSTRAP . '='
                     . self::STANDALONE_PROCESS_STARTED . '=1',
                     [
                         BP . '/bin/magento'

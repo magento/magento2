@@ -87,6 +87,37 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'catalog_category_product_index_replica'
             );
         }
+
+        if (version_compare($context->getVersion(), '2.2.2', '<')) {
+            $tables = [
+                'catalog_product_entity_tier_price',
+                'catalog_product_index_price_cfg_opt_agr_idx',
+                'catalog_product_index_price_cfg_opt_agr_tmp',
+                'catalog_product_index_price_cfg_opt_idx',
+                'catalog_product_index_price_cfg_opt_tmp',
+                'catalog_product_index_price_final_idx',
+                'catalog_product_index_price_final_tmp',
+                'catalog_product_index_price_idx',
+                'catalog_product_index_price_opt_agr_idx',
+                'catalog_product_index_price_opt_agr_tmp',
+                'catalog_product_index_price_opt_idx',
+                'catalog_product_index_price_opt_tmp',
+                'catalog_product_index_price_tmp',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'nullable' => false,
+                        'unsigned' => true,
+                        'default' => '0',
+                        'comment' => 'Customer Group ID',
+                    ]
+                );
+            }
+        }
         $setup->endSetup();
     }
 

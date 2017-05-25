@@ -15,6 +15,8 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Product search result block
+ *
+ * @api
  */
 class Result extends Template
 {

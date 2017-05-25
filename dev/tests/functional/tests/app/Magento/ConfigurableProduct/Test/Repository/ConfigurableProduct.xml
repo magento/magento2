@@ -531,6 +531,9 @@
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">configurable_one_option</item>
+            </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="dataset" xsi:type="string">default</item>

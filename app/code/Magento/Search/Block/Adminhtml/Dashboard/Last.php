@@ -7,6 +7,7 @@ namespace Magento\Search\Block\Adminhtml\Dashboard;
 
 /**
  * Dashboard last search keywords block
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Last extends \Magento\Backend\Block\Dashboard\Grid
