@@ -18,32 +18,32 @@ class SelectAttributesTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SelectAttributes
      */
-    protected $selectAttributes;
+    private $selectAttributes;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
      * @var Registry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $registryMock;
+    private $registryMock;
 
     /**
      * @var Button|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $buttonMock;
+    private $buttonMock;
 
     /**
      * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutMock;
+    private $layoutMock;
 
     /**
      * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlBuilderMock;
+    private $urlBuilderMock;
 
     /**
      * {@inheritDoc}
