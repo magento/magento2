@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class GetToken
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetToken extends AbstractExpress
 {
@@ -44,7 +45,7 @@ class GetToken extends AbstractExpress
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $_logger;
+    private $logger;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -68,7 +69,7 @@ class GetToken extends AbstractExpress
         \Magento\Customer\Model\Url $customerUrl,
         \Psr\Log\LoggerInterface $logger = null
     ) {
-        $this->_logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
         parent::__construct(
             $context,
             $customerSession,
@@ -79,8 +80,6 @@ class GetToken extends AbstractExpress
             $urlHelper,
             $customerUrl
         );
-        $parameters = ['params' => [$this->_configMethod]];
-        $this->_config = $this->_objectManager->create($this->_configType, $parameters);
     }
 
     /**
@@ -99,7 +98,7 @@ class GetToken extends AbstractExpress
             $this->_initToken($token);
             $controllerResult->setData(['url' => $url]);
         } catch (LocalizedException $exception) {
-            $this->_logger->critical($exception);
+            $this->logger->critical($exception);
             $controllerResult->setData([
                 'message' => [
                     'text' => $exception->getMessage(),
