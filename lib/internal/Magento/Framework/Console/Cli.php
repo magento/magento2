@@ -66,23 +66,33 @@ class Cli extends Console\Application
     /**
      * @param string $name the application name
      * @param string $version the application version
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
-        $configuration = require BP . '/setup/config/application.config.php';
-        $bootstrapApplication = new Application();
-        $application = $bootstrapApplication->bootstrap($configuration);
-        $this->serviceManager = $application->getServiceManager();
+        try {
+            $configuration = require BP . '/setup/config/application.config.php';
+            $bootstrapApplication = new Application();
+            $application = $bootstrapApplication->bootstrap($configuration);
+            $this->serviceManager = $application->getServiceManager();
 
-        $this->assertCompilerPreparation();
-        $this->initObjectManager();
-        $this->assertGenerationPermissions();
+            $this->assertCompilerPreparation();
+            $this->initObjectManager();
+            $this->assertGenerationPermissions();
 
-        if ($version == 'UNKNOWN') {
-            $directoryList = new DirectoryList(BP);
-            $composerJsonFinder = new ComposerJsonFinder($directoryList);
-            $productMetadata = new ProductMetadata($composerJsonFinder);
-            $version = $productMetadata->getVersion();
+            if ($version == 'UNKNOWN') {
+                $directoryList = new DirectoryList(BP);
+                $composerJsonFinder = new ComposerJsonFinder($directoryList);
+                $productMetadata = new ProductMetadata($composerJsonFinder);
+                $version = $productMetadata->getVersion();
+            }
+        } catch (\Exception $exception) {
+            $output = new Console\Output\ConsoleOutput();
+            $output->writeln(
+                '<error>' . $exception->getMessage() . '</error>'
+            );
+
+            exit(static::RETURN_FAILURE);
         }
 
         parent::__construct($name, $version);

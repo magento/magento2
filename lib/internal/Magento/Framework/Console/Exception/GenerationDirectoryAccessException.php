@@ -9,6 +9,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
 
+/**
+ * The default exception for missing write permissions on compilation generated folder.
+ */
 class GenerationDirectoryAccessException extends FileSystemException
 {
     /**
@@ -18,7 +21,7 @@ class GenerationDirectoryAccessException extends FileSystemException
     {
         $phrase = $phrase ?: new Phrase(
             'Command line user does not have read and write permissions on '
-            . $this->getDefaultDirectoryPath(DirectoryList::GENERATED_CODE) . ' directory. '
+            . $this->getDefaultDirectoryPath(DirectoryList::GENERATED) . ' directory. '
             . 'Please address this issue before using Magento command line.'
         );
 
