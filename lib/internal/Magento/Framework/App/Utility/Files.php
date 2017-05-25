@@ -1619,7 +1619,7 @@ class Files
     {
         $files = [];
         $setupAppPath = BP . '/setup';
-        if (file_exists($setupAppPath) && $flags & self::INCLUDE_SETUP) {
+        if ($flags & self::INCLUDE_SETUP && file_exists($setupAppPath)) {
             $regexIterator = $this->regexIteratorFactory->create(
                 $setupAppPath,
                 '/.*php$/'
