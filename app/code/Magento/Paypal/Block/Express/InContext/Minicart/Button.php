@@ -26,6 +26,8 @@ class Button extends Template implements ShortcutInterface
 
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
+    const LINK_DATA_ACTION = 'link_data_action';
+
     const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
 
     /**
@@ -130,6 +132,14 @@ class Button extends Template implements ShortcutInterface
     public function getContainerId()
     {
         return $this->getData(self::BUTTON_ELEMENT_INDEX);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkAction()
+    {
+        return $this->getData(self::LINK_DATA_ACTION);
     }
 
     /**

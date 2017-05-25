@@ -66,8 +66,8 @@ class SaveHandler implements ExtensionInterface
             $options = $bundleProductOptions ?: [];
             foreach ($options as $option) {
                 $this->optionRepository->save($entity, $option);
-                $entity->setCopyFromView(false);
             }
+            $entity->setCopyFromView(false);
         }
         return $entity;
     }

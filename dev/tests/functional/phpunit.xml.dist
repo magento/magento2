@@ -29,8 +29,8 @@
     </listeners>
 
     <php>
-        <env name="app_frontend_url" value="http://localhost/" />
-        <env name="app_backend_url" value="http://localhost/backend/" />
+        <env name="app_frontend_url" value="http://127.0.0.1/" />
+        <env name="app_backend_url" value="http://127.0.0.1/backend/" />
         <env name="testsuite_rule" value="basic" />
         <env name="testsuite_rule_path" value="Magento/Mtf/TestSuite/InjectableTests" />
         <env name="log_directory" value="var/log" />
