@@ -5,20 +5,16 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide functionality for Fulltext Search indexing.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
@@ -71,13 +67,6 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
      * @var \Magento\CatalogSearch\Model\Indexer\Scope\State
      */
     private $indexScopeState;
-
-    /**
-     * Holder for MetadataPool instance.
-     *
-     * @var MetadataPool
-     */
-    private $metadataPool = null;
 
     /**
      * @param FullFactory $fullActionFactory
@@ -133,35 +122,10 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         ]);
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
-            $productIds = array_unique(array_merge($ids, $this->getRelationsByChild($ids)));
+            $productIds = array_unique(array_merge($ids, $this->fulltextResource->getRelationsByChild($ids)));
             $saveHandler->deleteIndex([$dimension], new \ArrayObject($productIds));
             $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $ids));
         }
-    }
-
-    /**
-     * Retrieve product relations by children.
-     *
-     * @param int|array $childIds
-     * @return array
-     */
-    private function getRelationsByChild($childIds)
-    {
-        $connection = $this->fulltextResource->getConnection();
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $select = $connection->select()->from(
-            ['relation' => $this->fulltextResource->getTable('catalog_product_relation')],
-            []
-        )->join(
-            ['cpe' => $this->fulltextResource->getTable('catalog_product_entity')],
-            'cpe.' . $linkField . ' = relation.parent_id',
-            ['cpe.entity_id']
-        )->where(
-            'relation.child_id IN (?)',
-            $childIds
-        )->distinct(true);
-
-        return $connection->fetchCol($select);
     }
 
     /**
@@ -210,19 +174,5 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     public function executeRow($id)
     {
         $this->execute([$id]);
-    }
-
-    /**
-     * Get Metadata Pool instance.
-     *
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if ($this->metadataPool === null) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-
-        return $this->metadataPool;
     }
 }
