@@ -109,6 +109,8 @@ class ProductForm extends FormSections
         $sectionElement = $this->getContainerElement($sectionName);
         if ($sectionElement->getAttribute('type') == 'button') {
             $sectionElement->click();
+            // Wait until section animation finished.
+            $this->waitForElementVisible($this->closeButton);
         } else {
             parent::openSection($sectionName);
         }
