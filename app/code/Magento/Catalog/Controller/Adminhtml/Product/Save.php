@@ -53,6 +53,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\Exception\RendererInterface
+     */
+    private $exceptionRenderer;
+
+    /**
      * Save constructor.
      *
      * @param Action\Context $context
@@ -61,6 +66,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Framework\Exception\RendererInterface|null $exceptionRenderer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -68,12 +74,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Framework\Exception\RendererInterface $exceptionRenderer = null
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->productRepository = $productRepository;
+        $this->exceptionRenderer = $exceptionRenderer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Exception\RendererInterface::class);
         parent::__construct($context, $productBuilder);
     }
 
@@ -144,24 +153,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->_eventManager->dispatch(
-                    'controller_action_entity_exception_save_after',
-                    ['controller' => $this, 'entity_type' => 'product', 'exception' => $e]
-                );
-                if (empty($this->messageManager->getMessages()->getErrors())) {
-                    $this->messageManager->addError($e->getMessage());
-                }
+                $this->messageManager->addError($this->exceptionRenderer->render($e));
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
-                $this->_eventManager->dispatch(
-                    'controller_action_entity_exception_save_after',
-                    ['controller' => $this, 'entity_type' => 'product', 'exception' => $e]
-                );
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                if (empty($this->messageManager->getMessages()->getErrors())) {
-                    $this->messageManager->addError($e->getMessage());
-                }
+                $this->messageManager->addError($this->exceptionRenderer->render($e));
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }

@@ -6,15 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+    <type name="Magento\Framework\Exception\RendererPool">
         <arguments>
-            <argument name="configurationsMap" xsi:type="array">
-                <item name="urlDuplicateMessage" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
-                    <item name="data" xsi:type="array">
-                        <item name="template" xsi:type="string">Magento_UrlRewrite::messages/url_duplicate_message.phtml</item>
-                    </item>
-                </item>
+            <argument name="instances" xsi:type="array">
+                <item name="url_already_exists" xsi:type="object">Magento\UrlRewrite\Model\Exception\Renderer</item>
             </argument>
         </arguments>
     </type>

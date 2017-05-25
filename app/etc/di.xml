@@ -170,6 +170,7 @@
     <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
+    <preference for="Magento\Framework\Exception\RendererInterface" type="Magento\Framework\Exception\RendererPool" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1326,5 +1327,11 @@
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
-
+    <type name="Magento\Framework\Exception\RendererPool">
+        <arguments>
+            <argument name="instances" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Framework\Exception\DefaultRenderer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

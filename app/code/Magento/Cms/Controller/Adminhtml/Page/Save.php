@@ -41,19 +41,25 @@ class Save extends \Magento\Backend\App\Action
     private $pageRepository;
 
     /**
+     * @var \Magento\Framework\Exception\RendererInterface
+     */
+    private $exceptionRenderer;
+
+    /**
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
-     *
+     * @param \Magento\Framework\Exception\RendererInterface|null $exceptionRenderer
      */
     public function __construct(
         Action\Context $context,
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
         \Magento\Cms\Model\PageFactory $pageFactory = null,
-        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null,
+        \Magento\Framework\Exception\RendererInterface $exceptionRenderer = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
@@ -62,6 +68,8 @@ class Save extends \Magento\Backend\App\Action
         $this->pageRepository = $pageRepository
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->exceptionRenderer = $exceptionRenderer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Exception\RendererInterface::class);
         parent::__construct($context);
     }
 
@@ -119,21 +127,9 @@ class Save extends \Magento\Backend\App\Action
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->_eventManager->dispatch(
-                    'controller_action_entity_exception_save_after',
-                    ['controller' => $this, 'entity_type' => 'cms', 'exception' => $e]
-                );
-                if (empty($this->messageManager->getMessages()->getErrors())) {
-                    $this->messageManager->addError($e->getMessage());
-                }
+                $this->messageManager->addError($this->exceptionRenderer->render($e));
             } catch (\Exception $e) {
-                $this->_eventManager->dispatch(
-                    'controller_action_entity_exception_save_after',
-                    ['controller' => $this, 'entity_type' => 'cms', 'exception' => $e]
-                );
-                if (empty($this->messageManager->getMessages()->getErrors())) {
-                    $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
-                }
+                $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
             }
 
             $this->dataPersistor->set('cms_page', $data);
