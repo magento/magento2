@@ -155,11 +155,14 @@ class Data
      */
     private function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
-        $additionalData = $this->serializer->unserialize($attribute->getData('additional_data'));
-        if (isset($additionalData) && is_array($additionalData)) {
-            foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                if (isset($additionalData[$key])) {
-                    $attribute->setData($key, $additionalData[$key]);
+        $serializedAdditionalData = $attribute->getData('additional_data');
+        if ($serializedAdditionalData) {
+            $additionalData = $this->serializer->unserialize($serializedAdditionalData);
+            if (isset($additionalData) && is_array($additionalData)) {
+                foreach ($this->eavAttributeAdditionalDataKeys as $key) {
+                    if (isset($additionalData[$key])) {
+                        $attribute->setData($key, $additionalData[$key]);
+                    }
                 }
             }
         }
@@ -234,7 +237,9 @@ class Data
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
         $allAttributesArray = [];
         foreach ($configurableAttributes as $attribute) {
-            $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            if (!empty($attribute['default_value'])) {
+                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            }
         }
 
         $resultAttributesToFilter = array_merge(
