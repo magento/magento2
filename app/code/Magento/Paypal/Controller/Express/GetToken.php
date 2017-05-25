@@ -13,6 +13,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception;
 use Magento\Paypal\Model\Express\Checkout;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class GetToken
@@ -41,6 +42,48 @@ class GetToken extends AbstractExpress
     protected $_checkoutType = \Magento\Paypal\Model\Express\Checkout::class;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $_logger;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
+     * @param \Magento\Framework\Session\Generic $paypalSession
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Psr\Log\LoggerInterface|null $logger
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
+        \Magento\Framework\Session\Generic $paypalSession,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
+        \Magento\Customer\Model\Url $customerUrl,
+        \Psr\Log\LoggerInterface $logger = null
+    ) {
+        $this->_logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $orderFactory,
+            $checkoutFactory,
+            $paypalSession,
+            $urlHelper,
+            $customerUrl
+        );
+        $parameters = ['params' => [$this->_configMethod]];
+        $this->_config = $this->_objectManager->create($this->_configType, $parameters);
+    }
+
+    /**
      * @inheritdoc
      */
     public function execute()
@@ -56,10 +99,13 @@ class GetToken extends AbstractExpress
             $this->_initToken($token);
             $controllerResult->setData(['url' => $url]);
         } catch (LocalizedException $exception) {
-            $this->messageManager->addExceptionMessage(
-                $exception,
-                $exception->getMessage()
-            );
+            $this->_logger->critical($exception);
+            $controllerResult->setData([
+                'message' => [
+                    'text' => $exception->getMessage(),
+                    'type' => 'error'
+                ]
+            ]);
         } catch (\Exception $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,
