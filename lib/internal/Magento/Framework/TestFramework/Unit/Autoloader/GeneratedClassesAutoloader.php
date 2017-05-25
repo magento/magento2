@@ -6,33 +6,70 @@
 
 namespace Magento\Framework\TestFramework\Unit\Autoloader;
 
+use Magento\Framework\Code\Generator\Io;
+
 /**
  * Autoloader that initiates auto-generation of requested classes
  */
 class GeneratedClassesAutoloader
 {
     /**
-     * @var \Magento\Framework\Code\Generator
+     * @var Io
      */
-    private $generator;
+    private $generatorIo;
 
     /**
-     * FactoryGeneratorAutoloader constructor.
-     * @param \Magento\Framework\Code\Generator $generator
+     * @var GeneratorInterface[]
      */
-    public function __construct(\Magento\Framework\Code\Generator $generator)
+    private $generators;
+
+    /**
+     * @param GeneratorInterface[] $generators
+     * @param Io $generatorIo
+     */
+    public function __construct(array $generators, Io $generatorIo)
     {
-        $this->generator = $generator;
+        foreach ($generators as $generator) {
+            if (!($generator instanceof GeneratorInterface)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "Instance of '%s' is expected, instance of '%s' is received",
+                        '\Magento\Framework\TestFramework\Unit\Autoloader\GeneratorInterface',
+                        get_class($generator)
+                    )
+                );
+            }
+        }
+        $this->generators = $generators;
+        $this->generatorIo = $generatorIo;
     }
 
     /**
      * Load class
      *
      * @param string $className
-     * @return void
+     * @return bool
      */
     public function load($className)
     {
-        $this->generator->generateClass($className);
+        $classSourceFile = $this->generatorIo->generateResultFileName($className);
+        if ($this->generatorIo->fileExists($classSourceFile)) {
+            include $classSourceFile;
+            return true;
+        } else {
+
+            foreach ($this->generators as $generator) {
+                $content = $generator->generate($className);
+                if ($content) {
+                    $this->generatorIo->makeResultFileDirectory($className);
+                    $this->generatorIo->writeResultFile($classSourceFile, $content);
+                    include $classSourceFile;
+                    return true;
+                }
+            };
+
+        }
+
+        return false;
     }
 }
