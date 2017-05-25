@@ -79,20 +79,20 @@ class Cli extends Console\Application
             $this->assertCompilerPreparation();
             $this->initObjectManager();
             $this->assertGenerationPermissions();
-
-            if ($version == 'UNKNOWN') {
-                $directoryList = new DirectoryList(BP);
-                $composerJsonFinder = new ComposerJsonFinder($directoryList);
-                $productMetadata = new ProductMetadata($composerJsonFinder);
-                $version = $productMetadata->getVersion();
-            }
         } catch (\Exception $exception) {
-            $output = new Console\Output\ConsoleOutput();
+            $output = new \Symfony\Component\Console\Output\ConsoleOutput();
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
 
             exit(static::RETURN_FAILURE);
+        }
+
+        if ($version == 'UNKNOWN') {
+            $directoryList = new DirectoryList(BP);
+            $composerJsonFinder = new ComposerJsonFinder($directoryList);
+            $productMetadata = new ProductMetadata($composerJsonFinder);
+            $version = $productMetadata->getVersion();
         }
 
         parent::__construct($name, $version);
