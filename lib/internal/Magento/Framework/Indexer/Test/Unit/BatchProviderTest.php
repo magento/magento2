@@ -64,8 +64,6 @@ class BatchProviderTest extends \PHPUnit_Framework_TestCase
         $adapterMock = $this->getMock(AdapterInterface::class);
 
         $selectMock->expects($this->once())->method('where')->with('(entity_id BETWEEN 10 AND 100)')->willReturnSelf();
-        $selectMock->expects($this->once())->method('limit')->with(91)->willReturnSelf();
-
         $adapterMock->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
         $adapterMock->expects($this->once())->method('fetchCol')->with($selectMock, [])->willReturn([1, 2, 3]);
         $this->assertEquals(
