@@ -104,7 +104,11 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             $expectedCustomer,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $actualCustomerData = $this->_block->getCustomer()->__toArray();
+        $actualCustomer = $this->_block->getCustomer();
+        $actualCustomerData = $this->_dataObjectProcessor->buildOutputDataArray(
+            $actualCustomer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         foreach ($expectedCustomerData as $property => $value) {
             $expectedValue = is_numeric($value) ? intval($value) : $value;
             $actualValue = isset($actualCustomerData[$property]) ? $actualCustomerData[$property] : null;
