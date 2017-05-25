@@ -12,4 +12,11 @@ case $TEST_SUITE in
     js)
         grunt spec
         ;;
+    functional)
+        cd dev/tests/functional
+        vendor/phpunit/phpunit/phpunit -c phpunit.xml --debug testsuites/Magento/Mtf/TestSuite/InjectableTests.php
+        ;;
+    *)
+        phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER;
+        ;;
 esac

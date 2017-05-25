@@ -68,4 +68,41 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
             ['a:1:{s:3:"foo";s:3:"bar";}', ['foo' => 'bar']],
         ];
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to serialize value.
+     */
+    public function testSerializeException()
+    {
+        $this->serialize->serialize(STDOUT);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to unserialize value.
+     * @dataProvider unserializeExceptionDataProvider
+     */
+    public function testUnserializeException($value)
+    {
+        $this->serialize->unserialize($value);
+    }
+
+    public function unserializeExceptionDataProvider()
+    {
+        return [
+            [''],
+            [false],
+            [null]
+        ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to unserialize value, string is corrupted.
+     */
+    public function testUnserializeExceptionCorruptedString()
+    {
+        $this->serialize->unserialize('a:');
+    }
 }
