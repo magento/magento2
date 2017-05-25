@@ -13,7 +13,7 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/totals',
     'Magento_Checkout/js/model/cart/totals-processor/default'
-], function (ko, Component, quote, totals, totalsDefaultProvider) {
+], function (ko, Component, quote, totals, totalsDefaultProcessor) {
     'use strict';
 
     var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,
@@ -21,7 +21,7 @@ define([
         isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed;
 
     quote.shippingAddress.subscribe(function () {
-        totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+        totalsDefaultProcessor.estimateTotals(quote.shippingAddress());
     });
 
     return Component.extend({

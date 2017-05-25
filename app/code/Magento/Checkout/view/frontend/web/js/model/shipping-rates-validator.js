@@ -9,7 +9,6 @@
 define([
     'jquery',
     'ko',
-    'mageUtils',
     './shipping-rates-validation-rules',
     '../model/address-converter',
     '../action/select-shipping-address',
@@ -22,7 +21,6 @@ define([
 ], function (
     $,
     ko,
-    utils,
     shippingRatesValidationRules,
     addressConverter,
     selectShippingAddress,
