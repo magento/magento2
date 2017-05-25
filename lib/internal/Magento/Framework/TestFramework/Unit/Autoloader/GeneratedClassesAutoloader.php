@@ -34,7 +34,7 @@ class GeneratedClassesAutoloader
                 throw new \InvalidArgumentException(
                     sprintf(
                         "Instance of '%s' is expected, instance of '%s' is received",
-                        '\Magento\Framework\TestFramework\Unit\Autoloader\GeneratorInterface',
+                        \Magento\Framework\TestFramework\Unit\Autoloader\GeneratorInterface::class,
                         get_class($generator)
                     )
                 );
