@@ -41,6 +41,6 @@ class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())
             ->method('load')
             ->willReturn([$this->configType => [$path => 'value']]);
-        $this->assertEquals([$path => 'value'], $this->source->get());
+        $this->assertEquals('value', $this->source->get($path));
     }
 }

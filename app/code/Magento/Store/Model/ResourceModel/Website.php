@@ -16,11 +16,6 @@ namespace Magento\Store\Model\ResourceModel;
 class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var array
-     */
-    private $websitesCache;
-
-    /**
      * Define main table
      *
      * @return void

@@ -59,7 +59,12 @@ class Fallback implements PostProcessorInterface
 
     /**
      * Fallback constructor.
+     *
      * @param Scopes $scopes
+     * @param ResourceConnection $resourceConnection
+     * @param Store $storeResource
+     * @param Website $websiteResource
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         Scopes $scopes,
