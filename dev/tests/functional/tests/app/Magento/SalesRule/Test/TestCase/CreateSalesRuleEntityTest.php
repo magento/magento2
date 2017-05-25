@@ -104,7 +104,7 @@ class CreateSalesRuleEntityTest extends Injectable
      * @param CatalogProductSimple $productForSalesRule1
      * @param CatalogProductSimple|null $productForSalesRule2
      * @param Customer|null $customer
-     * @param null $conditionEntity
+     * @param string|null $conditionEntity
      * @param array|null $generateCouponsSettings
      *
      * @return array

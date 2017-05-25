@@ -194,7 +194,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
             $couponCode = isset($couponCodes[0]) ? $couponCodes[0]: null;
         }
 
-        if ($salesRule->getCouponCode() || $salesRuleOrigin->getCouponCode() || $couponCode) {
+        if ($couponCode) {
             $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode($couponCode);
         }
         $this->assert();
