@@ -7,10 +7,8 @@ namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\Framework\Filesystem\Directory\Write;
 use Zend\ServiceManager\ServiceManager;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
@@ -34,7 +32,7 @@ class GenerationDirectoryAccess
     }
 
     /**
-     * Check generated/code read and write access
+     * Check write permissions to generation folders
      *
      * @return bool
      */
@@ -47,8 +45,6 @@ class GenerationDirectoryAccess
         $directoryList = new DirectoryList(BP, $filesystemDirPaths);
         $driverPool = new DriverPool();
         $fileWriteFactory = new WriteFactory($driverPool);
-        /** @var \Magento\Framework\Filesystem\DriverInterface $driver */
-        $driver = $driverPool->getDriver(DriverPool::FILE);
 
         $generationDirs = [
             DirectoryList::GENERATED,
@@ -58,48 +54,19 @@ class GenerationDirectoryAccess
 
         foreach ($generationDirs as $generationDirectory) {
             $directoryPath = $directoryList->getPath($generationDirectory);
+            $directoryWrite = $fileWriteFactory->create($directoryPath);
 
-            if (!$this->checkDirectory($fileWriteFactory, $driver, $directoryPath)) {
+            if (!$directoryWrite->isExist()) {
+                try {
+                    $directoryWrite->create();
+                } catch (\Exception $e) {
+                    return false;
+                }
+            }
+
+            if (!$directoryWrite->isWritable()) {
                 return false;
             }
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks the permissions to specific directory
-     *
-     * @param WriteFactory $fileWriteFactory The factory of file writers
-     * @param DriverInterface $driver The driver
-     * @param string $directoryPath The directory path
-     * @return bool
-     */
-    private function checkDirectory(
-        WriteFactory $fileWriteFactory,
-        DriverInterface $driver,
-        $directoryPath
-    ) {
-        $directoryWrite = new Write($fileWriteFactory, $driver, $directoryPath);
-
-        if (!$directoryWrite->isExist()) {
-            try {
-                $directoryWrite->create();
-            } catch (\Exception $e) {
-                return false;
-            }
-        }
-
-        if (!$directoryWrite->isDirectory() || !$directoryWrite->isReadable()) {
-            return false;
-        }
-
-        try {
-            $probeFilePath = $directoryPath . DIRECTORY_SEPARATOR . uniqid(mt_rand()) . 'tmp';
-            $fileWriteFactory->create($probeFilePath, DriverPool::FILE, 'w');
-            $driver->deleteFile($probeFilePath);
-        } catch (\Exception $e) {
-            return false;
         }
 
         return true;

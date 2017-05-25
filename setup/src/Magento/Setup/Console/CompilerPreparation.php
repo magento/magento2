@@ -72,6 +72,10 @@ class CompilerPreparation
             return;
         }
 
+        if (!$this->getGenerationDirectoryAccess()->check()) {
+            throw new GenerationDirectoryAccessException();
+        }
+
         $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
         $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
             ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
@@ -81,10 +85,6 @@ class CompilerPreparation
             $directoryList->getPath(DirectoryList::GENERATED_CODE),
             $directoryList->getPath(DirectoryList::GENERATED_METADATA),
         ];
-
-        if (!$this->getGenerationDirectoryAccess()->check()) {
-            throw new GenerationDirectoryAccessException();
-        }
 
         foreach ($compileDirList as $compileDir) {
             if ($this->filesystemDriver->isExists($compileDir)) {
