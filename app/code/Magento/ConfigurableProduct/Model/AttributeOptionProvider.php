@@ -52,11 +52,20 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     {
         $scope = $this->scopeResolver->getScope();
         $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
-
         $data = $this->attributeResource->getConnection()->fetchAll($select);
+
         if ($superAttribute->getSourceModel()) {
+            $options = $superAttribute->getSource()->getAllOptions(false);
+
+            $optionLabels = [];
+            foreach ($options as $option) {
+                $optionLabels[$option['value']] = $option['label'];
+            }
+
             foreach ($data as $key => $value) {
-                $optionText = $superAttribute->getSource()->getOptionText($value['value_index']);
+                $optionText = isset($optionLabels[$value['value_index']])
+                    ? $optionLabels[$value['value_index']]
+                    : false;
                 $data[$key]['default_title'] = $optionText;
                 $data[$key]['option_title'] = $optionText;
             }

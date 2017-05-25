@@ -199,15 +199,15 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
 
         $source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptionText'])
+            ->setMethods(['getAllOptions'])
             ->getMockForAbstractClass();
         $source->expects($this->any())
-            ->method('getOptionText')
-            ->willReturnCallback(
-                function ($optionIndex) {
-                    return 'Option Value for index ' . $optionIndex;
-                }
-            );
+            ->method('getAllOptions')
+            ->willReturn([
+                ['value' => 13, 'label' => 'Option Value for index 13'],
+                ['value' => 14, 'label' => 'Option Value for index 14'],
+                ['value' => 15, 'label' => 'Option Value for index 15']
+            ]);
 
         $this->abstractAttribute->expects($this->atLeastOnce())
             ->method('getSource')
