@@ -466,12 +466,18 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation27"  summary="It's possible to specify negative value in 'Quantity' field for product." ticketId="MAGETWO-69432">
+        <variation name="CreateSimpleProductEntityTestWithBackorders"  summary="It's possible to specify negative value in 'Quantity' field for product with backorders." ticketId="MAGETWO-69432">
             <data name="configData" xsi:type="string">enable_backorders</data>
             <data name="product/dataset" xsi:type="string">simple_with_negative_qty</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
+        </variation>
+        <variation name="CreateSimpleProductEntityTestWithoutBackorders"  summary="It's possible to specify negative value in 'Quantity' field for product without backorders." ticketId="MAGETWO-69466">
+            <data name="product/dataset" xsi:type="string">simple_with_negative_qty</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
     </testCase>
 </config>
