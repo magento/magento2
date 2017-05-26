@@ -8,6 +8,7 @@ $commandList = [
     'cache:flush',
     'cache:disable',
     'cache:enable',
+    'cron:run',
 ];
 
 if (isset($_GET['command'])) {

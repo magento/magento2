@@ -94,9 +94,10 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->fields = $this->handlerCurl->prepareData($this->fixture);
         $this->prepareData();
         $this->convertData();
+        $storeCode = $this->fixture->hasData('store_code') ? $this->fixture->getStoreCode() : 'default';
 
         /** @var CatalogProductSimple $fixture */
-        $url = $_ENV['app_frontend_url'] . 'rest/default/V1/products';
+        $url = $_ENV['app_frontend_url'] . 'rest/'. $storeCode .'/V1/products';
         $this->webapiTransport->write($url, $this->fields, CurlInterface::POST);
         $encodedResponse = $this->webapiTransport->read();
         $response = json_decode($encodedResponse, true);
