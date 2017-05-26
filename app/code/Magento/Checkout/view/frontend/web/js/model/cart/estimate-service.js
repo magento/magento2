@@ -19,7 +19,7 @@ define([
     quote.shippingAddress.subscribe(function () {
         var type = quote.shippingAddress().getType();
 
-        if (quote.isVirtual()) {
+        if (quote.isVirtual() || quote.shippingAddress().isEditable()) {
             // update totals block when estimated address was set
             totalsProcessors['default'] = totalsDefaultProvider;
             totalsProcessors[type] ?

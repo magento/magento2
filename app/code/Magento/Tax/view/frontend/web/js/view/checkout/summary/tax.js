@@ -11,20 +11,13 @@ define([
     'ko',
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/totals',
-    'Magento_Checkout/js/model/cart/totals-processor/default'
-], function (ko, Component, quote, totals, totalsDefaultProcessor) {
+    'Magento_Checkout/js/model/totals'
+], function (ko, Component, quote, totals) {
     'use strict';
 
     var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,
         isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed,
         isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed;
-
-    quote.shippingAddress.subscribe(function () {
-        if (quote.shippingAddress().isEditable()) {
-            totalsDefaultProcessor.estimateTotals(quote.shippingAddress());
-        }
-    });
 
     return Component.extend({
         defaults: {
