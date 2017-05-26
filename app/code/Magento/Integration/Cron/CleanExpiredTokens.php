@@ -46,11 +46,11 @@ class CleanExpiredTokens
     public function execute()
     {
         $this->tokenResourceModel->deleteExpiredTokens(
-            $this->oauthHelper->getAdminTokenExpirationPeriod(),
+            $this->oauthHelper->getAdminTokenLifetime(),
             [UserContextInterface::USER_TYPE_ADMIN]
         );
         $this->tokenResourceModel->deleteExpiredTokens(
-            $this->oauthHelper->getCustomerTokenExpirationPeriod(),
+            $this->oauthHelper->getCustomerTokenLifetime(),
             [UserContextInterface::USER_TYPE_CUSTOMER]
         );
     }

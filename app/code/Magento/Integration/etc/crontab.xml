@@ -11,7 +11,7 @@
             <schedule>* * * * *</schedule>
         </job>
         <job name="expired_tokens_cleanup" instance="Magento\Integration\Cron\CleanExpiredTokens" method="execute">
-            <schedule>* * * * *</schedule>
+            <schedule>0 * * * *</schedule>
         </job>
     </group>
 </config>

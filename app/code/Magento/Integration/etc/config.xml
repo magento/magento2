@@ -22,8 +22,8 @@
                 <timeout>1800</timeout>
             </authentication_lock>
             <access_token_expiration_period>
-                <customer>259200</customer>
-                <admin>43200</admin>
+                <customer>1</customer>
+                <admin>4</admin>
             </access_token_expiration_period>
         </oauth>
     </default>

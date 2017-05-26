@@ -11,6 +11,17 @@
             <label>OAuth</label>
             <tab>service</tab>
             <resource>Magento_Integration::config_oauth</resource>
+            <group id="access_token_expiration_period" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Access Token Expiration</label>
+                <field id="customer" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Customer Token Lifetime (hours)</label>
+                    <comment>We will disable this feature if the value is empty.</comment>
+                </field>
+                <field id="admin" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Admin Token Lifetime (hours)</label>
+                    <comment>We will disable this feature if the value is empty.</comment>
+                </field>
+            </group>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Cleanup Settings</label>
                 <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
@@ -35,17 +46,6 @@
                 <field id="post_timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>OAuth consumer credentials HTTP Post timeout</label>
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
-                </field>
-            </group>
-            <group id="access_token_expiration_period" translate="label" type="text" sortOrder="600" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Access Tokens Expiration Period</label>
-                <field id="customer" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Customer Tokens</label>
-                    <comment>Customer access tokens will expire after X minutes after generation. Specify 0 to disable expiration (not recommended)</comment>
-                </field>
-                <field id="admin" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Admin Tokens</label>
-                    <comment>Admin access tokens will expire after X minutes after generation. Specify 0 to disable expiration (not recommended)</comment>
                 </field>
             </group>
         </section>
