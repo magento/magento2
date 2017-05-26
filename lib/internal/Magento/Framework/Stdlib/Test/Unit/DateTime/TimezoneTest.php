@@ -120,7 +120,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getDateFixtures
      */
-    public function testDate($expectedResult, $timezone = 'UTC', $date = null)
+    public function testDate(callable $expectedResult, $timezone = 'UTC', $date = null)
     {
         $this->localeResolver
             ->method('getLocale')
@@ -130,7 +130,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigWillReturnConfiguredTimezone($timezone);
 
         $this->assertEquals(
-            $expectedResult,
+            $expectedResult(),
             $this->getTimezone()->date($date, null, true),
             '',
             1
@@ -144,12 +144,44 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         date_default_timezone_set('UTC');
 
         return [
-            'now_datetime_utc' => [new \DateTime('now', new \DateTimeZone('UTC')), 'UTC'],
-            'fixed_datetime_utc' => [new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC')), 'UTC', new \DateTime('2017-01-01 10:00:00')],
-            'now_datetime_vancouver' => [new \DateTime('now', new \DateTimeZone('America/Vancouver')), 'America/Vancouver'],
-            'now_datetimeimmutable_utc' => [new \DateTimeImmutable('now', new \DateTimeZone('UTC')), 'UTC'],
-            'fixed_datetimeimmutable_utc' => [new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC')), 'UTC', new \DateTimeImmutable('2017-01-01 10:00:00')],
-            'now_datetimeimmutable_vancouver' => [new \DateTimeImmutable('now', new \DateTimeZone('America/Vancouver')), 'America/Vancouver'],
+            'now_datetime_utc' => [
+                function () {
+                    return new \DateTime('now', new \DateTimeZone('UTC'));
+                },
+                'UTC'
+            ],
+            'fixed_datetime_utc' => [
+                function () {
+                    return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
+                },
+                'UTC',
+                new \DateTime('2017-01-01 10:00:00')
+            ],
+            'now_datetime_vancouver' => [
+                function () {
+                    return new \DateTime('now', new \DateTimeZone('America/Vancouver'));
+                },
+                'America/Vancouver'
+            ],
+            'now_datetimeimmutable_utc' => [
+                function () {
+                    return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+                },
+                'UTC'
+            ],
+            'fixed_datetimeimmutable_utc' => [
+                function () {
+                    return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
+                },
+                'UTC',
+                new \DateTimeImmutable('2017-01-01 10:00:00')
+            ],
+            'now_datetimeimmutable_vancouver' => [
+                function () {
+                    return new \DateTimeImmutable('now', new \DateTimeZone('America/Vancouver'));
+                },
+                'America/Vancouver'
+            ],
         ];
     }
 
