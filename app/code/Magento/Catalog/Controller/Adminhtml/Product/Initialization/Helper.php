@@ -74,7 +74,7 @@ class Helper
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      */
     private $dateTimeFilter;
-    
+
     /**
      * @var \Magento\Catalog\Model\Product\LinkTypeProvider
      */
@@ -253,13 +253,16 @@ class Helper
 
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = $product->getProductLinks();
+        $linkTypes = [];
 
-        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkType */
-        foreach ($this->linkTypeProvider->getItems() as $linkType) {
-            $readonly = $product->getData($linkType->getName() . '_readonly');
+        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkTypeObject */
+        foreach ($this->linkTypeProvider->getItems() as $linkTypeObject) {
+            $linkTypes[$linkTypeObject->getName()] = $product->getData($linkTypeObject->getName() . '_readonly');
+        }
 
-            if (isset($links[$linkType->getName()]) && !$readonly) {
-                foreach ((array) $links[$linkType->getName()] as $linkData) {
+        foreach ($linkTypes as $linkType => $readonly) {
+            if (isset($links[$linkType]) && !$readonly) {
+                foreach ((array)$links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
                     }
@@ -268,7 +271,7 @@ class Helper
                     $link = $this->getProductLinkFactory()->create();
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
-                        ->setLinkType($linkType->getName())
+                        ->setLinkType($linkType)
                         ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
                     $productLinks[] = $link;
                 }
