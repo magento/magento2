@@ -66,26 +66,28 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled()) {
+        if ($this->getBaseUrlChecker()->isEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
                 $uri = parse_url($baseUrl);
-                if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
-                    $redirectUrl = $this->_url->getRedirectUrl(
-                        $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
-                    );
-                    $redirectCode = (int)$this->_scopeConfig->getValue(
-                        'web/url/redirect_to_base',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    ) !== 301 ? 302 : 301;
+                if (!$request->isPost()) {
+                    if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
+                        $redirectUrl = $this->_url->getRedirectUrl(
+                            $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
+                        );
+                        $redirectCode = (int)$this->_scopeConfig->getValue(
+                            'web/url/redirect_to_base',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        ) !== 301 ? 302 : 301;
 
-                    $response = $this->_responseFactory->create();
-                    $response->setRedirect($redirectUrl, $redirectCode);
-                    $response->setNoCacheHeaders();
-                    return $response;
+                        $response = $this->_responseFactory->create();
+                        $response->setRedirect($redirectUrl, $redirectCode);
+                        $response->setNoCacheHeaders();
+                        return $response;
+                    }
                 }
             }
         }
