@@ -666,7 +666,11 @@ class AccountManagement implements AccountManagementInterface
         if ($password !== null) {
             $this->checkPasswordStrength($password);
             $customerEmail = $customer->getEmail();
-            $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
+            try {
+                $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
+            } catch (InputException $e) {
+                throw new LocalizedException(__('Password cannot be the same as email address.'));
+            }
             $hash = $this->createPasswordHash($password);
         } else {
             $hash = null;
@@ -838,6 +842,8 @@ class AccountManagement implements AccountManagementInterface
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
+        $customerEmail = $customer->getEmail();
+        $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);

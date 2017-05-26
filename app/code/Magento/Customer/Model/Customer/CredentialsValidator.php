@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 class CredentialsValidator
 {
     /**
-     * Check that password is different from login.
+     * Check that password is different from email.
      *
      * @param string $email
      * @param string $password

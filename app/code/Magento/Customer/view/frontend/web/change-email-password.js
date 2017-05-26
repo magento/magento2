@@ -140,7 +140,7 @@ define([
                 'data-validate',
                 '{required:true, ' +
                 '\'validate-customer-password\':true, ' +
-                '\'password-not-equal-to-email\':\'' + $(this.options.emailSelector).val() + '\'}'
+                '\'password-not-equal-to-user-name\':\'' + $(this.options.emailSelector).val() + '\'}'
             ).prop('disabled', false);
         }
     });

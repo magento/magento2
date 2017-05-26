@@ -107,11 +107,10 @@ angular.module('create-admin-account', ['ngStorage'])
             }
         };
     })
-    .directive('checkEmailPassword', function() {
+    .directive('checkUserNamePassword', function() {
         return{
             require: "ngModel",
             link: function(scope, elm, attrs, ctrl){
-
                 var validator = function(value){
                     var password = value,
                         userName = scope.account.adminUsername.$viewValue;
@@ -120,11 +119,10 @@ angular.module('create-admin-account', ['ngStorage'])
                         password = password.toLowerCase();
                     }
                     if (userName) {
-                        userName = scope.account.adminUsername.$viewValue.toLowerCase();
+                        userName = userName.toLowerCase();
                     }
 
-                    ctrl.$setValidity('checkEmailPasswordDifferent', password !== userName);
-
+                    ctrl.$setValidity('checkUserNamePasswordDifferent', password !== userName);
                     return value;
                 };
 
