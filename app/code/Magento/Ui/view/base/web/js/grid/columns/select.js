@@ -27,7 +27,7 @@ define([
                 values = values.split(',');
             }
 
-            if (!Array.isArray(values)) {
+            if (!_.isArray(values)) {
                 values = [values];
             }
 
