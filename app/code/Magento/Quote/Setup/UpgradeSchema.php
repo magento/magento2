@@ -55,6 +55,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $setup->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id')
             );
         }
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+            $connection = $setup->getConnection();
+            $connection->modifyColumn(
+                $setup->getTable('quote_address'),
+                'shipping_method',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 120
+                ]
+            );
+        }
         $setup->endSetup();
     }
 }
