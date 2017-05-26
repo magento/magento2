@@ -39,18 +39,26 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
     private $baseSelectProcessor;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
+     * LinkedProductSelectBuilderByIndexPrice constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param BaseSelectProcessorInterface $baseSelectProcessor
+     * @param BaseSelectProcessorInterface|null $baseSelectProcessor
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        BaseSelectProcessorInterface $baseSelectProcessor = null
+        BaseSelectProcessorInterface $baseSelectProcessor = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
@@ -58,6 +66,8 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
         $this->metadataPool = $metadataPool;
         $this->baseSelectProcessor = (null !== $baseSelectProcessor)
             ? $baseSelectProcessor : ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class);
     }
 
     /**
@@ -79,7 +89,7 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
                 sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
                 ['entity_id']
             )->joinInner(
-                ['t' => $this->resource->getTableName('catalog_product_index_price')],
+                ['t' => $this->indexerFrontendResource->getMainTable()],
                 sprintf('t.entity_id = %s.entity_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
                 []
             )->where('parent.entity_id = ?', $productId)

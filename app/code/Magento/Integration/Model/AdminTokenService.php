@@ -17,13 +17,12 @@ use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 
 /**
  * Class to handle token generation for Admins
- *
  */
 class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInterface
 {
     /**
      * Token Model
-     *a
+     *
      * @var TokenModelFactory
      */
     private $tokenModelFactory;

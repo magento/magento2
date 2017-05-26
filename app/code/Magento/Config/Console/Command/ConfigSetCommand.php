@@ -5,11 +5,11 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
-use Magento\Framework\App\Area;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,38 +33,48 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * Scope manager.
+     * Emulator adminhtml area for CLI command.
      *
-     * @var ScopeInterface
+     * @var EmulatedAdminhtmlAreaProcessor
      */
-    private $scope;
+    private $emulatedAreaProcessor;
 
     /**
-     * Application state.
+     * The config change detector.
      *
-     * @var State
+     * @var ChangeDetector
      */
-    private $state;
+    private $changeDetector;
 
     /**
-     * The processor facade factory
+     * The hash manager.
+     *
+     * @var Hash
+     */
+    private $hash;
+
+    /**
+     * The factory for processor facade.
      *
      * @var ProcessorFacadeFactory
      */
     private $processorFacadeFactory;
 
     /**
-     * @param ScopeInterface $scope Scope manager
-     * @param State $state Application state
-     * @param ProcessorFacadeFactory $processorFacadeFactory The processor facade factory
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
+     * @param ChangeDetector $changeDetector The config change detector
+     * @param Hash $hash The hash manager
+     * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      */
     public function __construct(
-        ScopeInterface $scope,
-        State $state,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
+        ChangeDetector $changeDetector,
+        Hash $hash,
         ProcessorFacadeFactory $processorFacadeFactory
     ) {
-        $this->scope = $scope;
-        $this->state = $state;
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
+        $this->changeDetector = $changeDetector;
+        $this->hash = $hash;
         $this->processorFacadeFactory = $processorFacadeFactory;
 
         parent::__construct();
@@ -115,24 +125,31 @@ class ConfigSetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $areaScope = $this->scope->getCurrentScope();
-            // Emulating adminhtml scope to be able to read configs.
-            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($input, $output) {
-                $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+        if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
+            $output->writeln(
+                '<error>'
+                . 'This command is unavailable right now. '
+                . 'To continue working with it please run app:config:import or setup:upgrade command before.'
+                . '</error>'
+            );
 
-                $message = $this->processorFacadeFactory->create()->process(
+            return Cli::RETURN_FAILURE;
+        }
+
+        try {
+            $message = $this->emulatedAreaProcessor->process(function () use ($input) {
+                return $this->processorFacadeFactory->create()->process(
                     $input->getArgument(static::ARG_PATH),
                     $input->getArgument(static::ARG_VALUE),
                     $input->getOption(static::OPTION_SCOPE),
                     $input->getOption(static::OPTION_SCOPE_CODE),
                     $input->getOption(static::OPTION_LOCK)
                 );
-
-                $output->writeln('<info>' . $message . '</info>');
             });
 
-            $this->scope->setCurrentScope($areaScope);
+            $this->hash->regenerate(System::CONFIG_TYPE);
+
+            $output->writeln('<info>' . $message . '</info>');
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {

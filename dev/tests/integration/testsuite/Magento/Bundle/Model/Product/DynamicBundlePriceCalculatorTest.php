@@ -27,6 +27,12 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
+
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
@@ -38,6 +44,10 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+
+        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**

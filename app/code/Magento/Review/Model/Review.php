@@ -13,6 +13,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
 /**
  * Review model
  *
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Review\Model\Review setCreatedAt(string $value)
  * @method \Magento\Review\Model\Review setEntityId(int $value)

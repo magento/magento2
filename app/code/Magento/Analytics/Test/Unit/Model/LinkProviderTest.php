@@ -132,7 +132,7 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
      * @param string|null $fileInitializationVector
      *
      * @dataProvider fileNotReadyDataProvider
-     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage File is not ready yet.
      */
     public function testFileNotReady($fileInfoPath, $fileInitializationVector)

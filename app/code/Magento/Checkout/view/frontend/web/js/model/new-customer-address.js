@@ -2,8 +2,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-define([], function () {
+/**
+ * @api
+ */
+define([
+    'underscore'
+], function (_) {
     'use strict';
 
     /**
@@ -27,7 +31,7 @@ define([], function () {
             regionCode: addressData.region ? addressData.region['region_code'] : null,
             region: addressData.region ? addressData.region.region : null,
             customerId: addressData['customer_id'] || addressData.customerId,
-            street: addressData.street,
+            street: addressData.street ? _.compact(addressData.street) : addressData.street,
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,

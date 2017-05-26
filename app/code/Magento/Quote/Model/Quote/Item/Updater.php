@@ -105,7 +105,7 @@ class Updater
      *
      * @param array $info
      * @param Item $item
-     * @return array
+     * @return void
      */
     protected function setCustomPrice(array $info, Item $item)
     {

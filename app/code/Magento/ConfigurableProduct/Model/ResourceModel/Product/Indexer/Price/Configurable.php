@@ -31,8 +31,8 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param string $connectionName
-     * @param StoreResolverInterface $storeResolver
+     * @param string|null $connectionName
+     * @param StoreResolverInterface|null $storeResolver
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -44,40 +44,9 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         StoreResolverInterface $storeResolver = null
     ) {
         parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $moduleManager, $connectionName);
-        $this->storeResolver = $storeResolver ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(StoreResolverInterface::class);
-    }
-
-    /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @return $this
-     * @throws \Exception
-     */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->reindex();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-        return $this;
-    }
-
-    /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
-     */
-    public function reindexEntity($entityIds)
-    {
-        $this->reindex($entityIds);
-        return $this;
+        $this->storeResolver = $storeResolver ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            StoreResolverInterface::class
+        );
     }
 
     /**

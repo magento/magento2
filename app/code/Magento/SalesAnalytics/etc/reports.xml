@@ -26,6 +26,8 @@
             <attribute name="customer_email" function="sha1"/>
             <attribute name="base_total_online_refunded"/>
             <attribute name="base_total_offline_refunded"/>
+            <attribute name="base_currency_code"/>
+            <attribute name="billing_address_id"/>
         </source>
     </report>
     <report name="order_items" connection="sales">

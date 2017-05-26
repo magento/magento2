@@ -13,6 +13,8 @@ use Magento\Review\Helper\Data as StatusSource;
 
 /**
  * Class Status
+ *
+ * @api
  */
 class Status extends Column implements OptionSourceInterface
 {

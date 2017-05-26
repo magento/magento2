@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model;
 /**
  * Catalog Custom Category design Model
  *
+ * @api
+ *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Design extends \Magento\Framework\Model\AbstractModel

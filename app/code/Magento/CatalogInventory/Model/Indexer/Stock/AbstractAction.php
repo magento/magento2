@@ -71,24 +71,33 @@ abstract class AbstractAction
     private $cacheCleaner;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Indexer\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         ResourceConnection $resource,
         \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Indexer\CacheContext $cacheContext,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->_resource = $resource;
         $this->_indexerFactory = $indexerFactory;
         $this->_catalogProductType = $catalogProductType;
         $this->cacheContext = $cacheContext;
         $this->eventManager = $eventManager;
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -186,14 +195,14 @@ abstract class AbstractAction
     protected function _syncData()
     {
         $idxTableName = $this->_getIdxTable();
-        $tableName = $this->_getTable('cataloginventory_stock_status');
+        $tableName = $this->indexerStockFrontendResource->getMainTable();
 
         $this->_deleteOldRelations($tableName);
 
-        $columns = array_keys($this->_connection->describeTable($idxTableName));
-        $select = $this->_connection->select()->from($idxTableName, $columns);
+        $columns = array_keys($this->_getConnection()->describeTable($idxTableName));
+        $select = $this->_getConnection()->select()->from($idxTableName, $columns);
         $query = $select->insertFromSelect($tableName, $columns);
-        $this->_connection->query($query);
+        $this->_getConnection()->query($query);
         return $this;
     }
 
@@ -206,7 +215,7 @@ abstract class AbstractAction
      */
     protected function _deleteOldRelations($tableName)
     {
-        $select = $this->_connection->select()
+        $select = $this->_getConnection()->select()
             ->from(['s' => $tableName])
             ->joinLeft(
                 ['w' => $this->_getTable('catalog_product_website')],
@@ -216,7 +225,7 @@ abstract class AbstractAction
             ->where('w.product_id IS NULL');
 
         $sql = $select->deleteFromSelect('s');
-        $this->_connection->query($sql);
+        $this->_getConnection()->query($sql);
     }
 
     /**

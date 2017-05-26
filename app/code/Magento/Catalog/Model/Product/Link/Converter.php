@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Product\Link;
 
 /**
  * Class Converter
+ *
+ * @api
  */
 class Converter
 {

@@ -88,7 +88,10 @@ class ConfigurablePrice extends AbstractModifier
                             self::$advancedPricingButton => [
                                 'arguments' => [
                                     'data' => [
-                                        'config' => $visibilityConfig,
+                                        'config' => [
+                                            'componentType' => 'container',
+                                            $visibilityConfig
+                                        ],
                                     ],
                                 ],
                             ],

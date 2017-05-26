@@ -13,9 +13,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Directory\Model\AllowedCountries;
 
 /**
  * Multishipping checkout model
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -146,11 +148,18 @@ class Multishipping extends \Magento\Framework\DataObject
     private $cartExtensionFactory;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountryReader;
+
+    /**
      * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
      */
     private $shippingAssignmentProcessor;
 
     /**
+     * Multishipping constructor.
+     *
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -173,6 +182,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $data
+     * @param AllowedCountries|null $allowedCountryReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -197,7 +207,8 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
-        array $data = []
+        array $data = [],
+        AllowedCountries $allowedCountryReader = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -220,6 +231,8 @@ class Multishipping extends \Magento\Framework\DataObject
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
         $this->totalsCollector = $totalsCollector;
+        $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
+            ->get(AllowedCountries::class);
         parent::__construct($data);
         $this->_init();
     }
@@ -693,6 +706,18 @@ class Multishipping extends \Magento\Framework\DataObject
             if (!$method || !$rate) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please specify shipping methods for all addresses.')
+                );
+            }
+
+            // Checks if a country id present in the allowed countries list.
+            if (
+                !in_array(
+                    $address->getCountryId(),
+                    $this->allowedCountryReader->getAllowedCountries()
+                )
+            ) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Some addresses cannot be used due to country-specific configurations.')
                 );
             }
         }

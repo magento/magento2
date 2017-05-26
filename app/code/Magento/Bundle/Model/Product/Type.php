@@ -17,6 +17,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {

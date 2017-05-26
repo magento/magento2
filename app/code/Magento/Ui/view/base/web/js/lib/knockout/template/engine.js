@@ -6,8 +6,9 @@ define([
     'ko',
     'underscore',
     './observable_source',
-    './renderer'
-], function (ko, _, Source, renderer) {
+    './renderer',
+    '../../logger/console-logger'
+], function (ko, _, Source, renderer, consoleLogger) {
     'use strict';
 
     var RemoteTemplateEngine,
@@ -36,9 +37,12 @@ define([
      * Caches template after it's unique name and renders in once.
      * If template name is not typeof string, delegates work to knockout.templateSources.anonymousTemplate.
      * @param  {*} template
+     * @param  {HTMLElement} templateDocument - document
+     * @param  {Object} options - options, passed to template binding
+     * @param  {ko.bindingContext} bindingContext
      * @returns {TemplateSource} Object with methods 'nodes' and 'data'.
      */
-    RemoteTemplateEngine.prototype.makeTemplateSource = function (template) {
+    RemoteTemplateEngine.prototype.makeTemplateSource = function (template, templateDocument, options, bindingContext) {
         var source,
             templateId;
 
@@ -48,10 +52,32 @@ define([
 
             if (!source) {
                 source = new Source(template);
+                source.requestedBy = bindingContext.$data.name;
                 sources[templateId] = source;
 
+                consoleLogger.info('templateStartLoading', {
+                    template: templateId,
+                    component: bindingContext.$data.name
+                });
+
                 renderer.render(template).done(function (rendered) {
+                    consoleLogger.info('templateLoadedFromServer', {
+                        template: templateId,
+                        component: bindingContext.$data.name
+                    });
                     source.nodes(rendered);
+                }).fail(function () {
+                    consoleLogger.error('templateLoadingFail', {
+                        template: templateId,
+                        component: bindingContext.$data.name
+                    });
+                });
+            }
+
+            if (source.requestedBy !== bindingContext.$data.name) {
+                consoleLogger.info('templateLoadedFromCache', {
+                    template: templateId,
+                    component: bindingContext.$data.name
                 });
             }
 
@@ -87,7 +113,7 @@ define([
      * @return {Array} - array of html elements
      */
     RemoteTemplateEngine.prototype.renderTemplate = function (template, bindingContext, options, templateDocument) {
-        var templateSource = this.makeTemplateSource(template, templateDocument, options);
+        var templateSource = this.makeTemplateSource(template, templateDocument, options, bindingContext);
 
         return this.renderTemplateSource(templateSource, bindingContext, options);
     };

@@ -5,6 +5,9 @@
  */
 namespace Magento\SalesRule\Model\Coupon;
 
+/**
+ * @api
+ */
 interface CodegeneratorInterface
 {
     /**

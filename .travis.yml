@@ -7,15 +7,19 @@ addons:
     - mysql-client-core-5.6
     - mysql-client-5.6
     - postfix
+  firefox: "46.0"
+  hosts:
+      - magento2.travis
 language: php
 php:
-  - 5.6.29
   - 7.0
+  - 7.1
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
     - INTEGRATION_SETS=3
     - NODE_JS_VERSION=6
+    - MAGENTO_HOST_NAME="magento2.travis"
   matrix:
     - TEST_SUITE=unit
     - TEST_SUITE=integration INTEGRATION_INDEX=1
@@ -23,6 +27,18 @@ env:
     - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=static
     - TEST_SUITE=js
+    - TEST_SUITE=functional ACCEPTANCE_INDEX=1
+    - TEST_SUITE=functional ACCEPTANCE_INDEX=2
+matrix:
+  exclude:
+    - php: 7.0
+      env: TEST_SUITE=static
+    - php: 7.0
+      env: TEST_SUITE=js
+    - php: 7.0
+      env: TEST_SUITE=functional ACCEPTANCE_INDEX=1
+    - php: 7.0
+      env: TEST_SUITE=functional ACCEPTANCE_INDEX=2
 cache:
   apt: true
   directories:
@@ -30,16 +46,7 @@ cache:
     - $HOME/.nvm
     - $HOME/node_modules
     - $HOME/yarn.lock
-matrix:
-  exclude:
-    - php: 5.6.29
-      env: TEST_SUITE=static
-    - php: 5.6.29
-      env: TEST_SUITE=js
 before_install: ./dev/travis/before_install.sh
 install: composer install --no-interaction --prefer-dist
 before_script: ./dev/travis/before_script.sh
-script:
-  - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
-  - if [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
-  - if [ $TEST_SUITE == "js" ]; then grunt spec; fi
+script: ./dev/travis/script.sh

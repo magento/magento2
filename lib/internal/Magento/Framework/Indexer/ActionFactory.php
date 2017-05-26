@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Indexer;
 
-use Magento\Framework\Indexer\ActionInterface;
-
 class ActionFactory
 {
     /**

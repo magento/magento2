@@ -193,6 +193,19 @@ class FinalPriceBox extends BasePriceBox
     {
         $cacheKeys = parent::getCacheKeyInfo();
         $cacheKeys['display_minimal_price'] = $this->getDisplayMinimalPrice();
+        $cacheKeys['is_product_list'] = $this->isProductList();
         return $cacheKeys;
+    }
+
+    /**
+     * Get flag that price rendering should be done for the list of products
+     * By default (if flag is not set) is false
+     *
+     * @return bool
+     */
+    public function isProductList()
+    {
+        $isProductList = $this->getData('is_product_list');
+        return $isProductList === true;
     }
 }

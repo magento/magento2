@@ -28,6 +28,8 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Stock setStatus(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Stock extends \Magento\Framework\Model\AbstractModel
 {

@@ -48,7 +48,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
 

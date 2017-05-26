@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
 /**
  * Import behavior source model
+ *
+ * @api
  */
 class Custom extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {

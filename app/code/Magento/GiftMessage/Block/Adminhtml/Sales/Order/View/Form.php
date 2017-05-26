@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 /**
  * Adminhtml sales order view gift message form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Template

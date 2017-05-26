@@ -9,6 +9,7 @@ use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -98,6 +99,9 @@ class CollectionTest extends BaseCollectionTest
             ->method('create')
             ->willReturn($this->temporaryStorage);
 
+        $categoryProductFrontendMock = $this->getMockBuilder(FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             [
@@ -105,7 +109,8 @@ class CollectionTest extends BaseCollectionTest
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
                 'temporaryStorageFactory' => $temporaryStorageFactory,
-                'productLimitationFactory' => $productLimitationFactoryMock
+                'productLimitationFactory' => $productLimitationFactoryMock,
+                'categoryProductIndexerFrontend' => $categoryProductFrontendMock,
             ]
         );
 

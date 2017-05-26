@@ -9,6 +9,8 @@ use Magento\Catalog\Block\Product\AwareInterface as ProductAwareInterface;
 
 /**
  * Class List Item Block Container
+ *
+ * @api
  */
 class Container extends Block
 {

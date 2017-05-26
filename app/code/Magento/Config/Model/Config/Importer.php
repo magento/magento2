@@ -212,7 +212,6 @@ class Importer implements ImporterInterface
             $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
 
             if ($backendModel instanceof Config\Value) {
-                $backendModel->setData('force_changed_value', true);
                 $backendModel->beforeSave();
                 $backendModel->afterSave();
             }
