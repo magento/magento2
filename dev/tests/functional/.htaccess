@@ -1,6 +1,0 @@
-###########################################
-## Allow access to command.php
-    <Files command.php>
-         order allow,deny
-         allow from all
-    </Files>
