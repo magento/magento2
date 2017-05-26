@@ -39,7 +39,7 @@ class DateTime
     /**
      * Format date to internal format
      *
-     * @param string|\DateTime|bool|null $date
+     * @param string|\DateTimeInterface|bool|null $date
      * @param boolean $includeTime
      * @return string|null
      * @api
