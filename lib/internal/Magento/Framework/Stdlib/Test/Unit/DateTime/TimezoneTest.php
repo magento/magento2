@@ -15,6 +15,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class TimezoneTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var string|null
+     */
+    private static $defaultTimeZone;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
@@ -40,6 +45,11 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+    }
+
+    public static function tearDownAfterClass()
+    {
+        date_default_timezone_set(static::$defaultTimeZone);
     }
 
     /**
@@ -129,6 +139,10 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
 
     public function getDateFixtures()
     {
+        static::$defaultTimeZone = date_default_timezone_get();
+
+        date_default_timezone_set('UTC');
+
         return [
             'now_datetime_utc' => [new \DateTime('now', new \DateTimeZone('UTC')), 'UTC'],
             'fixed_datetime_utc' => [new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC')), 'UTC', new \DateTime('2017-01-01 10:00:00')],
