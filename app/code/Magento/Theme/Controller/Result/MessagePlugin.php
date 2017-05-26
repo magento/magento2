@@ -150,12 +150,11 @@ class MessagePlugin
      */
     protected function getCookiesMessages()
     {
-        $messages = $this->serializer->unserialize(
-            $this->cookieManager->getCookie(
-                self::MESSAGES_COOKIES_NAME,
-                $this->serializer->serialize([])
-            )
-        );
+        $messages = $this->cookieManager->getCookie(self::MESSAGES_COOKIES_NAME);
+        if (!$messages) {
+            return [];
+        }
+        $messages = $this->serializer->unserialize($messages);
         if (!is_array($messages)) {
             $messages = [];
         }
