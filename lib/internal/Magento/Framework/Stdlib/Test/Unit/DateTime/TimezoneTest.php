@@ -95,12 +95,12 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
                 '2016-10-10 10:00:00'
             ],
             'datetime' => [
-                new \DateTime('2016-10-10 10:00:00'),
+                new \DateTime('2016-10-10 10:00:00', new \DateTimeZone('UTC')),
                 'UTC',
                 '2016-10-10 10:00:00'
             ],
             'datetimeimmutable' => [
-                new \DateTimeImmutable('2016-10-10 10:00:00'),
+                new \DateTimeImmutable('2016-10-10 10:00:00', new \DateTimeZone('UTC')),
                 'UTC',
                 '2016-10-10 10:00:00'
             ]

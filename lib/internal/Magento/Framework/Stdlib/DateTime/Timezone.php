@@ -301,7 +301,7 @@ class Timezone implements TimezoneInterface
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
     {
-        if (!($date instanceof \DateTime)) {
+        if (!($date instanceof \DateTimeInterface)) {
             if ($date instanceof \DateTimeImmutable) {
                 $date = new \DateTime($date->format('Y-m-d H:i:s'), new \DateTimeZone($this->getConfigTimezone()));
             } else {
