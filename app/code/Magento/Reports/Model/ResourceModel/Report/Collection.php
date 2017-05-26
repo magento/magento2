@@ -19,14 +19,14 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * From value
      *
-     * @var string
+     * @var \DateTime
      */
     protected $_from;
 
     /**
      * To value
      *
-     * @var string
+     * @var \DateTime
      */
     protected $_to;
 
@@ -118,10 +118,10 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param \DateTimeInterface $toDate
      * @return $this
      */
-    public function setInterval($fromDate, $toDate)
+    public function setInterval(\DateTimeInterface $fromDate, \DateTimeInterface $toDate)
     {
-        $this->_from = $fromDate;
-        $this->_to = $toDate;
+        $this->_from = new \DateTime($fromDate->format('Y-m-d'), $fromDate->getTimezone());
+        $this->_to = new \DateTime($toDate->format('Y-m-d'), $toDate->getTimezone());
 
         return $this;
     }
@@ -168,10 +168,10 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Get interval for a day
      *
-     * @param \DateTimeInterface $dateStart
+     * @param \DateTime $dateStart
      * @return array
      */
-    protected function _getDayInterval(\DateTimeInterface $dateStart)
+    protected function _getDayInterval(\DateTime $dateStart)
     {
         $interval = [
             'period' => $this->_localeDate->formatDateTime(
@@ -188,12 +188,12 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Get interval for a month
      *
-     * @param \DateTimeInterface $dateStart
-     * @param \DateTimeInterface $dateEnd
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateEnd
      * @param bool $firstInterval
      * @return array
      */
-    protected function _getMonthInterval(\DateTimeInterface $dateStart, \DateTimeInterface $dateEnd, $firstInterval)
+    protected function _getMonthInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
     {
         $interval = [];
         $interval['period'] = $dateStart->format('m/Y');
@@ -231,12 +231,12 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * Get Interval for a year
      *
-     * @param \DateTimeInterface $dateStart
-     * @param \DateTimeInterface $dateEnd
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateEnd
      * @param bool $firstInterval
      * @return array
      */
-    protected function _getYearInterval(\DateTimeInterface $dateStart, \DateTimeInterface $dateEnd, $firstInterval)
+    protected function _getYearInterval(\DateTime $dateStart, \DateTime $dateEnd, $firstInterval)
     {
         $interval = [];
         $interval['period'] = $dateStart->format('Y');
