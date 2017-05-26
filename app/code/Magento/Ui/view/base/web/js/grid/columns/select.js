@@ -55,7 +55,7 @@ define([
         flatOptions: function (options) {
             var self = this;
 
-            if (!Array.isArray(options)) {
+            if (!_.isArray(options)) {
                 options = _.values(options);
             }
 
