@@ -120,7 +120,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getDateFixtures
      */
-    public function testDate($expectedResult, $timezone = 'UTC', $date = null, $locale = null)
+    public function testDate($expectedResult, $timezone = 'UTC', $date = null)
     {
         $this->localeResolver
             ->method('getLocale')
@@ -131,7 +131,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedResult,
-            $this->getTimezone()->date($date, $locale, true),
+            $this->getTimezone()->date($date, null, true),
             '',
             1
         );
@@ -155,7 +155,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
 
     private function getTimezone()
     {
-        return new \Magento\Framework\Stdlib\DateTime\Timezone(
+        return new Timezone(
             $this->scopeResolver,
             $this->localeResolver,
             $this->getMockBuilder(DateTime::class)->getMock(),
