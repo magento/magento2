@@ -165,7 +165,7 @@ define([
     });
 
     describe('Validation of the password against the user name', function () {
-        it("rejects data, if password is the same as user name", function() {
+        it('rejects data, if password is the same as user name', function() {
             var password = $('<input id="password" type="password" value="EmailPasswordTheSame" />');
             var email = $('<input id="email" type="email" value="EmailPasswordTheSame" />');
 
@@ -174,7 +174,7 @@ define([
             )).toEqual(false);
         });
 
-        it("approves data, if password is different from user name", function() {
+        it('approves data, if password is different from user name', function() {
             var password = $('<input id="password" type="password" value="SomePassword" />');
             var email = $('<input id="email" type="email" value="SomeEmail" />');
 

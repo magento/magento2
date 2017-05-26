@@ -74,7 +74,7 @@ define([
                 displayScore = 0;
             } else {
                 this.options.cache.input.rules('add', {
-                    'password-not-equal-to-email': this.options.cache.email.val()
+                    'password-not-equal-to-user-name': this.options.cache.email.val()
                 });
 
                 if (password.toLowerCase() === this.options.cache.email.val().toLowerCase()) {
