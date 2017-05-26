@@ -1359,25 +1359,4 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         return $usedSalableProducts;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function isPossibleBuyFromList($product)
-    {
-        /** @var bool $isAllCustomOptionsDisplayed */
-        $isAllCustomOptionsDisplayed = true;
-
-        foreach ($this->getConfigurableAttributes($product) as $attribute) {
-            /** @var Attribute $eavAttribute */
-            $eavAttribute = $attribute->getProductAttribute();
-
-            $isAllCustomOptionsDisplayed = (
-                $isAllCustomOptionsDisplayed
-                && $eavAttribute->getData('used_in_product_listing')
-            );
-        }
-
-        return $isAllCustomOptionsDisplayed;
-    }
 }
