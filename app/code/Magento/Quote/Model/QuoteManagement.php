@@ -10,7 +10,6 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -138,11 +137,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     private $quoteIdMaskFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     */
-    private $minimumAmountMessage;
-
-    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -163,7 +157,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param QuoteFactory $quoteFactory
-     * @param Quote\Validator\MinimumOrderAmount\ValidationMessage $minimumAmountMessage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -186,8 +179,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage $minimumAmountMessage = null
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -209,8 +201,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
         $this->quoteFactory = $quoteFactory;
-        $this->minimumAmountMessage = $minimumAmountMessage ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class);
     }
 
     /**
@@ -330,10 +320,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->minimumAmountMessage->getMessage());
-        }
-
         if ($paymentMethod) {
             $paymentMethod->setChecks([
                 \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,

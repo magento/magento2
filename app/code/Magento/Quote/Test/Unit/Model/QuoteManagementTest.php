@@ -122,11 +122,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     */
-    private $minimumAmountMessage;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteIdMock;
@@ -223,8 +218,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'setCustomerGroupId',
                 'assignCustomer',
                 'getPayment',
-                'getIsMultiShipping',
-                'validateMinimumAmount'
             ],
             [],
             '',
@@ -256,14 +249,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->minimumAmountMessage = $this->getMock(
-            \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class,
-            ['getMessage'],
-            [],
-            '',
-            false
-        );
-
         $this->quoteFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteFactory::class, ['create'], [], '', false);
         $this->model = $objectManager->getObject(
             \Magento\Quote\Model\QuoteManagement::class,
@@ -287,8 +272,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
-                'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountMessage' => $this->minimumAmountMessage
+                'quoteFactory' => $this->quoteFactoryMock
             ]
         );
 
@@ -721,10 +705,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Magento\Checkout\Model\Type\Onepage::METHOD_GUEST);
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
-        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(true);
-
-        $this->minimumAmountMessage->expects($this->never())->method('getMessage');
 
         $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, ['getEmail'], [], '', false);
         $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
@@ -759,8 +739,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
-                'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountMessage' => $this->minimumAmountMessage
+                'quoteFactory' => $this->quoteFactoryMock
             ]
         );
         $orderMock = $this->getMock(
@@ -818,8 +797,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
-                'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountMessage' => $this->minimumAmountMessage
+                'quoteFactory' => $this->quoteFactoryMock
             ]
         );
         $orderMock = $this->getMock(
@@ -851,11 +829,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerIsGuest')
             ->with(true);
 
-        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
-        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(true);
-
-        $this->minimumAmountMessage->expects($this->never())->method('getMessage');
-
         $service->expects($this->once())->method('submit')->willReturn($orderMock);
 
         $this->quoteMock->expects($this->atLeastOnce())->method('getId')->willReturn($cartId);
@@ -881,67 +854,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
 
         $this->assertEquals($orderId, $service->placeOrder($cartId, $paymentMethod));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Incorrect amount
-     */
-    public function testPlaceOrderWithViolationOfMinimumAmount()
-    {
-        $cartId = 323;
-
-        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(false);
-        $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(false)->willReturn(false);
-
-        $this->minimumAmountMessage->expects($this->once())
-            ->method('getMessage')
-            ->willReturn(__('Incorrect amount'));
-
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with($cartId)
-            ->willReturn($this->quoteMock);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
-        $service = $this->getMock(
-            \Magento\Quote\Model\QuoteManagement::class,
-            ['submit'],
-            [
-                'eventManager' => $this->eventManager,
-                'quoteValidator' => $this->quoteValidator,
-                'orderFactory' => $this->orderFactory,
-                'orderManagement' => $this->orderManagement,
-                'customerManagement' => $this->customerManagement,
-                'quoteAddressToOrder' => $this->quoteAddressToOrder,
-                'quoteAddressToOrderAddress' => $this->quoteAddressToOrderAddress,
-                'quoteItemToOrderItem' => $this->quoteItemToOrderItem,
-                'quotePaymentToOrderPayment' => $this->quotePaymentToOrderPayment,
-                'userContext' => $this->userContextMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'customerRepository' => $this->customerRepositoryMock,
-                'customerModelFactory' => $this->customerFactoryMock,
-                'quoteAddressFactory' => $this->quoteAddressFactory,
-                'dataObjectHelper' => $this->dataObjectHelperMock,
-                'storeManager' => $this->storeManagerMock,
-                'checkoutSession' => $this->checkoutSessionMock,
-                'customerSession' => $this->customerSessionMock,
-                'accountManagement' => $this->accountManagementMock,
-                'quoteFactory' => $this->quoteFactoryMock,
-                'minimumAmountMessage' => $this->minimumAmountMessage
-            ]
-        );
-
-        $service->expects($this->never())->method('submit');
-
-        $paymentMethod = $this->getMock(
-            \Magento\Quote\Model\Quote\Payment::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $service->placeOrder($cartId, $paymentMethod);
     }
 
     /**
