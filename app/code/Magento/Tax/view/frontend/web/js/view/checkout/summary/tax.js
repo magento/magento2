@@ -21,7 +21,9 @@ define([
         isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed;
 
     quote.shippingAddress.subscribe(function () {
-        totalsDefaultProcessor.estimateTotals(quote.shippingAddress());
+        if (quote.shippingAddress().isEditable()) {
+            totalsDefaultProcessor.estimateTotals(quote.shippingAddress());
+        }
     });
 
     return Component.extend({
