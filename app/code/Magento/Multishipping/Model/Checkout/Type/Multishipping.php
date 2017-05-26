@@ -10,6 +10,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Directory\Model\AllowedCountries;
 
 /**
  * Multishipping checkout model
@@ -146,11 +147,18 @@ class Multishipping extends \Magento\Framework\DataObject
     private $cartExtensionFactory;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountryReader;
+
+    /**
      * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
      */
     private $shippingAssignmentProcessor;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -174,6 +182,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $data
      * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
+     * @param AllowedCountries|null $allowedCountryReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -199,7 +208,8 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = [],
-        \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null
+        \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
+        AllowedCountries $allowedCountryReader = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -224,6 +234,8 @@ class Multishipping extends \Magento\Framework\DataObject
         $this->totalsCollector = $totalsCollector;
         $this->cartExtensionFactory = $cartExtensionFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Quote\Api\Data\CartExtensionFactory::class);
+        $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
+            ->get(AllowedCountries::class);
         parent::__construct($data);
         $this->_init();
     }
@@ -697,6 +709,18 @@ class Multishipping extends \Magento\Framework\DataObject
             if (!$method || !$rate) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please specify shipping methods for all addresses.')
+                );
+            }
+
+            // Checks if a country id present in the allowed countries list.
+            if (
+                !in_array(
+                    $address->getCountryId(),
+                    $this->allowedCountryReader->getAllowedCountries()
+                )
+            ) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Some addresses cannot be used due to country-specific configurations.')
                 );
             }
         }
