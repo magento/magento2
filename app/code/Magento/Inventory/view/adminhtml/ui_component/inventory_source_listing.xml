@@ -15,9 +15,9 @@
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string">Add New</item>
+                <item name="label" xsi:type="string">Add New Warehouse</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/Page/new</item>
+                <item name="url" xsi:type="string">*/*/edit</item>
             </item>
         </item>
     </argument>
@@ -48,7 +48,7 @@
         </settings>
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <filterSearch name="fulltext"/>
+        <filterSearch name="name"/>
         <filters name="listing_filters"/>
         <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="delete">
@@ -67,11 +67,9 @@
     </listingToolbar>
     <columns name="inventory_source_listing_columns">
         <selectionsColumn name="ids" sortOrder="10">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">source_id</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>source_id</indexField>
+            </settings>
         </selectionsColumn>
         <column name="source_id" sortOrder="20">
             <settings>
@@ -82,25 +80,72 @@
         </column>
         <column name="name" sortOrder="30">
             <settings>
-                <addField>true</addField>
                 <filter>text</filter>
                 <label translate="true">Name</label>
             </settings>
         </column>
-        <column name="email" sortOrder="40">
-            <settings>
-                <addField>true</addField>
-                <filter>text</filter>
-                <label translate="true">Email</label>
-            </settings>
-        </column>
-
-        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Columns\SourceActions" sortOrder="150">
+        <column name="is_active">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="active" xsi:type="array">
+                        <item name="value" xsi:type="string">1</item>
+                        <item name="label" xsi:type="string" translate="true">Active</item>
+                    </item>
+                    <item name="inactive" xsi:type="array">
+                        <item name="value" xsi:type="string">0</item>
+                        <item name="label" xsi:type="string" translate="true">Inactive</item>
+                    </item>
+                </item>
                 <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">source_id</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Is Active</item>
+                    <item name="sortOrder" xsi:type="number">35</item>
                 </item>
             </argument>
+        </column>
+        <column name="contact_name" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Contact Name</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="email" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="region" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Region</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="region_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
+            <settings>
+                <visible>false</visible>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Region Id</label>
+            </settings>
+        </column>
+        <column name="country_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
+            <settings>
+                <visible>false</visible>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Country</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Columns\SourceActions" sortOrder="150">
+            <settings>
+                <indexField>source_id</indexField>
+            </settings>
         </actionsColumn>
     </columns>
 </listing>

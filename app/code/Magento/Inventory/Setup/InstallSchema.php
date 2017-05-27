@@ -6,8 +6,8 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 
 class InstallSchema implements InstallSchemaInterface
 {
@@ -212,6 +212,8 @@ class InstallSchema implements InstallSchemaInterface
                         InstallSchema::OPTION_UNSIGNED => true,
                     ], 'Priority'
                 );
+
+
             $table->setComment('Inventory Source Entity Table')->setOption('type', 'InnoDB')->setOption('charset',
                 'utf8');
             $installer->getConnection()->createTable($table);
