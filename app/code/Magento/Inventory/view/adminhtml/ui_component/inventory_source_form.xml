@@ -58,7 +58,6 @@
                 </item>
             </argument>
         </field>
-
         <field name="status">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
