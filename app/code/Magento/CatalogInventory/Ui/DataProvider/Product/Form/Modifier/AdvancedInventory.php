@@ -213,7 +213,7 @@ class AdvancedInventory extends AbstractModifier
                 'dataScope' => 'qty',
                 'validation' => [
                     'validate-number' => true,
-                    'validate-integer' => true,
+                    'validate-digits' => true,
                     'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
                 ],
                 'imports' => [
