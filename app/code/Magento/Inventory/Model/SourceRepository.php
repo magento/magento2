@@ -188,15 +188,16 @@ class SourceRepository implements SourceRepositoryInterface
         /** @var \Magento\Inventory\Model\Resource\Source\Collection $collection */
         $collection = $this->collectionFactory->create();
 
+        /** @var SourceSearchResultsInterface $searchResults */
+        $searchResults = $this->sourceSearchResultsFactory->create();
+
         // if there is a searchCriteria defined, use it to add its creterias to the collection
         if (!is_null($searchCriteria)) {
             $this->collectionProcessor->process($searchCriteria, $collection);
+            $searchResults->setSearchCriteria($searchCriteria);
         }
 
-        /** @var SourceSearchResultsInterface $searchResults */
-        $searchResults = $this->sourceSearchResultsFactory->create();
         $searchResults->setItems($collection->getItems());
-        $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
