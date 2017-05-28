@@ -9,6 +9,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 
 /**
  * @api
@@ -23,7 +24,7 @@ interface SourceRepositoryInterface
      *
      * @throws CouldNotSaveException
      */
-    public function save(SourceInterface $source);
+    public function save(SourceInterface $source): int;
 
     /**
      * Load Source data by given sourceId.
@@ -32,7 +33,7 @@ interface SourceRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\SourceInterface
      * @throws NoSuchEntityException
      */
-    public function get($sourceId);
+    public function get(int $sourceId): SourceInterface;
 
     /**
      * Load Source data collection by given search criteria
@@ -40,5 +41,5 @@ interface SourceRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null);
+    public function getList(SearchCriteriaInterface $searchCriteria = null): SourceSearchResultsInterface;
 }

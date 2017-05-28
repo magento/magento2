@@ -5,7 +5,7 @@
  */
 namespace Magento\InventoryApi\Api\Data;
 
-use \Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
@@ -46,260 +46,260 @@ interface SourceInterface extends ExtensibleDataInterface
      * Set source id.
      *
      * @param int $sourceId
-     * @return $this
+     * @return SourceInterface
      */
-    public function setSourceId($sourceId);
+    public function setSourceId(int $sourceId): SourceInterface;
 
     /**
      * Get source name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Set source name.
      *
      * @param string $name
-     * @return $this
+     * @return SourceInterface
      */
-    public function setName($name);
+    public function setName(string $name): SourceInterface;
 
     /**
      * Get source email
      *
      * @return string
      */
-    public function getEmail();
+    public function getEmail(): string;
 
     /**
      * Set source email
      *
      * @param string $email
-     * @return $this
+     * @return SourceInterface
      */
-    public function setEmail($email);
+    public function setEmail(string $email): SourceInterface;
 
     /**
      * Get source contact name.
      *
      * @return string
      */
-    public function getContactName();
+    public function getContactName(): string;
 
     /**
      * Set source contact name.
      *
      * @param string $contactName
-     * @return $this
+     * @return SourceInterface
      */
-    public function setContactName($contactName);
+    public function setContactName(string $contactName): SourceInterface;
 
     /**
      * Check if source is enabled.
      *
      * @return bool
      */
-    public function getIsActive();
+    public function getIsActive(): bool;
 
     /**
      * Enable or disable source.
      *
      * @param bool $active
-     * @return $this
+     * @return SourceInterface
      */
-    public function setIsActive($active);
+    public function setIsActive(bool $active): SourceInterface;
 
     /**
      * Get source description.
      *
      * @return string
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * Set source description.
      *
      * @param string $description
-     * @return $this
+     * @return SourceInterface
      */
-    public function setDescription($description);
+    public function setDescription(string $description): SourceInterface;
 
     /**
      * Get source latitude.
      *
      * @return float
      */
-    public function getLatitude();
+    public function getLatitude(): float;
 
     /**
      * Set source latitude.
      *
      * @param float $latitude
-     * @return $this
+     * @return SourceInterface
      */
-    public function setLatitude($latitude);
+    public function setLatitude(float $latitude): SourceInterface;
 
     /**
      * Get source longitude.
      *
      * @return float
      */
-    public function getLongitude();
+    public function getLongitude(): float;
 
     /**
      * Set source longitude.
      *
      * @param float $longitude
-     * @return $this
+     * @return SourceInterface
      */
-    public function setLongitude($longitude);
+    public function setLongitude(float $longitude): SourceInterface;
 
     /**
      * Get source country id.
      *
      * @return string
      */
-    public function getCountryId();
+    public function getCountryId(): string;
 
     /**
      * Set source country id.
      *
-     * @param int $countryId
-     * @return $this
+     * @param string $countryId
+     * @return SourceInterface
      */
-    public function setCountryId($countryId);
+    public function setCountryId(string $countryId): SourceInterface;
 
     /**
      * Get region id if source has registered region.
      *
      * @return int
      */
-    public function getRegionId();
+    public function getRegionId(): int;
 
     /**
      * Set region id if source has registered region.
      *
      * @param int $regionId
-     * @return $this
+     * @return SourceInterface
      */
-    public function setRegionId($regionId);
+    public function setRegionId(int $regionId): SourceInterface;
 
     /**
      * Get region title if source has custom region
      *
      * @return string
      */
-    public function getRegion();
+    public function getRegion(): string;
 
     /**
      * Set source region title.
      *
      * @param string $region
-     * @return $this
+     * @return SourceInterface
      */
-    public function setRegion($region);
+    public function setRegion(string $region): SourceInterface;
 
     /**
      * Get source city.
      *
      * @return string
      */
-    public function getCity();
+    public function getCity(): string;
 
     /**
      * Set source city.
      *
      * @param string $city
-     * @return $this
+     * @return SourceInterface
      */
-    public function setCity($city);
+    public function setCity(string $city): SourceInterface;
 
     /**
      * Get source street name.
      *
      * @return string
      */
-    public function getStreet();
+    public function getStreet(): string;
 
     /**
      * Set source street name.
      *
      * @param string $street
-     * @return $this
+     * @return SourceInterface
      */
-    public function setStreet($street);
+    public function setStreet(string $street): SourceInterface;
 
     /**
      * Get source post code.
      *
      * @return string
      */
-    public function getPostcode();
+    public function getPostcode(): string;
 
     /**
      * Set source post code.
      *
      * @param string $postcode
-     * @return $this
+     * @return SourceInterface
      */
-    public function setPostcode($postcode);
+    public function setPostcode(string $postcode): SourceInterface;
 
     /**
      * Get source phone number.
      *
      * @return string
      */
-    public function getPhone();
+    public function getPhone(): string;
 
     /**
      * Set source phone number.
      *
      * @param string $phone
-     * @return $this
+     * @return SourceInterface
      */
-    public function setPhone($phone);
+    public function setPhone(string $phone): SourceInterface;
 
     /**
      * Get source fax.
      *
      * @return string
      */
-    public function getFax();
+    public function getFax(): string;
 
     /**
      * Set source fax.
      *
      * @param string $fax
-     * @return $this
+     * @return SourceInterface
      */
-    public function setFax($fax);
+    public function setFax(string $fax): SourceInterface;
 
     /**
      * Get source priority
      *
      * @return int
      */
-    public function getPriority();
+    public function getPriority(): int;
 
     /**
      * Set source priority
      *
      * @param int $priority
-     * @return $this
+     * @return SourceInterface
      */
-    public function setPriority($priority);
+    public function setPriority(int $priority): SourceInterface;
 
     /**
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[] $carrierLinks
-     * @return $this
+     * @return SourceInterface
      */
-    public function setCarrierLinks($carrierLinks);
+    public function setCarrierLinks(array $carrierLinks): SourceInterface;
 
     /**
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]
      */
-    public function getCarrierLinks();
+    public function getCarrierLinks(): array;
 
     /**
      * Retrieve existing extension attributes object or create a new one.

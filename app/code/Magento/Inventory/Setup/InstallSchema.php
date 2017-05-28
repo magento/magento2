@@ -136,7 +136,7 @@ class InstallSchema implements InstallSchemaInterface
             )->addColumn(
                 SourceInterface::COUNTRY_ID,
                 Table::TYPE_TEXT,
-                2,
+                30,
                 [
                     InstallSchema::OPTION_NULLABLE => false,
                     InstallSchema::OPTION_DEFAULT => ''
