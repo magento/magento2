@@ -65,6 +65,7 @@ class SourceRepository implements SourceRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
      * @param SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceSource $resource,

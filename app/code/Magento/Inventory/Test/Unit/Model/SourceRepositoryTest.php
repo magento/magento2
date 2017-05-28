@@ -39,6 +39,11 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     private $sourceSearchResultsFactory;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
+    /**
      * @var \Magento\Inventory\Model\SourceRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sourceRepository;
@@ -54,7 +59,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->sourceFactory = $this->getMock(
-            \Magento\Inventory\Model\SourceFactory::class,
+            \Magento\InventoryApi\Api\Data\SourceInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -81,6 +86,10 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sourceRepository = $objectManager->getObject(
             \Magento\Inventory\Model\SourceRepository::class,
@@ -90,6 +99,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionProcessor' => $this->collectionProcessor,
                 'collectionFactory' => $this->collectionFactory,
                 'sourceSearchResultsFactory' => $this->sourceSearchResultsFactory,
+                'logger' => $this->loggerMock,
             ]
         );
     }
