@@ -147,21 +147,42 @@ class SourceRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = [
-            'source' => $this->formSourceToArray($expectedSource)
+            'source' => $this->getSourceDataArray($expectedSource)
         ];
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($result);
 
         $createdSource = $this->sourceRepository->get($result);
-        $this->assertSame($this->formSourceToArray($expectedSource), $this->formSourceToArray($createdSource));
+        $this->assertSame(
+            $this->getExpectedValues($this->getSourceDataArray($expectedSource)),
+            $this->getSourceDataArray($createdSource)
+        );
+    }
+
+    /**
+     * @param array $sourceData
+     * @return array
+     */
+    private function getExpectedValues(array $sourceData)
+    {
+        $sourceData[SourceInterface::LATITUDE] = number_format(
+            $sourceData[SourceInterface::LATITUDE],
+            6
+        );
+        $sourceData[SourceInterface::LONGITUDE] = number_format(
+            $sourceData[SourceInterface::LONGITUDE],
+            6
+        );
+
+        return $sourceData;
     }
 
     /**
      * @param SourceInterface $source
      * @return array
      */
-    private function formSourceToArray(SourceInterface $source)
+    private function getSourceDataArray(SourceInterface $source)
     {
         $result = [
             SourceInterface::NAME => $source->getName(),
@@ -189,6 +210,7 @@ class SourceRepositoryTest extends WebapiAbstract
                 $result[SourceInterface::CARRIER_LINKS][] = [
                     SourceCarrierLinkInterface::CARRIER_CODE => $carrierLink->getCarrierCode(),
                     SourceCarrierLinkInterface::POSITION => $carrierLink->getPosition(),
+                    SourceCarrierLinkInterface::EXTENSION_ATTRIBUTES => [],
                 ];
             }
         }
