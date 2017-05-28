@@ -19,12 +19,13 @@ define([
     quote.shippingAddress.subscribe(function () {
         var type = quote.shippingAddress().getType();
 
-        totalsProcessors['default'] = totalsDefaultProvider;
-        totalsProcessors[type] ?
-            totalsProcessors[type].estimateTotals(quote.shippingAddress()) :
-            totalsProcessors['default'].estimateTotals(quote.shippingAddress());
-
-        if (!quote.isVirtual()) {
+        if (quote.isVirtual() || window.checkoutConfig.activeCarriers.length() === 0) {
+            // update totals block when estimated address was set
+            totalsProcessors['default'] = totalsDefaultProvider;
+            totalsProcessors[type] ?
+                totalsProcessors[type].estimateTotals(quote.shippingAddress()) :
+                totalsProcessors['default'].estimateTotals(quote.shippingAddress());
+        } else {
             // check if user data not changed -> load rates from cache
             if (!cartCache.isChanged('address', quote.shippingAddress()) &&
                 !cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
