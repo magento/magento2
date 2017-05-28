@@ -154,7 +154,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $this->assertNotNull($result);
 
         $createdSource = $this->sourceRepository->get($result);
-        $this->assertSame(
+        $this->assertEquals(
             $this->getExpectedValues($this->getSourceDataArray($expectedSource)),
             $this->getSourceDataArray($createdSource)
         );
@@ -210,7 +210,6 @@ class SourceRepositoryTest extends WebapiAbstract
                 $result[SourceInterface::CARRIER_LINKS][] = [
                     SourceCarrierLinkInterface::CARRIER_CODE => $carrierLink->getCarrierCode(),
                     SourceCarrierLinkInterface::POSITION => $carrierLink->getPosition(),
-                    SourceCarrierLinkInterface::EXTENSION_ATTRIBUTES => [],
                 ];
             }
         }
