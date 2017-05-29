@@ -23,7 +23,10 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
+        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
+        \Magento\Payment\Model\Config $paymentConfig,
+        \Magento\Framework\App\State $appState
     ) {
         parent::__construct('info:system');
         $this->productMetadataInterface = $productMetadataInterface;
@@ -33,6 +36,9 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
         $this->productFactory = $productFactory;
         $this->categoryFactory = $categoryFactory;
         $this->attributeFactory = $attributeFactory;
+        $this->scopeConfigInterface = $scopeConfigInterface;
+        $this->paymentConfig = $paymentConfig;
+        $this->appState = $appState;
     }
 
     protected function configure()
@@ -60,6 +66,8 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
                 array('Application Mode', $this->deploymentConfig->get(AppState::PARAM_MODE)),
                 array('Session', $this->deploymentConfig->get('session/save')),
                 array('Crypt Key', $this->deploymentConfig->get('crypt/key')),
+                array('Secure URLs at Storefront', $this->scopeConfigInterface->getValue('web/secure/use_in_frontend') ? 'Yes' : 'No'),
+                array('Secure URLs in Admin', $this->scopeConfigInterface->getValue('web/secure/use_in_adminhtml')),
                 array('Install Date', $this->deploymentConfig->get('install/date')),
                 array('Module Vendors', $this->getModuleVendors()),
                 new TableSeparator(),
@@ -68,6 +76,7 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
                 array('Total Categories', $this->getProductCount()),
                 array('Total Attributes', $this->getAttributeCount()),
                 array('Total Customers', $this->getCustomerCount()),
+                array('Active Payment Methods', $this->getActivePaymentMethods()),
             ))
         ;
         $table->render();
@@ -134,5 +143,23 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
         return $this->customerFactory->create()
             ->getCollection()
             ->getSize();
+    }
+
+
+    public function getActivePaymentMethods()
+    {
+        return $this->appState->emulateAreaCode(
+            'adminhtml',
+            function() {
+                $payments = $this->paymentConfig->getActiveMethods();
+                $paymentTitles = array();
+
+                foreach ($payments as $paymentCode => $paymentModel) {
+                    $paymentTitles[] = $this->scopeConfigInterface
+                        ->getValue('payment/'.$paymentCode.'/title');
+                }
+
+                return count($paymentTitles) > 1 ? implode(', ', $paymentTitles) : 'none';
+            });
     }
 }
