@@ -17,7 +17,7 @@ class AdditionalFieldsProvider implements AdditionalFieldsProviderInterface
     private $fieldsProviders;
 
     /**
-     * @param array $fieldsProviders
+     * @param AdditionalFieldsProviderInterface[] $fieldsProviders
      */
     public function __construct(array $fieldsProviders)
     {
@@ -29,11 +29,11 @@ class AdditionalFieldsProvider implements AdditionalFieldsProviderInterface
      */
     public function getFields(array $productIds, $storeId)
     {
-        $result = [];
+        $fields = [];
         foreach ($this->fieldsProviders as $fieldsProvider) {
-            $result = array_replace_recursive($result, $fieldsProvider->getFields($productIds, $storeId));
+            $fields[] = $fieldsProvider->getFields($productIds, $storeId);
         }
 
-        return $result;
+        return array_replace_recursive(...$fields);
     }
 }
