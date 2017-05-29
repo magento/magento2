@@ -31,7 +31,7 @@ class TemplateHintsEnableCommand extends Command
     public function __construct(
         \Magento\Config\Model\ResourceModel\Config $resourceConfig
     ) {
-        parent::__construct($name);
+        parent::__construct();
         $this->_resourceConfig = $resourceConfig;
     }
 
@@ -41,7 +41,7 @@ class TemplateHintsEnableCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Enable DB query logging');
+            ->setDescription('Disable frontend template hints.');
 
         parent::configure();
     }

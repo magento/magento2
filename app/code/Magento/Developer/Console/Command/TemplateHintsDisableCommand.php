@@ -29,7 +29,7 @@ class TemplateHintsDisableCommand extends Command
     public function __construct(
         \Magento\Config\Model\ResourceModel\Config $resourceConfig
     ) {
-        parent::__construct($name);
+        parent::__construct();
         $this->_resourceConfig = $resourceConfig;
     }
 
