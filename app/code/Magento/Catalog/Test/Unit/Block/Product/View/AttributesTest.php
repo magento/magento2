@@ -18,7 +18,7 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * Attributes block.
