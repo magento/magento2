@@ -9,12 +9,14 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrierLinkInterface
 {
     /**
      * Initialize resource model
      *
-     * @codingStandardsIgnore
      * @return void
      */
     protected function _construct()

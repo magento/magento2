@@ -11,9 +11,11 @@ use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
  * Class Source,
- * provides implementation of the SourceInterface which adds the possibilty
+ * provides implementation of the SourceInterface which adds the possibility
  * for a Merchant to map existing physical sources to some particular sales channels
- * this model holds the information like name and description of this physical sources
+ * this model holds the information like name and description of this physical sources.
+ *
+ * @codeCoverageIgnore
  */
 class Source extends AbstractExtensibleModel implements SourceInterface
 {
