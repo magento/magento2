@@ -184,7 +184,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @return int
      */
-    public function getCurrentWebsite()
+    public function getCurrentWebsiteId()
     {
         return $this->_storeManager->getWebsite()->getId();
     }

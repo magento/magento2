@@ -128,13 +128,13 @@ class GaTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->gaBlock->isCookieRestrictionModeEnabled());
     }
 
-    public function testGetCurrentWebsite()
+    public function testGetCurrentWebsiteId()
     {
         $websiteId = 100;
         $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)->getMock();
         $websiteMock->expects($this->once())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
-        $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsite());
+        $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsiteId());
     }
 
     public function testOrderTrackingData()
