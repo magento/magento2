@@ -11,6 +11,16 @@ define([
 ], function (ko, _) {
     'use strict';
 
+    var proceedTotalsData = function (data) {
+        if (_.isObject(data) && _.isObject(data['extension_attributes'])) {
+            _.each(data['extension_attributes'], function (element, index) {
+                data[index] = element;
+            });
+        }
+
+        return data;
+    };
+
     var billingAddress = ko.observable(null),
         shippingAddress = ko.observable(null),
         shippingMethod = ko.observable(null),
@@ -19,7 +29,7 @@ define([
         basePriceFormat = window.checkoutConfig.basePriceFormat,
         priceFormat = window.checkoutConfig.priceFormat,
         storeCode = window.checkoutConfig.storeCode,
-        totalsData = window.checkoutConfig.totalsData,
+        totalsData = proceedTotalsData(window.checkoutConfig.totalsData),
         totals = ko.observable(totalsData),
         collectedTotals = ko.observable({});
 
@@ -78,11 +88,7 @@ define([
          * @param {Object} data
          */
         setTotals: function (data) {
-            if (_.isObject(data) && _.isObject(data['extension_attributes'])) {
-                _.each(data['extension_attributes'], function (element, index) {
-                    data[index] = element;
-                });
-            }
+            data = proceedTotalsData(data);
             totals(data);
             this.setCollectedTotals('subtotal_with_discount', parseFloat(data['subtotal_with_discount']));
         },
