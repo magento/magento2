@@ -84,22 +84,11 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
     }
 
     /**
-     * Add selected data
-     *
-     * @return $this
-     */
-    protected function _initSelect()
-    {
-        $this->getSelect()->from($this->getResource()->getMainTable());
-        return parent::_initSelect();
-    }
-
-    /**
      * @return $this
      */
     protected function _beforeLoad()
     {
-        $this->getSelect()->columns($this->_getSelectedColumns());
+        $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if (!$this->isTotals()) {
             $this->getSelect()->group($this->_periodFormat);
             $this->getSelect()->having('SUM(orders_count) > 0');
