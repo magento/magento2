@@ -77,7 +77,7 @@ class DataMapperFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(new \stdClass());
-        $this->model->create( 'product');
+        $this->model->create('product');
     }
 
     /**
@@ -88,6 +88,6 @@ class DataMapperFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn($this->getMock(BatchDataMapperInterface::class));
-        $this->assertInstanceOf(BatchDataMapperInterface::class, $this->model->create( 'product'));
+        $this->assertInstanceOf(BatchDataMapperInterface::class, $this->model->create('product'));
     }
 }
