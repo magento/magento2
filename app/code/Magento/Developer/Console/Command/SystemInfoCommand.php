@@ -14,7 +14,21 @@ use Magento\Framework\App\State as AppState;
 class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
-     * Constructor
+     * Console Command Name
+     */
+    const COMMAND = 'info:system';
+
+    /**
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadataInterface
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
+     * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param AppState $appState
      */
     public function __construct(
         \Magento\Framework\App\ProductMetadataInterface $productMetadataInterface,
@@ -28,7 +42,7 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
         \Magento\Payment\Model\Config $paymentConfig,
         \Magento\Framework\App\State $appState
     ) {
-        parent::__construct('info:system');
+        parent::__construct(self::COMMAND);
         $this->productMetadataInterface = $productMetadataInterface;
         $this->deploymentConfig = $deploymentConfig;
         $this->moduleList = $moduleList;
@@ -59,15 +73,15 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
         $table
             ->setHeaders(array('Name', 'Value'))
             ->setRows(array(
-                array('Application', $this->productMetadataInterface->getName() . ' ' . $this->productMetadataInterface->getEdition()),
+                array('Application', $this->getApplicationName()),
                 array('Version', $this->productMetadataInterface->getVersion()),
                 new TableSeparator(),
 
                 array('Application Mode', $this->deploymentConfig->get(AppState::PARAM_MODE)),
                 array('Session', $this->deploymentConfig->get('session/save')),
                 array('Crypt Key', $this->deploymentConfig->get('crypt/key')),
-                array('Secure URLs at Storefront', $this->scopeConfigInterface->getValue('web/secure/use_in_frontend') ? 'Yes' : 'No'),
-                array('Secure URLs in Admin', $this->scopeConfigInterface->getValue('web/secure/use_in_adminhtml')),
+                array('Secure URLs at Storefront', $this->getSecurityInfo('frontend')),
+                array('Secure URLs in Admin', $this->getSecurityInfo('adminhtml')),
                 array('Install Date', $this->deploymentConfig->get('install/date')),
                 array('Module Vendors', $this->getModuleVendors()),
                 new TableSeparator(),
@@ -77,12 +91,19 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
                 array('Total Attributes', $this->getAttributeCount()),
                 array('Total Customers', $this->getCustomerCount()),
                 array('Active Payment Methods', $this->getActivePaymentMethods()),
-            ))
-        ;
-        $table->render();
+            ));
 
+        $table->render();
     }
 
+    /**
+     * @return string
+     */
+    protected function getApplicationName()
+    {
+        return $this->productMetadataInterface->getName() . ' ' . $this->productMetadataInterface->getEdition();
+    }
+    
     /**
      * @return string
      */
@@ -103,7 +124,7 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * @return number
+     * @return int
      */
     protected function getProductCount()
     {
@@ -114,7 +135,7 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * @return number
+     * @return int
      */
     protected function getCategoryCount()
     {
@@ -125,7 +146,7 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * @return number
+     * @return int
      */
     protected function getAttributeCount()
     {
@@ -136,7 +157,7 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
     }
 
     /**
-     * @return number
+     * @return int
      */
     protected function getCustomerCount()
     {
@@ -145,8 +166,11 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
             ->getSize();
     }
 
-
-    public function getActivePaymentMethods()
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function getActivePaymentMethods()
     {
         return $this->appState->emulateAreaCode(
             'adminhtml',
@@ -161,5 +185,14 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
 
                 return count($paymentTitles) > 1 ? implode(', ', $paymentTitles) : 'none';
             });
+    }
+
+    /**
+     * @param $area
+     * @return string
+     */
+    protected function getSecurityInfo($area)
+    {
+        return $this->scopeConfigInterface->getValue('web/secure/use_in_' . $area) ? 'Yes' : 'No';
     }
 }
