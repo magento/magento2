@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,18 +33,25 @@ class UpgradeCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, DeploymentConfig $deploymentConfig = null)
     {
         $this->installerFactory = $installerFactory;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         parent::__construct();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -61,17 +72,32 @@ class UpgradeCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
-        $installer = $this->installerFactory->create(new ConsoleLogger($output));
-        $installer->updateModulesSequence($keepGenerated);
-        $installer->installSchema();
-        $installer->installDataFixtures();
-        if (!$keepGenerated) {
-            $output->writeln('<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>');
+        try {
+            $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
+            $installer = $this->installerFactory->create(new ConsoleLogger($output));
+            $installer->updateModulesSequence($keepGenerated);
+            $installer->installSchema();
+            $installer->installDataFixtures();
+
+            if ($this->deploymentConfig->isAvailable()) {
+                $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
+                $arrayInput = new ArrayInput([]);
+                $arrayInput->setInteractive($input->isInteractive());
+                $importConfigCommand->run($arrayInput, $output);
+            }
+
+            if (!$keepGenerated) {
+                $output->writeln(
+                    '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
+                );
+            }
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;

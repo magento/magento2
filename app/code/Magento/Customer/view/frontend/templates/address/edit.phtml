@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@
 
 /** @var \Magento\Customer\Block\Address\Edit $block */
 ?>
+<?php $_company = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Company') ?>
+<?php $_telephone = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Telephone') ?>
+<?php $_fax = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Fax') ?>
 <form class="form-address-edit"
       action="<?php echo $block->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
@@ -20,41 +23,19 @@
         <input type="hidden" name="success_url" value="<?php echo $block->escapeUrl($block->getSuccessUrl()) ?>">
         <input type="hidden" name="error_url" value="<?php echo $block->escapeUrl($block->getErrorUrl()) ?>">
         <?php echo $block->getNameBlockHtml() ?>
-        <div class="field company">
-            <label class="label" for="company"><span><?php echo $block->escapeHtml(__('Company')) ?></span></label>
-            <div class="control">
-                <input type="text"
-                       name="company"
-                       id="company"
-                       title="<?php echo $block->escapeHtmlAttr(__('Company')) ?>"
-                       value="<?php echo $block->escapeHtmlAttr($block->getAddress()->getCompany()) ?>"
-                       class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company')) ?>">
-            </div>
-        </div>
-        <div class="field telephone required">
-            <label class="label" for="telephone">
-                <span><?php echo $block->escapeHtml(__('Phone Number')) ?></span>
-            </label>
-            <div class="control">
-                <input type="text"
-                       name="telephone"
-                       value="<?php echo $block->escapeHtmlAttr($block->getAddress()->getTelephone()) ?>"
-                       title="<?php echo $block->escapeHtmlAttr(__('Phone Number')) ?>"
-                       class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>"
-                       id="telephone">
-            </div>
-        </div>
-        <div class="field fax">
-            <label class="label" for="fax"><span><?php echo $block->escapeHtml(__('Fax')) ?></span></label>
-            <div class="control">
-                <input type="text"
-                       name="fax"
-                       id="fax"
-                       title="<?php echo $block->escapeHtmlAttr(__('Fax')) ?>"
-                       value="<?php echo $block->escapeHtmlAttr($block->getAddress()->getFax()) ?>"
-                       class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('fax')) ?>">
-            </div>
-        </div>
+
+        <?php if ($_company->isEnabled()): ?>
+            <?php echo $_company->setCompany($block->getAddress()->getCompany())->toHtml() ?>
+        <?php endif ?>
+
+        <?php if ($_telephone->isEnabled()): ?>
+            <?php echo $_telephone->setTelephone($block->getAddress()->getTelephone())->toHtml() ?>
+        <?php endif ?>
+
+        <?php if ($_fax->isEnabled()): ?>
+            <?php echo $_fax->setFax($block->getAddress()->getFax())->toHtml() ?>
+        <?php endif ?>
+
     </fieldset>
     <fieldset class="fieldset">
         <legend class="legend"><span><?php echo $block->escapeHtml(__('Address')) ?></span></legend><br>

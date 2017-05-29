@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block;
 
-use Magento\Backend\Model\Menu\Item;
-use Magento\Backend\Block\MenuItemChecker;
-use Magento\Framework\Escaper;
 use Magento\Backend\Block\AnchorRenderer;
+use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AnchorRendererTest extends \PHPUnit_Framework_TestCase
@@ -51,6 +51,9 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
         $this->menuItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->menuItemWithoutChildrenMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->menuItemCheckerMock = $this->getMockBuilder(MenuItemChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,6 +77,7 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
         $html =  'Test html';
         $this->menuItemMock->expects($this->once())->method('getUrl')->willReturn('#');
         $this->menuItemMock->expects($this->once())->method('getTitle')->willReturn($title);
+        $this->menuItemMock->expects($this->once())->method('hasChildren')->willReturn(true);
         $this->escaperMock->expects($this->once())->method('escapeHtml')->with(__($title))->willReturn($html);
 
         $expected =  '<strong class="submenu-group-title" role="presentation">'
@@ -83,6 +87,19 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $expected,
             $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, 1)
+        );
+    }
+
+    public function testRenderAnchorWithoutChildrenAndLevelIsOne()
+    {
+        $this->menuItemWithoutChildrenMock->expects($this->once())->method('getUrl')->willReturn('#');
+        $this->menuItemWithoutChildrenMock->expects($this->once())->method('hasChildren')->willReturn(false);
+
+        $expected =  '';
+
+        $this->assertEquals(
+            $expected,
+            $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemWithoutChildrenMock, 1)
         );
     }
 

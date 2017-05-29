@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,6 @@ interface BasePriceStorageInterface
      *
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\BasePriceInterface[]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get(array $skus);
 

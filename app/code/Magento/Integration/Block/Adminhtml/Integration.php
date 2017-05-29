@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml;
@@ -8,6 +8,7 @@ namespace Magento\Integration\Block\Adminhtml;
 /**
  * Integration block.
  *
+ * @api
  * @codeCoverageIgnore
  */
 class Integration extends \Magento\Backend\Block\Widget\Grid\Container

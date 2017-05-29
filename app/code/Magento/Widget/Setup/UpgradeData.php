@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Widget\Setup;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
@@ -19,17 +18,27 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var FieldDataConverterFactory
+     * @var \Magento\Framework\DB\Select\QueryModifierFactory
      */
-    private $fieldDataConverterFactory;
+    private $queryModifierFactory;
 
     /**
-     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @var AggregatedFieldDataConverter
+     */
+    private $aggregatedFieldConverter;
+
+    /**
+     * UpgradeData constructor
+     *
+     * @param AggregatedFieldDataConverter $aggregatedFieldConverter
+     * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory
+        AggregatedFieldDataConverter $aggregatedFieldConverter,
+        \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
     ) {
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->aggregatedFieldConverter = $aggregatedFieldConverter;
+        $this->queryModifierFactory = $queryModifierFactory;
     }
 
     /**
@@ -37,18 +46,44 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
-
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
-            $fieldDataConverter->convert(
-                $setup->getConnection(),
-                $setup->getTable('widget_instance'),
-                'instance_id',
-                'widget_parameters'
-            );
+            $this->upgradeVersionTwoZeroOne($setup);
         }
+    }
 
-        $setup->endSetup();
+    /**
+     * Upgrade data to version 2.0.1
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroOne(ModuleDataSetupInterface $setup)
+    {
+        $layoutUpdateQueryModifier = $this->queryModifierFactory->create(
+            'like',
+            [
+                'values' => [
+                    'xml' => '%conditions_encoded%'
+                ]
+            ]
+        );
+        $this->aggregatedFieldConverter->convert(
+            [
+                new FieldToConvert(
+                    SerializedToJson::class,
+                    $setup->getTable('widget_instance'),
+                    'instance_id',
+                    'widget_parameters'
+                ),
+                new FieldToConvert(
+                    LayoutUpdateConverter::class,
+                    $setup->getTable('layout_update'),
+                    'layout_update_id',
+                    'xml',
+                    $layoutUpdateQueryModifier
+                ),
+            ],
+            $setup->getConnection()
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Invoice;
@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Item getResource()
  * @method float getBaseWeeeTaxRowDisposition()
@@ -694,5 +695,6 @@ class Item extends AbstractModel implements InvoiceItemInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

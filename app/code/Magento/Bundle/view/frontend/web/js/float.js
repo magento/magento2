@@ -1,9 +1,16 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true expr:true*/
-define(["jquery","jquery/ui"], function($){
+
+/**
+ * @api
+ */
+define([
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
 
     $.widget('mage.float', {
         options: {
@@ -14,7 +21,7 @@ define(["jquery","jquery/ui"], function($){
          * Bind handlers to scroll event
          * @private
          */
-        _create: function() {
+        _create: function () {
             $(window).on('scroll', $.proxy(this._setTop, this));
         },
 
@@ -22,11 +29,14 @@ define(["jquery","jquery/ui"], function($){
          * float bundleSummary on windowScroll
          * @private
          */
-        _setTop: function() {
-            if ((this.element).is(':visible')) {
-                var starTop = $(this.options.productOptionsSelector).offset().top,
-                    offset = $(document).scrollTop(),
-                    maxTop = this.element.parent().offset().top;
+        _setTop: function () {
+            var starTop, offset, maxTop, allowedTop;
+
+            if (this.element.is(':visible')) {
+                starTop = $(this.options.productOptionsSelector).offset().top;
+                offset = $(document).scrollTop();
+                maxTop = this.element.parent().offset().top;
+
                 if (!this.options.top) {
                     this.options.top = this.element.position().top;
                     this.element.css('top', this.options.top);
@@ -40,7 +50,7 @@ define(["jquery","jquery/ui"], function($){
                     offset = this.options.top;
                 }
 
-                var allowedTop = this.options.top + offset - starTop;
+                allowedTop = this.options.top + offset - starTop;
 
                 if (allowedTop < maxTop) {
                     this.element.css('top', allowedTop);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console;
@@ -42,6 +42,9 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
      */
     private $generationDirectoryAccessMock;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->serviceManagerMock = $this->getMockBuilder(ServiceManager::class)
@@ -105,6 +108,9 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
         $this->model->handleCompilerEnvironment();
     }
 
+    /**
+     * @return array
+     */
     public function commandNameDataProvider()
     {
         return [

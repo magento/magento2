@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -8,6 +8,7 @@ namespace Magento\Backend\Block;
 /**
  * Backend abstract block
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Template extends \Magento\Framework\View\Element\Template
@@ -63,14 +64,14 @@ class Template extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check whether or not the module output is enabled
+     * Check whether or not the module output is enabled.
      *
      * Because many module blocks belong to Backend module,
-     * the feature "Disable module output" doesn't cover Admin area
+     * the feature "Disable module output" doesn't cover Admin area.
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)

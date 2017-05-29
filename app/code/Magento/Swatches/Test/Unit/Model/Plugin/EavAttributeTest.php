@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -78,6 +78,21 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $serializer = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            ['serialize', 'unserialize']
+        );
+
+        $serializer->expects($this->any())
+            ->method('serialize')->willReturnCallback(function ($parameter) {
+                return json_encode($parameter);
+            });
+
+        $serializer->expects($this->any())
+            ->method('unserialize')->willReturnCallback(function ($parameter) {
+                return json_decode($parameter, true);
+            });
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavAttribute = $objectManager->getObject(
             \Magento\Swatches\Model\Plugin\EavAttribute::class,
@@ -85,6 +100,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactory,
                 'swatchFactory' => $this->swatchFactory,
                 'swatchHelper' => $this->swatchHelper,
+                'serializer' => $serializer,
             ]
         );
 
@@ -134,7 +150,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->swatchHelper->expects($this->never())->method('isTextSwatch');
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     public function testBeforeSaveTextSwatch()
@@ -179,7 +195,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->with($this->attribute)
             ->willReturn(true);
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     /**
@@ -220,11 +236,11 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     /**
-     * @covers \Magento\Swatches\Model\Plugin\EavAttribute::beforeSave()
+     * @covers \Magento\Swatches\Model\Plugin\EavAttribute::beforeBeforeSave()
      */
     public function testBeforeSaveWithDeletedOption()
     {
@@ -262,7 +278,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                     false
                 )
             );
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     public function testBeforeSaveNotSwatch()
@@ -283,13 +299,13 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ['additional_data']
         )->willReturnOnConsecutiveCalls(
             Swatch::SWATCH_INPUT_TYPE_DROPDOWN,
-            serialize($additionalData)
+            json_encode($additionalData)
         );
 
         $this->attribute
             ->expects($this->once())
             ->method('setData')
-            ->with('additional_data', serialize($shortAdditionalData))
+            ->with('additional_data', json_encode($shortAdditionalData))
             ->will($this->returnSelf());
 
         $this->swatchHelper->expects($this->never())->method('assembleAdditionalDataEavAttribute');
@@ -300,7 +316,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->with($this->attribute)
             ->willReturn(false);
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     public function visualSwatchProvider()

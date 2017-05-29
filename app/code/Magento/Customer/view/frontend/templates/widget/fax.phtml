@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Widget\Fax $block */
+?>
+
+<div class="field fax <?php echo $block->isRequired() ? 'required' : '' ?>">
+    <label for="fax" class="label">
+        <span>
+            <?php echo $block->escapeHtml(__('Fax')) ?>
+        </span>
+    </label>
+    <div class="control">
+        <?php
+            $_validationClass = $block->escapeHtmlAttr(
+                $this->helper('Magento\Customer\Helper\Address')
+                     ->getAttributeValidationClass('fax')
+            );
+        ?>
+        <input type="text"
+               name="fax"
+               id="fax"
+               value="<?php echo $block->escapeHtmlAttr($block->getFax()) ?>"
+               title="<?php echo $block->escapeHtmlAttr(__('Fax')) ?>"
+               class="input-text <?php echo $_validationClass ?: '' ?>"
+        >
+    </div>
+</div>

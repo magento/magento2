@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Ui\Component\Report\Listing\Column;
@@ -43,6 +43,7 @@ class Status implements OptionSourceInterface
      */
     private function getAvailableStatuses()
     {
+        // @codingStandardsIgnoreStart
         return [
             Transaction::AUTHORIZATION_EXPIRED => __(Transaction::AUTHORIZATION_EXPIRED),
             Transaction::AUTHORIZING => __(Transaction::AUTHORIZING),
@@ -59,5 +60,6 @@ class Status implements OptionSourceInterface
             Transaction::SETTLEMENT_PENDING => __(Transaction::SETTLEMENT_PENDING),
             Transaction::SETTLEMENT_CONFIRMED => __(Transaction::SETTLEMENT_CONFIRMED)
         ];
+        // @codingStandardsIgnoreEnd
     }
 }

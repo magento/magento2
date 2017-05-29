@@ -1,23 +1,24 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Console;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Shell\ComplexParameter;
+use Magento\Setup\Application;
+use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Shell\ComplexParameter;
-use Magento\Setup\Console\CompilerPreparation;
-use Magento\Framework\App\ProductMetadata;
-use Magento\Framework\ObjectManagerInterface;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -68,8 +69,10 @@ class Cli extends Console\Application
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
-        $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-            ->getServiceManager();
+        $configuration = require BP . '/setup/config/application.config.php';
+        $bootstrapApplication = new Application();
+        $application = $bootstrapApplication->bootstrap($configuration);
+        $this->serviceManager = $application->getServiceManager();
 
         $this->assertCompilerPreparation();
         $this->initObjectManager();
@@ -191,8 +194,7 @@ class Cli extends Console\Application
         /** @var State $state */
         $state = $this->objectManager->get(State::class);
 
-        if (
-            $state->getMode() !== State::MODE_PRODUCTION
+        if ($state->getMode() !== State::MODE_PRODUCTION
             && !$generationDirectoryAccess->check()
         ) {
             $this->writeGenerationDirectoryReadError();

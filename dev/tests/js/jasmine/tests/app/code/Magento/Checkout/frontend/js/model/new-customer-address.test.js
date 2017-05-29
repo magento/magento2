@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,12 @@ define([
     describe('Magento_Checkout/js/model/new-customer-address', function () {
         var newCustomerAddress;
 
-        window.checkoutConfig = {
-            defaultCountryId: 'US'
-        };
-
         beforeEach(function () {
+
+            window.checkoutConfig = {
+                defaultCountryId: 'US'
+            };
+
             newCustomerAddress = NewCustomerAddress;
         });
 

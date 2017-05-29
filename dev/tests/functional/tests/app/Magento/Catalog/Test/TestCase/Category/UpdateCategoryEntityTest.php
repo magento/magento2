@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,14 +60,12 @@ class UpdateCategoryEntityTest extends Injectable
     /**
      * Inject page end prepare default category
      *
-     * @param Category $initialCategory
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
      * @param FixtureFactory $fixtureFactory
-     * @return array
+     * @return void
      */
     public function __inject(
-        Category $initialCategory,
         CatalogCategoryIndex $catalogCategoryIndex,
         CatalogCategoryEdit $catalogCategoryEdit,
         FixtureFactory $fixtureFactory
@@ -75,8 +73,6 @@ class UpdateCategoryEntityTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogCategoryIndex = $catalogCategoryIndex;
         $this->catalogCategoryEdit = $catalogCategoryEdit;
-        $initialCategory->persist();
-        return ['initialCategory' => $initialCategory];
     }
 
     /**
@@ -88,6 +84,7 @@ class UpdateCategoryEntityTest extends Injectable
      */
     public function test(Category $category, Category $initialCategory)
     {
+        $initialCategory->persist();
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);

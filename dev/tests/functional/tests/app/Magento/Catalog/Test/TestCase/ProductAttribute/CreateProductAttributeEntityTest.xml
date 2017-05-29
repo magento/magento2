@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -84,7 +84,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation5">
+        <variation name="CreateProductAttributeEntityTestVariation5" summary="Create custom multiple select attribute product field" ticketId="MAGETWO-14862">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Multiple_Select_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Multiple Select</data>
@@ -114,7 +114,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation6" summary="Create custom dropdown attribute product field" ticketId="MAGETWO-17475">
+        <variation name="CreateProductAttributeEntityTestVariation6" summary="Create custom dropdown attribute product field" ticketId="MAGETWO-17475, MAGETWO-14862">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>

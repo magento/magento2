@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,6 +23,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_ACCOUNT = 'google/analytics/account';
 
+    const XML_PATH_ANONYMIZE = 'google/analytics/anonymize';
+
     /**
      * Whether GA is ready to use
      *
@@ -33,5 +35,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $accountId = $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         return $accountId && $this->scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+    }
+
+    /**
+     * Whether anonymized IPs are active
+     *
+     * @param null|string|bool|int|Store $store
+     * @return bool
+     */
+    public function isAnonymizedIpActive($store = null)
+    {
+        $anonymize = $this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $anonymize;
     }
 }

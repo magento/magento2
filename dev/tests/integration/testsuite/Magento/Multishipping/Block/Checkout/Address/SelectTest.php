@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,8 +40,8 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $address = $addressRepository->getById($fixtureAddressId);
         $addressAsHtml = $this->_selectBlock->getAddressAsHtml($address);
         $this->assertEquals(
-            "John Smith<br/>CompanyName<br />Green str, 67<br />CityM,  Alabama, 75477"
-                . "<br/>United States<br/>T: <a href=\"tel:3468676\">3468676</a>",
+            "John Smith<br />CompanyName<br />Green str, 67<br />CityM,  Alabama, 75477"
+                . "<br />United States<br />T: <a href=\"tel:3468676\">3468676</a>",
             str_replace("\n", '', $addressAsHtml),
             "Address was represented as HTML incorrectly"
         );

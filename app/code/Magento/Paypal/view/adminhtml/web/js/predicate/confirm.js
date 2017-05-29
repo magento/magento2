@@ -1,7 +1,8 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define(['underscore'], function (_) {
     'use strict';
 
@@ -10,7 +11,7 @@ define(['underscore'], function (_) {
 
         _.every(argument, function (name) {
             if (solution.solutionsElements[name] &&
-                solution.solutionsElements[name].find(solution.enableButton).val() == 1
+                solution.solutionsElements[name].find(solution.enableButton).val() == 1 //eslint-disable-line eqeqeq
             ) {
                 isConfirm = true;
 
@@ -21,7 +22,7 @@ define(['underscore'], function (_) {
         }, this);
 
         if (isConfirm) {
-            return confirm(message);
+            return confirm(message); //eslint-disable-line no-alert
         }
 
         return true;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
@@ -13,6 +13,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Url
@@ -101,6 +102,11 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
+     */
+    private $categoryProductIndexerFrontend;
+
+    /**
      * Url constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -109,6 +115,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
      * @param null $connectionName
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -117,13 +124,17 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
         $this->productResource = $productResource;
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
+        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
+        );
         parent::__construct($context, $connectionName);
     }
 
@@ -655,7 +666,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         $select = $connection->select()->from(
-            ['i' => $this->getTable('catalog_category_product_index')],
+            ['i' => $this->categoryProductIndexerFrontend->getMainTable()],
             ['product_id', 'store_id', 'visibility']
         )->joinLeft(
             ['u' => $this->getMainTable()],

@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Model\Config;
 
 /**
  * Catalog data helper
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -46,7 +49,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Breadcrumb Path cache
      *
-     * @var string
+     * @var array
      */
     protected $_categoryPath;
 
@@ -267,12 +270,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return current category path or get it from current category
      * and creating array of categories|product paths for breadcrumbs
      *
-     * @return string
+     * @return array
      */
     public function getBreadcrumbPath()
     {
         if (!$this->_categoryPath) {
-
             $path = [];
             $category = $this->getCategory();
             if ($category) {

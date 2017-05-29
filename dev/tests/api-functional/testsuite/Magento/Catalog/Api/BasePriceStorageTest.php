@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,40 +57,6 @@ class BasePriceStorageTest extends WebapiAbstract
         $this->assertNotEmpty($response);
         $this->assertEquals($product->getPrice(), $response[0]['price']);
         $this->assertEquals($product->getSku(), $response[0]['sku']);
-    }
-
-    /**
-     * Test get method, called with not existing SKU.
-     */
-    public function testGetWithInvalidSku()
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/products/base-prices-information',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-            ],
-        ];
-        $expected = 'Requested product doesn\'t exist: %sku';
-
-        try {
-            $this->_webApiCall($serviceInfo, ['skus' => ['sku_of_not_exiting_product']]);
-            $this->fail("Expected throwing exception");
-        } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expected,
-                $e->getMessage(),
-                "SoapFault does not contain expected message."
-            );
-        } catch (\Exception $e) {
-            $error = $this->processRestExceptionResult($e);
-            $this->assertEquals($expected, $error['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
-        }
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@
         </div>
     <?php endif ?>
     <script>
-        window.checkout = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getConfig()); ?>;
+        window.checkout = <?php /* @escapeNotVerified */ echo $block->getSerializedConfig(); ?>;
     </script>
     <script type="text/x-magento-init">
     {

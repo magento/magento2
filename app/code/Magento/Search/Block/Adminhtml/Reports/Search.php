@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Block\Adminhtml\Reports;
@@ -8,6 +8,7 @@ namespace Magento\Search\Block\Adminhtml\Reports;
 /**
  * Adminhtml search report page content block
  *
+ * @api
  */
 class Search extends \Magento\Backend\Block\Widget\Grid\Container
 {

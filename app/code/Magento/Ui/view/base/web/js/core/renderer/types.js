@@ -1,7 +1,8 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'mageUtils'
@@ -10,6 +11,12 @@ define([
 
     var store = {};
 
+    /**
+     * Flatten a nested data.
+     *
+     * @param {Object} data
+     * @returns {Object}
+     */
     function flatten(data) {
         var extender = data.extends || [],
             result = {};
@@ -32,6 +39,11 @@ define([
     }
 
     return {
+        /**
+         * Set types to store object.
+         *
+         * @param {Object} types
+         */
         set: function (types) {
             types = types || {};
 
@@ -42,6 +54,12 @@ define([
             });
         },
 
+        /**
+         * Get type from store object.
+         *
+         * @param {String} type
+         * @returns {*|{}}
+         */
         get: function (type) {
             return store[type] || {};
         }

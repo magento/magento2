@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Validator\MinimumOrderAmount;
+
+use Magento\Framework\Phrase;
 
 class ValidationMessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +62,6 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())->method('getCurrentCurrencyCode')->willReturn($currencyCode);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
-
         $currencyMock = $this->getMock(\Magento\Framework\Currency::class, [], [], '', false);
         $this->currencyMock->expects($this->once())
             ->method('getCurrency')
@@ -86,6 +87,9 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
             ->with('sales/minimum_order/description', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn($configMessage);
 
-        $this->assertEquals($configMessage, $this->model->getMessage());
+        $message = $this->model->getMessage();
+
+        $this->assertEquals(Phrase::class, get_class($message));
+        $this->assertEquals($configMessage, $message->__toString());
     }
 }

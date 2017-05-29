@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,8 +11,8 @@
     <update handle="sales_order_guest_info_links"/>
     <body>
        <referenceContainer name="page.main.title">
-            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
-            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
+            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="Magento_Sales::order/order_status.phtml" />
+            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="Magento_Sales::order/order_date.phtml" />
             <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
                 <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false">
                     <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
@@ -21,14 +21,15 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false">
-                <block class="Magento\Sales\Block\Order\Items" name="order_items" template="order/items.phtml">
+                <block class="Magento\Sales\Block\Order\Items" name="order_items" template="Magento_Sales::order/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list" />
-                    <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
+                    <block class="Magento\Theme\Block\Html\Pager" name="sales_order_item_pager"/>
+                    <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="Magento_Sales::order/totals.phtml">
                         <arguments>
                             <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
                             <argument name="value_properties" xsi:type="string">class="amount"</argument>
                         </arguments>
-                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="order/tax.phtml"/>
+                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml"/>
                     </block>
                 </block>
             </block>

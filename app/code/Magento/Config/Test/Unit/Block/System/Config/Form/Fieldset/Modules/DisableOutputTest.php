@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Fieldset\Modules;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated because \Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput is deprecated
  */
 class DisableOutputTest extends \PHPUnit_Framework_TestCase
 {

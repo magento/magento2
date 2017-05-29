@@ -1,8 +1,13 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
+
+/**
+ * JQuery UI Widget declaration: 'mage.rowBuilder'
+ *
+ * @api
+ */
 define([
     'jquery',
     'mage/template',
@@ -31,6 +36,7 @@ define([
             rowIdPrefix: 'row',
             //This class is added to rows added after the first one. Adds the dotted separator
             additionalRowClass: 'add-row',
+
             /*
              This is provided during widget instantiation. eg :
              formDataPost : {"formData":formData,"templateFields":['field1-name','field2-name'] }
@@ -64,8 +70,16 @@ define([
             $($.proxy(this.ready, this));
 
             //Binding template-wide events handlers for adding and removing rows
-            this.element.on('click', this.options.addEventSelector + this.options.addRowBtn, $.proxy(this.handleAdd, this));
-            this.element.on('click', this.options.remEventSelector + this.options.btnRemoveSelector, $.proxy(this.handleRemove, this));
+            this.element.on(
+                'click',
+                this.options.addEventSelector + this.options.addRowBtn,
+                $.proxy(this.handleAdd, this)
+            );
+            this.element.on(
+                'click',
+                this.options.remEventSelector + this.options.btnRemoveSelector,
+                $.proxy(this.handleRemove, this)
+            );
         },
 
         /**
@@ -73,7 +87,10 @@ define([
          * @public
          */
         ready: function () {
-            if (this.options.formDataPost && this.options.formDataPost.formData && this.options.formDataPost.formData.length) {
+            if (this.options.formDataPost &&
+                this.options.formDataPost.formData &&
+                this.options.formDataPost.formData.length
+            ) {
                 this.processFormDataArr(this.options.formDataPost);
             } else if (this.options.rowIndex === 0 && this.options.maxRows !== 0) {
                 //If no form data , then add default row
@@ -163,6 +180,7 @@ define([
         maxRowCheck: function (rowIndex) {
             var addRowBtn = $(this.options.addRowBtn),
                 maxRowMsg = $(this.options.maxRowsMsg);
+
             //liIndex starts from 0
             if (rowIndex >= this.options.maxRows) {
                 addRowBtn.hide();
@@ -212,7 +230,7 @@ define([
          * @return {Boolean}
          */
         handleRemove: function (e) {
-            this.removeRow($(e.currentTarget).closest("[id^='" + this.options.btnRemoveIdPrefix + "']")
+            this.removeRow($(e.currentTarget).closest('[id^="' + this.options.btnRemoveIdPrefix + '"]')
                 .attr('id').replace(this.options.btnRemoveIdPrefix, ''));
 
             return false;

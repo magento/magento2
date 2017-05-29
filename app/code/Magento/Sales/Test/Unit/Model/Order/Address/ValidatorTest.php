@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Address;
@@ -56,9 +56,18 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $attributeMock->expects($this->any())
+            ->method('getIsRequired')
+            ->willReturn(true);
+        $eavConfigMock->expects($this->any())
+            ->method('getAttribute')
+            ->will($this->returnValue($attributeMock));
         $this->validator = new \Magento\Sales\Model\Order\Address\Validator(
             $this->directoryHelperMock,
-            $this->countryFactoryMock
+            $this->countryFactoryMock,
+            $eavConfigMock
         );
     }
 
@@ -106,6 +115,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                     ['country_id', true],
                     ['firstname', true],
                     ['address_type', true],
+                    ['company', 'Magento'],
+                    ['fax', '222-22-22'],
                 ],
                 'co@co.co',
                 'billing',
@@ -123,6 +134,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                     ['country_id', true],
                     ['firstname', true],
                     ['address_type', true],
+                    ['company', 'Magento'],
+                    ['fax', '222-22-22'],
                 ],
                 'co.co.co',
                 'coco-shipping',

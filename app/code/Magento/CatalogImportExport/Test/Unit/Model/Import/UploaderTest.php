@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
@@ -150,6 +150,62 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
         $this->uploader->setDestDir($destDir);
         $this->assertEquals(['name' => $fileName], $this->uploader->move($fileName));
+    }
+
+    /**
+     * @dataProvider moveFileUrlDriverPoolDataProvider
+     */
+    public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
+    {
+        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
+        $driverMock = $this->getMock($expectedDriverPool, ['readAll']);
+        $driverMock->expects($this->any())->method('isExists')->willReturn(true);
+        $driverMock->expects($this->any())->method('readAll')->willReturn(null);
+        $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
+
+        $readFactory = $this->getMockBuilder(\Magento\Framework\Filesystem\File\ReadFactory::class)
+            ->setConstructorArgs(
+                [
+                    $driverPool,
+                ]
+            )
+            ->setMethods(['create'])
+            ->getMock();
+
+        $readFactory->expects($this->any())->method('create')
+            ->with($expectedHost, $expectedScheme)
+            ->willReturn($driverMock);
+
+        $uploaderMock = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+            ->setConstructorArgs([
+                $this->coreFileStorageDb,
+                $this->coreFileStorage,
+                $this->imageFactory,
+                $this->validator,
+                $this->filesystem,
+                $readFactory,
+            ])
+            ->getMock();
+
+        $uploaderMock->move($fileUrl);
+    }
+
+    public function moveFileUrlDriverPoolDataProvider()
+    {
+        return [
+            [
+                '$fileUrl'              => 'http://test_uploader_file',
+                '$expectedHost'         => 'test_uploader_file',
+                '$expectedDriverPool'   => \Magento\Framework\Filesystem\Driver\Http::class,
+                '$expectedScheme'       => \Magento\Framework\Filesystem\DriverPool::HTTP,
+            ],
+            [
+                '$fileUrl'              => 'https://!:^&`;file',
+                '$expectedHost'         => '!:^&`;file',
+                '$expectedDriverPool'   => \Magento\Framework\Filesystem\Driver\Https::class,
+                '$expectedScheme'       => \Magento\Framework\Filesystem\DriverPool::HTTPS,
+            ],
+        ];
     }
 
     public function moveFileUrlDataProvider()

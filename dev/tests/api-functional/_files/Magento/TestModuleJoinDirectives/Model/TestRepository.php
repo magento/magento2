@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestModuleJoinDirectives\Model;
@@ -46,7 +46,7 @@ class TestRepository implements TestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $quoteCollection = $this->quoteCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($quoteCollection);

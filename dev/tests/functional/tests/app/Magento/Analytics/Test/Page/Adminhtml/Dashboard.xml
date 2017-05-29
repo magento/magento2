@@ -1,13 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="Dashboard" area="Adminhtml" mca="admin/dashboard" module="Magento_Backend">
-        <block name="subscriptionBlock" class="Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics\SubscriptionBlock" locator=".analytics_subscription_form_analytics_subscription_form_analytics_subscription_modal" strategy="css selector" />
+        <block name="subscriptionBlock" class="Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting\SubscriptionBlock" locator="[data-index='analytics_subscription_fieldset']" strategy="css selector" />
         <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector" />
+        <block name="reportsSectionBlock" class="Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting\ReportsSectionBlock" locator="[data-index='dashboard-advanced-reports']" strategy="css selector" />
     </page>
 </config>

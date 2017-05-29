@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 
 /**
@@ -67,6 +68,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
+
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     /**
      * @return void
@@ -151,6 +157,20 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->willReturn($routeParamsResolver);
         /** @var HostChecker|\PHPUnit_Framework_MockObject_MockObject $hostCheckerMock */
         $hostCheckerMock = $this->getMock(HostChecker::class, [], [], '', false);
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->setMethods(['serialize'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
         $this->_model = $objectManager->getObject(
             \Magento\Backend\Model\Url::class,
             [
@@ -161,7 +181,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'authSession' => $this->_authSessionMock,
                 'encryptor' => $this->_encryptor,
                 'routeParamsResolverFactory' => $this->routeParamsResolverFactoryMock,
-                'hostChecker' => $hostCheckerMock
+                'hostChecker' => $hostCheckerMock,
+                'serializer' => $this->serializerMock
             ]
         );
         $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);

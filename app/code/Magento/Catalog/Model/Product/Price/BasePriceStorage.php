@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,9 +54,9 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     private $pricePersistenceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
      */
-    private $invalidSkuChecker;
+    private $invalidSkuProcessor;
 
     /**
      * Price type allowed.
@@ -79,7 +79,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker
+     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -89,7 +89,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker,
+        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = []
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
@@ -99,7 +99,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
         $this->productRepository = $productRepository;
         $this->validationResult = $validationResult;
         $this->allowedProductTypes = $allowedProductTypes;
-        $this->invalidSkuChecker = $invalidSkuChecker;
+        $this->invalidSkuProcessor = $invalidSkuProcessor;
     }
 
     /**
@@ -107,7 +107,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      */
     public function get(array $skus)
     {
-        $this->invalidSkuChecker->isSkuListValid(
+        $skus = $this->invalidSkuProcessor->filterSkuList(
             $skus,
             $this->allowedProductTypes,
             $this->priceTypeAllowed
@@ -178,7 +178,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
                 return $price->getSku();
             }, $prices)
         );
-        $invalidSkus = $this->invalidSkuChecker->retrieveInvalidSkuList(
+        $invalidSkus = $this->invalidSkuProcessor->retrieveInvalidSkuList(
             $skus,
             $this->allowedProductTypes,
             $this->priceTypeAllowed

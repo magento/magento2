@@ -1,8 +1,6 @@
 <?php
 /**
- * Http application
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -17,6 +15,8 @@ use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
 
 /**
+ * HTTP web application. Called from webroot index.php to serve web requests.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Http implements \Magento\Framework\AppInterface

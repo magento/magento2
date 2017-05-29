@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
 /**
  * System config form block
@@ -436,7 +436,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                         ->afterLoad();
                     $data = $backendModel->getValue();
                 }
-
             } elseif ($field->getConfigPath() !== null) {
                 $data = $this->getConfigValue($field->getConfigPath());
             } else {

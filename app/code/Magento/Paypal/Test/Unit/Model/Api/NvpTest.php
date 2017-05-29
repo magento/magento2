@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -194,9 +194,21 @@ class NvpTest extends \PHPUnit_Framework_TestCase
             ->method('read')
             ->will($this->returnValue(
                 "\r\n" . 'ACK=Success&SHIPTONAME=Ship%20To%20Name'
+                . '&SHIPTOSTREET=testStreet'
+                . '&SHIPTOSTREET2=testApartment'
+                . '&BUSINESS=testCompany'
+                . '&SHIPTOCITY=testCity'
+                . '&PHONENUM=223322'
+                . '&STATE=testSTATE'
             ));
         $this->model->callGetExpressCheckoutDetails();
-        $this->assertEquals('Ship To Name', $this->model->getExportedShippingAddress()->getData('firstname'));
+        $address = $this->model->getExportedShippingAddress();
+        $this->assertEquals('Ship To Name', $address->getData('firstname'));
+        $this->assertEquals(implode("\n", ['testStreet','testApartment']), $address->getStreet());
+        $this->assertEquals('testCompany', $address->getCompany());
+        $this->assertEquals('testCity', $address->getCity());
+        $this->assertEquals('223322', $address->getTelephone());
+        $this->assertEquals('testSTATE', $address->getRegion());
     }
 
     public function testGetDebugReplacePrivateDataKeys()

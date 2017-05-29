@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -98,7 +98,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
                 'setOptions',
                 'getData',
                 'setIsDuplicate',
-                'setOriginalId',
+                'setOriginalLinkId',
                 'setStatus',
                 'setCreatedAt',
                 'setUpdatedAt',
@@ -117,7 +117,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
-        $duplicateMock->expects($this->once())->method('setOriginalId')->with(1);
+        $duplicateMock->expects($this->once())->method('setOriginalLinkId')->with(1);
         $duplicateMock->expects(
             $this->once()
         )->method(

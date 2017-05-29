@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,8 +15,8 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Abstract class for implementing assert applying.
@@ -156,6 +156,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         Customer $customer = null,
         Address $address = null,
         $isLoggedIn = null,
+        $couponCode = null,
         array $shipping = [],
         array $cartPrice = []
     ) {
@@ -179,10 +180,15 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
             $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($address);
             $this->checkoutCart->getShippingBlock()->selectShippingMethod($shipping);
         }
-        if ($salesRule->getCouponCode() || $salesRuleOrigin->getCouponCode()) {
-            $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode(
-                $salesRule->getCouponCode() ? $salesRule->getCouponCode() : $salesRuleOrigin->getCouponCode()
-            );
+
+        if ($salesRule->getCouponCode()) {
+            $couponCode = $salesRule->getCouponCode();
+        } elseif ($salesRuleOrigin->getCouponCode()) {
+            $couponCode = $salesRuleOrigin->getCouponCode();
+        }
+
+        if ($salesRule->getCouponCode() || $salesRuleOrigin->getCouponCode() || $couponCode) {
+            $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode($couponCode);
         }
         $this->assert();
     }

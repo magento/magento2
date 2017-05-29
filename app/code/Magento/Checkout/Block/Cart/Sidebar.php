@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -9,6 +9,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Cart sidebar block
+ *
+ * @api
  */
 class Sidebar extends AbstractCart
 {
@@ -28,13 +30,19 @@ class Sidebar extends AbstractCart
     protected $imageHelper;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
-     * @codeCoverageIgnore
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -42,7 +50,8 @@ class Sidebar extends AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         if (isset($data['jsLayout'])) {
             $this->jsLayout = array_merge_recursive($jsLayoutDataProvider->getData(), $data['jsLayout']);
@@ -53,6 +62,8 @@ class Sidebar extends AbstractCart
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
         $this->imageHelper = $imageHelper;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -70,8 +81,17 @@ class Sidebar extends AbstractCart
             'imageTemplate' => $this->getImageHtmlTemplate(),
             'baseUrl' => $this->getBaseUrl(),
             'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount(),
-            'websiteId' => $this->_storeManager->getStore()->getWebsiteId()
+            'websiteId' => $this->_storeManager->getStore()->getWebsiteId(),
+            'maxItemsToDisplay' => $this->getMaxItemsToDisplay()
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerializedConfig()
+    {
+        return $this->serializer->serialize($this->getConfig());
     }
 
     /**
@@ -187,5 +207,19 @@ class Sidebar extends AbstractCart
     private function getMiniCartMaxItemsCount()
     {
         return (int)$this->_scopeConfig->getValue('checkout/sidebar/count', ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * Returns maximum cart items to display
+     * This setting regulates how many items will be displayed in minicart
+     *
+     * @return int
+     */
+    private function getMaxItemsToDisplay()
+    {
+        return (int)$this->_scopeConfig->getValue(
+            'checkout/sidebar/max_items_display_count',
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

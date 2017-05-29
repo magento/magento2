@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,7 @@
             </arguments>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="address/edit.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="Magento_Customer::address/edit.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

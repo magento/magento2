@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,14 +10,40 @@
         <variation name="ApplyMapTestVariation1" summary="Apply Minimum Advertised Price Setting to Simple Product" ticketId="MAGETWO-12430">
             <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture</data>
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnCategoryPage" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
         </variation>
         <variation name="ApplyMapTestVariation2" summary="Apply Minimum Advertised Price to the Configurable Product" ticketId="MAGETWO-12847">
             <data name="product" xsi:type="string">configurableProduct::msrp_on_gesture_one_variation</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnCategoryPage" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
+        </variation>
+        <variation name="ApplyMapTestVariation3" summary="Apply Minimum Advertised Price to Simple Product with Quotes in product name" ticketId="MAGETWO-67491">
+            <data name="product" xsi:type="string">catalogProductSimple::msrp_display_actual_price_in_cart_with_quotes_in_product_name</data>
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
+        </variation>
+        <variation name="ApplyMapTestVariation4" summary="Apply MAP Setting on Gesture to Simple Product with Quotes in product name" ticketId="MAGETWO-69318">
+            <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture_for_product_with_single_quotes_in_product_name</data>
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
+        </variation>
+        <variation name="ApplyMapTestVariation5" summary="Apply MAP Setting on Gesture to Simple Product with Quotes in product name" ticketId="MAGETWO-69318">
+            <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture_for_product_with_one_single_quote_in_product_name</data>
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
         </variation>
     </testCase>

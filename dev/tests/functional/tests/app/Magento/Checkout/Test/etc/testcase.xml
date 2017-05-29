@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,7 +18,8 @@
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
         <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
-        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="refreshPage" />
+        <step name="refreshPage" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="createCustomerAccount" />
         <step name="createCustomerAccount" module="Magento_Checkout" />
     </scenario>
@@ -65,5 +66,26 @@
         <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" />
+    </scenario>
+    <scenario name="ShoppingCartPagerTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="mergePreconditionProducts" />
+        <step name="mergePreconditionProducts" module="Magento_Catalog" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="removeProductsFromTheCart" />
+        <step name="removeProductsFromTheCart" module="Magento_Checkout" />
+    </scenario>
+    <scenario name="EditShippingAddressOnePageCheckoutTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="createProducts"/>
+        <step name="createProducts" module="Magento_Catalog" next="loginCustomerOnFrontend"/>
+        <step name="loginCustomerOnFrontend" module="Magento_Customer" next="addProductsToTheCart"/>
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout"/>
+        <step name="proceedToCheckout" module="Magento_Checkout" next="addNewShippingAddress"/>
+        <step name="addNewShippingAddress" module="Magento_Checkout" next="editShippingAddress"/>
+        <step name="editShippingAddress" module="Magento_Checkout" next="fillShippingMethod"/>
+        <step name="fillShippingMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="refreshPage" />
+        <step name="refreshPage" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout"/>
     </scenario>
 </config>

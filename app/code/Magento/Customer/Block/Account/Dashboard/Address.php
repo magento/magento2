@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account\Dashboard;
@@ -11,6 +11,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class to manage customer dashboard addresses section
+ *
+ * @api
  */
 class Address extends \Magento\Framework\View\Element\Template
 {

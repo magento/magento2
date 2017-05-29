@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,15 +17,15 @@
                         <argument name="zone" xsi:type="string">item_view</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="product/view/addtocart.phtml">
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="Magento_Catalog::product/view/addtocart.phtml">
                     <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons"/>
                 </block>
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.bundle" as="addto" template="product/view/addto.phtml"/>
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.bundle" as="addto" template="Magento_Catalog::product/view/addto.phtml"/>
             </block>
         </referenceBlock>
         <referenceBlock name="product.info.options.wrapper">
             <block class="Magento\Catalog\Block\Product\View" name="bundle.product.view.options.notice" template="Magento_Bundle::catalog/product/view/options/notice.phtml"/>
-            <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle.options" as="type_bundle_options" template="catalog/product/view/type/bundle/options.phtml" before="-">
+            <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle.options" as="type_bundle_options" template="Magento_Bundle::catalog/product/view/type/bundle/options.phtml" before="-">
                 <container name="product.info.bundle.options.top" as="product_info_bundle_options_top">
                     <block class="Magento\Catalog\Block\Product\View" name="bundle.back.button" as="backButton" before="-" template="Magento_Bundle::catalog/product/view/backbutton.phtml"/>
                 </container>
@@ -42,7 +42,7 @@
         <move element="product.info.options.wrapper.bottom" destination="bundle.product.options.wrapper" after="product.info.options.wrapper" />
         <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
         <referenceBlock name="product.info.options.wrapper.bottom">
-            <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.qtyincrements" before="-" template="qtyincrements.phtml"/>
+            <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.qtyincrements" before="-" template="Magento_CatalogInventory::qtyincrements.phtml"/>
             <action method="unsetChild">
                 <argument name="block" xsi:type="string">product.info.addtocart</argument>
             </action>
@@ -57,7 +57,7 @@
             <container name="bundle.options.container" htmlTag="div" htmlClass="bundle-options-container" after="product.info.media"/>
         </referenceContainer>
         <referenceContainer name="product.info.type">
-            <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle" as="product_type_data" template="catalog/product/view/type/bundle.phtml"/>
+            <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle" as="product_type_data" template="Magento_Bundle::catalog/product/view/type/bundle.phtml"/>
             <container name="product.info.bundle.extra" after="product.info.bundle" as="product_type_data_extra" label="Product Extra Info"/>
         </referenceContainer>
         <referenceContainer name="product.info.main">

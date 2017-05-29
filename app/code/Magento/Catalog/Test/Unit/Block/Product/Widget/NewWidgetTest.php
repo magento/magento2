@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\Widget;
@@ -52,6 +52,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $productCollection;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
@@ -109,6 +112,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         $this->block = null;
@@ -168,6 +174,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->block->getCurrentPage());
     }
 
+    /**
+     * @return array
+     */
     public function getCurrentPageDataProvider()
     {
         return [
@@ -184,6 +193,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->block->getProductsCount());
     }
 
+    /**
+     * @return void
+     */
     protected function generalGetProductCollection()
     {
         $this->eventManager->expects($this->exactly(2))->method('dispatch')
@@ -327,6 +339,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getProductCollectionDataProvider()
     {
         return [

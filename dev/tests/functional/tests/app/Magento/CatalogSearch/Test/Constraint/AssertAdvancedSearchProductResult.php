@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -86,6 +86,7 @@ class AssertAdvancedSearchProductResult extends AbstractConstraint
                 unset($products[$key]);
             }
         } while ($resultPage->getBottomToolbar()->nextPage() && (count($products) > 0));
+
         sort($foundedProducts);
         return $foundedProducts;
     }

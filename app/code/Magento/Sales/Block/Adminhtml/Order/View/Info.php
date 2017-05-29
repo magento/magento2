@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Address;
 /**
  * Order history block
  * Class Info
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder

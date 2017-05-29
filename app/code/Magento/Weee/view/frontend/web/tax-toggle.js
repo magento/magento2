@@ -1,13 +1,17 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 define([
     'jquery'
 ], function ($) {
     'use strict';
 
+    /**
+     * @param {Object} config
+     * @param {jQuery.Event} e
+     */
     function onToggle(config, e) {
         var elem = $(e.currentTarget),
             expandedClassName = config.expandedClassName || 'cart-tax-total-expanded';

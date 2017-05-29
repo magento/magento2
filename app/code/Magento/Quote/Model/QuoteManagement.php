@@ -1,27 +1,27 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
-use Magento\Quote\Model\Quote as QuoteEntity;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
+use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Item\ToOrderItem as ToOrderItemConverter;
 use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
-use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class QuoteManagement
@@ -263,7 +263,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 __('Cannot assign customer to the given cart. Customer already has active cart.')
             );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
         }
 
         $quote->setCustomer($customer);
@@ -276,7 +275,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
         $this->quoteRepository->save($quote);
         return true;
-
     }
 
     /**
@@ -303,11 +301,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function createCustomerCart($customerId, $storeId)
     {
-        $customer = $this->customerRepository->getById($customerId);
-
         try {
             $quote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $customer = $this->customerRepository->getById($customerId);
             /** @var \Magento\Quote\Model\Quote $quote */
             $quote = $this->quoteFactory->create();
             $quote->setStoreId($storeId);
@@ -476,7 +473,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
-        
+
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
             [

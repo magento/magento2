@@ -1,13 +1,16 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true expr:true*/
+
+/**
+ * @api
+ */
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
 
     $.widget('mage.slide', {
         options: {
@@ -21,8 +24,9 @@ define([
 
         },
 
-        _create: function() {
-            if(this.options.slidedown === true) {
+        /** @inheritdoc */
+        _create: function () {
+            if (this.options.slidedown === true) {
                 $(this.options.slideSelector).on('click', $.proxy(this._show, this));
                 $(this.options.slideBackSelector).on('click', $.proxy(this._hide, this));
                 this.options.autostart && this._show();
@@ -37,15 +41,17 @@ define([
          * slide bundleOptionsContainer over to the main view area
          * @private
          */
-        _slide: function() {
+        _slide: function () {
             $(this.options.bundleProductSelector).css('top', '0px');
             $(this.options.bundleOptionsContainer).show();
-            this.element.css('height',$(this.options.productViewContainer).height() + 'px');
+            this.element.css('height', $(this.options.productViewContainer).height() + 'px');
             $(this.options.bundleProductSelector).css('left', '0px').animate(
-                {'left': '-' + this.element.width() + 'px'},
+                {
+                    'left': '-' + this.element.width() + 'px'
+                },
                 this.options.slideSpeed,
-                $.proxy(function() {
-                    this.element.css('height','auto');
+                $.proxy(function () {
+                    this.element.css('height', 'auto');
                     $(this.options.productViewContainer).hide();
                 }, this)
             );
@@ -55,33 +61,43 @@ define([
          * slideback productViewContainer to main view area
          * @private
          */
-        _slideBack: function() {
+        _slideBack: function () {
             $(this.options.bundleProductSelector).css('top', '0px');
             $(this.options.productViewContainer).show();
             this.element.css('height', $(this.options.bundleOptionsContainer).height() + 'px');
             $(this.options.bundleProductSelector).animate(
-                {'left': '0px'},
+                {
+                    'left': '0px'
+                },
                 this.options.slideSpeed,
-                $.proxy(function() {
+                $.proxy(function () {
                     $(this.options.bundleOptionsContainer).hide();
-                    this.element.css('height','auto');
+                    this.element.css('height', 'auto');
                 }, this)
             );
         },
-        _show: function() {
+
+        /**
+         * @private
+         */
+        _show: function () {
             $(this.options.bundleOptionsContainer).slideDown(800);
             $('html, body').animate({
                 scrollTop: $(this.options.bundleOptionsContainer).offset().top
             }, 600);
             $('#product-options-wrapper > fieldset').focus();
         },
-        _hide: function() {
+
+        /**
+         * @private
+         */
+        _hide: function () {
             $('html, body').animate({
                 scrollTop: 0
             }, 600);
             $(this.options.bundleOptionsContainer).slideUp(800);
         }
     });
-    
+
     return $.mage.slide;
 });

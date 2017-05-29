@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
 /**
  * Edit order address form container block
+ *
+ * @api
  */
 class Address extends \Magento\Backend\Block\Widget\Form\Container
 {

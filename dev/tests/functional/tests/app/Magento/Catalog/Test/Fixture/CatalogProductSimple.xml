@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -29,8 +29,8 @@
         <field name="country_of_manufacture" is_required="0" />
         <field name="created_at" is_required="1" />
         <field name="custom_design" is_required="0" />
-        <field name="custom_design_from" is_required="0" />
-        <field name="custom_design_to" is_required="0" />
+        <field name="custom_design_from" is_required="0" group="schedule-design-update" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="custom_design_to" is_required="0" group="schedule-design-update" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="custom_layout_update" is_required="0" />
         <field name="description" is_required="0" group="content" />
         <field name="gallery" is_required="0" />
@@ -81,8 +81,8 @@
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="is_returnable" is_required="0" group="product-details" />
-        <field name="news_from_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
-        <field name="news_to_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="news_from_date" is_required="0" group="product-details" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="news_to_date" is_required="0" group="product-details" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="stock_data" group="advanced-inventory" />
         <field name="checkout_data" group="null" repository="Magento\Catalog\Test\Repository\CatalogProductSimple\CheckoutData" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />

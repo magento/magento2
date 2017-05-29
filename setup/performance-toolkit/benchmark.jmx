@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -19,19 +19,29 @@
             <stringProp name="Argument.value">${__P(abandonedCartByGuest,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="abandonedCartByGuestPercent" elementType="Argument">
+            <stringProp name="Argument.name">abandonedCartByGuestPercent</stringProp>
+            <stringProp name="Argument.value">${__P(abandonedCartByGuestPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="abandonedCartByCustomer" elementType="Argument">
             <stringProp name="Argument.name">abandonedCartByCustomer</stringProp>
             <stringProp name="Argument.value">${__P(abandonedCartByCustomer,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="admin_delay" elementType="Argument">
-            <stringProp name="Argument.name">admin_delay</stringProp>
-            <stringProp name="Argument.value">${__P(admin_delay,150)}</stringProp>
+          <elementProp name="abandonedCartByCustomerPercent" elementType="Argument">
+            <stringProp name="Argument.name">abandonedCartByCustomerPercent</stringProp>
+            <stringProp name="Argument.value">${__P(abandonedCartByCustomerPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="admin_enabled" elementType="Argument">
-            <stringProp name="Argument.name">admin_enabled</stringProp>
-            <stringProp name="Argument.value">${__P(admin_enabled,0)}</stringProp>
+          <elementProp name="accountManagement" elementType="Argument">
+            <stringProp name="Argument.name">accountManagement</stringProp>
+            <stringProp name="Argument.value">${__P(accountManagement,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="accountManagementPercent" elementType="Argument">
+            <stringProp name="Argument.name">accountManagementPercent</stringProp>
+            <stringProp name="Argument.value">${__P(accountManagementPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="admin_password" elementType="Argument">
@@ -47,6 +57,11 @@
           <elementProp name="admin_user" elementType="Argument">
             <stringProp name="Argument.name">admin_user</stringProp>
             <stringProp name="Argument.value">${__P(admin_user,admin)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminBrowseCustomersGridPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminBrowseCustomersGridPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminBrowseCustomersGridPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="adminBrowseCustomersGridScenario1_ViewOddGridPages" elementType="Argument">
@@ -74,6 +89,11 @@
             <stringProp name="Argument.value">${__P(adminBrowseCustomersGridScenario5_FilteringAndSorting,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="adminBrowseOrdersGridPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminBrowseOrdersGridPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminBrowseOrdersGridPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="adminBrowseOrdersGridScenario1_ViewOddGridPages" elementType="Argument">
             <stringProp name="Argument.name">adminBrowseOrdersGridScenario1_ViewOddGridPages</stringProp>
             <stringProp name="Argument.value">${__P(adminBrowseOrdersGridScenario1_ViewOddGridPages,0)}</stringProp>
@@ -97,6 +117,11 @@
           <elementProp name="adminBrowseOrdersGridScenario5_FilteringAndSorting" elementType="Argument">
             <stringProp name="Argument.name">adminBrowseOrdersGridScenario5_FilteringAndSorting</stringProp>
             <stringProp name="Argument.value">${__P(adminBrowseOrdersGridScenario5_FilteringAndSorting,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminBrowseProductsGridPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminBrowseProductsGridPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminBrowseProductsGridPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="adminBrowseProductsGridScenario1_ViewOddGridPages" elementType="Argument">
@@ -124,9 +149,49 @@
             <stringProp name="Argument.value">${__P(adminBrowseProductsGridScenario5_FilteringAndSorting,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="adminCategoryCount" elementType="Argument">
+            <stringProp name="Argument.name">adminCategoryCount</stringProp>
+            <stringProp name="Argument.value">${__P(adminCategoryCount,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCategoryManagement" elementType="Argument">
+            <stringProp name="Argument.name">adminCategoryManagement</stringProp>
+            <stringProp name="Argument.value">${__P(adminCategoryManagement,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCategoryManagementDelay" elementType="Argument">
+            <stringProp name="Argument.name">adminCategoryManagementDelay</stringProp>
+            <stringProp name="Argument.value">${__P(adminCategoryManagementDelay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCategoryManagementPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminCategoryManagementPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminCategoryManagementPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCMSManagement" elementType="Argument">
+            <stringProp name="Argument.name">adminCMSManagement</stringProp>
+            <stringProp name="Argument.value">${__P(adminCMSManagement,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCMSManagementDelay" elementType="Argument">
+            <stringProp name="Argument.name">adminCMSManagementDelay</stringProp>
+            <stringProp name="Argument.value">${__P(adminCMSManagementDelay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCMSManagementPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminCMSManagementPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminCMSManagementPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="adminCreateOrder" elementType="Argument">
             <stringProp name="Argument.name">adminCreateOrder</stringProp>
             <stringProp name="Argument.value">${__P(adminCreateOrder,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCreateOrderPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminCreateOrderPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminCreateOrderPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="adminCreateProduct" elementType="Argument">
@@ -134,14 +199,44 @@
             <stringProp name="Argument.value">${__P(adminCreateProduct,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="adminCreateProductPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminCreateProductPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminCreateProductPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCustomerManagement" elementType="Argument">
+            <stringProp name="Argument.name">adminCustomerManagement</stringProp>
+            <stringProp name="Argument.value">${__P(adminCustomerManagement,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCustomerManagementDelay" elementType="Argument">
+            <stringProp name="Argument.name">adminCustomerManagementDelay</stringProp>
+            <stringProp name="Argument.value">${__P(adminCustomerManagementDelay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminCustomerManagementPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminCustomerManagementPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminCustomerManagementPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="adminEditOrder" elementType="Argument">
             <stringProp name="Argument.name">adminEditOrder</stringProp>
             <stringProp name="Argument.value">${__P(adminEditOrder,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="adminEditOrderPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminEditOrderPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminEditOrderPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="adminEditProduct" elementType="Argument">
             <stringProp name="Argument.name">adminEditProduct</stringProp>
             <stringProp name="Argument.value">${__P(adminEditProduct,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminEditProductPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminEditProductPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminEditProductPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="adminExportCustomers" elementType="Argument">
@@ -189,6 +284,76 @@
             <stringProp name="Argument.value">${__P(adminImportProducts,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="adminPromotionsManagement" elementType="Argument">
+            <stringProp name="Argument.name">adminPromotionsManagement</stringProp>
+            <stringProp name="Argument.value">${__P(adminPromotionsManagement,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminPromotionsManagementDelay" elementType="Argument">
+            <stringProp name="Argument.name">adminPromotionsManagementDelay</stringProp>
+            <stringProp name="Argument.value">${__P(adminPromotionsManagementDelay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="adminPromotionsManagementPercent" elementType="Argument">
+            <stringProp name="Argument.name">adminPromotionsManagementPercent</stringProp>
+            <stringProp name="Argument.value">${__P(adminPromotionsManagementPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiBrowseAndBuyFlow" elementType="Argument">
+            <stringProp name="Argument.name">apiBrowseAndBuyFlow</stringProp>
+            <stringProp name="Argument.value">${__P(apiBrowseAndBuyFlow,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiBrowseAndBuyFlowPercent" elementType="Argument">
+            <stringProp name="Argument.name">apiBrowseAndBuyFlowPercent</stringProp>
+            <stringProp name="Argument.value">${__P(apiBrowseAndBuyFlowPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiCustomerSync" elementType="Argument">
+            <stringProp name="Argument.name">apiCustomerSync</stringProp>
+            <stringProp name="Argument.value">${__P(apiCustomerSync,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiCustomerSyncPercent" elementType="Argument">
+            <stringProp name="Argument.name">apiCustomerSyncPercent</stringProp>
+            <stringProp name="Argument.value">${__P(apiCustomerSyncPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiOrderInvoiceShipmentSync" elementType="Argument">
+            <stringProp name="Argument.name">apiOrderInvoiceShipmentSync</stringProp>
+            <stringProp name="Argument.value">${__P(apiOrderInvoiceShipmentSync,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiOrderInvoiceShipmentSyncPercent" elementType="Argument">
+            <stringProp name="Argument.name">apiOrderInvoiceShipmentSyncPercent</stringProp>
+            <stringProp name="Argument.value">${__P(apiOrderInvoiceShipmentSyncPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiProcessOrders" elementType="Argument">
+            <stringProp name="Argument.name">apiProcessOrders</stringProp>
+            <stringProp name="Argument.value">${__P(apiProcessOrders,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiProcessOrdersPercent" elementType="Argument">
+            <stringProp name="Argument.name">apiProcessOrdersPercent</stringProp>
+            <stringProp name="Argument.value">${__P(apiProcessOrdersPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiProductSync" elementType="Argument">
+            <stringProp name="Argument.name">apiProductSync</stringProp>
+            <stringProp name="Argument.value">${__P(apiProductSync,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiProductSyncPercent" elementType="Argument">
+            <stringProp name="Argument.name">apiProductSyncPercent</stringProp>
+            <stringProp name="Argument.value">${__P(apiProductSyncPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="apiSnapshot" elementType="Argument">
+            <stringProp name="Argument.name">apiSnapshot</stringProp>
+            <stringProp name="Argument.value">${__P(apiSnapshot,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="bamboo_build_number" elementType="Argument">
             <stringProp name="Argument.name">bamboo_build_number</stringProp>
             <stringProp name="Argument.value">${__P(bamboo_build_number,)}</stringProp>
@@ -209,9 +374,19 @@
             <stringProp name="Argument.value">${__P(catalogBrowsingByGuest,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="catalogBrowsingByGuestPercent" elementType="Argument">
+            <stringProp name="Argument.name">catalogBrowsingByGuestPercent</stringProp>
+            <stringProp name="Argument.value">${__P(catalogBrowsingByGuestPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="catalogBrowsingByCustomer" elementType="Argument">
             <stringProp name="Argument.name">catalogBrowsingByCustomer</stringProp>
             <stringProp name="Argument.value">${__P(catalogBrowsingByCustomer,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="catalogBrowsingByCustomerPercent" elementType="Argument">
+            <stringProp name="Argument.name">catalogBrowsingByCustomerPercent</stringProp>
+            <stringProp name="Argument.value">${__P(catalogBrowsingByCustomerPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="checkoutByGuest" elementType="Argument">
@@ -219,9 +394,19 @@
             <stringProp name="Argument.value">${__P(checkoutByGuest,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="checkoutByGuestPercent" elementType="Argument">
+            <stringProp name="Argument.name">checkoutByGuestPercent</stringProp>
+            <stringProp name="Argument.value">${__P(checkoutByGuestPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="checkoutByCustomer" elementType="Argument">
             <stringProp name="Argument.name">checkoutByCustomer</stringProp>
             <stringProp name="Argument.value">${__P(checkoutByCustomer,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="checkoutByCustomerPercent" elementType="Argument">
+            <stringProp name="Argument.name">checkoutByCustomerPercent</stringProp>
+            <stringProp name="Argument.value">${__P(checkoutByCustomerPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="customer_checkout_percent" elementType="Argument">
@@ -249,6 +434,11 @@
             <stringProp name="Argument.value">${__P(dashboard_enabled,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="files_folder" elementType="Argument">
+            <stringProp name="Argument.name">files_folder</stringProp>
+            <stringProp name="Argument.value">${__P(files_folder,/opt/mpaf/tool/fragments/files/)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="guest_checkout_percent" elementType="Argument">
             <stringProp name="Argument.name">guest_checkout_percent</stringProp>
             <stringProp name="Argument.value">${__P(guest_checkout_percent,4)}</stringProp>
@@ -264,6 +454,11 @@
             <stringProp name="Argument.value">${__P(loops,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="lineItemsAmount" elementType="Argument">
+            <stringProp name="Argument.name">lineItemsAmount</stringProp>
+            <stringProp name="Argument.value">${__P(lineItemsAmount,10)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="orders" elementType="Argument">
             <stringProp name="Argument.name">orders</stringProp>
             <stringProp name="Argument.value">${__P(orders,0)}</stringProp>
@@ -277,6 +472,31 @@
           <elementProp name="products_page_size" elementType="Argument">
             <stringProp name="Argument.name">products_page_size</stringProp>
             <stringProp name="Argument.value">${__P(products_page_size,20)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="productCompareByGuest" elementType="Argument">
+            <stringProp name="Argument.name">productCompareByGuest</stringProp>
+            <stringProp name="Argument.value">${__P(productCompareByGuest,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="productCompareByGuestPercent" elementType="Argument">
+            <stringProp name="Argument.name">productCompareByGuestPercent</stringProp>
+            <stringProp name="Argument.value">${__P(productCompareByGuestPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="productCompareDelay" elementType="Argument">
+            <stringProp name="Argument.name">productCompareDelay</stringProp>
+            <stringProp name="Argument.value">${__P(productCompareDelay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="productsGridMassActions" elementType="Argument">
+            <stringProp name="Argument.name">productsGridMassActions</stringProp>
+            <stringProp name="Argument.value">${__P(productsGridMassActions,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="productsGridMassActionsPercent" elementType="Argument">
+            <stringProp name="Argument.name">productsGridMassActionsPercent</stringProp>
+            <stringProp name="Argument.value">${__P(productsGridMassActionsPercent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="ramp_period" elementType="Argument">
@@ -299,9 +519,54 @@
             <stringProp name="Argument.value">${__P(response_time_file_name,production.csv)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="reviewByCustomer" elementType="Argument">
+            <stringProp name="Argument.name">reviewByCustomer</stringProp>
+            <stringProp name="Argument.value">${__P(reviewByCustomer,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="reviewByCustomerPercent" elementType="Argument">
+            <stringProp name="Argument.name">reviewByCustomerPercent</stringProp>
+            <stringProp name="Argument.value">${__P(reviewByCustomerPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="reviewDelay" elementType="Argument">
+            <stringProp name="Argument.name">reviewDelay</stringProp>
+            <stringProp name="Argument.value">${__P(reviewDelay,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="scenario" elementType="Argument">
             <stringProp name="Argument.name">scenario</stringProp>
             <stringProp name="Argument.value">${__P(scenario,)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchQuick" elementType="Argument">
+            <stringProp name="Argument.name">searchQuick</stringProp>
+            <stringProp name="Argument.value">${__P(searchQuick,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchQuick_percent" elementType="Argument">
+            <stringProp name="Argument.name">searchQuick_percent</stringProp>
+            <stringProp name="Argument.value">${__P(searchQuick_percent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchQuickFilter" elementType="Argument">
+            <stringProp name="Argument.name">searchQuickFilter</stringProp>
+            <stringProp name="Argument.value">${__P(searchQuickFilter,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchQuickFilter_percent" elementType="Argument">
+            <stringProp name="Argument.name">searchQuickFilter_percent</stringProp>
+            <stringProp name="Argument.value">${__P(searchQuickFilter_percent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchAdvanced" elementType="Argument">
+            <stringProp name="Argument.name">searchAdvanced</stringProp>
+            <stringProp name="Argument.value">${__P(searchAdvanced,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchAdvanced_percent" elementType="Argument">
+            <stringProp name="Argument.name">searchAdvanced_percent</stringProp>
+            <stringProp name="Argument.value">${__P(searchAdvanced_percent,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="setupAndTearDownThread" elementType="Argument">
@@ -362,6 +627,21 @@
           <elementProp name="website_id" elementType="Argument">
             <stringProp name="Argument.name">website_id</stringProp>
             <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="wishlistByCustomer" elementType="Argument">
+            <stringProp name="Argument.name">wishlistByCustomer</stringProp>
+            <stringProp name="Argument.value">${__P(wishlistByCustomer,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="wishlistByCustomerPercent" elementType="Argument">
+            <stringProp name="Argument.name">wishlistByCustomerPercent</stringProp>
+            <stringProp name="Argument.value">${__P(wishlistByCustomerPercent,100)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="wishlistDelay" elementType="Argument">
+            <stringProp name="Argument.name">wishlistDelay</stringProp>
+            <stringProp name="Argument.value">${__P(wishlistDelay,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -1077,7 +1357,7 @@ productList.add(productMap);</stringProp>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract product attribute id" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">configurable_product_attribute_id</stringProp>
-            <stringProp name="RegexExtractor.regex">"spConfig": \{"attributes":\{"(\d+)"</stringProp>
+            <stringProp name="RegexExtractor.regex">"[sp|json]+Config": \{"attributes":\{"(\d+)"</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"/>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -2446,7 +2726,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${simple_product_1_uenc}/product/${simple_product_1_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -2632,7 +2912,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${simple_product_2_uenc}/product/${simple_product_2_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -2827,7 +3107,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${configurable_product_1_uenc}/product/${configurable_product_1_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -3275,7 +3555,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${simple_product_1_uenc}/product/${simple_product_1_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -3461,7 +3741,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${simple_product_2_uenc}/product/${simple_product_2_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -3656,7 +3936,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${configurable_product_1_uenc}/product/${configurable_product_1_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -4646,7 +4926,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${simple_product_1_uenc}/product/${simple_product_1_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -4832,7 +5112,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${simple_product_2_uenc}/product/${simple_product_2_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -5027,7 +5307,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/uenc/${configurable_product_1_uenc}/product/${configurable_product_1_id}/</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}checkout/cart/add/</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>

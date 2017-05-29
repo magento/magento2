@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,8 +17,8 @@ $products = [
         'id' => 101,
         'name' => 'search product 1',
         'sku' => 'search_product_1',
-        'status' => Visibility::VISIBILITY_BOTH,
-        'visibility' => Status::STATUS_ENABLED,
+        'status' => Status::STATUS_ENABLED,
+        'visibility' => Visibility::VISIBILITY_BOTH,
         'attribute_set' => 4,
         'website_ids' => [1],
         'price' => 10,
@@ -32,8 +32,8 @@ $products = [
         'id' => 102,
         'name' => 'search product 2',
         'sku' => 'search_product_2',
-        'status' => Visibility::VISIBILITY_BOTH,
-        'visibility' => Status::STATUS_ENABLED,
+        'status' => Status::STATUS_ENABLED,
+        'visibility' => Visibility::VISIBILITY_BOTH,
         'attribute_set' => 4,
         'website_ids' => [1],
         'price' => 10,
@@ -47,8 +47,8 @@ $products = [
         'id' => 103,
         'name' => 'search product 3',
         'sku' => 'search_product_3',
-        'status' => Visibility::VISIBILITY_BOTH,
-        'visibility' => Status::STATUS_ENABLED,
+        'status' => Status::STATUS_ENABLED,
+        'visibility' => Visibility::VISIBILITY_BOTH,
         'attribute_set' => 4,
         'website_ids' => [1],
         'price' => 20,
@@ -62,8 +62,8 @@ $products = [
         'id' => 104,
         'name' => 'search product 4',
         'sku' => 'search_product_4',
-        'status' => Visibility::VISIBILITY_BOTH,
-        'visibility' => Status::STATUS_ENABLED,
+        'status' => Status::STATUS_ENABLED,
+        'visibility' => Visibility::VISIBILITY_BOTH,
         'attribute_set' => 4,
         'website_ids' => [1],
         'price' => 30,
@@ -77,8 +77,8 @@ $products = [
         'id' => 105,
         'name' => 'search product 5',
         'sku' => 'search_product_5',
-        'status' => Visibility::VISIBILITY_BOTH,
-        'visibility' => Status::STATUS_ENABLED,
+        'status' => Status::STATUS_ENABLED,
+        'visibility' => Visibility::VISIBILITY_BOTH,
         'attribute_set' => 4,
         'website_ids' => [1],
         'price' => 40,

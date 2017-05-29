@@ -1,6 +1,10 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -9,8 +13,6 @@ define([
     'use strict';
 
     return Column.extend({
-
-        /*eslint-disable eqeqeq*/
         /**
          * Retrieves label associated with a provided value.
          *
@@ -33,6 +35,8 @@ define([
                 return value + '';
             });
 
+            options = this.flatOptions(options);
+
             options.forEach(function (item) {
                 if (_.contains(values, item.value + '')) {
                     label.push(item.label);
@@ -40,8 +44,26 @@ define([
             });
 
             return label.join(', ');
-        }
+        },
 
-        /*eslint-enable eqeqeq*/
+        /**
+         * Transformation tree options structure to liner array.
+         *
+         * @param {Array} options
+         * @returns {Array}
+         */
+        flatOptions: function (options) {
+            var self = this;
+
+            return options.reduce(function (opts, option) {
+                if (_.isArray(option.value)) {
+                    opts = opts.concat(self.flatOptions(option.value));
+                } else {
+                    opts.push(option);
+                }
+
+                return opts;
+            }, []);
+        }
     });
 });

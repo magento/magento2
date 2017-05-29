@@ -1,17 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 
-/**
- * Class DirectoryTest
- *
- * @package Magento\Setup\Module\Di\Code\Reader\Decorator
- */
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,6 +34,9 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
      */
     private $logMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)

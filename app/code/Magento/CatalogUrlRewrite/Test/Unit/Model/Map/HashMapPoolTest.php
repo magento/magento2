@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class HashMapPoolTest
@@ -63,7 +63,7 @@ class HashMapPoolTest extends \PHPUnit_Framework_TestCase
                         ['category' => 2],
                         $dataProductMapMockOtherCategory
                     ]
-               ]
+                ]
             );
         $this->assertSame($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
         $this->assertSame($dataProductMapMock, $this->model->getDataMap(DataProductHashMap::class, 1));

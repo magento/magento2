@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Config\Model\Config;
+use Magento\Config\Model\Config as SystemConfig;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Api\OauthServiceInterface;
 
@@ -22,7 +22,7 @@ use Magento\Integration\Api\OauthServiceInterface;
 class IntegrationManager
 {
     /**
-     * @var Config
+     * @var SystemConfig
      */
     private $config;
 
@@ -39,12 +39,12 @@ class IntegrationManager
     /**
      * IntegrationManager constructor
      *
-     * @param Config $config
+     * @param SystemConfig $config
      * @param IntegrationServiceInterface $integrationService
      * @param OauthServiceInterface $oauthService
      */
     public function __construct(
-        Config $config,
+        SystemConfig $config,
         IntegrationServiceInterface $integrationService,
         OauthServiceInterface $oauthService
     ) {
@@ -76,7 +76,7 @@ class IntegrationManager
     /**
      * This method execute Generate Token command and enable integration
      *
-     * @return bool|string
+     * @return bool|\Magento\Integration\Model\Oauth\Token
      */
     public function generateToken()
     {

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\File\Transfer\Adapter;
 
@@ -21,11 +19,13 @@ class Http
     private $mime;
 
     /**
-     * @param \Magento\Framework\App\Response\Http
+     * @param \Magento\Framework\App\Response\Http $response
      * @param \Magento\Framework\File\Mime $mime
      */
-    public function __construct(\Magento\Framework\HTTP\PhpEnvironment\Response $response, \Magento\Framework\File\Mime $mime)
-    {
+    public function __construct(
+        \Magento\Framework\HTTP\PhpEnvironment\Response $response,
+        \Magento\Framework\File\Mime $mime
+    ) {
         $this->response = $response;
         $this->mime = $mime;
     }

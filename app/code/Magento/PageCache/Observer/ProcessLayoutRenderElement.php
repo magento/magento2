@@ -1,12 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\EntitySpecificHandlesList;
 
 class ProcessLayoutRenderElement implements ObserverInterface
@@ -38,18 +40,36 @@ class ProcessLayoutRenderElement implements ObserverInterface
     private $entitySpecificHandlesList;
 
     /**
+     * @var Base64Json
+     */
+    private $base64jsonSerializer;
+
+    /**
+     * @var Json
+     */
+    private $jsonSerializer;
+
+    /**
      * Class constructor
      *
      * @param \Magento\PageCache\Model\Config $config
      * @param EntitySpecificHandlesList $entitySpecificHandlesList
+     * @param Json $jsonSerializer
+     * @param Base64Json $base64jsonSerializer
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
-        EntitySpecificHandlesList $entitySpecificHandlesList = null
+        EntitySpecificHandlesList $entitySpecificHandlesList = null,
+        Json $jsonSerializer = null,
+        Base64Json $base64jsonSerializer = null
     ) {
         $this->_config = $config;
         $this->entitySpecificHandlesList = $entitySpecificHandlesList
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
+        $this->jsonSerializer = $jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->base64jsonSerializer = $base64jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
     }
 
     /**
@@ -68,8 +88,10 @@ class ProcessLayoutRenderElement implements ObserverInterface
         $url = $block->getUrl(
             'page_cache/block/esi',
             [
-                'blocks' => json_encode([$block->getNameInLayout()]),
-                'handles' => json_encode(array_values(array_diff($handles, $pageSpecificHandles)))
+                'blocks' => $this->jsonSerializer->serialize([$block->getNameInLayout()]),
+                'handles' => $this->base64jsonSerializer->serialize(
+                    array_values(array_diff($handles, $pageSpecificHandles))
+                )
             ]
         );
         // Varnish does not support ESI over HTTPS must change to HTTP

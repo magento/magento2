@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -60,7 +60,6 @@ class EavTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyMeta()
     {
-        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load(1);
@@ -70,10 +69,9 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);
     }
-    
+
     public function testModifyMetaNewProduct()
     {
-        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->setAttributeSetId(4);
@@ -118,9 +116,9 @@ class EavTest extends \PHPUnit_Framework_TestCase
             }
             if ($item instanceof \Magento\Framework\Phrase) {
                 $item = (string)$item;
-            } else if (is_array($item)) {
+            } elseif (is_array($item)) {
                 $this->prepareDataForComparison($item, $expectedData[$key]);
-            } else if ($key === 'price_id' || $key === 'sortOrder') {
+            } elseif ($key === 'price_id' || $key === 'sortOrder') {
                 $data[$key] = '__placeholder__';
             }
         }

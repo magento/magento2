@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,8 @@ define([
                 on: jasmine.createSpy()
             },
             'Magento_Ui/js/lib/registry/registry': {
-                get: function() {
+                /** Method stub. */
+                get: function () {
                     return {
                         get: jasmine.createSpy(),
                         set: jasmine.createSpy()

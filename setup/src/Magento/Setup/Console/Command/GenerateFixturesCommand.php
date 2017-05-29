@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Mview\View\CollectionInterface;
+use Magento\Setup\Fixtures\FixtureModel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Fixtures\FixtureModel;
 
 /**
  * Command generates fixtures for performance tests
@@ -71,19 +73,14 @@ class GenerateFixturesCommand extends Command
             $totalStartTime = microtime(true);
 
             $fixtureModel = $this->fixtureModel;
+            $fixtureModel->loadConfig($input->getArgument(self::PROFILE_ARGUMENT));
             $fixtureModel->initObjectManager();
             $fixtureModel->loadFixtures();
-            $fixtureModel->loadConfig($input->getArgument(self::PROFILE_ARGUMENT));
 
             $output->writeln('<info>Generating profile with following params:</info>');
 
-            foreach ($fixtureModel->getParamLabels() as $configKey => $label) {
-                $output->writeln(
-                    '<info> |- ' . $label . ': ' . (is_array($fixtureModel->getValue($configKey)) === true
-                        ? sizeof(
-                            $fixtureModel->getValue($configKey)[array_keys($fixtureModel->getValue($configKey))[0]]
-                        ) : $fixtureModel->getValue($configKey)) . '</info>'
-                );
+            foreach ($fixtureModel->getFixtures() as $fixture) {
+                $fixture->printInfo($output);
             }
 
             /** @var $config \Magento\Indexer\Model\Config */
@@ -100,13 +97,15 @@ class GenerateFixturesCommand extends Command
             }
 
             foreach ($fixtureModel->getFixtures() as $fixture) {
-                $output->write($fixture->getActionTitle() . '... ');
+                $output->write('<info>' . $fixture->getActionTitle() . '... </info>');
                 $startTime = microtime(true);
-                $fixture->execute();
+                $fixture->execute($output);
                 $endTime = microtime(true);
                 $resultTime = $endTime - $startTime;
-                $output->writeln(' done in ' . gmdate('H:i:s', $resultTime));
+                $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
             }
+
+            $this->clearChangelog();
 
             foreach ($indexerListIds as $indexerId) {
                 /** @var $indexer \Magento\Indexer\Model\Indexer */
@@ -126,6 +125,27 @@ class GenerateFixturesCommand extends Command
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
+    }
+
+    /**
+     * Clear changelog after generation
+     *
+     * @return void
+     */
+    private function clearChangelog()
+    {
+        $viewConfig = $this->fixtureModel->getObjectManager()->create(CollectionInterface::class);
+
+        /* @var ResourceConnection $resource */
+        $resource = $this->fixtureModel->getObjectManager()->get(ResourceConnection::class);
+
+        foreach ($viewConfig as $view) {
+            /* @var \Magento\Framework\Mview\ViewInterface $view */
+            $changeLogTableName = $resource->getTableName($view->getChangelog()->getName());
+            if ($resource->getConnection()->isTableExists($changeLogTableName)) {
+                $resource->getConnection()->truncateTable($changeLogTableName);
+            }
         }
     }
 }

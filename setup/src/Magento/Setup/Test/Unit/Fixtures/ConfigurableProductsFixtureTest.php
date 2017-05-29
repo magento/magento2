@@ -1,14 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture;
+use Magento\Setup\Fixtures\AttributeSet\Pattern;
 use Magento\Setup\Fixtures\ConfigurableProductsFixture;
-use Magento\Setup\Model\Complex\Generator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -21,13 +27,43 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @var AttributeSetFixture
+     */
+    private $attributeSetsFixtureMock;
+
+    /**
+     * @var Pattern
+     */
+    private $attributePatternMock;
+
     public function setUp()
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()
+            ->setMethods(['createAttributeSet', 'getValue'])
             ->getMock();
 
-        $this->model = new ConfigurableProductsFixture($this->fixtureModelMock);
+        $this->attributeSetsFixtureMock = $this->getMockBuilder(AttributeSetFixture::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->attributePatternMock = $this->getMockBuilder(Pattern::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->attributePatternMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributePatternMock = $this->getMockBuilder(Pattern::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = (new ObjectManager($this))->getObject(ConfigurableProductsFixture::class, [
+            'fixtureModel' => $this->fixtureModelMock,
+            'attributeSetsFixture' => $this->attributeSetsFixtureMock,
+            'attributePattern' => $this->attributePatternMock,
+        ]);
     }
 
     /**
@@ -39,87 +75,82 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $abstractDbMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            [$contextMock],
-            '',
-            true,
-            true,
-            true,
-            ['getAllChildren']
-        );
-        $abstractDbMock->expects($this->once())
-            ->method('getAllChildren')
-            ->will($this->returnValue([1]));
-
         $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $categoryMock->expects($this->once())
-            ->method('getResource')
-            ->will($this->returnValue($abstractDbMock));
-        $categoryMock->expects($this->exactly(3))
-            ->method('getName')
-            ->will($this->returnValue('category_name'));
-        $categoryMock->expects($this->once())
-            ->method('getPath')
-            ->will($this->returnValue('path/to/category'));
-        $categoryMock->expects($this->exactly(4))
-            ->method('load')
-            ->willReturnSelf();
-
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock->expects($this->once())
-            ->method('getRootCategoryId')
-            ->will($this->returnValue([2]));
-
-        $websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $websiteMock->expects($this->once())
-            ->method('getCode')
-            ->will($this->returnValue('website_code'));
-        $websiteMock->expects($this->once())
-            ->method('getGroups')
-            ->will($this->returnValue([$storeMock]));
 
         $storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storeManagerMock->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnValue([$websiteMock]));
 
-        $source = $this->getMockBuilder(Generator::class)->disableOriginalConstructor()->getMock();
+        $source = $this->getMockBuilder(\Magento\Setup\Model\Complex\Generator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock->expects($this->at(0))
+
+        $attributeSetRepositoryMock = $this->getMockForAbstractClass(
+            \Magento\Catalog\Api\AttributeSetRepositoryInterface::class
+        );
+
+        $productAttributeOptionManagementInterface = $this->getMockForAbstractClass(
+            \Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class
+        );
+
+        $objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Store\Model\StoreManager::class)
-            ->willReturn($storeManagerMock);
+            ->will($this->returnValueMap([
+                [
+                    \Magento\Store\Model\StoreManager::class,
+                    $storeManagerMock
+                ],
+                [
+                    \Magento\Catalog\Api\AttributeSetRepositoryInterface::class,
+                    $attributeSetRepositoryMock
+                ],
+                [
+                    \Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class,
+                    $productAttributeOptionManagementInterface
+                ]
+            ]));
 
-        $objectManagerMock->expects($this->at(1))
-            ->method('create')
-            ->will($this->returnValue($categoryMock));
+        $attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $objectManagerMock->expects($this->at(2))
+        $objectManagerMock->expects($this->any())
             ->method('create')
-            ->with(\Magento\ImportExport\Model\Import::class)
-            ->willReturn($importMock);
+            ->will(
+                $this->returnCallback(
+                    function ($className) use (
+                        $attributeCollectionFactoryMock,
+                        $categoryMock,
+                        $importMock,
+                        $source
+                    ) {
+                        if ($className === CollectionFactory::class) {
+                            return $attributeCollectionFactoryMock;
+                        }
 
-        $objectManagerMock->expects($this->at(3))
-            ->method('create')
-            ->with(Generator::class)
-            ->willReturn($source);
-        $importMock->expects($this->once())->method('validateSource')->with($source)->willReturn(1);
-        $importMock->expects($this->once())->method('importSource')->willReturn(1);
+                        if ($className === \Magento\Catalog\Model\Category::class) {
+                            return $categoryMock;
+                        }
+
+                        if ($className === \Magento\ImportExport\Model\Import::class) {
+                            return $importMock;
+                        }
+
+                        if ($className === \Magento\Setup\Model\Complex\Generator::class) {
+                            return $source;
+                        }
+
+                        return null;
+                    }
+                )
+            );
 
         $valuesMap = [
             ['configurable_products', 0, 1],
@@ -176,10 +207,6 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getValue')
             ->will($this->returnValueMap($valuesMap));
-        $this->fixtureModelMock
-            ->expects($this->atLeastOnce())
-            ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
 
         $this->model->execute();
     }
@@ -204,10 +231,6 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
-        $this->fixtureModelMock
-            ->expects($this->once())
-            ->method('getValue')
-            ->willReturn(false);
 
         $this->model->execute();
     }
@@ -219,8 +242,6 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testIntroduceParamLabels()
     {
-        $this->assertSame([
-            'configurable_products' => 'Configurable products'
-        ], $this->model->introduceParamLabels());
+        $this->assertSame([], $this->model->introduceParamLabels());
     }
 }

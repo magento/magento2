@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Mvc\Bootstrap;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
@@ -17,7 +19,9 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Router\Http\RouteMatch;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
@@ -42,25 +46,30 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     private $listeners = [];
 
     /**
-     * List of controllers which should be skipped from auth check
+     * List of controllers and their actions which should be skipped from auth check
      *
      * @var array
      */
     private $controllersToSkip = [
-        \Magento\Setup\Controller\Session::class,
-        \Magento\Setup\Controller\Success::class
+        \Magento\Setup\Controller\Session::class => ['index', 'unlogin'],
+        \Magento\Setup\Controller\Success::class => ['index']
     ];
 
     /**
      * {@inheritdoc}
+     *
+     * The $priority argument is added to support latest versions of Zend Event Manager.
+     * Starting from Zend Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
+     * supports the `priority` argument.
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $sharedEvents = $events->getSharedManager();
         $this->listeners[] = $sharedEvents->attach(
-            \Zend\Mvc\Application::class,
+            Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
-            [$this, 'onBootstrap']
+            [$this, 'onBootstrap'],
+            $priority
         );
     }
 
@@ -110,8 +119,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
         /** @var RouteMatch $routeMatch */
         $routeMatch = $event->getRouteMatch();
         $controller = $routeMatch->getParam('controller');
+        $action = $routeMatch->getParam('action');
 
-        if (!in_array($controller, $this->controllersToSkip)) {
+        $skipCheck = array_key_exists($controller, $this->controllersToSkip)
+            && in_array($action, $this->controllersToSkip[$controller]);
+
+        if (!$skipCheck) {
             /** @var Application $application */
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
@@ -139,8 +152,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 /** @var \Magento\Backend\Model\Auth $auth */
                 $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
 
-                if (
-                    !$authentication->isLoggedIn() ||
+                if (!$authentication->isLoggedIn() ||
                     !$adminSession->isAllowed('Magento_Backend::setup_wizard')
                 ) {
                     $adminSession->destroy();

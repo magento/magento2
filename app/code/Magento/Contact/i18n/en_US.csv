@@ -22,3 +22,6 @@ Contacts,Contacts
 "Email Sender","Email Sender"
 "Email Template","Email Template"
 "Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+"Comment is missing","Comment is missing"
+"Name is missing","Name is missing"
+"Invalid email address","Invalid email address"

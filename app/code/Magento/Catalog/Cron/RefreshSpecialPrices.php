@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Cron;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class RefreshSpecialPrices
 {
@@ -169,7 +169,6 @@ class RefreshSpecialPrices
         if (!empty($selectData)) {
             $this->_processor->getIndexer()->reindexList($selectData);
         }
-
     }
 
     /**

@@ -1,11 +1,7 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
 
 define([
     'underscore',
@@ -23,12 +19,14 @@ define([
         });
 
         registry.set('provName', {
-            on: function () {
-            },
-            get: function () {
-            },
-            set: function () {
-            }
+            /** Stub */
+            on: function () {},
+
+            /** Stub */
+            get: function () {},
+
+            /** Stub */
+            set: function () {}
         });
 
         describe('"initAdapter" method', function () {

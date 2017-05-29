@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class AbstractGrid
+ * @api
  */
 abstract class AbstractGrid extends AbstractDb implements GridInterface
 {
@@ -67,6 +67,7 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
     {
         return $this->getTable($this->gridTableName);
     }
+
     /**
      * Purge grid row
      *
@@ -89,6 +90,9 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @param string $default
      * @return string
+     * @deprecated this method is not used in abstract model but only in single child so
+     * this deprecation is a part of cleaning abstract classes.
+     * @see \Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider
      */
     protected function getLastUpdatedAtValue($default = '0000-00-00 00:00:00')
     {

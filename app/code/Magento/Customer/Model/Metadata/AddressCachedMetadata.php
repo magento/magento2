@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Model\Metadata;
 
 use Magento\Customer\Api\AddressMetadataInterface;
@@ -19,12 +18,15 @@ class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInt
     protected $entityType = 'customer_address';
 
     /**
-     * Initialize dependencies.
+     * Constructor
      *
      * @param AddressMetadata $metadata
+     * @param AttributeMetadataCache|null $attributeMetadataCache
      */
-    public function __construct(AddressMetadata $metadata)
-    {
-        $this->metadata = $metadata;
+    public function __construct(
+        AddressMetadata $metadata,
+        AttributeMetadataCache $attributeMetadataCache = null
+    ) {
+        parent::__construct($metadata, $attributeMetadataCache);
     }
 }

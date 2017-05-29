@@ -1,10 +1,9 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global FORM_KEY*/
-// jscs:disable jsDoc
+
+/* global FORM_KEY, byteConvert */
 define([
     'uiComponent',
     'jquery',
@@ -36,11 +35,15 @@ define([
                 error: null
             }
         },
+
+        /** @inheritdoc */
         initObservable: function () {
             this._super().observe('countVariations attributes sections');
 
             return this;
         },
+
+        /** @inheritdoc */
         initialize: function () {
             var self = this;
 
@@ -68,14 +71,22 @@ define([
             });
 
             this.variationsComponent(function (variationsComponent) {
-                this.sections().price.currencySymbol = variationsComponent.getCurrencySymbol()
+                this.sections().price.currencySymbol = variationsComponent.getCurrencySymbol();
             }.bind(this));
 
+            /**
+             * Make options sections.
+             */
             this.makeOptionSections = function () {
                 this.images = new self.makeImages(null);
                 this.price = self.price;
                 this.quantity = self.quantity;
             };
+
+            /**
+             * @param {Object} images
+             * @param {*} typePreview
+             */
             this.makeImages = function (images, typePreview) {
                 var preview;
 
@@ -106,6 +117,10 @@ define([
             }, this);
         },
         types: ['each', 'single', 'none'],
+
+        /**
+         * Set Wizard notify message depend on section type
+         */
         setWizardNotifyMessageDependOnSectionType: function () {
             var flag = false;
 
@@ -117,13 +132,16 @@ define([
 
             if (flag) {
                 this.wizard.setNotificationMessage(
-                    $.mage.__('Choose this option to delete and replace extension data ' +
-                    'for all past configurations.')
+                    $.mage.__('Choose this option to delete and replace extension data for all past configurations.')
                 );
             } else {
                 this.wizard.cleanNotificationMessage();
             }
         },
+
+        /**
+         * @param {Object} wizard
+         */
         render: function (wizard) {
             this.wizard = wizard;
             this.attributes(wizard.data.attributes());
@@ -145,34 +163,40 @@ define([
             this.initCountVariations();
             this.bindGalleries();
         },
+
+        /**
+         * Init count variations.
+         */
         initCountVariations: function () {
             var variations = this.generateVariation(this.attributes()),
                 newVariations = _.map(variations, function (options) {
                     return this.variationsComponent().getVariationKey(options);
                 }.bind(this)),
                 existingVariations = _.keys(this.variationsComponent().productAttributesMap);
+
             this.countVariations(_.difference(newVariations, existingVariations).length);
         },
 
         /**
-         * @param attributes example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
+         * @param {Object} attributes - example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
          * @returns {*} example [['b1','a1','c1','d1'],['b1','a1','c2','d1']...]
          */
         generateVariation: function (attributes) {
             return _.reduce(attributes, function (matrix, attribute) {
                 var tmp = [];
+
                 _.each(matrix, function (variations) {
                     _.each(attribute.chosen, function (option) {
-                        option.attribute_code = attribute.code;
-                        option.attribute_label = attribute.label;
+                        option['attribute_code'] = attribute.code;
+                        option['attribute_label'] = attribute.label;
                         tmp.push(_.union(variations, [option]));
                     });
                 });
 
                 if (!tmp.length) {
                     return _.map(attribute.chosen, function (option) {
-                        option.attribute_code = attribute.code;
-                        option.attribute_label = attribute.label;
+                        option['attribute_code'] = attribute.code;
+                        option['attribute_label'] = attribute.label;
 
                         return [option];
                     });
@@ -181,12 +205,18 @@ define([
                 return tmp;
             }, []);
         },
+
+        /**
+         * @param {*} section
+         * @param {Object} options
+         * @return {*}
+         */
         getSectionValue: function (section, options) {
             switch (this.sections()[section].type()) {
                 case 'each':
                     return _.find(this.sections()[section].attribute().chosen, function (chosen) {
                         return _.find(options, function (option) {
-                            return chosen.id == option.id;
+                            return chosen.id == option.id; //eslint-disable-line eqeqeq
                         });
                     }).sections()[section];
 
@@ -197,21 +227,31 @@ define([
                     return this[section];
             }
         },
+
+        /**
+         * @param {*} node
+         * @return {Promise|*}
+         */
         getImageProperty: function (node) {
             var types = node.find('[data-role=gallery]').productGallery('option').types,
                 images = _.map(node.find('[data-role=image]'), function (image) {
-                var imageData = $(image).data('imageData');
-                imageData.galleryTypes = _.pluck(_.filter(types, function (type) {
-                    return type.value === imageData.file;
-                }), 'code');
+                    var imageData = $(image).data('imageData');
 
-                return imageData;
-            });
+                    imageData.galleryTypes = _.pluck(_.filter(types, function (type) {
+                        return type.value === imageData.file;
+                    }), 'code');
+
+                    return imageData;
+                });
 
             return _.reject(images, function (image) {
                 return !!image.isRemoved;
             });
         },
+
+        /**
+         * Fill images section.
+         */
         fillImagesSection: function () {
             switch (this.sections().images.type()) {
                 case 'each':
@@ -237,6 +277,10 @@ define([
                     break;
             }
         },
+
+        /**
+         * @param {Object} wizard
+         */
         force: function (wizard) {
             this.fillImagesSection();
             this.validate();
@@ -245,8 +289,13 @@ define([
             wizard.data.sectionHelper = this.getSectionValue.bind(this);
             wizard.data.variations = this.generateVariation(this.attributes());
         },
+
+        /**
+         * Validate.
+         */
         validate: function () {
             var formValid;
+
             _.each(this.sections(), function (section) {
                 switch (section.type()) {
                     case 'each':
@@ -273,10 +322,14 @@ define([
                 throw new Error($.mage.__('Please fill-in correct values.'));
             }
         },
+
+        /**
+         * Validate image.
+         */
         validateImage: function () {
             switch (this.sections().images.type()) {
                 case 'each':
-                    _.each(this.sections()['images'].attribute().chosen, function (option) {
+                    _.each(this.sections().images.attribute().chosen, function (option) {
                         if (!option.sections().images.images.length) {
                             throw new Error($.mage.__('Please select image(s) for your attribute.'));
                         }
@@ -290,9 +343,17 @@ define([
                     break;
             }
         },
+
+        /**
+         * Back.
+         */
         back: function () {
             this.setWizardNotifyMessageDependOnSectionType();
         },
+
+        /**
+         * Bind galleries.
+         */
         bindGalleries: function () {
             $('[data-role=bulk-step] [data-role=gallery]').each(function (index, element) {
                 var gallery = $(element),
@@ -319,16 +380,23 @@ define([
                         }, {
                             action: 'save'
                         }],
-                        formData: {form_key: FORM_KEY},
+                        formData: {
+                            'form_key': FORM_KEY
+                        },
                         sequentialUploads: true,
                         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+
+                        /**
+                         * @param {jQuery.Event} e
+                         * @param {Object} data
+                         */
                         add: function (e, data) {
                             var progressTmpl = mageTemplate('[data-template=uploader]'),
                                 fileSize,
                                 tmpl;
 
-                            $.each(data.files, function (index, file) {
-                                fileSize = typeof file.size == "undefined" ?
+                            $.each(data.files, function (i, file) {
+                                fileSize = typeof file.size == 'undefined' ?
                                     $.mage.__('We could not detect a size.') :
                                     byteConvert(file.size);
 
@@ -349,6 +417,11 @@ define([
                                 data.submit();
                             });
                         },
+
+                        /**
+                         * @param {jQuery.Event} e
+                         * @param {Object} data
+                         */
                         done: function (e, data) {
                             if (data.result && !data.result.error) {
                                 gallery.trigger('addItem', data.result);
@@ -362,12 +435,22 @@ define([
                             }
                             $('#' + data.fileId).remove();
                         },
+
+                        /**
+                         * @param {jQuery.Event} e
+                         * @param {Object} data
+                         */
                         progress: function (e, data) {
                             var progress = parseInt(data.loaded / data.total * 100, 10),
                                 progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
 
                             $(progressSelector).css('width', progress + '%');
                         },
+
+                        /**
+                         * @param {jQuery.Event} e
+                         * @param {Object} data
+                         */
                         fail: function (e, data) {
                             var progressSelector = '#' + data.fileId;
 

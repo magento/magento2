@@ -1,19 +1,20 @@
 <?php
-
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\LayeredNavigation\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Preconditions:
  * 1. Setup Layered Navigation configuration.
+ * 2. Run full reindex.
+ * 3. Clear cache.
  *
  * Steps:
  * 1. Create category.
@@ -37,21 +38,41 @@ class FilterProductListTest extends Injectable
     protected $configData;
 
     /**
+     * Should cache be flushed.
+     *
+     * @var bool
+     */
+    private $flushCache;
+
+    /**
      * Filtering product in the Frontend via layered navigation.
      *
      * @param string $configData
      * @param Category $category
+     * @param Indexer $indexer
+     * @param bool $runReindex
+     * @param bool $flushCache
      * @return array
      */
-    public function test($configData, Category $category)
-    {
+    public function test(
+        $configData,
+        Category $category,
+        Indexer $indexer,
+        $runReindex = false,
+        $flushCache = false
+    ) {
         $this->configData = $configData;
+        $this->flushCache = $flushCache;
 
         // Preconditions
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData]
+            ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
+
+        if ($runReindex) {
+            $indexer->reindex();
+        }
 
         // Steps
         $category->persist();
@@ -66,7 +87,7 @@ class FilterProductListTest extends Injectable
     {
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData, 'rollback' => true]
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
     }
 }

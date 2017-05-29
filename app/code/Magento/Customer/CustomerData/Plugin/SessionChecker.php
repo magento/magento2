@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\CustomerData\Plugin;
 
-use \Magento\Framework\Session\SessionManager;
+use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
@@ -37,6 +37,7 @@ class SessionChecker
      * Delete frontend session cookie if customer session is expired
      *
      * @param SessionManager $sessionManager
+     * @return void
      */
     public function beforeStart(SessionManager $sessionManager)
     {

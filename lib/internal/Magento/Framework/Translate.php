@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -182,8 +182,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->_data = [];
 
         $this->_loadModuleTranslation();
-        $this->_loadThemeTranslation();
         $this->_loadPackTranslation();
+        $this->_loadThemeTranslation();
         $this->_loadDbTranslation();
 
         if (!$forceReload) {

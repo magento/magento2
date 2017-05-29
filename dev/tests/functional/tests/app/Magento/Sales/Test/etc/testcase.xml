@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,6 +16,9 @@
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
+    </scenario>
+    <scenario name="FrontendOrderPagerTest" firstStep="createOrder">
+        <step name="createOrder" module="Magento_Sales" />
     </scenario>
     <scenario name="CreateOrderBackendTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
@@ -114,5 +117,17 @@
         <step name="placeOrder" module="Magento_Checkout" next="createInvoice" />
         <step name="createInvoice" module="Magento_Sales" next="createShipment" />
         <step name="createShipment" module="Magento_Sales" />
+    </scenario>
+    <scenario name="CreateInvoiceEntityTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="getDashboardOrder" />
+        <step name="getDashboardOrder" module="Magento_Backend" next="createOrder" />
+        <step name="createOrder" module="Magento_Sales" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" />
+    </scenario>
+    <scenario name="CreateCreditMemoEntityTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createOrder" />
+        <step name="createOrder" module="Magento_Sales" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" next="createCreditMemo" />
+        <step name="createCreditMemo" module="Magento_Sales" />
     </scenario>
 </config>

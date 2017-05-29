@@ -1,8 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 (function (factory) {
+    'use strict';
+
     if (typeof define === 'function' && define.amd) {
         define([
             'jquery',
@@ -14,10 +17,15 @@
     }
 }(function ($) {
     'use strict';
-    
+
     $.widget('mage.validation', $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul, ol',
+
+            /**
+             * @param {*} error
+             * @param {HTMLElement} element
+             */
             errorPlacement: function (error, element) {
                 var messageBox,
                     dataValidate;
@@ -47,12 +55,18 @@
                     element.after(error);
                 }
             },
+
+            /**
+             * @param {HTMLElement} element
+             * @param {String} errorClass
+             */
             highlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
 
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
-                    $(element).parent().find('.datetime-picker').each(function() {
+                    $(element).parent().find('.datetime-picker').each(function () {
                         $(this).removeClass(errorClass);
+
                         if ($(this).val().length === 0) {
                             $(this).addClass(errorClass);
                         }
@@ -63,6 +77,11 @@
                     $(element).addClass(errorClass);
                 }
             },
+
+            /**
+             * @param {HTMLElement} element
+             * @param {String} errorClass
+             */
             unhighlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
 

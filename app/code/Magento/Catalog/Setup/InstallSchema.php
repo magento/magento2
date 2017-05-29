@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -2020,18 +2020,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_product_entity_media_gallery',
-                    'entity_id',
-                    'catalog_product_entity',
-                    'entity_id'
-                ),
-                'entity_id',
-                $installer->getTable('catalog_product_entity'),
-                'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -4272,7 +4260,6 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()
             ->createTable($table);
 
-         $installer->endSetup();
-
+        $installer->endSetup();
     }
 }

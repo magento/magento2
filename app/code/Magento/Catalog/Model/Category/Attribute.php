@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category;
@@ -324,6 +324,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     {
         return $this->setData(self::IS_VISIBLE, $isVisible);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
