@@ -27,6 +27,7 @@ class CartTotalRepository
      * @var \Magento\SalesRule\Model\Coupon
      */
     private $coupon;
+
     /**
      * @var StoreManagerInterface
      */
@@ -55,6 +56,8 @@ class CartTotalRepository
      * @param \Magento\Quote\Model\Cart\CartTotalRepository $subject
      * @param \Magento\Quote\Api\Data\TotalsInterface $result
      * @return \Magento\Quote\Api\Data\TotalsInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGet(
         \Magento\Quote\Model\Cart\CartTotalRepository $subject,
@@ -86,7 +89,6 @@ class CartTotalRepository
 
         /* @var $label \Magento\SalesRule\Model\Data\RuleLabel */
         foreach ($rule->getStoreLabels() as $label) {
-
             if ($label->getStoreId() === 0) {
                 $storeLabelFallback = $label->getStoreLabel();
             }
@@ -98,9 +100,7 @@ class CartTotalRepository
         }
 
         $extensionAttributes->setCouponLabel(($storeLabel) ? $storeLabel : $storeLabelFallback);
-
         $result->setExtensionAttributes($extensionAttributes);
-
         return $result;
     }
 }
