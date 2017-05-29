@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sitemap\Test\TestCase\GenerateSitemapEntityTest" summary="Generate Sitemap" ticketId="MAGETWO-25124">
+        <variation name="GenerateSitemapEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no, severity:S1</data>
+            <data name="catalog/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="cmsPage/dataset" xsi:type="string">default</data>
+            <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
+            <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessSaveAndGenerateMessages" />
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapContent" />
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapInGrid" />
+        </variation>
+        <variation name="GenerateSitemapEntityTestVariation2" summary="Generate Sitemap with submission to Robots.txt" ticketId="MAGETWO-12410">
+            <data name="catalog/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/dataset" xsi:type="string">default</data>
+            <data name="cmsPage/dataset" xsi:type="string">default</data>
+            <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
+            <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
+            <data name="configData" xsi:type="string">enable_submission_to_robots</data>
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessSaveAndGenerateMessages" />
+            <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSubmissionToRobotsTxt" />
+        </variation>
+    </testCase>
+</config>

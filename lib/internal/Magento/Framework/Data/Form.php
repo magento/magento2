@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -13,6 +13,9 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Profiler;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Framework\Data\Form\AbstractForm
 {
     /**

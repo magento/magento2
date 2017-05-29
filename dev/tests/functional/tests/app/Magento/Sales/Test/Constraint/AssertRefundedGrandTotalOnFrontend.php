@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@ use Magento\Sales\Test\Page\OrderHistory;
 use Magento\Sales\Test\Page\CustomerOrderView;
 
 /**
- * Assert that refunded grand total is equal to data from fixture on My Account page
+ * Assert that refunded grand total is equal to data from fixture on My Account page.
  */
 class AssertRefundedGrandTotalOnFrontend extends AbstractAssertOrderOnFrontend
 {
     /**
-     * Assert that refunded grand total is equal to data from fixture on My Account page
+     * Assert that refunded grand total is equal to data from fixture on My Account page.
      *
      * @param OrderHistory $orderHistory
      * @param OrderInjectable $order
@@ -38,14 +38,14 @@ class AssertRefundedGrandTotalOnFrontend extends AbstractAssertOrderOnFrontend
         $customerOrderView->getOrderViewBlock()->openLinkByName('Refunds');
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             \PHPUnit_Framework_Assert::assertEquals(
-                number_format($order->getPrice()[$key]['grand_creditmemo_total'], 2),
+                number_format($order->getPrice()['refund'][$key]['grand_creditmemo_total'], 2),
                 $creditMemoView->getCreditMemoBlock()->getItemBlock($creditMemoId)->getGrandTotal()
             );
         }
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

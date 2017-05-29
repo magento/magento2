@@ -2,7 +2,7 @@
 /**
  * Webapi module exception. Should be used in web API services implementation.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -11,6 +11,12 @@ use Magento\Framework\Exception\ErrorMessage;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * Web API exception should not be used directly by any modules except for Magento_Webapi.
+ *
+ * During web API requests, all exceptions are converted to this exception,
+ * which is then used for proper error response generation.
+ */
 class Exception extends LocalizedException
 {
     /**#@+

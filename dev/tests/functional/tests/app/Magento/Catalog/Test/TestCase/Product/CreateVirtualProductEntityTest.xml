@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\CreateVirtualProductEntityTest" summary="Create Virtual Product" ticketId="MAGETWO-23417">
         <variation name="CreateVirtualProductEntityTestVariation1">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with required fields</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -18,7 +17,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation2" summary="Create product with tier price">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
@@ -66,14 +65,13 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPageWithCustomer" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation5">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-67206: [FT] Magento\Catalog\Test\TestCase\Product\CreateVirtualProductEntityTest fails on CI</data>
             <data name="description" xsi:type="string">Create product with custom options suite and import options</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
@@ -113,7 +111,6 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />

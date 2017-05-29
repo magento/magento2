@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 /**
  * Adminhtml transaction detail
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Detail extends \Magento\Backend\Block\Widget\Container

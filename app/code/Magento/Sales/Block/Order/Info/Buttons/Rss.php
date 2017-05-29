@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order\Info\Buttons;
 
 /**
  * Block of links in Order view page
+ *
+ * @api
  */
 class Rss extends \Magento\Framework\View\Element\Template
 {

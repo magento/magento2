@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * HTTP CURL Adapter
@@ -27,8 +25,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             | CURLPROTO_FTPS
         ),
         'verifypeer' => true,
-        'verifyhost' => 2,
-        'sslversion' => 6
+        'verifyhost' => 2
     ];
 
     /**
@@ -179,6 +176,9 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         } elseif ($method == \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
+        } elseif ($method == \Zend_Http_Client::PUT) {
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, \Zend_Http_Client::PUT);
+            curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         }
 
         if (is_array($headers)) {
@@ -236,7 +236,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     protected function _getResource()
     {
-        if (is_null($this->_resource)) {
+        if ($this->_resource === null) {
             $this->_resource = curl_init();
         }
         return $this->_resource;

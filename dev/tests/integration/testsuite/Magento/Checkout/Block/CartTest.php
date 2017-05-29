@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,5 +61,17 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class);
         $methods = $block->getMethods('child');
         $this->assertEquals([], $methods);
+    }
+
+    public function testGetPagerHtml()
+    {
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
+        );
+        /** @var $block \Magento\Checkout\Block\Cart */
+        $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class);
+        $pager = $block->getPagerHtml();
+        $this->assertEquals('', $pager);
     }
 }

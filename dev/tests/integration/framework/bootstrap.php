@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
@@ -25,11 +25,15 @@ try {
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
 
     if ($settings->get('TESTS_EXTRA_VERBOSE_LOG')) {
-        $logWriter = new \Zend_Log_Writer_Stream('php://output');
-        $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
+        $filesystem = new \Magento\Framework\Filesystem\Driver\File();
+        $exceptionHandler = new \Magento\Framework\Logger\Handler\Exception($filesystem);
+        $loggerHandlers = [
+            'system'    => new \Magento\Framework\Logger\Handler\System($filesystem, $exceptionHandler),
+            'debug'     => new \Magento\Framework\Logger\Handler\Debug($filesystem)
+        ];
         $shell = new \Magento\Framework\Shell(
             new \Magento\Framework\Shell\CommandRenderer(),
-            new \Zend_Log($logWriter)
+            new \Monolog\Logger('main', $loggerHandlers)
         );
     } else {
         $shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());

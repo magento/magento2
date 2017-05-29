@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,46 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\Serializer\Json as Serializer;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Eav\Model\Cache\Type as CacheType;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
+
+/**
+ * @api
+ */
 abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\Frontend\FrontendInterface
 {
+    /**
+     * Default cache tags values
+     * will be used if no values in the constructor provided
+     * @var array
+     */
+    private static $defaultCacheTags = [CacheType::CACHE_TAG, Attribute::CACHE_TAG];
+
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
+     * @var Serializer
+     */
+    private $serializer;
+
+    /**
+     * @var array
+     */
+    private $cacheTags;
+
     /**
      * Reference to the attribute instance
      *
@@ -21,17 +59,30 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     protected $_attribute;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory
+     * @var BooleanFactory
      */
     protected $_attrBooleanFactory;
 
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
+     * @param BooleanFactory $attrBooleanFactory
+     * @param CacheInterface $cache
+     * @param StoreResolverInterface $storeResolver
+     * @param array $cacheTags
+     * @param Serializer $serializer
      * @codeCoverageIgnore
      */
-    public function __construct(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory)
-    {
+    public function __construct(
+        BooleanFactory $attrBooleanFactory,
+        CacheInterface $cache = null,
+        StoreResolverInterface $storeResolver = null,
+        array $cacheTags = null,
+        Serializer $serializer = null
+    ) {
         $this->_attrBooleanFactory = $attrBooleanFactory;
+        $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
+        $this->storeResolver = $storeResolver ?: ObjectManager::getInstance()->get(StoreResolverInterface::class);
+        $this->cacheTags = $cacheTags ?: self::$defaultCacheTags;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serializer::class);
     }
 
     /**
@@ -246,7 +297,21 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      */
     public function getSelectOptions()
     {
-        return $this->getAttribute()->getSource()->getAllOptions();
+        $cacheKey = 'attribute-navigation-option-' .
+            $this->getAttribute()->getAttributeCode() . '-' .
+            $this->storeResolver->getCurrentStoreId();
+        $optionString = $this->cache->load($cacheKey);
+        if (false === $optionString) {
+            $options = $this->getAttribute()->getSource()->getAllOptions();
+            $this->cache->save(
+                $this->serializer->serialize($options),
+                $cacheKey,
+                $this->cacheTags
+            );
+        } else {
+            $options = $this->serializer->unserialize($optionString);
+        }
+        return $options;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
-<?php if ($block->hasSpecialPrice()): ?>
+<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
     <span class="special-price">
         <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
             'display_label'     => __('Special Price'),

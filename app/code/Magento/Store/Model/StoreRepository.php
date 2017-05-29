@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -11,8 +11,6 @@ use Magento\Framework\App\Config;
 
 /**
  * Information Expert in stores handling
- *
- * @package Magento\Store\Model
  */
 class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
 {

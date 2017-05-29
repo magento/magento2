@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,9 @@
         </job>
         <job name="catalog_product_flat_indexer_store_cleanup" instance="Magento\Catalog\Cron\DeleteAbandonedStoreFlatTables" method="execute">
             <schedule>0 0 * * *</schedule>
+        </job>
+        <job name="catalog_product_outdated_price_values_cleanup" instance="Magento\Catalog\Cron\DeleteOutdatedPriceValues" method="execute">
+            <schedule>* * * * *</schedule>
         </job>
     </group>
 </config>

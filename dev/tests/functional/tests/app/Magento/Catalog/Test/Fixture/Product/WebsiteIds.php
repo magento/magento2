@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Fixture\Product;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Prepare websites.
@@ -72,23 +73,53 @@ class WebsiteIds extends DataSource
         }
 
         foreach ($this->fixtureData as $dataset) {
-            if (isset($dataset['dataset'])) {
-                $store = $this->fixtureFactory->createByCode('store', $dataset);
-
-                if (!$store->getStoreId()) {
-                    $store->persist();
+            if (is_array($dataset) && isset($dataset['websites'])) {
+                foreach ($dataset['websites'] as $website) {
+                    $this->websites[] = $website;
                 }
-
-                $website = $store->getDataFieldConfig('group_id')['source']
-                    ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
-
-                $this->data[] = $website->getName();
-                $this->websites[] = $website;
-                $this->stores[] = $store;
+            } else {
+                $this->createStore($dataset);
             }
         }
 
         return parent::getData($key);
+    }
+
+    /**
+     * Create store.
+     *
+     * @param array|object $dataset
+     * @return void
+     */
+    private function createStore($dataset)
+    {
+        if ($dataset instanceof Store) {
+            $store = $dataset;
+        } elseif (is_array($dataset)) {
+            $store = isset($dataset['store']) ? $dataset['store'] :
+                (isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) : null);
+        }
+        if (isset($store)) {
+            $this->setWebsiteStoreData($store);
+        }
+    }
+
+    /**
+     * Set website and store data.
+     *
+     * @param Store $store
+     * @return void
+     */
+    private function setWebsiteStoreData(Store $store)
+    {
+        if (!$store->getStoreId()) {
+            $store->persist();
+        }
+        $website = $store->getDataFieldConfig('group_id')['source']
+            ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
+        $this->data[] = $website->getName();
+        $this->websites[] = $website;
+        $this->stores[] = $store;
     }
 
     /**

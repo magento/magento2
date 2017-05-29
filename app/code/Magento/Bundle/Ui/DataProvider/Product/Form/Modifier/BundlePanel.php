@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Framework\UrlInterface;
-use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Modal;
 
@@ -73,6 +74,7 @@ class BundlePanel extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $meta = $this->removeFixedTierPrice($meta);
         $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
 
         $meta = $this->arrayManager->merge(
@@ -174,6 +176,45 @@ class BundlePanel extends AbstractModifier
         $meta = $this->arrayManager->set($path, $meta, $bundleItemsGroup);
 
         $meta = $this->modifyShipmentType($meta);
+
+        return $meta;
+    }
+
+    /**
+     * Remove option with fixed tier price from config.
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function removeFixedTierPrice(array $meta)
+    {
+        $tierPricePath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_TIER_PRICE,
+            $meta,
+            null,
+            'children'
+        );
+        $pricePath =  $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE,
+            $meta,
+            $tierPricePath
+        );
+        $pricePath = $this->arrayManager->slicePath($pricePath, 0, -1) . '/value_type/arguments/data/options';
+
+        $price = $this->arrayManager->get($pricePath, $meta);
+        if ($price) {
+            $meta = $this->arrayManager->remove($pricePath, $meta);
+            foreach ($price as $key => $item) {
+                if ($item['value'] == ProductPriceOptionsInterface::VALUE_FIXED) {
+                    unset($price[$key]);
+                }
+            }
+            $meta = $this->arrayManager->merge(
+                $this->arrayManager->slicePath($pricePath, 0, -1),
+                $meta,
+                ['options' => $price]
+            );
+        }
 
         return $meta;
     }

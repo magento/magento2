@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Shipping\Test\TestCase\TrackingShipmentForPlacedOrderTest" summary="Create shipment for order.">
+        <variation name="TrackingShipmentForPlacedOrderTestVariation1" summary="Creating shipment for order placed within Flat Rate." ticketId="MAGETWO-65163">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Fixed</data>
+            <data name="shipping/shipping_method" xsi:type="string">Flat Rate</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Flat Rate</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
+            <data name="trackingData" xsi:type="array">
+                <item name="carrier" xsi:type="string">Custom Value</item>
+                <item name="carrier_title" xsi:type="string">Custom Number</item>
+                <item name="tracking_number" xsi:type="string">0123456789</item>
+            </data>
+            <data name="resultTrackingData" xsi:type="array">
+                <item name="number" xsi:type="string">0123456789</item>
+            </data>
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <constraint name="Magento\Shipping\Test\Constraint\AssertTrackingDetailsIsPresent" />
+        </variation>
+    </testCase>
+</config>

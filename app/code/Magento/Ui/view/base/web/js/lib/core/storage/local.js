@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -84,9 +84,14 @@ define([
      * @returns {Object}
      */
     function getRoot() {
-        var data = localStorage.getItem(root);
+        var data = localStorage.getItem(root),
+            result = {};
 
-        return !_.isNull(data) ? JSON.parse(data) : {};
+        if (!_.isNull(data) && typeof data != 'undefined') {
+            result = JSON.parse(data);
+        }
+
+        return result;
     }
 
     /**

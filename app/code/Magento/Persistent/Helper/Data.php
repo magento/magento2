@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ namespace Magento\Persistent\Helper;
 use Magento\Framework\Module\Dir;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const XML_PATH_ENABLED = 'persistent/options/enabled';

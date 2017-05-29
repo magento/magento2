@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model;
 
 /**
- * Swatch Model
+ * @api
  */
 class Swatch extends \Magento\Framework\Model\AbstractModel
 {

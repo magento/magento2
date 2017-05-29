@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product;
@@ -66,8 +66,8 @@ class SaveHandler implements ExtensionInterface
             $options = $bundleProductOptions ?: [];
             foreach ($options as $option) {
                 $this->optionRepository->save($entity, $option);
-                $entity->setCopyFromView(false);
             }
+            $entity->setCopyFromView(false);
         }
         return $entity;
     }

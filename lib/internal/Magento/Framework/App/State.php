@@ -1,12 +1,18 @@
 <?php
 /**
- *  Application state flags
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * Application state flags.
+ * Can be used to retrieve current application mode and current area.
+ *
+ * Note: Area code communication and emulation will be removed from this class.
+ *
+ * @api
+ */
 class State
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Downloadable Sales Order Email items renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {

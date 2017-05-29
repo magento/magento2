@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -240,10 +240,10 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCacheKeyInfo()
     {
-        $emptyMessagesCacheKey = ['storage_types' => 'a:0:{}'];
+        $emptyMessagesCacheKey = ['storage_types' => ''];
         $this->assertEquals($emptyMessagesCacheKey, $this->messages->getCacheKeyInfo());
 
-        $messagesCacheKey = ['storage_types' => 'a:1:{i:0;s:7:"default";}'];
+        $messagesCacheKey = ['storage_types' => 'default'];
         $this->messages->addStorageType(Manager::DEFAULT_GROUP);
         $this->assertEquals($messagesCacheKey, $this->messages->getCacheKeyInfo());
     }

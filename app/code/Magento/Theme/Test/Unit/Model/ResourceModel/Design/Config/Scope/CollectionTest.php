@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\ResourceModel\Design\Config\Scope;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
+use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,7 +88,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                                ],
                            ],
                        ],
-                   ],
+                    ],
                 ]
             );
 

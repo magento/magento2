@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 
 /**
  * Create handler for catalog product gallery
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -164,7 +166,7 @@ class CreateHandler implements ExtensionInterface
                 $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
             }
 
-            if (in_array($attrData, array_keys($existImages))) {
+            if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
             if (!empty($product->getData($mediaAttrCode))) {
@@ -295,7 +297,7 @@ class CreateHandler implements ExtensionInterface
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $product->getOriginalId(),
+            $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
 

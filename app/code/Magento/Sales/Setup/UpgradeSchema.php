@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
@@ -83,6 +83,28 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => 'integer']
                 );
             }
+        }
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+            $connection = $installer->getConnection(self::$connectionName);
+            $connection->modifyColumn(
+                $installer->getTable('sales_order_payment', self::$connectionName),
+                'cc_number_enc',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 128
+                ]
+            );
+        }
+        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+            $connection = $installer->getConnection(self::$connectionName);
+            $connection->modifyColumn(
+                $installer->getTable('sales_order', self::$connectionName),
+                'shipping_method',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 120
+                ]
+            );
         }
     }
 

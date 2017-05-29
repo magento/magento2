@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
@@ -216,13 +216,13 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         // Set payment adapter dependency
-        $paymentAdapterMock = $this->getMockBuilder(\Magento\Sales\Model\Order\PaymentAdapterInterface::class)
+        $refundAdapterMock = $this->getMockBuilder(\Magento\Sales\Model\Order\RefundAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->creditmemoService,
-            'paymentAdapter',
-            $paymentAdapterMock
+            'refundAdapter',
+            $refundAdapterMock
         );
 
         // Set resource dependency
@@ -250,7 +250,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
         $adapterMock->expects($this->once())->method('beginTransaction');
-        $paymentAdapterMock->expects($this->once())
+        $refundAdapterMock->expects($this->once())
             ->method('refund')
             ->with($creditMemoMock, $orderMock, false)
             ->willReturn($orderMock);

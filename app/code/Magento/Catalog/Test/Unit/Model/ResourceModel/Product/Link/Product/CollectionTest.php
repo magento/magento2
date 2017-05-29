@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -134,7 +134,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->timezoneInterfaceMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->sessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
         $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(
+            ProductLimitationFactory::class
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->getMock(ProductLimitation::class));
 

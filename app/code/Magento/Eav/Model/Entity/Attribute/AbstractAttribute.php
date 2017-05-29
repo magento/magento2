@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,11 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -120,9 +121,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Serializer Instance.
      *
-     * @var SerializerInterface
+     * @var Json
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * Array of attribute types that have empty string as a possible value.
@@ -197,12 +198,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Get Serializer instance.
      * @deprecated
      *
-     * @return SerializerInterface
+     * @return Json
      */
-    private function getSerializer()
+    protected function getSerializer()
     {
         if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(SerializerInterface::class);
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(Json::class);
         }
 
         return $this->serializer;
@@ -515,7 +516,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     public function getEntity()
     {
         if (!$this->_entity) {
-            $this->_entity = $this->getEntityType();
+            $this->_entity = $this->getEntityType()->getEntity();
         }
 
         return $this->_entity;
@@ -753,7 +754,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             } else {
                 $backendTable = trim($this->_getData('backend_table'));
                 if (empty($backendTable)) {
-                    $entityTable = [$this->getEntity()->getEntityTablePrefix(), $this->getBackendType()];
+                    $entityTable = [$this->getEntityType()->getEntityTablePrefix(), $this->getBackendType()];
                     $backendTable = $this->getResource()->getTable($entityTable);
                 }
                 $this->_dataTable = $backendTable;
@@ -865,6 +866,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Retrieve flat columns definition in old format (before MMDB support)
      * Used in database compatible mode
      *
+     * @deprecated
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -1106,6 +1108,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::IS_REQUIRED, $isRequired);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -1264,6 +1267,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->setData(self::SOURCE_MODEL, $sourceModel);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

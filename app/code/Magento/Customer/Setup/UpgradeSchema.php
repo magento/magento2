@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * @codeCoverageIgnore
@@ -136,14 +136,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ]
         );
         foreach ($keys as $key) {
-            $setup->getConnection()->modifyColumn(
+            $description = $setup->getConnection()->describeTable($key['TABLE_NAME'])[$key['COLUMN_NAME']];
+            $description['DATA_TYPE'] = 'int';
+            $setup->getConnection()->modifyColumnByDdl(
                 $key['TABLE_NAME'],
                 $key['COLUMN_NAME'],
-                [
-                    'type' => 'integer',
-                    'unsigned' => true,
-                    'nullable' => false
-                ]
+                $description
             );
         }
     }
@@ -189,13 +187,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $keysTree = $setup->getConnection()->getForeignKeysTree();
         foreach ($keysTree as $indexes) {
             foreach ($indexes as $index) {
-                if (
-                    $index['REF_TABLE_NAME'] == $setup->getTable('customer_group')
+                if ($index['REF_TABLE_NAME'] == $setup->getTable('customer_group')
                     && $index['REF_COLUMN_NAME'] == 'customer_group_id'
                 ) {
                     $foreignKeys[] = $index;
                 }
-
             }
         }
         return $foreignKeys;
