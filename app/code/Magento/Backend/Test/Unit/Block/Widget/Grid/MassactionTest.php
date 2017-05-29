@@ -246,10 +246,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->_gridMock->expects($this->once())
             ->method('getCollection')
             ->willReturn($collectionMock);
-
-        $collectionMock->expects($this->once())
-            ->method('clear')
-            ->willReturnSelf();
+        
         $collectionMock->expects($this->once())
             ->method('setPageSize')
             ->with(0)
