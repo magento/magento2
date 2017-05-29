@@ -21,4 +21,12 @@ class CreditCards extends PaymentTokens
     {
         return CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD;
     }
+
+    /**
+    * @return string
+    */
+    public function getBackUrl()
+    {
+        return 'javascript:history.back()';
+    }
 }

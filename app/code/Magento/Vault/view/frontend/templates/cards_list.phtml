@@ -33,3 +33,11 @@ $tokens = $block->getPaymentTokens();
 <?php elseif (!$block->isExistsCustomerTokens()): ?>
     <div class="message info empty"><span><?php /* @noEscape */ echo __('You have no stored payment methods.'); ?></span></div>
 <?php endif ?>
+
+<div class="actions-toolbar">
+    <div class="secondary">
+        <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+            <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+        </a>
+    </div>
+</div>
